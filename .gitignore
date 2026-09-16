@@ -29,3 +29,5 @@ secure_uploads/*
 templates/*.docx
 coverage*
 *.out
+
+start_env.txt
