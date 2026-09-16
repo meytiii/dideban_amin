@@ -1,0 +1,11 @@
+ALTER TABLE audit_logs DISABLE TRIGGER trg_immutable_audit_logs;
+ALTER TABLE audit_logs DISABLE TRIGGER trg_immutable_audit_logs_truncate;
+
+TRUNCATE TABLE audit_logs RESTART IDENTITY;
+TRUNCATE TABLE admin_notifications RESTART IDENTITY CASCADE;
+TRUNCATE TABLE report_messages RESTART IDENTITY CASCADE;
+TRUNCATE TABLE evidence_files RESTART IDENTITY CASCADE;
+TRUNCATE TABLE reports RESTART IDENTITY CASCADE;
+
+ALTER TABLE audit_logs ENABLE TRIGGER trg_immutable_audit_logs;
+ALTER TABLE audit_logs ENABLE TRIGGER trg_immutable_audit_logs_truncate;
