@@ -31,3 +31,5 @@ coverage*
 *.out
 
 start_env.txt
+
+assets/*
