@@ -1,0 +1,6 @@
+$env:HERASAT_AES_KEY="HERASAT_SECURE_KEY_32_CHARS_LONG"
+$env:HERASAT_DB_CONN="host=127.0.0.1 port=5432 user=herasat_user password=herasat1405@ dbname=herasat_db sslmode=disable"
+go run .
+
+for building exe : 
+go build -ldflags="-s -w" -o herasat_server.exe .

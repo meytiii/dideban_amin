@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه ستاد خبری و دریافت گزارش‌های مردمی - همدان</title>
+    <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="style.css?v=73">
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+
+<body>
+    <!-- Luxury 3D Preloader Overlay (guaranteed >= 1.5s prestige animation) -->
+    <div id="appPreloader" class="luxury-preloader" aria-label="در حال بارگذاری سامانه ستاد خبری" role="status">
+        <div class="preloader-backdrop-glow"></div>
+        <div class="preloader-content">
+            <div class="morph-loader-container">
+                <div class="morph-loader">
+                    <div class="morph-item morph-0"></div>
+                    <div class="morph-item morph-1"></div>
+                    <div class="morph-item morph-2"></div>
+                    <div class="morph-item morph-3"></div>
+                </div>
+            </div>
+            <div class="preloader-info">
+                <div class="preloader-title-row">
+                    <span class="preloader-pulse-dot"></span>
+                    <span class="preloader-title">در حال بارگذاری سامانه ستاد خبری</span>
+                </div>
+                <div class="preloader-progress-track">
+                    <div class="preloader-progress-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skeleton Layout Placeholder for Zero Layout Shift -->
+    <div id="pageSkeleton" class="page-skeleton" aria-hidden="true">
+        <div class="skeleton-header">
+            <div class="skeleton-crest skeleton-shimmer"></div>
+            <div class="skeleton-title skeleton-shimmer"></div>
+            <div class="skeleton-sub skeleton-shimmer"></div>
+        </div>
+        <div class="skeleton-tabs">
+            <div class="skeleton-tab-item skeleton-shimmer"></div>
+            <div class="skeleton-tab-item skeleton-shimmer"></div>
+        </div>
+        <div class="skeleton-card skeleton-shimmer"></div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+
+    <div id="draft-saved-indicator" class="draft-saved-indicator">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+            <polyline points="17 21 17 13 7 13 7 21" />
+            <polyline points="7 3 7 8 15 8" />
+        </svg>
+        <span>پیش‌نویس ذخیره شد</span>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="admin-logo-crest public-header-crest">
+                <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش" class="admin-crest-img">
+            </div>
+            <h1>سامانه ستاد خبری و دریافت گزارشهای مردمی</h1>
+            <p>اداره حراست آموزش و پرورش استان همدان</p>
+        </header>
+
+
+        <div class="top-nav-bar">
+            <nav class="tabs-container" aria-label="تب‌های سامانه">
+                <button type="button" id="tab-submit" class="tab-btn active">
+                    <span class="tab-label">ثبت گزارش جدید</span>
+                    <div class="tab-icon-pill">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
+                    </div>
+                </button>
+                <button type="button" id="tab-track" class="tab-btn">
+                    <span class="tab-label">پیگیری گزارش</span>
+                    <div class="tab-icon-pill">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </svg>
+                    </div>
+                </button>
+            </nav>
+            <button type="button" id="openDrawerBtn" class="btn-faq-trigger"
+                data-tooltip="مشاهده راهنمای ثبت و سوالات متداول">
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <path d="M12 17h.01"></path>
+                </svg>
+                <span>راهنما و سوالات متداول</span>
+            </button>
+        </div>
+
+
+
+
+        <main id="submitSection">
+            <form id="reportForm" enctype="multipart/form-data" novalidate>
+
+                <div class="step-tracker">
+                    <div class="step-item active" id="tracker-1" data-step="1">
+                        <div class="step-circle"><span class="step-num">۱</span></div>
+                        <div class="step-label">هویت گزارش‌دهنده</div>
+                    </div>
+                    <div class="step-connector" id="connector-1"></div>
+                    <div class="step-item" id="tracker-2" data-step="2">
+                        <div class="step-circle"><span class="step-num">۲</span></div>
+                        <div class="step-label">موضوع و شرح</div>
+                    </div>
+                    <div class="step-connector" id="connector-2"></div>
+                    <div class="step-item" id="tracker-3" data-step="3">
+                        <div class="step-circle"><span class="step-num">۳</span></div>
+                        <div class="step-label">مستندات و ثبت</div>
+                    </div>
+                </div>
+
+
+                <div class="form-step active" id="step-1">
+                    <div class="identity-notice-card">
+                        <div class="notice-icon-box">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
+                        </div>
+                        <div class="notice-text">
+                            <strong>ارسال کاملاً امن و محرمانه:</strong>
+                            <p>تکمیل مشخصات هویتی اختیاری است. در صورت تمایل به ناشناس ماندن، فیلدهای زیر را خالی
+                                بگذارید. هویت شما با بالاترین ضریب امنیتی محافظت می‌شود.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reporter_name">نام و نام خانوادگی <span
+                                class="label-optional">(اختیاری)</span></label>
+                        <input type="text" id="reporter_name" name="reporter_name" maxlength="100"
+                            placeholder="مثال: علی حسینی" autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="reporter_phone">شماره تماس <span class="label-optional">(اختیاری)</span></label>
+                        <input type="tel" id="reporter_phone" name="reporter_phone" maxlength="15"
+                            placeholder="۰۹۱۲۳۴۵۶۷۸۹" dir="ltr" style="text-align: right;" autocomplete="tel">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-primary btn-next">
+                            <span>مرحله بعد</span>
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow">
+                                <path d="M19 12H5"></path>
+                                <path d="m12 19-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="form-step" id="step-2">
+                    <div class="form-group custom-dropdown-wrapper">
+                        <label for="category">موضوع گزارش <span class="label-required">*</span></label>
+                        <select id="category" name="category" required class="native-select-hidden" aria-hidden="true"
+                            tabindex="-1">
+                            <option value="">-- موضوع گزارش را انتخاب کنید --</option>
+                            <option value="تخلفات مالی">تخلفات مالی</option>
+                            <option value="مسائل امنیتی">مسائل امنیتی</option>
+                            <option value="تخلفات اداری">تخلفات قانونی و اداری</option>
+                            <option value="تخلفات آموزشی">تخلفات آموزشی</option>
+                            <option value="پرسنلی">مسائل پرسنلی</option>
+                            <option value="دانش آموزی">مسائل دانش آموزی</option>
+                            <option value="مدارس غیردولتی">مدارس و آموزشگاه‌های غیردولتی</option>
+                            <option value="آموزش مجازی">مسائل مربوط به آموزش مجازی</option>
+                            <option value="فضای مجازی">هنجارشکنی و تخلفات در فضای مجازی</option>
+                            <option value="سایر">سایر</option>
+                        </select>
+
+                        <div class="custom-dropdown" id="categoryCustomDropdown">
+                            <button type="button" class="custom-dropdown-trigger" id="categoryDropdownTrigger"
+                                aria-haspopup="listbox" aria-expanded="false">
+                                <div class="trigger-content">
+                                    <span class="trigger-icon" id="categorySelectedIcon">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M4 6h16M4 12h16M4 18h7"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="trigger-label" id="categorySelectedLabel">-- موضوع گزارش را انتخاب کنید
+                                        --</span>
+                                </div>
+                                <span class="trigger-chevron">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m6 9 6 6 6-6"></path>
+                                    </svg>
+                                </span>
+                            </button>
+
+                            <div class="custom-dropdown-menu" id="categoryDropdownMenu" role="listbox">
+                                <div class="dropdown-item" data-value="تخلفات مالی" role="option">
+                                    <div class="item-icon-box text-emerald">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                                            <circle cx="12" cy="12" r="2"></circle>
+                                            <path d="M6 12h.01M18 12h.01"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="item-label">تخلفات مالی</span>
+                                </div>
+                                <div class="dropdown-item" data-value="مسائل امنیتی" role="option">
+                                    <div class="item-icon-box text-rose">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                        </svg>
+                                    </div>
+                                    <span class="item-label">مسائل امنیتی</span>
+                                </div>
+                                <div class="dropdown-item" data-value="تخلفات اداری" role="option">
+                                    <div class="item-icon-box text-amber">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                            <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                            <path d="M7 21h10M12 3v18M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="item-label">تخلفات قانونی و اداری</span>
+                                </div>
+                                <div class="dropdown-item" data-value="تخلفات آموزشی" role="option">
+                                    <div class="item-icon-box text-blue">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z">
+                                            </path>
+                                            <path d="M22 10v6M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="item-label">تخلفات آموزشی</span>
+                                </div>
+                                <div class="dropdown-item" data-value="پرسنلی" role="option">
+                                    <div class="item-icon-box text-cyan">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="item-label">مسائل پرسنلی</span>
+                                </div>
+                                <div class="dropdown-item" data-value="دانش آموزی" role="option">
+                                    <div class="item-icon-box text-purple">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3V4a2 2 0 0 0-2-2h-6a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2Z">
+                                            </path>
+                                            <path d="M9 10v4M15 10v4M9 6V4h6v2"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="item-label">مسائل دانش آموزی</span>
+                                </div>
+                                <div class="dropdown-item" data-value="مدارس غیردولتی" role="option">
+                                    <div class="item-icon-box text-indigo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
+                                            <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
+                                            <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
+                                            <path d="M10 6h4M10 10h4M10 14h4M10 18h4"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="item-label">مدارس و آموزشگاه‌های غیردولتی</span>
+                                </div>
+                                <div class="dropdown-item" data-value="آموزش مجازی" role="option">
+                                    <div class="item-icon-box text-teal">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <span class="item-label">مسائل مربوط به آموزش مجازی</span>
+                                </div>
+                                <div class="dropdown-item" data-value="فضای مجازی" role="option">
+                                    <div class="item-icon-box text-sky">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="item-label">هنجارشکنی و تخلفات در فضای مجازی</span>
+                                </div>
+                                <div class="dropdown-item" data-value="سایر" role="option">
+                                    <div class="item-icon-box text-slate">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0l8.57-3.91a1 1 0 0 0 0-1.83Z">
+                                            </path>
+                                            <path
+                                                d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65M22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <span class="item-label">سایر موارد</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="label-with-counter">
+                            <label for="description">شرح کامل گزارش <span class="label-required">*</span></label>
+                            <div class="char-counter" id="char-counter"><span id="current-char-count">۰</span> / ۵۰۰۰
+                                کاراکتر</div>
+                        </div>
+                        <textarea id="description" name="description" rows="6" required maxlength="5000"
+                            placeholder="جزئیات و شرح دقیق گزارش خود را اینجا بنویسید..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary btn-prev">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                            <span>مرحله قبل</span>
+                        </button>
+                        <button type="button" class="btn-primary btn-next">
+                            <span>مرحله بعد</span>
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow">
+                                <path d="M19 12H5"></path>
+                                <path d="m12 19-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="form-step" id="step-3">
+                    <div class="form-group">
+                        <label for="evidence">پیوست مدارک و مستندات <span class="label-optional">(اختیاری - حداکثر ۲۰
+                                مگابایت)</span></label>
+
+
+                        <div class="be-upload-container" id="be-upload-root">
+                            <input type="file" id="evidence" name="evidence"
+                                accept=".pdf, .jpg, .jpeg, .png, .zip, .rar, application/zip, application/x-zip-compressed, application/x-rar-compressed, application/octet-stream"
+                                multiple class="sr-only-input">
+
+
+                            <div class="be-dropzone centered" id="dropzone" role="button" tabindex="0"
+                                aria-label="بارگذاری مدارک و مستندات">
+                                <div class="be-dropzone-icon-box">
+                                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor"
+                                        stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+                                        class="be-cloud-icon">
+                                        <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                                        <path d="M12 12v9"></path>
+                                        <path d="m16 16-4-4-4 4"></path>
+                                    </svg>
+                                </div>
+                                <div class="be-dropzone-text-group">
+                                    <span class="be-dropzone-title">فایل‌های مستندات را اینجا بکشید و رها کنید</span>
+                                    <span class="be-dropzone-desc">اسناد PDF، تصاویر، ویدیو یا فایل‌های فشرده (حداکثر ۲۰
+                                        مگابایت)</span>
+                                </div>
+                                <span class="be-browse-badge">
+                                    <span>انتخاب از سیستم</span>
+                                </span>
+                            </div>
+
+
+                            <div class="be-file-queue d-none" id="be-file-queue">
+                                <div class="be-file-summary d-none" id="be-file-summary">
+                                    <span class="be-file-summary-badge" id="be-file-summary-count">۰ فایل پیوست
+                                        شده</span>
+                                    <span id="be-file-summary-size">۰ مگابایت از ۲۰ مگابایت</span>
+                                </div>
+                                <div class="be-file-list" id="be-file-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group captcha-wrapper">
+                        <label for="submit_captcha_answer">کد امنیتی <span class="label-required">*</span></label>
+                        <div class="captcha-row">
+                            <div class="captcha-box">
+                                <img id="submit-captcha-img" src="" alt="کد امنیتی" class="captcha-img">
+                                <button type="button" id="submit-captcha-refresh" class="btn-refresh"
+                                    data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
+                                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                                        <path d="M21 3v5h-5"></path>
+                                        <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                                        <path d="M8 16H3v5"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <input type="hidden" id="submit_captcha_id" name="captcha_id">
+                            <input type="text" id="submit_captcha_answer" name="captcha_answer" class="captcha-input"
+                                placeholder="پاسخ معادله را وارد کنید" required autocomplete="off" dir="ltr">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary btn-prev">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                            <span>مرحله قبل</span>
+                        </button>
+                        <button type="submit" id="submitBtn" class="btn-primary btn-submit">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
+                            <span class="btn-text">ثبت گزارش</span>
+                            <span class="btn-spinner d-none" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+
+            <div id="success-screen" class="d-none success-screen-container">
+                <div class="success-icon-wrapper">
+                    <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m9 12 2 2 4-4"></path>
+                    </svg>
+                </div>
+
+                <h2 class="success-title">گزارش با موفقیت ثبت شد</h2>
+
+                <p class="success-text">
+                    از احساس مسئولیت و همکاری شما سپاسگزاریم.<br>
+                    گزارش شما در بستری کاملاً امن، رمزنگاری‌شده و محرمانه دریافت گردید. لطفاً کد پیگیری زیر را ذخیره
+                    کرده و
+                    نزد خود نگه دارید.
+                </p>
+
+                <p class="success-hint">
+                    این کد برای پیگیری روند بررسی گزارش شما و ارتباط با کارشناسان حراست قابل استفاده است. از طریق قسمت
+                    <a href="#trackingSection" id="goToTrackingLink" class="success-tracking-link">پیگیری گزارش</a>
+                    اقدام فرمایید.
+                </p>
+
+                <div class="tracking-code-box">
+                    <span class="tracking-code-label">کد پیگیری اختصاصی شما:</span>
+                    <div class="tracking-code-row">
+                        <strong id="final-tracking-code" class="tracking-code-value"></strong>
+                        <button type="button" id="copyTrackingBtn" class="btn-copy" data-tooltip="کپی کد پیگیری"
+                            aria-label="کپی کد پیگیری">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                            </svg>
+                            <span id="copyBtnText">کپی کد</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="success-actions-row">
+                    <button type="button" id="printReceiptBtn" class="btn-secondary-outline">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                            <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path>
+                            <rect x="6" y="14" width="12" height="8" rx="1"></rect>
+                        </svg>
+                        <span>چاپ رسید پیگیری</span>
+                    </button>
+                    <button type="button" id="newReportBtn" class="btn-primary">ثبت گزارش جدید</button>
+                </div>
+            </div>
+
+            <div id="responseMessage" class="response-box" style="display: none;"></div>
+        </main>
+
+
+        <section id="trackingSection" class="d-none">
+            <form id="trackForm" style="margin-bottom: 25px;" novalidate>
+                <div class="form-group tracking-code-input-group">
+                    <div class="tracking-input-header">
+                        <label for="track_code_input" class="tracking-input-label">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="label-icon">
+                                <circle cx="7.5" cy="15.5" r="5.5"></circle>
+                                <path d="m21 2-9.6 9.6"></path>
+                                <path d="m15.5 7.5 3 3M17.5 5.5l2 2"></path>
+                            </svg>
+                            <span>کد پیگیری ۱۶ رقمی گزارش</span>
+                            <span class="label-required">*</span>
+                        </label>
+                        <span class="tracking-hint-badge">حروف و اعداد انگلیسی</span>
+                    </div>
+
+                    <div class="tracking-input-box">
+                        <div class="tracking-input-icon">
+                            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
+                        <input type="text" id="track_code_input" name="tracking_code"
+                            placeholder="مثال: A7B2K9X4M3P8Q1W5" maxlength="32" required dir="ltr" autocomplete="off"
+                            spellcheck="false" class="tracking-code-field">
+                        <button type="button" id="pasteTrackingBtn" class="btn-paste-stylish"
+                            data-tooltip="جای‌گذاری هوشمند از حافظه موقت" aria-label="جای‌گذاری کد پیگیری">
+                            <span class="btn-paste-icon">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect>
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2">
+                                    </path>
+                                </svg>
+                            </span>
+                            <span id="pasteBtnText" class="btn-paste-label">جای‌گذاری سریع</span>
+                        </button>
+                    </div>
+                    <small class="tracking-input-subtext">کد رهگیری دریافت شده هنگام ثبت گزارش را وارد کرده یا از دکمه
+                        جای‌گذاری سریع استفاده نمایید.</small>
+                </div>
+
+                <div class="form-group captcha-wrapper">
+                    <label for="track_captcha_answer">کد امنیتی <span class="label-required">*</span></label>
+                    <div class="captcha-row">
+                        <div class="captcha-box">
+                            <img id="track-captcha-img" src="" alt="کد امنیتی" class="captcha-img">
+                            <button type="button" id="track-captcha-refresh" class="btn-refresh"
+                                data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
+                                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                                    <path d="M21 3v5h-5"></path>
+                                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                                    <path d="M8 16H3v5"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <input type="hidden" id="track_captcha_id" name="captcha_id">
+                        <input type="text" id="track_captcha_answer" name="captcha_answer" class="captcha-input"
+                            placeholder="پاسخ معادله را وارد کنید" required autocomplete="off" dir="ltr">
+                    </div>
+                </div>
+
+                <button type="submit" id="trackSubmitBtn" class="btn-primary">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </svg>
+                    <span class="btn-text">استعلام وضعیت و مشاهده پاسخ</span>
+                    <span class="btn-spinner d-none" aria-hidden="true"></span>
+                </button>
+            </form>
+
+            <div id="trackErrorBox" class="response-box error" style="display: none;"></div>
+
+            <div id="trackResultSkeleton" class="skeleton-track-result d-none" aria-hidden="true" role="status" aria-label="در حال بارگذاری اطلاعات پرونده...">
+                <div class="skeleton-detail-grid">
+                    <div class="skeleton-detail-item">
+                        <div class="skeleton-shimmer skeleton-line-label"></div>
+                        <div class="skeleton-shimmer skeleton-line-val"></div>
+                    </div>
+                    <div class="skeleton-detail-item">
+                        <div class="skeleton-shimmer skeleton-line-label"></div>
+                        <div class="skeleton-shimmer skeleton-line-val"></div>
+                    </div>
+                    <div class="skeleton-detail-item">
+                        <div class="skeleton-shimmer skeleton-line-label"></div>
+                        <div class="skeleton-shimmer skeleton-line-val"></div>
+                    </div>
+                </div>
+
+                <div class="skeleton-conversation-card">
+                    <div class="skeleton-chat-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="skeleton-shimmer skeleton-chat-avatar"></div>
+                            <div class="skeleton-shimmer" style="width: 140px; height: 16px; border-radius: 4px;"></div>
+                        </div>
+                        <div class="skeleton-shimmer" style="width: 70px; height: 22px; border-radius: 12px;"></div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 14px;">
+                        <div class="skeleton-bubble-row admin-side">
+                            <div class="skeleton-shimmer skeleton-bubble-avatar"></div>
+                            <div class="skeleton-bubble-box admin-box">
+                                <div class="skeleton-shimmer" style="width: 100px; height: 12px; border-radius: 4px;"></div>
+                                <div class="skeleton-shimmer" style="width: 90%; height: 14px; border-radius: 4px;"></div>
+                                <div class="skeleton-shimmer" style="width: 65%; height: 14px; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton-bubble-row reporter-side">
+                            <div class="skeleton-shimmer skeleton-bubble-avatar"></div>
+                            <div class="skeleton-bubble-box reporter-box">
+                                <div class="skeleton-shimmer" style="width: 90px; height: 12px; border-radius: 4px;"></div>
+                                <div class="skeleton-shimmer" style="width: 75%; height: 14px; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skeleton-followup-card">
+                    <div class="skeleton-shimmer" style="width: 260px; height: 18px; border-radius: 4px;"></div>
+                    <div class="skeleton-shimmer" style="width: 95%; height: 13px; border-radius: 4px;"></div>
+                    <div class="skeleton-shimmer" style="width: 100%; height: 72px; border-radius: 8px;"></div>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <div class="skeleton-shimmer" style="width: 140px; height: 42px; border-radius: 8px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="trackResultBox" class="d-none track-result-container">
+                <div class="detail-grid" style="margin-bottom: 20px;">
+                    <div class="detail-item">
+                        <span class="detail-label">موضوع گزارش:</span>
+                        <strong id="track-category" class="detail-value"></strong>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">تاریخ ثبت:</span>
+                        <strong id="track-date" class="detail-value ltr"></strong>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">وضعیت بررسی:</span>
+                        <div id="track-status"></div>
+                    </div>
+                </div>
+
+                <!-- Unified Timeline / Conversation Feed (Nexus Chat Bubble Style) -->
+                <div id="track-conversation-container" class="nexus-chat-card d-none">
+                    <div class="nexus-chat-header">
+                        <div class="nexus-chat-header-info">
+                            <div class="nexus-chat-avatar-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="nexus-chat-title">گفتگو و پاسخ‌های پرونده</h4>
+                            </div>
+                        </div>
+                        <div class="nexus-chat-header-actions">
+                            <span id="track-messages-count-badge" class="nexus-chat-count-pill">۰ پیام</span>
+                        </div>
+                    </div>
+                    <div id="track-messages-list" class="nexus-chat-stream"></div>
+                </div>
+
+
+                <div id="track-followup-box" class="followup-reply-card">
+                    <h4>ارسال پیام یا توضیحات تکمیلی برای کارشناس حراست:</h4>
+                    <p class="followup-hint">در صورتی که مدارک جدید، توضیحات یا شواهدی جهت ضمیمه به این گزارش دارید، در
+                        کادر زیر وارد نمایید. توجه فرمایید که ارسال پیام‌های مکرر و فاقد اطلاعات جدید، کمکی به تسریع
+                        روند بررسی نخواهد کرد.</p>
+                    <textarea id="followup-message-input" rows="3" placeholder="توضیحات تکمیلی خود را بنویسید..."
+                        maxlength="4000"></textarea>
+
+                    <div class="followup-captcha-row">
+                        <div class="captcha-box captcha-box-compact">
+                            <img id="followup-captcha-img" src="" alt="کد امنیتی" class="captcha-img">
+                            <button type="button" id="followup-captcha-refresh" class="btn-refresh"
+                                data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                                    <path d="M21 3v5h-5"></path>
+                                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                                    <path d="M8 16H3v5"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <input type="hidden" id="followup_captcha_id">
+                        <input type="text" id="followup_captcha_answer" placeholder="پاسخ کد"
+                            class="captcha-input-compact" dir="ltr">
+                        <button type="button" id="btnSubmitFollowup" class="btn-primary btn-compact">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m22 2-7 20-4-9-9-4Z"></path>
+                                <path d="M22 2 11 13"></path>
+                            </svg>
+                            <span class="btn-text">ارسال پیام تکمیلی</span>
+                            <span class="btn-spinner d-none" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div id="followup-status-msg" class="response-box" style="display: none; margin-top: 12px;"></div>
+                </div>
+            </div>
+
+            <div class="contact-info-card">
+                <div class="contact-info-header">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                        </path>
+                    </svg>
+                    <strong>ارتباط مستقیم با اداره حراست آموزش و پرورش استان همدان</strong>
+                </div>
+                <p class="contact-info-text">
+                    در صورت نیاز به پیگیری تلفنی یا ارائه توضیحات تکمیلی، می‌توانید با شماره‌های زیر تماس حاصل فرمایید:
+                </p>
+                <div class="contact-badges-grid">
+                    <div class="contact-badge">
+                        <span class="contact-badge-label">شماره‌های تماس اداره کل:</span>
+                        <strong class="contact-badge-value ltr">۰۸۱-۳۸۲۶۴۰۴۱ الی ۳۸۲۶۴۰۴۶</strong>
+                    </div>
+                    <div class="contact-badge">
+                        <span class="contact-badge-label">شماره داخلی اداره حراست:</span>
+                        <strong class="contact-badge-value ltr highlight-ext">۱۱۸۶</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <footer class="portal-footer">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <img src="logo_it.png" alt="IT Protection Logo" class="footer-logo" loading="lazy"
+                            decoding="async" width="60" height="60">
+                        <div>
+                            <strong>حفاظت فناوری اطلاعات اداره حراست</strong>
+                            <p style="font-size: 12px; color: #94a3b8; margin-top: 2px;">اداره کل آموزش و پرورش استان
+                                همدان</p>
+                        </div>
+                    </div>
+                    <p class="footer-security-note">
+                        کلیه اطلاعات و گزارش‌های ارسالی در این درگاه در بستری کاملاً امن و رمزنگاری‌شده دریافت گردیده و
+                        با بالاترین استانداردهای حفاظت داده و محرمانگی سازمانی نگهداری می‌شوند.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <span class="footer-heading">
+                        <svg class="footer-title-icon" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+                            </path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        نشانی و ساعات اداری
+                    </span>
+                    <p class="footer-text">
+                        <strong>نشانی:</strong> همدان، خیابان فرهنگ، اداره کل آموزش و پرورش استان همدان
+                    </p>
+                    <p class="footer-text">
+                        <strong>پذیرش گزارش آنلاین:</strong> ۲۴ ساعته در تمام ایام هفته
+                    </p>
+                    <p class="footer-text">
+                        <strong>ساعات پاسخگویی تلفنی:</strong> شنبه تا چهارشنبه (۷:۳۰ الی ۱۳:۰۰)
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <span class="footer-heading">
+                        <svg class="footer-title-icon" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                            </path>
+                        </svg>
+                        راه‌های ارتباطی
+                    </span>
+                    <p class="footer-text">
+                        <strong>تلفنخانه:</strong> <span class="ltr">۶-۳۸۲۶۴۰۴۱</span>
+                    </p>
+                    <p class="footer-text">
+                        <strong>داخلی حراست:</strong> <span class="ltr highlight-ext">۱۱۸۶</span>
+                    </p>
+                    <p class="footer-text">
+                        <strong>کد پستی:</strong> <span class="ltr">۶۵۱۵۷۳۸۴۴۸</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© تمامی حقوق مادی و معنوی این سامانه متعلق به <strong>اداره حراست آموزش و پرورش استان همدان</strong>
+                    است.</p>
+            </div>
+        </footer>
+    </div>
+
+
+    <div id="guidelinesDrawer" class="drawer-overlay d-none" role="dialog" aria-modal="true"
+        aria-labelledby="faqDrawerTitle">
+        <div class="drawer-panel faq-themed-drawer">
+            <div class="drawer-grid-bg" aria-hidden="true"></div>
+            <div class="drawer-header">
+                <div class="drawer-title-box">
+                    <div class="faq-badge-icon">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <path d="M12 17h.01"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 id="faqDrawerTitle">راهنمای ثبت گزارش و سوالات متداول</h3>
+                        <p class="drawer-subtitle">پاسخ به سوالات پرتکرار پیرامون امنیت، پیگیری و مستندات</p>
+                    </div>
+                </div>
+                <button type="button" id="closeDrawerBtn" class="btn-close-drawer" aria-label="بستن راهنما">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="drawer-body">
+                <div class="faq-accordion-list" id="faqAccordionList">
+
+                    <div class="faq-accordion-item" data-faq="item-1">
+                        <button type="button" class="faq-accordion-header" aria-expanded="false">
+                            <div class="faq-header-content">
+                                <div class="faq-item-icon">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                                        <path d="m9 12 2 2 4-4"></path>
+                                    </svg>
+                                </div>
+                                <span class="faq-item-title">امنیت و محرمانگی گزارش‌ها چگونه تضمین می‌شود؟</span>
+                            </div>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-accordion-body">
+                            <div class="faq-accordion-content">
+                                تمامی داده‌ها با پیشرفته‌ترین استانداردهای رمزنگاری سازمانی دریافت شده و تنها کارشناسان
+                                ارشد حراست امکان دسترسی به گزارش‌ها را دارند. هیچ‌گونه ردپای هویتی در گزارش‌های ناشناس
+                                ذخیره نمی‌شود.
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="faq-accordion-item" data-faq="item-2">
+                        <button type="button" class="faq-accordion-header" aria-expanded="false">
+                            <div class="faq-header-content">
+                                <div class="faq-item-icon">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                                        <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                                        <path d="M10 9H8"></path>
+                                        <path d="M16 13H8"></path>
+                                        <path d="M16 17H8"></path>
+                                    </svg>
+                                </div>
+                                <span class="faq-item-title">چه اطلاعاتی به تسریع روند رسیدگی کمک می‌کند؟</span>
+                            </div>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-accordion-body">
+                            <div class="faq-accordion-content">
+                                ذکر دقیق زمان و مکان وقوع تخلف، نام افراد یا واحدهای مرتبط و در صورت امکان پیوست اسناد،
+                                تصاویر یا فایل‌های مستند به صورت فشرده به کارشناسان حراست در بررسی موثر و دقیق‌تر کمک
+                                شایانی می‌نماید.
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="faq-accordion-item" data-faq="item-3">
+                        <button type="button" class="faq-accordion-header" aria-expanded="false">
+                            <div class="faq-header-content">
+                                <div class="faq-item-icon">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <path d="m21 21-4.3-4.3"></path>
+                                    </svg>
+                                </div>
+                                <span class="faq-item-title">چگونه می‌توانم نتیجه گزارش خود را پیگیری کنم؟</span>
+                            </div>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-accordion-body">
+                            <div class="faq-accordion-content">
+                                پس از ثبت گزارش، یک کد پیگیری ۱۶ رقمی اختصاصی به شما ارائه می‌شود. با نگهداری این کد و
+                                مراجعه به بخش «پیگیری گزارش»، می‌توانید پاسخ رسمی اداره حراست را مشاهده کرده و در صورت
+                                نیاز پیام تکمیلی ارسال فرمایید.
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="faq-accordion-item" data-faq="item-4">
+                        <button type="button" class="faq-accordion-header" aria-expanded="false">
+                            <div class="faq-header-content">
+                                <div class="faq-item-icon">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path
+                                            d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <span class="faq-item-title">فایل‌ها و مستندات مجاز چیست؟</span>
+                            </div>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-accordion-body">
+                            <div class="faq-accordion-content">
+                                اسناد متنی (PDF)، تصاویر (JPG, PNG) و فایل‌های فشرده (ZIP, RAR) تا سقف ۲۰ مگابایت مجاز
+                                هستند. برای ارسال چند سند همزمان، لطفاً آنها را درون یک فایل فشرده قرار دهید.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-accordion-item" data-faq="item-5">
+                        <button type="button" class="faq-accordion-header" aria-expanded="false">
+                            <div class="faq-header-content">
+                                <div class="faq-item-icon">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                        <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                        <path d="M7 21h10"></path>
+                                        <path d="M12 3v18"></path>
+                                        <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+                                    </svg>
+                                </div>
+                                <span class="faq-item-title">چه موضوعاتی در حیطه صلاحیت رسیدگی ستاد خبری قرار
+                                    دارد؟</span>
+                            </div>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-accordion-body">
+                            <div class="faq-accordion-content">
+                                این سامانه جهت دریافت گزارش‌های مربوط به تخلفات اداری، مالی، سوءاستفاده از موقعیت شغلی،
+                                نقض ضوابط آزمون‌ها، مفاسد و رفتارهای سوء، و مسائل امنیتی در سطح مدارس و ادارات آموزش و
+                                پرورش استان ایجاد شده است. شکایات فردی یا درخواست‌های جاری اداری مانند نقل و انتقالات،
+                                باید از طریق سامانه ارزیابی عملکرد و پاسخگویی به شکایات پیگیری شوند.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-accordion-item" data-faq="item-6">
+                        <button type="button" class="faq-accordion-header" aria-expanded="false">
+                            <div class="faq-header-content">
+                                <div class="faq-item-icon">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"></path>
+                                        <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
+                                    </svg>
+                                </div>
+                                <span class="faq-item-title">در صورت مفقود شدن کد پیگیری، امکان بازیابی وجود
+                                    دارد؟</span>
+                            </div>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-accordion-body">
+                            <div class="faq-accordion-content">
+                                خیر؛ جهت تضمین اصل محرمانگی مطلق و عدم امکان ردگیری هویت گزارش‌دهندگان ناشناس، هیچ‌گونه
+                                روش بازیابی یا ارسال مجدد پیامکی کد پیگیری وجود ندارد. در این شرایط، در صورت نیاز به
+                                ارسال اطلاعات تکمیلی، لازم است گزارش جدیدی با اشاره به گزارش قبلی ثبت فرمایید.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-accordion-item" data-faq="item-7">
+                        <button type="button" class="faq-accordion-header" aria-expanded="false">
+                            <div class="faq-header-content">
+                                <div class="faq-item-icon">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <span class="faq-item-title">زمان بررسی اولیه و پاسخ‌دهی به گزارش‌ها چقدر است؟</span>
+                            </div>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-accordion-body">
+                            <div class="faq-accordion-content">
+                                تمامی گزارش‌های دریافتی حداکثر ظرف ۲۴ الی ۷۲ ساعت کاری توسط کارشناسان ارشد حراست ارزیابی
+                                اولیه شده و در مسیر رسیدگی قرار می‌گیرند. پاسخ رسمی حراست یا درخواست مستندات بیشتر در
+                                بخش «پیگیری گزارش» قابل مشاهده خواهد بود.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-accordion-item" data-faq="item-8">
+                        <button type="button" class="faq-accordion-header" aria-expanded="false">
+                            <div class="faq-header-content">
+                                <div class="faq-item-icon">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path
+                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                        </path>
+                                        <path d="M14.05 2a9 9 0 0 1 8 7.94"></path>
+                                        <path d="M14.05 6A5 5 0 0 1 18 10"></path>
+                                    </svg>
+                                </div>
+                                <span class="faq-item-title">آیا امکان ارتباط تلفنی یا مراجعه حضوری نیز وجود
+                                    دارد؟</span>
+                            </div>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-accordion-body">
+                            <div class="faq-accordion-content">
+                                بله؛ علاوه بر سامانه برخط، در ساعات اداری می‌توانید از طریق شماره ۳۸۲۶۴۰۴۱ (داخلی ۱۱۸۶)
+                                با کارشناسان ستاد خبری ارتباط برقرار نمایید یا به صورت حضوری به اداره حراست در ساختمان
+                                اداره کل آموزش و پرورش استان مراجعه فرمایید.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- =========================================================================
+         Standalone Official A5 Tracking Receipt (Exclusive Print/PDF Target)
+         ========================================================================= -->
+    <section id="officialReceiptDoc" class="official-receipt-doc" aria-hidden="true">
+        <div class="receipt-frame">
+            <div class="receipt-inner-border">
+                <!-- 1. Institutional Header -->
+                <header class="receipt-header">
+                    <div class="receipt-header-right">
+                        <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش استان همدان" class="receipt-emblem">
+                    </div>
+                    <div class="receipt-header-center">
+                        <span class="receipt-gov-title">جمهوری اسلامی ایران</span>
+                        <span class="receipt-ministry-title">وزارت آموزش و پرورش - اداره کل استان همدان</span>
+                        <span class="receipt-sub-org">اداره حراست · سامانه ستاد خبری و نظارت مردمی</span>
+                    </div>
+                    <div class="receipt-header-left">
+                        <div class="receipt-meta-item">
+                            <span class="receipt-meta-lbl">تاریخ ثبت:</span>
+                            <span class="receipt-meta-val" id="receipt-date">-</span>
+                        </div>
+                        <div class="receipt-meta-item">
+                            <span class="receipt-meta-lbl">ساعت ثبت:</span>
+                            <span class="receipt-meta-val" id="receipt-time">-</span>
+                        </div>
+                        <div class="receipt-meta-item">
+                            <span class="receipt-meta-lbl">وضعیت:</span>
+                            <span class="receipt-meta-val text-status-pending">در نوبت بررسی</span>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="receipt-decorative-line">
+                    <span class="receipt-dec-diamond"></span>
+                </div>
+
+                <!-- 2. Tracking Code Hero Section -->
+                <div class="receipt-tracking-hero">
+                    <div class="receipt-tracking-badge-row">
+                        <span class="receipt-shield-icon">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </span>
+                        <span class="receipt-tracking-caption">کد پیگیری پرونده</span>
+                    </div>
+                    <div class="receipt-tracking-number-box">
+                        <strong id="receipt-tracking-code" class="receipt-tracking-code-val"></strong>
+                    </div>
+                </div>
+
+                <!-- 3. Report Metadata Structured Grid -->
+                <div class="receipt-meta-table">
+                    <div class="receipt-meta-row">
+                        <div class="receipt-meta-col">
+                            <span class="receipt-col-label">موضوع گزارش:</span>
+                            <strong class="receipt-col-value" id="receipt-category">-</strong>
+                        </div>
+                        <div class="receipt-meta-col">
+                            <span class="receipt-col-label">نوع گزارش:</span>
+                            <strong class="receipt-col-value" id="receipt-type">ناشناس (محرمانه)</strong>
+                        </div>
+                    </div>
+                    <div class="receipt-meta-row">
+                        <div class="receipt-meta-col">
+                            <span class="receipt-col-label">مشخصات گزارش‌دهنده:</span>
+                            <span class="receipt-col-value" id="receipt-reporter">محفوظ (ثبت ناشناس)</span>
+                        </div>
+                        <div class="receipt-meta-col">
+                            <span class="receipt-col-label">شماره تماس متقاضی:</span>
+                            <span class="receipt-col-value ltr" id="receipt-phone">ثبت نشده</span>
+                        </div>
+                    </div>
+                    <div class="receipt-meta-row">
+                        <div class="receipt-meta-col">
+                            <span class="receipt-col-label">مستندات و فایل‌های پیوست:</span>
+                            <span class="receipt-col-value" id="receipt-attachments">فاقد فایل پیوست</span>
+                        </div>
+                        <div class="receipt-meta-col">
+                            <span class="receipt-col-label">کانال دریافت:</span>
+                            <span class="receipt-col-value">سامانه برخط ستاد خبری حراست</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Citizen Guidelines & Security Advisory -->
+                <div class="receipt-guidelines-box">
+                    <div class="receipt-guidelines-title">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <strong>نکات و ضوابط مهم پیگیری پرونده:</strong>
+                    </div>
+                    <ul class="receipt-guidelines-list">
+                        <li>کد پیگیری فوق تنها شناسه هویتی پرونده است؛ جهت حفظ اصل محرمانگی، از افشای آن به دیگران خودداری فرمایید.</li>
+                        <li>جهت اطلاع از نظر کارشناسان، روند بررسی یا ارسال توضیحات تکمیلی، با همین کد به بخش «پیگیری گزارش» در سامانه مراجعه فرمایید.</li>
+                        <li>در صورت نیاز به پیگیری تلفنی در ساعات اداری، کد رهگیری فوق را به کارشناس ستاد خبری اعلام فرمایید.</li>
+                    </ul>
+                </div>
+
+                <!-- 5. Verification Seal & Official Footer -->
+                <footer class="receipt-footer">
+                    <div class="receipt-footer-right">
+                        <span class="receipt-url">نشانی پیگیری برخط: setadkhabari.hedu.ir</span>
+                    </div>
+                    <div class="receipt-footer-left">
+                        <div class="receipt-barcode-wrap">
+                            <div class="receipt-barcode-lines" aria-hidden="true"></div>
+                            <span class="receipt-barcode-code" id="receipt-barcode-num"></span>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </section>
+
+    <script src="confirm.js"></script>
+    <script src="app.js?v=73"></script>
+</body>
+
+</html>

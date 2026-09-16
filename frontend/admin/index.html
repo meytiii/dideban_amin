@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت حراست - آموزش و پرورش همدان</title>
+    <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="admin.css?v=82">
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+
+<body>
+    <!-- Luxury 3D Preloader Overlay (guaranteed >= 1.5s prestige animation) -->
+    <div id="adminPreloader" class="luxury-preloader" aria-label="در حال بارگذاری سامانه ستاد خبری" role="status">
+        <div class="preloader-backdrop-glow"></div>
+        <div class="preloader-content">
+            <div class="morph-loader-container">
+                <div class="morph-loader">
+                    <div class="morph-item morph-0"></div>
+                    <div class="morph-item morph-1"></div>
+                    <div class="morph-item morph-2"></div>
+                    <div class="morph-item morph-3"></div>
+                </div>
+            </div>
+            <div class="preloader-info">
+                <div class="preloader-title-row">
+                    <span class="preloader-pulse-dot"></span>
+                    <span class="preloader-title">در حال بارگذاری سامانه ستاد خبری</span>
+                </div>
+                <div class="preloader-progress-track">
+                    <div class="preloader-progress-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skeleton Layout Placeholder for Zero Layout Shift -->
+    <div id="adminSkeleton" class="page-skeleton" aria-hidden="true">
+        <div class="skeleton-header">
+            <div class="skeleton-crest skeleton-shimmer"></div>
+            <div class="skeleton-title skeleton-shimmer"></div>
+            <div class="skeleton-sub skeleton-shimmer"></div>
+        </div>
+        <div class="skeleton-card skeleton-shimmer" style="max-width: 440px; height: 360px;"></div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+
+    <div id="login-section" class="admin-login-wrapper">
+        <div class="admin-login-card-3d-wrapper" id="loginCard3D">
+            <div class="admin-login-card">
+
+                <div class="card-beam-container" aria-hidden="true">
+                    <div class="beam beam-top"></div>
+                    <div class="beam beam-right"></div>
+                    <div class="beam beam-bottom"></div>
+                    <div class="beam beam-left"></div>
+                    <div class="corner-glow corner-tl"></div>
+                    <div class="corner-glow corner-tr"></div>
+                    <div class="corner-glow corner-br"></div>
+                    <div class="corner-glow corner-bl"></div>
+                </div>
+
+
+                <div class="admin-login-inner">
+                    <div class="admin-login-header">
+                        <div class="admin-logo-crest">
+                            <img src="logo.png" alt="لوگوی اداره حراست" class="admin-crest-img">
+                            <div class="crest-glow"></div>
+                        </div>
+                        <h1>ورود امن به پنل مدیریتی ستاد خبری</h1>
+                        <p>اداره حراست آموزش و پرورش استان همدان</p>
+                    </div>
+
+                    <form id="loginForm" novalidate>
+                        <div class="login-form-group">
+                            <label for="username">نام کاربری</label>
+                            <div class="login-input-wrapper">
+                                <span class="login-input-icon">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </span>
+                                <input type="text" id="username" name="username" required autocomplete="off"
+                                    placeholder="نام کاربری اداری">
+                            </div>
+                        </div>
+
+                        <div class="login-form-group">
+                            <label for="password">رمز عبور</label>
+                            <div class="login-input-wrapper">
+                                <span class="login-input-icon">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </span>
+                                <input type="password" id="password" name="password" required
+                                    autocomplete="current-password" placeholder="رمز عبور">
+                                <button type="button" id="togglePasswordBtn" class="btn-toggle-pw"
+                                    data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
+                                    <svg id="eye-icon-show" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    <svg id="eye-icon-hide" class="d-none" viewBox="0 0 24 24" width="18" height="18"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="m15 18-.722-3.25"></path>
+                                        <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
+                                        <path d="m20 15-1.726-2.05"></path>
+                                        <path d="m4 15 1.726-2.05"></path>
+                                        <path d="m9 18 .722-3.25"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="login-form-group captcha-wrapper">
+                            <label for="admin_captcha_answer">کد امنیتی</label>
+                            <div class="admin-captcha-row">
+                                <div class="admin-captcha-box">
+                                    <img id="admin-captcha-img" src="" alt="کد امنیتی" class="admin-captcha-img">
+                                    <button type="button" id="admin-captcha-refresh" class="btn-refresh"
+                                        data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                                            <path d="M3 3v5h5"></path>
+                                            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+                                            <path d="M16 21h5v-5"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <input type="hidden" id="admin_captcha_id" name="captcha_id">
+                                <input type="text" id="admin_captcha_answer" name="captcha_answer"
+                                    placeholder="پاسخ معادله" required autocomplete="off" dir="ltr"
+                                    class="admin-captcha-input">
+                            </div>
+                        </div>
+
+                        <button type="submit" id="loginBtn" class="btn-admin-login">
+                            <span class="btn-text">
+                                <span>ورود به سیستم</span>
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="login-arrow-icon">
+                                    <path d="M19 12H5"></path>
+                                    <path d="m12 19-7-7 7-7"></path>
+                                </svg>
+                            </span>
+                            <span class="btn-spinner d-none" aria-hidden="true"></span>
+                        </button>
+                    </form>
+                    <div id="loginMessage" class="response-box" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="dashboard-section" class="dashboard-container" style="display: none;">
+        <header class="dashboard-header">
+            <div class="dashboard-brand">
+                <h2>کارتابل محرمانه حراست</h2>
+                <span class="sub-brand">حفاظت اطلاعات اداره کل آموزش و پرورش همدان</span>
+                <div class="admin-profile-pill" id="header-admin-profile">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span id="header-admin-fullname" class="profile-fullname">در حال دریافت...</span>
+                    <span class="profile-sep">•</span>
+                    <span id="header-admin-role" class="profile-role">...</span>
+                </div>
+            </div>
+
+            <div class="dashboard-logo-center">
+                <div class="admin-logo-crest dashboard-header-crest">
+                    <img src="logo.png" alt="لوگوی اداره حراست آموزش و پرورش همدان" class="admin-crest-img">
+                </div>
+            </div>
+
+            <div class="dashboard-actions">
+
+                <div class="session-timer-wrapper" id="sessionTimerWrapper">
+                    <div class="session-timer-box" id="sessionTimerBox" tabindex="0" role="button" aria-haspopup="true"
+                        aria-expanded="false" aria-label="اعتبار نشست کاری - راهنما و وضعیت">
+                        <strong id="sessionCountdown" class="ltr">15:00</strong>
+                    </div>
+
+
+                    <div class="session-tooltip" id="sessionTooltip" role="tooltip">
+                        <div class="session-tooltip-header">
+                            <div class="tooltip-header-title">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                </svg>
+                                <span>راهنمای اعتبار نشست امنیتی</span>
+                            </div>
+                        </div>
+                        <div class="session-tooltip-body">
+                            <div class="tooltip-section">
+                                <div class="tooltip-sec-title">
+                                    <span class="bullet-dot"></span>
+                                    <strong>این تایمر چیست؟</strong>
+                                </div>
+                                <p>شمارشگر معکوس ۱۵ دقیقه‌ای برای حفظ امنیت نشست کاری و جلوگیری از دسترسی غیرمجاز در
+                                    صورت ترک سیستم است.</p>
+                            </div>
+
+                            <div class="tooltip-section">
+                                <div class="tooltip-sec-title">
+                                    <span class="bullet-dot"></span>
+                                    <strong>نحوه عملکرد (Timeout):</strong>
+                                </div>
+                                <p>به‌صورت پیش‌فرض نشست شما ۱۵ دقیقه اعتبار دارد. در صورت اتمام زمان (۰:۰۰)، سیستم جهت
+                                    جلوگیری از سوءاستفاده به‌صورت خودکار خارج شده و قفل می‌شود.</p>
+                            </div>
+
+                            <div class="tooltip-section">
+                                <div class="tooltip-sec-title">
+                                    <span class="bullet-dot"></span>
+                                    <strong>چگونه تمدید (Reset) می‌شود؟</strong>
+                                </div>
+                                <ul class="tooltip-list">
+                                    <li><strong>خودکار:</strong> با هر فعالیت (باز کردن گزارش، ثبت پاسخ، فیلتر یا جستجو)
+                                        تایمر خودکار به ۱۵:۰۰ بازنشانی می‌شود.</li>
+                                    <li><strong>دستی:</strong> با کلیک روی دکمه زیر یا کادر زمان‌سنج می‌توانید اعتبار
+                                        نشست را فوراً تمدید نمایید.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="session-tooltip-footer">
+                            <div class="session-status-pill">
+                                <span class="status-indicator-dot"></span>
+                                <span id="sessionStatusText">وضعیت: فعال و امن</span>
+                            </div>
+                            <button type="button" id="btnRenewSession" class="btn-renew-session"
+                                data-tooltip="تمدید فوری اعتبار نشست">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <span>تمدید نشست</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="notif-wrapper" id="notifWrapper">
+                    <button type="button" id="btnNotifBell" class="btn-action btn-secondary btn-notif-bell"
+                        aria-haspopup="true" aria-expanded="false" aria-label="مرکز اعلان‌ها و رویدادها"
+                        data-tooltip="مرکز اعلان‌ها و رویدادها">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span>اعلان‌ها</span>
+                        <span class="notif-badge-pill d-none" id="notifBadgeCount">۰</span>
+                    </button>
+
+
+                    <div class="notif-dropdown" id="notifDropdown" style="display: none;">
+                        <div class="notif-dropdown-header">
+                            <div class="notif-title-group">
+                                <div class="notif-bell-icon-small">
+                                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                    </svg>
+                                </div>
+                                <strong class="notif-title">اعلان‌ها و رویدادها</strong>
+                                <span class="notif-unread-tag" id="notifUnreadTag">۰ جدید</span>
+                            </div>
+                            <button type="button" id="btnMarkAllNotifsRead" class="btn-mark-all-read"
+                                data-tooltip="علامت‌گذاری همه به عنوان خوانده شده">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+                                    stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>خواندن همه</span>
+                            </button>
+                        </div>
+                        <div class="notif-dropdown-body" id="notifListContainer">
+
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" id="btnOpenShortcuts" class="btn-action btn-secondary"
+                    data-tooltip="راهنمای کلیدهای میانبر (کلید ?)">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                        <line x1="6" y1="8" x2="6" y2="8"></line>
+                        <line x1="10" y1="8" x2="10" y2="8"></line>
+                        <line x1="14" y1="8" x2="14" y2="8"></line>
+                        <line x1="18" y1="8" x2="18" y2="8"></line>
+                        <line x1="6" y1="12" x2="6" y2="12"></line>
+                        <line x1="18" y1="12" x2="18" y2="12"></line>
+                        <line x1="8" y1="16" x2="16" y2="16"></line>
+                    </svg>
+                    <span>میانبرها (?)</span>
+                </button>
+                <button type="button" id="btnOpenChangeMyPwd" class="btn-action btn-secondary"
+                    data-tooltip="تغییر رمز عبور حساب من">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <span>تغییر رمز</span>
+                </button>
+                <button type="button" id="logoutBtn" class="btn-action btn-danger" data-tooltip="خروج از کارتابل حراست">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>خروج</span>
+                </button>
+            </div>
+        </header>
+
+
+        <div class="admin-main-nav">
+            <button type="button" id="tab-btn-reports" class="main-nav-tab active">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                <span>کارتابل گزارش‌ها</span>
+            </button>
+            <button type="button" id="tab-btn-analytics" class="main-nav-tab">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>آمار و تحلیل داده‌ها</span>
+            </button>
+            <button type="button" id="tab-btn-advanced" class="main-nav-tab superuser-tab" style="display: none;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <circle cx="12" cy="11" r="3"></circle>
+                </svg>
+                <span>بخش پشتیبانی و امنیت سامانه</span>
+                <span class="superuser-badge-pill">پشتیبانی سامانه</span>
+            </button>
+        </div>
+
+
+        <div id="reports-inbox-section">
+
+            <section class="kpi-grid">
+                <div class="kpi-card" id="kpi-total-card">
+                    <div class="kpi-icon-box kpi-blue">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">کل گزارش‌ها</span>
+                        <strong class="kpi-value" id="kpi-total-count">۰</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card" id="kpi-unread-card">
+                    <div class="kpi-icon-box kpi-amber">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">در انتظار بررسی</span>
+                        <strong class="kpi-value text-amber" id="kpi-unread-count">۰</strong>
+                    </div>
+                    <div class="kpi-pulse-dot" id="kpi-unread-pulse"></div>
+                </div>
+
+                <div class="kpi-card" id="kpi-read-card">
+                    <div class="kpi-icon-box kpi-emerald">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">بررسی شده</span>
+                        <strong class="kpi-value text-emerald" id="kpi-read-count">۰</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card" id="kpi-responded-card">
+                    <div class="kpi-icon-box kpi-cyan">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">دارای پاسخ</span>
+                        <strong class="kpi-value text-cyan" id="kpi-responded-count">۰</strong>
+                    </div>
+                </div>
+            </section>
+
+
+            <div class="filter-container" id="reportsFilterContainer">
+                <div class="filter-group filter-search-group">
+                    <div class="search-input-wrapper" data-tooltip="جستجوی سریع در کد پیگیری، موضوع یا متن کامل گزارش...">
+                        <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="search-tracking" placeholder="جستجوی سریع در کد پیگیری، موضوع یا متن گزارش..."
+                            data-tooltip="جستجوی سریع در کد پیگیری، موضوع یا متن کامل گزارش..." aria-label="جستجوی سریع در گزارش‌ها">
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <select id="filter-type">
+                        <option value="all">همه موضوعات</option>
+                        <option value="مالی">تخلفات مالی</option>
+                        <option value="امنیتی">مسائل امنیتی</option>
+                        <option value="تخلفات اداری">تخلفات قانونی و اداری</option>
+                        <option value="تخلفات آموزشی">تخلفات آموزشی</option>
+                        <option value="پرسنلی">مسائل پرسنلی</option>
+                        <option value="دانش آموزی">مسائل دانش آموزی</option>
+                        <option value="مدارس غیردولتی">مدارس و آموزشگاه‌های غیردولتی</option>
+                        <option value="آموزش مجازی">مسائل مربوط به آموزش مجازی</option>
+                        <option value="فضای مجازی">هنجارشکنی و تخلفات در فضای مجازی</option>
+                        <option value="سایر">سایر</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="filter-read-status">
+                        <option value="all">همه وضعیت‌ها</option>
+                        <option value="new_message">پیام جدید</option>
+                        <option value="regional_response">پاسخ کارشناسی (ناحیه / منطقه)</option>
+                        <option value="unread">در نوبت بررسی (جدید)</option>
+                        <option value="read">بررسی شده</option>
+                        <option value="responded">دارای پاسخ</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="filter-priority">
+                        <option value="all">همه اولویت‌ها</option>
+                        <option value="critical">آنی / بسیار مهم</option>
+                        <option value="urgent">فوری</option>
+                        <option value="normal">عادی</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="filter-month">
+                        <option value="all">همه ماه‌ها</option>
+                        <option value="01">فروردین</option>
+                        <option value="02">اردیبهشت</option>
+                        <option value="03">خرداد</option>
+                        <option value="04">تیر</option>
+                        <option value="05">مرداد</option>
+                        <option value="06">شهریور</option>
+                        <option value="07">مهر</option>
+                        <option value="08">آبان</option>
+                        <option value="09">آذر</option>
+                        <option value="10">دی</option>
+                        <option value="11">بهمن</option>
+                        <option value="12">اسفند</option>
+                    </select>
+                </div>
+                <div class="filter-group-auto" style="display: flex; gap: 8px;">
+                    <button type="button" id="btnExportCSV" class="btn-action btn-export"
+                        data-tooltip="خروجی فایل اکسل / CSV گزارش‌های فیلتر شده">
+                        <svg class="office-icon" viewBox="0 0 24 24" width="16" height="16" fill="none">
+                            <path
+                                d="M14.5 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V7.5L14.5 2Z"
+                                fill="#107C41" />
+                            <path d="M14 2V7C14 7.6 14.4 8 15 8H20L14 2Z" fill="#33C481" />
+                            <rect x="2" y="7" width="12" height="12" rx="2" fill="#0B5A2F"
+                                filter="drop-shadow(0 2px 4px rgba(0,0,0,0.35))" />
+                            <path
+                                d="M5.2 10.2L7.3 13L5 16H6.5L7.9 13.9L9.4 16H10.9L8.6 13L10.7 10.2H9.3L8 12.2L6.7 10.2H5.2Z"
+                                fill="#FFFFFF" />
+                            <line x1="15.5" y1="11.5" x2="18.5" y2="11.5" stroke="#FFFFFF" stroke-width="1.2"
+                                stroke-linecap="round" stroke-opacity="0.8" />
+                            <line x1="15.5" y1="14.5" x2="18.5" y2="14.5" stroke="#FFFFFF" stroke-width="1.2"
+                                stroke-linecap="round" stroke-opacity="0.8" />
+                            <line x1="15.5" y1="17.5" x2="18.5" y2="17.5" stroke="#FFFFFF" stroke-width="1.2"
+                                stroke-linecap="round" stroke-opacity="0.8" />
+                        </svg>
+                        <span>خروجی اکسل</span>
+                    </button>
+                    <button type="button" id="refreshReportsBtn" class="btn-refresh-list"
+                        data-tooltip="بروزرسانی و دریافت آخرین گزارش‌ها">
+                        <svg class="refresh-icon" viewBox="0 0 24 24" width="16" height="16" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>بروزرسانی</span>
+                    </button>
+                    <button type="button" id="clearFiltersBtn" class="btn-clear" data-tooltip="حذف تمام فیلترها">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                        <span>حذف فیلترها</span>
+                    </button>
+                </div>
+            </div>
+
+
+            <div id="bulkActionsToolbar" class="bulk-actions-toolbar" style="display: none;">
+                <div class="bulk-info">
+                    <span id="bulkSelectedCount">۰</span> مورد انتخاب شده است
+                </div>
+                <div class="bulk-buttons">
+                    <button type="button" id="btnBulkMarkRead" class="btn-action btn-secondary"
+                        style="font-size: 12.5px; padding: 6px 14px;">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>علامت‌گذاری به عنوان بررسی‌شده</span>
+                    </button>
+                    <button type="button" id="btnBulkCancel" class="btn-action btn-clear"
+                        style="font-size: 12.5px; padding: 6px 12px;">
+                        <span>انصراف</span>
+                    </button>
+                </div>
+            </div>
+
+
+            <main id="reports-list-section" class="table-responsive">
+                <table id="reportsTable">
+                    <thead>
+                        <tr>
+                            <th class="bulk-th" style="width: 38px; text-align: center;">
+                                <input type="checkbox" id="selectAllReports" data-tooltip="انتخاب همه موارد این صفحه">
+                            </th>
+                            <th>کد پیگیری</th>
+                            <th>اولویت</th>
+                            <th>تاریخ و زمان ثبت</th>
+                            <th>موضوع</th>
+                            <th>نوع گزارش</th>
+                            <th>وضعیت بررسی</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportsBody">
+
+                    </tbody>
+                </table>
+
+
+                <div class="pagination-container">
+                    <div class="pagination-info" id="pagination-info">گزارش ۰ از ۰</div>
+                    <div class="pagination-controls" dir="ltr">
+
+                        <button id="btn-last" class="btn-page" data-tooltip="قدیمی‌ترین گزارش‌ها">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M13 17l-5-5 5-5M6 17l-5-5 5-5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+
+                        <button id="btn-next" class="btn-page" data-tooltip="صفحه بعد (قدیمی‌تر)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+
+                        <button id="btn-prev" class="btn-page" data-tooltip="صفحه قبل (جدیدتر)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+
+                        <button id="btn-first" class="btn-page" data-tooltip="جدیدترین گزارش‌ها (صفحه اول)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 17l5-5-5-5M18 17l5-5-5-5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+
+        <section id="report-detail-section" style="display: none;">
+
+            <div class="print-official-header">
+                <div class="print-header-side print-header-right">
+                    <img src="report_logo.png" alt="نشان رسمی اداره حراست" class="print-official-logo">
+                </div>
+                <div class="print-header-center">
+                    <div class="bismillah">« بسمه تعالی »</div>
+                    <div class="print-doc-title">برگ پرونده گزارش محرمانه</div>
+                    <div class="print-doc-subtitle">سامانه ستاد خبری و گزارش‌های مردمی</div>
+                </div>
+                <div class="print-header-side print-header-left">
+                    <div class="print-meta-item"><span>شماره پرونده:</span> <strong id="print-header-tracking"
+                            class="ltr"></strong></div>
+                    <div class="print-meta-item"><span>تاریخ ثبت:</span> <strong id="print-header-regdate"></strong>
+                    </div>
+                    <div class="print-meta-item"><span>زمان چاپ:</span> <strong id="print-header-date"></strong></div>
+                    <div class="print-meta-item print-meta-classified"><span>طبقه‌بندی:</span> <strong>محرمانه</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="print-divider-line"></div>
+
+            <div class="detail-header">
+                <div>
+                    <h3>جزئیات گزارش محرمانه</h3>
+                    <span class="detail-header-sub">اطلاعات پرونده و سابقه اقدامات</span>
+                </div>
+                <div class="detail-header-actions">
+                    <button type="button" id="btnDeleteReportSuperuser" class="btn-action btn-danger d-none"
+                        data-tooltip="حذف دائمی پرونده و فایل‌های ضمیمه از حافظه سرور (مخصوص پشتیبانی سامانه)">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                            </path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
+                        <span>حذف کامل پرونده</span>
+                    </button>
+                    <button type="button" id="btnForwardReportDetail" class="btn-action btn-submit d-none"
+                        data-tooltip="ارجاع خبر به کارشناسان حراست">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <polyline points="16 6 12 2 8 6"></polyline>
+                            <line x1="12" y1="2" x2="12" y2="15"></line>
+                        </svg>
+                        <span>ارجاع خبر به کارشناسان حراست</span>
+                    </button>
+                    <button type="button" id="btnHistoryReportDetail" class="btn-action btn-secondary"
+                        data-tooltip="مشاهده نمودار و تاریخچه گردش ارجاع پرونده">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>تاریخچه ارجاع</span>
+                    </button>
+                    <button type="button" id="btnPrintDossierBtn" class="btn-action btn-secondary"
+                        data-tooltip="صدور و چاپ فرم رسمی پرونده با قالب اختصاصی Word">
+                        <svg class="office-icon" viewBox="0 0 24 24" width="16" height="16" fill="none">
+                            <path
+                                d="M14.5 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V7.5L14.5 2Z"
+                                fill="#185ABD" />
+                            <path d="M14 2V7C14 7.6 14.4 8 15 8H20L14 2Z" fill="#41A5EE" />
+                            <rect x="2" y="7" width="12" height="12" rx="2" fill="#103F91"
+                                filter="drop-shadow(0 2px 4px rgba(0,0,0,0.35))" />
+                            <path
+                                d="M4.6 10.2L5.8 16H7.1L8 12.3L8.9 16H10.2L11.4 10.2H10.1L9.3 14.2L8.5 10.2H7.5L6.7 14.2L5.9 10.2H4.6Z"
+                                fill="#FFFFFF" />
+                            <line x1="15.5" y1="11.5" x2="18.5" y2="11.5" stroke="#FFFFFF" stroke-width="1.2"
+                                stroke-linecap="round" stroke-opacity="0.8" />
+                            <line x1="15.5" y1="14.5" x2="18.5" y2="14.5" stroke="#FFFFFF" stroke-width="1.2"
+                                stroke-linecap="round" stroke-opacity="0.8" />
+                            <line x1="15.5" y1="17.5" x2="18.5" y2="17.5" stroke="#FFFFFF" stroke-width="1.2"
+                                stroke-linecap="round" stroke-opacity="0.8" />
+                        </svg>
+                        <span>چاپ پرونده</span>
+                    </button>
+                    <button id="backToListBtn" class="btn-action btn-secondary" data-tooltip="بازگشت به فهرست گزارش‌ها">
+                        <span>بازگشت به لیست</span>
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+
+            <div id="report-detail-skeleton" class="skeleton-detail-container d-none" aria-hidden="true">
+                <div class="skeleton-detail-grid-layout">
+                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
+                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
+                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
+                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
+                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
+                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
+                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
+                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
+                </div>
+
+                <div class="skeleton-detail-section-card">
+                    <div class="skeleton-shimmer" style="width: 180px; height: 16px; border-radius: 4px;"></div>
+                    <div class="skeleton-shimmer" style="width: 95%; height: 14px; border-radius: 4px;"></div>
+                    <div class="skeleton-shimmer" style="width: 90%; height: 14px; border-radius: 4px;"></div>
+                    <div class="skeleton-shimmer" style="width: 60%; height: 14px; border-radius: 4px;"></div>
+                </div>
+
+                <div class="skeleton-detail-section-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="skeleton-shimmer" style="width: 140px; height: 16px; border-radius: 4px;"></div>
+                        <div class="skeleton-shimmer" style="width: 60px; height: 22px; border-radius: 12px;"></div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
+                        <div style="display: flex; gap: 10px; align-items: flex-end;">
+                            <div class="skeleton-shimmer" style="width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;"></div>
+                            <div class="skeleton-shimmer" style="width: 70%; height: 60px; border-radius: 12px;"></div>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: flex-end; flex-direction: row-reverse;">
+                            <div class="skeleton-shimmer" style="width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;"></div>
+                            <div class="skeleton-shimmer" style="width: 65%; height: 50px; border-radius: 12px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skeleton-detail-section-card">
+                    <div class="skeleton-shimmer" style="width: 200px; height: 16px; border-radius: 4px;"></div>
+                    <div class="skeleton-shimmer" style="width: 100%; height: 90px; border-radius: 8px;"></div>
+                </div>
+            </div>
+
+            <div id="report-detail-actual">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">کد پیگیری:</span>
+                    <div class="detail-value-with-copy">
+                        <strong id="detail-tracking" class="detail-value ltr"></strong>
+                        <button type="button" class="btn-mini-copy" id="copyDetailTrackingBtn"
+                            data-tooltip="کپی کد پیگیری">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">اولویت رسیدگی:</span>
+                    <div class="detail-priority-wrapper">
+                        <select id="detail-priority-select" class="priority-select-control">
+                            <option value="normal">عادی</option>
+                            <option value="urgent">فوری</option>
+                            <option value="critical">آنی و ویژه</option>
+                        </select>
+                        <strong id="detail-priority-print" class="print-only-inline">عادی</strong>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">تاریخ ثبت:</span>
+                    <strong id="detail-date" class="detail-value ltr"></strong>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">وضعیت مشاهده:</span>
+                    <strong id="detail-read-at" class="detail-value rtl"></strong>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">موضوع:</span>
+                    <strong id="detail-category" class="detail-value"></strong>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">نوع گزارش:</span>
+                    <strong id="detail-type" class="detail-value"></strong>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">نام گزارش دهنده:</span>
+                    <strong id="detail-name" class="detail-value"></strong>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">شماره تماس:</span>
+                    <div class="detail-value-with-copy">
+                        <strong id="detail-phone" class="detail-value ltr"></strong>
+                        <button type="button" class="btn-mini-copy" id="copyDetailPhoneBtn"
+                            data-tooltip="کپی شماره تماس">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="detail-item detail-item-attachment">
+                    <span class="detail-label">فایل پیوست:</span>
+                    <div id="detail-attachment" style="margin-top: 5px;"></div>
+                </div>
+            </div>
+
+            <div id="detail-classification-note" class="detail-classification-banner" style="display: none;">
+                <div class="classification-note-inner">
+                    <div class="classification-note-icon-box" id="classificationNoteIcon">
+                    </div>
+                    <div class="classification-note-content">
+                        <span id="classificationNoteText" class="classification-note-text"></span>
+                    </div>
+                    <div id="classificationActionContainer" class="classification-action-container"
+                        style="display: none;">
+                        <button type="button" id="btnOpenChangeClassification" class="btn-change-classification"
+                            data-tooltip="ارزیابی مجدد کیفیت این پرونده">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+                                stroke-width="2.2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            <span>تغییر ارزیابی</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-desc-container">
+                <span class="detail-desc-label">۱. متن و شرح گزارش واصله:</span>
+                <div id="detail-desc" class="detail-desc-box"></div>
+            </div>
+
+
+            <!-- Follow-up Conversation Thread (Nexus Chat Style) -->
+            <div id="detail-messages-container" class="nexus-chat-card d-none">
+                <div class="nexus-chat-header">
+                    <div class="nexus-chat-header-info">
+                        <div class="nexus-chat-avatar-icon">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="nexus-chat-title">پیام‌های تکمیلی واصله از گزارش‌دهنده (سامانه پیگیری گزارش)</h4>
+                        </div>
+                    </div>
+                    <div class="nexus-chat-header-actions">
+                        <span id="detail-messages-count-badge" class="nexus-chat-count-pill">۰ پیام ثبت‌شده</span>
+                    </div>
+                </div>
+                <div id="detail-messages-list" class="nexus-chat-stream"></div>
+            </div>
+
+            <!-- Regional Responses Section: Reports from Navahi & Manategh -->
+            <div id="detail-regional-responses-container" class="detail-regional-section" style="margin-top: 20px; display: none;">
+                <!-- Central Admins view: List of regional responses received -->
+                <div id="regional-responses-central-view" style="display: none;">
+                    <div class="regional-section-header">
+                        <div class="regional-section-title">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="8.5" cy="7" r="4"></circle>
+                                <polyline points="17 11 19 13 23 9"></polyline>
+                            </svg>
+                            <span>گزارش‌ها و نتایج بررسی کارشناسان نواحی و مناطق (ارجاع داخلی):</span>
+                        </div>
+                    </div>
+                    <div id="regional-responses-list" class="regional-responses-grid"></div>
+                </div>
+
+                <!-- Side Admin view: Form to submit investigation report to Central Admin -->
+                <div id="regional-responses-side-view" style="display: none;">
+                    <div class="regional-section-header">
+                        <div class="regional-section-title">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            <span>ثبت گزارش و نتیجه بررسی کارشناسی به اداره کل:</span>
+                        </div>
+                        <span class="regional-badge-confidential">
+                            مستقیماً جهت استحضار و تصمیم‌گیری نهایی اداره کل ارسال می‌شود
+                        </span>
+                    </div>
+
+                    <!-- Previously submitted response card if any -->
+                    <div id="regional-previous-response-card" class="existing-regional-card" style="display: none; margin-bottom: 12px;">
+                        <div class="existing-regional-header">
+                            <span class="text-emerald font-semibold" style="display: flex; align-items: center; gap: 6px;">
+                                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                آخرین گزارش بررسی ثبت‌شده شما:
+                            </span>
+                            <span id="regional-previous-time" class="text-muted font-tahoma ltr" style="font-size: 12px;"></span>
+                        </div>
+                        <div id="regional-previous-text" class="detail-desc-box response-text-highlight" style="margin-top: 6px; font-size: 13.5px;"></div>
+                    </div>
+
+                    <form id="regionalResponseForm" style="margin-top: 10px;">
+                        <div class="canned-responses-wrapper regional-canned-wrapper" id="regional-canned-wrapper" style="margin-bottom: 12px; margin-top: 0;">
+                            <span class="canned-title">قالب‌های آماده گزارش کارشناسی به اداره کل:</span>
+                            <div class="canned-chips-list">
+                                <button type="button" class="canned-chip regional-canned-chip"
+                                    data-target="regional_response_input"
+                                    data-text="تحقیقات و بررسی میدانی انجام گرفت؛ بر اساس شواهد و استعلامات، هیچ‌گونه تخلف اداری یا مغایرت قانونی در این موضوع احراز نگردید.">عدم احراز تخلف در بررسی میدانی</button>
+                                <button type="button" class="canned-chip regional-canned-chip"
+                                    data-target="regional_response_input"
+                                    data-text="موضوع مورد بررسی دقیق میدانی قرار گرفت و صحت گزارش تأیید گردید؛ اقدامات لازم و تشکیل پرونده انضباطی جهت اقدام قانونی معمول شد.">تأیید صحت تخلف و پیگیری قانونی</button>
+                                <button type="button" class="canned-chip regional-canned-chip"
+                                    data-target="regional_response_input"
+                                    data-text="موضوع با حضور کارشناس در محل بررسی گردید؛ تذکرات قانونی لازم ابلاغ و تمهیدات اصلاحی جهت رفع نواقص اعمال شد.">تذکر و رفع نقص در محل</button>
+                                <button type="button" class="canned-chip regional-canned-chip"
+                                    data-target="regional_response_input"
+                                    data-text="بررسی اولیه انجام شد؛ به دلیل فقدان شواهد و مستندات کافی، راستی‌آزمایی دقیق نیازمند ارائه مدارک تکمیلی از سوی گزارش‌دهنده است.">نیاز به مدارک تکمیلی گزارش‌دهنده</button>
+                                <button type="button" class="canned-chip regional-canned-chip"
+                                    data-target="regional_response_input"
+                                    data-text="پرونده در دست تحقیقات میدانی و استعلام از بخش‌های مربوطه است؛ گزارش نهایی پس از تکمیل مستندات متعاقباً ارسال خواهد شد.">در دست بررسی و استعلام تکمیلی</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <textarea id="regional_response_input" rows="4"
+                                placeholder="شرح تحقیقات میدانی، مستندات بررسی‌شده، اقدامات انجام‌گرفته و نظر کارشناسی خود را جهت ارائه به اداره کل وارد نمایید..."
+                                maxlength="8000" required></textarea>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                            <button type="submit" id="btnSubmitRegionalResponse" class="btn-action btn-submit"
+                                style="padding: 9px 22px; font-size: 13.5px;">
+                                <span class="btn-text">ارسال گزارش بررسی به اداره کل</span>
+                                <span class="btn-spinner d-none" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </form>
+                    <div id="regionalResponseStatusMsg" class="response-box" style="display: none; margin-top: 10px;"></div>
+                </div>
+            </div>
+
+            <div class="detail-response-container">
+                <span class="detail-desc-label" id="detail-response-heading">۲. پاسخ رسمی و اقدامات نهایی صورت‌گرفته توسط حراست:</span>
+
+                <div id="existing-response-box" class="existing-response-box" style="display: none;">
+                    <div id="detail-admin-response-text" class="detail-desc-box response-text-highlight"></div>
+                    <div class="response-meta" id="response-meta-info" style="margin-top: 6px;"></div>
+                </div>
+                <div id="print-no-response-placeholder" class="print-only-block print-box-content">در دست اقدام و بررسی
+                    کارشناسی می‌باشد.</div>
+
+
+                <div class="canned-responses-wrapper" id="admin-canned-wrapper">
+                    <span class="canned-title">قالب‌های آماده پاسخ سریع:</span>
+                    <div class="canned-chips-list">
+                        <button type="button" class="canned-chip"
+                            data-text="گزارش شما دریافت و جهت بررسی و اقدام مقتضی به کارشناس مربوطه ارجاع گردید.">ارجاع
+                            به کارشناس مربوطه</button>
+                        <button type="button" class="canned-chip"
+                            data-text="موضوع مورد بررسی همه‌جانبه قرار گرفت و تدابیر و اقدامات قانونی لازم معمول گردید.">بررسی
+                            و اقدام قانونی</button>
+                        <button type="button" class="canned-chip"
+                            data-text="جهت تکمیل پرونده و تسریع در پیگیری، مدارک و مستندات بیشتری مورد نیاز است. لطفاً گزارش تکمیلی ثبت فرمایید.">درخواست
+                            مستندات تکمیلی</button>
+                        <button type="button" class="canned-chip"
+                            data-text="موضوع گزارش با دقت بررسی شد و در حال حاضر تخلف اداری یا امنیتی احراز نگردید.">عدم
+                            احراز تخلف</button>
+                    </div>
+                </div>
+
+                <form id="adminResponseForm" style="margin-top: 15px;">
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <textarea id="admin_response_input" rows="4"
+                            placeholder="متن پاسخ یا نتیجه بررسی حراست را جهت مشاهده گزارش‌دهنده وارد نمایید..."
+                            maxlength="3000" required></textarea>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <button type="submit" id="submitResponseBtn" class="btn-action btn-submit"
+                            style="padding: 10px 24px; font-size: 14px;">
+                            <span class="btn-text">ثبت / ویرایش پاسخ</span>
+                            <span class="btn-spinner d-none" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </form>
+                <div id="responseStatusMsg" class="response-box" style="display: none; margin-top: 12px;"></div>
+            </div>
+
+            <div id="classification-prompt-container" class="classification-prompt-box" style="display: none;">
+                <div class="prompt-header-row">
+                    <div class="prompt-badge-icon">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M9 11l3 3L22 4" />
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                        </svg>
+                    </div>
+                    <div class="prompt-text-group">
+                        <strong class="prompt-title">ارزیابی اولیه کیفیت و سودمندی گزارش واصله</strong>
+                        <p class="prompt-desc">آیا این گزارش حاوی اطلاعات مستند، ارزشمند و قابل پیگیری اداری است؟ لطفاً
+                            وضعیت سودمندی پرونده را جهت تحلیل آماری مشخص فرمایید (یک‌بار برای هر پرونده):</p>
+                    </div>
+                </div>
+                <div class="prompt-btn-group">
+                    <button type="button" id="btnClassifyHelpful" class="btn-classify btn-classify-helpful">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+                        </svg>
+                        <span>گزارش مفید و موثر</span>
+                    </button>
+                    <button type="button" id="btnClassifyUseless" class="btn-classify btn-classify-useless">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                        </svg>
+                        <span>گزارش بی‌محتوا و فاقد ارزش</span>
+                    </button>
+                </div>
+                <div id="classificationPromptStatusMsg" class="response-box" style="display: none; margin-top: 10px;">
+                </div>
+            </div>
+
+            <div class="detail-internal-notes-container">
+                <div class="internal-notes-header">
+                    <div class="internal-notes-title">
+                        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <strong>۳. ملاحظات و یادداشت‌های محرمانه داخلی پرونده:</strong>
+                    </div>
+                    <span class="notes-badge-locked">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            style="vertical-align: middle; margin-left: 4px;">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        کاملاً محرمانه - غیرقابل مشاهده برای گزارش‌دهنده
+                    </span>
+                </div>
+                <textarea id="detail-internal-notes-input" rows="3"
+                    placeholder="ثبت اقدامات داخلی، شماره نامه‌های اداری، ارجاعات و یادداشت‌های محرمانه کارشناس..."
+                    maxlength="4000"></textarea>
+                <div id="print-internal-notes-text" class="print-only-block print-box-content"></div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+                    <button type="button" id="btnSaveInternalNotes" class="btn-action btn-secondary"
+                        style="font-size: 13px;">
+                        <span>ذخیره یادداشت محرمانه</span>
+                    </button>
+                </div>
+                <div id="internalNotesStatusMsg" class="response-box" style="display: none; margin-top: 8px;"></div>
+            </div>
+
+
+            <div class="print-official-footer">
+                <div class="print-sig-section-title">۴. صورت‌جلسه و تأییدیه نهایی بررسی پرونده:</div>
+                <div class="print-signature-grid">
+                    <div class="print-signature-box">
+                        <div class="print-sig-title">کارشناس بررسی‌کننده پرونده</div>
+                        <div class="print-sig-field">نام و سمت سازمانی: .......................................</div>
+                        <div class="print-sig-space"></div>
+                        <div class="print-sig-meta">محل امضاء و تاریخ</div>
+                    </div>
+                    <div class="print-signature-box">
+                        <div class="print-sig-title">رئیس / مدیر اداره حراست</div>
+                        <div class="print-sig-field">نام و سمت سازمانی: .......................................</div>
+                        <div class="print-sig-space"></div>
+                        <div class="print-sig-meta">محل امضاء، تاریخ و مهر رسمی اداره</div>
+                    </div>
+                </div>
+                <div class="print-security-warning">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-left: 4px;">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                        </path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    هشدار امنیتی: این سند حاوی اطلاعات طبقه‌بندی‌شده و محرمانه اداری است. هرگونه نسخه‌برداری غیرمجاز یا
+                    افشای مفاد آن پیگرد قانونی به همراه دارد.
+                </div>
+            </div>
+            </div> <!-- End report-detail-actual -->
+        </section>
+
+
+        <section id="advanced-section" style="display: none;">
+            <div class="adv-subnav-bar">
+                <button type="button" class="adv-subnav-btn active" data-target="adv-view-users">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>مدیریت کاربران اداری</span>
+                </button>
+                <button type="button" class="adv-subnav-btn" data-target="adv-view-audit">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                    <span>لاگ‌های امنیتی و بازرسی</span>
+                </button>
+                <button type="button" class="adv-subnav-btn" data-target="adv-view-sessions">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    <span>پایش نشست‌های فعال</span>
+                </button>
+                <button type="button" class="adv-subnav-btn" data-target="adv-view-system">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                        <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                        <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                        <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                    </svg>
+                    <span>وضعیت و سلامت سامانه</span>
+                </button>
+            </div>
+
+
+            <div id="adv-view-users" class="adv-subview active">
+                <div class="adv-toolbar">
+                    <div class="adv-stats-pills">
+                        <div class="adv-pill">کل کاربران: <strong id="adv-users-total">۰</strong></div>
+                        <div class="adv-pill">کاربران فعال: <strong id="adv-users-active"
+                                class="text-emerald">۰</strong></div>
+                        <div class="adv-pill">مدیران ارشد: <strong id="adv-users-super" class="text-cyan">۰</strong>
+                        </div>
+                    </div>
+                    <button type="button" id="btn-open-create-user-modal" class="btn-action btn-submit"
+                        style="font-size: 13.5px; padding: 8px 18px;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span>افزودن کاربر اداری جدید</span>
+                    </button>
+                </div>
+
+                <div class="table-responsive" style="margin-top: 15px;">
+                    <table class="adv-table">
+                        <thead>
+                            <tr>
+                                <th>شناسه</th>
+                                <th>نام و نام خانوادگی</th>
+                                <th>نام کاربری</th>
+                                <th>سمت / عنوان سازمانی</th>
+                                <th>سطح دسترسی</th>
+                                <th>وضعیت حساب</th>
+                                <th>تاریخ ایجاد</th>
+                                <th>عملیات امنیتی</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adv-users-tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div id="adv-view-audit" class="adv-subview" style="display: none;">
+                <div class="adv-audit-filters-grid">
+                    <div class="filter-group">
+                        <div class="search-input-wrapper">
+                            <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" id="audit-filter-search"
+                                placeholder="جستجو در آدرس IP یا شناسه پرونده...">
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <select id="audit-filter-action">
+                            <option value="all">همه اقدامات و عملیات‌ها</option>
+                            <option value="LOGIN">ورود به سیستم (LOGIN)</option>
+                            <option value="LOGOUT">خروج از سیستم (LOGOUT)</option>
+                            <option value="VIEW_REPORT_DETAILS">مشاهده پرونده گزارش</option>
+                            <option value="RESPOND_REPORT">ثبت یا تغییر پاسخ گزارش</option>
+                            <option value="TOGGLE_READ_STATUS">تغییر وضعیت خوانده‌شده</option>
+                            <option value="CREATE_ADMIN_USER">ایجاد کاربر اداری جدید</option>
+                            <option value="TOGGLE_USER_ACTIVE">فعال/غیرفعال‌سازی کاربر</option>
+                            <option value="RESET_PASSWORD_USER">تغییر رمز توسط پشتیبانی سامانه</option>
+                            <option value="DELETE_ADMIN_USER">حذف حساب کاربر اداری</option>
+                            <option value="CHANGE_OWN_PASSWORD">تغییر رمز عبور شخصی</option>
+                            <option value="REVOKE_SESSION">لغو نشست دستگاه</option>
+                            <option value="REVOKE_OTHER_SESSIONS">لغو سایر نشست‌های فعال</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select id="audit-filter-user">
+                            <option value="all">همه کاربران اداری</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select id="audit-filter-month">
+                            <option value="all">همه ماه‌های سال</option>
+                            <option value="01">فروردین</option>
+                            <option value="02">اردیبهشت</option>
+                            <option value="03">خرداد</option>
+                            <option value="04">تیر</option>
+                            <option value="05">مرداد</option>
+                            <option value="06">شهریور</option>
+                            <option value="07">مهر</option>
+                            <option value="08">آبان</option>
+                            <option value="09">آذر</option>
+                            <option value="10">دی</option>
+                            <option value="11">بهمن</option>
+                            <option value="12">اسفند</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button type="button" id="btn-refresh-audit" class="btn-action btn-secondary"
+                            style="font-size: 13px;">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15">
+                                </path>
+                            </svg>
+                            <span>بروزرسانی</span>
+                        </button>
+                        <button type="button" id="audit-clear-filters" class="btn-action btn-danger"
+                            style="font-size: 13px;" data-tooltip="حذف تمام فیلترها">
+                            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                            <span>حذف فیلترها</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive" style="margin-top: 15px;">
+                    <table class="adv-table">
+                        <thead>
+                            <tr>
+                                <th>شناسه</th>
+                                <th>زمان ثبت (ایران)</th>
+                                <th>کاربر مجری</th>
+                                <th>سمت سازمانی</th>
+                                <th>اقدام / رویداد</th>
+                                <th>کد رهگیری گزارش</th>
+                                <th>آدرس IP</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adv-audit-tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="pagination-container" id="audit-pagination-box" style="margin-top: 15px;">
+                    <div class="pagination-info" id="audit-pagination-info">لاگ ۰ از ۰</div>
+                    <div class="pagination-controls" dir="ltr">
+                        <button id="btn-audit-last" class="btn-page" data-tooltip="قدیمی‌ترین لاگ‌ها">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M13 17l-5-5 5-5M6 17l-5-5 5-5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        <button id="btn-audit-next" class="btn-page" data-tooltip="صفحه بعد">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        <span id="audit-current-page-badge"
+                            style="padding: 4px 10px; font-size: 13px; font-weight: 600; color: var(--color-primary); background: rgba(59,130,246,0.1); border-radius: var(--radius-sm);">۱</span>
+                        <button id="btn-audit-prev" class="btn-page" data-tooltip="صفحه قبل">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        <button id="btn-audit-first" class="btn-page" data-tooltip="جدیدترین لاگ‌ها">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M11 17l5-5-5-5M18 17l5-5-5-5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="adv-view-sessions" class="adv-subview" style="display: none;">
+                <div class="adv-toolbar">
+                    <div class="adv-stats-pills">
+                        <div class="adv-pill">کل نشست‌های فعال: <strong id="adv-sess-total"
+                                class="text-amber">۰</strong></div>
+                        <div class="adv-pill">مدیران ارشد آنلاین: <strong id="adv-sess-super"
+                                class="text-cyan">۰</strong></div>
+                        <div class="adv-pill">آدرس‌های IP مجزا: <strong id="adv-sess-ips"
+                                class="text-emerald">۰</strong></div>
+                    </div>
+                    <button type="button" id="btn-refresh-active-sessions" class="btn-action btn-secondary"
+                        style="font-size: 13px;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15">
+                            </path>
+                        </svg>
+                        <span>بروزرسانی نشست‌ها</span>
+                    </button>
+                </div>
+
+                <div class="table-responsive" style="margin-top: 15px;">
+                    <table class="adv-table">
+                        <thead>
+                            <tr>
+                                <th>شناسه نشست</th>
+                                <th>نام و سمت سازمانی</th>
+                                <th>نام کاربری و سطح</th>
+                                <th>آدرس IP کلاینت</th>
+                                <th>مرورگر و سیستم‌عامل کلاینت (User-Agent)</th>
+                                <th>زمان ورود</th>
+                                <th>آخرین فعالیت</th>
+                                <th>اعتبار باقیمانده (TTL)</th>
+                                <th>عملیات امنیتی</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adv-sessions-tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div id="adv-view-system" class="adv-subview" style="display: none;">
+                <div class="adv-toolbar" style="margin-bottom: 20px;">
+                    <span style="font-size: 14px; color: var(--text-muted);">پایش زنده سلامت پایگاه داده، نشست‌های برخط
+                        و تله‌متری سامانه:</span>
+                    <button type="button" id="btn-refresh-system-status" class="btn-action btn-secondary"
+                        style="font-size: 13px;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15">
+                            </path>
+                        </svg>
+                        <span>بروزرسانی وضعیت</span>
+                    </button>
+                </div>
+
+                <div class="sys-status-grid">
+                    <div class="sys-card">
+                        <div class="sys-card-header">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--color-primary)"
+                                stroke-width="2">
+                                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                            </svg>
+                            <h3>پایگاه داده (PostgreSQL)</h3>
+                        </div>
+                        <ul class="sys-metric-list">
+                            <li><span>وضعیت اتصال:</span> <strong id="sys-db-status" class="text-emerald">...</strong>
+                            </li>
+                            <li><span>اتصالات باز (Open):</span> <strong id="sys-db-conns">...</strong></li>
+                            <li><span>اتصالات آماده (Idle):</span> <strong id="sys-db-idle"
+                                    class="text-emerald">...</strong></li>
+                            <li><span>اتصالات در حال کار (In-Use):</span> <strong id="sys-db-inuse">...</strong></li>
+                            <li><span>منطقه زمانی دیتابیس:</span> <strong id="sys-db-tz">...</strong></li>
+                            <li><span>زمان فعلی دیتابیس:</span> <strong id="sys-db-time" class="ltr">...</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="sys-card">
+                        <div class="sys-card-header">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--color-warning)"
+                                stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            <h3>نشست‌های فعال و دسترسی</h3>
+                        </div>
+                        <ul class="sys-metric-list">
+                            <li><span>نشست‌های فعال اداری:</span> <strong id="sys-active-sessions"
+                                    class="text-amber">...</strong></li>
+                            <li><span>زمان انقضای هر نشست:</span> <strong>۱۵ دقیقه (Sliding Window)</strong></li>
+                            <li><span>قفل خودکار Brute-Force:</span> <strong class="text-emerald">فعال (پس از ۵
+                                    خطا)</strong></li>
+                            <li><span>امنیت کوکی و CSP:</span> <strong class="text-emerald">HttpOnly + Strict
+                                    AFTA</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="sys-card">
+                        <div class="sys-card-header">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--color-cyan)"
+                                stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                            </svg>
+                            <h3>آمار کل پرونده‌ها و سامانه</h3>
+                        </div>
+                        <ul class="sys-metric-list">
+                            <li><span>کل گزارش‌های ثبت‌شده:</span> <strong id="sys-total-reports">...</strong></li>
+                            <li><span>گزارش‌های در نوبت بررسی:</span> <strong id="sys-unread-reports"
+                                    class="text-amber">...</strong></li>
+                            <li><span>تعداد کل کاربران اداری:</span> <strong id="sys-total-users">...</strong></li>
+                            <li><span>تعداد کل لاگ‌های بازرسی:</span> <strong id="sys-total-logs">...</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="analytics-section" style="display: none;">
+            <div class="analytics-header">
+                <div>
+                    <h3>داشبورد آماری و تحلیل داده‌های گزارش‌ها</h3>
+                    <span class="detail-header-sub">تحلیل آماری دسته‌بندی‌ها، روند زمانی و وضعیت رسیدگی پرونده‌ها</span>
+                </div>
+                <button type="button" id="btnRefreshAnalytics" class="btn-action btn-secondary">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                    </svg>
+                    <span>بروزرسانی نمودارها</span>
+                </button>
+            </div>
+
+            <div id="analytics-skeleton-content" class="d-none" aria-hidden="true">
+                <div class="skeleton-analytics-kpi-grid">
+                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 45%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 60%; height: 28px; border-radius: 6px;"></div></div>
+                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 50%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 55%; height: 28px; border-radius: 6px;"></div></div>
+                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 48%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 50%; height: 28px; border-radius: 6px;"></div></div>
+                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 55%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 65%; height: 28px; border-radius: 6px;"></div></div>
+                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 52%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 60%; height: 28px; border-radius: 6px;"></div></div>
+                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 46%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 70%; height: 28px; border-radius: 6px;"></div></div>
+                </div>
+                <div class="skeleton-analytics-charts-grid">
+                    <div class="skeleton-analytics-chart-card">
+                        <div class="skeleton-shimmer" style="width: 140px; height: 18px; border-radius: 4px;"></div>
+                        <div class="skeleton-chart-donut-wrap">
+                            <div class="skeleton-shimmer skeleton-chart-donut-circle"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-analytics-chart-card">
+                        <div class="skeleton-shimmer" style="width: 150px; height: 18px; border-radius: 4px;"></div>
+                        <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 20px;">
+                            <div class="skeleton-shimmer" style="width: 100%; height: 24px; border-radius: 6px;"></div>
+                            <div class="skeleton-shimmer" style="width: 85%; height: 24px; border-radius: 6px;"></div>
+                            <div class="skeleton-shimmer" style="width: 65%; height: 24px; border-radius: 6px;"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-analytics-chart-card">
+                        <div class="skeleton-shimmer" style="width: 130px; height: 18px; border-radius: 4px;"></div>
+                        <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 20px;">
+                            <div class="skeleton-shimmer" style="width: 90%; height: 20px; border-radius: 4px;"></div>
+                            <div class="skeleton-shimmer" style="width: 100%; height: 14px; border-radius: 4px;"></div>
+                            <div class="skeleton-shimmer" style="width: 75%; height: 14px; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-analytics-chart-card">
+                        <div class="skeleton-shimmer" style="width: 160px; height: 18px; border-radius: 4px;"></div>
+                        <div style="display: flex; align-items: flex-end; gap: 12px; height: 160px; margin-top: 20px; padding: 0 10px;">
+                            <div class="skeleton-shimmer" style="flex: 1; height: 40%; border-radius: 4px 4px 0 0;"></div>
+                            <div class="skeleton-shimmer" style="flex: 1; height: 70%; border-radius: 4px 4px 0 0;"></div>
+                            <div class="skeleton-shimmer" style="flex: 1; height: 55%; border-radius: 4px 4px 0 0;"></div>
+                            <div class="skeleton-shimmer" style="flex: 1; height: 85%; border-radius: 4px 4px 0 0;"></div>
+                            <div class="skeleton-shimmer" style="flex: 1; height: 60%; border-radius: 4px 4px 0 0;"></div>
+                            <div class="skeleton-shimmer" style="flex: 1; height: 95%; border-radius: 4px 4px 0 0;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="analytics-actual-content">
+            <div class="analytics-metrics-grid"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px;">
+                <div class="analytics-metric-card">
+                    <span class="metric-label">کل گزارش‌های ثبت‌شده</span>
+                    <strong class="metric-val text-cyan" id="ana-total-reports">۰</strong>
+                </div>
+                <div class="analytics-metric-card">
+                    <span class="metric-label">رسیدگی و پاسخ‌داده‌شده</span>
+                    <strong class="metric-val text-emerald" id="ana-total-responded">۰</strong>
+                </div>
+                <div class="analytics-metric-card">
+                    <span class="metric-label">در انتظار بررسی</span>
+                    <strong class="metric-val text-amber" id="ana-total-unread">۰</strong>
+                </div>
+                <div class="analytics-metric-card">
+                    <span class="metric-label">گزارش‌های مفید و موثر</span>
+                    <strong class="metric-val text-emerald" id="ana-total-helpful">۰ <span class="metric-sub-pct"
+                            id="ana-helpful-pct">(۰٪)</span></strong>
+                </div>
+                <div class="analytics-metric-card">
+                    <span class="metric-label">گزارش‌های بی‌محتوا و فاقد ارزش</span>
+                    <strong class="metric-val text-slate-light" id="ana-total-useless">۰ <span class="metric-sub-pct"
+                            id="ana-useless-pct">(۰٪)</span></strong>
+                </div>
+                <div class="analytics-metric-card">
+                    <span class="metric-label">میانگین زمان پاسخگویی</span>
+                    <strong class="metric-val" id="ana-avg-response" style="color: #c084fc;">۰ ساعت</strong>
+                </div>
+            </div>
+
+            <div class="analytics-grid">
+
+                <div class="analytics-card">
+                    <div class="analytics-card-header">
+                        <h4 style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 2a10 10 0 0 1 10 10H12V2z"></path>
+                            </svg>
+                            <span>تحلیل کیفیت و سودمندی گزارش‌ها</span>
+                        </h4>
+                        <span class="chart-subtitle-tag" id="chart-quality-total-tag">۰ پرونده ارزیابی‌شده</span>
+                    </div>
+                    <div id="chart-classification-pie" class="chart-container"></div>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="analytics-card-header">
+                        <h4 style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                                <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                            </svg>
+                            <span>توزیع موضوعی گزارش‌ها</span>
+                        </h4>
+                        <span class="chart-subtitle-tag" id="chart-categories-total-tag">۰ پرونده</span>
+                    </div>
+                    <div id="chart-categories" class="chart-container"></div>
+                </div>
+
+
+                <div class="analytics-card">
+                    <div class="analytics-card-header">
+                        <h4 style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                            <span>توزیع اولویت و فوریت پرونده‌ها</span>
+                        </h4>
+                        <span class="chart-subtitle-tag" id="chart-priorities-total-tag">۰ پرونده</span>
+                    </div>
+                    <div id="chart-priorities" class="chart-container"></div>
+                </div>
+
+
+                <div class="analytics-card analytics-card-full">
+                    <div class="analytics-card-header">
+                        <h4 style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                            <span>روند ماهانه ثبت گزارش‌ها در سال جاری</span>
+                        </h4>
+                    </div>
+                    <div id="chart-monthly" class="chart-container-bar"></div>
+                </div>
+            </div>
+            </div> <!-- End analytics-actual-content -->
+        </section>
+    </div>
+
+
+    <div id="modal-shortcuts" class="admin-modal-overlay" style="display: none;">
+        <div class="admin-modal-box" style="max-width: 520px;">
+            <div class="admin-modal-header">
+                <h3 style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                        <line x1="6" y1="8" x2="6" y2="8"></line>
+                        <line x1="10" y1="8" x2="10" y2="8"></line>
+                        <line x1="14" y1="8" x2="14" y2="8"></line>
+                        <line x1="18" y1="8" x2="18" y2="8"></line>
+                        <line x1="6" y1="12" x2="6" y2="12"></line>
+                        <line x1="18" y1="12" x2="18" y2="12"></line>
+                        <line x1="7" y1="16" x2="17" y2="16"></line>
+                    </svg>
+                    <span>راهنمای کلیدهای میانبر کارتابل</span>
+                </h3>
+                <button type="button" class="btn-close-modal" id="btn-close-shortcuts-modal">&times;</button>
+            </div>
+            <div style="padding: 10px 0;">
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+                    برای افزایش سرعت کار در کارتابل حراست می‌توانید از کلیدهای میانبر زیر استفاده فرمایید:
+                </p>
+                <div class="shortcuts-table" style="display: flex; flex-direction: column; gap: 10px;">
+                    <div class="shortcut-row"
+                        style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(15,23,42,0.6); border-radius: var(--radius-sm);">
+                        <span style="font-size: 13.5px; color: #e2e8f0;">بستن نمایش جزئیات / پنجره‌ها</span>
+                        <kbd class="shortcut-key">Esc</kbd>
+                    </div>
+                    <div class="shortcut-row"
+                        style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(15,23,42,0.6); border-radius: var(--radius-sm);">
+                        <span style="font-size: 13.5px; color: #e2e8f0;">تمرکز روی کادر پاسخ حراست</span>
+                        <kbd class="shortcut-key">R</kbd>
+                    </div>
+                    <div class="shortcut-row"
+                        style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(15,23,42,0.6); border-radius: var(--radius-sm);">
+                        <span style="font-size: 13.5px; color: #e2e8f0;">جستجوی سریع در جدول</span>
+                        <kbd class="shortcut-key">/</kbd>
+                    </div>
+                    <div class="shortcut-row"
+                        style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(15,23,42,0.6); border-radius: var(--radius-sm);">
+                        <span style="font-size: 13.5px; color: #e2e8f0;">نمایش این راهنما</span>
+                        <kbd class="shortcut-key">?</kbd>
+                    </div>
+                </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button type="button" class="btn-action btn-secondary" id="btn-close-shortcuts-footer"
+                    style="width: 100%;">بستن</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="modal-create-user" class="admin-modal-overlay" style="display: none;">
+        <div class="admin-modal-box">
+            <div class="admin-modal-header">
+                <h3>افزودن کاربر اداری جدید</h3>
+                <button type="button" class="btn-close-modal" id="btn-close-create-user-modal">&times;</button>
+            </div>
+            <form id="form-create-user">
+                <div class="form-group">
+                    <label for="new_full_name">نام و نام خانوادگی:</label>
+                    <input type="text" id="new_full_name" required placeholder="مثال: علی حسینی"
+                        autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="new_username">نام کاربری اداری:</label>
+                    <input type="text" id="new_username" required placeholder="مثال: admin_pezhohesh"
+                        autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="new_password">رمز عبور (حداقل ۱۲ کاراکتر):</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="new_password" required placeholder="رمز عبور با الزامات امنیتی"
+                            autocomplete="new-password">
+                        <button type="button" id="toggleNewPasswordBtn" class="btn-toggle-pw"
+                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
+                            <svg id="eye-icon-show-new" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg id="eye-icon-hide-new" class="d-none" viewBox="0 0 24 24" width="18" height="18"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="m15 18-.722-3.25"></path>
+                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
+                                <path d="m20 15-1.726-2.05"></path>
+                                <path d="m4 15 1.726-2.05"></path>
+                                <path d="m9 18 .722-3.25"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="pwd-requirements-hint">
+                        <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
+                        (!@#$%^&*)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="new_password_confirm">تکرار رمز عبور:</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="new_password_confirm" required placeholder="تکرار مجدد رمز عبور"
+                            autocomplete="new-password">
+                        <button type="button" id="toggleNewPasswordConfirmBtn" class="btn-toggle-pw"
+                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
+                            <svg id="eye-icon-show-new-confirm" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg id="eye-icon-hide-new-confirm" class="d-none" viewBox="0 0 24 24" width="18" height="18"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="m15 18-.722-3.25"></path>
+                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
+                                <path d="m20 15-1.726-2.05"></path>
+                                <path d="m4 15 1.726-2.05"></path>
+                                <path d="m9 18 .722-3.25"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="new_role">سطح دسترسی و نقش کاربری:</label>
+                    <select id="new_role"
+                        style="width: 100%; height: 40px; background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 0 12px; color: var(--text-main); font-family: inherit; font-size: 13px;">
+                        <option value="edare_kol" selected>اداره کل</option>
+                        <option value="navahi_manategh">نواحی و مناطق</option>
+                        <option value="superuser">مدیر ارشد سامانه</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="new_role_title">سمت یا عنوان سازمانی:</label>
+                    <input type="text" id="new_role_title" required placeholder="مثال: کارشناس جمع آوری و تجزیه و تحلیل"
+                        autocomplete="off">
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-main); font-size: 13px;">
+                        <input type="checkbox" id="create_must_change_pwd"
+                            style="width: 16px; height: 16px; accent-color: var(--color-primary);">
+                        <span>اجبار کاربر به تغییر رمز عبور در اولین ورود</span>
+                    </label>
+                </div>
+                <div id="create-user-status" class="response-box" style="display: none; margin-bottom: 12px;"></div>
+                <div class="admin-modal-footer">
+                    <button type="button" class="btn-action btn-secondary" id="btn-cancel-create-user">انصراف</button>
+                    <button type="submit" class="btn-action btn-submit" id="btn-submit-create-user">
+                        <span class="btn-text">ثبت کاربر</span>
+                        <span class="btn-spinner d-none"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="modal-reset-password" class="admin-modal-overlay" style="display: none;">
+        <div class="admin-modal-box">
+            <div class="admin-modal-header">
+                <h3>تغییر رمز عبور کاربر</h3>
+                <button type="button" class="btn-close-modal" id="btn-close-reset-pwd-modal">&times;</button>
+            </div>
+            <form id="form-reset-password">
+                <input type="hidden" id="reset_pwd_user_id">
+                <p style="margin-bottom: 14px; font-size: 13.5px; color: var(--text-muted);">
+                    تغییر رمز عبور برای حساب: <strong id="reset_pwd_username_label" class="text-cyan">...</strong>
+                </p>
+                <div class="form-group">
+                    <label for="reset_new_password">رمز عبور جدید (حداقل ۱۲ کاراکتر):</label>
+                    <input type="password" id="reset_new_password" required placeholder="رمز عبور جدید امن"
+                        autocomplete="new-password">
+                    <div class="pwd-requirements-hint">
+                        <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
+                        (!@#$%^&*)
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-main); font-size: 13px;">
+                        <input type="checkbox" id="reset_must_change_pwd"
+                            style="width: 16px; height: 16px; accent-color: var(--color-primary);">
+                        <span>اجبار کاربر به تغییر مجدد رمز عبور در ورود بعدی</span>
+                    </label>
+                </div>
+                <div id="reset-pwd-status" class="response-box" style="display: none; margin-bottom: 12px;"></div>
+                <div class="admin-modal-footer">
+                    <button type="button" class="btn-action btn-secondary" id="btn-cancel-reset-pwd">انصراف</button>
+                    <button type="submit" class="btn-action btn-submit" id="btn-submit-reset-pwd">
+                        <span class="btn-text">ثبت رمز جدید</span>
+                        <span class="btn-spinner d-none"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="modal-edit-user" class="admin-modal-overlay" style="display: none;">
+        <div class="admin-modal-box">
+            <div class="admin-modal-header">
+                <h3>ویرایش مشخصات کاربر اداری</h3>
+                <button type="button" class="btn-close-modal" id="btn-close-edit-user-modal">&times;</button>
+            </div>
+            <form id="form-edit-user">
+                <input type="hidden" id="edit_user_id">
+                <div class="form-group">
+                    <label for="edit_username">نام کاربری:</label>
+                    <input type="text" id="edit_username" disabled style="opacity: 0.7; cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label for="edit_full_name">نام و نام خانوادگی:</label>
+                    <input type="text" id="edit_full_name" required placeholder="نام و نام خانوادگی" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="edit_role_title">سمت یا عنوان سازمانی:</label>
+                    <input type="text" id="edit_role_title" required placeholder="سمت سازمانی" autocomplete="off">
+                </div>
+                <div class="form-group" id="edit_role_container">
+                    <label for="edit_role">سطح دسترسی و نقش کاربری:</label>
+                    <select id="edit_role"
+                        style="width: 100%; height: 40px; background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 0 12px; color: var(--text-main); font-family: inherit; font-size: 13px;">
+                        <option value="edare_kol">اداره کل</option>
+                        <option value="navahi_manategh">نواحی و مناطق</option>
+                        <option value="superuser">مدیر ارشد سامانه</option>
+                    </select>
+                </div>
+                <div class="form-group" id="edit_active_container">
+                    <label for="edit_is_active">وضعیت حساب کاربری:</label>
+                    <select id="edit_is_active"
+                        style="width: 100%; height: 40px; background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 0 12px; color: var(--text-main); font-family: inherit; font-size: 13px;">
+                        <option value="true">فعال (دسترسی کامل به کارتابل)</option>
+                        <option value="false">غیرفعال (مسدود شده و لغو دسترسی)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-main); font-size: 13px;">
+                        <input type="checkbox" id="edit_must_change_pwd"
+                            style="width: 16px; height: 16px; accent-color: var(--color-primary);">
+                        <span>اجبار کاربر به تغییر رمز عبور در ورود بعدی</span>
+                    </label>
+                </div>
+                <div id="edit-user-status" class="response-box" style="display: none; margin-bottom: 12px;"></div>
+                <div class="admin-modal-footer">
+                    <button type="button" class="btn-action btn-secondary" id="btn-cancel-edit-user">انصراف</button>
+                    <button type="submit" class="btn-action btn-submit" id="btn-submit-edit-user">
+                        <span class="btn-text">ذخیره تغییرات</span>
+                        <span class="btn-spinner d-none"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="modal-change-my-password" class="admin-modal-overlay" style="display: none;">
+        <div class="admin-modal-box">
+            <div class="admin-modal-header">
+                <h3>تغییر کلمه عبور حساب کاربری</h3>
+                <button type="button" class="btn-close-modal" id="btn-close-change-my-pwd-modal">&times;</button>
+            </div>
+            <form id="form-change-my-password">
+                <p style="margin-bottom: 15px; font-size: 13px; color: var(--text-muted);">
+                    جهت افزایش امنیت و رعایت سیاست گردش ماهانه رمزها، لطفاً کلمه عبور جدید را تعیین فرمایید.
+                </p>
+                <div class="form-group">
+                    <label for="my_current_password">کلمه عبور فعلی:</label>
+                    <input type="password" id="my_current_password" required
+                        placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
+                </div>
+                <div class="form-group">
+                    <label for="my_new_password">کلمه عبور جدید (حداقل ۱۲ کاراکتر):</label>
+                    <input type="password" id="my_new_password" required placeholder="کلمه عبور جدید امن"
+                        autocomplete="new-password">
+                    <div class="pwd-requirements-hint">
+                        <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
+                        (!@#$%^&*)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="my_confirm_password">تکرار کلمه عبور جدید:</label>
+                    <input type="password" id="my_confirm_password" required placeholder="تکرار کلمه عبور جدید"
+                        autocomplete="new-password">
+                </div>
+                <div id="change-my-pwd-status" class="response-box" style="display: none; margin-bottom: 12px;"></div>
+                <div class="admin-modal-footer">
+                    <button type="button" class="btn-action btn-secondary" id="btn-cancel-change-my-pwd">انصراف</button>
+                    <button type="submit" class="btn-action btn-submit" id="btn-submit-change-my-pwd">
+                        <span class="btn-text">تغییر کلمه عبور</span>
+                        <span class="btn-spinner d-none"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="modal-force-change-password" class="admin-modal-overlay" style="display: none; z-index: 9995;">
+        <div class="admin-modal-box"
+            style="border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 0 35px rgba(245, 158, 11, 0.2);">
+            <div class="admin-modal-header">
+                <h3
+                    style="color: #fbbf24; display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 700;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>تغییر الزامی کلمه عبور</span>
+                </h3>
+            </div>
+            <form id="form-force-change-password">
+                <div
+                    style="background: rgba(245, 158, 11, 0.08); border: 1px dashed rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 18px; font-size: 13px; color: #fde68a; line-height: 1.7; display: flex; align-items: flex-start; gap: 10px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span id="force-pwd-reason-text">مدت زمان اعتبار ۳۰ روزه رمز عبور شما به پایان رسیده است یا تغییر آن
+                        توسط پشتیبانی سامانه الزامی شده است. لطفاً پیش از دسترسی به کارتابل، کلمه عبور جدید و امن خود را
+                        تعیین فرمایید.</span>
+                </div>
+                <div class="form-group">
+                    <label for="force_current_password">کلمه عبور فعلی:</label>
+                    <input type="password" id="force_current_password" required
+                        placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
+                </div>
+                <div class="form-group">
+                    <label for="force_new_password">کلمه عبور جدید (حداقل ۱۲ کاراکتر):</label>
+                    <input type="password" id="force_new_password" required placeholder="کلمه عبور جدید امن"
+                        autocomplete="new-password">
+                    <div class="pwd-requirements-hint">
+                        <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
+                        (!@#$%^&*)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="force_confirm_password">تکرار کلمه عبور جدید:</label>
+                    <input type="password" id="force_confirm_password" required placeholder="تکرار کلمه عبور جدید"
+                        autocomplete="new-password">
+                </div>
+                <div id="force-change-pwd-status" class="response-box" style="display: none; margin-bottom: 12px;">
+                </div>
+                <div class="force-pwd-actions">
+                    <button type="submit" class="btn-force-submit" id="btn-submit-force-change-pwd">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span class="btn-text">ثبت کلمه عبور جدید و ورود</span>
+                        <span class="btn-spinner d-none"></span>
+                    </button>
+                    <button type="button" class="btn-force-logout" id="btn-force-pwd-logout">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        <span>خروج از سامانه</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="modal-concurrent-alert" class="admin-modal-overlay" style="display: none; z-index: 9999;">
+        <div class="admin-modal-box"
+            style="max-width: 480px; text-align: center; border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 0 35px rgba(239, 68, 68, 0.25);">
+            <div
+                style="width: 56px; height: 56px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; color: #ef4444;">
+                <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                    </path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            <h3 style="color: #f87171; font-size: 18px; margin-bottom: 10px;">هشدار امنیتی: ورود در دستگاه دیگر</h3>
+            <p style="color: var(--text-main); font-size: 13.5px; line-height: 1.7; margin-bottom: 14px;">
+                یک ورود جدید با نام کاربری شما در دستگاه دیگری انجام شد و نشست فعلی شما در این مرورگر به دلایل امنیتی
+                خاتمه یافت.
+            </p>
+            <div
+                style="background: rgba(239, 68, 68, 0.08); border: 1px dashed rgba(239, 68, 68, 0.3); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 20px; font-size: 12.5px; color: #fca5a5; line-height: 1.6; display: flex; align-items: flex-start; gap: 8px; text-align: right;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span>چنانچه این ورود توسط شما نبوده است، لطفاً بلافاصله جهت بررسی‌های امنیتی با <strong>پشتیبانی
+                        سامانه</strong> تماس حاصل فرمایید.</span>
+            </div>
+            <div>
+                <button type="button" id="btn-ack-concurrent-logout" class="btn-action btn-danger"
+                    style="width: 100%; justify-content: center; padding: 10px 0; font-size: 14px;">
+                    تایید و خروج به صفحه ورود
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Change Classification -->
+    <div id="modal-change-classification" class="admin-modal-overlay" style="display: none;">
+        <div class="admin-modal-box" style="max-width: 520px;">
+            <div class="admin-modal-header">
+                <h3 style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    <span>تغییر ارزیابی کیفیت و سودمندی پرونده</span>
+                </h3>
+                <button type="button" class="btn-close-modal" id="btn-close-change-classification-modal" aria-label="بستن پنجره">&times;</button>
+            </div>
+            <form id="form-change-classification">
+                <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;">
+                    شما به عنوان ثبت‌کننده ارزیابی اولیه، می‌توانید وضعیت ارزش اطلاعاتی و کیفیت این گزارش را ویرایش فرمایید:
+                </p>
+                <div class="classify-modal-options" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+                    <div class="classify-option-card" id="option-card-helpful">
+                        <input type="radio" name="modal_classification" id="radio-helpful" value="helpful">
+                        <div class="classify-card-content">
+                            <div class="classify-card-icon helpful">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+                                </svg>
+                            </div>
+                            <div class="classify-card-texts">
+                                <strong class="classify-title">گزارش مفید و موثر</strong>
+                                <span class="classify-desc">حاوی اطلاعات مستند، معتبر، مشخصات دقیق و ارزش پیگیری اداری</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="classify-option-card" id="option-card-useless">
+                        <input type="radio" name="modal_classification" id="radio-useless" value="useless">
+                        <div class="classify-card-content">
+                            <div class="classify-card-icon useless">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                                </svg>
+                            </div>
+                            <div class="classify-card-texts">
+                                <strong class="classify-title">گزارش بی‌محتوا و فاقد ارزش</strong>
+                                <span class="classify-desc">فاقد ادله و مستندات، تکراری، نامفهوم یا بدون قابلیت رسیدگی قانونی</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="changeClassificationStatusMsg" class="response-box" style="display: none; margin-bottom: 14px;"></div>
+
+                <div class="admin-modal-footer">
+                    <button type="button" class="btn-action btn-secondary" id="btn-cancel-change-classification">انصراف</button>
+                    <button type="submit" class="btn-action btn-submit" id="btn-submit-change-classification">
+                        <span class="btn-text">ثبت و بروزرسانی ارزیابی</span>
+                        <span class="btn-spinner d-none" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Modal Forward Report (ارجاع خبر) -->
+    <div id="modal-forward-report" class="admin-modal-overlay" style="display: none;">
+        <div class="admin-modal-box forward-modal-box" style="max-width: 540px;">
+            <div class="admin-modal-header">
+                <div>
+                    <h3 style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <polyline points="16 6 12 2 8 6"></polyline>
+                            <line x1="12" y1="2" x2="12" y2="15"></line>
+                        </svg>
+                        <span>ارجاع خبر به کارشناسان حراست</span>
+                    </h3>
+                    <div class="modal-header-sub text-muted" id="forward-modal-tracking-sub" style="font-size: 12px; margin-top: 4px;">
+                        شماره پرونده: <strong id="forward-modal-tracking-code" class="ltr text-cyan font-tahoma">...</strong>
+                    </div>
+                </div>
+                <button type="button" class="btn-close-modal" id="btn-close-forward-modal" aria-label="بستن">&times;</button>
+            </div>
+            <form id="form-forward-report">
+                <input type="hidden" id="forward_report_id">
+                
+                <div class="forward-search-bar" style="margin-bottom: 12px;">
+                    <div style="position: relative;">
+                        <input type="text" id="forward-search-input" placeholder="جستجوی نام کارشناس یا ناحیه/منطقه..."
+                            style="width: 100%; height: 38px; background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 0 34px 0 12px; color: var(--text-main); font-family: inherit; font-size: 13px;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; right: 10px; top: 11px; color: var(--text-muted); pointer-events: none;">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="forward-actions-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12px; color: var(--text-muted);">
+                    <div style="display: flex; gap: 10px;">
+                        <button type="button" id="btn-select-all-recipients" class="btn-link-action" style="background:none; border:none; color:var(--color-primary); cursor:pointer; font-family:inherit; font-size:12px; padding:0;">انتخاب همه</button>
+                        <span>|</span>
+                        <button type="button" id="btn-deselect-all-recipients" class="btn-link-action" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-family:inherit; font-size:12px; padding:0;">لغو انتخاب</button>
+                    </div>
+                    <div>
+                        تعداد انتخاب‌شده: <strong id="forward-selected-count" class="text-cyan font-bold">۰</strong> کارشناس
+                    </div>
+                </div>
+
+                <div id="forward-recipients-container" class="forward-recipients-list" style="max-height: 260px; overflow-y: auto; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 8px; background: rgba(15, 23, 42, 0.35); margin-bottom: 14px;">
+                    <div id="forward-recipients-loading" style="text-align: center; padding: 25px; color: var(--text-muted); font-size: 13px;">
+                        در حال بارگذاری لیست کارشناسان نواحی و مناطق...
+                    </div>
+                </div>
+
+                <div id="forward-status-msg" class="response-box" style="display: none; margin-bottom: 12px;"></div>
+
+                <div class="admin-modal-footer">
+                    <button type="button" class="btn-action btn-secondary" id="btn-cancel-forward">انصراف</button>
+                    <button type="submit" class="btn-action btn-submit" id="btn-submit-forward">
+                        <span class="btn-text">تایید و ارجاع خبر</span>
+                        <span class="btn-spinner d-none"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Forward History (نمودار و تاریخچه ارجاع) -->
+    <div id="modal-forward-history" class="admin-modal-overlay" style="display: none;">
+        <div class="admin-modal-box forward-history-modal-box" style="max-width: 820px; width: 95%; max-height: 90vh; display: flex; flex-direction: column;">
+            <div class="admin-modal-header" style="flex-shrink: 0;">
+                <div>
+                    <h3 style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>تاریخچه و نمودار جریان ارجاع خبر</span>
+                    </h3>
+                    <div class="modal-header-sub text-muted" style="font-size: 12px; margin-top: 4px;">
+                        شماره پرونده: <strong id="history-modal-tracking-code" class="ltr text-cyan font-tahoma">...</strong>
+                    </div>
+                </div>
+                <button type="button" class="btn-close-modal" id="btn-close-history-modal" aria-label="بستن">&times;</button>
+            </div>
+
+            <div id="forward-history-body" class="forward-history-scroll" style="flex: 1; overflow-y: auto; min-height: 220px;">
+                <!-- Flowchart diagrams rendered here dynamically -->
+            </div>
+
+            <div class="admin-modal-footer" style="flex-shrink: 0; margin-top: 14px; border-top: 1px solid var(--border-subtle); padding-top: 12px;">
+                <button type="button" class="btn-action btn-secondary" id="btn-close-history-footer">بستن</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="sessionWarningModal" class="admin-modal-overlay" style="display: none; z-index: 9998;">
+        <div class="admin-modal-box" style="max-width: 460px; text-align: center;">
+            <div
+                style="width: 52px; height: 52px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px auto; color: #f59e0b;">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <h3 style="color: #fbbf24; font-size: 17.5px; margin-bottom: 8px;">هشدار امنیتی: انقضای قریب‌الوقوع نشست
+            </h3>
+            <p style="color: var(--text-main); font-size: 13.5px; line-height: 1.7; margin-bottom: 16px;">
+                به دلیل عدم فعالیت، نشست اداری شما تا <strong id="warningCountdownText"
+                    style="color: #f59e0b; font-size: 15px;">۶۰ ثانیه</strong> دیگر به دلایل امنیتی خاتمه می‌یابد. آیا
+                مایل به ادامه کار هستید؟
+            </p>
+            <div style="display: flex; gap: 10px;">
+                <button type="button" id="btnExtendSessionWarning" class="btn-action btn-submit"
+                    style="flex: 1; justify-content: center; padding: 10px 0;">
+                    تمدید و ادامه فعالیت
+                </button>
+                <button type="button" id="btnLogoutSessionWarning" class="btn-action btn-secondary"
+                    style="flex: 1; justify-content: center; padding: 10px 0;">
+                    خروج
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="confirm.js"></script>
+    <script src="admin.js?v=82"></script>
+</body>
+
+</html>

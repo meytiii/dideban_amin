@@ -1,0 +1,5971 @@
+
+// Minimum prestige 3D preloader dismiss for Admin with guaranteed safety timeout
+(function initAdminPreloader() {
+    const PRELOADER_MIN_MS = 1000;
+    const startTime = performance.now();
+    let dismissed = false;
+
+    function dismiss() {
+        if (dismissed) return;
+        dismissed = true;
+        const elapsed = performance.now() - startTime;
+        const remaining = Math.max(0, PRELOADER_MIN_MS - elapsed);
+        setTimeout(() => {
+            const preloader = document.getElementById('adminPreloader');
+            const skeleton = document.getElementById('adminSkeleton');
+            if (preloader) {
+                preloader.classList.add('fade-out');
+                setTimeout(() => {
+                    if (preloader.parentNode) preloader.remove();
+                }, 450);
+            }
+            if (skeleton) {
+                skeleton.classList.add('fade-out');
+                setTimeout(() => {
+                    if (skeleton.parentNode) skeleton.remove();
+                }, 450);
+            }
+        }, remaining);
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        dismiss();
+    } else {
+        window.addEventListener('load', dismiss);
+        document.addEventListener('DOMContentLoaded', dismiss);
+    }
+    // Hard fallback: dismiss after 2s regardless of window load event
+    setTimeout(dismiss, 2000);
+})();
+
+
+const nativeFetch = window.fetch.bind(window);
+function adminFetch(url, options = {}) {
+    const opts = { credentials: 'same-origin', ...options };
+    opts.headers = { ...(opts.headers || {}) };
+    const csrf = sessionStorage.getItem('herasat_csrf');
+    if (csrf && opts.method && opts.method.toUpperCase() !== 'GET') {
+        opts.headers['X-CSRF-Token'] = csrf;
+    }
+    return nativeFetch(url, opts);
+}
+
+// Unified High-End Tooltip System (matching Radix/shadcn component)
+function initAppTooltips() {
+    let tooltipEl = null;
+    let activeTarget = null;
+    let showTimer = null;
+    let hideTimer = null;
+
+    function getOrCreateTooltip() {
+        if (!tooltipEl) {
+            tooltipEl = document.createElement('div');
+            tooltipEl.className = 'app-tooltip';
+            tooltipEl.setAttribute('role', 'tooltip');
+            tooltipEl.innerHTML = '<span class="app-tooltip-text"></span><div class="app-tooltip-arrow"></div>';
+            document.body.appendChild(tooltipEl);
+        }
+        return tooltipEl;
+    }
+
+    function convertTitles(root) {
+        if (!root || !root.querySelectorAll) return;
+        root.querySelectorAll('[title]').forEach(el => {
+            const t = el.getAttribute('title');
+            if (t && t.trim()) {
+                el.setAttribute('data-tooltip', t.trim());
+                el.removeAttribute('title');
+            }
+        });
+    }
+    window.convertTitles = convertTitles;
+
+    function isMobileOrTouch() {
+        if (window.innerWidth <= 768) return true;
+        try {
+            if (window.matchMedia && (window.matchMedia('(hover: none)').matches || window.matchMedia('(pointer: coarse)').matches)) {
+                return true;
+            }
+        } catch (e) { }
+        return false;
+    }
+
+    function positionTooltip(el) {
+        if (isMobileOrTouch()) return;
+        const text = el.getAttribute('data-tooltip');
+        if (!text || !text.trim()) return;
+
+        const tip = getOrCreateTooltip();
+        tip.querySelector('.app-tooltip-text').textContent = text;
+
+        const rect = el.getBoundingClientRect();
+        if (rect.width === 0 && rect.height === 0) return;
+
+        const side = rect.top < 46 ? 'bottom' : 'top';
+        tip.setAttribute('data-side', side);
+
+        tip.style.left = '-9999px';
+        tip.style.top = '-9999px';
+        tip.style.visibility = 'hidden';
+        tip.style.display = 'block';
+
+        const tipWidth = tip.offsetWidth;
+        const tipHeight = tip.offsetHeight;
+
+        let left = rect.left + (rect.width / 2) - (tipWidth / 2);
+        left = Math.max(10, Math.min(window.innerWidth - tipWidth - 10, left));
+
+        let top = side === 'top' ? (rect.top - tipHeight - 6) : (rect.bottom + 6);
+
+        const arrow = tip.querySelector('.app-tooltip-arrow');
+        if (arrow) {
+            const arrowLeft = rect.left + (rect.width / 2) - left - 3;
+            arrow.style.left = `${Math.max(8, Math.min(tipWidth - 14, arrowLeft))}px`;
+        }
+
+        tip.style.left = `${Math.round(left)}px`;
+        tip.style.top = `${Math.round(top)}px`;
+        tip.style.visibility = 'visible';
+
+        requestAnimationFrame(() => {
+            if (activeTarget === el && !isMobileOrTouch()) {
+                tip.classList.add('show');
+            }
+        });
+    }
+
+    function show(el) {
+        if (isMobileOrTouch()) return;
+        if (activeTarget === el) return;
+        activeTarget = el;
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+
+        showTimer = setTimeout(() => {
+            if (isMobileOrTouch()) {
+                hide(el);
+                return;
+            }
+            if (activeTarget === el) {
+                positionTooltip(el);
+            }
+        }, 80);
+    }
+
+    function hide(el) {
+        if (activeTarget !== el && el !== null) return;
+        clearTimeout(showTimer);
+        activeTarget = null;
+        if (tooltipEl) {
+            tooltipEl.classList.remove('show');
+            hideTimer = setTimeout(() => {
+                if (!activeTarget && tooltipEl) {
+                    tooltipEl.style.display = 'none';
+                    tooltipEl.style.visibility = 'hidden';
+                }
+            }, 160);
+        }
+    }
+
+    const start = () => {
+        convertTitles(document.body);
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+    } else {
+        start();
+    }
+
+    document.addEventListener('pointerover', (e) => {
+        if (e.pointerType === 'touch' || e.pointerType === 'pen') return;
+        if (isMobileOrTouch()) return;
+        const target = e.target.closest('[data-tooltip], [title]');
+        if (target) {
+            if (target.hasAttribute('title')) {
+                const t = target.getAttribute('title');
+                target.setAttribute('data-tooltip', t);
+                target.removeAttribute('title');
+            }
+            show(target);
+        }
+    }, { passive: true });
+
+    document.addEventListener('pointerout', (e) => {
+        const target = e.target.closest('[data-tooltip]');
+        if (target) {
+            if (e.relatedTarget && target.contains(e.relatedTarget)) {
+                return;
+            }
+            hide(target);
+        }
+    }, { passive: true });
+
+    document.addEventListener('focusin', (e) => {
+        if (isMobileOrTouch()) return;
+        const target = e.target.closest('[data-tooltip], [title]');
+        if (target) {
+            if (target.hasAttribute('title')) {
+                const t = target.getAttribute('title');
+                target.setAttribute('data-tooltip', t);
+                target.removeAttribute('title');
+            }
+            show(target);
+        }
+    }, { passive: true });
+
+    document.addEventListener('focusout', (e) => {
+        const target = e.target.closest('[data-tooltip]');
+        if (target) hide(target);
+    }, { passive: true });
+
+    document.addEventListener('input', (e) => {
+        if (activeTarget && (activeTarget === e.target || activeTarget.contains(e.target))) {
+            hide(activeTarget);
+        }
+    }, { passive: true });
+
+    document.addEventListener('touchstart', () => {
+        if (activeTarget) hide(activeTarget);
+        if (tooltipEl) {
+            tooltipEl.classList.remove('show');
+            tooltipEl.style.display = 'none';
+            tooltipEl.style.visibility = 'hidden';
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+        if (isMobileOrTouch()) {
+            if (activeTarget) hide(activeTarget);
+            if (tooltipEl) {
+                tooltipEl.classList.remove('show');
+                tooltipEl.style.display = 'none';
+                tooltipEl.style.visibility = 'hidden';
+            }
+        }
+    }, { passive: true });
+
+    window.addEventListener('scroll', () => {
+        if (activeTarget) hide(activeTarget);
+    }, { passive: true });
+}
+
+initAppTooltips();
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const toPersianNum = (n) => String(n).replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+    const toastContainer = document.getElementById('toast-container');
+    function showToast(message, duration = 2500, type = '') {
+        if (!toastContainer) return;
+        if (typeof duration === 'string') {
+            type = duration;
+            duration = 2500;
+        }
+        const toast = document.createElement('div');
+        toast.className = 'toast' + (type ? ` toast-${type}` : '');
+        toast.textContent = message;
+        const fadeDelay = Math.max(duration - 300, 200) / 1000;
+        toast.style.animation = `toastIn 0.25s ease, toastOut 0.25s ease ${fadeDelay}s forwards`;
+        toastContainer.appendChild(toast);
+        setTimeout(() => {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, duration);
+    }
+
+    /**
+     * Professional confirmation dialog matching the AlertDialog / Shadcn / Lucide pattern.
+     * Replaces native browser confirm() dialogs with a modern RTL modal.
+     */
+    function showConfirmDialog({
+        title = 'آیا اطمینان دارید؟',
+        description = '',
+        htmlContent = '',
+        confirmText = 'بله، تأیید',
+        cancelText = 'خیر، انصراف',
+        variant = 'warning', // 'warning', 'danger', 'primary', 'success'
+        iconType = 'shield-question' // 'logout', 'trash', 'shield-alert', 'shield-question', 'user-x', 'check-circle'
+    } = {}) {
+        return new Promise((resolve) => {
+            document.querySelectorAll('.pro-confirm-overlay').forEach(el => el.remove());
+
+            const safeEscape = (str) => {
+                if (!str) return '';
+                return String(str).replace(/[&<>'"]/g, tag => ({
+                    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+                }[tag] || tag));
+            };
+
+            const icons = {
+                'logout': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>',
+                'trash': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>',
+                'shield-alert': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
+                'shield-question': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M12 8a2 2 0 0 1 2 2c0 1.2-1.5 1.8-1.5 2.5"></path><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
+                'user-x': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg>',
+                'check-circle': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+            };
+
+            const iconSvg = icons[iconType] || icons['shield-question'];
+            const overlay = document.createElement('div');
+            overlay.className = 'pro-confirm-overlay';
+            overlay.innerHTML = `
+                <div class="pro-confirm-card" role="dialog" aria-modal="true">
+                    <div class="pro-confirm-body">
+                        <div class="pro-confirm-icon-badge pro-confirm-badge-${variant}">
+                            ${iconSvg}
+                        </div>
+                        <h3 class="pro-confirm-title">${safeEscape(title)}</h3>
+                        ${description ? `<p class="pro-confirm-desc">${safeEscape(description)}</p>` : ''}
+                        ${htmlContent ? `<div class="pro-confirm-custom-content">${htmlContent}</div>` : ''}
+                    </div>
+                    <div class="pro-confirm-footer">
+                        <button type="button" class="pro-confirm-btn pro-confirm-btn-cancel" id="proConfirmCancelBtn">
+                            ${safeEscape(cancelText)}
+                        </button>
+                        <button type="button" class="pro-confirm-btn pro-confirm-btn-confirm btn-var-${variant}" id="proConfirmOkBtn">
+                            ${safeEscape(confirmText)}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            function cleanup(result) {
+                document.removeEventListener('keydown', keyHandler);
+                overlay.remove();
+                resolve(result);
+            }
+
+            function keyHandler(e) {
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    cleanup(false);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    cleanup(true);
+                }
+            }
+
+            document.addEventListener('keydown', keyHandler);
+            overlay.querySelector('#proConfirmCancelBtn').addEventListener('click', () => cleanup(false));
+            overlay.querySelector('#proConfirmOkBtn').addEventListener('click', () => cleanup(true));
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) cleanup(false);
+            });
+
+            document.body.appendChild(overlay);
+            const cancelBtn = overlay.querySelector('#proConfirmCancelBtn');
+            if (cancelBtn) cancelBtn.focus();
+        });
+    }
+    window.showConfirmDialog = showConfirmDialog;
+
+    const loginForm = document.getElementById('loginForm');
+    const loginSection = document.getElementById('login-section');
+    const dashboardSection = document.getElementById('dashboard-section');
+    const loginMessage = document.getElementById('loginMessage');
+    const reportsBody = document.getElementById('reportsBody');
+
+    const reportsInboxSection = document.getElementById('reports-inbox-section');
+    const listSection = document.getElementById('reports-list-section');
+    const detailSection = document.getElementById('report-detail-section');
+    const filterContainer = document.getElementById('reportsFilterContainer') || document.querySelector('.filter-container');
+    const bulkActionsToolbar = document.getElementById('bulkActionsToolbar');
+    const advancedSection = document.getElementById('advanced-section');
+    const analyticsSection = document.getElementById('analytics-section');
+    const tabBtnReports = document.getElementById('tab-btn-reports');
+    const tabBtnAnalytics = document.getElementById('tab-btn-analytics');
+    const tabBtnAdvanced = document.getElementById('tab-btn-advanced');
+    const backBtn = document.getElementById('backToListBtn');
+
+    let currentAdmin = null;
+
+    if (loginSection) loginSection.style.display = 'flex';
+    if (dashboardSection) dashboardSection.style.display = 'none';
+    if (reportsInboxSection) reportsInboxSection.style.display = 'block';
+    if (detailSection) detailSection.style.display = 'none';
+    if (listSection) listSection.style.display = 'block';
+    if (filterContainer) filterContainer.style.display = '';
+    if (advancedSection) advancedSection.style.display = 'none';
+    if (analyticsSection) analyticsSection.style.display = 'none';
+
+    const SESSION_DURATION = 15 * 60;
+    let remainingSeconds = SESSION_DURATION;
+    let timerInterval = null;
+
+    const countdownEl = document.getElementById('sessionCountdown');
+    const timerBoxEl = document.getElementById('sessionTimerBox') || document.querySelector('.session-timer-box');
+    const btnRenewSession = document.getElementById('btnRenewSession');
+
+    const sessionWarningModal = document.getElementById('sessionWarningModal');
+    const warningCountdownText = document.getElementById('warningCountdownText');
+    const btnExtendSessionWarning = document.getElementById('btnExtendSessionWarning');
+    const btnLogoutSessionWarning = document.getElementById('btnLogoutSessionWarning');
+
+    function updateTimerDisplay() {
+        if (!countdownEl) return;
+        const minutes = Math.floor(remainingSeconds / 60);
+        const seconds = remainingSeconds % 60;
+        countdownEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+        const statusDot = document.querySelector('.status-indicator-dot');
+        const statusText = document.getElementById('sessionStatusText');
+
+        if (remainingSeconds <= 120) {
+            timerBoxEl?.classList.add('warning');
+            if (statusDot) statusDot.className = 'status-indicator-dot danger';
+            if (statusText) statusText.textContent = 'وضعیت: در شرف انقضا!';
+        } else if (remainingSeconds <= 300) {
+            timerBoxEl?.classList.remove('warning');
+            if (statusDot) statusDot.className = 'status-indicator-dot warning';
+            if (statusText) statusText.textContent = 'وضعیت: نیاز به تمدید';
+        } else {
+            timerBoxEl?.classList.remove('warning');
+            if (statusDot) statusDot.className = 'status-indicator-dot';
+            if (statusText) statusText.textContent = 'وضعیت: فعال و امن';
+        }
+    }
+
+    function resetSessionTimer() {
+        remainingSeconds = SESSION_DURATION;
+        if (sessionWarningModal) sessionWarningModal.style.display = 'none';
+        updateTimerDisplay();
+    }
+
+    async function renewSessionInteractive(e) {
+        if (e) e.stopPropagation();
+        const icon = btnRenewSession?.querySelector('svg');
+        if (icon) icon.classList.add('spinning');
+
+        try {
+            await fetchReports();
+            if (sessionWarningModal) sessionWarningModal.style.display = 'none';
+            showToast('اعتبار نشست با موفقیت به ۱۵ دقیقه تمدید شد', 2500, 'success');
+        } catch (err) {
+            showToast('خطا در تمدید نشست. ارتباط با سرور برقرار نشد.', 3500, 'error');
+        } finally {
+            setTimeout(() => {
+                if (icon) icon.classList.remove('spinning');
+            }, 500);
+        }
+    }
+
+    if (btnRenewSession) {
+        btnRenewSession.addEventListener('click', renewSessionInteractive);
+    }
+    if (btnExtendSessionWarning) {
+        btnExtendSessionWarning.addEventListener('click', renewSessionInteractive);
+    }
+    if (btnLogoutSessionWarning) {
+        btnLogoutSessionWarning.addEventListener('click', async () => {
+            try {
+                await adminFetch('/api/admin/logout', { method: 'POST' });
+            } catch (e) { }
+            document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            location.reload();
+        });
+    }
+
+    if (timerBoxEl) {
+        timerBoxEl.addEventListener('click', (e) => {
+            if (e.target.closest('#btnRenewSession')) return;
+            renewSessionInteractive(e);
+        });
+        timerBoxEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                renewSessionInteractive(e);
+            }
+        });
+    }
+
+    function startSessionTimer() {
+        clearInterval(timerInterval);
+        resetSessionTimer();
+        timerInterval = setInterval(() => {
+            remainingSeconds--;
+            updateTimerDisplay();
+
+            if (remainingSeconds <= 60 && remainingSeconds > 0) {
+                if (sessionWarningModal && sessionWarningModal.style.display !== 'flex') {
+                    sessionWarningModal.style.display = 'flex';
+                }
+                if (warningCountdownText) warningCountdownText.textContent = `${toPersianNum(remainingSeconds)} ثانیه`;
+            } else if (remainingSeconds > 60) {
+                if (sessionWarningModal) sessionWarningModal.style.display = 'none';
+            }
+
+            if (remainingSeconds <= 0) {
+                clearInterval(timerInterval);
+                showConfirmDialog({
+                    title: 'پایان نشست کاری',
+                    description: 'نشست کاری شما به دلیل عدم فعالیت به پایان رسید. لطفاً مجدداً وارد شوید.',
+                    confirmText: 'ورود مجدد به سامانه',
+                    cancelText: 'بستن',
+                    variant: 'warning',
+                    iconType: 'shield-alert'
+                }).then(() => {
+                    document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                    location.reload();
+                });
+            }
+        }, 1000);
+    }
+
+    const adminCaptchaImg = document.getElementById('admin-captcha-img');
+    const adminCaptchaId = document.getElementById('admin_captcha_id');
+    const adminCaptchaAnswer = document.getElementById('admin_captcha_answer');
+    const adminCaptchaRefresh = document.getElementById('admin-captcha-refresh');
+
+    async function loadAdminCaptcha() {
+        if (adminCaptchaImg) adminCaptchaImg.classList.add('skeleton-shimmer');
+        try {
+            const res = await adminFetch('/api/captcha');
+            if (res.ok) {
+                const data = await res.json();
+                if (adminCaptchaImg) {
+                    adminCaptchaImg.src = data.image_base64;
+                    adminCaptchaImg.onload = () => adminCaptchaImg.classList.remove('skeleton-shimmer');
+                }
+                if (adminCaptchaId) adminCaptchaId.value = data.captcha_id;
+                if (adminCaptchaAnswer) adminCaptchaAnswer.value = '';
+            } else {
+                if (adminCaptchaImg) adminCaptchaImg.classList.remove('skeleton-shimmer');
+            }
+        } catch (err) {
+            console.error('Failed to load CAPTCHA');
+            if (adminCaptchaImg) adminCaptchaImg.classList.remove('skeleton-shimmer');
+        }
+    }
+
+    if (adminCaptchaRefresh) {
+        adminCaptchaRefresh.addEventListener('click', loadAdminCaptcha);
+    }
+    loadAdminCaptcha();
+
+
+
+    // Password Visibility Toggle
+    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+    const passwordInput = document.getElementById('password');
+    const eyeShow = document.getElementById('eye-icon-show');
+    const eyeHide = document.getElementById('eye-icon-hide');
+    if (togglePasswordBtn && passwordInput) {
+        togglePasswordBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            if (eyeShow && eyeHide) {
+                eyeShow.classList.toggle('d-none', isPassword);
+                eyeHide.classList.toggle('d-none', !isPassword);
+            }
+        });
+    }
+
+    (async () => {
+        const hasSession = await checkAdminProfile();
+        if (hasSession) {
+            if (loginSection) {
+                loginSection.classList.add('d-none');
+                loginSection.style.display = 'none';
+            }
+            if (dashboardSection) {
+                dashboardSection.classList.remove('d-none');
+                dashboardSection.style.display = 'block';
+            }
+            startSessionTimer();
+            startHeartbeat();
+            switchMainTab('reports');
+            fetchNotifications();
+        }
+    })();
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const loginBtn = document.getElementById('loginBtn');
+        const btnText = loginBtn?.querySelector('.btn-text');
+        const btnSpinner = loginBtn?.querySelector('.btn-spinner');
+
+        if (loginBtn) loginBtn.disabled = true;
+        if (btnText) btnText.textContent = 'در حال احراز هویت...';
+        if (btnSpinner) btnSpinner.classList.remove('d-none');
+        if (loginMessage) loginMessage.style.display = 'none';
+
+        const payload = {
+            username: loginForm.username.value,
+            password: loginForm.password.value,
+            captcha_id: adminCaptchaId.value,
+            captcha_answer: adminCaptchaAnswer.value
+        };
+
+        try {
+            const response = await adminFetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                try {
+                    const loginClone = response.clone();
+                    loginClone.json().then(data => {
+                        if (data && data.csrf_token) {
+                            sessionStorage.setItem('herasat_csrf', data.csrf_token);
+                        }
+                    }).catch(() => {});
+                } catch (e) {}
+                if (loginSection) {
+                    loginSection.classList.add('d-none');
+                    loginSection.style.display = 'none';
+                }
+                if (dashboardSection) {
+                    dashboardSection.classList.remove('d-none');
+                    dashboardSection.style.display = 'block';
+                }
+                startSessionTimer();
+                startHeartbeat();
+                await checkAdminProfile();
+                switchMainTab('reports');
+                fetchNotifications();
+            } else {
+                const errText = await response.text();
+                loginMessage.textContent = errText || 'نام کاربری یا رمز عبور اشتباه است.';
+                loginMessage.style.display = 'block';
+                loadAdminCaptcha();
+            }
+        } catch (error) {
+            loginMessage.textContent = 'خطای ارتباط با سرور.';
+            loginMessage.style.display = 'block';
+            loadAdminCaptcha();
+        } finally {
+            if (loginBtn) loginBtn.disabled = false;
+            if (btnText) btnText.textContent = 'ورود به سیستم';
+            if (btnSpinner) btnSpinner.classList.add('d-none');
+        }
+    });
+
+    let allReports = [];
+    let filteredReports = [];
+    let currentPage = 1;
+    const itemsPerPage = 50;
+    const selectedReportIds = new Set();
+    let currentViewingIndex = -1;
+    let previousUnreadCount = -1;
+
+    const searchTracking = document.getElementById('search-tracking');
+    const filterType = document.getElementById('filter-type');
+    const filterPriority = document.getElementById('filter-priority');
+    const filterMonth = document.getElementById('filter-month');
+    const filterReadStatus = document.getElementById('filter-read-status');
+    const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+    const btnExportCSV = document.getElementById('btnExportCSV');
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    if (searchTracking) searchTracking.addEventListener('input', debounce(() => applyFilters(true), 150));
+    if (filterType) filterType.addEventListener('change', () => applyFilters(true));
+    if (filterPriority) filterPriority.addEventListener('change', () => applyFilters(true));
+    if (filterMonth) filterMonth.addEventListener('change', () => applyFilters(true));
+    if (filterReadStatus) filterReadStatus.addEventListener('change', () => applyFilters(true));
+
+    const refreshReportsBtn = document.getElementById('refreshReportsBtn');
+    if (refreshReportsBtn) {
+        refreshReportsBtn.addEventListener('click', async () => {
+            const icon = refreshReportsBtn.querySelector('.refresh-icon');
+            refreshReportsBtn.disabled = true;
+            if (icon) icon.classList.add('spinning');
+
+            try {
+                await fetchReports();
+                showToast('لیست گزارش‌ها بروزرسانی شد', 2500, 'success');
+            } catch (err) {
+                showToast('خطا در دریافت اطلاعات. ارتباط با سرور برقرار نشد.', 3500, 'error');
+            } finally {
+                setTimeout(() => {
+                    if (icon) icon.classList.remove('spinning');
+                    refreshReportsBtn.disabled = false;
+                }, 400);
+            }
+        });
+    }
+
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', () => {
+            if (searchTracking) searchTracking.value = '';
+            if (filterType) filterType.value = 'all';
+            if (filterPriority) filterPriority.value = 'all';
+            if (filterMonth) filterMonth.value = 'all';
+            if (filterReadStatus) filterReadStatus.value = 'all';
+            applyFilters(true);
+        });
+    }
+
+    function exportReportsToCSV() {
+        if (!filteredReports || filteredReports.length === 0) {
+            showToast('گزارشی برای خروجی اکسل وجود ندارد');
+            return;
+        }
+
+        const headers = ['کد پیگیری', 'اولویت', 'موضوع', 'نوع گزارش', 'تاریخ ثبت', 'وضعیت بررسی', 'دارای پاسخ'];
+        const rows = filteredReports.map(r => {
+            const prioFa = r.priority === 'critical' ? 'آنی' : (r.priority === 'urgent' ? 'فوری' : 'عادی');
+            let statusFa = 'در نوبت بررسی';
+            const hasResp = Boolean(r.has_response || (r.admin_response && r.admin_response.trim() !== ''));
+            if (r.has_new_message) {
+                statusFa = 'پیام جدید';
+            } else if (r.has_regional_response) {
+                statusFa = 'پاسخ کارشناسی';
+            } else if (hasResp) {
+                statusFa = 'پاسخ داده شده';
+            } else if (r.is_read) {
+                statusFa = 'بررسی شده';
+            }
+            const hasRespFa = hasResp ? 'بله' : 'خیر';
+            const dateFa = formatJalaliDateTime(r.created_at);
+
+            return [
+                `"${r.tracking_code}"`,
+                `"${prioFa}"`,
+                `"${r.category || ''}"`,
+                `"${typeFa}"`,
+                `"${dateFa}"`,
+                `"${statusFa}"`,
+                `"${hasRespFa}"`
+            ].join(',');
+        });
+
+        const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `Herasat_Reports_Export_${Date.now()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast('فایل اکسل با موفقیت دانلود شد');
+    }
+
+    if (btnExportCSV) {
+        btnExportCSV.addEventListener('click', exportReportsToCSV);
+    }
+
+    function handleKPICardFilter(statusFilterValue) {
+
+        if (reportsInboxSection) reportsInboxSection.style.display = 'block';
+        if (detailSection) detailSection.style.display = 'none';
+        if (listSection) listSection.style.display = 'block';
+        if (filterContainer) filterContainer.style.display = '';
+        reportsInboxSection?.classList.remove('in-detail-view');
+        if (advancedSection) advancedSection.style.display = 'none';
+        if (analyticsSection) analyticsSection.style.display = 'none';
+
+        if (tabBtnReports) tabBtnReports.classList.add('active');
+        if (tabBtnAnalytics) tabBtnAnalytics.classList.remove('active');
+        if (tabBtnAdvanced) tabBtnAdvanced.classList.remove('active');
+
+        if (filterReadStatus) filterReadStatus.value = statusFilterValue;
+        applyFilters(true);
+
+        const targetEl = document.querySelector('.filter-container') || listSection;
+        if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    document.getElementById('kpi-total-card')?.addEventListener('click', () => handleKPICardFilter('all'));
+    document.getElementById('kpi-unread-card')?.addEventListener('click', () => handleKPICardFilter('unread'));
+    document.getElementById('kpi-read-card')?.addEventListener('click', () => handleKPICardFilter('read'));
+    document.getElementById('kpi-responded-card')?.addEventListener('click', () => handleKPICardFilter('responded'));
+
+    document.getElementById('btn-first')?.addEventListener('click', () => { currentPage = 1; renderCurrentPage(); });
+    document.getElementById('btn-prev')?.addEventListener('click', () => { currentPage--; renderCurrentPage(); });
+    document.getElementById('btn-next')?.addEventListener('click', () => { currentPage++; renderCurrentPage(); });
+    document.getElementById('btn-last')?.addEventListener('click', () => {
+        currentPage = Math.ceil(filteredReports.length / itemsPerPage) || 1;
+        renderCurrentPage();
+    });
+
+    // Compensate for Iran DST / Windows Server timezone shift (+1 hour = +60 min)
+    // Can be adjusted or overridden via window.HERASAT_TIME_OFFSET_MINUTES (default: 60)
+    const TIME_OFFSET_MS = ((typeof window.HERASAT_TIME_OFFSET_MINUTES !== 'undefined' ? window.HERASAT_TIME_OFFSET_MINUTES : 60) * 60 * 1000);
+
+    // Cached high-performance Intl singletons (prevents GC pressure and repeated parser construction)
+    const cachedJalaliFormatterFull = new Intl.DateTimeFormat('fa-IR', {
+        timeZone: 'Asia/Tehran',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    });
+
+    const cachedJalaliFormatterShort = new Intl.DateTimeFormat('fa-IR', {
+        timeZone: 'Asia/Tehran',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    });
+
+    const cachedJalaliMonthFormatter = new Intl.DateTimeFormat('fa-IR-u-nu-latn', {
+        timeZone: 'Asia/Tehran',
+        month: '2-digit'
+    });
+
+    function formatJalaliDateTime(isoStr, includeSeconds = false) {
+        if (!isoStr) return 'نامشخص';
+        try {
+            let dateObj = new Date(isoStr);
+            if (isNaN(dateObj.getTime())) return 'نامشخص';
+            if (TIME_OFFSET_MS) {
+                dateObj = new Date(dateObj.getTime() + TIME_OFFSET_MS);
+            }
+            return (includeSeconds ? cachedJalaliFormatterFull : cachedJalaliFormatterShort).format(dateObj);
+        } catch (e) {
+            return 'نامشخص';
+        }
+    }
+
+    function indexReportForSearch(report) {
+        if (!report) return;
+        report._normTracking = normalizePersianForSearch(report.tracking_code || '');
+        report._normCategory = normalizePersianForSearch(report.category || '');
+        report._normDesc = normalizePersianForSearch(report.description || '');
+        report._lowerTracking = (report.tracking_code || '').toLowerCase();
+        report._lowerCategory = (report.category || '').toLowerCase();
+        report._lowerDesc = (report.description || '').toLowerCase();
+
+        if (report.created_at) {
+            try {
+                let d = new Date(report.created_at);
+                if (TIME_OFFSET_MS) d = new Date(d.getTime() + TIME_OFFSET_MS);
+                report._shamsiMonth = cachedJalaliMonthFormatter.format(d);
+                report._timestamp = d.getTime();
+            } catch (e) {
+                report._shamsiMonth = '';
+                report._timestamp = 0;
+            }
+        } else {
+            report._shamsiMonth = '';
+            report._timestamp = 0;
+        }
+
+        if (report.updated_at) {
+            try {
+                report._updateTimestamp = new Date(report.updated_at).getTime();
+            } catch (e) {
+                report._updateTimestamp = report._timestamp;
+            }
+        } else {
+            report._updateTimestamp = report._timestamp;
+        }
+    }
+
+    function updateKPICards() {
+        const total = allReports.length;
+        let unread = 0;
+        let responded = 0;
+        let read = 0;
+
+        for (let i = 0; i < total; i++) {
+            const r = allReports[i];
+            const hasResp = Boolean(r.has_response || (r.admin_response && r.admin_response.trim() !== ''));
+            if (!r.is_read) {
+                unread++;
+            }
+            if (hasResp) {
+                responded++;
+            } else if (r.is_read && !r.has_new_message && !(r.has_response || (r.admin_response && r.admin_response.trim() !== ''))) {
+                read++;
+            }
+        }
+
+        const totalEl = document.getElementById('kpi-total-count');
+        const unreadEl = document.getElementById('kpi-unread-count');
+        const readEl = document.getElementById('kpi-read-count');
+        const respondedEl = document.getElementById('kpi-responded-count');
+        const pulseEl = document.getElementById('kpi-unread-pulse');
+
+        if (totalEl) totalEl.textContent = toPersianNum(total);
+        if (unreadEl) unreadEl.textContent = toPersianNum(unread);
+        if (readEl) readEl.textContent = toPersianNum(read);
+        if (respondedEl) respondedEl.textContent = toPersianNum(responded);
+
+        if (pulseEl) pulseEl.style.display = unread > 0 ? 'block' : 'none';
+    }
+
+    function escapeHTML(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>'"]/g, tag => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        }[tag] || tag));
+    }
+
+    function normalizePersianForSearch(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/[\u200c\u200b\u200e\u200f\uFEFF]/g, '')
+            .replace(/[يئ]/g, 'ی')
+            .replace(/[ك]/g, 'ک')
+            .replace(/[ة]/g, 'ه')
+            .replace(/[آأإ]/g, 'ا')
+            .replace(/[ؤ]/g, 'و')
+            .replace(/[\u064B-\u065F\u0670]/g, '')
+            .toLowerCase()
+            .trim();
+    }
+
+    function makePersianRegex(term) {
+        if (!term || !term.trim()) return null;
+        const trimmed = term.trim().replace(/[\u200c\u200b\u200e\u200f\uFEFF]/g, '');
+        if (!trimmed) return null;
+        let pattern = '';
+        for (let i = 0; i < trimmed.length; i++) {
+            const char = trimmed[i];
+            let charPattern = char.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            if (char === 'ی' || char === 'ي' || char === 'ئ') {
+                charPattern = '[یييئ]';
+            } else if (char === 'ک' || char === 'ك') {
+                charPattern = '[کك]';
+            } else if (char === 'ا' || char === 'آ' || char === 'أ' || char === 'إ') {
+                charPattern = '[اآأإ]';
+            } else if (char === 'ه' || char === 'ة') {
+                charPattern = '[هة]';
+            } else if (char === 'و' || char === 'ؤ') {
+                charPattern = '[وؤ]';
+            }
+            pattern += (i > 0 ? '[\\u200c\\s]?' : '') + charPattern;
+        }
+        return new RegExp(`(${pattern})`, 'gi');
+    }
+
+    function highlightSearchTerm(text, term) {
+        if (!text) return 'ندارد';
+        const escaped = escapeHTML(text);
+        if (!term || !term.trim()) return escaped;
+        const regex = makePersianRegex(term);
+        if (!regex) return escaped;
+        return escaped.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+
+    function getMatchSnippet(fullText, term, maxLength = 80) {
+        if (!fullText || !term || !term.trim()) return '';
+        const regex = makePersianRegex(term);
+        if (!regex) return '';
+        const match = regex.exec(fullText);
+        if (!match) return '';
+        const matchIdx = match.index;
+        const matchLen = match[0].length;
+
+        const beforeLen = Math.floor((maxLength - matchLen) / 2);
+        let start = Math.max(0, matchIdx - beforeLen);
+        let end = Math.min(fullText.length, start + maxLength);
+        if (end === fullText.length) {
+            start = Math.max(0, end - maxLength);
+        }
+
+        let snippet = fullText.slice(start, end);
+        if (start > 0) snippet = '...' + snippet;
+        if (end < fullText.length) snippet = snippet + '...';
+
+        return highlightSearchTerm(snippet, term);
+    }
+
+    // Bulk Selection Toolbar Sync (C3)
+    function updateBulkToolbar() {
+        const toolbar = document.getElementById('bulkActionsToolbar');
+        const countEl = document.getElementById('bulkSelectedCount');
+        const selectAllCb = document.getElementById('selectAllReports');
+
+        const count = selectedReportIds.size;
+        if (countEl) countEl.textContent = toPersianNum(count);
+        if (toolbar) toolbar.style.display = count > 0 ? 'flex' : 'none';
+
+        // Check if all visible items on current page are selected
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, filteredReports.length);
+        const currentPageItems = filteredReports.slice(startIndex, endIndex);
+
+        if (selectAllCb) {
+            if (currentPageItems.length > 0 && currentPageItems.every(r => selectedReportIds.has(r.id))) {
+                selectAllCb.checked = true;
+                selectAllCb.indeterminate = false;
+            } else if (currentPageItems.some(r => selectedReportIds.has(r.id))) {
+                selectAllCb.checked = false;
+                selectAllCb.indeterminate = true;
+            } else {
+                selectAllCb.checked = false;
+                selectAllCb.indeterminate = false;
+            }
+        }
+    }
+
+    // Bulk Toolbar Event Handlers
+    document.getElementById('selectAllReports')?.addEventListener('change', (e) => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, filteredReports.length);
+        const currentPageItems = filteredReports.slice(startIndex, endIndex);
+
+        if (e.target.checked) {
+            currentPageItems.forEach(r => selectedReportIds.add(r.id));
+        } else {
+            currentPageItems.forEach(r => selectedReportIds.delete(r.id));
+        }
+        renderCurrentPage();
+        updateBulkToolbar();
+    });
+
+    document.getElementById('btnBulkCancel')?.addEventListener('click', () => {
+        selectedReportIds.clear();
+        renderCurrentPage();
+        updateBulkToolbar();
+    });
+
+    document.getElementById('btnBulkMarkRead')?.addEventListener('click', async () => {
+        if (selectedReportIds.size === 0) return;
+        const unreadSelected = Array.from(selectedReportIds).filter(id => {
+            const rep = allReports.find(r => r.id === id);
+            return rep && !rep.is_read;
+        });
+
+        if (unreadSelected.length === 0) {
+            showToast('تمامی موارد انتخابی قبلاً بررسی شده‌اند.');
+            selectedReportIds.clear();
+            updateBulkToolbar();
+            return;
+        }
+
+        try {
+            await Promise.all(unreadSelected.map(id =>
+                adminFetch('/api/admin/toggle-read', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ report_id: id })
+                })
+            ));
+            showToast(`${toPersianNum(unreadSelected.length)} پرونده به عنوان بررسی‌شده علامت‌گذاری شدند`, 2500, 'success');
+            selectedReportIds.clear();
+            await fetchReports().catch(() => { });
+        } catch (err) {
+            showToast('خطا در انجام عملیات گروهی', 3000, 'error');
+        }
+    });
+
+    function renderReportsTableSkeleton(count = 8) {
+        if (!reportsBody) return;
+        let html = '';
+        for (let i = 0; i < count; i++) {
+            html += `
+                <tr class="skeleton-tr" aria-hidden="true">
+                    <td><div class="skeleton-shimmer skeleton-td-check"></div></td>
+                    <td><div class="skeleton-shimmer skeleton-td-tracking"></div></td>
+                    <td><div class="skeleton-shimmer skeleton-td-priority"></div></td>
+                    <td><div class="skeleton-shimmer skeleton-td-date"></div></td>
+                    <td><div class="skeleton-shimmer skeleton-td-category"></div></td>
+                    <td><div class="skeleton-shimmer skeleton-td-type"></div></td>
+                    <td><div class="skeleton-shimmer skeleton-td-status"></div></td>
+                    <td><div class="skeleton-shimmer skeleton-td-actions"></div></td>
+                </tr>
+            `;
+        }
+        reportsBody.innerHTML = html;
+    }
+
+    let lastReportsSignature = '';
+
+    async function fetchReports(forceSkeleton = false) {
+        if (forceSkeleton || !allReports || allReports.length === 0) {
+            renderReportsTableSkeleton(8);
+        }
+        try {
+            const queryParams = new URLSearchParams();
+            queryParams.set('page', currentPage || 1);
+            queryParams.set('page_size', itemsPerPage || 50);
+            if (typeof searchTracking !== 'undefined' && searchTracking && searchTracking.value.trim()) {
+                queryParams.set('q', searchTracking.value.trim());
+            }
+            if (typeof filterType !== 'undefined' && filterType && filterType.value !== 'all') {
+                queryParams.set('category', filterType.value);
+            }
+            if (typeof filterPriority !== 'undefined' && filterPriority && filterPriority.value !== 'all') {
+                queryParams.set('priority', filterPriority.value);
+            }
+            if (typeof filterReadStatus !== 'undefined' && filterReadStatus && filterReadStatus.value !== 'all') {
+                queryParams.set('read_status', filterReadStatus.value);
+            }
+            const reportsUrl = `/api/admin/reports?${queryParams.toString()}`;
+            const response = await adminFetch(reportsUrl);
+            if (response.status === 401) {
+                location.reload();
+                return false;
+            }
+            if (!response.ok) {
+                throw new Error(`خطای دریافت اطلاعات: ${response.status}`);
+            }
+            const data = await response.json();
+
+            let fetchedReports = [];
+            // Handle both paginated object and flat array format
+            if (Array.isArray(data)) {
+                fetchedReports = data;
+            } else if (data && Array.isArray(data.reports)) {
+                fetchedReports = data.reports;
+            } else {
+                fetchedReports = [];
+            }
+
+            // Real-time unread report notification (C4)
+            let currentUnread = 0;
+            for (let i = 0; i < fetchedReports.length; i++) {
+                if (!fetchedReports[i].is_read) currentUnread++;
+            }
+
+            if (previousUnreadCount !== -1 && currentUnread > previousUnreadCount) {
+                const diff = currentUnread - previousUnreadCount;
+                showToast(`${toPersianNum(diff)} گزارش جدید در کارتابل دریافت شد`, 4000, 'info');
+            }
+            previousUnreadCount = currentUnread;
+
+            // Signature check: avoid tearing down and rebuilding DOM when poll returned unchanged data
+            const firstReport = fetchedReports[0];
+            const newSignature = `${fetchedReports.length}_${currentUnread}_${firstReport ? firstReport.id : 0}_${firstReport ? (firstReport.updated_at || firstReport.created_at) : ''}`;
+            if (!forceSkeleton && allReports.length > 0 && newSignature === lastReportsSignature) {
+                resetSessionTimer();
+                return true;
+            }
+            lastReportsSignature = newSignature;
+            allReports = fetchedReports;
+
+            // Pre-index reports for fast sub-millisecond filtering and sorting
+            for (let i = 0; i < allReports.length; i++) {
+                indexReportForSearch(allReports[i]);
+            }
+
+            resetSessionTimer();
+            updateKPICards();
+            applyFilters();
+            return true;
+        } catch (error) {
+            console.error("Failed to load reports:", error);
+            if (reportsBody && (!allReports || allReports.length === 0)) {
+                reportsBody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--color-danger, #ef4444);">خطا در دریافت اطلاعات گزارش‌ها: ${escapeHTML(error.message)}</td></tr>`;
+            }
+            throw error;
+        }
+    }
+
+    function applyFilters(forceResetPage) {
+        if (forceResetPage) currentPage = 1;
+
+        const rawTerm = searchTracking ? searchTracking.value.trim() : '';
+        const normTerm = normalizePersianForSearch(rawTerm);
+        const lowerTerm = rawTerm.toLowerCase();
+        const typeMode = filterType ? filterType.value : 'all';
+        const priorityMode = filterPriority ? filterPriority.value : 'all';
+        const targetMonth = filterMonth ? filterMonth.value : 'all';
+        const readMode = filterReadStatus ? filterReadStatus.value : 'all';
+
+        filteredReports = allReports.filter(report => {
+            let matchSearch = true;
+            if (normTerm) {
+                matchSearch = (report._normTracking && report._normTracking.includes(normTerm)) ||
+                    (report._normCategory && report._normCategory.includes(normTerm)) ||
+                    (report._normDesc && report._normDesc.includes(normTerm)) ||
+                    (report._lowerTracking && report._lowerTracking.includes(lowerTerm)) ||
+                    (report._lowerCategory && report._lowerCategory.includes(lowerTerm)) ||
+                    (report._lowerDesc && report._lowerDesc.includes(lowerTerm));
+            }
+            const matchType = typeMode === 'all' || report.category === typeMode;
+            const matchPriority = priorityMode === 'all' || (report.priority || 'normal') === priorityMode;
+            const matchMonth = targetMonth === 'all' || report._shamsiMonth === targetMonth;
+
+            let matchRead = true;
+            const hasResp = Boolean(report.has_response === true || (report.admin_response && report.admin_response.trim() !== ''));
+            if (readMode === 'new_message') matchRead = report.has_new_message === true;
+            else if (readMode === 'regional_response') matchRead = Boolean(report.has_regional_response || report.has_any_regional_response);
+            else if (readMode === 'read') matchRead = report.is_read === true && !hasResp && !report.has_new_message && !report.has_regional_response;
+            else if (readMode === 'unread') matchRead = !report.is_read;
+            else if (readMode === 'responded') matchRead = hasResp;
+
+            return matchSearch && matchType && matchPriority && matchMonth && matchRead;
+        });
+
+        // Dynamic sorting: reports with new messages OR new regional responses first, then latest activity (updated_at DESC, created_at DESC)
+        filteredReports.sort((a, b) => {
+            const prioA = (a.has_new_message ? 4 : 0) + (a.has_regional_response ? 2 : 0);
+            const prioB = (b.has_new_message ? 4 : 0) + (b.has_regional_response ? 2 : 0);
+            if (prioA !== prioB) {
+                return prioB - prioA;
+            }
+            const timeA = a._updateTimestamp || a._timestamp || 0;
+            const timeB = b._updateTimestamp || b._timestamp || 0;
+            return timeB - timeA;
+        });
+
+        renderCurrentPage();
+    }
+
+    function renderCurrentPage() {
+        const totalItems = filteredReports.length;
+        const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+        const pageData = filteredReports.slice(startIndex, endIndex);
+        renderTable(pageData);
+        updateBulkToolbar();
+
+        const infoEl = document.getElementById('pagination-info');
+        if (infoEl) {
+            const startFa = toPersianNum(totalItems === 0 ? 0 : startIndex + 1);
+            const endFa = toPersianNum(endIndex);
+            const totalFa = toPersianNum(totalItems);
+            infoEl.textContent = `گزارش ${startFa} تا ${endFa} از ${totalFa}`;
+        }
+
+        const btnFirst = document.getElementById('btn-first');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const btnLast = document.getElementById('btn-last');
+
+        if (btnFirst) btnFirst.disabled = currentPage === 1;
+        if (btnPrev) btnPrev.disabled = currentPage === 1;
+        if (btnNext) btnNext.disabled = currentPage === totalPages;
+        if (btnLast) btnLast.disabled = currentPage === totalPages;
+    }
+
+    function renderTable(reports) {
+        reportsBody.innerHTML = '';
+
+        if (reports.length === 0) {
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.colSpan = 8;
+            td.style.textAlign = 'center';
+            td.style.padding = '30px';
+            td.style.color = '#94a3b8';
+            td.textContent = 'هیچ گزارشی با فیلترهای انتخابی یافت نشد.';
+            tr.appendChild(td);
+            reportsBody.appendChild(tr);
+            return;
+        }
+
+        // Set up event delegation on reportsBody once to eliminate listener churn
+        if (reportsBody && !reportsBody._perfDelegated) {
+            reportsBody._perfDelegated = true;
+
+            reportsBody.addEventListener('change', (e) => {
+                if (e.target.matches('.bulk-checkbox')) {
+                    const cb = e.target;
+                    const rId = parseInt(cb.getAttribute('data-report-id'), 10);
+                    if (!isNaN(rId)) {
+                        if (cb.checked) selectedReportIds.add(rId);
+                        else selectedReportIds.delete(rId);
+                        updateBulkToolbar();
+                    }
+                }
+            });
+
+            reportsBody.addEventListener('click', (e) => {
+                const btn = e.target.closest('button.btn-action');
+                if (!btn) return;
+                e.stopPropagation();
+
+                const tr = btn.closest('tr');
+                if (!tr) return;
+                const reportId = parseInt(tr.getAttribute('data-report-id'), 10);
+                const trackingCode = tr.getAttribute('data-tracking-code') || '';
+                if (isNaN(reportId)) return;
+
+                if (btn.classList.contains('btn-view-report')) {
+                    viewReport(reportId);
+                } else if (btn.classList.contains('btn-toggle-read')) {
+                    toggleReadStatus(reportId);
+                } else if (btn.classList.contains('btn-forward-report')) {
+                    openForwardModal(reportId, trackingCode);
+                } else if (btn.classList.contains('btn-forward-history')) {
+                    openForwardHistoryModal(reportId, trackingCode);
+                } else if (btn.classList.contains('btn-delete-report')) {
+                    deleteReportPermanently(reportId, trackingCode);
+                }
+            });
+        }
+
+        const fragment = document.createDocumentFragment();
+        const searchTerm = searchTracking ? searchTracking.value.trim() : '';
+        const normSearch = searchTerm ? normalizePersianForSearch(searchTerm) : '';
+
+        reports.forEach(report => {
+            const tr = document.createElement('tr');
+            tr.setAttribute('data-report-id', report.id);
+            tr.setAttribute('data-tracking-code', report.tracking_code || '');
+            const prio = report.priority || 'normal';
+            tr.className = `row-priority-${prio}`;
+            if (report.has_new_message) {
+                tr.classList.add('row-new-message');
+            }
+            if (report.has_regional_response) {
+                tr.classList.add('row-regional-response');
+            }
+
+            // Checkbox Cell (C3)
+            const checkTd = document.createElement('td');
+            checkTd.className = 'bulk-td';
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.className = 'bulk-checkbox';
+            cb.setAttribute('data-report-id', report.id);
+            cb.checked = selectedReportIds.has(report.id);
+            checkTd.appendChild(cb);
+            tr.appendChild(checkTd);
+
+            const shamsiDate = formatJalaliDateTime(report.created_at);
+
+            // Tracking Code Cell (with highlight C7)
+            const codeTd = document.createElement('td');
+            codeTd.style.fontFamily = 'Tahoma, Arial, sans-serif';
+            codeTd.style.fontWeight = 'bold';
+            codeTd.style.direction = 'ltr';
+            codeTd.style.textAlign = 'right';
+            codeTd.innerHTML = highlightSearchTerm(report.tracking_code, searchTerm);
+            tr.appendChild(codeTd);
+
+            // Priority Badge Cell
+            const priorityTd = document.createElement('td');
+            const priorityBadge = document.createElement('span');
+            if (prio === 'critical') {
+                priorityBadge.className = 'badge-priority badge-priority-critical';
+                priorityBadge.innerHTML = '<span class="priority-dot priority-dot-critical"></span>آنی';
+            } else if (prio === 'urgent') {
+                priorityBadge.className = 'badge-priority badge-priority-urgent';
+                priorityBadge.innerHTML = '<span class="priority-dot priority-dot-urgent"></span>فوری';
+            } else {
+                priorityBadge.className = 'badge-priority badge-priority-normal';
+                priorityBadge.innerHTML = '<span class="priority-dot priority-dot-normal"></span>عادی';
+            }
+            priorityTd.appendChild(priorityBadge);
+            tr.appendChild(priorityTd);
+
+            const dateTd = document.createElement('td');
+            dateTd.textContent = shamsiDate;
+            dateTd.style.direction = 'ltr';
+            dateTd.style.textAlign = 'right';
+            tr.appendChild(dateTd);
+
+            // Category Cell (with highlight C7 and description search snippet)
+            const catTd = document.createElement('td');
+            const catBadge = document.createElement('div');
+            catBadge.className = 'table-category-label';
+            catBadge.innerHTML = highlightSearchTerm(report.category, searchTerm);
+            catTd.appendChild(catBadge);
+
+            if (normSearch && report.description) {
+                if ((report._normDesc && report._normDesc.includes(normSearch)) || (report._lowerDesc && report._lowerDesc.includes(searchTerm.toLowerCase()))) {
+                    const snippetHtml = getMatchSnippet(report.description, searchTerm);
+                    if (snippetHtml) {
+                        const snippetEl = document.createElement('div');
+                        snippetEl.className = 'search-match-snippet';
+                        snippetEl.innerHTML = `
+                            <svg class="snippet-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                            <span class="snippet-text">${snippetHtml}</span>
+                        `;
+                        catTd.appendChild(snippetEl);
+                    }
+                }
+            }
+            tr.appendChild(catTd);
+
+            const typeTd = document.createElement('td');
+            typeTd.textContent = report.report_type === 'anonymous' ? 'ناشناس' : 'با هویت';
+            tr.appendChild(typeTd);
+
+            const statusCell = document.createElement('td');
+            statusCell.className = 'status-cell';
+            const badgesWrapper = document.createElement('div');
+            badgesWrapper.className = 'status-badges-wrap';
+
+            let hasSpecialBadge = false;
+
+            if (report.has_new_message) {
+                const msgBadge = document.createElement('span');
+                msgBadge.className = 'badge badge-new-message';
+                msgBadge.setAttribute('data-tooltip', 'پیام جدید از سوی گزارش‌دهنده');
+                msgBadge.innerHTML = `<span class="badge-dot-beacon"></span><svg class="badge-icon-chat" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span>پیام جدید</span>`;
+                badgesWrapper.appendChild(msgBadge);
+                hasSpecialBadge = true;
+            }
+
+            if (report.has_regional_response) {
+                const regBadge = document.createElement('span');
+                regBadge.className = 'badge badge-regional-response';
+                regBadge.setAttribute('data-tooltip', 'پاسخ بررسی کارشناسی از سوی ناحیه / منطقه');
+                regBadge.innerHTML = `<span class="badge-dot-beacon beacon-indigo"></span><svg class="badge-icon-regional" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg><span>پاسخ کارشناسی</span>`;
+                badgesWrapper.appendChild(regBadge);
+                hasSpecialBadge = true;
+            }
+
+            if (!hasSpecialBadge) {
+                const statusBadge = document.createElement('span');
+                if (report.has_response || (report.admin_response && report.admin_response.trim() !== '')) {
+                    statusBadge.className = 'badge badge-responded';
+                    statusBadge.textContent = 'پاسخ داده شده';
+                } else if (report.is_read) {
+                    statusBadge.className = 'badge badge-read';
+                    statusBadge.textContent = 'بررسی شده';
+                } else {
+                    statusBadge.className = 'badge badge-unread';
+                    statusBadge.textContent = 'در نوبت بررسی';
+                }
+                badgesWrapper.appendChild(statusBadge);
+            }
+            statusCell.appendChild(badgesWrapper);
+            tr.appendChild(statusCell);
+
+            const actionTd = document.createElement('td');
+
+            const viewBtn = document.createElement('button');
+            viewBtn.className = 'btn-action btn-view-report';
+            viewBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg><span>مشاهده</span>`;
+            viewBtn.style.marginLeft = '6px';
+            actionTd.appendChild(viewBtn);
+
+            if (!report.is_read) {
+                const toggleBtn = document.createElement('button');
+                toggleBtn.className = 'btn-action btn-secondary btn-toggle-read';
+                toggleBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg><span>علامت بررسی</span>`;
+                actionTd.appendChild(toggleBtn);
+            }
+
+            // Forward Report Action (Available to edare_kol and superuser)
+            const canForward = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
+            if (canForward) {
+                const forwardBtn = document.createElement('button');
+                forwardBtn.className = 'btn-action btn-secondary btn-icon-only btn-forward-report';
+                forwardBtn.setAttribute('data-tooltip', 'ارجاع خبر به کارشناسان حراست');
+                forwardBtn.setAttribute('aria-label', 'ارجاع خبر به کارشناسان حراست');
+                forwardBtn.style.marginRight = '6px';
+                forwardBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>`;
+                actionTd.appendChild(forwardBtn);
+            }
+
+            // Forwarding History Action (Available to all authorized users for this report)
+            const historyBtn = document.createElement('button');
+            historyBtn.className = 'btn-action btn-secondary btn-icon-only btn-forward-history';
+            historyBtn.setAttribute('data-tooltip', 'تاریخچه ارجاع');
+            historyBtn.setAttribute('aria-label', 'تاریخچه ارجاع');
+            historyBtn.style.marginRight = '6px';
+            historyBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+            actionTd.appendChild(historyBtn);
+
+            if (currentAdmin && currentAdmin.is_superuser) {
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn-action btn-danger btn-delete-report';
+                deleteBtn.title = 'حذف دائمی پرونده و فایل ضمیمه (پشتیبانی سامانه)';
+                deleteBtn.style.marginRight = '6px';
+                deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg><span>حذف</span>`;
+                actionTd.appendChild(deleteBtn);
+            }
+
+            tr.appendChild(actionTd);
+            fragment.appendChild(tr);
+        });
+
+        reportsBody.appendChild(fragment);
+    }
+
+    // Back to list navigation
+    function closeDetailView() {
+        if (detailSection) detailSection.style.display = "none";
+        if (listSection) listSection.style.display = "block";
+        if (filterContainer) filterContainer.style.display = "";
+        reportsInboxSection?.classList.remove('in-detail-view');
+        updateBulkToolbar();
+        currentViewingIndex = -1;
+    }
+
+    if (backBtn) {
+        backBtn.addEventListener('click', closeDetailView);
+    }
+
+    // Prev / Next Report Navigation in Detail View (C5)
+    const btnPrevReport = document.getElementById('btnPrevReportDetail');
+    const btnNextReport = document.getElementById('btnNextReportDetail');
+
+    function updateDetailNavButtons() {
+        if (btnPrevReport) btnPrevReport.disabled = (currentViewingIndex <= 0);
+        if (btnNextReport) btnNextReport.disabled = (currentViewingIndex < 0 || currentViewingIndex >= filteredReports.length - 1);
+    }
+
+    btnPrevReport?.addEventListener('click', () => {
+        if (currentViewingIndex > 0) {
+            viewReport(filteredReports[currentViewingIndex - 1].id);
+        }
+    });
+
+    btnNextReport?.addEventListener('click', () => {
+        if (currentViewingIndex >= 0 && currentViewingIndex < filteredReports.length - 1) {
+            viewReport(filteredReports[currentViewingIndex + 1].id);
+        }
+    });
+
+    // Keyboard Shortcuts Modal Handlers (C2)
+    const modalShortcuts = document.getElementById('modal-shortcuts');
+    const btnOpenShortcuts = document.getElementById('btnOpenShortcuts');
+    const btnCloseShortcuts = document.getElementById('btn-close-shortcuts-modal');
+    const btnCloseShortcutsFooter = document.getElementById('btn-close-shortcuts-footer');
+
+    function openShortcutsModal() {
+        if (modalShortcuts) modalShortcuts.style.display = 'flex';
+    }
+
+    function closeShortcutsModal() {
+        if (modalShortcuts) modalShortcuts.style.display = 'none';
+    }
+
+    btnOpenShortcuts?.addEventListener('click', openShortcutsModal);
+    btnCloseShortcuts?.addEventListener('click', closeShortcutsModal);
+    btnCloseShortcutsFooter?.addEventListener('click', closeShortcutsModal);
+    modalShortcuts?.addEventListener('click', (e) => {
+        if (e.target === modalShortcuts) closeShortcutsModal();
+    });
+
+    // Global Keyboard Shortcuts (C2)
+    document.addEventListener('keydown', (e) => {
+        const isEditing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
+
+        // Escape: Close detail or open modals
+        if (e.key === 'Escape') {
+            if (modalShortcuts && modalShortcuts.style.display !== 'none') {
+                closeShortcutsModal();
+                return;
+            }
+            if (detailSection && detailSection.style.display === 'block') {
+                closeDetailView();
+                return;
+            }
+            // Close any open admin modals
+            document.querySelectorAll('.admin-modal-overlay').forEach(m => {
+                if (m.id !== 'modal-concurrent-alert') m.style.display = 'none';
+            });
+            return;
+        }
+
+        // Only trigger single-letter shortcuts when NOT typing in inputs/textareas
+        if (!isEditing) {
+            if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+                e.preventDefault();
+                openShortcutsModal();
+            } else if (e.key === '/') {
+                e.preventDefault();
+                const searchEl = document.getElementById('search-tracking');
+                if (searchEl) {
+                    searchEl.focus();
+                    searchEl.select();
+                }
+            } else if (detailSection && detailSection.style.display === 'block') {
+                if (e.key === 'r' || e.key === 'R') {
+                    e.preventDefault();
+                    const respInput = document.getElementById('admin_response_input');
+                    if (respInput) {
+                        respInput.focus();
+                        respInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else if (e.key === 'n' || e.key === 'N') {
+                    e.preventDefault();
+                    if (currentViewingIndex >= 0 && currentViewingIndex < filteredReports.length - 1) {
+                        viewReport(filteredReports[currentViewingIndex + 1].id);
+                    }
+                } else if (e.key === 'p' || e.key === 'P') {
+                    e.preventDefault();
+                    if (currentViewingIndex > 0) {
+                        viewReport(filteredReports[currentViewingIndex - 1].id);
+                    }
+                }
+            }
+        }
+    });
+
+    // Dossier Word Template Generator & Print Trigger
+    document.getElementById('btnPrintDossierBtn')?.addEventListener('click', () => {
+        if (!currentViewingReportId) return;
+        showToast('در حال صدور و دریافت برگ پرونده بر اساس قالب ورد...');
+        window.location.href = `/api/admin/report/export-docx?id=${currentViewingReportId}`;
+    });
+
+    async function viewReport(id) {
+        currentViewingReportId = id;
+        currentViewingIndex = filteredReports.findIndex(r => r.id === id);
+        updateDetailNavButtons();
+
+        const detailSkeleton = document.getElementById('report-detail-skeleton');
+        const detailActual = document.getElementById('report-detail-actual');
+        if (listSection) listSection.style.display = 'none';
+        if (detailSection) detailSection.style.display = 'block';
+        if (detailSkeleton) detailSkeleton.classList.remove('d-none');
+        if (detailActual) detailActual.classList.add('d-none');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        try {
+            const response = await adminFetch(`/api/admin/report?id=${id}`);
+            if (!response.ok) {
+                if (detailSkeleton) detailSkeleton.classList.add('d-none');
+                if (detailActual) detailActual.classList.remove('d-none');
+                closeDetailView();
+                showToast('خطا در دریافت جزئیات گزارش', 3500, 'error');
+                return;
+            }
+            const data = await response.json();
+            resetSessionTimer();
+
+            // Synchronize in-memory report states immediately
+            const repInAll = allReports.find(r => r.id === id);
+            if (repInAll) {
+                repInAll.is_read = true;
+                repInAll.has_new_message = false;
+                repInAll.has_regional_response = false;
+                if (!repInAll.read_by_name) {
+                    repInAll.read_by_name = data.read_by_name || data.read_by || (currentAdmin ? (currentAdmin.full_name || currentAdmin.username) : '');
+                }
+            }
+            const repInFiltered = filteredReports.find(r => r.id === id);
+            if (repInFiltered) {
+                repInFiltered.is_read = true;
+                repInFiltered.has_new_message = false;
+                repInFiltered.has_regional_response = false;
+                if (!repInFiltered.read_by_name) {
+                    repInFiltered.read_by_name = data.read_by_name || data.read_by || (currentAdmin ? (currentAdmin.full_name || currentAdmin.username) : '');
+                }
+            }
+
+            // Immediately update the table row in DOM without needing page refresh
+            const rowEl = reportsBody.querySelector(`tr[data-report-id="${id}"]`);
+            if (rowEl) {
+                rowEl.classList.remove('row-new-message');
+                rowEl.classList.remove('row-regional-response');
+                const cellEl = rowEl.querySelector('.status-cell');
+                if (cellEl) {
+                    const hasResp = (repInAll && (repInAll.has_response || (repInAll.admin_response && repInAll.admin_response.trim() !== ''))) ||
+                        (data.admin_response && data.admin_response.trim() !== '');
+                    const statusText = hasResp ? 'پاسخ داده شده' : 'بررسی شده';
+                    const statusClass = hasResp ? 'badge-responded' : 'badge-read';
+                    cellEl.innerHTML = `<div class="status-badges-wrap"><span class="badge ${statusClass}">${statusText}</span></div>`;
+                }
+                const toggleBtn = rowEl.querySelector('.btn-toggle-read');
+                if (toggleBtn) toggleBtn.remove();
+            }
+
+            // Immediately update KPI count cards & notification bell counter
+            updateKPICards();
+            fetchNotifications();
+
+            const shamsiDate = formatJalaliDateTime(data.created_at, true);
+            const printCurrentDate = formatJalaliDateTime(new Date().toISOString(), true);
+
+            document.getElementById('detail-tracking').textContent = data.tracking_code;
+            document.getElementById('detail-date').textContent = shamsiDate;
+
+            // Print Header Elements
+            const printTrackingEl = document.getElementById('print-header-tracking');
+            const printRegDateEl = document.getElementById('print-header-regdate');
+            const printDateEl = document.getElementById('print-header-date');
+            if (printTrackingEl) printTrackingEl.textContent = data.tracking_code;
+            if (printRegDateEl) printRegDateEl.textContent = shamsiDate;
+            if (printDateEl) printDateEl.textContent = printCurrentDate;
+
+            // Priority Selector & Print Text
+            const prioritySelect = document.getElementById('detail-priority-select');
+            const priorityPrintEl = document.getElementById('detail-priority-print');
+            const priorityLabels = {
+                'normal': 'عادی',
+                'urgent': 'فوری',
+                'critical': 'آنی و ویژه'
+            };
+
+            const updatePriorityDisplay = (prio) => {
+                if (priorityPrintEl) {
+                    priorityPrintEl.textContent = priorityLabels[prio] || 'عادی';
+                }
+            };
+
+            if (prioritySelect) {
+                const isNavahiAdmin = Boolean(currentAdmin && currentAdmin.role === 'navahi_manategh');
+                const prio = data.priority || 'normal';
+                prioritySelect.value = prio;
+                updatePriorityDisplay(prio);
+
+                let fixedBadge = document.getElementById('detail-priority-badge');
+                if (isNavahiAdmin) {
+                    prioritySelect.style.display = 'none';
+                    if (!fixedBadge) {
+                        fixedBadge = document.createElement('span');
+                        fixedBadge.id = 'detail-priority-badge';
+                        prioritySelect.parentNode.insertBefore(fixedBadge, prioritySelect);
+                    }
+                    fixedBadge.style.display = 'inline-flex';
+                    if (prio === 'critical') {
+                        fixedBadge.className = 'badge-priority badge-priority-critical';
+                        fixedBadge.innerHTML = '<span class="priority-dot priority-dot-critical"></span>آنی';
+                    } else if (prio === 'urgent') {
+                        fixedBadge.className = 'badge-priority badge-priority-urgent';
+                        fixedBadge.innerHTML = '<span class="priority-dot priority-dot-urgent"></span>فوری';
+                    } else {
+                        fixedBadge.className = 'badge-priority badge-priority-normal';
+                        fixedBadge.innerHTML = '<span class="priority-dot priority-dot-normal"></span>عادی';
+                    }
+                    prioritySelect.onchange = null;
+                } else {
+                    prioritySelect.style.display = '';
+                    if (fixedBadge) {
+                        fixedBadge.style.display = 'none';
+                    }
+                    prioritySelect.disabled = false;
+                    prioritySelect.style.cursor = '';
+                    prioritySelect.style.opacity = '';
+                    prioritySelect.title = '';
+                    prioritySelect.onchange = async () => {
+                        const newPrio = prioritySelect.value;
+                        updatePriorityDisplay(newPrio);
+                        try {
+                            const res = await adminFetch('/api/admin/report/set-priority', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ report_id: id, priority: newPrio })
+                            });
+                            if (res.ok) {
+                                showToast('اولویت پرونده با موفقیت تغییر یافت', 2500, 'success');
+                                fetchReports().catch(() => { });
+                            } else {
+                                const errText = await res.text();
+                                showToast(errText || 'خطا در تغییر اولویت', 3000, 'error');
+                            }
+                        } catch (err) {
+                            showToast('خطا در ارتباط با سرور', 3000, 'error');
+                        }
+                    };
+                }
+            }
+
+            const readAtTd = document.getElementById('detail-read-at');
+            const adminName = data.read_by_name || data.read_by || (currentAdmin ? (currentAdmin.full_name || currentAdmin.username) : '');
+            const readTimestamp = data.read_at || new Date().toISOString();
+            const shamsiReadDate = formatJalaliDateTime(readTimestamp, true);
+            const byText = adminName ? ` توسط ${adminName}` : '';
+
+            readAtTd.textContent = `مشاهده شده در ${shamsiReadDate}${byText}`;
+            readAtTd.className = 'detail-value rtl text-success';
+            readAtTd.style.direction = 'rtl';
+
+            document.getElementById('detail-category').textContent = data.category;
+            document.getElementById('detail-type').textContent = data.report_type === 'anonymous' ? 'ناشناس' : 'با هویت';
+            document.getElementById('detail-name').textContent = data.reporter_name || 'ثبت نشده';
+            document.getElementById('detail-phone').textContent = data.reporter_phone || 'ثبت نشده';
+            const detailDescEl = document.getElementById('detail-desc');
+            if (detailDescEl) {
+                const activeSearch = searchTracking ? searchTracking.value.trim() : '';
+                if (activeSearch) {
+                    detailDescEl.innerHTML = highlightSearchTerm(data.description, activeSearch);
+                } else {
+                    detailDescEl.textContent = data.description;
+                }
+            }
+
+            // Update Report Quality Classification Banner & One-Time Prompt
+            updateClassificationUI(data, id);
+
+            // Two-Way Follow-up Messages Thread (C1)
+            const messagesContainer = document.getElementById('detail-messages-container');
+            const messagesList = document.getElementById('detail-messages-list');
+            const messagesCountBadge = document.getElementById('detail-messages-count-badge');
+            if (messagesContainer && messagesList) {
+                messagesList.innerHTML = '';
+                messagesContainer.classList.remove('d-none');
+                const hasMessages = data.messages && data.messages.length > 0;
+                if (messagesCountBadge) {
+                    messagesCountBadge.textContent = hasMessages ? `${data.messages.length} پیام ثبت‌شده` : 'فاقد پیام تکمیلی';
+                }
+                if (hasMessages) {
+                    data.messages.forEach(msg => {
+                        const isReporter = msg.sender_type === 'reporter';
+                        const row = document.createElement('div');
+                        row.className = `nexus-bubble-row ${isReporter ? 'nexus-row-reporter' : 'nexus-row-admin'}`;
+
+                        const userSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+                        const shieldSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>';
+
+                        const avatarSvg = isReporter ? userSvg : shieldSvg;
+                        const avatarClass = isReporter ? 'nexus-avatar-reporter' : 'nexus-avatar-admin';
+                        const senderTitle = isReporter ? 'گزارش‌دهنده' : `پاسخ اداره کل حراست (${escapeHTML(msg.admin_username || 'کارشناس')})`;
+
+                        row.innerHTML = `
+                            <div class="nexus-bubble-unit">
+                                <div class="nexus-bubble-avatar ${avatarClass}" title="${senderTitle}">
+                                    ${avatarSvg}
+                                </div>
+                                <div class="nexus-bubble-card ${isReporter ? 'nexus-bubble-reporter' : 'nexus-bubble-admin'}">
+                                    <div class="nexus-bubble-top">
+                                        <span class="nexus-bubble-sender">${senderTitle}</span>
+                                        <span class="nexus-bubble-timestamp">${formatJalaliDateTime(msg.created_at)}</span>
+                                    </div>
+                                    <div class="nexus-bubble-body">${escapeHTML(msg.message).replace(/\n/g, '<br>')}</div>
+                                </div>
+                            </div>
+                        `;
+                        messagesList.appendChild(row);
+                    });
+                } else {
+                    const emptyCard = document.createElement('div');
+                    emptyCard.className = 'nexus-chat-empty';
+                    emptyCard.innerHTML = `
+                        <div class="nexus-chat-empty-icon">
+                            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <span class="nexus-chat-empty-title">هنوز پیام تکمیلی در این پرونده ثبت نشده است</span>
+                        <span class="nexus-chat-empty-sub">در صورت ارسال توضیحات، پاسخ یا مستندات جدید از طریق سامانه پیگیری، متن پیام‌ها در این کارت گفتگو به صورت زنده قابل مشاهده خواهد بود.</span>
+                    `;
+                    messagesList.appendChild(emptyCard);
+                }
+            }
+
+            // Confidential Internal Notes Box
+            const notesInput = document.getElementById('detail-internal-notes-input');
+            const printNotesText = document.getElementById('print-internal-notes-text');
+            const saveNotesBtn = document.getElementById('btnSaveInternalNotes');
+            const notesStatus = document.getElementById('internalNotesStatusMsg');
+
+            const internalNotesVal = data.internal_notes || '';
+            if (notesInput) notesInput.value = internalNotesVal;
+            if (printNotesText) printNotesText.textContent = internalNotesVal || 'فاقد یادداشت محرمانه داخلی.';
+            if (notesStatus) notesStatus.style.display = 'none';
+
+            const isNavahi = currentAdmin && currentAdmin.role === 'navahi_manategh';
+
+            if (saveNotesBtn) {
+                if (isNavahi) {
+                    if (notesInput) {
+                        notesInput.readOnly = true;
+                        notesInput.placeholder = 'فاقد یادداشت محرمانه ثبت‌شده توسط اداره کل.';
+                    }
+                    saveNotesBtn.style.display = 'none';
+                } else {
+                    if (notesInput) {
+                        notesInput.readOnly = false;
+                        notesInput.placeholder = 'ثبت اقدامات داخلی، شماره نامه‌های اداری، ارجاعات و یادداشت‌های محرمانه کارشناس...';
+                    }
+                    saveNotesBtn.style.display = '';
+                    saveNotesBtn.disabled = false;
+                    saveNotesBtn.style.opacity = '';
+                    saveNotesBtn.style.cursor = '';
+                    saveNotesBtn.onclick = async () => {
+                        try {
+                            const notesVal = notesInput ? notesInput.value.trim() : '';
+                            const res = await adminFetch('/api/admin/report/internal-notes', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ report_id: id, internal_notes: notesVal, notes: notesVal })
+                            });
+                            if (res.ok) {
+                                showToast('یادداشت محرمانه ذخیره و رمزنگاری شد');
+                                if (printNotesText) printNotesText.textContent = notesVal || 'فاقد یادداشت محرمانه داخلی.';
+                                if (notesStatus) {
+                                    notesStatus.className = 'response-box badge-read';
+                                    notesStatus.textContent = 'یادداشت محرمانه با موفقیت در بانک اطلاعاتی رمزنگاری و ثبت گردید.';
+                                    notesStatus.style.display = 'block';
+                                }
+                            } else {
+                                const err = await res.text();
+                                showToast(err || 'خطا در ذخیره یادداشت', 3500, 'error');
+                            }
+                        } catch (err) {
+                            showToast('خطای ارتباط با سرور', 3500, 'error');
+                        }
+                    };
+                }
+            }
+
+            const attachmentTd = document.getElementById('detail-attachment');
+            attachmentTd.innerHTML = '';
+
+            const formatAdminFileSize = (bytes) => {
+                if (!bytes || bytes === 0) return '';
+                const k = 1024;
+                const sizes = ['بایت', 'کیلوبایت', 'مگابایت'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                const formatted = parseFloat((bytes / Math.pow(k, i)).toFixed(1));
+                return `${toPersianNum(formatted)} ${sizes[i]}`;
+            };
+
+            if (data.attachments && data.attachments.length > 0) {
+                if (data.attachments.length > 1) {
+                    const bulkBtn = document.createElement('button');
+                    bulkBtn.className = 'btn-attachment-bulk';
+                    bulkBtn.setAttribute('data-tooltip', 'دانلود یکجای تمامی مدارک پیوست به صورت فایل فشرده');
+                    bulkBtn.innerHTML = `
+                        <span class="attachment-icon-box">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </span>
+                        <span class="attachment-text-group">
+                            <span class="attachment-primary-title">دانلود پیوست‌های گزارش</span>
+                            <span class="attachment-sub-meta">${toPersianNum(data.attachments.length)} فایل ضمیمه • قالب فشرده ZIP</span>
+                        </span>
+                    `;
+                    bulkBtn.onclick = () => {
+                        window.location.href = `/api/admin/download?id=${id}`;
+                    };
+                    attachmentTd.appendChild(bulkBtn);
+                } else {
+                    const att = data.attachments[0];
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.className = 'btn-attachment-bulk';
+                    const szText = att.file_size ? ` (${formatAdminFileSize(att.file_size)})` : '';
+                    const nameText = att.file_name || 'فایل ضمیمه';
+                    downloadBtn.setAttribute('data-tooltip', `دانلود مستقیم: ${nameText}`);
+                    downloadBtn.innerHTML = `
+                        <span class="attachment-icon-box">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </span>
+                        <span class="attachment-text-group">
+                            <span class="attachment-primary-title">دانلود فایل پیوست</span>
+                            <span class="attachment-sub-meta">${nameText}${szText}</span>
+                        </span>
+                    `;
+                    downloadBtn.onclick = () => {
+                        window.location.href = `/api/admin/download?id=${id}&file_id=${att.id}`;
+                    };
+                    attachmentTd.appendChild(downloadBtn);
+                }
+            } else if (data.has_attachment) {
+                const downloadBtn = document.createElement('button');
+                downloadBtn.className = 'btn-attachment-bulk';
+                downloadBtn.innerHTML = `
+                    <span class="attachment-icon-box">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </span>
+                    <span class="attachment-text-group">
+                        <span class="attachment-primary-title">دانلود فایل پیوست</span>
+                        <span class="attachment-sub-meta">فایل ضمیمه گزارش</span>
+                    </span>
+                `;
+                downloadBtn.onclick = () => {
+                    window.location.href = `/api/admin/download?id=${id}`;
+                };
+                attachmentTd.appendChild(downloadBtn);
+            } else {
+                attachmentTd.textContent = 'ندارد';
+            }
+
+            const existingBox = document.getElementById('existing-response-box');
+            const responseTextEl = document.getElementById('detail-admin-response-text');
+            const metaInfoEl = document.getElementById('response-meta-info');
+            const responseInput = document.getElementById('admin_response_input');
+            const statusMsg = document.getElementById('responseStatusMsg');
+            const printNoRespEl = document.getElementById('print-no-response-placeholder');
+
+            if (statusMsg) statusMsg.style.display = 'none';
+
+            if (data.admin_response && data.admin_response.trim() !== '') {
+                responseTextEl.textContent = data.admin_response;
+                responseInput.value = data.admin_response;
+
+                let respDateStr = '';
+                if (data.responded_at) {
+                    respDateStr = formatJalaliDateTime(data.responded_at, false);
+                }
+
+                metaInfoEl.textContent = `ثبت پاسخ توسط: ${data.responded_by || 'حراست'}  |  تاریخ ثبت پاسخ: ${respDateStr || 'ثبت نشده'}`;
+                existingBox.style.display = 'block';
+                if (printNoRespEl) printNoRespEl.style.display = 'none';
+            } else {
+                existingBox.style.display = 'none';
+                responseTextEl.textContent = '';
+                responseInput.value = '';
+                if (printNoRespEl) printNoRespEl.style.display = 'block';
+            }
+
+            // Official Response Section
+            const adminCannedWrapper = document.getElementById('admin-canned-wrapper');
+            const regionalCannedWrapper = document.getElementById('regional-canned-wrapper');
+            const submitRespBtn = document.getElementById('submitResponseBtn');
+            const adminRespForm = document.getElementById('adminResponseForm');
+            const responseHeading = document.getElementById('detail-response-heading');
+            const detailRespContainer = document.querySelector('.detail-response-container');
+
+            if (isNavahi) {
+                if (adminRespForm) adminRespForm.style.display = 'none';
+                if (adminCannedWrapper) adminCannedWrapper.style.display = 'none';
+                if (regionalCannedWrapper) regionalCannedWrapper.style.display = '';
+
+                const hasFinalResponse = Boolean(data.admin_response && data.admin_response.trim() !== '');
+                if (hasFinalResponse) {
+                    if (detailRespContainer) detailRespContainer.style.display = '';
+                    if (responseHeading) responseHeading.textContent = '۲. پاسخ نهایی اداره کل حراست به گزارش‌دهنده:';
+                    if (existingBox) existingBox.style.display = 'block';
+                } else {
+                    if (detailRespContainer) detailRespContainer.style.display = 'none';
+                }
+            } else {
+                if (detailRespContainer) detailRespContainer.style.display = '';
+                if (responseHeading) responseHeading.textContent = '۲. پاسخ رسمی و اقدامات نهایی صورت‌گرفته توسط حراست:';
+                if (adminRespForm) adminRespForm.style.display = '';
+                if (adminCannedWrapper) adminCannedWrapper.style.display = '';
+                if (regionalCannedWrapper) regionalCannedWrapper.style.display = 'none';
+                if (responseInput) {
+                    responseInput.readOnly = false;
+                    if (!data.admin_response) {
+                        responseInput.placeholder = 'متن پاسخ یا نتیجه بررسی حراست را جهت مشاهده گزارش‌دهنده وارد نمایید...';
+                    }
+                }
+                if (submitRespBtn) {
+                    submitRespBtn.disabled = false;
+                    submitRespBtn.style.opacity = '';
+                    submitRespBtn.style.cursor = '';
+                }
+            }
+
+            // Regional Responses Section (Internal Submissions from Navahi & Manategh)
+            const regionalSection = document.getElementById('detail-regional-responses-container');
+            const regionalCentralView = document.getElementById('regional-responses-central-view');
+            const regionalSideView = document.getElementById('regional-responses-side-view');
+            const regionalList = document.getElementById('regional-responses-list');
+
+            if (regionalSection) {
+                regionalSection.style.display = 'block';
+
+                if (!isNavahi) {
+                    // Central Admins: see all internal investigation reports
+                    if (regionalCentralView) regionalCentralView.style.display = 'block';
+                    if (regionalSideView) regionalSideView.style.display = 'none';
+
+                    if (regionalList) {
+                        regionalList.innerHTML = '';
+                        if (data.regional_responses && data.regional_responses.length > 0) {
+                            data.regional_responses.forEach(rr => {
+                                const card = document.createElement('div');
+                                card.className = 'regional-response-card';
+                                const timeFa = rr.responded_at ? formatJalaliDateTime(rr.responded_at, true) : 'ثبت‌شده';
+                                card.innerHTML = `
+                                    <div class="regional-response-card-header">
+                                        <div class="regional-card-author">
+                                            <span class="badge-regional font-bold">${escapeHTML(rr.recipient_title || 'حراست ناحیه/منطقه')}</span>
+                                            <span class="regional-card-name">${escapeHTML(rr.recipient_name || rr.recipient_username)}</span>
+                                        </div>
+                                        <div class="regional-card-date font-tahoma ltr">
+                                            <span>تاریخ ارسال:</span>
+                                            <strong>${timeFa}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="regional-card-body">${escapeHTML(rr.response_text)}</div>
+                                `;
+                                regionalList.appendChild(card);
+                            });
+                        } else {
+                            regionalList.innerHTML = `
+                                <div class="regional-responses-empty">
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" style="margin-bottom: 6px; opacity: 0.6;">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                    </svg>
+                                    <div>هنوز پاسخی از سوی کارشناسان نواحی و مناطق برای این پرونده ثبت نگردیده است.</div>
+                                </div>
+                            `;
+                        }
+                    }
+                } else {
+                    // Side Admins: submit/view own investigation report to Central Admin
+                    if (regionalCentralView) regionalCentralView.style.display = 'none';
+                    if (regionalSideView) regionalSideView.style.display = 'block';
+
+                    const prevCard = document.getElementById('regional-previous-response-card');
+                    const prevTime = document.getElementById('regional-previous-time');
+                    const prevText = document.getElementById('regional-previous-text');
+                    const regionalInput = document.getElementById('regional_response_input');
+                    const regionalStatus = document.getElementById('regionalResponseStatusMsg');
+
+                    if (regionalStatus) regionalStatus.style.display = 'none';
+
+                    if (data.my_regional_response && data.my_regional_response.response_text) {
+                        if (prevCard) prevCard.style.display = 'block';
+                        if (prevTime) prevTime.textContent = data.my_regional_response.responded_at ? formatJalaliDateTime(data.my_regional_response.responded_at, true) : '';
+                        if (prevText) prevText.textContent = data.my_regional_response.response_text;
+                        if (regionalInput) regionalInput.value = data.my_regional_response.response_text;
+                    } else {
+                        if (prevCard) prevCard.style.display = 'none';
+                        if (regionalInput) regionalInput.value = '';
+                    }
+                }
+            }
+
+            // Superuser Delete Button in Detail View Header
+            const deleteReportBtn = document.getElementById('btnDeleteReportSuperuser');
+            if (deleteReportBtn) {
+                if (currentAdmin && currentAdmin.is_superuser) {
+                    deleteReportBtn.classList.remove('d-none');
+                    deleteReportBtn.onclick = () => {
+                        deleteReportPermanently(id, data.tracking_code, true);
+                    };
+                } else {
+                    deleteReportBtn.classList.add('d-none');
+                }
+            }
+
+            // Forwarding Button in Detail View Header (edare_kol and superuser only)
+            const btnForwardDetail = document.getElementById('btnForwardReportDetail');
+            const canForward = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
+            if (btnForwardDetail) {
+                if (canForward) {
+                    btnForwardDetail.classList.remove('d-none');
+                    btnForwardDetail.onclick = () => openForwardModal(id, data.tracking_code);
+                } else {
+                    btnForwardDetail.classList.add('d-none');
+                }
+            }
+
+            // Forwarding History Button in Detail View Header (All authorized roles)
+            const btnHistoryDetail = document.getElementById('btnHistoryReportDetail');
+            if (btnHistoryDetail) {
+                btnHistoryDetail.onclick = () => openForwardHistoryModal(id, data.tracking_code);
+            }
+
+            listSection.style.display = "none";
+            if (filterContainer) filterContainer.style.display = 'none';
+            if (bulkActionsToolbar) bulkActionsToolbar.style.display = 'none';
+            reportsInboxSection?.classList.add('in-detail-view');
+            detailSection.style.display = "block";
+            if (detailSkeleton) detailSkeleton.classList.add('d-none');
+            if (detailActual) detailActual.classList.remove('d-none');
+
+            // Trigger auto-expand when elements are visible in the DOM
+            if (notesInput) makeTextareaAutoExpand(notesInput);
+            if (responseInput) makeTextareaAutoExpand(responseInput);
+            const regionalTextarea = document.getElementById('regional_response_input');
+            if (regionalTextarea) makeTextareaAutoExpand(regionalTextarea);
+
+            if (!data.is_read) {
+                toggleReadStatus(id, false);
+            }
+        } catch (error) {
+            console.error('Error opening report modal:', error);
+            const detailSkeleton = document.getElementById('report-detail-skeleton');
+            const detailActual = document.getElementById('report-detail-actual');
+            if (detailSkeleton) detailSkeleton.classList.add('d-none');
+            if (detailActual) detailActual.classList.remove('d-none');
+            closeDetailView();
+            showToast('خطا در بارگذاری اطلاعات پرونده', 3500, 'error');
+        }
+    }
+
+    // Regional Side-Admin Investigation Report Submission to Central Admin
+    const regionalResponseForm = document.getElementById('regionalResponseForm');
+    regionalResponseForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentViewingReportId) return;
+
+        const regionalInput = document.getElementById('regional_response_input');
+        const submitBtn = document.getElementById('btnSubmitRegionalResponse');
+        const statusMsg = document.getElementById('regionalResponseStatusMsg');
+
+        const text = regionalInput ? regionalInput.value.trim() : '';
+        if (!text) {
+            showToast('لطفاً متن گزارش و نتیجه بررسی را وارد فرمایید.', 3500, 'error');
+            return;
+        }
+
+        const btnText = submitBtn?.querySelector('.btn-text');
+        const spinner = submitBtn?.querySelector('.btn-spinner');
+        if (submitBtn) submitBtn.disabled = true;
+        if (btnText) btnText.textContent = 'در حال ارسال...';
+        if (spinner) spinner.classList.remove('d-none');
+        if (statusMsg) statusMsg.style.display = 'none';
+
+        try {
+            const res = await adminFetch('/api/admin/report/regional-response', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ report_id: currentViewingReportId, response: text })
+            });
+
+            if (!res.ok) {
+                const err = await res.text();
+                throw new Error(err || 'خطا در ثبت و ارسال گزارش');
+            }
+
+            const data = await res.json();
+            showToast(data.message || 'گزارش بررسی با موفقیت برای اداره کل ارسال گردید.');
+            if (statusMsg) {
+                statusMsg.className = 'response-box badge-read';
+                statusMsg.textContent = data.message || 'گزارش بررسی با موفقیت برای اداره کل ارسال شد.';
+                statusMsg.style.display = 'block';
+            }
+            viewReport(currentViewingReportId);
+        } catch (err) {
+            showToast(err.message || 'خطای ارتباط با سرور', 4000, 'error');
+            if (statusMsg) {
+                statusMsg.className = 'response-box badge-unread';
+                statusMsg.textContent = err.message || 'خطای ارتباط با سرور.';
+                statusMsg.style.display = 'block';
+            }
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+            if (btnText) btnText.textContent = 'ارسال گزارش بررسی به اداره کل';
+            if (spinner) spinner.classList.add('d-none');
+        }
+    });
+
+    // Superuser Permanent Report & Evidence File Deletion
+    async function deleteReportPermanently(reportId, trackingCode, isInsideDetail = false) {
+        if (!currentAdmin || !currentAdmin.is_superuser) {
+            showToast('تنها پشتیبانی سامانه مجاز به حذف پرونده می‌باشد.', 3000, 'warning');
+            return;
+        }
+
+        const confirmed = await showConfirmDialog({
+            title: 'حذف دائمی و غیرقابل بازگشت پرونده',
+            description: `اخطار امنیتی پشتیبانی سامانه: آیا از حذف دائمی پرونده [${trackingCode || reportId}] و کلیه فایل‌های ضمیمه آن از سرور و پایگاه داده اطمینان دارید؟ این عملیات غیرقابل بازگشت است و در لاگ‌های بازرسی ثبت می‌گردد.`,
+            confirmText: 'بله، حذف دائمی پرونده',
+            cancelText: 'انصراف',
+            variant: 'danger',
+            iconType: 'trash'
+        });
+        if (!confirmed) return;
+
+        try {
+            const response = await adminFetch('/api/admin/report/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ report_id: reportId })
+            });
+
+            if (!response.ok) {
+                const errText = await response.text();
+                throw new Error(errText || 'خطا در حذف پرونده');
+            }
+
+            const data = await response.json();
+            showToast(data.message || 'پرونده با موفقیت حذف گردید', 'success');
+
+            if (isInsideDetail && backBtn) {
+                backBtn.click();
+            }
+            await fetchReports().catch(() => { });
+        } catch (err) {
+            showToast('خطا در اجرای عملیات حذف: ' + err.message, 4000, 'error');
+        }
+    }
+
+    async function toggleReadStatus(id, shouldRefresh = true) {
+        try {
+            const payload = { report_id: id };
+            const response = await adminFetch('/api/admin/toggle-read', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                resetSessionTimer();
+
+                const repInAll = allReports.find(r => r.id === id);
+                if (repInAll) {
+                    repInAll.is_read = true;
+                    repInAll.has_new_message = false;
+                    repInAll.has_regional_response = false;
+                    if (!repInAll.read_by_name && currentAdmin) {
+                        repInAll.read_by_name = currentAdmin.full_name || currentAdmin.username;
+                    }
+                }
+                const repInFiltered = filteredReports.find(r => r.id === id);
+                if (repInFiltered) {
+                    repInFiltered.is_read = true;
+                    repInFiltered.has_new_message = false;
+                    repInFiltered.has_regional_response = false;
+                    if (!repInFiltered.read_by_name && currentAdmin) {
+                        repInFiltered.read_by_name = currentAdmin.full_name || currentAdmin.username;
+                    }
+                }
+
+                const rowEl = reportsBody.querySelector(`tr[data-report-id="${id}"]`);
+                if (rowEl) {
+                    rowEl.classList.remove('row-new-message');
+                    rowEl.classList.remove('row-regional-response');
+                    const cellEl = rowEl.querySelector('.status-cell');
+                    if (cellEl) {
+                        const hasResp = repInAll && (repInAll.has_response || (repInAll.admin_response && repInAll.admin_response.trim() !== ''));
+                        const statusText = hasResp ? 'پاسخ داده شده' : 'بررسی شده';
+                        const statusClass = hasResp ? 'badge-responded' : 'badge-read';
+                        cellEl.innerHTML = `<div class="status-badges-wrap"><span class="badge ${statusClass}">${statusText}</span></div>`;
+                    }
+                    const toggleBtn = rowEl.querySelector('.btn-toggle-read');
+                    if (toggleBtn) toggleBtn.remove();
+                }
+
+                updateKPICards();
+                fetchNotifications();
+
+                if (shouldRefresh) fetchReports().catch(() => { });
+            }
+        } catch (error) {
+            console.error('Failed to toggle read status');
+        }
+    }
+
+    function makeTextareaAutoExpand(el) {
+        if (!el) return;
+        el.style.resize = 'none';
+        el.style.overflowY = 'hidden';
+        const adjustHeight = () => {
+            el.style.height = 'auto';
+            el.style.height = Math.max(el.scrollHeight, (el.id === 'admin_response_input' ? 85 : 70)) + 'px';
+        };
+        el.addEventListener('input', adjustHeight);
+        el.addEventListener('change', adjustHeight);
+        el.addEventListener('paste', () => setTimeout(adjustHeight, 0));
+        adjustHeight();
+        return adjustHeight;
+    }
+
+    // Apply auto-expand to all textareas in admin dashboard
+    document.querySelectorAll('textarea').forEach(ta => makeTextareaAutoExpand(ta));
+
+    // 3. Quick Canned Response Chips (Both Main Admin and Regional Sub-Admin)
+    document.querySelectorAll('.canned-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            const text = chip.getAttribute('data-text');
+            const targetId = chip.getAttribute('data-target') || 'admin_response_input';
+            const targetInput = document.getElementById(targetId);
+            if (targetInput && text) {
+                targetInput.value = text;
+                makeTextareaAutoExpand(targetInput);
+                targetInput.focus();
+            }
+        });
+    });
+
+    // 4. Mini Copy Buttons in Detail View
+    const copyTrackingBtn = document.getElementById('copyDetailTrackingBtn');
+    const copyPhoneBtn = document.getElementById('copyDetailPhoneBtn');
+
+    if (copyTrackingBtn) {
+        copyTrackingBtn.addEventListener('click', () => {
+            const text = document.getElementById('detail-tracking')?.textContent.trim();
+            if (text) {
+                navigator.clipboard?.writeText(text);
+                showToast('کد پیگیری کپی شد');
+            }
+        });
+    }
+
+    if (copyPhoneBtn) {
+        copyPhoneBtn.addEventListener('click', () => {
+            const text = document.getElementById('detail-phone')?.textContent.trim();
+            if (text && text !== 'ثبت نشده') {
+                navigator.clipboard?.writeText(text);
+                showToast('شماره تماس کپی شد');
+            }
+        });
+    }
+
+    // 5. Submit Admin Response
+    const adminResponseForm = document.getElementById('adminResponseForm');
+    if (adminResponseForm) {
+        adminResponseForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentViewingReportId) return;
+
+            const responseInput = document.getElementById('admin_response_input');
+            const statusMsg = document.getElementById('responseStatusMsg');
+
+            if (currentAdmin && currentAdmin.role === 'navahi_manategh') {
+                showToast('شما به این قسمت دسترسی ندارید.', 3500, 'error');
+                if (statusMsg) {
+                    statusMsg.className = 'response-box badge-unread';
+                    statusMsg.textContent = 'شما به این قسمت دسترسی ندارید.';
+                    statusMsg.style.display = 'block';
+                }
+                return;
+            }
+            const submitBtn = document.getElementById('submitResponseBtn');
+            const btnText = submitBtn?.querySelector('.btn-text');
+            const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+
+            if (submitBtn) submitBtn.disabled = true;
+            if (btnText) btnText.textContent = 'در حال ثبت پاسخ...';
+            if (btnSpinner) btnSpinner.classList.remove('d-none');
+
+            try {
+                const payload = {
+                    report_id: currentViewingReportId,
+                    response: responseInput.value.trim()
+                };
+
+                const res = await adminFetch('/api/admin/respond', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    resetSessionTimer();
+                    showToast('پاسخ با موفقیت ذخیره و رمزنگاری شد');
+                    if (statusMsg) {
+                        statusMsg.className = 'response-box badge-read';
+                        statusMsg.textContent = 'پاسخ با موفقیت ذخیره و رمزنگاری شد.';
+                        statusMsg.style.display = 'block';
+                    }
+                    await viewReport(currentViewingReportId);
+                    fetchReports().catch(() => { });
+                } else {
+                    const err = await res.text();
+                    if (statusMsg) {
+                        statusMsg.className = 'response-box badge-unread';
+                        statusMsg.textContent = `خطا در ثبت پاسخ: ${err}`;
+                        statusMsg.style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                if (statusMsg) {
+                    statusMsg.className = 'response-box badge-unread';
+                    statusMsg.textContent = 'خطای ارتباط با سرور.';
+                    statusMsg.style.display = 'block';
+                }
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+                if (btnText) btnText.textContent = 'ثبت / ویرایش پاسخ';
+                if (btnSpinner) btnSpinner.classList.add('d-none');
+            }
+        });
+    }
+
+    // 6. Admin Logout
+    async function handleAdminLogout() {
+        const confirmed = await showConfirmDialog({
+            title: 'خروج از کارتابل حراست',
+            description: 'آیا از خروج از حساب کاربری اداری خود اطمینان دارید؟ برای دسترسی مجدد نیاز به ورود با نام کاربری و گذرواژه خواهید داشت.',
+            confirmText: 'بله، خروج از سامانه',
+            cancelText: 'انصراف و ماندن',
+            variant: 'warning',
+            iconType: 'logout'
+        });
+        if (!confirmed) return;
+
+        try {
+            await adminFetch('/api/admin/logout', { method: 'POST' });
+        } catch (err) {
+            console.error('Logout error:', err);
+        } finally {
+            document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            location.reload();
+        }
+    }
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) logoutBtn.addEventListener('click', handleAdminLogout);
+
+    if (btnLogoutSessionWarning) btnLogoutSessionWarning.addEventListener('click', handleAdminLogout);
+
+    // =========================================================================
+    // 7. Report Quality Classification Module (C7 - Anti-Slop, Pure JS)
+    // =========================================================================
+
+    function updateClassificationUI(data, reportId) {
+        const bannerEl = document.getElementById('detail-classification-note');
+        const noteTextEl = document.getElementById('classificationNoteText');
+        const noteIconEl = document.getElementById('classificationNoteIcon');
+        const actionContainer = document.getElementById('classificationActionContainer');
+        const promptContainer = document.getElementById('classification-prompt-container');
+
+        // navahi_manategh role cannot classify or change classification
+        const isNavahi = currentAdmin && currentAdmin.role === 'navahi_manategh';
+
+        const classification = data ? data.classification : null;
+        if (classification && (classification === 'helpful' || classification === 'useless')) {
+            // Already classified: show top note, hide one-time prompt permanently
+            if (promptContainer) promptContainer.style.display = 'none';
+
+            if (bannerEl && noteTextEl && noteIconEl) {
+                bannerEl.style.display = 'block';
+                bannerEl.className = `detail-classification-banner ${classification === 'helpful' ? 'banner-helpful' : 'banner-useless'}`;
+
+                const classifierName = data.classified_by_name || data.classified_by || (currentAdmin ? (currentAdmin.full_name || currentAdmin.username) : 'کارشناس حراست');
+
+                if (classification === 'helpful') {
+                    noteIconEl.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+                    </svg>`;
+                    noteTextEl.innerHTML = `این گزارش توسط <strong>${escapeHTML(classifierName)}</strong> به عنوان <strong class="badge-tag-helpful">مفید و موثر</strong> علامت‌گذاری شده است.`;
+                } else {
+                    noteIconEl.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                    </svg>`;
+                    noteTextEl.innerHTML = `این گزارش توسط <strong>${escapeHTML(classifierName)}</strong> به عنوان <strong class="badge-tag-useless">بی‌محتوا و فاقد ارزش</strong> علامت‌گذاری شده است.`;
+                }
+
+                // Only original classifier can change their classification, and navahi_manategh is strictly forbidden
+                const isClassifier = !isNavahi && currentAdmin && data.classified_by && (currentAdmin.username === data.classified_by);
+                if (actionContainer) {
+                    actionContainer.style.display = isClassifier ? 'flex' : 'none';
+                }
+            }
+        } else {
+            // Not classified yet: show one-time prompt only if not navahi_manategh
+            if (bannerEl) bannerEl.style.display = 'none';
+            if (promptContainer) {
+                if (isNavahi) {
+                    promptContainer.style.display = 'none';
+                } else {
+                    promptContainer.style.display = 'block';
+                    const statusEl = document.getElementById('classificationPromptStatusMsg');
+                    if (statusEl) statusEl.style.display = 'none';
+                    const btnHelpful = document.getElementById('btnClassifyHelpful');
+                    const btnUseless = document.getElementById('btnClassifyUseless');
+                    if (btnHelpful) btnHelpful.disabled = false;
+                    if (btnUseless) btnUseless.disabled = false;
+                }
+            }
+        }
+    }
+
+    async function submitClassification(classification) {
+        if (!currentViewingReportId) return;
+        const btnHelpful = document.getElementById('btnClassifyHelpful');
+        const btnUseless = document.getElementById('btnClassifyUseless');
+
+        if (btnHelpful) btnHelpful.disabled = true;
+        if (btnUseless) btnUseless.disabled = true;
+
+        try {
+            const res = await adminFetch('/api/admin/report/classify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    report_id: currentViewingReportId,
+                    classification: classification
+                })
+            });
+
+            if (res.ok) {
+                const respData = await res.json();
+                showToast('ارزیابی کیفیت گزارش با موفقیت ثبت شد', 2500, 'success');
+
+                // Update in-memory collections
+                const repInAll = allReports ? allReports.find(r => r.id === currentViewingReportId) : null;
+                if (repInAll) repInAll.classification = classification;
+                const repInFiltered = filteredReports ? filteredReports.find(r => r.id === currentViewingReportId) : null;
+                if (repInFiltered) repInFiltered.classification = classification;
+
+                // Animate prompt out
+                const promptContainer = document.getElementById('classification-prompt-container');
+                if (promptContainer) {
+                    promptContainer.style.opacity = '0';
+                    promptContainer.style.transform = 'translateY(10px)';
+                    setTimeout(() => {
+                        promptContainer.style.display = 'none';
+                        promptContainer.style.opacity = '1';
+                        promptContainer.style.transform = 'none';
+                    }, 250);
+                }
+
+                updateClassificationUI({
+                    classification: classification,
+                    classified_by: respData.classified_by || (currentAdmin ? currentAdmin.username : ''),
+                    classified_by_name: respData.classified_by_name || (currentAdmin ? currentAdmin.full_name : '')
+                }, currentViewingReportId);
+
+            } else {
+                const errText = await res.text();
+                showToast(errText || 'خطا در ثبت ارزیابی گزارش', 3500, 'error');
+                if (btnHelpful) btnHelpful.disabled = false;
+                if (btnUseless) btnUseless.disabled = false;
+            }
+        } catch (err) {
+            showToast('خطای ارتباط با سرور', 3500, 'error');
+            if (btnHelpful) btnHelpful.disabled = false;
+            if (btnUseless) btnUseless.disabled = false;
+        }
+    }
+
+    function setupClassificationModal() {
+        const modal = document.getElementById('modal-change-classification');
+        const btnOpen = document.getElementById('btnOpenChangeClassification');
+        const btnClose = document.getElementById('btn-close-change-classification-modal');
+        const btnCancel = document.getElementById('btn-cancel-change-classification');
+        const form = document.getElementById('form-change-classification');
+        const statusMsg = document.getElementById('changeClassificationStatusMsg');
+
+        const radioHelpful = document.getElementById('radio-helpful');
+        const radioUseless = document.getElementById('radio-useless');
+        const cardHelpful = document.getElementById('option-card-helpful');
+        const cardUseless = document.getElementById('option-card-useless');
+
+        const updateCardSelected = () => {
+            if (cardHelpful && radioHelpful) {
+                cardHelpful.classList.toggle('selected', radioHelpful.checked);
+            }
+            if (cardUseless && radioUseless) {
+                cardUseless.classList.toggle('selected', radioUseless.checked);
+            }
+        };
+
+        radioHelpful?.addEventListener('change', updateCardSelected);
+        radioUseless?.addEventListener('change', updateCardSelected);
+
+        cardHelpful?.addEventListener('click', () => {
+            if (radioHelpful) {
+                radioHelpful.checked = true;
+                updateCardSelected();
+            }
+        });
+
+        cardUseless?.addEventListener('click', () => {
+            if (radioUseless) {
+                radioUseless.checked = true;
+                updateCardSelected();
+            }
+        });
+
+        btnOpen?.addEventListener('click', () => {
+            if (!currentViewingReportId) return;
+            const rep = allReports ? allReports.find(r => r.id === currentViewingReportId) : null;
+            const currentVal = rep?.classification || 'helpful';
+
+            if (radioHelpful && radioUseless) {
+                radioHelpful.checked = currentVal === 'helpful';
+                radioUseless.checked = currentVal === 'useless';
+                updateCardSelected();
+            }
+
+            if (statusMsg) statusMsg.style.display = 'none';
+            if (modal) modal.style.display = 'flex';
+        });
+
+        const closeModal = () => {
+            if (modal) modal.style.display = 'none';
+        };
+
+        btnClose?.addEventListener('click', closeModal);
+        btnCancel?.addEventListener('click', closeModal);
+        modal?.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        form?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentViewingReportId) return;
+
+            const selected = form.querySelector('input[name="modal_classification"]:checked')?.value;
+            if (!selected) {
+                showToast('لطفاً یک گزینه را انتخاب فرمایید', 3000, 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('btn-submit-change-classification');
+            const spinner = submitBtn?.querySelector('.btn-spinner');
+            const btnText = submitBtn?.querySelector('.btn-text');
+
+            if (submitBtn) submitBtn.disabled = true;
+            if (spinner) spinner.classList.remove('d-none');
+
+            try {
+                const res = await adminFetch('/api/admin/report/classify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        report_id: currentViewingReportId,
+                        classification: selected
+                    })
+                });
+
+                if (res.ok) {
+                    const respData = await res.json();
+                    closeModal();
+                    showToast('ارزیابی گزارش با موفقیت تغییر یافت', 2500, 'success');
+
+                    const repInAll = allReports ? allReports.find(r => r.id === currentViewingReportId) : null;
+                    if (repInAll) repInAll.classification = selected;
+                    const repInFiltered = filteredReports ? filteredReports.find(r => r.id === currentViewingReportId) : null;
+                    if (repInFiltered) repInFiltered.classification = selected;
+
+                    updateClassificationUI({
+                        classification: selected,
+                        classified_by: respData.classified_by || (currentAdmin ? currentAdmin.username : ''),
+                        classified_by_name: respData.classified_by_name || (currentAdmin ? currentAdmin.full_name : '')
+                    }, currentViewingReportId);
+
+                } else {
+                    const errText = await res.text();
+                    if (statusMsg) {
+                        statusMsg.className = 'response-box badge-critical';
+                        statusMsg.textContent = errText || 'خطا در تغییر ارزیابی پرونده';
+                        statusMsg.style.display = 'block';
+                    }
+                }
+            } catch (err) {
+                if (statusMsg) {
+                    statusMsg.className = 'response-box badge-critical';
+                    statusMsg.textContent = 'خطای ارتباط با سرور';
+                    statusMsg.style.display = 'block';
+                }
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+                if (spinner) spinner.classList.add('d-none');
+            }
+        });
+
+        // Wire prompt buttons
+        document.getElementById('btnClassifyHelpful')?.addEventListener('click', () => submitClassification('helpful'));
+        document.getElementById('btnClassifyUseless')?.addEventListener('click', () => submitClassification('useless'));
+    }
+
+    setupClassificationModal();
+
+    function renderClassificationPieChart(classData) {
+        const container = document.getElementById('chart-classification-pie');
+        const tagEl = document.getElementById('chart-quality-total-tag');
+        if (!container) return;
+
+        const totalClassified = classData ? (classData.total_classified || 0) : 0;
+        const helpfulCount = classData ? (classData.total_helpful || 0) : 0;
+        const uselessCount = classData ? (classData.total_useless || 0) : 0;
+        const helpfulPct = classData ? (classData.helpful_percentage || 0) : 0;
+        const uselessPct = classData ? (classData.useless_percentage || 0) : 0;
+
+        if (tagEl) {
+            tagEl.textContent = `${toPersianNum(totalClassified)} پرونده ارزیابی‌شده`;
+        }
+
+        if (totalClassified === 0) {
+            container.innerHTML = `
+                <div class="chart-empty-state">
+                    <div class="chart-empty-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 2a10 10 0 0 1 10 10H12V2z"></path>
+                        </svg>
+                    </div>
+                    <span>هنوز هیچ پرونده‌ای توسط کارشناسان ارزیابی کیفیت نشده است.</span>
+                </div>
+            `;
+            return;
+        }
+
+        const size = 230;
+        const strokeWidth = 24;
+        const radius = (size / 2) - (strokeWidth / 2); // 115 - 12 = 103
+        const circumference = 2 * Math.PI * radius; // ~647.168
+
+        const segments = [
+            {
+                key: 'helpful',
+                value: helpfulCount,
+                percentage: helpfulPct,
+                color: '#10b981',
+                label: 'گزارش‌های مفید و موثر',
+                shortLabel: 'گزارش‌های مفید',
+                pillClass: 'helpful'
+            },
+            {
+                key: 'useless',
+                value: uselessCount,
+                percentage: uselessPct,
+                color: '#64748b',
+                label: 'گزارش‌های بی‌محتوا و فاقد ارزش',
+                shortLabel: 'بی‌محتوا و فاقد ارزش',
+                pillClass: 'useless'
+            }
+        ];
+
+        const nonZeroSegments = segments.filter(s => s.value > 0);
+        const bothPresent = nonZeroSegments.length > 1;
+        const gap = bothPresent ? 14 : 0;
+
+        let circlesHtml = '';
+        let cumulativePct = 0;
+
+        nonZeroSegments.forEach((seg) => {
+            const rawLength = (seg.percentage / 100) * circumference;
+            const arcLength = Math.max(2, rawLength - gap);
+            const targetOffset = -((cumulativePct / 100) * circumference + (gap / 2));
+
+            circlesHtml += `
+                <circle
+                    id="donut-seg-${seg.key}"
+                    class="donut-segment"
+                    cx="${size / 2}"
+                    cy="${size / 2}"
+                    r="${radius}"
+                    fill="none"
+                    stroke="${seg.color}"
+                    stroke-dasharray="${arcLength} ${circumference}"
+                    stroke-dashoffset="-${circumference}"
+                    data-target-offset="${targetOffset}"
+                    data-key="${seg.key}"
+                    style="filter: none; pointer-events: stroke;"
+                />
+            `;
+            cumulativePct += seg.percentage;
+        });
+
+        const legendHtml = segments.map((seg) => `
+            <div class="donut-legend-item" id="donut-legend-${seg.key}" data-key="${seg.key}">
+                <div class="donut-legend-item-right">
+                    <span class="donut-legend-dot" style="background: ${seg.color}; box-shadow: 0 0 6px ${seg.color}80;"></span>
+                    <span class="donut-legend-name">${seg.label}</span>
+                </div>
+                <div class="donut-legend-item-left">
+                    <span class="donut-legend-pct-pill ${seg.pillClass}">${toPersianNum(seg.percentage)}٪</span>
+                    <span class="donut-legend-val">${toPersianNum(seg.value)} پرونده</span>
+                </div>
+            </div>
+        `).join('');
+
+        container.innerHTML = `
+            <div class="donut-card-container">
+                <div class="donut-chart-wrapper" id="donutChartWrapper">
+                    <svg class="donut-svg" viewBox="0 0 ${size} ${size}" aria-label="نمودار تفکیک کیفیت پرونده‌ها" role="img">
+                        <!-- Background base track ring -->
+                        <circle
+                            class="donut-base-ring"
+                            cx="${size / 2}"
+                            cy="${size / 2}"
+                            r="${radius}"
+                            fill="none"
+                            style="pointer-events: none;"
+                        />
+                        <!-- Data Segments -->
+                        ${circlesHtml}
+                    </svg>
+
+                    <!-- Interactive Center Content -->
+                    <div class="donut-center-content" id="donutCenterContent">
+                        <span class="donut-center-label" id="donutCenterLabel">کل ارزیابی‌ها</span>
+                        <span class="donut-center-value" id="donutCenterValue">${toPersianNum(totalClassified)}</span>
+                        <span class="donut-center-pct" id="donutCenterPct" style="color: var(--text-muted);">پرونده</span>
+                    </div>
+                </div>
+
+                <!-- Legend Breakdown List -->
+                <div class="donut-legend-list">
+                    ${legendHtml}
+                </div>
+            </div>
+        `;
+
+        // Trigger entrance animation for segments
+        requestAnimationFrame(() => {
+            nonZeroSegments.forEach(seg => {
+                const circleEl = document.getElementById(`donut-seg-${seg.key}`);
+                if (circleEl) {
+                    const targetOffset = circleEl.getAttribute('data-target-offset');
+                    circleEl.style.strokeDashoffset = `${targetOffset}`;
+                }
+            });
+        });
+
+        // Interactive hover states linking segments and legend rows
+        const centerLabel = document.getElementById('donutCenterLabel');
+        const centerValue = document.getElementById('donutCenterValue');
+        const centerPct = document.getElementById('donutCenterPct');
+
+        function setHoveredState(key) {
+            const seg = segments.find(s => s.key === key);
+            if (!seg) return;
+
+            segments.forEach(s => {
+                const circleEl = document.getElementById(`donut-seg-${s.key}`);
+                const legendEl = document.getElementById(`donut-legend-${s.key}`);
+                const isTarget = s.key === key;
+
+                if (circleEl) {
+                    if (isTarget) {
+                        circleEl.classList.add('active');
+                        circleEl.style.filter = `drop-shadow(0px 0px 8px ${s.color}) brightness(1.15)`;
+                    } else {
+                        circleEl.classList.remove('active');
+                        circleEl.style.filter = 'none';
+                    }
+                }
+                if (legendEl) {
+                    legendEl.classList.toggle('active', isTarget);
+                }
+            });
+
+            if (centerLabel) centerLabel.textContent = seg.shortLabel || seg.label;
+            if (centerValue) centerValue.textContent = toPersianNum(seg.value);
+            if (centerPct) {
+                centerPct.textContent = `[${toPersianNum(seg.percentage)}٪]`;
+                centerPct.style.color = seg.color;
+            }
+        }
+
+        function resetHoveredState() {
+            segments.forEach(s => {
+                const circleEl = document.getElementById(`donut-seg-${s.key}`);
+                const legendEl = document.getElementById(`donut-legend-${s.key}`);
+                if (circleEl) {
+                    circleEl.classList.remove('active');
+                    circleEl.style.filter = 'none';
+                }
+                if (legendEl) {
+                    legendEl.classList.remove('active');
+                }
+            });
+
+            if (centerLabel) centerLabel.textContent = 'کل ارزیابی‌ها';
+            if (centerValue) centerValue.textContent = toPersianNum(totalClassified);
+            if (centerPct) {
+                centerPct.textContent = 'پرونده';
+                centerPct.style.color = 'var(--text-muted)';
+            }
+        }
+
+        // Attach listeners to chart wrapper & SVG circles
+        const donutWrapper = container.querySelector('.donut-chart-wrapper');
+        if (donutWrapper) {
+            donutWrapper.addEventListener('mouseleave', resetHoveredState);
+        }
+
+        nonZeroSegments.forEach(seg => {
+            const circleEl = document.getElementById(`donut-seg-${seg.key}`);
+            if (circleEl) {
+                circleEl.addEventListener('mouseenter', () => setHoveredState(seg.key));
+            }
+        });
+
+        // Attach listeners to legend items & list
+        const legendListEl = container.querySelector('.donut-legend-list');
+        if (legendListEl) {
+            legendListEl.addEventListener('mouseleave', resetHoveredState);
+        }
+
+        segments.forEach(seg => {
+            const legendEl = document.getElementById(`donut-legend-${seg.key}`);
+            if (legendEl) {
+                legendEl.addEventListener('mouseenter', () => setHoveredState(seg.key));
+            }
+        });
+    }
+
+    function renderCategoryPieChart(categoryBreakdown, totalReports) {
+        const container = document.getElementById('chart-categories');
+        const tagEl = document.getElementById('chart-categories-total-tag');
+        if (!container) return;
+
+        const validItems = (categoryBreakdown || []).filter(item => item.count > 0);
+        const total = totalReports || validItems.reduce((sum, item) => sum + item.count, 0) || 0;
+
+        if (tagEl) {
+            tagEl.textContent = `${toPersianNum(total)} پرونده`;
+        }
+
+        if (validItems.length === 0 || total === 0) {
+            container.innerHTML = `
+                <div class="chart-empty-state">
+                    <div class="chart-empty-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                            <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                        </svg>
+                    </div>
+                    <span>هنوز هیچ گزارشی برای نمایش توزیع موضوعی ثبت نشده است.</span>
+                </div>
+            `;
+            return;
+        }
+
+        const palette = [
+            '#38bdf8', // Sky
+            '#34d399', // Emerald
+            '#818cf8', // Indigo
+            '#fbbf24', // Amber
+            '#f43f5e', // Rose
+            '#a78bfa', // Purple
+            '#2dd4bf', // Teal
+            '#fb923c', // Orange
+            '#94a3b8'  // Slate
+        ];
+
+        const size = 230;
+        const strokeWidth = 24;
+        const radius = (size / 2) - (strokeWidth / 2); // 103
+        const circumference = 2 * Math.PI * radius; // ~647.168
+
+        const segments = validItems.map((item, idx) => {
+            const pct = Math.round((item.count / total) * 1000) / 10;
+            return {
+                id: `cat-${idx}`,
+                label: item.category || 'سایر',
+                value: item.count,
+                percentage: pct,
+                color: palette[idx % palette.length]
+            };
+        });
+
+        const bothPresent = segments.length > 1;
+        const gap = bothPresent ? Math.min(12, Math.max(6, Math.floor(60 / segments.length))) : 0;
+
+        let circlesHtml = '';
+        let cumulativePct = 0;
+
+        segments.forEach((seg) => {
+            const rawLength = (seg.percentage / 100) * circumference;
+            const arcLength = Math.max(2, rawLength - gap);
+            const targetOffset = -((cumulativePct / 100) * circumference + (gap / 2));
+
+            circlesHtml += `
+                <circle
+                    id="donut-cat-seg-${seg.id}"
+                    class="donut-segment"
+                    cx="${size / 2}"
+                    cy="${size / 2}"
+                    r="${radius}"
+                    fill="none"
+                    stroke="${seg.color}"
+                    stroke-dasharray="${arcLength} ${circumference}"
+                    stroke-dashoffset="-${circumference}"
+                    data-target-offset="${targetOffset}"
+                    data-id="${seg.id}"
+                    style="filter: none; pointer-events: stroke;"
+                />
+            `;
+            cumulativePct += seg.percentage;
+        });
+
+        const legendHtml = segments.map((seg) => `
+            <div class="donut-legend-item" id="donut-cat-legend-${seg.id}" data-id="${seg.id}">
+                <div class="donut-legend-item-right">
+                    <span class="donut-legend-dot" style="background: ${seg.color}; box-shadow: 0 0 6px ${seg.color}80;"></span>
+                    <span class="donut-legend-name">${escapeHTML(seg.label)}</span>
+                </div>
+                <div class="donut-legend-item-left">
+                    <span class="donut-legend-pct-pill" style="background: ${seg.color}22; color: ${seg.color};">${toPersianNum(seg.percentage)}٪</span>
+                    <span class="donut-legend-val">${toPersianNum(seg.value)} پرونده</span>
+                </div>
+            </div>
+        `).join('');
+
+        container.innerHTML = `
+            <div class="donut-card-container">
+                <div class="donut-chart-wrapper">
+                    <svg class="donut-svg" viewBox="0 0 ${size} ${size}" aria-label="نمودار توزیع موضوعی گزارش‌ها" role="img">
+                        <!-- Background track ring -->
+                        <circle
+                            class="donut-base-ring"
+                            cx="${size / 2}"
+                            cy="${size / 2}"
+                            r="${radius}"
+                            fill="none"
+                            style="pointer-events: none;"
+                        />
+                        <!-- Data Segments -->
+                        ${circlesHtml}
+                    </svg>
+
+                    <!-- Interactive Center Content -->
+                    <div class="donut-center-content" id="donutCatCenterContent">
+                        <span class="donut-center-label" id="donutCatCenterLabel">کل گزارش‌ها</span>
+                        <span class="donut-center-value" id="donutCatCenterValue">${toPersianNum(total)}</span>
+                        <span class="donut-center-pct" id="donutCatCenterPct" style="color: var(--text-muted);">پرونده</span>
+                    </div>
+                </div>
+
+                <!-- Legend Breakdown List -->
+                <div class="donut-legend-list">
+                    ${legendHtml}
+                </div>
+            </div>
+        `;
+
+        // Entrance animation
+        requestAnimationFrame(() => {
+            segments.forEach(seg => {
+                const circleEl = document.getElementById(`donut-cat-seg-${seg.id}`);
+                if (circleEl) {
+                    const targetOffset = circleEl.getAttribute('data-target-offset');
+                    circleEl.style.strokeDashoffset = `${targetOffset}`;
+                }
+            });
+        });
+
+        // Hover state handlers
+        const centerLabel = document.getElementById('donutCatCenterLabel');
+        const centerValue = document.getElementById('donutCatCenterValue');
+        const centerPct = document.getElementById('donutCatCenterPct');
+
+        function setHoveredCat(segId) {
+            const seg = segments.find(s => s.id === segId);
+            if (!seg) return;
+
+            segments.forEach(s => {
+                const circleEl = document.getElementById(`donut-cat-seg-${s.id}`);
+                const legendEl = document.getElementById(`donut-cat-legend-${s.id}`);
+                const isTarget = s.id === segId;
+
+                if (circleEl) {
+                    if (isTarget) {
+                        circleEl.classList.add('active');
+                        circleEl.style.filter = `drop-shadow(0px 0px 8px ${s.color}) brightness(1.15)`;
+                    } else {
+                        circleEl.classList.remove('active');
+                        circleEl.style.filter = 'none';
+                    }
+                }
+                if (legendEl) {
+                    legendEl.classList.toggle('active', isTarget);
+                }
+            });
+
+            if (centerLabel) centerLabel.textContent = seg.label;
+            if (centerValue) centerValue.textContent = toPersianNum(seg.value);
+            if (centerPct) {
+                centerPct.textContent = `[${toPersianNum(seg.percentage)}٪]`;
+                centerPct.style.color = seg.color;
+            }
+        }
+
+        function resetHoveredCat() {
+            segments.forEach(s => {
+                const circleEl = document.getElementById(`donut-cat-seg-${s.id}`);
+                const legendEl = document.getElementById(`donut-cat-legend-${s.id}`);
+                if (circleEl) {
+                    circleEl.classList.remove('active');
+                    circleEl.style.filter = 'none';
+                }
+                if (legendEl) {
+                    legendEl.classList.remove('active');
+                }
+            });
+
+            if (centerLabel) centerLabel.textContent = 'کل گزارش‌ها';
+            if (centerValue) centerValue.textContent = toPersianNum(total);
+            if (centerPct) {
+                centerPct.textContent = 'پرونده';
+                centerPct.style.color = 'var(--text-muted)';
+            }
+        }
+
+        // Attach listeners to chart wrapper & SVG circles
+        const donutWrapper = container.querySelector('.donut-chart-wrapper');
+        if (donutWrapper) {
+            donutWrapper.addEventListener('mouseleave', resetHoveredCat);
+        }
+
+        segments.forEach(seg => {
+            const circleEl = document.getElementById(`donut-cat-seg-${seg.id}`);
+            if (circleEl) {
+                circleEl.addEventListener('mouseenter', () => setHoveredCat(seg.id));
+            }
+
+            const legendEl = document.getElementById(`donut-cat-legend-${seg.id}`);
+            if (legendEl) {
+                legendEl.addEventListener('mouseenter', () => setHoveredCat(seg.id));
+            }
+        });
+
+        // Attach listeners to legend list
+        const legendListEl = container.querySelector('.donut-legend-list');
+        if (legendListEl) {
+            legendListEl.addEventListener('mouseleave', resetHoveredCat);
+        }
+    }
+
+    function renderPrioritiesSegmentedBar(priorityBreakdown, totalReports) {
+        const container = document.getElementById('chart-priorities');
+        const tagEl = document.getElementById('chart-priorities-total-tag');
+        if (!container) return;
+
+        const critItem = (priorityBreakdown || []).find(p => p.priority === 'critical');
+        const urgItem = (priorityBreakdown || []).find(p => p.priority === 'urgent');
+        const normItem = (priorityBreakdown || []).find(p => p.priority === 'normal');
+
+        const critCount = critItem ? critItem.count : 0;
+        const urgCount = urgItem ? urgItem.count : 0;
+        const normCount = normItem ? normItem.count : 0;
+        const total = totalReports || (critCount + urgCount + normCount) || 0;
+
+        if (tagEl) {
+            tagEl.textContent = `${toPersianNum(total)} پرونده`;
+        }
+
+        if (total === 0) {
+            container.innerHTML = `
+                <div class="chart-empty-state">
+                    <div class="chart-empty-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </div>
+                    <span>هنوز هیچ اطلاعاتی برای تفکیک فوریت پرونده‌ها ثبت نشده است.</span>
+                </div>
+            `;
+            return;
+        }
+
+        const critPct = Math.round((critCount / total) * 1000) / 10;
+        const urgPct = Math.round((urgCount / total) * 1000) / 10;
+        const normPct = Math.max(0, Math.round((100 - critPct - urgPct) * 10) / 10);
+
+        let overallBadge = '';
+        if (critCount > 0) {
+            overallBadge = `
+                <span class="priority-overall-badge critical">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>${toPersianNum(critCount)} پرونده ویژه و آنی</span>
+                </span>
+            `;
+        } else if (urgCount > 0) {
+            overallBadge = `
+                <span class="priority-overall-badge urgent">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>${toPersianNum(urgCount)} پرونده فوری</span>
+                </span>
+            `;
+        } else {
+            overallBadge = `
+                <span class="priority-overall-badge normal">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span>وضعیت عادی و پایدار</span>
+                </span>
+            `;
+        }
+
+        const prioItems = [
+            {
+                key: 'critical',
+                label: 'آنی و ویژه (حداکثر حساسیت)',
+                shortLabel: 'آنی و ویژه',
+                count: critCount,
+                pct: critPct,
+                color: '#f43f5e',
+                iconSvg: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`
+            },
+            {
+                key: 'urgent',
+                label: 'فوری (رسیدگی با اولویت بالا)',
+                shortLabel: 'فوری',
+                count: urgCount,
+                pct: urgPct,
+                color: '#f59e0b',
+                iconSvg: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`
+            },
+            {
+                key: 'normal',
+                label: 'عادی (روال معمول اداری)',
+                shortLabel: 'عادی',
+                count: normCount,
+                pct: normPct,
+                color: '#10b981',
+                iconSvg: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`
+            }
+        ];
+
+        let barSegmentsHtml = '';
+        prioItems.forEach(item => {
+            if (item.count > 0) {
+                barSegmentsHtml += `
+                    <div
+                        class="segmented-progress-bar-item"
+                        id="prio-bar-${item.key}"
+                        data-key="${item.key}"
+                        style="width: 0%; background: ${item.color};"
+                        data-target-width="${item.pct}%"
+                        title="${item.shortLabel}: ${toPersianNum(item.pct)}٪ (${toPersianNum(item.count)} پرونده)"
+                    ></div>
+                `;
+            }
+        });
+
+        let legendRowsHtml = prioItems.map(item => `
+            <div class="donut-legend-item" id="prio-legend-${item.key}" data-key="${item.key}">
+                <div class="donut-legend-item-right">
+                    <span class="prio-icon-badge ${item.key}">${item.iconSvg}</span>
+                    <span class="donut-legend-name">${item.label}</span>
+                </div>
+                <div class="donut-legend-item-left">
+                    <span class="donut-legend-pct-pill" style="background: ${item.color}22; color: ${item.color};">${toPersianNum(item.pct)}٪</span>
+                    <span class="donut-legend-val">${toPersianNum(item.count)} پرونده</span>
+                </div>
+            </div>
+        `).join('');
+
+        container.innerHTML = `
+            <div class="priority-segmented-card">
+                <div class="priority-overall-header">
+                    <span class="priority-overall-title">پایش فوریت و ضرورت رسیدگی</span>
+                    ${overallBadge}
+                </div>
+
+                <div class="segmented-progress-track" role="progressbar" aria-label="توزیع اولویت و فوریت پرونده‌ها" aria-valuemin="0" aria-valuemax="100">
+                    ${barSegmentsHtml}
+                </div>
+
+                <div class="donut-legend-list" style="margin-top: 10px;">
+                    ${legendRowsHtml}
+                </div>
+            </div>
+        `;
+
+        // Trigger entrance animation for progress segments
+        requestAnimationFrame(() => {
+            prioItems.forEach(item => {
+                const el = document.getElementById(`prio-bar-${item.key}`);
+                if (el) {
+                    el.style.width = el.getAttribute('data-target-width');
+                }
+            });
+        });
+
+        // Hover linkages
+        prioItems.forEach(item => {
+            const barEl = document.getElementById(`prio-bar-${item.key}`);
+            const legendEl = document.getElementById(`prio-legend-${item.key}`);
+
+            function highlight() {
+                if (barEl) {
+                    barEl.classList.add('active');
+                    barEl.style.filter = `brightness(1.25) drop-shadow(0 0 6px ${item.color})`;
+                }
+                if (legendEl) legendEl.classList.add('active');
+            }
+
+            function unhighlight() {
+                if (barEl) {
+                    barEl.classList.remove('active');
+                    barEl.style.filter = '';
+                }
+                if (legendEl) legendEl.classList.remove('active');
+            }
+
+            if (barEl) {
+                barEl.addEventListener('mouseenter', highlight);
+                barEl.addEventListener('mouseleave', unhighlight);
+            }
+            if (legendEl) {
+                legendEl.addEventListener('mouseenter', highlight);
+                legendEl.addEventListener('mouseleave', unhighlight);
+            }
+        });
+    }
+
+    // =========================================================================
+    // 8. Analytics & Statistics Module (C6 - Pure SVG / HTML, Zero Deps)
+    // =========================================================================
+
+    let cachedAnalyticsData = null;
+    let lastAnalyticsFetchTime = 0;
+    const ANALYTICS_CACHE_TTL = 60000;
+
+    function populateAnalyticsDOM(data) {
+        // 1. Update Analytics Metric Cards
+        const totalEl = document.getElementById('ana-total-reports');
+        const respEl = document.getElementById('ana-total-responded');
+        const unreadEl = document.getElementById('ana-total-unread');
+        const avgEl = document.getElementById('ana-avg-response');
+
+        const helpfulEl = document.getElementById('ana-total-helpful');
+        const uselessEl = document.getElementById('ana-total-useless');
+
+        if (totalEl) totalEl.textContent = toPersianNum(data.total_reports || 0);
+        if (respEl) respEl.textContent = toPersianNum(data.total_responded || 0);
+        if (unreadEl) unreadEl.textContent = toPersianNum(data.total_unread || 0);
+        if (avgEl) {
+            const hours = Math.round((data.avg_response_hours || 0) * 10) / 10;
+            avgEl.textContent = hours > 24 ? `${toPersianNum(Math.round(hours / 24))} روز` : `${toPersianNum(hours)} ساعت`;
+        }
+
+        if (data.classification_analytics) {
+            const ca = data.classification_analytics;
+            if (helpfulEl) helpfulEl.innerHTML = `${toPersianNum(ca.total_helpful)} <span class="metric-sub-pct" id="ana-helpful-pct">(${toPersianNum(ca.helpful_percentage)}٪)</span>`;
+            if (uselessEl) uselessEl.innerHTML = `${toPersianNum(ca.total_useless)} <span class="metric-sub-pct" id="ana-useless-pct">(${toPersianNum(ca.useless_percentage)}٪)</span>`;
+            renderClassificationPieChart(ca);
+        } else {
+            renderClassificationPieChart(null);
+        }
+
+        // 2. Render Category Distribution (Interactive Luxury Donut Chart)
+        renderCategoryPieChart(data.category_breakdown, data.total_reports);
+
+        // 3. Priorities Breakdown (Segmented Progress Bar & Rich Legend)
+        renderPrioritiesSegmentedBar(data.priority_breakdown, data.total_reports);
+
+        // 4. Monthly Trends (12 Months of Solar Year)
+        renderMonthlyChart(data.monthly_trend);
+    }
+
+    async function renderAnalyticsDashboard(force = false) {
+        const anaSkeleton = document.getElementById('analytics-skeleton-content');
+        const anaActual = document.getElementById('analytics-actual-content');
+
+        if (!force && cachedAnalyticsData && (Date.now() - lastAnalyticsFetchTime < ANALYTICS_CACHE_TTL)) {
+            if (anaSkeleton) anaSkeleton.classList.add('d-none');
+            if (anaActual) anaActual.classList.remove('d-none');
+            populateAnalyticsDOM(cachedAnalyticsData);
+            return true;
+        }
+
+        if (anaSkeleton && anaActual && (!cachedAnalyticsData || force)) {
+            anaSkeleton.classList.remove('d-none');
+            anaActual.classList.add('d-none');
+        }
+
+        try {
+            const res = await adminFetch('/api/admin/analytics');
+            if (!res.ok) {
+                if (anaSkeleton) anaSkeleton.classList.add('d-none');
+                if (anaActual) anaActual.classList.remove('d-none');
+                renderClientSideAnalytics();
+                throw new Error(`خطای دریافت آمار: ${res.status}`);
+            }
+            const data = await res.json();
+            cachedAnalyticsData = data;
+            lastAnalyticsFetchTime = Date.now();
+
+            populateAnalyticsDOM(data);
+
+            if (anaSkeleton) anaSkeleton.classList.add('d-none');
+            if (anaActual) anaActual.classList.remove('d-none');
+            return true;
+
+        } catch (e) {
+            if (anaSkeleton) anaSkeleton.classList.add('d-none');
+            if (anaActual) anaActual.classList.remove('d-none');
+            renderClientSideAnalytics();
+            throw e;
+        }
+    }
+
+    function renderMonthlyChart(monthlyTrend) {
+        const monthNames = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+        const monthCounts = new Array(12).fill(0);
+
+        if (Array.isArray(monthlyTrend) && monthlyTrend.length === 12) {
+            for (let i = 0; i < 12; i++) {
+                monthCounts[i] = Number(monthlyTrend[i]) || 0;
+            }
+        } else if (allReports && allReports.length > 0) {
+            for (let i = 0; i < allReports.length; i++) {
+                const r = allReports[i];
+                if (r._shamsiMonth) {
+                    const mIdx = parseInt(r._shamsiMonth, 10) - 1;
+                    if (mIdx >= 0 && mIdx < 12) {
+                        monthCounts[mIdx]++;
+                    }
+                }
+            }
+        }
+
+        const monthlyContainer = document.getElementById('chart-monthly');
+        if (!monthlyContainer) return;
+
+        const totalReports = monthCounts.reduce((acc, val) => acc + val, 0);
+        const avgMonthly = totalReports > 0 ? (totalReports / 12).toFixed(1) : '۰';
+        const maxVal = Math.max(...monthCounts, 0);
+        const minVal = Math.min(...monthCounts);
+        const peakIdx = maxVal > 0 ? monthCounts.indexOf(maxVal) : -1;
+        const lowestIdx = monthCounts.indexOf(minVal);
+        const peakMonthText = peakIdx >= 0 ? `${monthNames[peakIdx]} (${toPersianNum(maxVal)})` : 'ثبت‌نشده';
+        const lowestMonthText = `${monthNames[lowestIdx]} (${toPersianNum(minVal)})`;
+        const activeMonths = monthCounts.filter(c => c > 0).length;
+
+        // SVG Coordinate System (RTL: Month 0 at right, Month 11 at left)
+        const svgWidth = 960;
+        const svgHeight = 240;
+        const padX = 55;
+        const yTop = 26;
+        const yBottom = 195;
+        const effectiveMax = maxVal > 0 ? Math.ceil(maxVal * 1.25) : 4;
+        const stepX = (svgWidth - padX * 2) / 11;
+
+        const points = monthNames.map((name, i) => {
+            const count = monthCounts[i];
+            const ratio = count / effectiveMax;
+            const x = (svgWidth - padX) - (i * stepX); // RTL: Farvardin on right, Esfand on left
+            const y = yBottom - (ratio * (yBottom - yTop));
+            return { x, y, count, name, index: i };
+        });
+
+        // Generate smooth Catmull-Rom -> Cubic Bezier curve
+        function generateSpline(pts) {
+            if (!pts || pts.length === 0) return '';
+            if (pts.length === 1) return `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+            let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+            for (let i = 0; i < pts.length - 1; i++) {
+                const p0 = pts[i === 0 ? i : i - 1];
+                const p1 = pts[i];
+                const p2 = pts[i + 1];
+                const p3 = pts[i + 2 < pts.length ? i + 2 : i + 1];
+
+                const cp1x = p1.x + (p2.x - p0.x) / 6;
+                const cp1y = p1.y + (p2.y - p0.y) / 6;
+                const cp2x = p2.x - (p3.x - p1.x) / 6;
+                const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+                d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+            }
+            return d;
+        }
+
+        const linePath = generateSpline(points);
+        const areaPath = `${linePath} L ${points[11].x.toFixed(1)} ${yBottom} L ${points[0].x.toFixed(1)} ${yBottom} Z`;
+
+        // Horizontal Grid Lines & Ticks
+        const gridLevels = [0, 0.33, 0.66, 1];
+        const gridLinesHtml = gridLevels.map(lvl => {
+            const y = yBottom - lvl * (yBottom - yTop);
+            const val = Math.round(lvl * effectiveMax);
+            return `
+                <line x1="40" y1="${y.toFixed(1)}" x2="${svgWidth - 40}" y2="${y.toFixed(1)}" stroke="rgba(255, 255, 255, 0.07)" stroke-dasharray="4 6" />
+                <text x="${svgWidth - 32}" y="${(y + 4).toFixed(1)}" font-size="11" fill="#64748b" text-anchor="start" font-family="var(--font-main, 'Vazirmatn', sans-serif)">${toPersianNum(val)}</text>
+            `;
+        }).join('');
+
+        // Dots on points
+        const dotsHtml = points.map(p => {
+            const isPeak = p.count === maxVal && maxVal > 0;
+            if (isPeak) {
+                return `
+                    <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="8" fill="none" stroke="#38bdf8" stroke-width="1.5" class="pulsing-halo" />
+                    <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="5" fill="#38bdf8" stroke="#ffffff" stroke-width="2" filter="url(#monthlyDotShadow)" />
+                `;
+            }
+            if (p.count > 0) {
+                return `
+                    <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" fill="#38bdf8" stroke="#0f172a" stroke-width="1.5" />
+                `;
+            }
+            return `
+                <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2" fill="rgba(255, 255, 255, 0.18)" />
+            `;
+        }).join('');
+
+        // X-Axis month items (RTL positioning)
+        const xLabelsHtml = points.map((p, i) => {
+            const isPeak = p.count === maxVal && maxVal > 0;
+            const rightPct = ((svgWidth - p.x) / svgWidth * 100).toFixed(2);
+            return `
+                <div class="monthly-xaxis-item ${isPeak ? 'peak' : ''}" style="right: ${rightPct}%;">
+                    <span class="monthly-xaxis-text">${p.name}</span>
+                </div>
+            `;
+        }).join('');
+
+        monthlyContainer.innerHTML = `
+            <div class="monthly-chart-root">
+                <!-- Top Summary & Stats Row -->
+                <div class="monthly-stats-header">
+                    <div class="monthly-primary-stat">
+                        <span class="monthly-stat-title">کل گزارش‌های ثبت‌شده سال جاری</span>
+                        <div class="monthly-stat-val-row">
+                            <span class="monthly-stat-number">${toPersianNum(totalReports)}</span>
+                            <span class="monthly-stat-unit">پرونده</span>
+                            <div class="monthly-trend-pill">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                    <polyline points="17 6 23 6 23 12"></polyline>
+                                </svg>
+                                <span>میانگین ماهانه: ${toPersianNum(avgMonthly)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="monthly-secondary-stats">
+                        <div class="monthly-substat">
+                            <span class="substat-label">بیشترین ثبت:</span>
+                            <span class="substat-value high">${peakMonthText}</span>
+                        </div>
+                        <div class="monthly-substat-divider"></div>
+                        <div class="monthly-substat">
+                            <span class="substat-label">کمترین ثبت:</span>
+                            <span class="substat-value low">${lowestMonthText}</span>
+                        </div>
+                        <div class="monthly-substat-divider"></div>
+                        <div class="monthly-substat">
+                            <span class="substat-label">ماه‌های فعال:</span>
+                            <span class="substat-value">${toPersianNum(activeMonths)} از ۱۲ ماه</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart Canvas Area with Dot Grid & Spline Area -->
+                <div class="monthly-chart-canvas-wrap" id="monthlyChartCanvasWrap">
+                    <svg class="monthly-spline-svg" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="none">
+                        <defs>
+                            <pattern id="monthlyDotGrid" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
+                                <circle cx="11" cy="11" r="1.1" fill="rgba(255, 255, 255, 0.08)" />
+                            </pattern>
+                            <linearGradient id="monthlyAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.30" />
+                                <stop offset="70%" stop-color="#38bdf8" stop-opacity="0.05" />
+                                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+                            </linearGradient>
+                            <filter id="monthlyLineShadow" x="-10%" y="-20%" width="120%" height="150%">
+                                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0284c7" flood-opacity="0.65" />
+                            </filter>
+                            <filter id="monthlyDotShadow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.85)" />
+                            </filter>
+                        </defs>
+
+                        <!-- Dot Grid Background -->
+                        <rect x="0" y="0" width="100%" height="100%" fill="url(#monthlyDotGrid)" style="pointer-events: none;" />
+
+                        <!-- Cartesian Horizontal Grid Lines & Ticks -->
+                        ${gridLinesHtml}
+
+                        <!-- Active Reference Tracking Line -->
+                        <line id="monthlyRefLine" x1="0" y1="20" x2="0" y2="${yBottom}" stroke="#38bdf8" stroke-dasharray="4 4" stroke-width="1.5" style="display: none; pointer-events: none; opacity: 0.75;" />
+
+                        <!-- Smooth Spline Gradient Area -->
+                        <path class="monthly-spline-area" d="${areaPath}" fill="url(#monthlyAreaGradient)" />
+
+                        <!-- Smooth Spline Line -->
+                        <path class="monthly-spline-line" d="${linePath}" fill="none" stroke="#38bdf8" stroke-width="2.5" filter="url(#monthlyLineShadow)" />
+
+                        <!-- Data Dots -->
+                        ${dotsHtml}
+
+                        <!-- Active Hover Dot Marker -->
+                        <circle id="monthlyActiveDot" r="6.5" fill="#38bdf8" stroke="#ffffff" stroke-width="2.5" filter="url(#monthlyDotShadow)" style="display: none; pointer-events: none;" />
+                    </svg>
+
+                    <!-- X-Axis Labels (Persian Months RTL) -->
+                    <div class="monthly-xaxis-bar">
+                        ${xLabelsHtml}
+                    </div>
+
+                    <!-- Floating Interactive Tooltip -->
+                    <div id="monthlyTooltip" class="monthly-custom-tooltip" style="display: none;">
+                        <div class="monthly-tooltip-date" id="monthlyTooltipDate">فروردین</div>
+                        <div class="monthly-tooltip-val-row">
+                            <span class="monthly-tooltip-val" id="monthlyTooltipVal">۰ پرونده</span>
+                            <span class="monthly-tooltip-pct" id="monthlyTooltipPct">[۰٪]</span>
+                        </div>
+                        <div class="monthly-tooltip-badge" id="monthlyTooltipBadge">ثبت‌شده در این ماه</div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Interactive mouse hover event bindings
+        const canvasWrap = document.getElementById('monthlyChartCanvasWrap');
+        const refLine = document.getElementById('monthlyRefLine');
+        const activeDot = document.getElementById('monthlyActiveDot');
+        const tooltip = document.getElementById('monthlyTooltip');
+        const tooltipDate = document.getElementById('monthlyTooltipDate');
+        const tooltipVal = document.getElementById('monthlyTooltipVal');
+        const tooltipPct = document.getElementById('monthlyTooltipPct');
+        const tooltipBadge = document.getElementById('monthlyTooltipBadge');
+
+        if (canvasWrap) {
+            canvasWrap.addEventListener('mousemove', (e) => {
+                const rect = canvasWrap.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const svgX = (mouseX / rect.width) * svgWidth;
+
+                // Find nearest point
+                let nearestPt = points[0];
+                let minDiff = Infinity;
+                points.forEach(pt => {
+                    const diff = Math.abs(pt.x - svgX);
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        nearestPt = pt;
+                    }
+                });
+
+                if (refLine) {
+                    refLine.style.display = 'block';
+                    refLine.setAttribute('x1', nearestPt.x.toFixed(1));
+                    refLine.setAttribute('x2', nearestPt.x.toFixed(1));
+                }
+
+                if (activeDot) {
+                    activeDot.style.display = 'block';
+                    activeDot.setAttribute('cx', nearestPt.x.toFixed(1));
+                    activeDot.setAttribute('cy', nearestPt.y.toFixed(1));
+                }
+
+                if (tooltip) {
+                    tooltip.style.display = 'block';
+                    if (tooltipDate) tooltipDate.textContent = `${nearestPt.name} ماه`;
+                    if (tooltipVal) tooltipVal.textContent = `${toPersianNum(nearestPt.count)} پرونده`;
+                    const pct = totalReports > 0 ? ((nearestPt.count / totalReports) * 100).toFixed(1) : '۰';
+                    if (tooltipPct) tooltipPct.textContent = `[${toPersianNum(pct)}٪]`;
+                    if (tooltipBadge) {
+                        if (nearestPt.count === maxVal && maxVal > 0) {
+                            tooltipBadge.textContent = 'بیشترین ثبت سال جاری';
+                            tooltipBadge.style.color = '#38bdf8';
+                            tooltipBadge.style.background = 'rgba(56, 189, 248, 0.16)';
+                        } else if (nearestPt.count > (totalReports / 12)) {
+                            tooltipBadge.textContent = 'بالاتر از میانگین ماهانه';
+                            tooltipBadge.style.color = '#34d399';
+                            tooltipBadge.style.background = 'rgba(16, 185, 129, 0.16)';
+                        } else if (nearestPt.count === 0) {
+                            tooltipBadge.textContent = 'بدون ثبت گزارش';
+                            tooltipBadge.style.color = '#94a3b8';
+                            tooltipBadge.style.background = 'rgba(255, 255, 255, 0.06)';
+                        } else {
+                            tooltipBadge.textContent = 'ثبت‌شده در این ماه';
+                            tooltipBadge.style.color = '#93c5fd';
+                            tooltipBadge.style.background = 'rgba(59, 130, 246, 0.12)';
+                        }
+                    }
+
+                    const ptClientX = (nearestPt.x / svgWidth) * rect.width;
+                    const ptClientY = (nearestPt.y / svgHeight) * rect.height;
+                    const clampedX = Math.max(75, Math.min(rect.width - 75, ptClientX));
+                    tooltip.style.left = `${clampedX}px`;
+                    tooltip.style.top = `${Math.max(12, ptClientY)}px`;
+                }
+            });
+
+            canvasWrap.addEventListener('mouseleave', () => {
+                if (refLine) refLine.style.display = 'none';
+                if (activeDot) activeDot.style.display = 'none';
+                if (tooltip) tooltip.style.display = 'none';
+            });
+        }
+    }
+
+    function renderClientSideAnalytics() {
+        if (!allReports || allReports.length === 0) return;
+        renderMonthlyChart();
+    }
+
+    document.getElementById('btnRefreshAnalytics')?.addEventListener('click', async () => {
+        try {
+            await renderAnalyticsDashboard(true);
+            showToast('نمودارهای آماری بروزرسانی شدند', 2500, 'success');
+        } catch (err) {
+            showToast('خطا در دریافت اطلاعات آماری. ارتباط با سرور برقرار نشد.', 3500, 'error');
+        }
+    });
+
+    // Background Polling for Live Report Count (every 60 seconds - C4)
+    setInterval(() => {
+        if (dashboardSection && dashboardSection.style.display !== 'none') {
+            fetchReports().catch(() => { });
+        }
+    }, 60000);
+
+    // =========================================================================
+    // 9. Superuser Advanced Management & Role-Based UI Module
+    // =========================================================================
+
+    async function checkAdminProfile() {
+        try {
+            const res = await adminFetch('/api/admin/me');
+            if (res.ok) {
+                currentAdmin = await res.json();
+                setupSuperuserUI();
+                checkMustChangePasswordPolicy();
+                return true;
+            }
+        } catch (e) {
+            console.error("Failed to check profile", e);
+        }
+        return false;
+    }
+
+    function checkMustChangePasswordPolicy() {
+        if (!currentAdmin) return;
+        const modalForcePwd = document.getElementById('modal-force-change-password');
+        const reasonText = document.getElementById('force-pwd-reason-text');
+
+        if (currentAdmin.must_change_password) {
+            if (modalForcePwd) modalForcePwd.style.display = 'flex';
+            if (reasonText) {
+                if (currentAdmin.is_password_expired) {
+                    reasonText.textContent = 'هشدار امنیتی: مدت زمان اعتبار ۳۰ روزه رمز عبور شما به پایان رسیده است. طبق خط‌مشی امنیتی سامانه، تعیین رمز عبور جدید پیش از ورود به کارتابل الزامی می‌باشد.';
+                } else {
+                    reasonText.textContent = 'توجه: تغییر رمز عبور حساب کاربری شما توسط پشتیبانی سامانه الزامی شده است. لطفاً کلمه عبور جدید و امن خود را تعیین فرمایید.';
+                }
+            }
+        } else {
+            if (modalForcePwd) modalForcePwd.style.display = 'none';
+        }
+    }
+
+    function setupSuperuserUI() {
+        const fullnameEl = document.getElementById('header-admin-fullname');
+        const roleEl = document.getElementById('header-admin-role');
+        if (currentAdmin) {
+            if (fullnameEl) fullnameEl.textContent = currentAdmin.full_name || currentAdmin.username;
+            if (roleEl) roleEl.textContent = currentAdmin.role_title || 'کارشناس حراست';
+        }
+
+        if (currentAdmin && currentAdmin.is_superuser) {
+            if (tabBtnAdvanced) tabBtnAdvanced.style.display = 'inline-flex';
+        } else {
+            if (tabBtnAdvanced) tabBtnAdvanced.style.display = 'none';
+            if (advancedSection) advancedSection.style.display = 'none';
+            if (reportsInboxSection) reportsInboxSection.style.display = 'block';
+        }
+    }
+
+    function switchMainTab(tabName) {
+        if (tabName === 'reports') {
+            tabBtnReports?.classList.add('active');
+            tabBtnAnalytics?.classList.remove('active');
+            tabBtnAdvanced?.classList.remove('active');
+            if (reportsInboxSection) reportsInboxSection.style.display = 'block';
+            if (detailSection) detailSection.style.display = 'none';
+            if (listSection) listSection.style.display = 'block';
+            if (filterContainer) filterContainer.style.display = '';
+            reportsInboxSection?.classList.remove('in-detail-view');
+            updateBulkToolbar();
+            if (advancedSection) advancedSection.style.display = 'none';
+            if (analyticsSection) analyticsSection.style.display = 'none';
+            fetchReports().catch(() => { });
+        } else if (tabName === 'analytics') {
+            tabBtnAnalytics?.classList.add('active');
+            tabBtnReports?.classList.remove('active');
+            tabBtnAdvanced?.classList.remove('active');
+            if (reportsInboxSection) reportsInboxSection.style.display = 'none';
+            if (detailSection) detailSection.style.display = 'none';
+            if (advancedSection) advancedSection.style.display = 'none';
+            if (analyticsSection) analyticsSection.style.display = 'block';
+            renderAnalyticsDashboard().catch(() => { });
+        } else if (tabName === 'advanced') {
+            if (!currentAdmin || !currentAdmin.is_superuser) {
+                showToast('دسترسی به این بخش برای حساب شما مجاز نمی‌باشد.', 3000, 'error');
+                return;
+            }
+            tabBtnAdvanced?.classList.add('active');
+            tabBtnReports?.classList.remove('active');
+            tabBtnAnalytics?.classList.remove('active');
+            if (reportsInboxSection) reportsInboxSection.style.display = 'none';
+            if (detailSection) detailSection.style.display = 'none';
+            if (analyticsSection) analyticsSection.style.display = 'none';
+            if (advancedSection) advancedSection.style.display = 'block';
+
+            const activeSubBtn = document.querySelector('.adv-subnav-btn.active');
+            const target = activeSubBtn ? activeSubBtn.getAttribute('data-target') : 'adv-view-users';
+            loadAdvSubView(target);
+        }
+    }
+
+    tabBtnReports?.addEventListener('click', () => switchMainTab('reports'));
+    tabBtnAnalytics?.addEventListener('click', () => switchMainTab('analytics'));
+    tabBtnAdvanced?.addEventListener('click', () => switchMainTab('advanced'));
+
+    // Advanced Sub-Tabs Switching
+    document.querySelectorAll('.adv-subnav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-target');
+            document.querySelectorAll('.adv-subnav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            loadAdvSubView(targetId);
+        });
+    });
+
+    function loadAdvSubView(targetId) {
+        document.querySelectorAll('.adv-subview').forEach(v => {
+            if (v.id === targetId) {
+                v.style.display = 'block';
+            } else {
+                v.style.display = 'none';
+            }
+        });
+
+        if (targetId === 'adv-view-users') {
+            fetchAdminUsers();
+        } else if (targetId === 'adv-view-audit') {
+            fetchAuditLogs();
+        } else if (targetId === 'adv-view-sessions') {
+            fetchActiveSessions();
+        } else if (targetId === 'adv-view-system') {
+            fetchSystemStatus();
+        }
+    }
+
+    // -------------------------------------------------------------
+    // User Management Sub-Module
+    // -------------------------------------------------------------
+    let allAdminUsers = [];
+
+    function renderUsersTableSkeleton(count = 5) {
+        const tbody = document.getElementById('adv-users-tbody');
+        if (!tbody) return;
+        let html = '';
+        for (let i = 0; i < count; i++) {
+            html += `
+                <tr class="skeleton-tr" aria-hidden="true">
+                    <td><div class="skeleton-shimmer" style="width:24px; height:18px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:90px; height:18px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:120px; height:18px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:80px; height:20px; border-radius:10px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:70px; height:18px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:60px; height:20px; border-radius:10px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:110px; height:16px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:70px; height:26px; border-radius:6px;"></div></td>
+                </tr>
+            `;
+        }
+        tbody.innerHTML = html;
+    }
+
+    async function fetchAdminUsers() {
+        const tbody = document.getElementById('adv-users-tbody');
+        if (!tbody) return;
+        renderUsersTableSkeleton(5);
+
+        try {
+            const res = await adminFetch('/api/admin/users');
+            if (res.status === 403) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--color-danger);">دسترسی به بخش مدیریت کاربران محدود به پشتیبانی سامانه است.</td></tr>';
+                return;
+            }
+            if (!res.ok) throw new Error('خطا در دریافت کاربران');
+
+            allAdminUsers = await res.json();
+            renderUsersTable(allAdminUsers);
+
+            // Update user counts
+            const totalEl = document.getElementById('adv-users-total');
+            const activeEl = document.getElementById('adv-users-active');
+            const superEl = document.getElementById('adv-users-super');
+            if (totalEl) totalEl.textContent = toPersianNum(allAdminUsers.length);
+            if (activeEl) activeEl.textContent = toPersianNum(allAdminUsers.filter(u => u.is_active).length);
+            if (superEl) superEl.textContent = toPersianNum(allAdminUsers.filter(u => u.is_superuser).length);
+        } catch (e) {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${e.message}</td></tr>`;
+        }
+    }
+
+    // Password Complexity Validator
+    function validatePasswordComplexity(pwd) {
+        if (!pwd || pwd.length < 12) {
+            return 'رمز عبور باید حداقل ۱۲ کاراکتر باشد.';
+        }
+        if (!/[A-Z]/.test(pwd)) {
+            return 'رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی (A-Z) باشد.';
+        }
+        if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(pwd)) {
+            return 'رمز عبور باید حداقل شامل یک نماد یا کاراکتر خاص (!@#$%^&*...) باشد.';
+        }
+        return null;
+    }
+
+    function renderUsersTable(users) {
+        const tbody = document.getElementById('adv-users-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (!users || users.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--text-muted);">هیچ کاربری یافت نشد.</td></tr>';
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        users.forEach(u => {
+            const tr = document.createElement('tr');
+            const isSelf = currentAdmin && currentAdmin.username === u.username;
+
+            let actionButtons = '';
+            if (u.is_superuser) {
+                actionButtons = `
+                    <button type="button" class="btn-action btn-submit" data-action="edit-user" data-id="${u.id}" style="font-size:12px; padding:5px 10px;">
+                        ویرایش
+                    </button>
+                    <button type="button" class="btn-action btn-secondary" data-action="reset-pwd" data-id="${u.id}" data-user="${escapeHTML(u.username)}" style="font-size:12px; padding:5px 10px;">
+                        تغییر رمز
+                    </button>
+                `;
+            } else {
+                actionButtons = `
+                    <button type="button" class="btn-action btn-submit" data-action="edit-user" data-id="${u.id}" style="font-size:12px; padding:5px 10px;">
+                        ویرایش
+                    </button>
+                    <button type="button" class="btn-action btn-secondary" data-action="reset-pwd" data-id="${u.id}" data-user="${escapeHTML(u.username)}" style="font-size:12px; padding:5px 10px;">
+                        تغییر رمز
+                    </button>
+                    <button type="button" class="btn-action btn-danger" data-action="delete-user" data-id="${u.id}" data-user="${escapeHTML(u.username)}" style="font-size:12px; padding:5px 10px;">
+                        حذف
+                    </button>
+                `;
+            }
+
+            let pwdBadges = '';
+            if (u.must_change_password) {
+                pwdBadges += `<span class="badge-pwd-forced" data-tooltip="الزام به تغییر رمز در ورود بعدی"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-left:3px;"><path d="M21 2l-2 2m-1.5 1.5L14 9a5 5 0 1 0 3 3l3.5-3.5"></path><path d="M15.5 6.5l2 2"></path></svg>الزام تغییر رمز</span> `;
+            }
+            if (u.is_password_expired) {
+                pwdBadges += `<span class="badge-pwd-expired" data-tooltip="اعتبار ۳۰ روزه منقضی شده است"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-left:3px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>منقضی شده</span> `;
+            }
+
+            let roleBadge = '';
+            const userRole = u.role || (u.is_superuser ? 'superuser' : 'edare_kol');
+            if (userRole === 'superuser') {
+                roleBadge = '<span class="badge-super">مدیر ارشد سامانه</span>';
+            } else if (userRole === 'navahi_manategh') {
+                roleBadge = '<span class="badge-navahi" style="background:rgba(14, 165, 233, 0.15); color:#38bdf8; border:1px solid rgba(56, 189, 248, 0.35); font-size:11px; padding:2px 8px; border-radius:12px; font-weight:600;">نواحی و مناطق</span>';
+            } else {
+                roleBadge = '<span class="badge-edare-kol" style="background:rgba(99, 102, 241, 0.15); color:#a5b4fc; border:1px solid rgba(165, 180, 252, 0.35); font-size:11px; padding:2px 8px; border-radius:12px; font-weight:600;">اداره کل</span>';
+            }
+
+            tr.innerHTML = `
+                <td><strong>#${toPersianNum(u.id)}</strong></td>
+                <td><strong style="color:var(--text-main); font-weight:600;">${escapeHTML(u.full_name || '-')}</strong></td>
+                <td><span class="ltr" style="font-family:Tahoma,sans-serif; color:var(--text-muted);">${escapeHTML(u.username)}</span> ${isSelf ? '<span class="badge badge-read" style="margin-right:6px;">حساب شما</span>' : ''}</td>
+                <td>${escapeHTML(u.role_title)}</td>
+                <td>${roleBadge}</td>
+                <td>
+                    ${u.is_active ? '<span class="badge-active">فعال</span>' : '<span class="badge-inactive">مسدود / غیرفعال</span>'}
+                    ${pwdBadges ? `<div style="margin-top:4px;">${pwdBadges}</div>` : ''}
+                </td>
+                <td class="ltr" style="text-align:right;">${formatJalaliDateTime(u.created_at, false)}</td>
+                <td>
+                    <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                        ${actionButtons}
+                    </div>
+                </td>
+            `;
+
+            fragment.appendChild(tr);
+        });
+
+        tbody.appendChild(fragment);
+
+        tbody.querySelectorAll('button[data-action="edit-user"]').forEach(b => {
+            b.addEventListener('click', () => {
+                const targetId = parseInt(b.getAttribute('data-id'), 10);
+                const targetUser = allAdminUsers.find(u => u.id === targetId);
+                if (targetUser) openEditUserModal(targetUser);
+            });
+        });
+        tbody.querySelectorAll('button[data-action="reset-pwd"]').forEach(b => {
+            b.addEventListener('click', () => openResetPwdModal(b.getAttribute('data-id'), b.getAttribute('data-user')));
+        });
+        tbody.querySelectorAll('button[data-action="delete-user"]').forEach(b => {
+            b.addEventListener('click', () => deleteUser(b.getAttribute('data-id'), b.getAttribute('data-user')));
+        });
+    }
+
+    function escapeHTML(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>'"]/g, tag => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        }[tag] || tag));
+    }
+
+    async function deleteUser(userId, username) {
+        const confirmed = await showConfirmDialog({
+            title: 'حذف حساب کاربری مدیر',
+            description: `آیا از حذف دائم حساب کاربری «${username}» اطمینان دارید؟ این عملیات غیرقابل بازگشت است و دسترسی کاربر فوراً قطع خواهد شد.`,
+            confirmText: 'بله، حذف حساب کاربری',
+            cancelText: 'انصراف',
+            variant: 'danger',
+            iconType: 'user-x'
+        });
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const res = await adminFetch('/api/admin/users/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: parseInt(userId, 10) })
+            });
+            if (res.ok) {
+                showToast(`کاربر "${username}" با موفقیت حذف گردید`);
+                fetchAdminUsers();
+            } else {
+                const err = await res.text();
+                showToast(`خطا: ${err}`);
+            }
+        } catch (e) {
+            showToast('خطای ارتباط با سرور.');
+        }
+    }
+
+    const modalCreateUser = document.getElementById('modal-create-user');
+    const modalEditUser = document.getElementById('modal-edit-user');
+    const modalResetPassword = document.getElementById('modal-reset-password');
+    const btnOpenCreateUser = document.getElementById('btn-open-create-user-modal');
+    const btnCloseCreateUser = document.getElementById('btn-close-create-user-modal');
+    const btnCancelCreateUser = document.getElementById('btn-cancel-create-user');
+    const formCreateUser = document.getElementById('form-create-user');
+
+    const btnCloseEditUser = document.getElementById('btn-close-edit-user-modal');
+    const btnCancelEditUser = document.getElementById('btn-cancel-edit-user');
+    const formEditUser = document.getElementById('form-edit-user');
+
+    const btnCloseResetPwd = document.getElementById('btn-close-reset-pwd-modal');
+    const btnCancelResetPwd = document.getElementById('btn-cancel-reset-pwd');
+    const formResetPwd = document.getElementById('form-reset-password');
+
+    const toggleNewPasswordBtn = document.getElementById('toggleNewPasswordBtn');
+    const newPasswordInput = document.getElementById('new_password');
+    const eyeShowNew = document.getElementById('eye-icon-show-new');
+    const eyeHideNew = document.getElementById('eye-icon-hide-new');
+
+    if (toggleNewPasswordBtn && newPasswordInput) {
+        toggleNewPasswordBtn.addEventListener('click', () => {
+            const isPassword = newPasswordInput.type === 'password';
+            newPasswordInput.type = isPassword ? 'text' : 'password';
+            if (eyeShowNew && eyeHideNew) {
+                eyeShowNew.classList.toggle('d-none', isPassword);
+                eyeHideNew.classList.toggle('d-none', !isPassword);
+            }
+        });
+    }
+
+    const toggleNewPasswordConfirmBtn = document.getElementById('toggleNewPasswordConfirmBtn');
+    const newPasswordConfirmInput = document.getElementById('new_password_confirm');
+    const eyeShowNewConfirm = document.getElementById('eye-icon-show-new-confirm');
+    const eyeHideNewConfirm = document.getElementById('eye-icon-hide-new-confirm');
+
+    if (toggleNewPasswordConfirmBtn && newPasswordConfirmInput) {
+        toggleNewPasswordConfirmBtn.addEventListener('click', () => {
+            const isPassword = newPasswordConfirmInput.type === 'password';
+            newPasswordConfirmInput.type = isPassword ? 'text' : 'password';
+            if (eyeShowNewConfirm && eyeHideNewConfirm) {
+                eyeShowNewConfirm.classList.toggle('d-none', isPassword);
+                eyeHideNewConfirm.classList.toggle('d-none', !isPassword);
+            }
+        });
+    }
+
+    function resetNewUserPasswordToggles() {
+        if (newPasswordInput) newPasswordInput.type = 'password';
+        if (eyeShowNew) eyeShowNew.classList.remove('d-none');
+        if (eyeHideNew) eyeHideNew.classList.add('d-none');
+
+        if (newPasswordConfirmInput) newPasswordConfirmInput.type = 'password';
+        if (eyeShowNewConfirm) eyeShowNewConfirm.classList.remove('d-none');
+        if (eyeHideNewConfirm) eyeHideNewConfirm.classList.add('d-none');
+    }
+
+    btnOpenCreateUser?.addEventListener('click', () => {
+        formCreateUser?.reset();
+        resetNewUserPasswordToggles();
+        const status = document.getElementById('create-user-status');
+        if (status) status.style.display = 'none';
+        if (modalCreateUser) modalCreateUser.style.display = 'flex';
+    });
+
+    const closeCreateUserModal = () => {
+        if (modalCreateUser) modalCreateUser.style.display = 'none';
+        resetNewUserPasswordToggles();
+    };
+    btnCloseCreateUser?.addEventListener('click', closeCreateUserModal);
+    btnCancelCreateUser?.addEventListener('click', closeCreateUserModal);
+
+    function openEditUserModal(user) {
+        if (!user) return;
+        formEditUser?.reset();
+        const idInput = document.getElementById('edit_user_id');
+        const userInput = document.getElementById('edit_username');
+        const nameInput = document.getElementById('edit_full_name');
+        const roleInput = document.getElementById('edit_role_title');
+        const roleSelect = document.getElementById('edit_role');
+        const activeSelect = document.getElementById('edit_is_active');
+        const activeContainer = document.getElementById('edit_active_container');
+        const forcePwdCheckbox = document.getElementById('edit_must_change_pwd');
+        const statusEl = document.getElementById('edit-user-status');
+
+        if (idInput) idInput.value = user.id;
+        if (userInput) userInput.value = user.username;
+        if (nameInput) nameInput.value = user.full_name || '';
+        if (roleInput) roleInput.value = user.role_title || '';
+        if (roleSelect) {
+            roleSelect.value = user.role || (user.is_superuser ? 'superuser' : 'edare_kol');
+        }
+        if (forcePwdCheckbox) forcePwdCheckbox.checked = !!user.must_change_password;
+
+        if (user.is_superuser) {
+            if (activeSelect) activeSelect.value = 'true';
+            if (activeContainer) activeContainer.style.display = 'none';
+        } else {
+            if (activeContainer) activeContainer.style.display = 'block';
+            if (activeSelect) activeSelect.value = user.is_active ? 'true' : 'false';
+        }
+
+        if (statusEl) statusEl.style.display = 'none';
+        if (modalEditUser) modalEditUser.style.display = 'flex';
+    }
+
+    const closeEditUserModal = () => { if (modalEditUser) modalEditUser.style.display = 'none'; };
+    btnCloseEditUser?.addEventListener('click', closeEditUserModal);
+    btnCancelEditUser?.addEventListener('click', closeEditUserModal);
+
+    formEditUser?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('btn-submit-edit-user');
+        const btnText = submitBtn?.querySelector('.btn-text');
+        const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+        const statusEl = document.getElementById('edit-user-status');
+
+        const userId = parseInt(document.getElementById('edit_user_id')?.value, 10);
+        const fullName = document.getElementById('edit_full_name')?.value.trim();
+        const roleTitle = document.getElementById('edit_role_title')?.value.trim();
+        const role = document.getElementById('edit_role')?.value || 'edare_kol';
+        const isActive = document.getElementById('edit_is_active')?.value === 'true';
+        const mustChangePwd = document.getElementById('edit_must_change_pwd')?.checked || false;
+
+        if (submitBtn) submitBtn.disabled = true;
+        if (btnText) btnText.textContent = 'در حال ذخیره...';
+        if (btnSpinner) btnSpinner.classList.remove('d-none');
+        if (statusEl) statusEl.style.display = 'none';
+
+        try {
+            const res = await adminFetch('/api/admin/users/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user_id: userId,
+                    full_name: fullName,
+                    role_title: roleTitle,
+                    role: role,
+                    is_active: isActive,
+                    must_change_password: mustChangePwd
+                })
+            });
+
+            if (res.ok) {
+                showToast(`اطلاعات کاربر "${fullName}" با موفقیت بروزرسانی شد`);
+                closeEditUserModal();
+                fetchAdminUsers();
+                if (currentAdmin && currentAdmin.id === userId) {
+                    await checkAdminProfile();
+                }
+            } else {
+                const err = await res.text();
+                if (statusEl) {
+                    statusEl.textContent = err || 'خطا در ویرایش کاربر.';
+                    statusEl.style.display = 'block';
+                }
+            }
+        } catch (err) {
+            if (statusEl) {
+                statusEl.textContent = 'خطای ارتباط با سرور.';
+                statusEl.style.display = 'block';
+            }
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+            if (btnText) btnText.textContent = 'ذخیره تغییرات';
+            if (btnSpinner) btnSpinner.classList.add('d-none');
+        }
+    });
+
+    formCreateUser?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('btn-submit-create-user');
+        const btnText = submitBtn?.querySelector('.btn-text');
+        const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+        const statusEl = document.getElementById('create-user-status');
+
+        const passwordVal = document.getElementById('new_password')?.value.trim();
+        const passwordConfirmVal = document.getElementById('new_password_confirm')?.value.trim();
+
+        if (passwordVal !== passwordConfirmVal) {
+            if (statusEl) {
+                statusEl.textContent = 'کلمه عبور با تکرار آن مطابقت ندارد.';
+                statusEl.style.display = 'block';
+            }
+            return;
+        }
+
+        const pwdError = validatePasswordComplexity(passwordVal);
+        if (pwdError) {
+            if (statusEl) {
+                statusEl.textContent = pwdError;
+                statusEl.style.display = 'block';
+            }
+            return;
+        }
+
+        if (submitBtn) submitBtn.disabled = true;
+        if (btnText) btnText.textContent = 'در حال ثبت...';
+        if (btnSpinner) btnSpinner.classList.remove('d-none');
+        if (statusEl) statusEl.style.display = 'none';
+
+        const payload = {
+            full_name: document.getElementById('new_full_name')?.value.trim(),
+            username: document.getElementById('new_username')?.value.trim(),
+            password: passwordVal,
+            role_title: document.getElementById('new_role_title')?.value.trim(),
+            role: document.getElementById('new_role')?.value || 'edare_kol',
+            must_change_password: document.getElementById('create_must_change_pwd')?.checked || false
+        };
+
+        try {
+            const res = await adminFetch('/api/admin/users/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                showToast(`کاربر "${payload.full_name || payload.username}" با موفقیت ثبت شد`);
+                closeCreateUserModal();
+                fetchAdminUsers();
+            } else {
+                const err = await res.text();
+                if (statusEl) {
+                    statusEl.textContent = err || 'خطا در ثبت کاربر.';
+                    statusEl.style.display = 'block';
+                }
+            }
+        } catch (err) {
+            if (statusEl) {
+                statusEl.textContent = 'خطای ارتباط با سرور.';
+                statusEl.style.display = 'block';
+            }
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+            if (btnText) btnText.textContent = 'ثبت کاربر';
+            if (btnSpinner) btnSpinner.classList.add('d-none');
+        }
+    });
+
+    function openResetPwdModal(userId, username) {
+        formResetPwd?.reset();
+        const idInput = document.getElementById('reset_pwd_user_id');
+        const labelEl = document.getElementById('reset_pwd_username_label');
+        const statusEl = document.getElementById('reset-pwd-status');
+
+        if (idInput) idInput.value = userId;
+        if (labelEl) labelEl.textContent = username;
+        if (statusEl) statusEl.style.display = 'none';
+        if (modalResetPassword) modalResetPassword.style.display = 'flex';
+    }
+
+    const closeResetPwdModal = () => { if (modalResetPassword) modalResetPassword.style.display = 'none'; };
+    btnCloseResetPwd?.addEventListener('click', closeResetPwdModal);
+    btnCancelResetPwd?.addEventListener('click', closeResetPwdModal);
+
+    formResetPwd?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('btn-submit-reset-pwd');
+        const btnText = submitBtn?.querySelector('.btn-text');
+        const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+        const statusEl = document.getElementById('reset-pwd-status');
+
+        const userId = parseInt(document.getElementById('reset_pwd_user_id')?.value, 10);
+        const newPassword = document.getElementById('reset_new_password')?.value.trim();
+        const mustChangePwd = document.getElementById('reset_must_change_pwd')?.checked || false;
+
+        const pwdError = validatePasswordComplexity(newPassword);
+        if (pwdError) {
+            if (statusEl) {
+                statusEl.textContent = pwdError;
+                statusEl.style.display = 'block';
+            }
+            return;
+        }
+
+        if (submitBtn) submitBtn.disabled = true;
+        if (btnText) btnText.textContent = 'در حال تغییر...';
+        if (btnSpinner) btnSpinner.classList.remove('d-none');
+        if (statusEl) statusEl.style.display = 'none';
+
+        try {
+            const res = await adminFetch('/api/admin/users/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user_id: userId,
+                    new_password: newPassword,
+                    must_change_password: mustChangePwd
+                })
+            });
+
+            if (res.ok) {
+                showToast('رمز عبور با موفقیت بروزرسانی شد');
+                closeResetPwdModal();
+                fetchAdminUsers();
+            } else {
+                const err = await res.text();
+                if (statusEl) {
+                    statusEl.textContent = err || 'خطا در تغییر پسورد.';
+                    statusEl.style.display = 'block';
+                }
+            }
+        } catch (err) {
+            if (statusEl) {
+                statusEl.textContent = 'خطای ارتباط با سرور.';
+                statusEl.style.display = 'block';
+            }
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+            if (btnText) btnText.textContent = 'ثبت رمز جدید';
+            if (btnSpinner) btnSpinner.classList.add('d-none');
+        }
+    });
+
+    const modalChangeMyPwd = document.getElementById('modal-change-my-password');
+    const btnOpenChangeMyPwd = document.getElementById('btnOpenChangeMyPwd');
+    const btnCloseChangeMyPwd = document.getElementById('btn-close-change-my-pwd-modal');
+    const btnCancelChangeMyPwd = document.getElementById('btn-cancel-change-my-pwd');
+    const formChangeMyPwd = document.getElementById('form-change-my-password');
+
+    btnOpenChangeMyPwd?.addEventListener('click', () => {
+        formChangeMyPwd?.reset();
+        const status = document.getElementById('change-my-pwd-status');
+        if (status) status.style.display = 'none';
+        if (modalChangeMyPwd) modalChangeMyPwd.style.display = 'flex';
+    });
+
+    const closeChangeMyPwdModal = () => { if (modalChangeMyPwd) modalChangeMyPwd.style.display = 'none'; };
+    btnCloseChangeMyPwd?.addEventListener('click', closeChangeMyPwdModal);
+    btnCancelChangeMyPwd?.addEventListener('click', closeChangeMyPwdModal);
+
+    formChangeMyPwd?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const curPwd = document.getElementById('my_current_password')?.value.trim();
+        const newPwd = document.getElementById('my_new_password')?.value.trim();
+        const confPwd = document.getElementById('my_confirm_password')?.value.trim();
+        const statusEl = document.getElementById('change-my-pwd-status');
+        const submitBtn = document.getElementById('btn-submit-change-my-pwd');
+        const btnText = submitBtn?.querySelector('.btn-text');
+        const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+
+        if (newPwd !== confPwd) {
+            if (statusEl) {
+                statusEl.textContent = 'کلمه عبور جدید با تکرار آن مطابقت ندارد.';
+                statusEl.style.display = 'block';
+            }
+            return;
+        }
+
+        const pwdError = validatePasswordComplexity(newPwd);
+        if (pwdError) {
+            if (statusEl) {
+                statusEl.textContent = pwdError;
+                statusEl.style.display = 'block';
+            }
+            return;
+        }
+
+        if (submitBtn) submitBtn.disabled = true;
+        if (btnText) btnText.textContent = 'در حال ذخیره...';
+        if (btnSpinner) btnSpinner.classList.remove('d-none');
+        if (statusEl) statusEl.style.display = 'none';
+
+        try {
+            const res = await adminFetch('/api/admin/change-my-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ current_password: curPwd, new_password: newPwd })
+            });
+
+            if (res.ok) {
+                showToast('کلمه عبور شما با موفقیت تغییر یافت');
+                closeChangeMyPwdModal();
+                if (currentAdmin) {
+                    currentAdmin.must_change_password = false;
+                    currentAdmin.is_password_expired = false;
+                }
+            } else {
+                const err = await res.text();
+                if (statusEl) {
+                    statusEl.textContent = err || 'خطا در تغییر رمز عبور.';
+                    statusEl.style.display = 'block';
+                }
+            }
+        } catch (err) {
+            if (statusEl) {
+                statusEl.textContent = 'خطای ارتباط با سرور.';
+                statusEl.style.display = 'block';
+            }
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+            if (btnText) btnText.textContent = 'تغییر کلمه عبور';
+            if (btnSpinner) btnSpinner.classList.add('d-none');
+        }
+    });
+
+    const modalForceChangePwd = document.getElementById('modal-force-change-password');
+    const formForceChangePwd = document.getElementById('form-force-change-password');
+    const btnForcePwdLogout = document.getElementById('btn-force-pwd-logout');
+
+    btnForcePwdLogout?.addEventListener('click', async () => {
+        try {
+            await adminFetch('/api/admin/logout', { method: 'POST' });
+        } catch (e) { }
+        document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        location.reload();
+    });
+
+    formForceChangePwd?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const curPwd = document.getElementById('force_current_password')?.value.trim();
+        const newPwd = document.getElementById('force_new_password')?.value.trim();
+        const confPwd = document.getElementById('force_confirm_password')?.value.trim();
+        const statusEl = document.getElementById('force-change-pwd-status');
+        const submitBtn = document.getElementById('btn-submit-force-change-pwd');
+        const btnText = submitBtn?.querySelector('.btn-text');
+        const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+
+        if (newPwd !== confPwd) {
+            if (statusEl) {
+                statusEl.textContent = 'کلمه عبور جدید با تکرار آن مطابقت ندارد.';
+                statusEl.style.display = 'block';
+            }
+            return;
+        }
+
+        const pwdError = validatePasswordComplexity(newPwd);
+        if (pwdError) {
+            if (statusEl) {
+                statusEl.textContent = pwdError;
+                statusEl.style.display = 'block';
+            }
+            return;
+        }
+
+        if (submitBtn) submitBtn.disabled = true;
+        if (btnText) btnText.textContent = 'در حال ثبت...';
+        if (btnSpinner) btnSpinner.classList.remove('d-none');
+        if (statusEl) statusEl.style.display = 'none';
+
+        try {
+            const res = await adminFetch('/api/admin/change-my-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ current_password: curPwd, new_password: newPwd })
+            });
+
+            if (res.ok) {
+                showToast('کلمه عبور با موفقیت تغییر یافت و ثبت گردید');
+                if (modalForceChangePwd) modalForceChangePwd.style.display = 'none';
+                if (currentAdmin) {
+                    currentAdmin.must_change_password = false;
+                    currentAdmin.is_password_expired = false;
+                }
+            } else {
+                const err = await res.text();
+                if (statusEl) {
+                    statusEl.textContent = err || 'خطا در تغییر رمز عبور.';
+                    statusEl.style.display = 'block';
+                }
+            }
+        } catch (err) {
+            if (statusEl) {
+                statusEl.textContent = 'خطای ارتباط با سرور.';
+                statusEl.style.display = 'block';
+            }
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+            if (btnText) btnText.textContent = 'ثبت کلمه عبور جدید و ورود';
+            if (btnSpinner) btnSpinner.classList.add('d-none');
+        }
+    });
+
+    const modalConcurrentAlert = document.getElementById('modal-concurrent-alert');
+    const btnAckConcurrentLogout = document.getElementById('btn-ack-concurrent-logout');
+
+    let isKickoutHandled = false;
+
+    function triggerConcurrentLoginAlert() {
+        if (isKickoutHandled) return;
+        isKickoutHandled = true;
+        clearInterval(timerInterval);
+        clearInterval(heartbeatInterval);
+
+        if (modalConcurrentAlert) {
+            modalConcurrentAlert.style.display = 'flex';
+        } else {
+            showConfirmDialog({
+                title: 'خروج همزمان از حساب کاربری',
+                description: 'یک ورود جدید با نام کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.',
+                confirmText: 'ورود مجدد به سامانه',
+                cancelText: 'بستن',
+                variant: 'danger',
+                iconType: 'shield-alert'
+            }).then(() => {
+                location.reload();
+            });
+        }
+    }
+
+    btnAckConcurrentLogout?.addEventListener('click', () => {
+        document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        location.reload();
+    });
+
+    let heartbeatInterval = null;
+    function startHeartbeat() {
+        clearInterval(heartbeatInterval);
+        heartbeatInterval = setInterval(async () => {
+            if (loginSection && loginSection.style.display !== 'none') return;
+            try {
+                const res = await adminFetch('/api/admin/me');
+                if (res.status === 401) {
+                    try {
+                        const data = await res.json();
+                        if (data && data.error === 'concurrent_login') {
+                            triggerConcurrentLoginAlert();
+                        }
+                    } catch (_) { }
+                }
+            } catch (_) { }
+        }, 8000);
+    }
+
+    let allAuditLogs = [];
+    let filteredAuditLogs = [];
+    let auditCurrentPage = 1;
+    const auditPageSize = 25;
+
+    const auditFilterSearch = document.getElementById('audit-filter-search');
+    const auditFilterAction = document.getElementById('audit-filter-action');
+    const auditFilterUser = document.getElementById('audit-filter-user');
+    const auditFilterMonth = document.getElementById('audit-filter-month');
+    const auditClearFiltersBtn = document.getElementById('audit-clear-filters');
+    const btnRefreshAudit = document.getElementById('btn-refresh-audit');
+
+    function getJalaliMonth(isoStr) {
+        if (!isoStr) return '';
+        try {
+            let d = new Date(isoStr);
+            if (TIME_OFFSET_MS) d = new Date(d.getTime() + TIME_OFFSET_MS);
+            const m = cachedJalaliMonthFormatter.format(d);
+            return m ? m.padStart(2, '0') : '';
+        } catch (e) {
+            return '';
+        }
+    }
+
+    function populateAuditUsersDropdown(logs) {
+        if (!auditFilterUser) return;
+        const currentVal = auditFilterUser.value;
+        const users = Array.from(new Set(logs.map(l => l.admin_username).filter(Boolean))).sort();
+
+        let html = '<option value="all">همه کاربران اداری</option>';
+        users.forEach(u => {
+            html += `<option value="${escapeHTML(u)}">${escapeHTML(u)}</option>`;
+        });
+        auditFilterUser.innerHTML = html;
+        if (users.includes(currentVal)) {
+            auditFilterUser.value = currentVal;
+        }
+    }
+
+    function applyAuditFiltersAndPagination(resetPage = false) {
+        if (resetPage) auditCurrentPage = 1;
+
+        const searchQuery = auditFilterSearch?.value.trim().toLowerCase() || '';
+        const actionQuery = auditFilterAction?.value || 'all';
+        const userQuery = auditFilterUser?.value || 'all';
+        const monthQuery = auditFilterMonth?.value || 'all';
+
+        filteredAuditLogs = allAuditLogs.filter(l => {
+
+            if (searchQuery) {
+                const inIp = (l.ip_address || '').toLowerCase().includes(searchQuery);
+                const inUser = (l.admin_username || '').toLowerCase().includes(searchQuery);
+                const inTitle = (l.admin_title || '').toLowerCase().includes(searchQuery);
+                const inAction = (l.action || '').toLowerCase().includes(searchQuery);
+                const inTarget = l.target_report_id ? String(l.target_report_id).includes(searchQuery) : false;
+                const inTracking = (l.target_tracking_code || '').toLowerCase().includes(searchQuery);
+                if (!inIp && !inUser && !inTitle && !inAction && !inTarget && !inTracking) return false;
+            }
+
+            if (actionQuery !== 'all') {
+                if (l.action !== actionQuery) return false;
+            }
+
+            if (userQuery !== 'all') {
+                if (l.admin_username !== userQuery) return false;
+            }
+
+            if (monthQuery !== 'all') {
+                const logMonth = getJalaliMonth(l.created_at);
+                if (logMonth !== monthQuery) return false;
+            }
+
+            return true;
+        });
+
+        const totalItems = filteredAuditLogs.length;
+        const totalPages = Math.ceil(totalItems / auditPageSize) || 1;
+        if (auditCurrentPage > totalPages) auditCurrentPage = totalPages;
+        if (auditCurrentPage < 1) auditCurrentPage = 1;
+
+        const startIdx = (auditCurrentPage - 1) * auditPageSize;
+        const endIdx = startIdx + auditPageSize;
+        const pageItems = filteredAuditLogs.slice(startIdx, endIdx);
+
+        renderAuditTable(pageItems);
+
+        const paginationInfo = document.getElementById('audit-pagination-info');
+        const pageBadge = document.getElementById('audit-current-page-badge');
+        const btnFirst = document.getElementById('btn-audit-first');
+        const btnPrev = document.getElementById('btn-audit-prev');
+        const btnNext = document.getElementById('btn-audit-next');
+        const btnLast = document.getElementById('btn-audit-last');
+
+        if (paginationInfo) {
+            if (totalItems === 0) {
+                paginationInfo.textContent = 'لاگ ۰ از ۰';
+            } else {
+                const fromNum = startIdx + 1;
+                const toNum = Math.min(endIdx, totalItems);
+                paginationInfo.textContent = `نمایش ${toPersianNum(fromNum)} تا ${toPersianNum(toNum)} از ${toPersianNum(totalItems)} لاگ`;
+            }
+        }
+
+        if (pageBadge) {
+            pageBadge.textContent = `${toPersianNum(auditCurrentPage)} / ${toPersianNum(totalPages)}`;
+        }
+
+        if (btnFirst) btnFirst.disabled = (auditCurrentPage === 1 || totalPages <= 1);
+        if (btnPrev) btnPrev.disabled = (auditCurrentPage === 1 || totalPages <= 1);
+        if (btnNext) btnNext.disabled = (auditCurrentPage === totalPages || totalPages <= 1);
+        if (btnLast) btnLast.disabled = (auditCurrentPage === totalPages || totalPages <= 1);
+    }
+
+    btnRefreshAudit?.addEventListener('click', () => fetchAuditLogs());
+    auditFilterSearch?.addEventListener('input', debounce(() => applyAuditFiltersAndPagination(true), 150));
+    auditFilterAction?.addEventListener('change', () => applyAuditFiltersAndPagination(true));
+    auditFilterUser?.addEventListener('change', () => applyAuditFiltersAndPagination(true));
+    auditFilterMonth?.addEventListener('change', () => applyAuditFiltersAndPagination(true));
+
+    auditClearFiltersBtn?.addEventListener('click', () => {
+        if (auditFilterSearch) auditFilterSearch.value = '';
+        if (auditFilterAction) auditFilterAction.value = 'all';
+        if (auditFilterUser) auditFilterUser.value = 'all';
+        if (auditFilterMonth) auditFilterMonth.value = 'all';
+        applyAuditFiltersAndPagination(true);
+    });
+
+    document.getElementById('btn-audit-first')?.addEventListener('click', () => { auditCurrentPage = 1; applyAuditFiltersAndPagination(false); });
+    document.getElementById('btn-audit-prev')?.addEventListener('click', () => { if (auditCurrentPage > 1) { auditCurrentPage--; applyAuditFiltersAndPagination(false); } });
+    document.getElementById('btn-audit-next')?.addEventListener('click', () => { auditCurrentPage++; applyAuditFiltersAndPagination(false); });
+    document.getElementById('btn-audit-last')?.addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredAuditLogs.length / auditPageSize) || 1;
+        auditCurrentPage = totalPages;
+        applyAuditFiltersAndPagination(false);
+    });
+
+    document.getElementById('adv-audit-tbody')?.addEventListener('click', async (e) => {
+        const copyBtn = e.target.closest('[data-copy-tracking]');
+        if (copyBtn) {
+            const code = copyBtn.getAttribute('data-copy-tracking');
+            if (code) {
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(code);
+                    } else {
+                        const temp = document.createElement('textarea');
+                        temp.value = code;
+                        document.body.appendChild(temp);
+                        temp.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(temp);
+                    }
+                    showToast('کد رهگیری کپی شد');
+                } catch (err) {
+                    showToast('خطا در کپی');
+                }
+            }
+        }
+    });
+
+    function renderAuditTableSkeleton(count = 6) {
+        const tbody = document.getElementById('adv-audit-tbody');
+        if (!tbody) return;
+        let html = '';
+        for (let i = 0; i < count; i++) {
+            html += `
+                <tr class="skeleton-tr" aria-hidden="true">
+                    <td><div class="skeleton-shimmer" style="width:24px; height:18px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:85px; height:18px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:95px; height:20px; border-radius:10px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:180px; height:16px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:90px; height:16px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:65px; height:18px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:110px; height:16px; border-radius:4px;"></div></td>
+                </tr>
+            `;
+        }
+        tbody.innerHTML = html;
+    }
+
+    async function fetchAuditLogs() {
+        const tbody = document.getElementById('adv-audit-tbody');
+        if (!tbody) return;
+        renderAuditTableSkeleton(6);
+
+        try {
+            const res = await adminFetch('/api/admin/audit-logs');
+            if (res.status === 403) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-danger);">دسترسی به لاگ‌های بازرسی محدود به پشتیبانی سامانه است.</td></tr>';
+                return;
+            }
+            if (!res.ok) throw new Error('خطا در دریافت لاگ‌ها');
+
+            allAuditLogs = await res.json();
+            populateAuditUsersDropdown(allAuditLogs);
+            applyAuditFiltersAndPagination(true);
+        } catch (e) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${e.message}</td></tr>`;
+        }
+    }
+
+    function renderAuditTable(logs) {
+        const tbody = document.getElementById('adv-audit-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (!logs || logs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--text-muted);">هیچ لاگ بازرسی با فیلترهای انتخابی یافت نشد.</td></tr>';
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        logs.forEach(l => {
+            const tr = document.createElement('tr');
+            const trackingCell = l.target_tracking_code ? `
+                <div class="audit-tracking-cell">
+                    <code class="audit-tracking-code ltr">${escapeHTML(l.target_tracking_code)}</code>
+                    <button type="button" class="btn-mini-copy" data-copy-tracking="${escapeHTML(l.target_tracking_code)}" data-tooltip="کپی کد رهگیری" aria-label="کپی کد رهگیری">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                </div>
+            ` : (l.target_report_id ? `<span class="ltr" style="font-family:Tahoma,sans-serif; color:var(--text-muted); font-size:12px;">#${toPersianNum(l.target_report_id)}</span>` : '<span style="color:var(--text-subtle);">-</span>');
+
+            tr.innerHTML = `
+                <td>#${toPersianNum(l.id)}</td>
+                <td class="ltr" style="text-align:right;">${formatJalaliDateTime(l.created_at, true)}</td>
+                <td><strong class="ltr" style="font-family:Tahoma,sans-serif; color:var(--text-main);">${escapeHTML(l.admin_username)}</strong></td>
+                <td>${escapeHTML(l.admin_title)}</td>
+                <td><span class="badge-action-audit">${escapeHTML(l.action)}</span></td>
+                <td>${trackingCell}</td>
+                <td class="ltr" style="font-family:monospace; color:var(--text-muted);">${escapeHTML(l.ip_address)}</td>
+            `;
+            fragment.appendChild(tr);
+        });
+
+        tbody.appendChild(fragment);
+    }
+
+    const btnRefreshSys = document.getElementById('btn-refresh-system-status');
+    btnRefreshSys?.addEventListener('click', () => fetchSystemStatus());
+
+    async function fetchSystemStatus() {
+        try {
+            const res = await adminFetch('/api/admin/system-status');
+            if (res.status === 403) return;
+            if (!res.ok) throw new Error('خطا در دریافت وضعیت سامانه');
+
+            const data = await res.json();
+
+            const dbStatusEl = document.getElementById('sys-db-status');
+            const dbConnsEl = document.getElementById('sys-db-conns');
+            const dbIdleEl = document.getElementById('sys-db-idle');
+            const dbInUseEl = document.getElementById('sys-db-inuse');
+            const dbTzEl = document.getElementById('sys-db-tz');
+            const dbTimeEl = document.getElementById('sys-db-time');
+            const activeSessEl = document.getElementById('sys-active-sessions');
+            const totalRepEl = document.getElementById('sys-total-reports');
+            const unreadRepEl = document.getElementById('sys-unread-reports');
+            const totalUsersEl = document.getElementById('sys-total-users');
+            const totalLogsEl = document.getElementById('sys-total-logs');
+
+            if (dbStatusEl) dbStatusEl.textContent = data.db_status;
+            if (dbConnsEl) dbConnsEl.textContent = toPersianNum(data.db_open_conns);
+            if (dbIdleEl) dbIdleEl.textContent = toPersianNum(data.db_idle_conns);
+            if (dbInUseEl) dbInUseEl.textContent = toPersianNum(data.db_in_use_conns);
+            if (dbTzEl) dbTzEl.textContent = data.db_timezone || 'Asia/Tehran';
+            if (dbTimeEl) dbTimeEl.textContent = formatJalaliDateTime(data.db_time, true);
+            if (activeSessEl) activeSessEl.textContent = toPersianNum(data.active_sessions);
+            if (totalRepEl) totalRepEl.textContent = toPersianNum(data.total_reports);
+            if (unreadRepEl) unreadRepEl.textContent = toPersianNum(data.unread_reports);
+            if (totalUsersEl) totalUsersEl.textContent = toPersianNum(data.total_users);
+            if (totalLogsEl) totalLogsEl.textContent = toPersianNum(data.total_audit_logs);
+
+            showToast('وضعیت سلامت سامانه بروزرسانی شد');
+        } catch (e) {
+            showToast('خطا در دریافت تله‌متری سیستم');
+        }
+    }
+
+    const btnRefreshSessions = document.getElementById('btn-refresh-active-sessions');
+    btnRefreshSessions?.addEventListener('click', () => fetchActiveSessions());
+
+    let allActiveSessions = [];
+
+    function renderSessionsTableSkeleton(count = 5) {
+        const tbody = document.getElementById('adv-sessions-tbody');
+        if (!tbody) return;
+        let html = '';
+        for (let i = 0; i < count; i++) {
+            html += `
+                <tr class="skeleton-tr" aria-hidden="true">
+                    <td><div class="skeleton-shimmer" style="width:24px; height:18px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:80px; height:18px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:110px; height:18px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:75px; height:20px; border-radius:10px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:85px; height:16px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:90px; height:16px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:105px; height:16px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:105px; height:16px; border-radius:4px;"></div></td>
+                    <td><div class="skeleton-shimmer" style="width:70px; height:26px; border-radius:6px;"></div></td>
+                </tr>
+            `;
+        }
+        tbody.innerHTML = html;
+    }
+
+    async function fetchActiveSessions() {
+        const tbody = document.getElementById('adv-sessions-tbody');
+        if (!tbody) return;
+        renderSessionsTableSkeleton(5);
+
+        try {
+            const res = await adminFetch('/api/admin/sessions');
+            if (res.status === 403) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--color-danger);">دسترسی به اطلاعات نشست‌ها محدود به پشتیبانی سامانه است.</td></tr>';
+                return;
+            }
+            if (!res.ok) throw new Error('خطا در دریافت نشست‌های فعال');
+
+            allActiveSessions = await res.json();
+            renderSessionsTable(allActiveSessions);
+
+            const totalEl = document.getElementById('adv-sess-total');
+            const superEl = document.getElementById('adv-sess-super');
+            const ipsEl = document.getElementById('adv-sess-ips');
+
+            if (totalEl) totalEl.textContent = toPersianNum(allActiveSessions.length);
+            if (superEl) superEl.textContent = toPersianNum(allActiveSessions.filter(s => s.is_superuser).length);
+            const uniqueIPs = new Set(allActiveSessions.map(s => s.ip)).size;
+            if (ipsEl) ipsEl.textContent = toPersianNum(uniqueIPs);
+
+            showToast('لیست نشست‌های فعال بروزرسانی شد');
+        } catch (e) {
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${e.message}</td></tr>`;
+        }
+    }
+
+    function renderSessionsTable(sessions) {
+        const tbody = document.getElementById('adv-sessions-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (!sessions || sessions.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--text-muted);">هیچ نشست فعالی در حافظه سرور یافت نشد.</td></tr>';
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        sessions.forEach(s => {
+            const tr = document.createElement('tr');
+            const isSelf = currentAdmin && currentAdmin.username === s.username;
+
+            const ttlMinutes = Math.floor(s.ttl_seconds / 60);
+            const ttlSecs = s.ttl_seconds % 60;
+            const ttlDisplay = `${toPersianNum(ttlMinutes)} دقیقه و ${toPersianNum(ttlSecs)} ثانیه`;
+
+            const uaSummary = parseUserAgent(s.user_agent);
+
+            tr.innerHTML = `
+                <td>
+                    <span class="badge" style="font-family:monospace; background:rgba(15,23,42,0.8); border:1px solid var(--border-subtle); color:#38bdf8;">
+                        ${escapeHTML(s.session_id)}
+                    </span>
+                    ${isSelf ? '<div style="margin-top:4px;"><span class="badge badge-read">نشست فعلی شما</span></div>' : ''}
+                </td>
+                <td>
+                    <strong style="color:var(--text-main); font-weight:600;">${escapeHTML(s.full_name || s.username)}</strong>
+                    <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">${escapeHTML(s.role_title || '-')}</div>
+                </td>
+                <td>
+                    <span class="ltr" style="font-family:Tahoma,sans-serif; color:var(--text-muted);">${escapeHTML(s.username)}</span>
+                    <div style="margin-top:3px;">
+                        ${s.is_superuser ? '<span class="badge-super">پشتیبانی سامانه</span>' : '<span class="badge-standard">کارشناس</span>'}
+                    </div>
+                </td>
+                <td>
+                    <span class="ltr" style="font-family:monospace; color:#86efac; font-weight:600;">${escapeHTML(s.ip)}</span>
+                </td>
+                <td style="max-width: 240px;">
+                    <div style="font-size:12.5px; color:#e2e8f0; font-weight:500;">${escapeHTML(uaSummary.client)}</div>
+                    <div class="ltr" style="font-size:11px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:230px;" data-tooltip="${escapeHTML(s.user_agent)}">
+                        ${escapeHTML(s.user_agent)}
+                    </div>
+                </td>
+                <td class="ltr" style="text-align:right; font-size:12px;">
+                    ${formatJalaliDateTime(s.created_at, true)}
+                </td>
+                <td class="ltr" style="text-align:right; font-size:12px;">
+                    ${formatJalaliDateTime(s.last_active, true)}
+                </td>
+                <td>
+                    <span class="badge" style="background:rgba(245,158,11,0.15); color:#fbbf24; border:1px solid rgba(245,158,11,0.3); font-weight:600; display:inline-flex; align-items:center; gap:4px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        ${ttlDisplay}
+                    </span>
+                </td>
+                <td>
+                    ${isSelf ? `
+                        <span style="font-size:12px; color:var(--text-muted);">غیرقابل لغو</span>
+                    ` : `
+                        <button type="button" class="btn-action btn-danger" data-action="terminate-session" data-token="${escapeHTML(s.token)}" data-user="${escapeHTML(s.username)}" style="font-size:12px; padding:5px 10px;">
+                            خاتمه نشست
+                        </button>
+                    `}
+                </td>
+            `;
+
+            fragment.appendChild(tr);
+        });
+
+        tbody.appendChild(fragment);
+
+        tbody.querySelectorAll('button[data-action="terminate-session"]').forEach(b => {
+            b.addEventListener('click', () => {
+                const token = b.getAttribute('data-token');
+                const username = b.getAttribute('data-user');
+                terminateSession(token, username);
+            });
+        });
+    }
+
+    async function terminateSession(token, username) {
+        const confirmed = await showConfirmDialog({
+            title: 'قطع دسترسی و خاتمه فوری نشست',
+            description: `آیا از قطع دسترسی و خاتمه فوری نشست کاربر «${username}» اطمینان دارید؟ نشست کاربر بلافاصله باطل شده و از سامانه خارج می‌گردد.`,
+            confirmText: 'بله، خاتمه نشست',
+            cancelText: 'انصراف',
+            variant: 'danger',
+            iconType: 'shield-alert'
+        });
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const res = await adminFetch('/api/admin/sessions/terminate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: token })
+            });
+
+            if (res.ok) {
+                showToast(`نشست کاربر "${username}" با موفقیت قطع و لغو گردید`);
+                fetchActiveSessions();
+            } else {
+                const err = await res.text();
+                showToast(`خطا: ${err}`);
+            }
+        } catch (e) {
+            showToast('خطای ارتباط با سرور.');
+        }
+    }
+
+    function parseUserAgent(ua) {
+        if (!ua) return { client: 'نامشخص' };
+        let browser = 'مرورگر ناشناس';
+        let os = 'سیستم‌عامل ناشناس';
+
+        if (ua.includes('Windows NT 10.0')) os = 'ویندوز ۱۰ / ۱۱';
+        else if (ua.includes('Windows')) os = 'ویندوز';
+        else if (ua.includes('Linux')) os = 'لینوکس';
+        else if (ua.includes('Macintosh') || ua.includes('Mac OS')) os = 'macOS';
+        else if (ua.includes('Android')) os = 'اندروید';
+        else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+
+        if (ua.includes('Edg/')) browser = 'Microsoft Edge';
+        else if (ua.includes('Chrome/') && !ua.includes('Edg/')) browser = 'Google Chrome';
+        else if (ua.includes('Firefox/')) browser = 'Mozilla Firefox';
+        else if (ua.includes('Safari/') && !ua.includes('Chrome/')) browser = 'Apple Safari';
+
+        return { client: `${browser} روی ${os}` };
+    }
+
+    let allNotifications = [];
+    let previousNotifUnreadCount = -1;
+    const btnNotifBell = document.getElementById('btnNotifBell');
+    const notifDropdown = document.getElementById('notifDropdown');
+    const notifBadgeCount = document.getElementById('notifBadgeCount');
+    const notifUnreadTag = document.getElementById('notifUnreadTag');
+    const notifListContainer = document.getElementById('notifListContainer');
+    const btnMarkAllNotifsRead = document.getElementById('btnMarkAllNotifsRead');
+
+    async function fetchNotifications() {
+        if (!dashboardSection || dashboardSection.style.display === 'none') return;
+
+        try {
+            const res = await adminFetch('/api/admin/notifications');
+            if (res.status === 401) return;
+            if (!res.ok) return;
+
+            const data = await res.json();
+            allNotifications = data.notifications || [];
+            const unreadCount = data.unread_count || 0;
+
+            if (notifBadgeCount) {
+                if (unreadCount > 0) {
+                    notifBadgeCount.textContent = toPersianNum(unreadCount);
+                    notifBadgeCount.classList.remove('d-none');
+                } else {
+                    notifBadgeCount.textContent = '۰';
+                    notifBadgeCount.classList.add('d-none');
+                }
+            }
+
+            if (notifUnreadTag) {
+                notifUnreadTag.textContent = `${toPersianNum(unreadCount)} جدید`;
+            }
+
+            if (previousNotifUnreadCount !== -1 && unreadCount > previousNotifUnreadCount) {
+                if (btnNotifBell) {
+                    btnNotifBell.classList.remove('bell-shake');
+                    void btnNotifBell.offsetWidth;
+                    btnNotifBell.classList.add('bell-shake');
+                }
+            }
+            previousNotifUnreadCount = unreadCount;
+
+            // Performance: Only render the notification list if dropdown is currently visible
+            if (notifDropdown && notifDropdown.style.display === 'block') {
+                renderNotificationsList(allNotifications);
+            }
+        } catch (e) {
+            console.error('Failed to fetch notifications', e);
+        }
+    }
+
+    function renderNotificationsList(notifs) {
+        if (!notifListContainer) return;
+        notifListContainer.innerHTML = '';
+
+        if (!notifs || notifs.length === 0) {
+            notifListContainer.innerHTML = `
+                <div class="notif-empty-state">
+                    <div class="notif-empty-icon">
+                        <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                    </div>
+                    <div class="notif-empty-text">هیچ اعلانی در سیستم ثبت نشده است.</div>
+                </div>
+            `;
+            return;
+        }
+
+        // Set up event delegation on notifListContainer once
+        if (notifListContainer && !notifListContainer._perfDelegated) {
+            notifListContainer._perfDelegated = true;
+            notifListContainer.addEventListener('click', async (e) => {
+                const item = e.target.closest('.notif-item');
+                if (!item) return;
+
+                const notifId = parseInt(item.getAttribute('data-id'), 10);
+                const targetReportId = item.getAttribute('data-report-id');
+                const isUnread = item.classList.contains('unread');
+
+                if (isUnread && !isNaN(notifId)) {
+                    try {
+                        await adminFetch('/api/admin/notifications/mark-read', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: notifId })
+                        });
+                        item.classList.remove('unread');
+                        item.querySelector('.notif-dot-unread')?.remove();
+                        const nObj = allNotifications.find(n => n.id === notifId);
+                        if (nObj) nObj.is_read = true;
+                        fetchNotifications();
+                    } catch (err) { }
+                }
+
+                if (notifDropdown) notifDropdown.style.display = 'none';
+
+                if (targetReportId) {
+                    const repIdNum = parseInt(targetReportId, 10);
+                    if (!isNaN(repIdNum)) {
+                        switchMainTab('reports');
+                        viewReport(repIdNum);
+                    }
+                }
+            });
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        notifs.forEach(n => {
+            const item = document.createElement('div');
+            item.className = `notif-item ${!n.is_read ? 'unread' : ''}`;
+            item.setAttribute('data-id', n.id);
+            if (n.target_report_id) {
+                item.setAttribute('data-report-id', n.target_report_id);
+            }
+
+            const isReply = n.notif_type === 'new_reply';
+            const isForward = n.notif_type === 'report_forwarded';
+            const isRegionalResponse = n.notif_type === 'regional_response';
+            let iconHTML = '';
+            if (isRegionalResponse) {
+                iconHTML = `
+                    <div class="notif-icon-box notif-icon-regional" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <polyline points="16 11 18 13 22 9"></polyline>
+                        </svg>
+                    </div>
+                `;
+            } else if (isForward) {
+                iconHTML = `
+                    <div class="notif-icon-box notif-icon-forward" style="background: rgba(14, 165, 233, 0.15); color: #38bdf8;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <polyline points="16 6 12 2 8 6"></polyline>
+                            <line x1="12" y1="2" x2="12" y2="15"></line>
+                        </svg>
+                    </div>
+                `;
+            } else if (isReply) {
+                iconHTML = `
+                    <div class="notif-icon-box notif-icon-reply">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                `;
+            } else {
+                iconHTML = `
+                    <div class="notif-icon-box notif-icon-report">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                    </div>
+                `;
+            }
+
+            item.innerHTML = `
+                ${iconHTML}
+                <div class="notif-content">
+                    <div class="notif-item-header">
+                        <div class="notif-item-title">${escapeHTML(n.title)}</div>
+                        ${!n.is_read ? '<span class="notif-dot-unread" data-tooltip="خوانده‌نشده"></span>' : ''}
+                    </div>
+                    <div class="notif-item-msg">${escapeHTML(n.message)}</div>
+                    <div class="notif-item-meta">
+                        <span>${formatJalaliDateTime(n.created_at, true)}</span>
+                        ${n.target_tracking_code ? `<span class="ltr font-mono" style="color: #38bdf8;">${escapeHTML(n.target_tracking_code)}</span>` : ''}
+                    </div>
+                </div>
+            `;
+
+            fragment.appendChild(item);
+        });
+
+        notifListContainer.appendChild(fragment);
+    }
+
+    if (btnNotifBell) {
+        btnNotifBell.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!notifDropdown) return;
+            const isShown = notifDropdown.style.display === 'block';
+            notifDropdown.style.display = isShown ? 'none' : 'block';
+            if (!isShown) {
+                renderNotificationsList(allNotifications);
+                fetchNotifications();
+            }
+        });
+    }
+
+    document.addEventListener('click', (e) => {
+        if (notifDropdown && notifDropdown.style.display === 'block') {
+            if (!notifDropdown.contains(e.target) && !btnNotifBell.contains(e.target)) {
+                notifDropdown.style.display = 'none';
+            }
+        }
+    });
+
+    if (btnMarkAllNotifsRead) {
+        btnMarkAllNotifsRead.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            try {
+                const res = await adminFetch('/api/admin/notifications/mark-all-read', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (res.ok) {
+                    showToast('تمامی اعلان‌ها خوانده شدند');
+                    await fetchNotifications();
+                }
+            } catch (e) {
+                showToast('خطا در علامت‌گذاری اعلان‌ها');
+            }
+        });
+    }
+
+    // =========================================================================
+    // 13. Report Forwarding (ارجاع خبر) & Visual Flowchart History Module
+    // =========================================================================
+
+    let cachedForwardingRecipients = null;
+    let selectedRecipientUsernames = new Set();
+    let currentForwardReportId = null;
+
+    // --- Forwarding Modal ---
+    const modalForward = document.getElementById('modal-forward-report');
+    const btnCloseForward = document.getElementById('btn-close-forward-modal');
+    const btnCancelForward = document.getElementById('btn-cancel-forward');
+    const formForward = document.getElementById('form-forward-report');
+    const forwardSearchInput = document.getElementById('forward-search-input');
+    const btnSelectAllRecipients = document.getElementById('btn-select-all-recipients');
+    const btnDeselectAllRecipients = document.getElementById('btn-deselect-all-recipients');
+    const forwardSelectedCount = document.getElementById('forward-selected-count');
+    const forwardRecipientsContainer = document.getElementById('forward-recipients-container');
+    const forwardStatusMsg = document.getElementById('forward-status-msg');
+    const forwardModalTrackingCode = document.getElementById('forward-modal-tracking-code');
+
+    function closeForwardModal() {
+        if (modalForward) modalForward.style.display = 'none';
+        selectedRecipientUsernames.clear();
+        currentForwardReportId = null;
+        if (forwardSearchInput) forwardSearchInput.value = '';
+        if (forwardStatusMsg) forwardStatusMsg.style.display = 'none';
+    }
+
+    btnCloseForward?.addEventListener('click', closeForwardModal);
+    btnCancelForward?.addEventListener('click', closeForwardModal);
+    modalForward?.addEventListener('click', (e) => {
+        if (e.target === modalForward) closeForwardModal();
+    });
+
+    async function fetchForwardingRecipients() {
+        try {
+            const res = await adminFetch('/api/admin/forwarding-recipients');
+            if (res.ok) {
+                cachedForwardingRecipients = await res.json();
+                return cachedForwardingRecipients;
+            }
+        } catch (e) {
+            console.error('Failed to fetch forwarding recipients:', e);
+        }
+        return [];
+    }
+
+    function updateSelectedRecipientsCounter() {
+        if (forwardSelectedCount) {
+            forwardSelectedCount.textContent = toPersianNum(selectedRecipientUsernames.size);
+        }
+    }
+
+    function renderRecipientList(searchTerm = '') {
+        if (!forwardRecipientsContainer) return;
+        forwardRecipientsContainer.innerHTML = '';
+
+        if (!cachedForwardingRecipients || cachedForwardingRecipients.length === 0) {
+            forwardRecipientsContainer.innerHTML = `
+                <div style="text-align:center; padding:25px; color:var(--text-muted); font-size:13px;">
+                    هیچ کاربری با نقش «نواحی و مناطق» در سامانه تعریف نشده است.
+                </div>
+            `;
+            return;
+        }
+
+        const normSearch = normalizePersianForSearch(searchTerm.trim());
+        const filtered = cachedForwardingRecipients.filter(u => {
+            if (!normSearch) return true;
+            const normName = normalizePersianForSearch(u.full_name || '');
+            const normTitle = normalizePersianForSearch(u.role_title || '');
+            return normName.includes(normSearch) || normTitle.includes(normSearch);
+        });
+
+        if (filtered.length === 0) {
+            forwardRecipientsContainer.innerHTML = `
+                <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">
+                    کارشناسی با مشخصات جستجو شده یافت نشد.
+                </div>
+            `;
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        filtered.forEach(u => {
+            const item = document.createElement('label');
+            const isChecked = selectedRecipientUsernames.has(u.username);
+            item.className = `forward-recipient-item ${isChecked ? 'selected' : ''}`;
+            item.style.display = 'flex';
+            item.style.alignItems = 'center';
+            item.style.justifyContent = 'space-between';
+            item.style.padding = '10px 14px';
+            item.style.margin = '4px 0';
+            item.style.borderRadius = 'var(--radius-md, 8px)';
+            item.style.border = '1px solid var(--border-subtle, rgba(255,255,255,0.08))';
+            item.style.background = isChecked ? 'rgba(56, 189, 248, 0.12)' : 'rgba(255,255,255,0.02)';
+            item.style.cursor = 'pointer';
+            item.style.transition = 'all 0.15s ease';
+
+            // Display ONLY Full Name and District/Position Title - NEVER EXPOSE USERNAME (Requirement 9)
+            item.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <input type="checkbox" class="recipient-checkbox" value="${escapeHTML(u.username)}" ${isChecked ? 'checked' : ''} style="width: 17px; height: 17px; accent-color: var(--color-primary, #0ea5e9); cursor: pointer;">
+                    <div>
+                        <div class="recipient-fullname" style="font-weight: 600; font-size: 13.5px; color: var(--text-main);">
+                            ${escapeHTML(u.full_name || 'کارشناس حراست')}
+                        </div>
+                        <div class="recipient-roletitle" style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                            ${escapeHTML(u.role_title || 'ناحیه / منطقه')}
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-regional-pill" style="font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
+                    نواحی و مناطق
+                </span>
+            `;
+
+            const cb = item.querySelector('.recipient-checkbox');
+            cb.addEventListener('change', (e) => {
+                if (cb.checked) {
+                    selectedRecipientUsernames.add(u.username);
+                    item.classList.add('selected');
+                    item.style.background = 'rgba(56, 189, 248, 0.12)';
+                } else {
+                    selectedRecipientUsernames.delete(u.username);
+                    item.classList.remove('selected');
+                    item.style.background = 'rgba(255,255,255,0.02)';
+                }
+                updateSelectedRecipientsCounter();
+            });
+
+            fragment.appendChild(item);
+        });
+
+        forwardRecipientsContainer.appendChild(fragment);
+    }
+
+    forwardSearchInput?.addEventListener('input', () => {
+        renderRecipientList(forwardSearchInput.value);
+    });
+
+    btnSelectAllRecipients?.addEventListener('click', () => {
+        if (!cachedForwardingRecipients) return;
+        const normSearch = normalizePersianForSearch(forwardSearchInput ? forwardSearchInput.value.trim() : '');
+        cachedForwardingRecipients.forEach(u => {
+            if (!normSearch) {
+                selectedRecipientUsernames.add(u.username);
+            } else {
+                const normName = normalizePersianForSearch(u.full_name || '');
+                const normTitle = normalizePersianForSearch(u.role_title || '');
+                if (normName.includes(normSearch) || normTitle.includes(normSearch)) {
+                    selectedRecipientUsernames.add(u.username);
+                }
+            }
+        });
+        renderRecipientList(forwardSearchInput ? forwardSearchInput.value : '');
+        updateSelectedRecipientsCounter();
+    });
+
+    btnDeselectAllRecipients?.addEventListener('click', () => {
+        selectedRecipientUsernames.clear();
+        renderRecipientList(forwardSearchInput ? forwardSearchInput.value : '');
+        updateSelectedRecipientsCounter();
+    });
+
+    function renderRecipientListSkeleton(count = 4) {
+        if (!forwardRecipientsContainer) return;
+        let html = '';
+        for (let i = 0; i < count; i++) {
+            html += `
+                <div class="recipient-select-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-bottom:1px solid rgba(255,255,255,0.05); pointer-events:none;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div class="skeleton-shimmer" style="width:16px; height:16px; border-radius:4px;"></div>
+                        <div style="display:flex; flex-direction:column; gap:6px;">
+                            <div class="skeleton-shimmer" style="width:120px; height:14px; border-radius:4px;"></div>
+                            <div class="skeleton-shimmer" style="width:80px; height:11px; border-radius:4px;"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-shimmer" style="width:75px; height:20px; border-radius:10px;"></div>
+                </div>
+            `;
+        }
+        forwardRecipientsContainer.innerHTML = html;
+    }
+
+    async function openForwardModal(reportId, trackingCode) {
+        currentForwardReportId = reportId;
+        selectedRecipientUsernames.clear();
+        updateSelectedRecipientsCounter();
+
+        if (forwardModalTrackingCode) {
+            forwardModalTrackingCode.textContent = trackingCode || `#${reportId}`;
+        }
+        if (forwardStatusMsg) forwardStatusMsg.style.display = 'none';
+        if (forwardSearchInput) forwardSearchInput.value = '';
+
+        if (modalForward) modalForward.style.display = 'flex';
+
+        if (!cachedForwardingRecipients) {
+            renderRecipientListSkeleton(4);
+        }
+
+        await fetchForwardingRecipients();
+        renderRecipientList();
+    }
+
+    formForward?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentForwardReportId) return;
+
+        if (selectedRecipientUsernames.size === 0) {
+            if (forwardStatusMsg) {
+                forwardStatusMsg.textContent = 'لطفاً حداقل یک کارشناس از نواحی و مناطق را برای ارجاع خبر انتخاب فرمایید.';
+                forwardStatusMsg.className = 'response-box text-danger';
+                forwardStatusMsg.style.display = 'block';
+            } else {
+                showToast('لطفاً حداقل یک کارشناس را انتخاب فرمایید', 3000, 'error');
+            }
+            return;
+        }
+
+        const submitBtn = document.getElementById('btn-submit-forward');
+        const btnText = submitBtn?.querySelector('.btn-text');
+        const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+
+        if (submitBtn) submitBtn.disabled = true;
+        if (btnText) btnText.textContent = 'در حال ثبت ارجاع...';
+        if (btnSpinner) btnSpinner.classList.remove('d-none');
+        if (forwardStatusMsg) forwardStatusMsg.style.display = 'none';
+
+        try {
+            const res = await adminFetch('/api/admin/report/forward', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    report_id: currentForwardReportId,
+                    recipient_usernames: Array.from(selectedRecipientUsernames)
+                })
+            });
+
+            if (res.ok) {
+                const count = selectedRecipientUsernames.size;
+                showToast(`خبر با موفقیت به ${toPersianNum(count)} کارشناس ارجاع داده شد`, 3000, 'success');
+                closeForwardModal();
+            } else {
+                const err = await res.text();
+                if (forwardStatusMsg) {
+                    forwardStatusMsg.textContent = err || 'خطا در ارجاع خبر.';
+                    forwardStatusMsg.className = 'response-box text-danger';
+                    forwardStatusMsg.style.display = 'block';
+                } else {
+                    showToast(err || 'خطا در ارجاع خبر', 3500, 'error');
+                }
+            }
+        } catch (err) {
+            if (forwardStatusMsg) {
+                forwardStatusMsg.textContent = 'خطای ارتباط با سرور.';
+                forwardStatusMsg.className = 'response-box text-danger';
+                forwardStatusMsg.style.display = 'block';
+            } else {
+                showToast('خطای ارتباط با سرور', 3500, 'error');
+            }
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+            if (btnText) btnText.textContent = 'تایید و ارجاع خبر';
+            if (btnSpinner) btnSpinner.classList.add('d-none');
+        }
+    });
+
+    // --- Visual Flowchart Forwarding History Modal ---
+    const modalHistory = document.getElementById('modal-forward-history');
+    const btnCloseHistory = document.getElementById('btn-close-history-modal');
+    const btnCloseHistoryFooter = document.getElementById('btn-close-history-footer');
+    const historyModalTrackingCode = document.getElementById('history-modal-tracking-code');
+    const forwardHistoryBody = document.getElementById('forward-history-body');
+
+    function closeHistoryModal() {
+        if (modalHistory) modalHistory.style.display = 'none';
+        if (forwardHistoryBody) forwardHistoryBody.innerHTML = '';
+    }
+
+    btnCloseHistory?.addEventListener('click', closeHistoryModal);
+    btnCloseHistoryFooter?.addEventListener('click', closeHistoryModal);
+    modalHistory?.addEventListener('click', (e) => {
+        if (e.target === modalHistory) closeHistoryModal();
+    });
+
+    function renderForwardHistorySkeleton() {
+        if (!forwardHistoryBody) return;
+        forwardHistoryBody.innerHTML = `
+            <div class="skeleton-flowchart-container" aria-hidden="true">
+                <div class="skeleton-flowchart-node">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="skeleton-shimmer" style="width: 120px; height: 18px; border-radius: 6px;"></div>
+                        <div class="skeleton-shimmer" style="width: 70px; height: 20px; border-radius: 10px;"></div>
+                    </div>
+                    <div class="skeleton-shimmer" style="width: 80%; height: 14px; border-radius: 4px;"></div>
+                    <div class="skeleton-shimmer" style="width: 50%; height: 13px; border-radius: 4px;"></div>
+                </div>
+                <div class="skeleton-flowchart-connector"></div>
+                <div class="skeleton-flowchart-node">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="skeleton-shimmer" style="width: 130px; height: 18px; border-radius: 6px;"></div>
+                        <div class="skeleton-shimmer" style="width: 75px; height: 20px; border-radius: 10px;"></div>
+                    </div>
+                    <div class="skeleton-shimmer" style="width: 85%; height: 14px; border-radius: 4px;"></div>
+                    <div class="skeleton-shimmer" style="width: 60%; height: 13px; border-radius: 4px;"></div>
+                </div>
+            </div>
+        `;
+    }
+
+    async function openForwardHistoryModal(reportId, trackingCode) {
+        if (historyModalTrackingCode) {
+            historyModalTrackingCode.textContent = trackingCode || `#${reportId}`;
+        }
+        if (modalHistory) modalHistory.style.display = 'flex';
+
+        renderForwardHistorySkeleton();
+
+        try {
+            const res = await adminFetch(`/api/admin/report/forward-history?id=${reportId}`);
+            if (!res.ok) {
+                const err = await res.text();
+                if (forwardHistoryBody) {
+                    forwardHistoryBody.innerHTML = `
+                        <div class="flow-empty-state" style="text-align:center; padding:35px; color:var(--color-danger, #ef4444);">
+                            خطا در دریافت تاریخچه: ${escapeHTML(err)}
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            const historyList = await res.json();
+            renderForwardHistoryFlowchart(historyList);
+        } catch (e) {
+            console.error('Failed to load or render forward history:', e);
+            if (forwardHistoryBody) {
+                forwardHistoryBody.innerHTML = `
+                    <div class="flow-empty-state" style="text-align:center; padding:35px; color:var(--color-danger, #ef4444);">
+                        خطا در پردازش تاریخچه ارجاع: ${escapeHTML(e.message || 'خطای ناشناخته')}
+                    </div>
+                `;
+            }
+        }
+    }
+
+    function renderForwardHistoryFlowchart(items) {
+        if (!forwardHistoryBody) return;
+        forwardHistoryBody.innerHTML = '';
+
+        if (!items || items.length === 0) {
+            forwardHistoryBody.innerHTML = `
+                <div class="flow-empty-state" style="text-align:center; padding:45px 20px; color:var(--text-muted);">
+                    <div style="width:54px; height:54px; border-radius:50%; background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; margin:0 auto 12px; color:var(--text-muted);">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div style="font-weight:600; font-size:14.5px; color:var(--text-main); margin-bottom:6px;">تاکنون ارجاعی برای این پرونده ثبت نگردیده است</div>
+                    <div style="font-size:12.5px;">گزارش در کارتابل اداره کل بررسی و در صورت نیاز به کارشناسان نواحی و مناطق ارجاع خواهد شد.</div>
+                </div>
+            `;
+            return;
+        }
+
+        // Group history events by forwarder and forwarding timestamp (within same minute)
+        const groups = [];
+        items.forEach(item => {
+            const fwdAt = item.forwarded_at || '';
+            const key = `${item.forwarded_by}_${fwdAt.length >= 16 ? fwdAt.substring(0, 16) : fwdAt}`;
+            let group = groups.find(g => g.key === key);
+            if (!group) {
+                // Resolve human-readable full name (strictly avoid raw usernames like admin_herasat)
+                let resolvedForwarderName = item.forwarder_name || item.forwarded_by_name;
+                if (!resolvedForwarderName || resolvedForwarderName === item.forwarded_by) {
+                    const matchUser = (typeof allAdminUsers !== 'undefined' && Array.isArray(allAdminUsers)) ? allAdminUsers.find(u => u.username === item.forwarded_by) : null;
+                    if (matchUser && matchUser.full_name) {
+                        resolvedForwarderName = matchUser.full_name;
+                    } else if (item.forwarder_title || item.forwarded_by_title) {
+                        resolvedForwarderName = item.forwarder_title || item.forwarded_by_title;
+                    } else {
+                        resolvedForwarderName = 'کارشناس اداره کل';
+                    }
+                }
+
+                group = {
+                    key: key,
+                    forwarder_name: resolvedForwarderName,
+                    forwarder_title: item.forwarder_title || item.forwarded_by_title || 'اداره کل حراست',
+                    forwarded_at: item.forwarded_at,
+                    recipients: []
+                };
+                groups.push(group);
+            }
+            group.recipients.push(item);
+        });
+
+        const container = document.createElement('div');
+        container.className = 'flowchart-wrapper';
+
+        groups.forEach((group, idx) => {
+            const groupCard = document.createElement('div');
+            groupCard.className = 'flow-group-card';
+            if (idx > 0) {
+                groupCard.style.marginTop = '28px';
+                groupCard.style.borderTop = '1px dashed var(--border-subtle, rgba(255,255,255,0.12))';
+                groupCard.style.paddingTop = '24px';
+            }
+
+            const forwardDateFa = formatJalaliDateTime(group.forwarded_at, true);
+
+            // 1. Source Node (Forwarder - اداره کل / مقام ارجاع‌دهنده)
+            const sourceHtml = `
+                <div class="flow-node-source-container">
+                    <div class="flow-node flow-node-source">
+                        <div class="flow-node-header">
+                            <div class="flow-node-badge-role">مقام ارجاع‌دهنده (اداره کل)</div>
+                        </div>
+                        <div class="flow-node-body">
+                            <div class="flow-node-icon-box source-icon">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <div class="flow-node-details">
+                                <div class="flow-person-name">${escapeHTML(group.forwarder_name)}</div>
+                                <div class="flow-person-title">${escapeHTML(group.forwarder_title)}</div>
+                            </div>
+                        </div>
+                        <div class="flow-node-footer">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>تاریخ و ساعت ارجاع: <strong class="font-tahoma ltr">${forwardDateFa}</strong></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 2. Visual Directional Arrow Downwards (↓)
+            const connectorHtml = `
+                <div class="flow-connector-wrapper">
+                    <div class="flow-connector-line"></div>
+                    <div class="flow-connector-arrow">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <polyline points="19 12 12 19 5 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="flow-connector-label">ارجاع به ${toPersianNum(group.recipients.length)} کارشناس</div>
+                </div>
+            `;
+
+            // 3. Destination Nodes Grid (Recipients - کارشناسان دریافت‌کننده)
+            let destinationsHtml = `<div class="flow-destinations-grid count-${Math.min(group.recipients.length, 4)}">`;
+
+            group.recipients.forEach(r => {
+                const isViewed = r.is_viewed;
+                const viewDateFa = isViewed && r.viewed_at ? formatJalaliDateTime(r.viewed_at, true) : null;
+
+                const seenBadge = isViewed ? `
+                    <div class="flow-seen-badge seen">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <div class="seen-text-wrap">
+                            <span class="seen-title">مشاهده شد</span>
+                            <span class="seen-time font-tahoma ltr">${viewDateFa}</span>
+                        </div>
+                    </div>
+                ` : `
+                    <div class="flow-seen-badge unseen">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <div class="seen-text-wrap">
+                            <span class="seen-title">مشاهده نشده</span>
+                            <span class="seen-sub">در انتظار رویت کارشناس</span>
+                        </div>
+                    </div>
+                `;
+
+                const isMainAdmin = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
+                const revokeBtnHtml = isMainAdmin ? `
+                    <button type="button" class="btn-revoke-forward" data-fwd-id="${r.id}" data-rep-id="${r.report_id}" data-recip-name="${escapeHTML(r.recipient_name || r.recipient_username)}" data-recip-user="${escapeHTML(r.recipient_username)}" title="حذف ارجاع و قطع دسترسی این کارشناس" aria-label="حذف ارجاع">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                ` : '';
+
+                const responsePreviewHtml = r.response_text ? `
+                    <div class="flow-regional-response-preview">
+                        <div class="response-preview-header">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            <span>گزارش بررسی کارشناس (${r.responded_at ? formatJalaliDateTime(r.responded_at, true) : 'ثبت‌شده'}):</span>
+                        </div>
+                        <div class="response-preview-body">${escapeHTML(r.response_text)}</div>
+                    </div>
+                ` : '';
+
+                destinationsHtml += `
+                    <div class="flow-node flow-node-destination ${isViewed ? 'is-viewed' : 'is-unseen'}">
+                        <div class="flow-node-header">
+                            <div class="flow-node-badge-role recipient">دریافت‌کننده (ناحیه / منطقه)</div>
+                            ${revokeBtnHtml}
+                        </div>
+                        <div class="flow-node-body">
+                            <div class="flow-node-icon-box dest-icon ${isViewed ? 'viewed' : 'unseen'}">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <div class="flow-node-details">
+                                <div class="flow-person-name">${escapeHTML(r.recipient_name || 'کارشناس حراست')}</div>
+                                <div class="flow-person-title">${escapeHTML(r.recipient_title || 'حراست ناحیه / منطقه')}</div>
+                            </div>
+                        </div>
+                        ${responsePreviewHtml}
+                        <div class="flow-node-footer status-footer">
+                            ${seenBadge}
+                        </div>
+                    </div>
+                `;
+            });
+
+            destinationsHtml += `</div>`;
+
+            groupCard.innerHTML = sourceHtml + connectorHtml + destinationsHtml;
+            container.appendChild(groupCard);
+        });
+
+        forwardHistoryBody.appendChild(container);
+        if (typeof convertTitles === 'function') {
+            convertTitles(forwardHistoryBody);
+        } else if (typeof window !== 'undefined' && typeof window.convertTitles === 'function') {
+            window.convertTitles(forwardHistoryBody);
+        }
+
+        forwardHistoryBody.querySelectorAll('.btn-revoke-forward').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const fwdId = btn.getAttribute('data-fwd-id');
+                const repId = btn.getAttribute('data-rep-id');
+                const recipName = btn.getAttribute('data-recip-name') || 'این کارشناس';
+                const recipUser = btn.getAttribute('data-recip-user');
+
+                const confirmed = await showConfirmDialog({
+                    title: 'حذف ارجاع پرونده',
+                    description: `آیا از حذف ارجاع این پرونده به «${recipName}» اطمینان دارید؟ با این اقدام، دسترسی این کارشناس به این پرونده فوراً قطع شده و کلیه اعلان‌های مرتبط از کارتابل وی پاک خواهند شد.`,
+                    confirmText: 'بله، حذف ارجاع',
+                    cancelText: 'انصراف',
+                    variant: 'warning',
+                    iconType: 'shield-alert'
+                });
+                if (!confirmed) {
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.style.opacity = '0.4';
+
+                try {
+                    const res = await adminFetch('/api/admin/report/remove-forward', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            forwarding_id: parseInt(fwdId, 10),
+                            report_id: parseInt(repId, 10),
+                            recipient_username: recipUser
+                        })
+                    });
+
+                    if (!res.ok) {
+                        const err = await res.text();
+                        throw new Error(err || 'خطا در حذف ارجاع');
+                    }
+
+                    const resData = await res.json();
+                    showToast(resData.message || 'ارجاع پرونده با موفقیت لغو گردید.');
+
+                    // Re-fetch and redraw forward history modal
+                    openForwardHistoryModal(parseInt(repId, 10), historyModalTrackingCode?.textContent || '');
+
+                    // Refresh report details if current report is open
+                    if (currentViewingReportId && currentViewingReportId === parseInt(repId, 10)) {
+                        viewReport(currentViewingReportId);
+                    }
+                } catch (err) {
+                    showToast(err.message || 'خطای ارتباط با سرور در حذف ارجاع', 4000, 'error');
+                    btn.disabled = false;
+                    btn.style.opacity = '';
+                }
+            });
+        });
+    }
+
+    setInterval(() => {
+        if (dashboardSection && dashboardSection.style.display !== 'none') {
+            fetchNotifications();
+        }
+    }, 25000);
+});
