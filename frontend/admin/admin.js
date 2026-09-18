@@ -1,30 +1,33 @@
 
-// Minimum prestige 3D preloader dismiss for Admin with guaranteed safety timeout
+// [PERF-FIX-3] Eliminate artificial preloader delay and redundant skeleton
 (function initAdminPreloader() {
-    const PRELOADER_MIN_MS = 1000;
+    // Only show the preloader on the very first load per session
+    if (sessionStorage.getItem('herasat_preloader_seen')) {
+        const p = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
+        const s = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
+        if (p) p.remove();
+        if (s) s.remove();
+        return;
+    }
+    sessionStorage.setItem('herasat_preloader_seen', '1');
+
+    const PRELOADER_MIN_MS = 250;
     const startTime = performance.now();
     let dismissed = false;
 
     function dismiss() {
         if (dismissed) return;
         dismissed = true;
-        const elapsed = performance.now() - startTime;
-        const remaining = Math.max(0, PRELOADER_MIN_MS - elapsed);
+        const remaining = Math.max(0, PRELOADER_MIN_MS - (performance.now() - startTime));
         setTimeout(() => {
-            const preloader = document.getElementById('adminPreloader');
-            const skeleton = document.getElementById('adminSkeleton');
+            const preloader = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
+            const skeleton = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
             if (preloader) {
                 preloader.classList.add('fade-out');
-                setTimeout(() => {
-                    if (preloader.parentNode) preloader.remove();
-                }, 450);
+                setTimeout(() => preloader.remove(), 450);
             }
-            if (skeleton) {
-                skeleton.classList.add('fade-out');
-                setTimeout(() => {
-                    if (skeleton.parentNode) skeleton.remove();
-                }, 450);
-            }
+            // Skeleton is redundant once preloader is up — remove immediately
+            if (skeleton) skeleton.remove();
         }, remaining);
     }
 
@@ -34,9 +37,9 @@
         window.addEventListener('load', dismiss);
         document.addEventListener('DOMContentLoaded', dismiss);
     }
-    // Hard fallback: dismiss after 2s regardless of window load event
-    setTimeout(dismiss, 2000);
+    setTimeout(dismiss, 800);   // reduced from 2000
 })();
+
 
 
 const nativeFetch = window.fetch.bind(window);
@@ -49,6 +52,25 @@ function adminFetch(url, options = {}) {
     }
     return nativeFetch(url, opts);
 }
+
+// [PERF-FIX-21] Respect prefers-reduced-motion for programmatic scroll
+const getScrollBehavior = () => (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+
+// [PERF-FIX-28] Dynamic will-change promotion helper with auto-cleanup
+function promoteTemporarily(el, props = 'transform, opacity', durationMs = 300) {
+    if (!el || !el.style) return;
+    el.style.willChange = props;
+    setTimeout(() => {
+        if (el && el.style) {
+            el.style.willChange = 'auto';
+        }
+    }, durationMs);
+}
+
+// [PERF-FIX-30] requestIdleCallback wrapper with fallback for deferred initialization
+const runWhenIdle = (typeof window !== 'undefined' && window.requestIdleCallback)
+    ? (cb) => window.requestIdleCallback(cb, { timeout: 1500 })
+    : (cb) => setTimeout(cb, 100);
 
 // Unified High-End Tooltip System (matching Radix/shadcn component)
 function initAppTooltips() {
@@ -250,7 +272,8 @@ function initAppTooltips() {
     }, { passive: true });
 }
 
-initAppTooltips();
+// [PERF-FIX-30] Defer tooltip initialization to browser idle phase
+runWhenIdle(initAppTooltips);
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -274,91 +297,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, duration);
     }
 
-    /**
-     * Professional confirmation dialog matching the AlertDialog / Shadcn / Lucide pattern.
-     * Replaces native browser confirm() dialogs with a modern RTL modal.
-     */
-    function showConfirmDialog({
-        title = 'آیا اطمینان دارید؟',
-        description = '',
-        htmlContent = '',
-        confirmText = 'بله، تأیید',
-        cancelText = 'خیر، انصراف',
-        variant = 'warning', // 'warning', 'danger', 'primary', 'success'
-        iconType = 'shield-question' // 'logout', 'trash', 'shield-alert', 'shield-question', 'user-x', 'check-circle'
-    } = {}) {
-        return new Promise((resolve) => {
-            document.querySelectorAll('.pro-confirm-overlay').forEach(el => el.remove());
-
-            const safeEscape = (str) => {
-                if (!str) return '';
-                return String(str).replace(/[&<>'"]/g, tag => ({
-                    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-                }[tag] || tag));
-            };
-
-            const icons = {
-                'logout': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>',
-                'trash': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>',
-                'shield-alert': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
-                'shield-question': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M12 8a2 2 0 0 1 2 2c0 1.2-1.5 1.8-1.5 2.5"></path><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
-                'user-x': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg>',
-                'check-circle': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
-            };
-
-            const iconSvg = icons[iconType] || icons['shield-question'];
-            const overlay = document.createElement('div');
-            overlay.className = 'pro-confirm-overlay';
-            overlay.innerHTML = `
-                <div class="pro-confirm-card" role="dialog" aria-modal="true">
-                    <div class="pro-confirm-body">
-                        <div class="pro-confirm-icon-badge pro-confirm-badge-${variant}">
-                            ${iconSvg}
-                        </div>
-                        <h3 class="pro-confirm-title">${safeEscape(title)}</h3>
-                        ${description ? `<p class="pro-confirm-desc">${safeEscape(description)}</p>` : ''}
-                        ${htmlContent ? `<div class="pro-confirm-custom-content">${htmlContent}</div>` : ''}
-                    </div>
-                    <div class="pro-confirm-footer">
-                        <button type="button" class="pro-confirm-btn pro-confirm-btn-cancel" id="proConfirmCancelBtn">
-                            ${safeEscape(cancelText)}
-                        </button>
-                        <button type="button" class="pro-confirm-btn pro-confirm-btn-confirm btn-var-${variant}" id="proConfirmOkBtn">
-                            ${safeEscape(confirmText)}
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            function cleanup(result) {
-                document.removeEventListener('keydown', keyHandler);
-                overlay.remove();
-                resolve(result);
-            }
-
-            function keyHandler(e) {
-                if (e.key === 'Escape') {
-                    e.preventDefault();
-                    cleanup(false);
-                } else if (e.key === 'Enter') {
-                    e.preventDefault();
-                    cleanup(true);
-                }
-            }
-
-            document.addEventListener('keydown', keyHandler);
-            overlay.querySelector('#proConfirmCancelBtn').addEventListener('click', () => cleanup(false));
-            overlay.querySelector('#proConfirmOkBtn').addEventListener('click', () => cleanup(true));
-            overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) cleanup(false);
-            });
-
-            document.body.appendChild(overlay);
-            const cancelBtn = overlay.querySelector('#proConfirmCancelBtn');
-            if (cancelBtn) cancelBtn.focus();
-        });
-    }
-    window.showConfirmDialog = showConfirmDialog;
+    // [PERF-FIX-17] Use shared modal confirmation dialog from confirm.js
+    const showConfirmDialog = window.showConfirmDialog || function () { return Promise.resolve(true); };
 
     const loginForm = document.getElementById('loginForm');
     const loginSection = document.getElementById('login-section');
@@ -391,7 +331,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const SESSION_DURATION = 15 * 60;
     let remainingSeconds = SESSION_DURATION;
+    // [PERF-FIX-14] Tracked interval handles for tab visibility suspension
     let timerInterval = null;
+    let heartbeatInterval = null;
+    let reportPollingInterval = null;
+    let notifPollingInterval = null;
 
     const countdownEl = document.getElementById('sessionCountdown');
     const timerBoxEl = document.getElementById('sessionTimerBox') || document.querySelector('.session-timer-box');
@@ -479,37 +423,47 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // [PERF-FIX-14] Separate timer tick to allow pausing/resuming without resetting countdown
+    function handleTimerTick() {
+        remainingSeconds--;
+        updateTimerDisplay();
+
+        if (remainingSeconds <= 60 && remainingSeconds > 0) {
+            if (sessionWarningModal && sessionWarningModal.style.display !== 'flex') {
+                sessionWarningModal.style.display = 'flex';
+            }
+            if (warningCountdownText) warningCountdownText.textContent = `${toPersianNum(remainingSeconds)} ثانیه`;
+        } else if (remainingSeconds > 60) {
+            if (sessionWarningModal) sessionWarningModal.style.display = 'none';
+        }
+
+        if (remainingSeconds <= 0) {
+            clearInterval(timerInterval);
+            showConfirmDialog({
+                title: 'پایان نشست کاری',
+                description: 'نشست کاری شما به دلیل عدم فعالیت به پایان رسید. لطفاً مجدداً وارد شوید.',
+                confirmText: 'ورود مجدد به سامانه',
+                cancelText: 'بستن',
+                variant: 'warning',
+                iconType: 'shield-alert'
+            }).then(() => {
+                document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                location.reload();
+            });
+        }
+    }
+
+    function resumeSessionTimer() {
+        clearInterval(timerInterval);
+        if (remainingSeconds > 0) {
+            timerInterval = setInterval(handleTimerTick, 1000);
+        }
+    }
+
     function startSessionTimer() {
         clearInterval(timerInterval);
         resetSessionTimer();
-        timerInterval = setInterval(() => {
-            remainingSeconds--;
-            updateTimerDisplay();
-
-            if (remainingSeconds <= 60 && remainingSeconds > 0) {
-                if (sessionWarningModal && sessionWarningModal.style.display !== 'flex') {
-                    sessionWarningModal.style.display = 'flex';
-                }
-                if (warningCountdownText) warningCountdownText.textContent = `${toPersianNum(remainingSeconds)} ثانیه`;
-            } else if (remainingSeconds > 60) {
-                if (sessionWarningModal) sessionWarningModal.style.display = 'none';
-            }
-
-            if (remainingSeconds <= 0) {
-                clearInterval(timerInterval);
-                showConfirmDialog({
-                    title: 'پایان نشست کاری',
-                    description: 'نشست کاری شما به دلیل عدم فعالیت به پایان رسید. لطفاً مجدداً وارد شوید.',
-                    confirmText: 'ورود مجدد به سامانه',
-                    cancelText: 'بستن',
-                    variant: 'warning',
-                    iconType: 'shield-alert'
-                }).then(() => {
-                    document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-                    location.reload();
-                });
-            }
-        }, 1000);
+        timerInterval = setInterval(handleTimerTick, 1000);
     }
 
     const adminCaptchaImg = document.getElementById('admin-captcha-img');
@@ -575,7 +529,8 @@ document.addEventListener('DOMContentLoaded', () => {
             startSessionTimer();
             startHeartbeat();
             switchMainTab('reports');
-            fetchNotifications();
+            // [PERF-FIX-30] Fetch non-critical notifications in idle window
+            runWhenIdle(fetchNotifications);
         }
     })();
 
@@ -626,7 +581,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 startHeartbeat();
                 await checkAdminProfile();
                 switchMainTab('reports');
-                fetchNotifications();
+                // [PERF-FIX-30] Fetch non-critical notifications in idle window
+                runWhenIdle(fetchNotifications);
             } else {
                 const errText = await response.text();
                 loginMessage.textContent = errText || 'نام کاربری یا رمز عبور اشتباه است.';
@@ -672,7 +628,12 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    if (searchTracking) searchTracking.addEventListener('input', debounce(() => applyFilters(true), 150));
+    // [PERF-FIX-11] Debounce search input to 300ms and batch renders via requestAnimationFrame
+    if (searchTracking) {
+        searchTracking.addEventListener('input', debounce(() => {
+            requestAnimationFrame(() => applyFilters(true));
+        }, 300));
+    }
     if (filterType) filterType.addEventListener('change', () => applyFilters(true));
     if (filterPriority) filterPriority.addEventListener('change', () => applyFilters(true));
     if (filterMonth) filterMonth.addEventListener('change', () => applyFilters(true));
@@ -779,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const targetEl = document.querySelector('.filter-container') || listSection;
         if (targetEl) {
-            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            targetEl.scrollIntoView({ behavior: getScrollBehavior(), block: 'start' });
         }
     }
 
@@ -876,6 +837,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // [PERF-FIX-23] Cache frequent DOM queries in hot paths
+    let _elKPITotal = null;
+    let _elKPIUnread = null;
+    let _elKPIRead = null;
+    let _elKPIResponded = null;
+    let _elKPIPulse = null;
+
     function updateKPICards() {
         const total = allReports.length;
         let unread = 0;
@@ -895,25 +863,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        const totalEl = document.getElementById('kpi-total-count');
-        const unreadEl = document.getElementById('kpi-unread-count');
-        const readEl = document.getElementById('kpi-read-count');
-        const respondedEl = document.getElementById('kpi-responded-count');
-        const pulseEl = document.getElementById('kpi-unread-pulse');
+        if (!_elKPITotal) _elKPITotal = document.getElementById('kpi-total-count');
+        if (!_elKPIUnread) _elKPIUnread = document.getElementById('kpi-unread-count');
+        if (!_elKPIRead) _elKPIRead = document.getElementById('kpi-read-count');
+        if (!_elKPIResponded) _elKPIResponded = document.getElementById('kpi-responded-count');
+        if (!_elKPIPulse) _elKPIPulse = document.getElementById('kpi-unread-pulse');
 
-        if (totalEl) totalEl.textContent = toPersianNum(total);
-        if (unreadEl) unreadEl.textContent = toPersianNum(unread);
-        if (readEl) readEl.textContent = toPersianNum(read);
-        if (respondedEl) respondedEl.textContent = toPersianNum(responded);
+        if (_elKPITotal) _elKPITotal.textContent = toPersianNum(total);
+        if (_elKPIUnread) _elKPIUnread.textContent = toPersianNum(unread);
+        if (_elKPIRead) _elKPIRead.textContent = toPersianNum(read);
+        if (_elKPIResponded) _elKPIResponded.textContent = toPersianNum(responded);
 
-        if (pulseEl) pulseEl.style.display = unread > 0 ? 'block' : 'none';
+        if (_elKPIPulse) _elKPIPulse.style.display = unread > 0 ? 'block' : 'none';
     }
 
+    // [PERF-FIX-4] Fast pure-string HTML escape (consolidated single definition)
+    const ESCAPE_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
     function escapeHTML(str) {
-        if (!str) return '';
-        return String(str).replace(/[&<>'"]/g, tag => ({
-            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-        }[tag] || tag));
+        if (str == null) return '';
+        return String(str).replace(/[&<>"']/g, c => ESCAPE_MAP[c]);
     }
 
     function normalizePersianForSearch(str) {
@@ -930,10 +898,15 @@ document.addEventListener('DOMContentLoaded', () => {
             .trim();
     }
 
+    // [PERF-FIX-5] Cache the compiled Persian search regex
+    let _persianRegexCache = { term: null, regex: null };
+
     function makePersianRegex(term) {
         if (!term || !term.trim()) return null;
         const trimmed = term.trim().replace(/[\u200c\u200b\u200e\u200f\uFEFF]/g, '');
         if (!trimmed) return null;
+        if (_persianRegexCache.term === trimmed) return _persianRegexCache.regex;
+
         let pattern = '';
         for (let i = 0; i < trimmed.length; i++) {
             const char = trimmed[i];
@@ -951,22 +924,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             pattern += (i > 0 ? '[\\u200c\\s]?' : '') + charPattern;
         }
-        return new RegExp(`(${pattern})`, 'gi');
+        _persianRegexCache = { term: trimmed, regex: new RegExp(`(${pattern})`, 'gi') };
+        return _persianRegexCache.regex;
     }
 
-    function highlightSearchTerm(text, term) {
+    function highlightSearchTerm(text, term, precompiledRegex = null) {
         if (!text) return 'ندارد';
         const escaped = escapeHTML(text);
         if (!term || !term.trim()) return escaped;
-        const regex = makePersianRegex(term);
+        const regex = precompiledRegex || makePersianRegex(term);
         if (!regex) return escaped;
+        regex.lastIndex = 0;
         return escaped.replace(regex, '<span class="search-highlight">$1</span>');
     }
 
-    function getMatchSnippet(fullText, term, maxLength = 80) {
+    function getMatchSnippet(fullText, term, maxLength = 80, precompiledRegex = null) {
         if (!fullText || !term || !term.trim()) return '';
-        const regex = makePersianRegex(term);
+        const regex = precompiledRegex || makePersianRegex(term);
         if (!regex) return '';
+        regex.lastIndex = 0;
         const match = regex.exec(fullText);
         if (!match) return '';
         const matchIdx = match.index;
@@ -983,34 +959,39 @@ document.addEventListener('DOMContentLoaded', () => {
         if (start > 0) snippet = '...' + snippet;
         if (end < fullText.length) snippet = snippet + '...';
 
-        return highlightSearchTerm(snippet, term);
+        return highlightSearchTerm(snippet, term, regex);
     }
+
+    // [PERF-FIX-23] Cache bulk toolbar elements
+    let _elBulkToolbar = null;
+    let _elBulkCount = null;
+    let _elSelectAllReports = null;
 
     // Bulk Selection Toolbar Sync (C3)
     function updateBulkToolbar() {
-        const toolbar = document.getElementById('bulkActionsToolbar');
-        const countEl = document.getElementById('bulkSelectedCount');
-        const selectAllCb = document.getElementById('selectAllReports');
+        if (!_elBulkToolbar) _elBulkToolbar = document.getElementById('bulkActionsToolbar');
+        if (!_elBulkCount) _elBulkCount = document.getElementById('bulkSelectedCount');
+        if (!_elSelectAllReports) _elSelectAllReports = document.getElementById('selectAllReports');
 
         const count = selectedReportIds.size;
-        if (countEl) countEl.textContent = toPersianNum(count);
-        if (toolbar) toolbar.style.display = count > 0 ? 'flex' : 'none';
+        if (_elBulkCount) _elBulkCount.textContent = toPersianNum(count);
+        if (_elBulkToolbar) _elBulkToolbar.style.display = count > 0 ? 'flex' : 'none';
 
         // Check if all visible items on current page are selected
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = Math.min(startIndex + itemsPerPage, filteredReports.length);
         const currentPageItems = filteredReports.slice(startIndex, endIndex);
 
-        if (selectAllCb) {
+        if (_elSelectAllReports) {
             if (currentPageItems.length > 0 && currentPageItems.every(r => selectedReportIds.has(r.id))) {
-                selectAllCb.checked = true;
-                selectAllCb.indeterminate = false;
+                _elSelectAllReports.checked = true;
+                _elSelectAllReports.indeterminate = false;
             } else if (currentPageItems.some(r => selectedReportIds.has(r.id))) {
-                selectAllCb.checked = false;
-                selectAllCb.indeterminate = true;
+                _elSelectAllReports.checked = false;
+                _elSelectAllReports.indeterminate = true;
             } else {
-                selectAllCb.checked = false;
-                selectAllCb.indeterminate = false;
+                _elSelectAllReports.checked = false;
+                _elSelectAllReports.indeterminate = false;
             }
         }
     }
@@ -1169,12 +1150,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // [PERF-FIX-11] [PERF-FIX-20] Module-scoped cache for search regex and normalized term
+    let activeSearchContext = { rawTerm: '', normTerm: '', lowerTerm: '', regex: null };
+
     function applyFilters(forceResetPage) {
         if (forceResetPage) currentPage = 1;
 
+        // [PERF-FIX-11] [PERF-FIX-20] Compute search regex and normalized term once
         const rawTerm = searchTracking ? searchTracking.value.trim() : '';
-        const normTerm = normalizePersianForSearch(rawTerm);
-        const lowerTerm = rawTerm.toLowerCase();
+        if (activeSearchContext.rawTerm !== rawTerm) {
+            activeSearchContext = {
+                rawTerm,
+                normTerm: normalizePersianForSearch(rawTerm),
+                lowerTerm: rawTerm.toLowerCase(),
+                regex: rawTerm ? makePersianRegex(rawTerm) : null
+            };
+        }
+        const { normTerm, lowerTerm } = activeSearchContext;
         const typeMode = filterType ? filterType.value : 'all';
         const priorityMode = filterPriority ? filterPriority.value : 'all';
         const targetMonth = filterMonth ? filterMonth.value : 'all';
@@ -1311,8 +1303,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const fragment = document.createDocumentFragment();
-        const searchTerm = searchTracking ? searchTracking.value.trim() : '';
-        const normSearch = searchTerm ? normalizePersianForSearch(searchTerm) : '';
+        // [PERF-FIX-5] [PERF-FIX-11] [PERF-FIX-20] Reuse pre-compiled search regex and normalized term
+        const searchTerm = activeSearchContext.rawTerm;
+        const searchRegex = activeSearchContext.regex;
+        const normSearch = activeSearchContext.normTerm;
 
         reports.forEach(report => {
             const tr = document.createElement('tr');
@@ -1346,7 +1340,7 @@ document.addEventListener('DOMContentLoaded', () => {
             codeTd.style.fontWeight = 'bold';
             codeTd.style.direction = 'ltr';
             codeTd.style.textAlign = 'right';
-            codeTd.innerHTML = highlightSearchTerm(report.tracking_code, searchTerm);
+            codeTd.innerHTML = highlightSearchTerm(report.tracking_code, searchTerm, searchRegex);
             tr.appendChild(codeTd);
 
             // Priority Badge Cell
@@ -1375,12 +1369,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const catTd = document.createElement('td');
             const catBadge = document.createElement('div');
             catBadge.className = 'table-category-label';
-            catBadge.innerHTML = highlightSearchTerm(report.category, searchTerm);
+            catBadge.innerHTML = highlightSearchTerm(report.category, searchTerm, searchRegex);
             catTd.appendChild(catBadge);
 
             if (normSearch && report.description) {
                 if ((report._normDesc && report._normDesc.includes(normSearch)) || (report._lowerDesc && report._lowerDesc.includes(searchTerm.toLowerCase()))) {
-                    const snippetHtml = getMatchSnippet(report.description, searchTerm);
+                    const snippetHtml = getMatchSnippet(report.description, searchTerm, 80, searchRegex);
                     if (snippetHtml) {
                         const snippetEl = document.createElement('div');
                         snippetEl.className = 'search-match-snippet';
@@ -1539,7 +1533,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCloseShortcutsFooter = document.getElementById('btn-close-shortcuts-footer');
 
     function openShortcutsModal() {
-        if (modalShortcuts) modalShortcuts.style.display = 'flex';
+        if (modalShortcuts) {
+            const card = modalShortcuts.querySelector('.modal-card, .pro-card') || modalShortcuts;
+            // [PERF-FIX-28] Promote layer temporarily for modal enter transition
+            promoteTemporarily(card, 'transform, opacity', 250);
+            modalShortcuts.style.display = 'flex';
+        }
     }
 
     function closeShortcutsModal() {
@@ -1592,7 +1591,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const respInput = document.getElementById('admin_response_input');
                     if (respInput) {
                         respInput.focus();
-                        respInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        respInput.scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
                     }
                 } else if (e.key === 'n' || e.key === 'N') {
                     e.preventDefault();
@@ -1616,24 +1615,29 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = `/api/admin/report/export-docx?id=${currentViewingReportId}`;
     });
 
+    // [PERF-FIX-23] Cache detail view elements
+    let _elDetailSkeleton = null;
+    let _elDetailActual = null;
+
     async function viewReport(id) {
         currentViewingReportId = id;
         currentViewingIndex = filteredReports.findIndex(r => r.id === id);
         updateDetailNavButtons();
 
-        const detailSkeleton = document.getElementById('report-detail-skeleton');
-        const detailActual = document.getElementById('report-detail-actual');
+        if (!_elDetailSkeleton) _elDetailSkeleton = document.getElementById('report-detail-skeleton');
+        if (!_elDetailActual) _elDetailActual = document.getElementById('report-detail-actual');
+
         if (listSection) listSection.style.display = 'none';
         if (detailSection) detailSection.style.display = 'block';
-        if (detailSkeleton) detailSkeleton.classList.remove('d-none');
-        if (detailActual) detailActual.classList.add('d-none');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (_elDetailSkeleton) _elDetailSkeleton.classList.remove('d-none');
+        if (_elDetailActual) _elDetailActual.classList.add('d-none');
+        window.scrollTo({ top: 0, behavior: getScrollBehavior() });
 
         try {
             const response = await adminFetch(`/api/admin/report?id=${id}`);
             if (!response.ok) {
-                if (detailSkeleton) detailSkeleton.classList.add('d-none');
-                if (detailActual) detailActual.classList.remove('d-none');
+                if (_elDetailSkeleton) _elDetailSkeleton.classList.add('d-none');
+                if (_elDetailActual) _elDetailActual.classList.remove('d-none');
                 closeDetailView();
                 showToast('خطا در دریافت جزئیات گزارش', 3500, 'error');
                 return;
@@ -2168,9 +2172,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (filterContainer) filterContainer.style.display = 'none';
             if (bulkActionsToolbar) bulkActionsToolbar.style.display = 'none';
             reportsInboxSection?.classList.add('in-detail-view');
-            detailSection.style.display = "block";
-            if (detailSkeleton) detailSkeleton.classList.add('d-none');
-            if (detailActual) detailActual.classList.remove('d-none');
+            if (_elDetailSkeleton) _elDetailSkeleton.classList.add('d-none');
+            if (_elDetailActual) _elDetailActual.classList.remove('d-none');
 
             // Trigger auto-expand when elements are visible in the DOM
             if (notesInput) makeTextareaAutoExpand(notesInput);
@@ -2183,10 +2186,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Error opening report modal:', error);
-            const detailSkeleton = document.getElementById('report-detail-skeleton');
-            const detailActual = document.getElementById('report-detail-actual');
-            if (detailSkeleton) detailSkeleton.classList.add('d-none');
-            if (detailActual) detailActual.classList.remove('d-none');
+            if (_elDetailSkeleton) _elDetailSkeleton.classList.add('d-none');
+            if (_elDetailActual) _elDetailActual.classList.remove('d-none');
             closeDetailView();
             showToast('خطا در بارگذاری اطلاعات پرونده', 3500, 'error');
         }
@@ -2346,13 +2347,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // [PERF-FIX-13] Throttle makeTextareaAutoExpand with requestAnimationFrame
     function makeTextareaAutoExpand(el) {
         if (!el) return;
         el.style.resize = 'none';
         el.style.overflowY = 'hidden';
+        const minHeight = el.id === 'admin_response_input' ? 85 : 70;
+        let rafId;
         const adjustHeight = () => {
-            el.style.height = 'auto';
-            el.style.height = Math.max(el.scrollHeight, (el.id === 'admin_response_input' ? 85 : 70)) + 'px';
+            cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => {
+                el.style.height = 'auto';
+                el.style.height = Math.max(el.scrollHeight, minHeight) + 'px';
+            });
         };
         el.addEventListener('input', adjustHeight);
         el.addEventListener('change', adjustHeight);
@@ -3701,74 +3708,91 @@ document.addEventListener('DOMContentLoaded', () => {
         const tooltipPct = document.getElementById('monthlyTooltipPct');
         const tooltipBadge = document.getElementById('monthlyTooltipBadge');
 
+        // [PERF-FIX-29] RAF-throttled mousemove with passive event listener to eliminate layout thrashing
         if (canvasWrap) {
+            let chartMoveRaf = null;
+            let lastEvent = null;
+
             canvasWrap.addEventListener('mousemove', (e) => {
-                const rect = canvasWrap.getBoundingClientRect();
-                const mouseX = e.clientX - rect.left;
-                const svgX = (mouseX / rect.width) * svgWidth;
+                lastEvent = e;
+                if (chartMoveRaf) return;
+                chartMoveRaf = requestAnimationFrame(() => {
+                    chartMoveRaf = null;
+                    if (!lastEvent) return;
+                    const ev = lastEvent;
+                    const rect = canvasWrap.getBoundingClientRect();
+                    const mouseX = ev.clientX - rect.left;
+                    const svgX = (mouseX / rect.width) * svgWidth;
 
-                // Find nearest point
-                let nearestPt = points[0];
-                let minDiff = Infinity;
-                points.forEach(pt => {
-                    const diff = Math.abs(pt.x - svgX);
-                    if (diff < minDiff) {
-                        minDiff = diff;
-                        nearestPt = pt;
-                    }
-                });
-
-                if (refLine) {
-                    refLine.style.display = 'block';
-                    refLine.setAttribute('x1', nearestPt.x.toFixed(1));
-                    refLine.setAttribute('x2', nearestPt.x.toFixed(1));
-                }
-
-                if (activeDot) {
-                    activeDot.style.display = 'block';
-                    activeDot.setAttribute('cx', nearestPt.x.toFixed(1));
-                    activeDot.setAttribute('cy', nearestPt.y.toFixed(1));
-                }
-
-                if (tooltip) {
-                    tooltip.style.display = 'block';
-                    if (tooltipDate) tooltipDate.textContent = `${nearestPt.name} ماه`;
-                    if (tooltipVal) tooltipVal.textContent = `${toPersianNum(nearestPt.count)} پرونده`;
-                    const pct = totalReports > 0 ? ((nearestPt.count / totalReports) * 100).toFixed(1) : '۰';
-                    if (tooltipPct) tooltipPct.textContent = `[${toPersianNum(pct)}٪]`;
-                    if (tooltipBadge) {
-                        if (nearestPt.count === maxVal && maxVal > 0) {
-                            tooltipBadge.textContent = 'بیشترین ثبت سال جاری';
-                            tooltipBadge.style.color = '#38bdf8';
-                            tooltipBadge.style.background = 'rgba(56, 189, 248, 0.16)';
-                        } else if (nearestPt.count > (totalReports / 12)) {
-                            tooltipBadge.textContent = 'بالاتر از میانگین ماهانه';
-                            tooltipBadge.style.color = '#34d399';
-                            tooltipBadge.style.background = 'rgba(16, 185, 129, 0.16)';
-                        } else if (nearestPt.count === 0) {
-                            tooltipBadge.textContent = 'بدون ثبت گزارش';
-                            tooltipBadge.style.color = '#94a3b8';
-                            tooltipBadge.style.background = 'rgba(255, 255, 255, 0.06)';
-                        } else {
-                            tooltipBadge.textContent = 'ثبت‌شده در این ماه';
-                            tooltipBadge.style.color = '#93c5fd';
-                            tooltipBadge.style.background = 'rgba(59, 130, 246, 0.12)';
+                    // Find nearest point
+                    let nearestPt = points[0];
+                    let minDiff = Infinity;
+                    for (let i = 0; i < points.length; i++) {
+                        const pt = points[i];
+                        const diff = Math.abs(pt.x - svgX);
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            nearestPt = pt;
                         }
                     }
 
-                    const ptClientX = (nearestPt.x / svgWidth) * rect.width;
-                    const ptClientY = (nearestPt.y / svgHeight) * rect.height;
-                    const clampedX = Math.max(75, Math.min(rect.width - 75, ptClientX));
-                    tooltip.style.left = `${clampedX}px`;
-                    tooltip.style.top = `${Math.max(12, ptClientY)}px`;
-                }
-            });
+                    if (refLine) {
+                        refLine.style.display = 'block';
+                        refLine.setAttribute('x1', nearestPt.x.toFixed(1));
+                        refLine.setAttribute('x2', nearestPt.x.toFixed(1));
+                    }
+
+                    if (activeDot) {
+                        activeDot.style.display = 'block';
+                        activeDot.setAttribute('cx', nearestPt.x.toFixed(1));
+                        activeDot.setAttribute('cy', nearestPt.y.toFixed(1));
+                    }
+
+                    if (tooltip) {
+                        tooltip.style.display = 'block';
+                        if (tooltipDate) tooltipDate.textContent = `${nearestPt.name} ماه`;
+                        if (tooltipVal) tooltipVal.textContent = `${toPersianNum(nearestPt.count)} پرونده`;
+                        const pct = totalReports > 0 ? ((nearestPt.count / totalReports) * 100).toFixed(1) : '۰';
+                        if (tooltipPct) tooltipPct.textContent = `[${toPersianNum(pct)}٪]`;
+                        if (tooltipBadge) {
+                            if (nearestPt.count === maxVal && maxVal > 0) {
+                                tooltipBadge.textContent = 'بیشترین ثبت سال جاری';
+                                tooltipBadge.style.color = '#38bdf8';
+                                tooltipBadge.style.background = 'rgba(56, 189, 248, 0.16)';
+                            } else if (nearestPt.count > (totalReports / 12)) {
+                                tooltipBadge.textContent = 'بالاتر از میانگین ماهانه';
+                                tooltipBadge.style.color = '#34d399';
+                                tooltipBadge.style.background = 'rgba(16, 185, 129, 0.16)';
+                            } else if (nearestPt.count === 0) {
+                                tooltipBadge.textContent = 'بدون ثبت گزارش';
+                                tooltipBadge.style.color = '#94a3b8';
+                                tooltipBadge.style.background = 'rgba(255, 255, 255, 0.06)';
+                            } else {
+                                tooltipBadge.textContent = 'ثبت‌شده در این ماه';
+                                tooltipBadge.style.color = '#93c5fd';
+                                tooltipBadge.style.background = 'rgba(59, 130, 246, 0.12)';
+                            }
+                        }
+
+                        const ptClientX = (nearestPt.x / svgWidth) * rect.width;
+                        const ptClientY = (nearestPt.y / svgHeight) * rect.height;
+                        const clampedX = Math.max(75, Math.min(rect.width - 75, ptClientX));
+                        tooltip.style.left = `${clampedX}px`;
+                        tooltip.style.top = `${Math.max(12, ptClientY)}px`;
+                    }
+                });
+            }, { passive: true });
 
             canvasWrap.addEventListener('mouseleave', () => {
+                if (chartMoveRaf) {
+                    cancelAnimationFrame(chartMoveRaf);
+                    chartMoveRaf = null;
+                }
+                lastEvent = null;
                 if (refLine) refLine.style.display = 'none';
                 if (activeDot) activeDot.style.display = 'none';
                 if (tooltip) tooltip.style.display = 'none';
-            });
+            }, { passive: true });
         }
     }
 
@@ -3786,12 +3810,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Background Polling for Live Report Count (every 60 seconds - C4)
-    setInterval(() => {
-        if (dashboardSection && dashboardSection.style.display !== 'none') {
-            fetchReports().catch(() => { });
-        }
-    }, 60000);
+    // [PERF-FIX-14] Controllable background polling for live report count and notifications
+    function startBackgroundPolling() {
+        clearInterval(reportPollingInterval);
+        clearInterval(notifPollingInterval);
+        reportPollingInterval = setInterval(() => {
+            if (dashboardSection && dashboardSection.style.display !== 'none') {
+                fetchReports().catch(() => { });
+            }
+        }, 60000);
+        notifPollingInterval = setInterval(() => {
+            if (dashboardSection && dashboardSection.style.display !== 'none') {
+                fetchNotifications();
+            }
+        }, 25000);
+    }
+
+    function stopBackgroundPolling() {
+        clearInterval(reportPollingInterval);
+        clearInterval(notifPollingInterval);
+        reportPollingInterval = null;
+        notifPollingInterval = null;
+    }
+
+    startBackgroundPolling();
 
     // =========================================================================
     // 9. Superuser Advanced Management & Role-Based UI Module
@@ -4073,26 +4115,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tbody.appendChild(fragment);
 
-        tbody.querySelectorAll('button[data-action="edit-user"]').forEach(b => {
-            b.addEventListener('click', () => {
-                const targetId = parseInt(b.getAttribute('data-id'), 10);
-                const targetUser = allAdminUsers.find(u => u.id === targetId);
-                if (targetUser) openEditUserModal(targetUser);
+        // [PERF-FIX-6] Event delegation on users tbody with _delegated guard
+        if (!tbody._delegated) {
+            tbody._delegated = true;
+            tbody.addEventListener('click', (e) => {
+                const b = e.target.closest('button[data-action]');
+                if (!b) return;
+                const action = b.dataset.action;
+                if (action === 'edit-user') {
+                    const targetId = parseInt(b.getAttribute('data-id'), 10);
+                    const targetUser = allAdminUsers.find(u => u.id === targetId);
+                    if (targetUser) openEditUserModal(targetUser);
+                } else if (action === 'reset-pwd') {
+                    openResetPwdModal(b.getAttribute('data-id'), b.getAttribute('data-user'));
+                } else if (action === 'delete-user') {
+                    deleteUser(b.getAttribute('data-id'), b.getAttribute('data-user'));
+                }
             });
-        });
-        tbody.querySelectorAll('button[data-action="reset-pwd"]').forEach(b => {
-            b.addEventListener('click', () => openResetPwdModal(b.getAttribute('data-id'), b.getAttribute('data-user')));
-        });
-        tbody.querySelectorAll('button[data-action="delete-user"]').forEach(b => {
-            b.addEventListener('click', () => deleteUser(b.getAttribute('data-id'), b.getAttribute('data-user')));
-        });
-    }
-
-    function escapeHTML(str) {
-        if (!str) return '';
-        return String(str).replace(/[&<>'"]/g, tag => ({
-            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-        }[tag] || tag));
+        }
     }
 
     async function deleteUser(userId, username) {
@@ -4230,7 +4270,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (statusEl) statusEl.style.display = 'none';
-        if (modalEditUser) modalEditUser.style.display = 'flex';
+        if (modalEditUser) {
+            // [PERF-FIX-28] Promote layer temporarily for modal enter transition
+            const card = modalEditUser.querySelector('.modal-card') || modalEditUser;
+            promoteTemporarily(card, 'transform, opacity', 250);
+            modalEditUser.style.display = 'flex';
+        }
     }
 
     const closeEditUserModal = () => { if (modalEditUser) modalEditUser.style.display = 'none'; };
@@ -4376,7 +4421,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (idInput) idInput.value = userId;
         if (labelEl) labelEl.textContent = username;
         if (statusEl) statusEl.style.display = 'none';
-        if (modalResetPassword) modalResetPassword.style.display = 'flex';
+        if (modalResetPassword) {
+            // [PERF-FIX-28] Promote layer temporarily for modal enter transition
+            const card = modalResetPassword.querySelector('.modal-card') || modalResetPassword;
+            promoteTemporarily(card, 'transform, opacity', 250);
+            modalResetPassword.style.display = 'flex';
+        }
     }
 
     const closeResetPwdModal = () => { if (modalResetPassword) modalResetPassword.style.display = 'none'; };
@@ -4452,7 +4502,12 @@ document.addEventListener('DOMContentLoaded', () => {
         formChangeMyPwd?.reset();
         const status = document.getElementById('change-my-pwd-status');
         if (status) status.style.display = 'none';
-        if (modalChangeMyPwd) modalChangeMyPwd.style.display = 'flex';
+        if (modalChangeMyPwd) {
+            // [PERF-FIX-28] Promote layer temporarily for modal enter transition
+            const card = modalChangeMyPwd.querySelector('.modal-card') || modalChangeMyPwd;
+            promoteTemporarily(card, 'transform, opacity', 250);
+            modalChangeMyPwd.style.display = 'flex';
+        }
     });
 
     const closeChangeMyPwdModal = () => { if (modalChangeMyPwd) modalChangeMyPwd.style.display = 'none'; };
@@ -4633,7 +4688,7 @@ document.addEventListener('DOMContentLoaded', () => {
         location.reload();
     });
 
-    let heartbeatInterval = null;
+    // [PERF-FIX-14] heartbeatInterval is declared at module scope
     function startHeartbeat() {
         clearInterval(heartbeatInterval);
         heartbeatInterval = setInterval(async () => {
@@ -4766,7 +4821,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     btnRefreshAudit?.addEventListener('click', () => fetchAuditLogs());
-    auditFilterSearch?.addEventListener('input', debounce(() => applyAuditFiltersAndPagination(true), 150));
+    // [PERF-FIX-11] Debounce audit search input to 300ms and batch renders via requestAnimationFrame
+    auditFilterSearch?.addEventListener('input', debounce(() => {
+        requestAnimationFrame(() => applyAuditFiltersAndPagination(true));
+    }, 300));
     auditFilterAction?.addEventListener('change', () => applyAuditFiltersAndPagination(true));
     auditFilterUser?.addEventListener('change', () => applyAuditFiltersAndPagination(true));
     auditFilterMonth?.addEventListener('change', () => applyAuditFiltersAndPagination(true));
@@ -4788,29 +4846,34 @@ document.addEventListener('DOMContentLoaded', () => {
         applyAuditFiltersAndPagination(false);
     });
 
-    document.getElementById('adv-audit-tbody')?.addEventListener('click', async (e) => {
-        const copyBtn = e.target.closest('[data-copy-tracking]');
-        if (copyBtn) {
-            const code = copyBtn.getAttribute('data-copy-tracking');
-            if (code) {
-                try {
-                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                        await navigator.clipboard.writeText(code);
-                    } else {
-                        const temp = document.createElement('textarea');
-                        temp.value = code;
-                        document.body.appendChild(temp);
-                        temp.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(temp);
+    // [PERF-FIX-6] Delegated copy listener with _delegated guard
+    const auditTbody = document.getElementById('adv-audit-tbody');
+    if (auditTbody && !auditTbody._delegated) {
+        auditTbody._delegated = true;
+        auditTbody.addEventListener('click', async (e) => {
+            const copyBtn = e.target.closest('[data-copy-tracking]');
+            if (copyBtn) {
+                const code = copyBtn.getAttribute('data-copy-tracking');
+                if (code) {
+                    try {
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            await navigator.clipboard.writeText(code);
+                        } else {
+                            const temp = document.createElement('textarea');
+                            temp.value = code;
+                            document.body.appendChild(temp);
+                            temp.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(temp);
+                        }
+                        showToast('کد رهگیری کپی شد');
+                    } catch (err) {
+                        showToast('خطا در کپی');
                     }
-                    showToast('کد رهگیری کپی شد');
-                } catch (err) {
-                    showToast('خطا در کپی');
                 }
             }
-        }
-    });
+        });
+    }
 
     function renderAuditTableSkeleton(count = 6) {
         const tbody = document.getElementById('adv-audit-tbody');
@@ -4892,6 +4955,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         tbody.appendChild(fragment);
+        tbody._delegated = true;
     }
 
     const btnRefreshSys = document.getElementById('btn-refresh-system-status');
@@ -5069,13 +5133,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tbody.appendChild(fragment);
 
-        tbody.querySelectorAll('button[data-action="terminate-session"]').forEach(b => {
-            b.addEventListener('click', () => {
+        // [PERF-FIX-6] Event delegation on sessions tbody with _delegated guard
+        if (!tbody._delegated) {
+            tbody._delegated = true;
+            tbody.addEventListener('click', (e) => {
+                const b = e.target.closest('button[data-action="terminate-session"]');
+                if (!b) return;
                 const token = b.getAttribute('data-token');
                 const username = b.getAttribute('data-user');
                 terminateSession(token, username);
             });
-        });
+        }
     }
 
     async function terminateSession(token, username) {
@@ -5228,7 +5296,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     } catch (err) { }
                 }
 
-                if (notifDropdown) notifDropdown.style.display = 'none';
+                if (notifDropdown) {
+                    notifDropdown.style.display = 'none';
+                    notifDropdown.classList.remove('is-open');
+                }
 
                 if (targetReportId) {
                     const repIdNum = parseInt(targetReportId, 10);
@@ -5319,8 +5390,12 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             if (!notifDropdown) return;
             const isShown = notifDropdown.style.display === 'block';
-            notifDropdown.style.display = isShown ? 'none' : 'block';
-            if (!isShown) {
+            if (isShown) {
+                notifDropdown.style.display = 'none';
+                notifDropdown.classList.remove('is-open');
+            } else {
+                notifDropdown.style.display = 'block';
+                notifDropdown.classList.add('is-open');
                 renderNotificationsList(allNotifications);
                 fetchNotifications();
             }
@@ -5331,6 +5406,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (notifDropdown && notifDropdown.style.display === 'block') {
             if (!notifDropdown.contains(e.target) && !btnNotifBell.contains(e.target)) {
                 notifDropdown.style.display = 'none';
+                notifDropdown.classList.remove('is-open');
             }
         }
     });
@@ -5551,7 +5627,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (forwardStatusMsg) forwardStatusMsg.style.display = 'none';
         if (forwardSearchInput) forwardSearchInput.value = '';
 
-        if (modalForward) modalForward.style.display = 'flex';
+        if (modalForward) {
+            // [PERF-FIX-28] Promote layer temporarily for modal enter transition
+            const card = modalForward.querySelector('.modal-card') || modalForward;
+            promoteTemporarily(card, 'transform, opacity', 250);
+            modalForward.style.display = 'flex';
+        }
 
         if (!cachedForwardingRecipients) {
             renderRecipientListSkeleton(4);
@@ -5905,8 +5986,12 @@ document.addEventListener('DOMContentLoaded', () => {
             window.convertTitles(forwardHistoryBody);
         }
 
-        forwardHistoryBody.querySelectorAll('.btn-revoke-forward').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
+        // [PERF-FIX-6] Event delegation on forwardHistoryBody with _delegated guard
+        if (!forwardHistoryBody._delegated) {
+            forwardHistoryBody._delegated = true;
+            forwardHistoryBody.addEventListener('click', async (e) => {
+                const btn = e.target.closest('.btn-revoke-forward');
+                if (!btn) return;
                 e.stopPropagation();
                 const fwdId = btn.getAttribute('data-fwd-id');
                 const repId = btn.getAttribute('data-rep-id');
@@ -5960,12 +6045,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.style.opacity = '';
                 }
             });
-        });
+        }
     }
 
-    setInterval(() => {
-        if (dashboardSection && dashboardSection.style.display !== 'none') {
-            fetchNotifications();
+    // [PERF-FIX-14] Suspend background work when tab is hidden
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            clearInterval(timerInterval);
+            clearInterval(heartbeatInterval);
+            stopBackgroundPolling();
+        } else {
+            if (dashboardSection && dashboardSection.style.display !== 'none') {
+                if (typeof resumeSessionTimer === 'function') resumeSessionTimer();
+                if (typeof startHeartbeat === 'function') startHeartbeat();
+                if (typeof startBackgroundPolling === 'function') startBackgroundPolling();
+                if (typeof fetchNotifications === 'function') fetchNotifications();
+            }
         }
-    }, 25000);
+    });
+
+    // [PERF-FIX-16] [PERF-FIX-30] Suspend infinite animations when elements are off-screen, registered during idle phase
+    runWhenIdle(() => {
+        if ('IntersectionObserver' in window) {
+            const animObserver = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    e.target.style.animationPlayState = e.isIntersecting ? 'running' : 'paused';
+                });
+            });
+            document.querySelectorAll('.beam, .corner-glow, .kpi-pulse-dot, .badge-dot-beacon, .pulsing-halo').forEach(el => animObserver.observe(el));
+        }
+    });
 });

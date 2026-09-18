@@ -36,20 +36,6 @@
         </div>
     </div>
 
-    <!-- Skeleton Layout Placeholder for Zero Layout Shift -->
-    <div id="pageSkeleton" class="page-skeleton" aria-hidden="true">
-        <div class="skeleton-header">
-            <div class="skeleton-crest skeleton-shimmer"></div>
-            <div class="skeleton-title skeleton-shimmer"></div>
-            <div class="skeleton-sub skeleton-shimmer"></div>
-        </div>
-        <div class="skeleton-tabs">
-            <div class="skeleton-tab-item skeleton-shimmer"></div>
-            <div class="skeleton-tab-item skeleton-shimmer"></div>
-        </div>
-        <div class="skeleton-card skeleton-shimmer"></div>
-    </div>
-
     <div id="toast-container" class="toast-container"></div>
 
 
@@ -66,7 +52,7 @@
     <div class="container">
         <header class="header">
             <div class="admin-logo-crest public-header-crest">
-                <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش" class="admin-crest-img">
+                <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش" class="admin-crest-img" width="172" height="172" decoding="async">
             </div>
             <h1>سامانه ستاد خبری و دریافت گزارشهای مردمی</h1>
             <p>اداره حراست آموزش و پرورش استان همدان</p>
@@ -423,7 +409,7 @@
                         <label for="submit_captcha_answer">کد امنیتی <span class="label-required">*</span></label>
                         <div class="captcha-row">
                             <div class="captcha-box">
-                                <img id="submit-captcha-img" src="" alt="کد امنیتی" class="captcha-img">
+                                <img id="submit-captcha-img" src="" alt="کد امنیتی" class="captcha-img" width="130" height="48" decoding="async">
                                 <button type="button" id="submit-captcha-refresh" class="btn-refresh"
                                     data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
                                     <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
@@ -571,7 +557,7 @@
                     <label for="track_captcha_answer">کد امنیتی <span class="label-required">*</span></label>
                     <div class="captcha-row">
                         <div class="captcha-box">
-                            <img id="track-captcha-img" src="" alt="کد امنیتی" class="captcha-img">
+                            <img id="track-captcha-img" src="" alt="کد امنیتی" class="captcha-img" width="130" height="48" loading="lazy" decoding="async">
                             <button type="button" id="track-captcha-refresh" class="btn-refresh"
                                 data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
                                 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
@@ -702,7 +688,7 @@
 
                     <div class="followup-captcha-row">
                         <div class="captcha-box captcha-box-compact">
-                            <img id="followup-captcha-img" src="" alt="کد امنیتی" class="captcha-img">
+                            <img id="followup-captcha-img" src="" alt="کد امنیتی" class="captcha-img" width="130" height="48" loading="lazy" decoding="async">
                             <button type="button" id="followup-captcha-refresh" class="btn-refresh"
                                 data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
@@ -1095,7 +1081,7 @@
                 <!-- 1. Institutional Header -->
                 <header class="receipt-header">
                     <div class="receipt-header-right">
-                        <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش استان همدان" class="receipt-emblem">
+                        <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش استان همدان" class="receipt-emblem" width="80" height="80" loading="lazy" decoding="async">
                     </div>
                     <div class="receipt-header-center">
                         <span class="receipt-gov-title">جمهوری اسلامی ایران</span>
@@ -1204,8 +1190,9 @@
         </div>
     </section>
 
-    <script src="confirm.js"></script>
-    <script src="app.js?v=73"></script>
+    <!-- [PERF-FIX-18] Defer non-blocking script execution -->
+    <script src="confirm.js" defer></script>
+    <script src="app.js?v=73" defer></script>
 </body>
 
 </html>

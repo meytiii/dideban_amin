@@ -36,16 +36,6 @@
         </div>
     </div>
 
-    <!-- Skeleton Layout Placeholder for Zero Layout Shift -->
-    <div id="adminSkeleton" class="page-skeleton" aria-hidden="true">
-        <div class="skeleton-header">
-            <div class="skeleton-crest skeleton-shimmer"></div>
-            <div class="skeleton-title skeleton-shimmer"></div>
-            <div class="skeleton-sub skeleton-shimmer"></div>
-        </div>
-        <div class="skeleton-card skeleton-shimmer" style="max-width: 440px; height: 360px;"></div>
-    </div>
-
     <div id="toast-container" class="toast-container"></div>
 
 
@@ -68,7 +58,7 @@
                 <div class="admin-login-inner">
                     <div class="admin-login-header">
                         <div class="admin-logo-crest">
-                            <img src="logo.png" alt="لوگوی اداره حراست" class="admin-crest-img">
+                            <img src="logo.png" alt="لوگوی اداره حراست" class="admin-crest-img" width="172" height="172" decoding="async">
                             <div class="crest-glow"></div>
                         </div>
                         <h1>ورود امن به پنل مدیریتی ستاد خبری</h1>
@@ -128,7 +118,7 @@
                             <label for="admin_captcha_answer">کد امنیتی</label>
                             <div class="admin-captcha-row">
                                 <div class="admin-captcha-box">
-                                    <img id="admin-captcha-img" src="" alt="کد امنیتی" class="admin-captcha-img">
+                                    <img id="admin-captcha-img" src="" alt="کد امنیتی" class="admin-captcha-img" width="130" height="48" decoding="async">
                                     <button type="button" id="admin-captcha-refresh" class="btn-refresh"
                                         data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
@@ -186,7 +176,7 @@
 
             <div class="dashboard-logo-center">
                 <div class="admin-logo-crest dashboard-header-crest">
-                    <img src="logo.png" alt="لوگوی اداره حراست آموزش و پرورش همدان" class="admin-crest-img">
+                    <img src="logo.png" alt="لوگوی اداره حراست آموزش و پرورش همدان" class="admin-crest-img" width="180" height="180" loading="lazy" decoding="async">
                 </div>
             </div>
 
@@ -614,7 +604,7 @@
 
             <div class="print-official-header">
                 <div class="print-header-side print-header-right">
-                    <img src="report_logo.png" alt="نشان رسمی اداره حراست" class="print-official-logo">
+                    <img src="report_logo.png" alt="نشان رسمی اداره حراست" class="print-official-logo" width="80" height="80" loading="lazy" decoding="async">
                 </div>
                 <div class="print-header-center">
                     <div class="bismillah">« بسمه تعالی »</div>
@@ -2179,8 +2169,9 @@
         </div>
     </div>
 
-    <script src="confirm.js"></script>
-    <script src="admin.js?v=82"></script>
+    <!-- [PERF-FIX-18] Defer non-blocking script execution -->
+    <script src="confirm.js" defer></script>
+    <script src="admin.js?v=82" defer></script>
 </body>
 
 </html>

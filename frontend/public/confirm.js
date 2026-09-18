@@ -1,6 +1,7 @@
 /**
- * Shared Modal Confirmation Dialog System (M-4)
+ * Shared Modal Confirmation Dialog System (M-4) [PERF-FIX-17] [PERF-FIX-23]
  * Herasat Whistleblowing Portal - Education Department of Hamadan
+ * Lazy DOM creation with element caching to eliminate GC thrash and HTML parsing on each call.
  */
 
 (function () {
@@ -22,73 +23,143 @@
         'check-circle': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
     };
 
+    let cachedOverlay = null;
+    let cachedElements = null;
+    let activeResolver = null;
+
+    function getOrCreateDialog() {
+        if (cachedOverlay && document.body.contains(cachedOverlay)) {
+            return cachedElements;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'pro-confirm-overlay';
+        overlay.style.display = 'none';
+        overlay.innerHTML = `
+            <div class="pro-confirm-card" role="dialog" aria-modal="true">
+                <div class="pro-confirm-body">
+                    <div class="pro-confirm-icon-badge" id="proConfirmIconBadge"></div>
+                    <h3 class="pro-confirm-title" id="proConfirmTitle"></h3>
+                    <p class="pro-confirm-desc" id="proConfirmDesc"></p>
+                    <div class="pro-confirm-custom-content" id="proConfirmCustomContent"></div>
+                </div>
+                <div class="pro-confirm-footer">
+                    <button type="button" class="pro-confirm-btn pro-confirm-btn-cancel" id="proConfirmCancelBtn"></button>
+                    <button type="button" class="pro-confirm-btn pro-confirm-btn-confirm" id="proConfirmOkBtn"></button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        cachedOverlay = overlay;
+        cachedElements = {
+            overlay,
+            card: overlay.querySelector('.pro-confirm-card'),
+            badge: overlay.querySelector('#proConfirmIconBadge'),
+            title: overlay.querySelector('#proConfirmTitle'),
+            desc: overlay.querySelector('#proConfirmDesc'),
+            customContent: overlay.querySelector('#proConfirmCustomContent'),
+            cancelBtn: overlay.querySelector('#proConfirmCancelBtn'),
+            okBtn: overlay.querySelector('#proConfirmOkBtn')
+        };
+
+        const cleanup = (result) => {
+            // [PERF-FIX-28] Temporarily promote modal card layer during exit transition
+            promoteTemporarily(cachedElements.card, 'transform, opacity', 200);
+            overlay.classList.remove('active');
+            document.removeEventListener('keydown', onKey);
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                if (activeResolver) {
+                    const resolve = activeResolver;
+                    activeResolver = null;
+                    resolve(result);
+                }
+            }, 180);
+        };
+
+        const onKey = (e) => {
+            if (e.key === 'Escape') cleanup(false);
+            else if (e.key === 'Enter' && document.activeElement !== cachedElements.cancelBtn) {
+                e.preventDefault();
+                cleanup(true);
+            }
+        };
+
+        cachedElements.cleanup = cleanup;
+        cachedElements.onKey = onKey;
+
+        cachedElements.cancelBtn.addEventListener('click', () => cleanup(false));
+        cachedElements.okBtn.addEventListener('click', () => cleanup(true));
+        overlay.addEventListener('click', (e) => {
+            if (!cachedElements.card.contains(e.target)) cleanup(false);
+        });
+
+        return cachedElements;
+    }
+
+    // [PERF-FIX-28] Dynamic will-change promotion helper with auto-cleanup
+    function promoteTemporarily(el, props = 'transform, opacity', durationMs = 250) {
+        if (!el || !el.style) return;
+        el.style.willChange = props;
+        setTimeout(() => {
+            if (el && el.style) el.style.willChange = 'auto';
+        }, durationMs);
+    }
+
     function showConfirmDialog({
         title = 'آیا اطمینان دارید؟',
         description = '',
         htmlContent = '',
         confirmText = 'بله، تأیید',
         cancelText = 'خیر، انصراف',
-        variant = 'warning', // 'warning', 'danger', 'primary', 'success'
-        iconType = 'shield-question' // 'logout', 'trash', 'shield-alert', 'shield-question', 'user-x', 'check-circle'
+        variant = 'warning',
+        iconType = 'shield-question'
     } = {}) {
         return new Promise((resolve) => {
-            document.querySelectorAll('.pro-confirm-overlay').forEach(el => el.remove());
+            const els = getOrCreateDialog();
+            activeResolver = resolve;
 
             const iconSvg = icons[iconType] || icons['shield-question'];
-            const overlay = document.createElement('div');
-            overlay.className = 'pro-confirm-overlay';
-            overlay.innerHTML = `
-                <div class="pro-confirm-card" role="dialog" aria-modal="true">
-                    <div class="pro-confirm-body">
-                        <div class="pro-confirm-icon-badge pro-confirm-badge-${variant}">
-                            ${iconSvg}
-                        </div>
-                        <h3 class="pro-confirm-title">${safeEscape(title)}</h3>
-                        ${description ? `<p class="pro-confirm-desc">${safeEscape(description)}</p>` : ''}
-                        ${htmlContent ? `<div class="pro-confirm-custom-content">${htmlContent}</div>` : ''}
-                    </div>
-                    <div class="pro-confirm-footer">
-                        <button type="button" class="pro-confirm-btn pro-confirm-btn-cancel" id="proConfirmCancelBtn">
-                            ${safeEscape(cancelText)}
-                        </button>
-                        <button type="button" class="pro-confirm-btn pro-confirm-btn-confirm btn-var-${variant}" id="proConfirmOkBtn">
-                            ${safeEscape(confirmText)}
-                        </button>
-                    </div>
-                </div>
-            `;
+            els.badge.className = `pro-confirm-icon-badge pro-confirm-badge-${variant}`;
+            els.badge.innerHTML = iconSvg;
 
-            document.body.appendChild(overlay);
+            els.title.textContent = title;
 
-            // Reflow to ensure animation triggers
-            void overlay.offsetWidth;
-            overlay.classList.add('active');
-
-            const card = overlay.querySelector('.pro-confirm-card');
-            const cancelBtn = overlay.querySelector('#proConfirmCancelBtn');
-            const okBtn = overlay.querySelector('#proConfirmOkBtn');
-
-            function cleanup(result) {
-                overlay.classList.remove('active');
-                document.removeEventListener('keydown', onKey);
-                setTimeout(() => {
-                    overlay.remove();
-                    resolve(result);
-                }, 180);
+            if (description) {
+                els.desc.textContent = description;
+                els.desc.style.display = '';
+            } else {
+                els.desc.textContent = '';
+                els.desc.style.display = 'none';
             }
 
-            function onKey(e) {
-                if (e.key === 'Escape') cleanup(false);
+            if (htmlContent) {
+                els.customContent.innerHTML = htmlContent;
+                els.customContent.style.display = '';
+            } else {
+                els.customContent.innerHTML = '';
+                els.customContent.style.display = 'none';
             }
 
-            cancelBtn.addEventListener('click', () => cleanup(false));
-            okBtn.addEventListener('click', () => cleanup(true));
-            overlay.addEventListener('click', (e) => {
-                if (!card.contains(e.target)) cleanup(false);
-            });
-            document.addEventListener('keydown', onKey);
+            els.cancelBtn.textContent = cancelText;
+            els.okBtn.textContent = confirmText;
+            els.okBtn.className = `pro-confirm-btn pro-confirm-btn-confirm btn-var-${variant}`;
 
-            setTimeout(() => okBtn.focus(), 50);
+            // [PERF-FIX-28] Temporarily promote modal card layer during open transition
+            promoteTemporarily(els.card, 'transform, opacity', 250);
+
+            els.overlay.style.display = 'flex';
+            void els.overlay.offsetWidth;
+            els.overlay.classList.add('active');
+
+            document.removeEventListener('keydown', els.onKey);
+            document.addEventListener('keydown', els.onKey);
+
+            setTimeout(() => {
+                if (els.okBtn) els.okBtn.focus();
+            }, 50);
         });
     }
 

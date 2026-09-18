@@ -1,30 +1,33 @@
 
-// Minimum prestige 3D preloader dismiss with guaranteed safety timeout
+// [PERF-FIX-3] Eliminate artificial preloader delay and redundant skeleton
 (function initPreloader() {
-    const PRELOADER_MIN_MS = 1000;
+    // Only show the preloader on the very first load per session
+    if (sessionStorage.getItem('herasat_preloader_seen')) {
+        const p = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
+        const s = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
+        if (p) p.remove();
+        if (s) s.remove();
+        return;
+    }
+    sessionStorage.setItem('herasat_preloader_seen', '1');
+
+    const PRELOADER_MIN_MS = 250;
     const startTime = performance.now();
     let dismissed = false;
 
     function dismiss() {
         if (dismissed) return;
         dismissed = true;
-        const elapsed = performance.now() - startTime;
-        const remaining = Math.max(0, PRELOADER_MIN_MS - elapsed);
+        const remaining = Math.max(0, PRELOADER_MIN_MS - (performance.now() - startTime));
         setTimeout(() => {
-            const preloader = document.getElementById('appPreloader');
-            const skeleton = document.getElementById('pageSkeleton');
+            const preloader = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
+            const skeleton = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
             if (preloader) {
                 preloader.classList.add('fade-out');
-                setTimeout(() => {
-                    if (preloader.parentNode) preloader.remove();
-                }, 450);
+                setTimeout(() => preloader.remove(), 450);
             }
-            if (skeleton) {
-                skeleton.classList.add('fade-out');
-                setTimeout(() => {
-                    if (skeleton.parentNode) skeleton.remove();
-                }, 450);
-            }
+            // Skeleton is redundant once preloader is up — remove immediately
+            if (skeleton) skeleton.remove();
         }, remaining);
     }
 
@@ -34,9 +37,21 @@
         window.addEventListener('load', dismiss);
         document.addEventListener('DOMContentLoaded', dismiss);
     }
-    // Hard fallback: dismiss after 2s regardless of window load event
-    setTimeout(dismiss, 2000);
 })();
+
+// [PERF-FIX-21] Respect prefers-reduced-motion for programmatic scroll
+const getScrollBehavior = () => (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+
+// [PERF-FIX-28] Dynamic will-change promotion helper with auto-cleanup
+function promoteTemporarily(el, props = 'transform, opacity', durationMs = 300) {
+    if (!el || !el.style) return;
+    el.style.willChange = props;
+    setTimeout(() => {
+        if (el && el.style) {
+            el.style.willChange = 'auto';
+        }
+    }, durationMs);
+}
 
 // Unified High-End Tooltip System (matching Radix/shadcn component)
 function initAppTooltips() {
@@ -495,13 +510,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtns = document.querySelectorAll('.btn-prev');
     const stepTrackers = document.querySelectorAll('.step-item');
 
+    // [PERF-FIX-13] Throttle makeTextareaAutoExpand with requestAnimationFrame
     function makeTextareaAutoExpand(el) {
         if (!el) return;
         el.style.resize = 'none';
         el.style.overflowY = 'hidden';
+        const minHeight = el.id === 'description' ? 130 : 60;
+        let rafId;
         const adjustHeight = () => {
-            el.style.height = 'auto';
-            el.style.height = Math.max(el.scrollHeight, (el.id === 'description' ? 130 : 60)) + 'px';
+            cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => {
+                el.style.height = 'auto';
+                el.style.height = Math.max(el.scrollHeight, minHeight) + 'px';
+            });
         };
         el.addEventListener('input', adjustHeight);
         el.addEventListener('change', adjustHeight);
@@ -548,7 +569,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (connector) connector.classList.remove('completed');
             }
         }
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // [PERF-FIX-21] Respect reduced-motion
+        window.scrollTo({ top: 0, behavior: getScrollBehavior() });
 
         if (currentStep === 3) {
             const submitCaptchaImg = document.getElementById('submit-captcha-img');
@@ -822,11 +844,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let selectedFiles = [];
 
+    // [PERF-FIX-4] Fast pure-string HTML escape (bypasses expensive DOM element creation)
+    const ESCAPE_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
     function escapeHtml(str) {
-        if (!str) return '';
-        const p = document.createElement('p');
-        p.textContent = str;
-        return p.innerHTML;
+        if (str == null) return '';
+        return String(str).replace(/[&<>"']/g, c => ESCAPE_MAP[c]);
     }
 
     function renderFileQueue(newlyAddedIndices = []) {
@@ -1131,95 +1153,114 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/[\u064B-\u065F\u0670\u200C\u200B\uFEFF\u200E\u200F]/g, '')
             .replace(/[@$013!45]/g, m => ({ '@': 'a', '$': 's', '0': 'o', '1': 'i', '3': 'e', '!': 'i', '4': 'a', '5': 's' })[m]);
 
-        // 1. Regex patterns for masked / wildcard vulgarities (ک*ر, ک*ص*ش, and symbol-injected forms)
-        const patterns = [
-            /(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+ر(?:ی|م|ت|تون|مون|ش|ها)?(?:[^\p{L}\p{N}]|$)/iu,
-            /ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[یiي*]+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر/iu,
-            /(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+ش(?:[^\p{L}\p{N}]|$)/iu,
-            /ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[وo0u*]?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ک?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش/iu,
-            /(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+[صس](?:[^\p{L}\p{N}]|$)/iu,
-            /ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*خ[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*و?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ل/iu,
-            /ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[ع*]?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر/iu,
-            /(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+ن[یiي*]?(?:[^\p{L}\p{N}]|$)/iu,
-            /ج[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ن?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*]/iu,
-            /ق[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ح[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ب?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*]/iu,
-            /د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*و+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ث/iu,
-            /س[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ت[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر/iu,
-            /پ[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*س[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*گ/iu,
-            /ب[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ن[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*م[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*و+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*س/iu,
-            /ب[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ف/iu,
-            /ح[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[اوu]*[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*م[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ز[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*]/iu,
-            /م[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ج[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ن?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*]/iu,
-            /گ[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*م/iu,
-            /(?:^|[^\p{L}\p{N}])ل[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[یiي*]+(?:[^\p{L}\p{N}]|$)/iu,
+        // [PERF-FIX-22] Module-scoped precomputed profanity tokens, patterns, and phonetic map
+        return _fastCheckClientVulgar(lowered);
+    }
 
-            /\bk+[i|e|y]+r+\b/i,
-            /\bk+[o|u]+s+\b/i,
-            /\bk+[o|u]+n+\b/i,
-            /\bf+[\s*._~^#@$%&/\\|!?\-+=0-9]*[u*]+[\s*._~^#@$%&/\\|!?\-+=0-9]*[c*]*[\s*._~^#@$%&/\\|!?\-+=0-9]*k+\b/i,
-            /\bs+[\s*._~^#@$%&/\\|!?\-+=0-9]*[h*]+[\s*._~^#@$%&/\\|!?\-+=0-9]*[i*!1]+[\s*._~^#@$%&/\\|!?\-+=0-9]*t+\b/i,
-            /\bb+[\s*._~^#@$%&/\\|!?\-+=0-9]*[i*!1]+[\s*._~^#@$%&/\\|!?\-+=0-9]*t+[\s*._~^#@$%&/\\|!?\-+=0-9]*c+[\s*._~^#@$%&/\\|!?\-+=0-9]*h+\b/i,
-            /\bc+[\s*._~^#@$%&/\\|!?\-+=0-9]*[u*]+[\s*._~^#@$%&/\\|!?\-+=0-9]*n+[\s*._~^#@$%&/\\|!?\-+=0-9]*t+\b/i,
-            /\ba+[\s*._~^#@$%&/\\|!?\-+=0-9]*s+[\s*._~^#@$%&/\\|!?\-+=0-9]*s+[\s*._~^#@$%&/\\|!?\-+=0-9]*h+[\s*._~^#@$%&/\\|!?\-+=0-9]*o+[\s*._~^#@$%&/\\|!?\-+=0-9]*l+[\s*._~^#@$%&/\\|!?\-+=0-9]*e+\b/i,
-            /\bj+e+n+d+e+h?/i,
-            /\bd+a+y+[o|u]+s+/i,
-            /\bk+o+s+k+e+s+h+/i
-        ];
+    // [PERF-FIX-22] Precomputed once at startup to eliminate CPU spikes and string allocations on keystrokes
+    const _vulgarPatterns = [
+        /(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+ر(?:ی|م|ت|تون|مون|ش|ها)?(?:[^\p{L}\p{N}]|$)/iu,
+        /ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[یiي*]+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر/iu,
+        /(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+ش(?:[^\p{L}\p{N}]|$)/iu,
+        /ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[وo0u*]?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ک?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش/iu,
+        /(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+[صس](?:[^\p{L}\p{N}]|$)/iu,
+        /ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*خ[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*و?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ل/iu,
+        /ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[ع*]?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر/iu,
+        /(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+ن[یiي*]?(?:[^\p{L}\p{N}]|$)/iu,
+        /ج[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ن?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*]/iu,
+        /ق[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ح[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ب?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*]/iu,
+        /د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*و+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ث/iu,
+        /س[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ت[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر/iu,
+        /پ[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*س[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*گ/iu,
+        /ب[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ن[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*م[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*و+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*س/iu,
+        /ب[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ف/iu,
+        /ح[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[اوu]*[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*م[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ز[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*]/iu,
+        /م[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ج[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ن?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*]/iu,
+        /گ[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*م/iu,
+        /(?:^|[^\p{L}\p{N}])ل[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[یiي*]+(?:[^\p{L}\p{N}]|$)/iu,
+        /\bk+[i|e|y]+r+\b/i,
+        /\bk+[o|u]+s+\b/i,
+        /\bk+[o|u]+n+\b/i,
+        /\bf+[\s*._~^#@$%&/\\|!?\-+=0-9]*[u*]+[\s*._~^#@$%&/\\|!?\-+=0-9]*[c*]*[\s*._~^#@$%&/\\|!?\-+=0-9]*k+\b/i,
+        /\bs+[\s*._~^#@$%&/\\|!?\-+=0-9]*[h*]+[\s*._~^#@$%&/\\|!?\-+=0-9]*[i*!1]+[\s*._~^#@$%&/\\|!?\-+=0-9]*t+\b/i,
+        /\bb+[\s*._~^#@$%&/\\|!?\-+=0-9]*[i*!1]+[\s*._~^#@$%&/\\|!?\-+=0-9]*t+[\s*._~^#@$%&/\\|!?\-+=0-9]*c+[\s*._~^#@$%&/\\|!?\-+=0-9]*h+\b/i,
+        /\bc+[\s*._~^#@$%&/\\|!?\-+=0-9]*[u*]+[\s*._~^#@$%&/\\|!?\-+=0-9]*n+[\s*._~^#@$%&/\\|!?\-+=0-9]*t+\b/i,
+        /\ba+[\s*._~^#@$%&/\\|!?\-+=0-9]*s+[\s*._~^#@$%&/\\|!?\-+=0-9]*s+[\s*._~^#@$%&/\\|!?\-+=0-9]*h+[\s*._~^#@$%&/\\|!?\-+=0-9]*o+[\s*._~^#@$%&/\\|!?\-+=0-9]*l+[\s*._~^#@$%&/\\|!?\-+=0-9]*e+\b/i,
+        /\bj+e+n+d+e+h?/i,
+        /\bd+a+y+[o|u]+s+/i,
+        /\bk+o+s+k+e+s+h+/i
+    ];
 
-        if (patterns.some(rx => rx.test(lowered))) return true;
+    const _stripSymbols = s => s.replace(/[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+/gu, '');
+    const _collapseRepeats = s => s.replace(/(.)\1+/gu, '$1');
+    const _toPhonetic = s => s.replace(/ص/g, 'س');
 
-        // 2. Token-level analysis
-        const persianList = [
-            "کیر", "کسکش", "کس کش", "کوسکش", "کوس کش", "کصکش", "کص کش", "کوصکش", "کوص کش",
-            "کونی", "کوص", "کص", "کوس", "کون", "جنده", "قحبه",
-            "مادرجنده", "مادر جنده", "خواهرجنده", "خواهر جنده", "پدر سگ", "پدرسگ", "پدرصلواتی",
-            "دیوث", "بی ناموس", "بی‌ناموس", "بیناموس", "حرامزاده", "حرومزاده", "حروم زاده", "حرام زاده",
-            "سیکتیر", "سیک تیر", "گوه", "عن", "لاشی", "لاشخور", "پفیوز", "کثافت", "بی شرف", "بی‌شرف",
-            "بیشرف", "مادرقحبه", "مادر قحبه", "مادر قهوه", "مادرقهوه", "کیرم", "کیرت", "کیری",
-            "کسخل", "کس خل", "کصخل", "کص خل", "کسمغز", "کس مغز", "کصمغز", "کص مغز",
-            "کسشعر", "کس شعر", "کسشر", "کس شر", "کصشعر", "کص شعر", "کصشر", "کص شر", "کصش", "کسش",
-            "گه نخور", "خفه شو", "کره خر", "تخم سگ", "تخمسگ", "گاایدم", "گاییدم", "میگام", "بگام",
-            "ممه", "کوندوز", "کونده", "اوبی", "بی پدر", "بی‌پدر", "پدرسوخته", "پدر سوخته",
-            "کسلیس", "کصلیس", "کونکش", "کون کش"
-        ];
+    const _rawPersianList = [
+        "کیر", "کسکش", "کس کش", "کوسکش", "کوس کش", "کصکش", "کص کش", "کوصکش", "کوص کش",
+        "کونی", "کوص", "کص", "کوس", "کون", "جنده", "قحبه",
+        "مادرجنده", "مادر جنده", "خواهرجنده", "خواهر جنده", "پدر سگ", "پدرسگ", "پدرصلواتی",
+        "دیوث", "بی ناموس", "بی‌ناموس", "بیناموس", "حرامزاده", "حرومزاده", "حروم زاده", "حرام زاده",
+        "سیکتیر", "سیک تیر", "گوه", "عن", "لاشی", "لاشخور", "پفیوز", "کثافت", "بی شرف", "بی‌شرف",
+        "بیشرف", "مادرقحبه", "مادر قحبه", "مادر قهوه", "مادرقهوه", "کیرم", "کیرت", "کیری",
+        "کسخل", "کس خل", "کصخل", "کص خل", "کسمغز", "کس مغز", "کصمغز", "کص مغز",
+        "کسشعر", "کس شعر", "کسشر", "کس شر", "کصشعر", "کص شعر", "کصشر", "کص شر", "کصش", "کسش",
+        "گه نخور", "خفه شو", "کره خر", "تخم سگ", "تخمسگ", "گاایدم", "گاییدم", "میگام", "بگام",
+        "ممه", "کوندوز", "کونده", "اوبی", "بی پدر", "بی‌پدر", "پدرسوخته", "پدر سوخته",
+        "کسلیس", "کصلیس", "کونکش", "کون کش"
+    ];
 
-        const finglishList = [
-            "kos", "koss", "kose", "koseh", "koskesh", "koskhol", "koskhel", "kir", "keer", "kiri", "kiram", "koon",
-            "kooni", "jende", "jendeh", "madarjende", "khaharjende", "dayoos", "dayus", "dayous",
-            "binamoos", "haroomzade", "haromzade", "siktir", "sikter", "lashi", "bisharaf",
-            "pedarsag", "pedar sag", "goh", "gohkhor", "gayidam", "gayedam", "fuck", "shit", "bitch", "cunt", "asshole"
-        ];
+    const _precomputedPersianTokens = _rawPersianList.map(p => {
+        const clean = _stripSymbols(p);
+        return {
+            raw: p,
+            clean: clean,
+            phonetic: _toPhonetic(clean),
+            isPhrase: p.includes(' '),
+            normPhrase: p.includes(' ') ? p.replace(/\s+/g, ' ') : null
+        };
+    });
 
-        const collapseRepeats = s => s.replace(/(.)\1+/gu, '$1');
-        const stripSymbols = s => s.replace(/[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+/gu, '');
-        const toPhonetic = s => s.replace(/ص/g, 'س');
+    const _precomputedPhrases = _precomputedPersianTokens.filter(p => p.isPhrase);
+
+    const _finglishList = [
+        "kos", "koss", "kose", "koseh", "koskesh", "koskhol", "koskhel", "kir", "keer", "kiri", "kiram", "koon",
+        "kooni", "jende", "jendeh", "madarjende", "khaharjende", "dayoos", "dayus", "dayous",
+        "binamoos", "haroomzade", "haromzade", "siktir", "sikter", "lashi", "bisharaf",
+        "pedarsag", "pedar sag", "goh", "gohkhor", "gayidam", "gayedam", "fuck", "shit", "bitch", "cunt", "asshole"
+    ];
+
+    const _vulgarSuffixes = ["", "ها", "هاش", "های", "ه", "ی", "م", "ت", "ش", "مان", "تان", "شان", "تون", "مون", "ان", "ا"];
+    const _hasPrefixVulgar = (tok, term) => {
+        if (tok.startsWith(term)) {
+            const sfx = tok.substring(term.length);
+            return _vulgarSuffixes.includes(sfx);
+        }
+        return false;
+    };
+
+    function _fastCheckClientVulgar(lowered) {
+        if (_vulgarPatterns.some(rx => rx.test(lowered))) return true;
 
         const tokens = lowered.split(/\s+/);
         let singleCharSeq = '';
 
-        const vulgarSuffixes = ["", "ها", "هاش", "های", "ه", "ی", "م", "ت", "ش", "مان", "تان", "شان", "تون", "مون", "ان", "ا"];
-        const hasPrefixVulgar = (tok, term) => {
-            if (tok.startsWith(term)) {
-                const sfx = tok.substring(term.length);
-                return vulgarSuffixes.includes(sfx);
-            }
-            return false;
-        };
+        for (let i = 0; i < tokens.length; i++) {
+            const tok = tokens[i];
+            const stripped = _stripSymbols(tok);
+            const collapsed = _collapseRepeats(stripped);
+            const phonetic = _toPhonetic(collapsed);
 
-        for (let tok of tokens) {
-            const stripped = stripSymbols(tok);
-            const collapsed = collapseRepeats(stripped);
-            const phonetic = toPhonetic(collapsed);
-
-            for (let p of persianList) {
-                const pClean = stripSymbols(p);
-                const pPhonetic = toPhonetic(pClean);
+            for (let j = 0; j < _precomputedPersianTokens.length; j++) {
+                const p = _precomputedPersianTokens[j];
+                const pClean = p.clean;
+                const pPhonetic = p.phonetic;
 
                 if (stripped === pClean || collapsed === pClean || phonetic === pPhonetic) return true;
-                if (hasPrefixVulgar(stripped, pClean) || hasPrefixVulgar(collapsed, pClean) || hasPrefixVulgar(phonetic, pPhonetic)) return true;
+                if (_hasPrefixVulgar(stripped, pClean) || _hasPrefixVulgar(collapsed, pClean) || _hasPrefixVulgar(phonetic, pPhonetic)) return true;
             }
 
-            for (let f of finglishList) {
+            for (let k = 0; k < _finglishList.length; k++) {
+                const f = _finglishList[k];
                 if (stripped === f || collapsed === f) return true;
                 if (f.length >= 4 && (stripped.startsWith(f) || collapsed.startsWith(f))) return true;
             }
@@ -1227,34 +1268,29 @@ document.addEventListener('DOMContentLoaded', () => {
             if (stripped.length === 1) {
                 singleCharSeq += stripped;
             } else if (singleCharSeq.length > 0) {
-                const seqCol = collapseRepeats(singleCharSeq);
-                const seqPhon = toPhonetic(seqCol);
-                for (let p of persianList) {
-                    const pClean = stripSymbols(p);
-                    const pPhon = toPhonetic(pClean);
-                    if (singleCharSeq === pClean || seqCol === pClean || seqPhon === pPhon) return true;
+                const seqCol = _collapseRepeats(singleCharSeq);
+                const seqPhon = _toPhonetic(seqCol);
+                for (let j = 0; j < _precomputedPersianTokens.length; j++) {
+                    const p = _precomputedPersianTokens[j];
+                    if (singleCharSeq === p.clean || seqCol === p.clean || seqPhon === p.phonetic) return true;
                 }
                 singleCharSeq = '';
             }
         }
 
         if (singleCharSeq.length > 0) {
-            const seqCol = collapseRepeats(singleCharSeq);
-            const seqPhon = toPhonetic(seqCol);
-            for (let p of persianList) {
-                const pClean = stripSymbols(p);
-                const pPhon = toPhonetic(pClean);
-                if (singleCharSeq === pClean || seqCol === pClean || seqPhon === pPhon) return true;
+            const seqCol = _collapseRepeats(singleCharSeq);
+            const seqPhon = _toPhonetic(seqCol);
+            for (let j = 0; j < _precomputedPersianTokens.length; j++) {
+                const p = _precomputedPersianTokens[j];
+                if (singleCharSeq === p.clean || seqCol === p.clean || seqPhon === p.phonetic) return true;
             }
         }
 
-        // Multi-word phrase check (e.g. "مادر جنده", "بی ناموس", "پدر سگ")
+        // Multi-word phrase check
         const normalizedSentence = lowered.replace(/[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+/gu, ' ').trim();
-        for (let p of persianList) {
-            if (p.includes(' ')) {
-                const pNorm = p.replace(/\s+/g, ' ');
-                if (normalizedSentence.includes(pNorm)) return true;
-            }
+        for (let m = 0; m < _precomputedPhrases.length; m++) {
+            if (normalizedSentence.includes(_precomputedPhrases[m].normPhrase)) return true;
         }
 
         return false;
@@ -1277,84 +1313,50 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     `;
 
+    // [PERF-FIX-17] Use shared cached modal confirmation dialog from confirm.js
     function showConfirmDialog() {
-        return new Promise((resolve) => {
-            const category = document.getElementById('category');
-            const desc = descTextarea?.value || '';
-            const descPreview = desc.length > 120 ? desc.substring(0, 120) + '...' : desc;
+        const category = document.getElementById('category');
+        const desc = descTextarea?.value || '';
+        const descPreview = desc.length > 120 ? desc.substring(0, 120) + '...' : desc;
 
-            let attachmentSummary = 'ندارد';
-            if (selectedFiles.length === 1) {
-                attachmentSummary = `${escapeHtml(selectedFiles[0].name)} (${formatFileSize(selectedFiles[0].size)})`;
-            } else if (selectedFiles.length > 1) {
-                const totalBytes = selectedFiles.reduce((s, f) => s + f.size, 0);
-                const names = selectedFiles.map(f => escapeHtml(f.name)).join('، ');
-                attachmentSummary = `${toPersianNum(selectedFiles.length)} فایل (مجموعاً ${formatFileSize(totalBytes)}): ${names}`;
-            }
+        let attachmentSummary = 'ندارد';
+        if (selectedFiles.length === 1) {
+            attachmentSummary = `${escapeHtml(selectedFiles[0].name)} (${formatFileSize(selectedFiles[0].size)})`;
+        } else if (selectedFiles.length > 1) {
+            const totalBytes = selectedFiles.reduce((s, f) => s + f.size, 0);
+            const names = selectedFiles.map(f => escapeHtml(f.name)).join('، ');
+            attachmentSummary = `${toPersianNum(selectedFiles.length)} فایل (مجموعاً ${formatFileSize(totalBytes)}): ${names}`;
+        }
 
-            const overlay = document.createElement('div');
-            overlay.className = 'pro-confirm-overlay';
-            overlay.innerHTML = `
-                <div class="pro-confirm-card" role="dialog" aria-modal="true">
-                    <div class="pro-confirm-body">
-                        <div class="pro-confirm-icon-badge pro-confirm-badge-primary">
-                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                <path d="m9 12 2 2 4-4"></path>
-                            </svg>
-                        </div>
-                        <h3 class="pro-confirm-title">بررسی نهایی قبل از ارسال گزارش</h3>
-                        <p class="pro-confirm-desc">لطفاً پیش از ارسال نهایی، مشخصات گزارش محرمانه خود را به دقت بررسی فرمایید.</p>
-                        <div class="pro-confirm-custom-content">
-                            <div class="confirm-summary">
-                                <div class="confirm-summary-item">
-                                    <span class="confirm-summary-label">موضوع:</span>
-                                    <span class="confirm-summary-value">${category?.options[category.selectedIndex]?.text || 'نامشخص'}</span>
-                                </div>
-                                <div class="confirm-summary-item">
-                                    <span class="confirm-summary-label">شرح گزارش:</span>
-                                    <span class="confirm-summary-value">${descPreview || 'بدون شرح'}</span>
-                                </div>
-                                <div class="confirm-summary-item">
-                                    <span class="confirm-summary-label">فایل‌های پیوست:</span>
-                                    <span class="confirm-summary-value">${attachmentSummary}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pro-confirm-footer">
-                        <button type="button" class="pro-confirm-btn pro-confirm-btn-cancel" id="confirmCancel">
-                            بازگشت و ویرایش
-                        </button>
-                        <button type="button" class="pro-confirm-btn pro-confirm-btn-confirm btn-var-primary" id="confirmSubmit">
-                            تأیید و ارسال گزارش
-                        </button>
-                    </div>
+        const summaryHtml = `
+            <div class="confirm-summary">
+                <div class="confirm-summary-item">
+                    <span class="confirm-summary-label">موضوع:</span>
+                    <span class="confirm-summary-value">${escapeHtml(category?.options[category.selectedIndex]?.text || 'نامشخص')}</span>
                 </div>
-            `;
-            document.body.appendChild(overlay);
+                <div class="confirm-summary-item">
+                    <span class="confirm-summary-label">شرح گزارش:</span>
+                    <span class="confirm-summary-value">${escapeHtml(descPreview || 'بدون شرح')}</span>
+                </div>
+                <div class="confirm-summary-item">
+                    <span class="confirm-summary-label">فایل‌های پیوست:</span>
+                    <span class="confirm-summary-value">${attachmentSummary}</span>
+                </div>
+            </div>
+        `;
 
-            function cleanup(result) {
-                document.removeEventListener('keydown', keyHandler);
-                overlay.remove();
-                resolve(result);
-            }
-
-            function keyHandler(e) {
-                if (e.key === 'Escape') {
-                    e.preventDefault();
-                    cleanup(false);
-                } else if (e.key === 'Enter') {
-                    e.preventDefault();
-                    cleanup(true);
-                }
-            }
-
-            document.addEventListener('keydown', keyHandler);
-            overlay.querySelector('#confirmSubmit').addEventListener('click', () => cleanup(true));
-            overlay.querySelector('#confirmCancel').addEventListener('click', () => cleanup(false));
-            overlay.addEventListener('click', (e) => { if (e.target === overlay) cleanup(false); });
-        });
+        if (typeof window.showConfirmDialog === 'function') {
+            return window.showConfirmDialog({
+                title: 'بررسی نهایی قبل از ارسال گزارش',
+                description: 'لطفاً پیش از ارسال نهایی، مشخصات گزارش محرمانه خود را به دقت بررسی فرمایید.',
+                htmlContent: summaryHtml,
+                confirmText: 'تأیید و ارسال گزارش',
+                cancelText: 'بازگشت و ویرایش',
+                variant: 'primary',
+                iconType: 'check-circle'
+            });
+        }
+        return Promise.resolve(window.confirm('آیا از ارسال گزارش اطمینان دارید؟'));
     }
 
     form.addEventListener('submit', async (e) => {
@@ -1379,7 +1381,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (checkClientVulgarLanguage(descVal) || checkClientVulgarLanguage(nameVal)) {
             responseBox.innerHTML = LEGAL_WARNING_HTML;
             responseBox.style.display = 'block';
-            responseBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            responseBox.scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
             loadCaptcha('submit-captcha-img', 'submit_captcha_id', 'submit_captcha_answer');
             return;
         }
@@ -1418,7 +1420,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (errorText.includes('اخطار حقوقی و امنیتی') || errorText.includes('ماده ۶۰۸')) {
                     responseBox.innerHTML = LEGAL_WARNING_HTML;
                     responseBox.style.display = 'block';
-                    responseBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    responseBox.scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
                     loadCaptcha('submit-captcha-img', 'submit_captcha_id', 'submit_captcha_answer');
                     return;
                 }
@@ -1519,7 +1521,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             tabTrack?.click();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
         });
     }
 
@@ -1584,7 +1586,7 @@ document.addEventListener('DOMContentLoaded', () => {
             form.classList.remove('d-none');
             responseBox.style.display = 'none';
             loadCaptcha('submit-captcha-img', 'submit_captcha_id', 'submit_captcha_answer');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
         }, 250);
     });
 
@@ -1622,18 +1624,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const guidelinesDrawer = document.getElementById('guidelinesDrawer');
 
     function openGuidelinesDrawer() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: getScrollBehavior() });
 
         if (guidelinesDrawer) {
             guidelinesDrawer.classList.remove('d-none');
             document.body.style.overflow = 'hidden';
             const panel = guidelinesDrawer.querySelector('.drawer-panel');
-            if (panel) panel.scrollTop = 0;
+            if (panel) {
+                // [PERF-FIX-28] Promote layer temporarily for sliding drawer animation
+                promoteTemporarily(panel, 'transform', 350);
+                panel.scrollTop = 0;
+            }
         }
     }
 
     function closeGuidelinesDrawer() {
         if (guidelinesDrawer) {
+            const panel = guidelinesDrawer.querySelector('.drawer-panel');
+            if (panel) {
+                // [PERF-FIX-28] Promote layer temporarily for drawer slide-out
+                promoteTemporarily(panel, 'transform', 350);
+            }
             guidelinesDrawer.classList.add('d-none');
             document.body.style.overflow = '';
         }
@@ -1840,7 +1851,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
                 messagesList.appendChild(optimisticBubble);
-                optimisticBubble.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                optimisticBubble.scrollIntoView({ behavior: getScrollBehavior(), block: 'nearest' });
             }
 
             try {
@@ -1902,7 +1913,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     `;
                     messagesList.appendChild(row);
-                    row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    row.scrollIntoView({ behavior: getScrollBehavior(), block: 'nearest' });
 
                     if (countBadge) {
                         const currentCount = messagesList.querySelectorAll('.nexus-bubble-row').length;
@@ -1946,7 +1957,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span>${escapeHtml(msg)}</span>
         `;
         trackErrorBox.style.display = 'flex';
-        trackErrorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        trackErrorBox.scrollIntoView({ behavior: getScrollBehavior(), block: 'nearest' });
     }
 
     trackInput?.addEventListener('input', () => {

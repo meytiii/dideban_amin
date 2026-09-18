@@ -72,6 +72,7 @@ body {
     position: relative;
 }
 
+/* [PERF-FIX-2] Remove translateZ and will-change on static background */
 body::before {
     content: '';
     position: fixed;
@@ -80,21 +81,25 @@ body::before {
     background: linear-gradient(rgba(11, 17, 32, 0.8), rgba(15, 23, 42, 0.9)), url('bg.jpg') no-repeat center center;
     background-size: cover;
     pointer-events: none;
-    transform: translateZ(0);
-    will-change: transform;
 }
 
+/* [PERF-FIX-1] Solid surface replacing backdrop-filter; [PERF-FIX-2] remove translateZ; [PERF-FIX-10] layout/paint containment */
 .container {
     width: 100%;
     max-width: 1020px;
-    background: var(--bg-surface);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(30, 41, 59, 0.88);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
     padding: 35px 40px;
     box-shadow: var(--shadow-card);
-    transform: translateZ(0);
+    contain: layout paint;
+}
+
+/* [PERF-FIX-10] Off-screen section virtualization */
+#trackingSection,
+#submitSection {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 900px;
 }
 
 .header {
@@ -104,6 +109,7 @@ body::before {
     padding-bottom: 20px;
 }
 
+/* [PERF-FIX-7] Pseudo-element opacity fade for hover shadow; [PERF-FIX-27] capped blur */
 .admin-logo-crest {
     position: relative;
     width: 200px;
@@ -116,21 +122,37 @@ body::before {
     align-items: center;
     justify-content: center;
     padding: 14px;
-    box-shadow: 0 0 45px rgba(59, 130, 246, 0.35), inset 0 0 28px rgba(59, 130, 246, 0.22);
-    transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.35), inset 0 0 15px rgba(59, 130, 246, 0.22);
+    transition: transform var(--transition-normal), border-color var(--transition-normal);
+}
+
+.admin-logo-crest::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: inherit;
+    box-shadow: 0 0 35px rgba(59, 130, 246, 0.45), inset 0 0 20px rgba(59, 130, 246, 0.25);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.admin-logo-crest:hover::after {
+    opacity: 1;
 }
 
 .admin-logo-crest:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 55px rgba(59, 130, 246, 0.5), inset 0 0 32px rgba(59, 130, 246, 0.28);
     border-color: rgba(96, 165, 250, 0.7);
 }
 
+/* [PERF-FIX-8] Removed drop-shadow raster filter; TODO: replace logo.png with logo-white.png */
 .admin-crest-img {
     width: 172px;
     height: 172px;
     object-fit: contain;
-    filter: brightness(0) invert(1) drop-shadow(0 2px 8px rgba(59, 130, 246, 0.6));
+    filter: brightness(0) invert(1);
     user-select: none;
     pointer-events: none;
 }
@@ -149,11 +171,14 @@ body::before {
     font-size: 14.5px;
 }
 
+/* [PERF-FIX-24] Primary consolidated definition for top-nav-bar */
 .top-nav-bar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     margin-bottom: 25px;
+    flex-wrap: wrap;
 }
 
 .top-nav-bar .tabs-container {
@@ -174,7 +199,8 @@ body::before {
     border-radius: var(--radius-md);
     cursor: pointer;
     white-space: nowrap;
-    transition: all var(--transition-fast);
+    /* [PERF-FIX-15] Explicit property transitions with fast timing */
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     height: 48px;
 }
@@ -196,9 +222,8 @@ body::before {
     width: 100vw;
     height: 100vh;
     height: 100dvh;
-    background: rgba(11, 17, 32, 0.75);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    /* [PERF-FIX-1] High-opacity solid overlay replacing backdrop-filter */
+    background: rgba(11, 17, 32, 0.9);
     z-index: 100000;
     display: flex;
     justify-content: flex-end;
@@ -286,7 +311,8 @@ body::before {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
     flex-shrink: 0;
 }
 
@@ -312,12 +338,11 @@ body::before {
     gap: 11px;
 }
 
+/* [PERF-FIX-1] Removed backdrop-filter */
 .faq-accordion-item {
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(15, 23, 42, 0.85);
     overflow: hidden;
     transition: border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
                 background 0.22s cubic-bezier(0.16, 1, 0.3, 1),
@@ -370,7 +395,8 @@ body::before {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: all 0.2s ease;
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .faq-accordion-item.open .faq-item-icon {
@@ -459,7 +485,8 @@ body::before {
     border-radius: var(--radius-full);
     cursor: pointer;
     overflow: hidden;
-    transition: all 0.5s cubic-bezier(0.34, 1.3, 0.64, 1);
+    /* [PERF-FIX-15] Explicit transitions, shortened from 0.5s to 0.25s */
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease, padding 0.25s ease;
     user-select: none;
 }
 
@@ -467,7 +494,7 @@ body::before {
     position: relative;
     z-index: 2;
     font-weight: 600;
-    transition: transform 0.5s cubic-bezier(0.34, 1.3, 0.64, 1);
+    transition: transform 0.25s ease;
 }
 
 .tab-btn .tab-icon-pill {
@@ -482,7 +509,7 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.5s cubic-bezier(0.34, 1.3, 0.64, 1);
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
     z-index: 3;
 }
 
@@ -554,10 +581,10 @@ body::before {
     justify-content: center;
     font-weight: 700;
     font-size: 14px;
-    transition: all var(--transition-normal);
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
     z-index: 2;
     position: relative;
-    transform: translateZ(0);
 }
 
 .step-item.active .step-circle {
@@ -626,12 +653,12 @@ body::before {
     }
 }
 
+/* [PERF-FIX-2] Removed will-change on static/intermittent step */
 .form-step {
     display: none;
     opacity: 0;
     transform: translate3d(0, 8px, 0);
     transition: opacity 0.25s ease, transform 0.25s ease;
-    will-change: opacity, transform;
 }
 
 .form-step.active {
@@ -826,9 +853,9 @@ textarea:focus {
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* [PERF-FIX-1] Removed backdrop-filter */
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     user-select: none;
 }
@@ -882,12 +909,15 @@ textarea:focus {
     color: #60a5fa;
 }
 
+/* [PERF-FIX-9] Only apply blur when dropdown is open */
 .custom-dropdown-menu {
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
     right: 0;
     background: rgba(15, 23, 42, 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border: 1px solid rgba(59, 130, 246, 0.35);
     border-radius: var(--radius-md);
     box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.7), 0 0 24px rgba(59, 130, 246, 0.15);
@@ -921,8 +951,8 @@ textarea:focus {
     background: linear-gradient(180deg, rgba(56, 189, 248, 0.45), rgba(59, 130, 246, 0.55));
     border-radius: 9999px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
-    transition: all 0.2s ease;
+    /* [PERF-FIX-15] Explicit property transition */
+    transition: background 0.2s ease;
 }
 
 .custom-dropdown-menu::-webkit-scrollbar-thumb:hover {
@@ -965,6 +995,8 @@ textarea:focus {
     opacity: 1;
     visibility: visible;
     transform: translateY(0) scale(1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .dropdown-item {
@@ -977,7 +1009,8 @@ textarea:focus {
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
     user-select: none;
 }
 
@@ -1071,9 +1104,8 @@ textarea:focus {
     text-align: center;
     border: 2px dashed rgba(255, 255, 255, 0.16);
     border-radius: 24px;
-    background: rgba(15, 23, 42, 0.45);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+    background: rgba(15, 23, 42, 0.72);
     cursor: pointer;
     outline: none;
     transition: border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1148,7 +1180,8 @@ textarea:focus {
     color: var(--text-main);
     font-size: 12.5px;
     font-weight: 600;
-    transition: all 0.2s ease;
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .be-dropzone.centered:hover .be-browse-badge {
@@ -1200,9 +1233,8 @@ textarea:focus {
     padding: 14px 18px;
     border: 1px solid rgba(59, 130, 246, 0.32);
     border-radius: 20px;
-    background: rgba(15, 23, 42, 0.88);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+    background: rgba(15, 23, 42, 0.94);
     box-shadow: 0 10px 28px -6px rgba(0, 0, 0, 0.45);
     animation: fileRowFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
@@ -1213,7 +1245,8 @@ textarea:focus {
 .be-file-row.removing {
     opacity: 0;
     transform: translateY(-8px) scale(0.98);
-    transition: all 0.2s ease;
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 @keyframes fileRowFadeIn {
@@ -1302,8 +1335,8 @@ textarea:focus {
     background: rgba(244, 63, 94, 0.16) !important;
     color: #fda4af !important;
     cursor: pointer;
-    box-shadow: none !important;
-    transition: all 0.16s ease !important;
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease !important;
     flex-shrink: 0;
 }
 
@@ -1388,7 +1421,8 @@ textarea:focus {
 button {
     font-family: inherit;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), opacity var(--transition-fast);
 }
 
 .btn-primary {
@@ -1405,7 +1439,6 @@ button {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transform: translateZ(0);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -1507,7 +1540,8 @@ button:disabled {
     background: var(--bg-input);
     border: 1px solid var(--border-subtle);
     color: var(--text-main);
-    transition: all var(--transition-fast);
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .captcha-row .captcha-input:focus {
@@ -1547,7 +1581,8 @@ button:disabled {
     justify-content: center;
     cursor: pointer;
     box-shadow: none !important;
-    transition: all var(--transition-fast);
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
 .btn-refresh:hover {
@@ -1613,7 +1648,8 @@ button:disabled {
     font-weight: 700;
     text-decoration: underline;
     text-underline-offset: 4px;
-    transition: all var(--transition-fast);
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: color var(--transition-fast), transform var(--transition-fast);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -1671,7 +1707,8 @@ button:disabled {
     border-radius: var(--radius-sm);
     font-size: 13px;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
 .btn-copy:hover {
@@ -1733,9 +1770,9 @@ button:disabled {
     border-radius: var(--radius-md);
     padding: 5px 6px 5px 12px;
     box-shadow: 0 4px 18px -3px rgba(0, 0, 0, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.04);
-    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: border-color 0.22s ease, background-color 0.22s ease;
+    /* [PERF-FIX-1] Removed backdrop-filter */
     gap: 8px;
 }
 
@@ -1793,8 +1830,8 @@ button:disabled {
     font-size: 13.5px;
     font-weight: 600;
     cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    /* [PERF-FIX-15] Explicit property transitions */
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     user-select: none;
     flex-shrink: 0;
@@ -2120,7 +2157,8 @@ button:disabled {
     width: 60px;
     height: 60px;
     object-fit: contain;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
+    /* [PERF-FIX-8] Removed drop-shadow raster filter */
+    filter: none;
     opacity: 1;
     flex-shrink: 0;
     border-radius: 50%;
@@ -2211,8 +2249,8 @@ button:disabled {
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+    background: rgba(15, 23, 42, 0.98);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -2351,8 +2389,8 @@ button:disabled {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(6px);
+    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+    background: rgba(0, 0, 0, 0.85);
     z-index: 99998;
     display: flex;
     align-items: center;
@@ -2533,7 +2571,8 @@ button:disabled {
         min-height: 44px !important;
         border-radius: var(--radius-full) !important;
         border: none !important;
-        transition: all 0.25s ease !important;
+        /* [PERF-FIX-15] Explicit property transitions */
+        transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease !important;
     }
 
     .tab-btn:hover:not(.active) {
@@ -2936,42 +2975,7 @@ button:disabled {
     }
 }
 
-.top-nav-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-}
-
-.top-nav-bar .tabs-container {
-    margin-bottom: 0;
-    flex: 1;
-}
-
-.btn-faq-trigger {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    background: rgba(15, 23, 42, 0.65);
-    border: 1px solid rgba(148, 163, 184, 0.25);
-    color: #93c5fd;
-    padding: 8px 14px;
-    border-radius: var(--radius-md);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-}
-
-.btn-faq-trigger:hover {
-    background: rgba(30, 41, 59, 0.85);
-    border-color: rgba(96, 165, 250, 0.45);
-    color: #bfdbfe;
-    transform: translateY(-1px);
-}
+/* [PERF-FIX-24] Removed duplicate .top-nav-bar and .btn-faq-trigger (consolidated above) */
 
 
 
@@ -3036,9 +3040,8 @@ button:disabled {
     justify-content: space-between;
     padding: 14px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    background: rgba(24, 24, 27, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+    background: rgba(24, 24, 27, 0.95);
 }
 
 .nexus-chat-header-info {
@@ -3199,9 +3202,8 @@ button:disabled {
 .nexus-bubble-admin {
     border-radius: 4px 18px 18px 18px;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(39, 39, 42, 0.92);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+    background: rgba(39, 39, 42, 0.98);
     color: #f4f4f5;
     box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
 }
@@ -3787,12 +3789,11 @@ button:disabled {
     font-weight: 500;
     line-height: 1.4;
     color: #ffffff;
-    background: rgba(15, 23, 42, 0.95);
+    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+    background: rgba(15, 23, 42, 0.98);
     border: 1px solid rgba(59, 130, 246, 0.35);
     border-radius: 6px;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.65), 0 0 15px rgba(59, 130, 246, 0.18);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
     opacity: 0;
     transform: scale(0.95);
     transition: opacity 0.16s cubic-bezier(0.16, 1, 0.3, 1),
@@ -4103,21 +4104,26 @@ button:disabled {
     opacity: 0;
 }
 
+/* [PERF-FIX-12] Transform-based skeleton sweep replacing background-position paint loop */
 .skeleton-shimmer {
-    background: linear-gradient(
-        90deg,
-        rgba(30, 41, 59, 0.45) 0%,
-        rgba(56, 189, 248, 0.12) 50%,
-        rgba(30, 41, 59, 0.45) 100%
-    );
-    background-size: 200% 100%;
-    animation: skeletonShimmerAnim 1.6s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    position: relative;
+    overflow: hidden;
+    background: rgba(30, 41, 59, 0.45);
     border-radius: 10px;
 }
 
-@keyframes skeletonShimmerAnim {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+.skeleton-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.14), transparent);
+    transform: translateX(-100%);
+    animation: skeletonSlide 1.6s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    pointer-events: none;
+}
+
+@keyframes skeletonSlide {
+    to { transform: translateX(100%); }
 }
 
 .skeleton-header {
@@ -4306,9 +4312,8 @@ button:disabled {
     position: fixed;
     inset: 0;
     z-index: 999999;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    /* [PERF-FIX-1] High-opacity solid overlay replacing backdrop-filter */
+    background: rgba(0, 0, 0, 0.88);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -4512,9 +4517,8 @@ button:disabled {
     justify-content: space-between;
     padding: 14px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+    background: rgba(15, 23, 42, 0.95);
 }
 
 .nexus-chat-header-info {
@@ -4652,9 +4656,8 @@ button:disabled {
 .nexus-bubble-admin {
     border-radius: 4px 18px 18px 18px;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(30, 41, 59, 0.92);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+    background: rgba(30, 41, 59, 0.98);
     color: #f8fafc;
     box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
 }

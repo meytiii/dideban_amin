@@ -1,1 +1,0 @@
-{"nodes": [{"id": "$graphify-root$_vendor_golang_org_x_sys_cpu_endian_big_go", "label": "endian_big.go", "file_type": "code", "source_file": "vendor/golang.org/x/sys/cpu/endian_big.go", "source_location": "L1"}], "edges": [], "raw_calls": [], "go_imports": {}}

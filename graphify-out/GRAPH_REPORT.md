@@ -1,27 +1,94 @@
-# Graph Report - herasat_backend  (2026-09-16)
+# Graph Report - Setad_Khabari_HMD  (2026-09-18)
 
 ## Corpus Check
-- 72 files · ~110,406 words
+- 177 files · ~216,665 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 586 nodes · 1201 edges · 40 communities (26 shown, 14 thin omitted)
-- Extraction: 83% EXTRACTED · 17% INFERRED · 0% AMBIGUOUS · INFERRED: 206 edges (avg confidence: 0.85)
+- 1365 nodes · 2044 edges · 103 communities (66 shown, 37 thin omitted)
+- Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 204 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `08379fe4`
+- Built from commit: `2003e5ee`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - Components
+- component-cookbook.md
 - Running Tests
+- Assets — sourcing canon for icons, logos, illustrations, photography, video
 - admin_handlers.go
+- macrostructures.md
+- Theme — Lumen
+- Theme — Hum
+- Custom craft — how to hand-build hero artwork
+- Custom theme — protocol
+- Design flow (default)
+- SKILL.md
+- Recipes
+- Study — extracting design DNA from a screenshot or URL
 - admin.js
+- Hero enrichment — when, what, and how much
+- Theme — Carnival
+- Interaction and states
 - Project Guidelines
+- Major (looks AI-generated)
 - app.js
+- Slop test — 58 gates + pre-emit self-critique
+- Copy
+- Critical (ships as slop)
+- Typography
+- captcha.go
+- crypto.go
+- getTestDB
+- Microinteraction tells
+- Archetype index — load ONLY the picks you need
+- Theme — Cobalt
+- Theme - Grid
+- Responsive
+- The six axes
+- Minor (small taste issues)
+- Imagery kit — curated abstract assets, hosted, ready
+- InitCrypto
+- Genre — atmospheric
+- Genre — modern-minimal
+- Genre — playful
+- § Multi-page flow — design.md first, then redesign
+- Genre — editorial (default)
+- Layout and space
+- Motion
+- design.md — opt-in portable design system
+- Export formats
+- Colour
+- Macrostructures
+- Floating nav on scroll — the cross-fade morph
+- contextWithAdmin
+- Output contract & scope
+- Hallmark Design Directives
+- f5-annotated-screenshot.md
+- ft1-mast-headed.md
+- ft3-index-style-category-list.md
+- ft4-dense-typographic.md
+- ft7-newsletter-first.md
+- h2-split-diptych.md
+- h4-stat-led.md
+- h6-photographic-fold.md
+- h8-mockup-split-browser-framed.md
+- n11-mega-menu.md
+- n13-inline-cmdk-pill.md
+- n2-floating-chip.md
+- n3-side-rail.md
+- n7-brutal-slab.md
+- s1-left-margin-numbered.md
+- s2-hanging.md
+- s4-inline-no-break.md
+- s5-bottom-anchored.md
 - herasat.local/backend
+- t1-pull-quote-with-marginalia.md
+- t3-single-huge-quote.md
+- workflows/hallmark.md
 - rules/graphify.md
 - workflows/graphify.md
 - generate_docx.py
@@ -42,68 +109,241 @@
 - initAppTooltips
 - morph-loading.tsx
 - testing.T
-- 🚀 راه‌اندازی سریع (Quickstart)
+- README.md
 - security.go
 - main
-- [2.0.0] - 2026-09-16
-- showConfirmDialog
-- showConfirmDialog
-- showConfirmDialog
-- Reporting Security Issues
-- SECURITY_CHANGELOG.md
+- admin/confirm.js
+- frontend/confirm.js
+- public/confirm.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `getIP()` - 29 edges
 2. `adminFetch()` - 24 edges
-3. `viewReport()` - 21 edges
-4. `SessionManager` - 18 edges
-5. `logAudit()` - 17 edges
-6. `SubmitReportHandler()` - 16 edges
-7. `getTestDB()` - 16 edges
-8. `DecryptAES()` - 14 edges
-9. `showToast()` - 14 edges
-10. `escapeHTML()` - 14 edges
+3. `viewReport()` - 22 edges
+4. `Major (looks AI-generated)` - 20 edges
+5. `Slop test — 58 gates + pre-emit self-critique` - 19 edges
+6. `SessionManager` - 18 edges
+7. `Theme — Hum` - 18 edges
+8. `logAudit()` - 17 edges
+9. `Critical (ships as slop)` - 17 edges
+10. `Theme — Lumen` - 17 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `LoginHandler()` --calls--> `VerifyCaptcha()`  [INFERRED]
   admin_auth.go → captcha.go
 - `LoginHandler()` --calls--> `VerifyPasswordWithRehash()`  [INFERRED]
   admin_auth.go → crypto.go
-- `LoginHandler()` --calls--> `isCookieSecure()`  [INFERRED]
-  admin_auth.go → security.go
 - `RateLimitMiddleware()` --calls--> `getIP()`  [INFERRED]
   security.go → admin_auth.go
 - `TestGetIPHardening()` --calls--> `getIP()`  [INFERRED]
   test/get_ip_test.go → admin_auth.go
+- `AdminAuthMiddleware()` --calls--> `isCookieSecure()`  [INFERRED]
+  admin_handlers.go → security.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (40 total, 14 thin omitted)
+## Communities (103 total, 37 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.07
 Nodes (28): 1. Navigation & Pill Tab Bar, 2. Multi-Step Form Tracker, 3. Glass Category Dropdown (`dropdown-menu`), 4. Centered Smart Evidence Upload (`be-ui-file-upload`), 5. FAQ Themed Accordion (`accordion-2`), 6. Admin 3D Sign-in Card (`sign-in-card-2`), 7. Action Buttons & Directional Arrows, 8. Secure Tracking & Follow-up Thread (+20 more)
 
+### Community 1 - "component-cookbook.md"
+Cohesion: 0.03
+Nodes (28): C1 · Outlined chip, C2 · Inline form-as-CTA, C3 · Typographic link, C4 · Sticky bottom bar, F1 · Bento grid, F2 · Sticky-scroll stack, F3 · Tabular spec sheet, F4 · Step sequence (+20 more)
+
 ### Community 2 - "Running Tests"
 Cohesion: 0.40
 Nodes (4): Option 1: Temporary restore to root, Option 2: Run specific test with root source files, Running Tests, Test Suite
 
+### Community 3 - "Assets — sourcing canon for icons, logos, illustrations, photography, video"
+Cohesion: 0.05
+Nodes (44): Abstract backgrounds, App mockups / device frames, Assets — sourcing canon for icons, logos, illustrations, photography, video, Avoid, Avoid, Avoid, Avoid, Avoid (+36 more)
+
 ### Community 4 - "admin_handlers.go"
 Cohesion: 0.06
-Nodes (88): generateSessionToken(), GetCurrentAdminHandler(), getIP(), ipInCIDRs(), logAudit(), logAuditTx(), LoginHandler(), LogoutHandler() (+80 more)
+Nodes (89): generateSessionToken(), GetCurrentAdminHandler(), getIP(), ipInCIDRs(), logAudit(), logAuditTx(), LoginHandler(), LogoutHandler() (+81 more)
+
+### Community 5 - "macrostructures.md"
+Cohesion: 0.05
+Nodes (21): 01 · Bento Grid, 02 · Long Document, 03 · Marquee Hero, 04 · Stat-Led, 05 · Workbench, 06 · Conversational FAQ, 07 · Manifesto, 08 · Photographic (+13 more)
+
+### Community 6 - "Theme — Lumen"
+Cohesion: 0.06
+Nodes (33): 1. Hand-built apparatus (no orb), 2. Lowercase headline with verb-landmark (no italics), 3. Mono eyebrow above every section, 4. Blueprint grid background (4% opacity), 5. Meter strip (below the hero), 6. Hairline cards with inner emission, 7. Three-stat row with Instrument Serif numerals + tabular-nums, Anti-patterns (theme-specific) (+25 more)
+
+### Community 7 - "Theme — Hum"
+Cohesion: 0.06
+Nodes (32): 1. The button system — three variations, the press is the feedback, 2. Multi-accent section bands, 3. Color-shift card grid, 4. Streak / counter tick-up, 5. Character moment — one small reacting mark, 6. Big rounded everything, 7. Star-burst micro-celebration on success, Anti-patterns (theme-specific) (+24 more)
+
+### Community 8 - "Custom craft — how to hand-build hero artwork"
+Cohesion: 0.07
+Nodes (30): A hand-built SVG with declarative animation, A worked example — the bakery loaf as a single div, Animation choices for SVG in 2026, Anti-patterns of CSS art, Anti-patterns of declarative animation, Anti-patterns of generated stills, Anti-patterns of hand-built SVG, Anti-patterns of Three.js / WebGL (+22 more)
+
+### Community 9 - "Custom theme — protocol"
+Cohesion: 0.07
+Nodes (29): § A · The one follow-up question, B.1 · Anchor accent first, B.2 · Paper, B.3 · Ink, B.4 · Supporting greys, B.5 · Focus, B.6 · Accent-ink (overlay text colour on accent), B.7 · Verification (+21 more)
+
+### Community 10 - "Design flow (default)"
+Cohesion: 0.07
+Nodes (28): 0. Pre-flight scan, 1. Design-context gate, 2.5. Check project memory, 2.6. Theme route — studied-DNA, catalog, or custom, 2. Pick a macrostructure FIRST, 3. Load the visual ruleset, 4. Decide on hero enrichment, 5. Preview (+20 more)
+
+### Community 11 - "SKILL.md"
+Cohesion: 0.19
+Nodes (4): H7 · Demo Video — Clipped-by-viewport-edge, H9 · Custom Illustration Centerpiece, Preview-block worked examples, `hallmark audit`
+
+### Community 12 - "Recipes"
+Cohesion: 0.07
+Nodes (27): Accessibility ground truth, Button press, Command palette navigation, Copy-to-clipboard, Drag handle, Dropdown / menu, Form validation, Hard rules for default-on motion (+19 more)
+
+### Community 13 - "Study — extracting design DNA from a screenshot or URL"
+Cohesion: 0.08
+Nodes (26): After the file is written, Emitting a `design.md` from `study`, Image-mode template, Junk-or-blocked detection, Limits and disclaimers, Refusal — when not to study, Remote URL safety, Source mode — image or URL (+18 more)
 
 ### Community 14 - "admin.js"
-Cohesion: 0.06
-Nodes (80): adminFetch(), applyAuditFiltersAndPagination(), applyFilters(), checkAdminProfile(), checkMustChangePasswordPolicy(), closeDetailView(), deleteReportPermanently(), deleteUser() (+72 more)
+Cohesion: 0.05
+Nodes (82): adminFetch(), applyAuditFiltersAndPagination(), applyFilters(), checkAdminProfile(), checkMustChangePasswordPolicy(), closeDetailView(), deleteReportPermanently(), deleteUser() (+74 more)
+
+### Community 15 - "Hero enrichment — when, what, and how much"
+Cohesion: 0.09
+Nodes (23): Animation discipline (hero specifically), Common mistakes — and the fixes, E1 · Demo Video — Clipped-by-viewport-edge, E2 · Demo Video — Full-bleed muted loop with ghost overlay, E3 · Mock App Screenshot — Browser-framed split, E4 · Mock App Screenshot — Floating no-frame, E5 · Custom Illustration Centerpiece, E6 · Animated Loop — pure CSS / SVG / Motion (+15 more)
+
+### Community 16 - "Theme — Carnival"
+Cohesion: 0.09
+Nodes (22): Anti-patterns (theme-specific), Axes (diversification), Build hint, Drop 01 · Cold Snap *(default)*, Drop 02 · Citrus Riot, Drop 03 · Diner Sign, Drop 04 · Studio Night, Drop 05 · Aqua Park (+14 more)
+
+### Community 17 - "Interaction and states"
+Cohesion: 0.10
+Nodes (21): Bans, Computation, Contrast discipline, Don't, list, Dropdowns, tooltips, popovers, Focus rings, Forms, Heights and rhythm (+13 more)
 
 ### Community 18 - "Project Guidelines"
 Cohesion: 0.40
 Nodes (4): Codebase Navigation & Knowledge Graph (Graphify - Primary Reference), Communication Style (Caveman Mode & Language), Frontend Craft & Design System (Impeccable & Design Taste), Project Guidelines
 
+### Community 19 - "Major (looks AI-generated)"
+Cohesion: 0.10
+Nodes (20): AI-illustration look, Animate-on-scroll on everything, Bounce and elastic easing, Centred everything, Eyebrow on every section, Generic emoji as feature icon, Glassmorphism without purpose, Hover-only affordances (+12 more)
+
 ### Community 20 - "app.js"
 Cohesion: 0.08
-Nodes (27): addFiles(), clearDraft(), clearFileInput(), dismissToast(), escapeHtml(), getBeFileIconSvg(), initAppTooltips(), getOrCreateTooltip() (+19 more)
+Nodes (31): addFiles(), checkClientVulgarLanguage(), clearDraft(), clearFileInput(), closeGuidelinesDrawer(), dismissToast(), escapeHtml(), _fastCheckClientVulgar() (+23 more)
+
+### Community 21 - "Slop test — 58 gates + pre-emit self-critique"
+Cohesion: 0.11
+Nodes (19): Contrast & readability, Diversification gates, Hero enrichment gates, Honest copy · no fabricated content, Implementation gates, Input-state gate, Layout-safety gates, Microinteractions (+11 more)
+
+### Community 22 - "Copy"
+Cohesion: 0.11
+Nodes (17): Austere, Banned opening lines (anti-patterns), Brutalist, Buttons, Copy, Editorial, Empty states, Error messages (+9 more)
+
+### Community 23 - "Critical (ships as slop)"
+Cohesion: 0.12
+Nodes (17): Aurora-blob background, Card-in-card, Critical (ships as slop), Default-attractor sameness, Floating-orb decoration, Full-viewport centred hero, Inter-everywhere, Lazy-loaded LCP (+9 more)
+
+### Community 24 - "Typography"
+Cohesion: 0.12
+Nodes (17): Banned defaults, Bans, Body text rules, Free body faces, Free display faces, Free mono / outlier faces, Headings rules, Hero headline sizing — match size to copy length (+9 more)
+
+### Community 25 - "captcha.go"
+Cohesion: 0.19
+Nodes (15): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), VerifyCaptcha(), GetHMACKey() (+7 more)
+
+### Community 26 - "crypto.go"
+Cohesion: 0.29
+Nodes (13): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), EncryptAES(), EncryptFileBytes(), EncryptFilePath() (+5 more)
+
+### Community 27 - "getTestDB"
+Cohesion: 0.17
+Nodes (10): NewSessionManager(), TestAuditFailClosed(), TestCaptchaPersistenceTryRedeem(), TestGetReportsPaginationAndFiltering(), TestSecurityStoresInitOrder(), getTestDB(), TestSessionManagementAndRateLimiter(), TestSessionPersistenceAcrossReinstantiation() (+2 more)
+
+### Community 28 - "Microinteraction tells"
+Cohesion: 0.14
+Nodes (14): Animated hover gradients, Auto-rotating carousels with no pause, Bouncy overshoot easings on UI, Celebratory success toasts, Confirmation dialogs for reversible actions, Cursor follower dots, Focus rings that animate in, Microinteraction tells (+6 more)
+
+### Community 29 - "Archetype index — load ONLY the picks you need"
+Cohesion: 0.14
+Nodes (14): Archetype index — load ONLY the picks you need, Component cookbook, CTAs / signups, Feature blocks, Footers, Heroes, Mobile collapse — per archetype, Navigation (+6 more)
+
+### Community 30 - "Theme — Cobalt"
+Cohesion: 0.14
+Nodes (13): Anti-patterns, Axes (diversification), Build hint, How Cobalt differs from neighbouring themes, Macrostructure affinity, Macrostructure rejection, Motion, Reference register (+5 more)
+
+### Community 31 - "Theme - Grid"
+Cohesion: 0.14
+Nodes (13): Axes (diversification), Build hint, Do-nots (this theme's own failure modes), How Grid differs from its neighbours, Material, Motion, Reference register, The marks kit (+5 more)
+
+### Community 32 - "Responsive"
+Cohesion: 0.15
+Nodes (13): Bans, Breakpoints, Clickable text — never wraps, Fluid scaling, Images, Internationalisation, Mobile — non-negotiable, Pointer and hover queries (+5 more)
+
+### Community 33 - "The six axes"
+Cohesion: 0.15
+Nodes (13): 1. Section-heading placement, 2. Body composition, 3. Divider language, 4. Button voice, 5. Image treatment, 6. Reveal pattern, Anti-patterns of structural sameness, Domain → trio (offer these three; never default) (+5 more)
+
+### Community 34 - "Minor (small taste issues)"
+Cohesion: 0.18
+Nodes (11): 100vw widths, Anti-patterns — the named tells, Double-hyphen dashes, Every section padded the same, How `hallmark audit` should report, Minor (small taste issues), Placeholder names, Startup-cliché product names (+3 more)
+
+### Community 35 - "Imagery kit — curated abstract assets, hosted, ready"
+Cohesion: 0.18
+Nodes (11): Anti-patterns, Categories, Decoration, Empty state, Generation pipeline (out-of-band, one-time), Imagery kit — curated abstract assets, hosted, ready, Layered hero composition (the masterclass move), Manifest (placeholder until generation pass ships) (+3 more)
+
+### Community 36 - "InitCrypto"
+Cohesion: 0.24
+Nodes (9): deriveKey(), InitCrypto(), VerifyPassword(), VerifyPasswordWithRehash(), TestArgon2idDualFormatAndRehash(), TestCaptchaVerificationSuite(), TestDeriveKeyDeterministic(), TestValidatePasswordComplexity() (+1 more)
+
+### Community 37 - "Genre — atmospheric"
+Cohesion: 0.20
+Nodes (10): Genre — atmospheric, Nav and footer voice, Reference register, Stamp signature, Themes that belong, Voice, Voice fixtures, What this genre allows (+2 more)
+
+### Community 38 - "Genre — modern-minimal"
+Cohesion: 0.20
+Nodes (10): Genre — modern-minimal, Nav and footer voice, Reference register (for the LLM, not credited to anyone), Stamp signature, Themes that belong, Voice, Voice fixtures, What this genre allows (+2 more)
+
+### Community 39 - "Genre — playful"
+Cohesion: 0.20
+Nodes (10): Genre — playful, Nav and footer voice, Reference register, Stamp signature, Themes that belong, Voice, Voice fixtures, What this genre allows (+2 more)
+
+### Community 40 - "§ Multi-page flow — design.md first, then redesign"
+Cohesion: 0.20
+Nodes (10): 1. Read the project, then pause, 2. Produce `design.md` at the project root, 3. Redesign each page reading from `design.md`, 4. Diversification rule — INVERTED for multi-page, 5. When to amend `design.md` instead of overriding, `hallmark redesign`, § Multi-page flow — design.md first, then redesign, Non-destructive implementation rule (+2 more)
+
+### Community 41 - "Genre — editorial (default)"
+Cohesion: 0.22
+Nodes (9): Genre — editorial (default), Nav and footer voice, Stamp signature, Themes that belong, Voice, Voice fixtures, What this genre allows, What this genre disallows (+1 more)
+
+### Community 42 - "Layout and space"
+Cohesion: 0.22
+Nodes (9): Asymmetry techniques, Bans, Depth, Grids, Layout and space, Page-edge clipping, Principles, The spacing scale (+1 more)
+
+### Community 43 - "Motion"
+Cohesion: 0.22
+Nodes (9): Bans, Durations, Easings, Motion, Page-load orchestration, Principles, Reduced motion, Scroll-linked motion (+1 more)
+
+### Community 44 - "design.md — opt-in portable design system"
+Cohesion: 0.25
+Nodes (8): After the file is written, CTA — surface the offer in the Step 5 preview, design.md — opt-in portable design system, Format (the tight version), Scope, Triggers (phrase-only — no new verb), Two emission paths (default vs study), Why opt-in (not auto-emit)
+
+### Community 45 - "Export formats"
+Cohesion: 0.25
+Nodes (7): Export formats, Format 1 — `tokens.css`, Format 2 — Tailwind v4 `@theme`, Format 3 — DTCG `tokens.json`, Format 4 — shadcn/ui CSS variables, Output rule, Token taxonomy — Hallmark's source of truth
+
+### Community 46 - "Colour"
+Cohesion: 0.29
+Nodes (7): Bans, Colour, Contrast, Dark mode recipe, Palette construction, Principles, Use of the accent
+
+### Community 47 - "Macrostructures"
+Cohesion: 0.29
+Nodes (7): Diversification rule (mandatory), Hero polish patterns, How to pick, Macrostructures, Nav and footer voice, SaaS page sequence, The 21 macrostructures — index
+
+### Community 48 - "Floating nav on scroll — the cross-fade morph"
+Cohesion: 0.33
+Nodes (6): Anti-patterns Hallmark refuses, Floating nav on scroll — the cross-fade morph, The four laws — non-negotiable, The property morph (10 properties, one curve), The scroll handler, The structure
+
+### Community 50 - "Output contract & scope"
+Cohesion: 0.50
+Nodes (3): Output contract, Output contract & scope, Scope and limits
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -130,64 +370,52 @@ Cohesion: 0.23
 Nodes (7): Button, ButtonProps, buttonVariants, cn(), ButtonWithIconProps, DropdownMenuProps, DropdownOption
 
 ### Community 106 - "initAppTooltips"
-Cohesion: 0.67
-Nodes (6): initAppTooltips(), getOrCreateTooltip(), hide(), isMobileOrTouch(), positionTooltip(), show()
+Cohesion: 0.52
+Nodes (7): initAppTooltips(), convertTitles(), getOrCreateTooltip(), hide(), isMobileOrTouch(), positionTooltip(), show()
 
 ### Community 108 - "testing.T"
-Cohesion: 0.05
-Nodes (62): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), VerifyCaptcha(), DecryptAES() (+54 more)
-
-### Community 111 - "🚀 راه‌اندازی سریع (Quickstart)"
-Cohesion: 0.22
-Nodes (8): 🚀 راه‌اندازی سریع (Quickstart), سامانه گزارش‌های مردمی و نظارت حراست (Herasat Whistleblowing Platform), ⚙️ متغیرهای محیطی (Environment Variables), 🛡️ معماری امنیتی (Security Architecture), ۱. کپی متغیرهای محیطی, ۲. اجرای پایگاه داده و مهاجرت‌ها, ۳. کامپایل و اجرای برنامه, ۴. اجرای آزمون‌ها (Tests)
+Cohesion: 0.15
+Nodes (17): testing.T, InitCookieSecurity(), TestClassificationValidationAndMath(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization() (+9 more)
 
 ### Community 115 - "security.go"
 Cohesion: 0.10
-Nodes (21): NewUsedCaptchaStore(), database/sql.DB, sync.Mutex, sync.Once, sync.RWMutex, time.Duration, time.Time, AccountLockoutManager (+13 more)
+Nodes (21): NewUsedCaptchaStore(), database/sql.DB, sync.Mutex, sync.Once, sync.RWMutex, time.Duration, time.Time, hashToken() (+13 more)
 
 ### Community 116 - "main"
-Cohesion: 0.10
-Nodes (21): AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed(), enforceImmutableAuditLogs(), InitDB(), runMigrations(), net/http.Handler (+13 more)
+Cohesion: 0.12
+Nodes (17): AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed(), enforceImmutableAuditLogs(), InitDB(), runMigrations(), net/http.Handler (+9 more)
 
-### Community 117 - "[2.0.0] - 2026-09-16"
-Cohesion: 0.29
-Nodes (6): [2.0.0] - 2026-09-16, Added, Changed, Changelog, Removed, Security
+### Community 118 - "admin/confirm.js"
+Cohesion: 0.70
+Nodes (3): getOrCreateDialog(), promoteTemporarily(), showConfirmDialog()
 
-### Community 118 - "showConfirmDialog"
-Cohesion: 0.60
-Nodes (4): safeEscape(), showConfirmDialog(), cleanup(), onKey()
+### Community 119 - "frontend/confirm.js"
+Cohesion: 0.70
+Nodes (3): getOrCreateDialog(), promoteTemporarily(), showConfirmDialog()
 
-### Community 119 - "showConfirmDialog"
-Cohesion: 0.60
-Nodes (4): safeEscape(), showConfirmDialog(), cleanup(), onKey()
-
-### Community 120 - "showConfirmDialog"
-Cohesion: 0.60
-Nodes (4): safeEscape(), showConfirmDialog(), cleanup(), onKey()
-
-### Community 121 - "Reporting Security Issues"
-Cohesion: 0.40
-Nodes (4): Disclosure Guidelines, Reporting Security Issues, Scope, Security Policy
+### Community 120 - "public/confirm.js"
+Cohesion: 0.70
+Nodes (3): getOrCreateDialog(), promoteTemporarily(), showConfirmDialog()
 
 ## Knowledge Gaps
-- **85 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+80 more)
+- **673 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+668 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **37 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `getIP()` connect `admin_handlers.go` to `security.go`, `testing.T`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
-- **Why does `main()` connect `main` to `security.go`, `testing.T`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Why does `SubmitReportHandler()` connect `admin_handlers.go` to `testing.T`, `ContainsVulgarLanguage`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **Why does `Anti-patterns — the named tells` connect `Minor (small taste issues)` to `Major (looks AI-generated)`, `SKILL.md`, `Microinteraction tells`, `Critical (ships as slop)`?**
+  _High betweenness centrality (0.049) - this node is a cross-community bridge._
+- **Why does `Major (looks AI-generated)` connect `Major (looks AI-generated)` to `Minor (small taste issues)`?**
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `Critical (ships as slop)` connect `Critical (ships as slop)` to `Minor (small taste issues)`?**
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Are the 23 inferred relationships involving `getIP()` (e.g. with `ChangeMyPasswordHandler()` and `ClassifyReportHandler()`) actually correct?**
   _`getIP()` has 23 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `AdminUserItem`, `AuditLogItem`, `RecipientUserItem` to the rest of the system?**
-  _85 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _673 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Components` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
-- **Should `admin_handlers.go` be split into smaller, more focused modules?**
-  _Cohesion score 0.061872909698996656 - nodes in this community are weakly interconnected._
+- **Should `component-cookbook.md` be split into smaller, more focused modules?**
+  _Cohesion score 0.03278688524590164 - nodes in this community are weakly interconnected._
