@@ -218,6 +218,7 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Don't** use pure black `#000000` for dark mode surfaces—use layered obsidian/slate tones.
 - **Don't** allow form inputs or buttons to wrap text onto multiple lines at desktop breakpoints.
 - **Don't** bypass validation checks or profanity screening before submission.
+- **Don't** put comments in codes.
 
 NO DEPENDANCIES FOR THIS PROJECT... EVERYTHING MUST BE LOCAL FOR SECURITY REASONS (BY EVERYTHING I MEAN ASSETS AND NOT PLUGINS).
 PLUGINS OR EXTERNAL LIBRARIES ARE FORBIDDEN.
