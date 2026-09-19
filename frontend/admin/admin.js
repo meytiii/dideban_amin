@@ -1816,20 +1816,48 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update Report Quality Classification Banner & One-Time Prompt
             updateClassificationUI(data, id);
 
-            // Two-Way Follow-up Messages Thread (C1)
             const messagesContainer = document.getElementById('detail-messages-container');
             const messagesList = document.getElementById('detail-messages-list');
             const messagesCountBadge = document.getElementById('detail-messages-count-badge');
             if (messagesContainer && messagesList) {
                 messagesList.innerHTML = '';
                 messagesContainer.classList.remove('d-none');
-                const hasMessages = data.messages && data.messages.length > 0;
-                if (messagesCountBadge) {
-                    messagesCountBadge.textContent = hasMessages ? `${data.messages.length} پیام ثبت‌شده` : 'فاقد پیام تکمیلی';
+
+                const allItems = [];
+
+                if (data.admin_response && data.admin_response.trim() !== '') {
+                    const respondedByTitle = data.responded_by ? ` (ثبت توسط ${escapeHTML(data.responded_by)})` : '';
+                    allItems.push({
+                        sender_type: 'admin',
+                        is_official_response: true,
+                        sender_title: 'پاسخ و نتیجه بررسی اداره حراست' + respondedByTitle,
+                        message: data.admin_response.trim(),
+                        created_at: data.responded_at || data.created_at
+                    });
                 }
-                if (hasMessages) {
+
+                if (Array.isArray(data.messages)) {
                     data.messages.forEach(msg => {
                         const isReporter = msg.sender_type === 'reporter';
+                        allItems.push({
+                            sender_type: msg.sender_type,
+                            is_official_response: false,
+                            sender_title: isReporter ? 'گزارش‌دهنده' : `پاسخ اداره کل حراست (${escapeHTML(msg.admin_username || 'کارشناس')})`,
+                            message: msg.message,
+                            created_at: msg.created_at
+                        });
+                    });
+                }
+
+                allItems.sort((a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
+
+                if (messagesCountBadge) {
+                    messagesCountBadge.textContent = allItems.length > 0 ? `${toPersianNum(allItems.length)} مورد ثبت‌شده` : 'فاقد پاسخ یا پیام تکمیلی';
+                }
+
+                if (allItems.length > 0) {
+                    allItems.forEach(item => {
+                        const isReporter = item.sender_type === 'reporter';
                         const row = document.createElement('div');
                         row.className = `nexus-bubble-row ${isReporter ? 'nexus-row-reporter' : 'nexus-row-admin'}`;
 
@@ -1838,19 +1866,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         const avatarSvg = isReporter ? userSvg : shieldSvg;
                         const avatarClass = isReporter ? 'nexus-avatar-reporter' : 'nexus-avatar-admin';
-                        const senderTitle = isReporter ? 'گزارش‌دهنده' : `پاسخ اداره کل حراست (${escapeHTML(msg.admin_username || 'کارشناس')})`;
+                        const bubbleCardClass = isReporter ? 'nexus-bubble-reporter' : (item.is_official_response ? 'nexus-bubble-admin nexus-bubble-official' : 'nexus-bubble-admin');
+
+                        const timeStr = item.created_at ? formatJalaliDateTime(item.created_at) : '';
 
                         row.innerHTML = `
                             <div class="nexus-bubble-unit">
-                                <div class="nexus-bubble-avatar ${avatarClass}" title="${senderTitle}">
+                                <div class="nexus-bubble-avatar ${avatarClass}" title="${escapeHTML(item.sender_title)}">
                                     ${avatarSvg}
                                 </div>
-                                <div class="nexus-bubble-card ${isReporter ? 'nexus-bubble-reporter' : 'nexus-bubble-admin'}">
+                                <div class="nexus-bubble-card ${bubbleCardClass}">
                                     <div class="nexus-bubble-top">
-                                        <span class="nexus-bubble-sender">${senderTitle}</span>
-                                        <span class="nexus-bubble-timestamp">${formatJalaliDateTime(msg.created_at)}</span>
+                                        <span class="nexus-bubble-sender">${escapeHTML(item.sender_title)}</span>
+                                        ${timeStr ? `<span class="nexus-bubble-timestamp">${timeStr}</span>` : ''}
                                     </div>
-                                    <div class="nexus-bubble-body">${escapeHTML(msg.message).replace(/\n/g, '<br>')}</div>
+                                    <div class="nexus-bubble-body">${escapeHTML(item.message).replace(/\n/g, '<br>')}</div>
                                 </div>
                             </div>
                         `;
@@ -1865,8 +1895,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                             </svg>
                         </div>
-                        <span class="nexus-chat-empty-title">هنوز پیام تکمیلی در این پرونده ثبت نشده است</span>
-                        <span class="nexus-chat-empty-sub">در صورت ارسال توضیحات، پاسخ یا مستندات جدید از طریق سامانه پیگیری، متن پیام‌ها در این کارت گفتگو به صورت زنده قابل مشاهده خواهد بود.</span>
+                        <span class="nexus-chat-empty-title">هنوز گفتگو یا پاسخی در این پرونده ثبت نشده است</span>
+                        <span class="nexus-chat-empty-sub">پیام‌های تکمیلی واصله از گزارش‌دهنده و پاسخ‌های رسمی صادرشده توسط حراست در این بخش به صورت یکپارچه و به ترتیب زمانی نمایش داده می‌شوند.</span>
                     `;
                     messagesList.appendChild(emptyCard);
                 }
@@ -2030,7 +2060,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 metaInfoEl.textContent = `ثبت پاسخ توسط: ${data.responded_by || 'حراست'}  |  تاریخ ثبت پاسخ: ${respDateStr || 'ثبت نشده'}`;
-                existingBox.style.display = 'block';
+                existingBox.style.display = 'none';
                 if (printNoRespEl) printNoRespEl.style.display = 'none';
             } else {
                 existingBox.style.display = 'none';
@@ -2039,7 +2069,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (printNoRespEl) printNoRespEl.style.display = 'block';
             }
 
-            // Official Response Section
             const adminCannedWrapper = document.getElementById('admin-canned-wrapper');
             const regionalCannedWrapper = document.getElementById('regional-canned-wrapper');
             const submitRespBtn = document.getElementById('submitResponseBtn');
@@ -2056,13 +2085,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (hasFinalResponse) {
                     if (detailRespContainer) detailRespContainer.style.display = '';
                     if (responseHeading) responseHeading.textContent = '۲. پاسخ نهایی اداره کل حراست به گزارش‌دهنده:';
-                    if (existingBox) existingBox.style.display = 'block';
+                    if (existingBox) existingBox.style.display = 'none';
                 } else {
                     if (detailRespContainer) detailRespContainer.style.display = 'none';
                 }
             } else {
                 if (detailRespContainer) detailRespContainer.style.display = '';
-                if (responseHeading) responseHeading.textContent = '۲. پاسخ رسمی و اقدامات نهایی صورت‌گرفته توسط حراست:';
+                if (responseHeading) responseHeading.textContent = '۲. ثبت یا ویرایش پاسخ رسمی به گزارش‌دهنده:';
                 if (adminRespForm) adminRespForm.style.display = '';
                 if (adminCannedWrapper) adminCannedWrapper.style.display = '';
                 if (regionalCannedWrapper) regionalCannedWrapper.style.display = 'none';

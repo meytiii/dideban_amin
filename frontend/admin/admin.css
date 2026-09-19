@@ -6171,6 +6171,12 @@ tr.row-priority-normal {
     box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
 }
 
+.nexus-bubble-admin.nexus-bubble-official {
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    background: linear-gradient(180deg, rgba(39, 39, 42, 0.96) 0%, rgba(20, 26, 23, 0.98) 100%);
+    box-shadow: 0 6px 20px -2px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(16, 185, 129, 0.25);
+}
+
 /* Inside Bubble */
 .nexus-bubble-top {
     display: flex;
