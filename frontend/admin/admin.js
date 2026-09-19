@@ -1,43 +1,47 @@
 
-// [PERF-FIX-3] Eliminate artificial preloader delay and redundant skeleton
 (function initAdminPreloader() {
-    // Only show the preloader on the very first load per session
-    if (sessionStorage.getItem('herasat_preloader_seen')) {
-        const p = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
-        const s = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
-        if (p) p.remove();
-        if (s) s.remove();
-        return;
-    }
-    sessionStorage.setItem('herasat_preloader_seen', '1');
-
-    const PRELOADER_MIN_MS = 250;
+    const PRELOADER_MIN_MS = 3000;
     const startTime = performance.now();
+    let isReady = false;
     let dismissed = false;
 
-    function dismiss() {
-        if (dismissed) return;
+    function attemptDismiss() {
+        if (dismissed || !isReady) return;
+        const elapsed = performance.now() - startTime;
+        if (elapsed < PRELOADER_MIN_MS) {
+            setTimeout(attemptDismiss, PRELOADER_MIN_MS - elapsed);
+            return;
+        }
         dismissed = true;
-        const remaining = Math.max(0, PRELOADER_MIN_MS - (performance.now() - startTime));
-        setTimeout(() => {
-            const preloader = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
-            const skeleton = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
-            if (preloader) {
-                preloader.classList.add('fade-out');
-                setTimeout(() => preloader.remove(), 450);
-            }
-            // Skeleton is redundant once preloader is up — remove immediately
-            if (skeleton) skeleton.remove();
-        }, remaining);
+        const preloader = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
+        const skeleton = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
+        if (preloader) {
+            preloader.classList.add('fade-out');
+            setTimeout(() => preloader.remove(), 450);
+        }
+        if (skeleton) skeleton.remove();
     }
 
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        dismiss();
-    } else {
-        window.addEventListener('load', dismiss);
-        document.addEventListener('DOMContentLoaded', dismiss);
-    }
-    setTimeout(dismiss, 800);   // reduced from 2000
+    window.markAdminReady = function () {
+        isReady = true;
+        attemptDismiss();
+    };
+
+    window.addEventListener('load', () => {
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => {
+                if (window.__adminStartupComplete) window.markAdminReady();
+            }).catch(() => {
+                if (window.__adminStartupComplete) window.markAdminReady();
+            });
+        } else {
+            if (window.__adminStartupComplete) window.markAdminReady();
+        }
+    });
+
+    setTimeout(() => {
+        window.markAdminReady();
+    }, 10000);
 })();
 
 
@@ -516,21 +520,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     (async () => {
-        const hasSession = await checkAdminProfile();
-        if (hasSession) {
-            if (loginSection) {
-                loginSection.classList.add('d-none');
-                loginSection.style.display = 'none';
+        try {
+            const hasSession = await checkAdminProfile();
+            if (hasSession) {
+                if (loginSection) {
+                    loginSection.classList.add('d-none');
+                    loginSection.style.display = 'none';
+                }
+                if (dashboardSection) {
+                    dashboardSection.classList.remove('d-none');
+                    dashboardSection.style.display = 'block';
+                }
+                startSessionTimer();
+                startHeartbeat();
+                switchMainTab('reports');
+                runWhenIdle(fetchNotifications);
             }
-            if (dashboardSection) {
-                dashboardSection.classList.remove('d-none');
-                dashboardSection.style.display = 'block';
+        } catch (e) {
+            console.error(e);
+        } finally {
+            window.__adminStartupComplete = true;
+            if (document.readyState === 'complete') {
+                if (typeof window.markAdminReady === 'function') window.markAdminReady();
+            } else {
+                window.addEventListener('load', () => {
+                    if (typeof window.markAdminReady === 'function') window.markAdminReady();
+                });
             }
-            startSessionTimer();
-            startHeartbeat();
-            switchMainTab('reports');
-            // [PERF-FIX-30] Fetch non-critical notifications in idle window
-            runWhenIdle(fetchNotifications);
         }
     })();
 

@@ -466,55 +466,72 @@ body::before {
     box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), 0 0 20px rgba(56, 189, 248, 0.15);
 }
 
+.admin-captcha-row,
 .admin-captcha-group {
     display: flex;
+    align-items: stretch;
     gap: 12px;
-    align-items: center;
     margin-top: 4px;
+    width: 100%;
 }
 
 .admin-captcha-box {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex: 1.15;
+    min-width: 0;
+    height: 52px;
     background: rgba(15, 23, 42, 0.85);
     border: 1px solid rgba(56, 189, 248, 0.3);
     border-radius: 12px;
-    padding: 3px 6px;
-    height: 52px;
+    padding: 4px 8px;
     box-sizing: border-box;
 }
 
-.admin-captcha-box img {
+.admin-captcha-box img,
+.admin-captcha-img {
     height: 44px;
+    flex: 1;
+    min-width: 0;
     border-radius: 8px;
     cursor: pointer;
     background: #ffffff;
     display: block;
+    object-fit: contain;
 }
 
+.admin-captcha-box .btn-refresh,
 .btn-captcha-refresh {
     background: transparent;
     border: none;
     color: #94a3b8;
-    padding: 6px;
-    margin-right: 4px;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px;
+    padding: 0 !important;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
-    /* [PERF-FIX-25] Explicit property transitions */
-    transition: color 0.2s ease, transform 0.2s ease;
+    border-radius: 8px;
+    transition: color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
 }
 
+.admin-captcha-box .btn-refresh:hover,
 .btn-captcha-refresh:hover {
     color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
     transform: rotate(45deg);
 }
 
+.admin-captcha-row .admin-captcha-input,
 .admin-captcha-input {
     flex: 1;
+    min-width: 0;
     height: 52px;
+    margin-top: 0 !important;
     background: rgba(15, 23, 42, 0.7) !important;
     border: 1px solid rgba(56, 189, 248, 0.3) !important;
     border-radius: 12px !important;
@@ -527,7 +544,6 @@ body::before {
     font-weight: 700 !important;
     text-align: center !important;
     outline: none !important;
-    /* [PERF-FIX-25] Explicit property transitions */
     transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
     box-sizing: border-box !important;
 }
@@ -709,11 +725,10 @@ body::before {
     opacity: 1;
 }
 
-/* [PERF-FIX-8] Dashboard crest always visible - eliminate runtime raster filter */
 .dashboard-header-crest .admin-crest-img {
     width: 180px !important;
     height: 180px !important;
-    filter: none !important;
+    filter: brightness(0) invert(1) !important;
 }
 
 .dashboard-actions {

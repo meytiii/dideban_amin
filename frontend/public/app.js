@@ -1,42 +1,51 @@
 
-// [PERF-FIX-3] Eliminate artificial preloader delay and redundant skeleton
 (function initPreloader() {
-    // Only show the preloader on the very first load per session
-    if (sessionStorage.getItem('herasat_preloader_seen')) {
-        const p = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
-        const s = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
-        if (p) p.remove();
-        if (s) s.remove();
-        return;
-    }
-    sessionStorage.setItem('herasat_preloader_seen', '1');
-
-    const PRELOADER_MIN_MS = 250;
+    const PRELOADER_MIN_MS = 3000;
     const startTime = performance.now();
+    let pageLoaded = false;
     let dismissed = false;
 
-    function dismiss() {
-        if (dismissed) return;
+    function attemptDismiss() {
+        if (dismissed || !pageLoaded) return;
+        const elapsed = performance.now() - startTime;
+        if (elapsed < PRELOADER_MIN_MS) {
+            setTimeout(attemptDismiss, PRELOADER_MIN_MS - elapsed);
+            return;
+        }
         dismissed = true;
-        const remaining = Math.max(0, PRELOADER_MIN_MS - (performance.now() - startTime));
-        setTimeout(() => {
-            const preloader = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
-            const skeleton = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
-            if (preloader) {
-                preloader.classList.add('fade-out');
-                setTimeout(() => preloader.remove(), 450);
-            }
-            // Skeleton is redundant once preloader is up — remove immediately
-            if (skeleton) skeleton.remove();
-        }, remaining);
+        const preloader = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
+        const skeleton = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
+        if (preloader) {
+            preloader.classList.add('fade-out');
+            setTimeout(() => preloader.remove(), 450);
+        }
+        if (skeleton) skeleton.remove();
     }
 
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        dismiss();
-    } else {
-        window.addEventListener('load', dismiss);
-        document.addEventListener('DOMContentLoaded', dismiss);
+    function onComplete() {
+        pageLoaded = true;
+        attemptDismiss();
     }
+
+    if (document.readyState === 'complete') {
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(onComplete).catch(onComplete);
+        } else {
+            onComplete();
+        }
+    } else {
+        window.addEventListener('load', () => {
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(onComplete).catch(onComplete);
+            } else {
+                onComplete();
+            }
+        });
+    }
+
+    setTimeout(() => {
+        onComplete();
+    }, 10000);
 })();
 
 // [PERF-FIX-21] Respect prefers-reduced-motion for programmatic scroll
