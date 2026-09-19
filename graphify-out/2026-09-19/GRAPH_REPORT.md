@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-09-19)
 
 ## Corpus Check
-- 178 files · ~228,629 words
+- 178 files · ~261,651 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1372 nodes · 2054 edges · 99 communities (63 shown, 36 thin omitted)
+- 1373 nodes · 2056 edges · 105 communities (69 shown, 36 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 203 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `dcd6a770`
+- Built from commit: `d1d7b27d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -82,9 +82,15 @@
 - n3-side-rail.md
 - n7-brutal-slab.md
 - s1-left-margin-numbered.md
+- crypto.go
+- getTestDB
 - s5-bottom-anchored.md
 - herasat.local/backend
+- captcha.go
+- crypto_test.go
 - workflows/hallmark.md
+- InitDB
+- NewIPRateLimiter
 - rules/graphify.md
 - workflows/graphify.md
 - generate_docx.py
@@ -125,21 +131,21 @@
 10. `Theme — Lumen` - 17 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `VerifyCaptcha()` --calls--> `GetLegacyHMACKey()`  [INFERRED]
-  captcha.go → crypto.go
-- `TestInputSanitizationAndLimits()` --calls--> `truncateRunes()`  [INFERRED]
-  test/input_limits_test.go → security.go
+- `LoginHandler()` --calls--> `VerifyCaptcha()`  [INFERRED]
+  admin_auth.go → captcha.go
 - `LoginHandler()` --calls--> `VerifyPasswordWithRehash()`  [INFERRED]
   admin_auth.go → crypto.go
 - `RateLimitMiddleware()` --calls--> `getIP()`  [INFERRED]
   security.go → admin_auth.go
 - `TestGetIPHardening()` --calls--> `getIP()`  [INFERRED]
   test/get_ip_test.go → admin_auth.go
+- `AdminAuthMiddleware()` --calls--> `isCookieSecure()`  [INFERRED]
+  admin_handlers.go → security.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (99 total, 36 thin omitted)
+## Communities (105 total, 36 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.07
@@ -159,7 +165,7 @@ Nodes (44): Abstract backgrounds, App mockups / device frames, Assets — sourci
 
 ### Community 4 - "admin_handlers.go"
 Cohesion: 0.06
-Nodes (87): generateSessionToken(), GetCurrentAdminHandler(), getIP(), ipInCIDRs(), logAudit(), logAuditTx(), LoginHandler(), LogoutHandler() (+79 more)
+Nodes (89): generateSessionToken(), GetCurrentAdminHandler(), getIP(), ipInCIDRs(), logAudit(), logAuditTx(), LoginHandler(), LogoutHandler() (+81 more)
 
 ### Community 5 - "macrostructures.md"
 Cohesion: 0.05
@@ -242,8 +248,8 @@ Cohesion: 0.12
 Nodes (17): Banned defaults, Bans, Body text rules, Free body faces, Free display faces, Free mono / outlier faces, Headings rules, Hero headline sizing — match size to copy length (+9 more)
 
 ### Community 25 - "seed_50_reports.go"
-Cohesion: 0.83
-Nodes (3): deriveKey(), encryptWithKey(), main()
+Cohesion: 0.70
+Nodes (4): deriveKey(), encryptWithKey(), genTrackingCode(), main()
 
 ### Community 28 - "Microinteraction tells"
 Cohesion: 0.14
@@ -329,6 +335,30 @@ Nodes (6): Anti-patterns Hallmark refuses, Floating nav on scroll — the cross-
 Cohesion: 0.50
 Nodes (3): Output contract, Output contract & scope, Scope and limits
 
+### Community 67 - "crypto.go"
+Cohesion: 0.23
+Nodes (16): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES(), EncryptFileBytes() (+8 more)
+
+### Community 68 - "getTestDB"
+Cohesion: 0.16
+Nodes (11): NewUsedCaptchaStore(), NewSessionManager(), TestAuditFailClosed(), TestCaptchaPersistenceTryRedeem(), TestAccountLockoutConcurrentFailures(), TestGetReportsPaginationAndFiltering(), TestSecurityStoresInitOrder(), getTestDB() (+3 more)
+
+### Community 71 - "captcha.go"
+Cohesion: 0.24
+Nodes (14): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), VerifyCaptcha(), GetHMACKey() (+6 more)
+
+### Community 72 - "crypto_test.go"
+Cohesion: 0.40
+Nodes (5): VerifyPassword(), VerifyPasswordWithRehash(), TestArgon2idDualFormatAndRehash(), TestDeriveKeyDeterministic(), TestValidatePasswordComplexity()
+
+### Community 74 - "InitDB"
+Cohesion: 0.47
+Nodes (4): enforceImmutableAuditLogs(), InitDB(), runMigrations(), TestReportsUpdatedAtTrigger()
+
+### Community 75 - "NewIPRateLimiter"
+Cohesion: 0.50
+Nodes (3): NewIPRateLimiter(), TestInspectZipArchive(), TestIPRateLimiterBoundedCapacity()
+
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
 Nodes (7): format_persian_text_with_dates(), main(), populate_docx(), replace_in_table(), replace_placeholders_in_paragraph(), set_english_formatting(), set_persian_formatting()
@@ -358,16 +388,16 @@ Cohesion: 0.52
 Nodes (7): initAppTooltips(), convertTitles(), getOrCreateTooltip(), hide(), isMobileOrTouch(), positionTooltip(), show()
 
 ### Community 108 - "testing.T"
-Cohesion: 0.06
-Nodes (55): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES(), EncryptFileBytes() (+47 more)
+Cohesion: 0.15
+Nodes (17): testing.T, InitCookieSecurity(), TestClassificationValidationAndMath(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization() (+9 more)
 
 ### Community 115 - "security.go"
-Cohesion: 0.06
-Nodes (33): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), NewUsedCaptchaStore(), renderObfuscatedChars(), GetHMACKey() (+25 more)
+Cohesion: 0.09
+Nodes (19): database/sql.DB, sync.Mutex, sync.Once, sync.RWMutex, time.Duration, time.Time, hashToken(), NewAccountLockoutManager() (+11 more)
 
 ### Community 116 - "main"
-Cohesion: 0.12
-Nodes (17): AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed(), enforceImmutableAuditLogs(), InitDB(), runMigrations(), net/http.Handler (+9 more)
+Cohesion: 0.15
+Nodes (14): AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed(), net/http.Handler, net/http.HandlerFunc, main(), secureHeadersMiddleware() (+6 more)
 
 ### Community 118 - "admin/confirm.js"
 Cohesion: 0.70
@@ -390,7 +420,7 @@ Nodes (3): getOrCreateDialog(), promoteTemporarily(), showConfirmDialog()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Anti-patterns — the named tells` connect `Minor (small taste issues)` to `Major (looks AI-generated)`, `SKILL.md`, `Microinteraction tells`, `Critical (ships as slop)`?**
-  _High betweenness centrality (0.054) - this node is a cross-community bridge._
+  _High betweenness centrality (0.050) - this node is a cross-community bridge._
 - **Why does `Assets — sourcing canon for icons, logos, illustrations, photography, video` connect `Assets — sourcing canon for icons, logos, illustrations, photography, video` to `SKILL.md`?**
   _High betweenness centrality (0.023) - this node is a cross-community bridge._
 - **Why does `Study — extracting design DNA from a screenshot or URL` connect `Study — extracting design DNA from a screenshot or URL` to `SKILL.md`?**

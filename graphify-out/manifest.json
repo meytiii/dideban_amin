@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "main.go": {
-    "mtime": 1789535682.29289,
-    "seen": 1789789094.1521387,
-    "ast_hash": "f0ab391944fae91847ca8cfe8f4b3244",
+    "mtime": 1789792997.6932285,
+    "seen": 1789793164.2900388,
+    "ast_hash": "112ba72ccc4556ae1c8880f713014e3c",
     "semantic_hash": ""
   },
   "public_handlers.go": {
@@ -66,9 +66,9 @@
     "semantic_hash": ""
   },
   "security.go": {
-    "mtime": 1789536658.3937485,
-    "seen": 1789789094.1521442,
-    "ast_hash": "f78b281592301ca0ef15e196e412861d",
+    "mtime": 1789792953.581419,
+    "seen": 1789793164.2904046,
+    "ast_hash": "7bba185591a2b854597c778c4746e29a",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {

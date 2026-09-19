@@ -788,20 +788,22 @@ func (alm *AccountLockoutManager) Reset(username string) {
 }
 
 var (
-	cachedCookieSecure bool
-	cookieSecureOnce   sync.Once
+	cachedCookieSecure   bool
+	cookieSecureExplicit bool
+	cookieSecureOnce     sync.Once
 )
 
 func InitCookieSecurity(secure bool) {
 	cachedCookieSecure = secure
+	cookieSecureExplicit = true
 }
 
 func isCookieSecure() bool {
-	cookieSecureOnce.Do(func() {
-		if !cachedCookieSecure {
+	if !cookieSecureExplicit {
+		cookieSecureOnce.Do(func() {
 			cachedCookieSecure = os.Getenv("HERASAT_COOKIE_SECURE") == "true"
-		}
-	})
+		})
+	}
 	return cachedCookieSecure
 }
 

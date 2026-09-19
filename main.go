@@ -55,14 +55,25 @@ func main() {
 	certFile := os.Getenv("HERASAT_TLS_CERT")
 	keyFile := os.Getenv("HERASAT_TLS_KEY")
 	tlsConfigured := certFile != "" && keyFile != ""
-	cookieSecure := os.Getenv("HERASAT_COOKIE_SECURE") == "true"
-	if !tlsConfigured && !cookieSecure {
+	cookieSecureEnv := os.Getenv("HERASAT_COOKIE_SECURE")
+	enableTLSEnv := os.Getenv("HERASAT_ENABLE_TLS")
+	allowInsecureHTTP := enableTLSEnv == "false" || os.Getenv("HERASAT_INSECURE_HTTP") == "true" || os.Getenv("HERASAT_DEV_MODE") == "1" || cookieSecureEnv == "false"
+
+	if !tlsConfigured && cookieSecureEnv != "true" && !allowInsecureHTTP {
 		log.Fatalf("FATAL: refusing to start without TLS and without HERASAT_COOKIE_SECURE=true. Set HERASAT_TLS_CERT/HERASAT_TLS_KEY or explicitly set HERASAT_COOKIE_SECURE=true behind a trusted TLS-terminating reverse proxy.")
 	}
-	if cookieSecure && !tlsConfigured {
-		log.Println("WARNING: HERASAT_COOKIE_SECURE=true set without TLS certificates; assuming trusted TLS-terminating reverse proxy.")
+
+	if allowInsecureHTTP {
+		log.Println("WARNING: Running in HTTP mode. Session cookies will not have Secure flag.")
+		InitCookieSecurity(false)
+	} else if cookieSecureEnv == "true" {
+		if !tlsConfigured {
+			log.Println("WARNING: HERASAT_COOKIE_SECURE=true set without TLS certificates; assuming trusted TLS-terminating reverse proxy.")
+		}
+		InitCookieSecurity(true)
+	} else {
+		InitCookieSecurity(tlsConfigured)
 	}
-	InitCookieSecurity(cookieSecure || tlsConfigured)
 
 	aesMasterKey := os.Getenv("HERASAT_AES_KEY")
 	if len(aesMasterKey) != 32 {
