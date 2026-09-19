@@ -46,6 +46,18 @@ func encryptWithKey(key []byte, prefix, plaintext string) (string, error) {
 	return prefix + base64.StdEncoding.EncodeToString(ciphertext), nil
 }
 
+func genTrackingCode() string {
+	const charset = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+	b := make([]byte, 8)
+	if _, err := rand.Read(b); err != nil {
+		return fmt.Sprintf("PAG%d", time.Now().UnixNano()%100000000)
+	}
+	for i := range b {
+		b[i] = charset[b[i]%byte(len(charset))]
+	}
+	return "PAG" + string(b)
+}
+
 func main() {
 	connStr := os.Getenv("HERASAT_DB_CONN")
 	if connStr == "" {
@@ -73,48 +85,48 @@ func main() {
 	}
 
 	categories := []string{
-		"financial",
-		"administrative",
-		"security",
-		"complaint",
-		"service",
+		"تخلفات مالی",
+		"مسائل امنیتی",
+		"تخلفات اداری",
+		"تخلفات آموزشی",
+		"پرسنلی",
+		"دانش آموزی",
+		"مدارس غیردولتی",
+		"آموزش مجازی",
+		"فضای مجازی",
+		"سایر",
+	}
+
+	descriptions := []string{
+		"احتراماً به استحضار اداره حراست می‌رساند، در روند تسویه اسناد مالی و فاکتورهای صادره جهت تجهیز کارگاه‌های آموزشی، ارقام غیرواقعی و مغایرت‌های فاحش مشاهده شده است. تقاضای بررسی کارشناسی و تطبیق صورت‌حساب‌های بانکی مورد استدعا می‌باشد.",
+		"گزارش واصله حاکی از عدم رعایت پروتکل‌های حفاظت فیزیکی، نقص در عملکرد دوربین‌های نظارتی و نگهداری نامناسب کلیدهای بایگانی اسناد محرمانه آموزشگاه در ساعات غیراداری است. لطفاً اقدامات بازدارنده و مقتضی مبذول گردد.",
+		"به استحضار می‌رساند در صدور ابلاغ‌های کارگزینی و تخصیص ساعات اضافه‌کار اداری، ضوابط قانونی و عدالت اداری رعایت نگردیده و تبعیض آشکار در انتصابات اداری مشاهده شده است. استدعای پیگیری و نظارت حراستی را دارد.",
+		"در فرآیند نمره‌دهی و ثبت نمرات نهایی مستمر دانش‌آموزان در سامانه سیدا، تغییرات بدون مجوز و تخلف از ضوابط امتحانات توسط عوامل آموزشی صورت پذیرفته است. مستندات جهت رسیدگی اداره سنجش و حراست پیوست می‌باشد.",
+		"درخواست رسیدگی به رفتار نامناسب و برخورد غیرحرفه‌ای و خارج از شئونات اداری با همکاران و مراجعین در واحد ستادی، که منجر به ایجاد نارضایتی و اخلال در خدمت‌رسانی مطلوب شده است. تقاضای تذکر جدی و بررسی حراستی داریم.",
+		"گزارش در خصوص عدم رعایت ضوابط ایمنی در تردد سرویس‌های ایاب و ذهاب دانش‌آموزی و استفاده از خودروهای فاقد معاینه فنی که موجب مخاطره سلامت فرزندان گردیده است. تقاضای نظارت و الزام شرکت پیمانکار به رفع نقص وجود دارد.",
+		"دریافت وجوه مازاد بر تعرفه ابلاغی مصوب آموزش و پرورش تحت عنوان کلاس‌های فوق‌برنامه اجباری و عدم شفافیت در قرارداد با اولیای محترم دانش‌آموزان در این واحد آموزشی. تقاضای اعزام بازرس و عودت مبالغ مازاد را داریم.",
+		"مشکلات مکرر در سامانه‌های آموزش برخط، عدم دسترسی پایدار کاربران و قطع مکرر کلاس‌ها که موجب سردرگمی دانش‌آموزان و خانواده‌ها گردیده است. تقاضای بازنگری در زیرساخت فناوری و نظارت بر نحوه ارائه آموزش‌ها را داریم.",
+		"ایجاد گروه‌ها و کانال‌های غیررسمی با سوءاستفاده از عنوان مدرسه در بستر شبکه‌های اجتماعی و انتشار محتواهای نامناسب و غیرهمسو با ضوابط تربیتی. تقاضای مسدودسازی و شناسایی عوامل تشکیل‌دهنده از طریق مراجع مربوطه را دارد.",
+		"گزارش در مورد نقص فنی مکرر در تأسیسات گرمایشی و سرمایشی آموزشگاه و عدم تخصیص بهنگام اقلام مصرفی بهداشتی که موجب اختلال در فعالیت‌های جاری گردیده است. استدعای پیگیری از مدیریت پشتیبانی و رفاهی را دارد.",
+	}
+
+	sampleNames := []string{
+		"علی حسینی",
+		"مریم رضایی",
+		"محمد کریمی",
+		"فاطمه ابراهیمی",
+		"حسین مرادی",
+		"زهرا قاسمی",
+		"مهدی صادقی",
+		"نرگس نجفی",
+		"امیر موسوی",
+		"سمیه رحیمی",
 	}
 
 	priorities := []string{
 		"normal",
 		"urgent",
 		"critical",
-	}
-
-	classifications := []string{
-		"confidential",
-		"secret",
-		"top_secret",
-	}
-
-	sampleSubjects := []string{
-		"گزارش مغایرت مالی در صدور احکام اداری منطقه ۲",
-		"بررسی مستندات دریافتی غیرمجاز در فرآیند خرید تجهیزات",
-		"تخلف در ثبت نمرات و فرآیند ارزیابی آزمون استخدامی",
-		"درخواست رسیدگی به سوءاستفاده از موقعیت شغلی در شعبه",
-		"گزارش نقص حفاظت فیزیکی و بایگانی اسناد محرمانه آموزشگاه",
-		"ابهام در نحوه تخصیص بودجه رفاهی و تسهیلات کارکنان",
-		"عدم رعایت ضوابط حراستی در ورود و خروج ارباب رجوع",
-		"گزارش جعل امضا در مکاتبات رسمی و قراردادهای پشتیبانی",
-		"عدم شفافیت در واگذاری بوفه و امکانات مدارس به بخش خصوصی",
-		"گزارش تخلف در توزیع کتب درسی و اقلام اداری اداره کل",
-	}
-
-	var adminUsers []string
-	rows, err := db.Query("SELECT username FROM admin_users")
-	if err == nil {
-		for rows.Next() {
-			var u string
-			if err := rows.Scan(&u); err == nil {
-				adminUsers = append(adminUsers, u)
-			}
-		}
-		rows.Close()
 	}
 
 	tx, err := db.Begin()
@@ -126,13 +138,12 @@ func main() {
 	insertedCount := 0
 
 	for i := 1; i <= 50; i++ {
-		trackingCode := fmt.Sprintf("PAG%02d%04d", (i*7)%90+10, i*123%9000+1000)
-		cat := categories[(i-1)%len(categories)]
+		trackingCode := genTrackingCode()
+		catIdx := (i - 1) % len(categories)
+		cat := categories[catIdx]
+		descPlain := fmt.Sprintf("%s (شناسه پیگیری پرونده آزمایشی: %s)", descriptions[catIdx], trackingCode)
 		prio := priorities[(i-1)%len(priorities)]
-		class := classifications[(i-1)%len(classifications)]
-		subj := sampleSubjects[(i-1)%len(sampleSubjects)]
 
-		descPlain := fmt.Sprintf("%s. این گزارش تستی شماره %d جهت بررسی ناوبری و صفحه‌بندی سامانه ثبت شده است. کلیه جزئیات مرتبط با تاریخچه و گردش کار در سامانه ذخیره می‌گردد.", subj, i)
 		encDesc, err := encryptWithKey(keyFields, "v2:f:", descPlain)
 		if err != nil {
 			log.Fatalf("Encryption failed: %v", err)
@@ -142,33 +153,17 @@ func main() {
 		reportType := "anonymous"
 		if i%2 == 0 {
 			reportType = "identified"
-			namePlain := fmt.Sprintf("گزارش‌دهنده تستی %d", i)
+			namePlain := sampleNames[(i-1)%len(sampleNames)]
 			encN, _ := encryptWithKey(keyFields, "v2:f:", namePlain)
 			encName = sql.NullString{String: encN, Valid: true}
 
-			phonePlain := fmt.Sprintf("0912%07d", 1000000+i)
+			phonePlain := fmt.Sprintf("0918%07d", 1000000+i*31%900000)
 			encP, _ := encryptWithKey(keyFields, "v2:f:", phonePlain)
 			encPhone = sql.NullString{String: encP, Valid: true}
 		}
 
-		hasNewMessage := (i%4 == 0)
-		var encResponse sql.NullString
-		var respBy sql.NullString
-		var respAt *time.Time
-		if i%3 == 0 {
-			respPlain := fmt.Sprintf("پاسخ حراست برای پرونده شماره %d: گزارش بررسی شد و دستور پیگیری صادر گردید.", i)
-			encR, _ := encryptWithKey(keyFields, "v2:f:", respPlain)
-			encResponse = sql.NullString{String: encR, Valid: true}
-			respBy = sql.NullString{String: "admin_herasat", Valid: true}
-			nowTime := time.Now().Add(-time.Duration(51-i) * time.Hour)
-			respAt = &nowTime
-		}
-
-		createdAt := time.Now().Add(-time.Duration(51-i) * 2 * time.Hour)
+		createdAt := time.Now().Add(-time.Duration(51-i) * time.Hour)
 		updatedAt := createdAt
-		if respAt != nil {
-			updatedAt = *respAt
-		}
 
 		var reportID int64
 		err = tx.QueryRow(`
@@ -177,34 +172,24 @@ func main() {
 				reporter_name, reporter_phone, description,
 				admin_response, responded_by, responded_at,
 				has_new_message, classification,
+				is_read, read_at, read_by,
 				created_at, updated_at
 			) VALUES (
 				$1, $2, $3, $4,
 				$5, $6, $7,
-				$8, $9, $10,
-				$11, $12,
-				$13, $14
+				NULL, NULL, NULL,
+				FALSE, NULL,
+				FALSE, NULL, NULL,
+				$8, $9
 			) RETURNING id
 		`,
 			trackingCode, cat, reportType, prio,
 			encName, encPhone, encDesc,
-			encResponse, respBy, respAt,
-			hasNewMessage, class,
 			createdAt, updatedAt,
 		).Scan(&reportID)
 
 		if err != nil {
 			log.Fatalf("Failed to insert report %d: %v", i, err)
-		}
-
-		if i%2 == 1 {
-			for _, u := range adminUsers {
-				_, _ = tx.Exec(`
-					INSERT INTO admin_report_views (report_id, admin_username, viewed_at)
-					VALUES ($1, $2, $3)
-					ON CONFLICT (report_id, admin_username) DO NOTHING
-				`, reportID, u, createdAt.Add(time.Minute*15))
-			}
 		}
 
 		insertedCount++
@@ -214,5 +199,5 @@ func main() {
 		log.Fatalf("Transaction commit failed: %v", err)
 	}
 
-	fmt.Printf("Successfully inserted %d test reports.\n", insertedCount)
+	fmt.Printf("Successfully inserted %d untouched unread test reports.\n", insertedCount)
 }
