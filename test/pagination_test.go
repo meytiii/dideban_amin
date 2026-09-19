@@ -66,7 +66,7 @@ func TestGetReportsPaginationAndFiltering(t *testing.T) {
 		Role:     "super_admin",
 	}
 
-	// 1. Test Default Pagination (page=1, page_size=50)
+	// 1. Test Default Pagination (page=1, page_size=25)
 	{
 		req := httptest.NewRequest("GET", "/api/admin/reports?q=PAG_TEST_", nil)
 		req = req.WithContext(context.WithValue(req.Context(), "admin", adminSession))
@@ -89,8 +89,8 @@ func TestGetReportsPaginationAndFiltering(t *testing.T) {
 		if len(result.Reports) != 15 {
 			t.Errorf("expected 15 reports, got %d", len(result.Reports))
 		}
-		if result.Page != 1 || result.PageSize != 50 {
-			t.Errorf("expected page=1, pageSize=50; got page=%d, pageSize=%d", result.Page, result.PageSize)
+		if result.Page != 1 || result.PageSize != 25 {
+			t.Errorf("expected page=1, pageSize=25; got page=%d, pageSize=%d", result.Page, result.PageSize)
 		}
 	}
 

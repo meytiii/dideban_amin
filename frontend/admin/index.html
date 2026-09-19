@@ -12,7 +12,6 @@
 </head>
 
 <body>
-    <!-- Luxury 3D Preloader Overlay (guaranteed >= 1.5s prestige animation) -->
     <div id="adminPreloader" class="luxury-preloader" aria-label="در حال بارگذاری سامانه ستاد خبری" role="status">
         <div class="preloader-backdrop-glow"></div>
         <div class="preloader-content">
@@ -58,7 +57,8 @@
                 <div class="admin-login-inner">
                     <div class="admin-login-header">
                         <div class="admin-logo-crest">
-                            <img src="logo.png" alt="لوگوی اداره حراست" class="admin-crest-img" width="172" height="172" decoding="async">
+                            <img src="logo.png" alt="لوگوی اداره حراست" class="admin-crest-img" width="172" height="172"
+                                decoding="async">
                             <div class="crest-glow"></div>
                         </div>
                         <h1>ورود امن به پنل مدیریتی ستاد خبری</h1>
@@ -118,9 +118,11 @@
                             <label for="admin_captcha_answer">کد امنیتی</label>
                             <div class="admin-captcha-row">
                                 <div class="admin-captcha-box">
-                                    <img id="admin-captcha-img" src="" alt="کد امنیتی" class="admin-captcha-img" width="130" height="48" decoding="async">
-                                    <button type="button" id="admin-captcha-refresh" class="btn-refresh btn-captcha-refresh"
-                                        data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
+                                    <img id="admin-captcha-img" src="" alt="کد امنیتی" class="admin-captcha-img"
+                                        width="130" height="48" decoding="async">
+                                    <button type="button" id="admin-captcha-refresh"
+                                        class="btn-refresh btn-captcha-refresh" data-tooltip="تغییر کد امنیتی"
+                                        aria-label="تغییر کد امنیتی">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round">
@@ -176,7 +178,8 @@
 
             <div class="dashboard-logo-center">
                 <div class="admin-logo-crest dashboard-header-crest">
-                    <img src="logo.png" alt="لوگوی اداره حراست آموزش و پرورش همدان" class="admin-crest-img" width="180" height="180" loading="lazy" decoding="async">
+                    <img src="logo.png" alt="لوگوی اداره حراست آموزش و پرورش همدان" class="admin-crest-img" width="180"
+                        height="180" loading="lazy" decoding="async">
                 </div>
             </div>
 
@@ -419,14 +422,17 @@
 
             <div class="filter-container" id="reportsFilterContainer">
                 <div class="filter-group filter-search-group">
-                    <div class="search-input-wrapper" data-tooltip="جستجوی سریع در کد پیگیری، موضوع یا متن کامل گزارش...">
+                    <div class="search-input-wrapper"
+                        data-tooltip="جستجوی سریع در کد پیگیری، موضوع یا متن کامل گزارش...">
                         <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none"
                             stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
-                        <input type="text" id="search-tracking" placeholder="جستجوی سریع در کد پیگیری، موضوع یا متن گزارش..."
-                            data-tooltip="جستجوی سریع در کد پیگیری، موضوع یا متن کامل گزارش..." aria-label="جستجوی سریع در گزارش‌ها">
+                        <input type="text" id="search-tracking"
+                            placeholder="جستجوی سریع در کد پیگیری، موضوع یا متن گزارش..."
+                            data-tooltip="جستجوی سریع در کد پیگیری، موضوع یا متن کامل گزارش..."
+                            aria-label="جستجوی سریع در گزارش‌ها">
                     </div>
                 </div>
                 <div class="filter-group">
@@ -566,35 +572,12 @@
                 </table>
 
 
-                <div class="pagination-container">
+                <div class="pagination-container" aria-label="ناوبری صفحات گزارش‌ها">
                     <div class="pagination-info" id="pagination-info">گزارش ۰ از ۰</div>
-                    <div class="pagination-controls" dir="ltr">
-
-                        <button id="btn-last" class="btn-page" data-tooltip="قدیمی‌ترین گزارش‌ها">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M13 17l-5-5 5-5M6 17l-5-5 5-5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </button>
-
-                        <button id="btn-next" class="btn-page" data-tooltip="صفحه بعد (قدیمی‌تر)">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </button>
-
-                        <button id="btn-prev" class="btn-page" data-tooltip="صفحه قبل (جدیدتر)">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </button>
-
-                        <button id="btn-first" class="btn-page" data-tooltip="جدیدترین گزارش‌ها (صفحه اول)">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M11 17l5-5-5-5M18 17l5-5-5-5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                    </div>
+                    <nav class="pagination-nav" aria-label="صفحات گزارش‌ها">
+                        <ul class="pagination-list" id="pagination-controls" dir="rtl">
+                        </ul>
+                    </nav>
                 </div>
             </main>
         </div>
@@ -604,7 +587,8 @@
 
             <div class="print-official-header">
                 <div class="print-header-side print-header-right">
-                    <img src="report_logo.png" alt="نشان رسمی اداره حراست" class="print-official-logo" width="80" height="80" loading="lazy" decoding="async">
+                    <img src="report_logo.png" alt="نشان رسمی اداره حراست" class="print-official-logo" width="80"
+                        height="80" loading="lazy" decoding="async">
                 </div>
                 <div class="print-header-center">
                     <div class="bismillah">« بسمه تعالی »</div>
@@ -643,7 +627,8 @@
                     </button>
                     <button type="button" id="btnForwardReportDetail" class="btn-action btn-submit d-none"
                         data-tooltip="ارجاع خبر به کارشناسان حراست">
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
                             <polyline points="16 6 12 2 8 6"></polyline>
                             <line x1="12" y1="2" x2="12" y2="15"></line>
@@ -652,7 +637,8 @@
                     </button>
                     <button type="button" id="btnHistoryReportDetail" class="btn-action btn-secondary"
                         data-tooltip="مشاهده نمودار و تاریخچه گردش ارجاع پرونده">
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"></circle>
                             <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
@@ -692,14 +678,38 @@
 
             <div id="report-detail-skeleton" class="skeleton-detail-container d-none" aria-hidden="true">
                 <div class="skeleton-detail-grid-layout">
-                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
-                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
-                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
-                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
-                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
-                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
-                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
-                    <div class="skeleton-detail-box"><div class="skeleton-shimmer skeleton-meta-label"></div><div class="skeleton-shimmer skeleton-meta-val"></div></div>
+                    <div class="skeleton-detail-box">
+                        <div class="skeleton-shimmer skeleton-meta-label"></div>
+                        <div class="skeleton-shimmer skeleton-meta-val"></div>
+                    </div>
+                    <div class="skeleton-detail-box">
+                        <div class="skeleton-shimmer skeleton-meta-label"></div>
+                        <div class="skeleton-shimmer skeleton-meta-val"></div>
+                    </div>
+                    <div class="skeleton-detail-box">
+                        <div class="skeleton-shimmer skeleton-meta-label"></div>
+                        <div class="skeleton-shimmer skeleton-meta-val"></div>
+                    </div>
+                    <div class="skeleton-detail-box">
+                        <div class="skeleton-shimmer skeleton-meta-label"></div>
+                        <div class="skeleton-shimmer skeleton-meta-val"></div>
+                    </div>
+                    <div class="skeleton-detail-box">
+                        <div class="skeleton-shimmer skeleton-meta-label"></div>
+                        <div class="skeleton-shimmer skeleton-meta-val"></div>
+                    </div>
+                    <div class="skeleton-detail-box">
+                        <div class="skeleton-shimmer skeleton-meta-label"></div>
+                        <div class="skeleton-shimmer skeleton-meta-val"></div>
+                    </div>
+                    <div class="skeleton-detail-box">
+                        <div class="skeleton-shimmer skeleton-meta-label"></div>
+                        <div class="skeleton-shimmer skeleton-meta-val"></div>
+                    </div>
+                    <div class="skeleton-detail-box">
+                        <div class="skeleton-shimmer skeleton-meta-label"></div>
+                        <div class="skeleton-shimmer skeleton-meta-val"></div>
+                    </div>
                 </div>
 
                 <div class="skeleton-detail-section-card">
@@ -716,11 +726,13 @@
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
                         <div style="display: flex; gap: 10px; align-items: flex-end;">
-                            <div class="skeleton-shimmer" style="width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;"></div>
+                            <div class="skeleton-shimmer"
+                                style="width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;"></div>
                             <div class="skeleton-shimmer" style="width: 70%; height: 60px; border-radius: 12px;"></div>
                         </div>
                         <div style="display: flex; gap: 10px; align-items: flex-end; flex-direction: row-reverse;">
-                            <div class="skeleton-shimmer" style="width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;"></div>
+                            <div class="skeleton-shimmer"
+                                style="width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;"></div>
                             <div class="skeleton-shimmer" style="width: 65%; height: 50px; border-radius: 12px;"></div>
                         </div>
                     </div>
@@ -733,349 +745,376 @@
             </div>
 
             <div id="report-detail-actual">
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <span class="detail-label">کد پیگیری:</span>
-                    <div class="detail-value-with-copy">
-                        <strong id="detail-tracking" class="detail-value ltr"></strong>
-                        <button type="button" class="btn-mini-copy" id="copyDetailTrackingBtn"
-                            data-tooltip="کپی کد پیگیری">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">اولویت رسیدگی:</span>
-                    <div class="detail-priority-wrapper">
-                        <select id="detail-priority-select" class="priority-select-control">
-                            <option value="normal">عادی</option>
-                            <option value="urgent">فوری</option>
-                            <option value="critical">آنی و ویژه</option>
-                        </select>
-                        <strong id="detail-priority-print" class="print-only-inline">عادی</strong>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">تاریخ ثبت:</span>
-                    <strong id="detail-date" class="detail-value ltr"></strong>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">وضعیت مشاهده:</span>
-                    <strong id="detail-read-at" class="detail-value rtl"></strong>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">موضوع:</span>
-                    <strong id="detail-category" class="detail-value"></strong>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">نوع گزارش:</span>
-                    <strong id="detail-type" class="detail-value"></strong>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">نام گزارش دهنده:</span>
-                    <strong id="detail-name" class="detail-value"></strong>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">شماره تماس:</span>
-                    <div class="detail-value-with-copy">
-                        <strong id="detail-phone" class="detail-value ltr"></strong>
-                        <button type="button" class="btn-mini-copy" id="copyDetailPhoneBtn"
-                            data-tooltip="کپی شماره تماس">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="detail-item detail-item-attachment">
-                    <span class="detail-label">فایل پیوست:</span>
-                    <div id="detail-attachment" style="margin-top: 5px;"></div>
-                </div>
-            </div>
-
-            <div id="detail-classification-note" class="detail-classification-banner" style="display: none;">
-                <div class="classification-note-inner">
-                    <div class="classification-note-icon-box" id="classificationNoteIcon">
-                    </div>
-                    <div class="classification-note-content">
-                        <span id="classificationNoteText" class="classification-note-text"></span>
-                    </div>
-                    <div id="classificationActionContainer" class="classification-action-container"
-                        style="display: none;">
-                        <button type="button" id="btnOpenChangeClassification" class="btn-change-classification"
-                            data-tooltip="ارزیابی مجدد کیفیت این پرونده">
-                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
-                                stroke-width="2.2">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                            </svg>
-                            <span>تغییر ارزیابی</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="detail-desc-container">
-                <span class="detail-desc-label">۱. متن و شرح گزارش واصله:</span>
-                <div id="detail-desc" class="detail-desc-box"></div>
-            </div>
-
-
-            <!-- Follow-up Conversation Thread (Nexus Chat Style) -->
-            <div id="detail-messages-container" class="nexus-chat-card d-none">
-                <div class="nexus-chat-header">
-                    <div class="nexus-chat-header-info">
-                        <div class="nexus-chat-avatar-icon">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="nexus-chat-title">گفتگو و پاسخ‌های پرونده</h4>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">کد پیگیری:</span>
+                        <div class="detail-value-with-copy">
+                            <strong id="detail-tracking" class="detail-value ltr"></strong>
+                            <button type="button" class="btn-mini-copy" id="copyDetailTrackingBtn"
+                                data-tooltip="کپی کد پیگیری">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
-                    <div class="nexus-chat-header-actions">
-                        <span id="detail-messages-count-badge" class="nexus-chat-count-pill">۰ مورد ثبت‌شده</span>
+                    <div class="detail-item">
+                        <span class="detail-label">اولویت رسیدگی:</span>
+                        <div class="detail-priority-wrapper">
+                            <select id="detail-priority-select" class="priority-select-control">
+                                <option value="normal">عادی</option>
+                                <option value="urgent">فوری</option>
+                                <option value="critical">آنی و ویژه</option>
+                            </select>
+                            <strong id="detail-priority-print" class="print-only-inline">عادی</strong>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">تاریخ ثبت:</span>
+                        <strong id="detail-date" class="detail-value ltr"></strong>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">وضعیت مشاهده:</span>
+                        <strong id="detail-read-at" class="detail-value rtl"></strong>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">موضوع:</span>
+                        <strong id="detail-category" class="detail-value"></strong>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">نوع گزارش:</span>
+                        <strong id="detail-type" class="detail-value"></strong>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">نام گزارش دهنده:</span>
+                        <strong id="detail-name" class="detail-value"></strong>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">شماره تماس:</span>
+                        <div class="detail-value-with-copy">
+                            <strong id="detail-phone" class="detail-value ltr"></strong>
+                            <button type="button" class="btn-mini-copy" id="copyDetailPhoneBtn"
+                                data-tooltip="کپی شماره تماس">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="detail-item detail-item-attachment">
+                        <span class="detail-label">فایل پیوست:</span>
+                        <div id="detail-attachment" style="margin-top: 5px;"></div>
                     </div>
                 </div>
-                <div id="detail-messages-list" class="nexus-chat-stream"></div>
-            </div>
 
-            <!-- Regional Responses Section: Reports from Navahi & Manategh -->
-            <div id="detail-regional-responses-container" class="detail-regional-section" style="margin-top: 20px; display: none;">
-                <!-- Central Admins view: List of regional responses received -->
-                <div id="regional-responses-central-view" style="display: none;">
-                    <div class="regional-section-header">
-                        <div class="regional-section-title">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="8.5" cy="7" r="4"></circle>
-                                <polyline points="17 11 19 13 23 9"></polyline>
-                            </svg>
-                            <span>گزارش‌ها و نتایج بررسی کارشناسان نواحی و مناطق (ارجاع داخلی):</span>
+                <div id="detail-classification-note" class="detail-classification-banner" style="display: none;">
+                    <div class="classification-note-inner">
+                        <div class="classification-note-icon-box" id="classificationNoteIcon">
+                        </div>
+                        <div class="classification-note-content">
+                            <span id="classificationNoteText" class="classification-note-text"></span>
+                        </div>
+                        <div id="classificationActionContainer" class="classification-action-container"
+                            style="display: none;">
+                            <button type="button" id="btnOpenChangeClassification" class="btn-change-classification"
+                                data-tooltip="ارزیابی مجدد کیفیت این پرونده">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+                                    stroke-width="2.2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                <span>تغییر ارزیابی</span>
+                            </button>
                         </div>
                     </div>
-                    <div id="regional-responses-list" class="regional-responses-grid"></div>
                 </div>
 
-                <!-- Side Admin view: Form to submit investigation report to Central Admin -->
-                <div id="regional-responses-side-view" style="display: none;">
-                    <div class="regional-section-header">
-                        <div class="regional-section-title">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                            </svg>
-                            <span>ثبت گزارش و نتیجه بررسی کارشناسی به اداره کل:</span>
-                        </div>
-                        <span class="regional-badge-confidential">
-                            مستقیماً جهت استحضار و تصمیم‌گیری نهایی اداره کل ارسال می‌شود
-                        </span>
-                    </div>
+                <div class="detail-desc-container">
+                    <span class="detail-desc-label">۱. متن و شرح گزارش واصله:</span>
+                    <div id="detail-desc" class="detail-desc-box"></div>
+                </div>
 
-                    <!-- Previously submitted response card if any -->
-                    <div id="regional-previous-response-card" class="existing-regional-card" style="display: none; margin-bottom: 12px;">
-                        <div class="existing-regional-header">
-                            <span class="text-emerald font-semibold" style="display: flex; align-items: center; gap: 6px;">
-                                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                آخرین گزارش بررسی ثبت‌شده شما:
-                            </span>
-                            <span id="regional-previous-time" class="text-muted font-tahoma ltr" style="font-size: 12px;"></span>
-                        </div>
-                        <div id="regional-previous-text" class="detail-desc-box response-text-highlight" style="margin-top: 6px; font-size: 13.5px;"></div>
-                    </div>
 
-                    <form id="regionalResponseForm" style="margin-top: 10px;">
-                        <div class="canned-responses-wrapper regional-canned-wrapper" id="regional-canned-wrapper" style="margin-bottom: 12px; margin-top: 0;">
-                            <span class="canned-title">قالب‌های آماده گزارش کارشناسی به اداره کل:</span>
-                            <div class="canned-chips-list">
-                                <button type="button" class="canned-chip regional-canned-chip"
-                                    data-target="regional_response_input"
-                                    data-text="تحقیقات و بررسی میدانی انجام گرفت؛ بر اساس شواهد و استعلامات، هیچ‌گونه تخلف اداری یا مغایرت قانونی در این موضوع احراز نگردید.">عدم احراز تخلف در بررسی میدانی</button>
-                                <button type="button" class="canned-chip regional-canned-chip"
-                                    data-target="regional_response_input"
-                                    data-text="موضوع مورد بررسی دقیق میدانی قرار گرفت و صحت گزارش تأیید گردید؛ اقدامات لازم و تشکیل پرونده انضباطی جهت اقدام قانونی معمول شد.">تأیید صحت تخلف و پیگیری قانونی</button>
-                                <button type="button" class="canned-chip regional-canned-chip"
-                                    data-target="regional_response_input"
-                                    data-text="موضوع با حضور کارشناس در محل بررسی گردید؛ تذکرات قانونی لازم ابلاغ و تمهیدات اصلاحی جهت رفع نواقص اعمال شد.">تذکر و رفع نقص در محل</button>
-                                <button type="button" class="canned-chip regional-canned-chip"
-                                    data-target="regional_response_input"
-                                    data-text="بررسی اولیه انجام شد؛ به دلیل فقدان شواهد و مستندات کافی، راستی‌آزمایی دقیق نیازمند ارائه مدارک تکمیلی از سوی گزارش‌دهنده است.">نیاز به مدارک تکمیلی گزارش‌دهنده</button>
-                                <button type="button" class="canned-chip regional-canned-chip"
-                                    data-target="regional_response_input"
-                                    data-text="پرونده در دست تحقیقات میدانی و استعلام از بخش‌های مربوطه است؛ گزارش نهایی پس از تکمیل مستندات متعاقباً ارسال خواهد شد.">در دست بررسی و استعلام تکمیلی</button>
+                <!-- Follow-up Conversation Thread (Nexus Chat Style) -->
+                <div id="detail-messages-container" class="nexus-chat-card d-none">
+                    <div class="nexus-chat-header">
+                        <div class="nexus-chat-header-info">
+                            <div class="nexus-chat-avatar-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="nexus-chat-title">گفتگو و پاسخ‌های پرونده</h4>
                             </div>
                         </div>
+                        <div class="nexus-chat-header-actions">
+                            <span id="detail-messages-count-badge" class="nexus-chat-count-pill">۰ مورد ثبت‌شده</span>
+                        </div>
+                    </div>
+                    <div id="detail-messages-list" class="nexus-chat-stream"></div>
+                </div>
 
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <textarea id="regional_response_input" rows="4"
-                                placeholder="شرح تحقیقات میدانی، مستندات بررسی‌شده، اقدامات انجام‌گرفته و نظر کارشناسی خود را جهت ارائه به اداره کل وارد نمایید..."
-                                maxlength="8000" required></textarea>
+                <!-- Regional Responses Section: Reports from Navahi & Manategh -->
+                <div id="detail-regional-responses-container" class="detail-regional-section"
+                    style="margin-top: 20px; display: none;">
+                    <!-- Central Admins view: List of regional responses received -->
+                    <div id="regional-responses-central-view" style="display: none;">
+                        <div class="regional-section-header">
+                            <div class="regional-section-title">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="text-indigo">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="8.5" cy="7" r="4"></circle>
+                                    <polyline points="17 11 19 13 23 9"></polyline>
+                                </svg>
+                                <span>گزارش‌ها و نتایج بررسی کارشناسان نواحی و مناطق (ارجاع داخلی):</span>
+                            </div>
+                        </div>
+                        <div id="regional-responses-list" class="regional-responses-grid"></div>
+                    </div>
+
+                    <!-- Side Admin view: Form to submit investigation report to Central Admin -->
+                    <div id="regional-responses-side-view" style="display: none;">
+                        <div class="regional-section-header">
+                            <div class="regional-section-title">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                <span>ثبت گزارش و نتیجه بررسی کارشناسی به اداره کل:</span>
+                            </div>
+                            <span class="regional-badge-confidential">
+                                مستقیماً جهت استحضار و تصمیم‌گیری نهایی اداره کل ارسال می‌شود
+                            </span>
+                        </div>
+
+                        <!-- Previously submitted response card if any -->
+                        <div id="regional-previous-response-card" class="existing-regional-card"
+                            style="display: none; margin-bottom: 12px;">
+                            <div class="existing-regional-header">
+                                <span class="text-emerald font-semibold"
+                                    style="display: flex; align-items: center; gap: 6px;">
+                                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                    آخرین گزارش بررسی ثبت‌شده شما:
+                                </span>
+                                <span id="regional-previous-time" class="text-muted font-tahoma ltr"
+                                    style="font-size: 12px;"></span>
+                            </div>
+                            <div id="regional-previous-text" class="detail-desc-box response-text-highlight"
+                                style="margin-top: 6px; font-size: 13.5px;"></div>
+                        </div>
+
+                        <form id="regionalResponseForm" style="margin-top: 10px;">
+                            <div class="canned-responses-wrapper regional-canned-wrapper" id="regional-canned-wrapper"
+                                style="margin-bottom: 12px; margin-top: 0;">
+                                <span class="canned-title">قالب‌های آماده گزارش کارشناسی به اداره کل:</span>
+                                <div class="canned-chips-list">
+                                    <button type="button" class="canned-chip regional-canned-chip"
+                                        data-target="regional_response_input"
+                                        data-text="تحقیقات و بررسی میدانی انجام گرفت؛ بر اساس شواهد و استعلامات، هیچ‌گونه تخلف اداری یا مغایرت قانونی در این موضوع احراز نگردید.">عدم
+                                        احراز تخلف در بررسی میدانی</button>
+                                    <button type="button" class="canned-chip regional-canned-chip"
+                                        data-target="regional_response_input"
+                                        data-text="موضوع مورد بررسی دقیق میدانی قرار گرفت و صحت گزارش تأیید گردید؛ اقدامات لازم و تشکیل پرونده انضباطی جهت اقدام قانونی معمول شد.">تأیید
+                                        صحت تخلف و پیگیری قانونی</button>
+                                    <button type="button" class="canned-chip regional-canned-chip"
+                                        data-target="regional_response_input"
+                                        data-text="موضوع با حضور کارشناس در محل بررسی گردید؛ تذکرات قانونی لازم ابلاغ و تمهیدات اصلاحی جهت رفع نواقص اعمال شد.">تذکر
+                                        و رفع نقص در محل</button>
+                                    <button type="button" class="canned-chip regional-canned-chip"
+                                        data-target="regional_response_input"
+                                        data-text="بررسی اولیه انجام شد؛ به دلیل فقدان شواهد و مستندات کافی، راستی‌آزمایی دقیق نیازمند ارائه مدارک تکمیلی از سوی گزارش‌دهنده است.">نیاز
+                                        به مدارک تکمیلی گزارش‌دهنده</button>
+                                    <button type="button" class="canned-chip regional-canned-chip"
+                                        data-target="regional_response_input"
+                                        data-text="پرونده در دست تحقیقات میدانی و استعلام از بخش‌های مربوطه است؛ گزارش نهایی پس از تکمیل مستندات متعاقباً ارسال خواهد شد.">در
+                                        دست بررسی و استعلام تکمیلی</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 10px;">
+                                <textarea id="regional_response_input" rows="4"
+                                    placeholder="شرح تحقیقات میدانی، مستندات بررسی‌شده، اقدامات انجام‌گرفته و نظر کارشناسی خود را جهت ارائه به اداره کل وارد نمایید..."
+                                    maxlength="8000" required></textarea>
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                                <button type="submit" id="btnSubmitRegionalResponse" class="btn-action btn-submit"
+                                    style="padding: 9px 22px; font-size: 13.5px;">
+                                    <span class="btn-text">ارسال گزارش بررسی به اداره کل</span>
+                                    <span class="btn-spinner d-none" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </form>
+                        <div id="regionalResponseStatusMsg" class="response-box"
+                            style="display: none; margin-top: 10px;"></div>
+                    </div>
+                </div>
+
+                <div class="detail-response-container">
+                    <span class="detail-desc-label" id="detail-response-heading">۲. ثبت یا ویرایش پاسخ رسمی به
+                        گزارش‌دهنده:</span>
+
+                    <div id="existing-response-box" class="existing-response-box" style="display: none;">
+                        <div id="detail-admin-response-text" class="detail-desc-box response-text-highlight"></div>
+                        <div class="response-meta" id="response-meta-info" style="margin-top: 6px;"></div>
+                    </div>
+                    <div id="print-no-response-placeholder" class="print-only-block print-box-content">در دست اقدام و
+                        بررسی
+                        کارشناسی می‌باشد.</div>
+
+
+                    <div class="canned-responses-wrapper" id="admin-canned-wrapper">
+                        <span class="canned-title">قالب‌های آماده پاسخ سریع:</span>
+                        <div class="canned-chips-list">
+                            <button type="button" class="canned-chip"
+                                data-text="گزارش شما دریافت و جهت بررسی و اقدام مقتضی به کارشناس مربوطه ارجاع گردید.">ارجاع
+                                به کارشناس مربوطه</button>
+                            <button type="button" class="canned-chip"
+                                data-text="موضوع مورد بررسی همه‌جانبه قرار گرفت و تدابیر و اقدامات قانونی لازم معمول گردید.">بررسی
+                                و اقدام قانونی</button>
+                            <button type="button" class="canned-chip"
+                                data-text="جهت تکمیل پرونده و تسریع در پیگیری، مدارک و مستندات بیشتری مورد نیاز است. لطفاً گزارش تکمیلی ثبت فرمایید.">درخواست
+                                مستندات تکمیلی</button>
+                            <button type="button" class="canned-chip"
+                                data-text="موضوع گزارش با دقت بررسی شد و در حال حاضر تخلف اداری یا امنیتی احراز نگردید.">عدم
+                                احراز تخلف</button>
+                        </div>
+                    </div>
+
+                    <form id="adminResponseForm" style="margin-top: 15px;">
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <textarea id="admin_response_input" rows="4"
+                                placeholder="متن پاسخ یا نتیجه بررسی حراست را جهت مشاهده گزارش‌دهنده وارد نمایید..."
+                                maxlength="3000" required></textarea>
                         </div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                            <button type="submit" id="btnSubmitRegionalResponse" class="btn-action btn-submit"
-                                style="padding: 9px 22px; font-size: 13.5px;">
-                                <span class="btn-text">ارسال گزارش بررسی به اداره کل</span>
+                            <button type="submit" id="submitResponseBtn" class="btn-action btn-submit"
+                                style="padding: 10px 24px; font-size: 14px;">
+                                <span class="btn-text">ثبت / ویرایش پاسخ</span>
                                 <span class="btn-spinner d-none" aria-hidden="true"></span>
                             </button>
                         </div>
                     </form>
-                    <div id="regionalResponseStatusMsg" class="response-box" style="display: none; margin-top: 10px;"></div>
+                    <div id="responseStatusMsg" class="response-box" style="display: none; margin-top: 12px;"></div>
                 </div>
-            </div>
 
-            <div class="detail-response-container">
-                <span class="detail-desc-label" id="detail-response-heading">۲. ثبت یا ویرایش پاسخ رسمی به گزارش‌دهنده:</span>
-
-                <div id="existing-response-box" class="existing-response-box" style="display: none;">
-                    <div id="detail-admin-response-text" class="detail-desc-box response-text-highlight"></div>
-                    <div class="response-meta" id="response-meta-info" style="margin-top: 6px;"></div>
-                </div>
-                <div id="print-no-response-placeholder" class="print-only-block print-box-content">در دست اقدام و بررسی
-                    کارشناسی می‌باشد.</div>
-
-
-                <div class="canned-responses-wrapper" id="admin-canned-wrapper">
-                    <span class="canned-title">قالب‌های آماده پاسخ سریع:</span>
-                    <div class="canned-chips-list">
-                        <button type="button" class="canned-chip"
-                            data-text="گزارش شما دریافت و جهت بررسی و اقدام مقتضی به کارشناس مربوطه ارجاع گردید.">ارجاع
-                            به کارشناس مربوطه</button>
-                        <button type="button" class="canned-chip"
-                            data-text="موضوع مورد بررسی همه‌جانبه قرار گرفت و تدابیر و اقدامات قانونی لازم معمول گردید.">بررسی
-                            و اقدام قانونی</button>
-                        <button type="button" class="canned-chip"
-                            data-text="جهت تکمیل پرونده و تسریع در پیگیری، مدارک و مستندات بیشتری مورد نیاز است. لطفاً گزارش تکمیلی ثبت فرمایید.">درخواست
-                            مستندات تکمیلی</button>
-                        <button type="button" class="canned-chip"
-                            data-text="موضوع گزارش با دقت بررسی شد و در حال حاضر تخلف اداری یا امنیتی احراز نگردید.">عدم
-                            احراز تخلف</button>
+                <div id="classification-prompt-container" class="classification-prompt-box" style="display: none;">
+                    <div class="prompt-header-row">
+                        <div class="prompt-badge-icon">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M9 11l3 3L22 4" />
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                            </svg>
+                        </div>
+                        <div class="prompt-text-group">
+                            <strong class="prompt-title">ارزیابی اولیه کیفیت و سودمندی گزارش واصله</strong>
+                            <p class="prompt-desc">آیا این گزارش حاوی اطلاعات مستند، ارزشمند و قابل پیگیری اداری است؟
+                                لطفاً
+                                وضعیت سودمندی پرونده را جهت تحلیل آماری مشخص فرمایید (یک‌بار برای هر پرونده):</p>
+                        </div>
                     </div>
-                </div>
-
-                <form id="adminResponseForm" style="margin-top: 15px;">
-                    <div class="form-group" style="margin-bottom: 12px;">
-                        <textarea id="admin_response_input" rows="4"
-                            placeholder="متن پاسخ یا نتیجه بررسی حراست را جهت مشاهده گزارش‌دهنده وارد نمایید..."
-                            maxlength="3000" required></textarea>
-                    </div>
-                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                        <button type="submit" id="submitResponseBtn" class="btn-action btn-submit"
-                            style="padding: 10px 24px; font-size: 14px;">
-                            <span class="btn-text">ثبت / ویرایش پاسخ</span>
-                            <span class="btn-spinner d-none" aria-hidden="true"></span>
+                    <div class="prompt-btn-group">
+                        <button type="button" id="btnClassifyHelpful" class="btn-classify btn-classify-helpful">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+                            </svg>
+                            <span>گزارش مفید و موثر</span>
+                        </button>
+                        <button type="button" id="btnClassifyUseless" class="btn-classify btn-classify-useless">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                            </svg>
+                            <span>گزارش بی‌محتوا و فاقد ارزش</span>
                         </button>
                     </div>
-                </form>
-                <div id="responseStatusMsg" class="response-box" style="display: none; margin-top: 12px;"></div>
-            </div>
+                    <div id="classificationPromptStatusMsg" class="response-box"
+                        style="display: none; margin-top: 10px;">
+                    </div>
+                </div>
 
-            <div id="classification-prompt-container" class="classification-prompt-box" style="display: none;">
-                <div class="prompt-header-row">
-                    <div class="prompt-badge-icon">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M9 11l3 3L22 4" />
-                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                        </svg>
+                <div class="detail-internal-notes-container">
+                    <div class="internal-notes-header">
+                        <div class="internal-notes-title">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <strong>۳. ملاحظات و یادداشت‌های محرمانه داخلی پرونده:</strong>
+                        </div>
+                        <span class="notes-badge-locked">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                style="vertical-align: middle; margin-left: 4px;">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            کاملاً محرمانه - غیرقابل مشاهده برای گزارش‌دهنده
+                        </span>
                     </div>
-                    <div class="prompt-text-group">
-                        <strong class="prompt-title">ارزیابی اولیه کیفیت و سودمندی گزارش واصله</strong>
-                        <p class="prompt-desc">آیا این گزارش حاوی اطلاعات مستند، ارزشمند و قابل پیگیری اداری است؟ لطفاً
-                            وضعیت سودمندی پرونده را جهت تحلیل آماری مشخص فرمایید (یک‌بار برای هر پرونده):</p>
+                    <textarea id="detail-internal-notes-input" rows="3"
+                        placeholder="ثبت اقدامات داخلی، شماره نامه‌های اداری، ارجاعات و یادداشت‌های محرمانه کارشناس..."
+                        maxlength="4000"></textarea>
+                    <div id="print-internal-notes-text" class="print-only-block print-box-content"></div>
+                    <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+                        <button type="button" id="btnSaveInternalNotes" class="btn-action btn-secondary"
+                            style="font-size: 13px;">
+                            <span>ذخیره یادداشت محرمانه</span>
+                        </button>
                     </div>
+                    <div id="internalNotesStatusMsg" class="response-box" style="display: none; margin-top: 8px;"></div>
                 </div>
-                <div class="prompt-btn-group">
-                    <button type="button" id="btnClassifyHelpful" class="btn-classify btn-classify-helpful">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
-                        </svg>
-                        <span>گزارش مفید و موثر</span>
-                    </button>
-                    <button type="button" id="btnClassifyUseless" class="btn-classify btn-classify-useless">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-                        </svg>
-                        <span>گزارش بی‌محتوا و فاقد ارزش</span>
-                    </button>
-                </div>
-                <div id="classificationPromptStatusMsg" class="response-box" style="display: none; margin-top: 10px;">
-                </div>
-            </div>
 
-            <div class="detail-internal-notes-container">
-                <div class="internal-notes-header">
-                    <div class="internal-notes-title">
-                        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                        <strong>۳. ملاحظات و یادداشت‌های محرمانه داخلی پرونده:</strong>
+
+                <div class="print-official-footer">
+                    <div class="print-sig-section-title">۴. صورت‌جلسه و تأییدیه نهایی بررسی پرونده:</div>
+                    <div class="print-signature-grid">
+                        <div class="print-signature-box">
+                            <div class="print-sig-title">کارشناس بررسی‌کننده پرونده</div>
+                            <div class="print-sig-field">نام و سمت سازمانی: .......................................
+                            </div>
+                            <div class="print-sig-space"></div>
+                            <div class="print-sig-meta">محل امضاء و تاریخ</div>
+                        </div>
+                        <div class="print-signature-box">
+                            <div class="print-sig-title">رئیس / مدیر اداره حراست</div>
+                            <div class="print-sig-field">نام و سمت سازمانی: .......................................
+                            </div>
+                            <div class="print-sig-space"></div>
+                            <div class="print-sig-meta">محل امضاء، تاریخ و مهر رسمی اداره</div>
+                        </div>
                     </div>
-                    <span class="notes-badge-locked">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    <div class="print-security-warning">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            style="vertical-align: middle; margin-left: 4px;">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            style="vertical-align: -2px; margin-left: 4px;">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                            </path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
                         </svg>
-                        کاملاً محرمانه - غیرقابل مشاهده برای گزارش‌دهنده
-                    </span>
-                </div>
-                <textarea id="detail-internal-notes-input" rows="3"
-                    placeholder="ثبت اقدامات داخلی، شماره نامه‌های اداری، ارجاعات و یادداشت‌های محرمانه کارشناس..."
-                    maxlength="4000"></textarea>
-                <div id="print-internal-notes-text" class="print-only-block print-box-content"></div>
-                <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
-                    <button type="button" id="btnSaveInternalNotes" class="btn-action btn-secondary"
-                        style="font-size: 13px;">
-                        <span>ذخیره یادداشت محرمانه</span>
-                    </button>
-                </div>
-                <div id="internalNotesStatusMsg" class="response-box" style="display: none; margin-top: 8px;"></div>
-            </div>
-
-
-            <div class="print-official-footer">
-                <div class="print-sig-section-title">۴. صورت‌جلسه و تأییدیه نهایی بررسی پرونده:</div>
-                <div class="print-signature-grid">
-                    <div class="print-signature-box">
-                        <div class="print-sig-title">کارشناس بررسی‌کننده پرونده</div>
-                        <div class="print-sig-field">نام و سمت سازمانی: .......................................</div>
-                        <div class="print-sig-space"></div>
-                        <div class="print-sig-meta">محل امضاء و تاریخ</div>
-                    </div>
-                    <div class="print-signature-box">
-                        <div class="print-sig-title">رئیس / مدیر اداره حراست</div>
-                        <div class="print-sig-field">نام و سمت سازمانی: .......................................</div>
-                        <div class="print-sig-space"></div>
-                        <div class="print-sig-meta">محل امضاء، تاریخ و مهر رسمی اداره</div>
+                        هشدار امنیتی: این سند حاوی اطلاعات طبقه‌بندی‌شده و محرمانه اداری است. هرگونه نسخه‌برداری غیرمجاز
+                        یا
+                        افشای مفاد آن پیگرد قانونی به همراه دارد.
                     </div>
                 </div>
-                <div class="print-security-warning">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-left: 4px;">
-                        <path
-                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
-                        </path>
-                        <line x1="12" y1="9" x2="12" y2="13"></line>
-                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                    </svg>
-                    هشدار امنیتی: این سند حاوی اطلاعات طبقه‌بندی‌شده و محرمانه اداری است. هرگونه نسخه‌برداری غیرمجاز یا
-                    افشای مفاد آن پیگرد قانونی به همراه دارد.
-                </div>
-            </div>
             </div> <!-- End report-detail-actual -->
         </section>
 
@@ -1433,12 +1472,30 @@
 
             <div id="analytics-skeleton-content" class="d-none" aria-hidden="true">
                 <div class="skeleton-analytics-kpi-grid">
-                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 45%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 60%; height: 28px; border-radius: 6px;"></div></div>
-                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 50%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 55%; height: 28px; border-radius: 6px;"></div></div>
-                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 48%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 50%; height: 28px; border-radius: 6px;"></div></div>
-                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 55%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 65%; height: 28px; border-radius: 6px;"></div></div>
-                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 52%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 60%; height: 28px; border-radius: 6px;"></div></div>
-                    <div class="skeleton-analytics-kpi-card"><div class="skeleton-shimmer" style="width: 46%; height: 13px; border-radius: 4px;"></div><div class="skeleton-shimmer" style="width: 70%; height: 28px; border-radius: 6px;"></div></div>
+                    <div class="skeleton-analytics-kpi-card">
+                        <div class="skeleton-shimmer" style="width: 45%; height: 13px; border-radius: 4px;"></div>
+                        <div class="skeleton-shimmer" style="width: 60%; height: 28px; border-radius: 6px;"></div>
+                    </div>
+                    <div class="skeleton-analytics-kpi-card">
+                        <div class="skeleton-shimmer" style="width: 50%; height: 13px; border-radius: 4px;"></div>
+                        <div class="skeleton-shimmer" style="width: 55%; height: 28px; border-radius: 6px;"></div>
+                    </div>
+                    <div class="skeleton-analytics-kpi-card">
+                        <div class="skeleton-shimmer" style="width: 48%; height: 13px; border-radius: 4px;"></div>
+                        <div class="skeleton-shimmer" style="width: 50%; height: 28px; border-radius: 6px;"></div>
+                    </div>
+                    <div class="skeleton-analytics-kpi-card">
+                        <div class="skeleton-shimmer" style="width: 55%; height: 13px; border-radius: 4px;"></div>
+                        <div class="skeleton-shimmer" style="width: 65%; height: 28px; border-radius: 6px;"></div>
+                    </div>
+                    <div class="skeleton-analytics-kpi-card">
+                        <div class="skeleton-shimmer" style="width: 52%; height: 13px; border-radius: 4px;"></div>
+                        <div class="skeleton-shimmer" style="width: 60%; height: 28px; border-radius: 6px;"></div>
+                    </div>
+                    <div class="skeleton-analytics-kpi-card">
+                        <div class="skeleton-shimmer" style="width: 46%; height: 13px; border-radius: 4px;"></div>
+                        <div class="skeleton-shimmer" style="width: 70%; height: 28px; border-radius: 6px;"></div>
+                    </div>
                 </div>
                 <div class="skeleton-analytics-charts-grid">
                     <div class="skeleton-analytics-chart-card">
@@ -1465,111 +1522,118 @@
                     </div>
                     <div class="skeleton-analytics-chart-card">
                         <div class="skeleton-shimmer" style="width: 160px; height: 18px; border-radius: 4px;"></div>
-                        <div style="display: flex; align-items: flex-end; gap: 12px; height: 160px; margin-top: 20px; padding: 0 10px;">
-                            <div class="skeleton-shimmer" style="flex: 1; height: 40%; border-radius: 4px 4px 0 0;"></div>
-                            <div class="skeleton-shimmer" style="flex: 1; height: 70%; border-radius: 4px 4px 0 0;"></div>
-                            <div class="skeleton-shimmer" style="flex: 1; height: 55%; border-radius: 4px 4px 0 0;"></div>
-                            <div class="skeleton-shimmer" style="flex: 1; height: 85%; border-radius: 4px 4px 0 0;"></div>
-                            <div class="skeleton-shimmer" style="flex: 1; height: 60%; border-radius: 4px 4px 0 0;"></div>
-                            <div class="skeleton-shimmer" style="flex: 1; height: 95%; border-radius: 4px 4px 0 0;"></div>
+                        <div
+                            style="display: flex; align-items: flex-end; gap: 12px; height: 160px; margin-top: 20px; padding: 0 10px;">
+                            <div class="skeleton-shimmer" style="flex: 1; height: 40%; border-radius: 4px 4px 0 0;">
+                            </div>
+                            <div class="skeleton-shimmer" style="flex: 1; height: 70%; border-radius: 4px 4px 0 0;">
+                            </div>
+                            <div class="skeleton-shimmer" style="flex: 1; height: 55%; border-radius: 4px 4px 0 0;">
+                            </div>
+                            <div class="skeleton-shimmer" style="flex: 1; height: 85%; border-radius: 4px 4px 0 0;">
+                            </div>
+                            <div class="skeleton-shimmer" style="flex: 1; height: 60%; border-radius: 4px 4px 0 0;">
+                            </div>
+                            <div class="skeleton-shimmer" style="flex: 1; height: 95%; border-radius: 4px 4px 0 0;">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div id="analytics-actual-content">
-            <div class="analytics-metrics-grid"
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px;">
-                <div class="analytics-metric-card">
-                    <span class="metric-label">کل گزارش‌های ثبت‌شده</span>
-                    <strong class="metric-val text-cyan" id="ana-total-reports">۰</strong>
-                </div>
-                <div class="analytics-metric-card">
-                    <span class="metric-label">رسیدگی و پاسخ‌داده‌شده</span>
-                    <strong class="metric-val text-emerald" id="ana-total-responded">۰</strong>
-                </div>
-                <div class="analytics-metric-card">
-                    <span class="metric-label">در انتظار بررسی</span>
-                    <strong class="metric-val text-amber" id="ana-total-unread">۰</strong>
-                </div>
-                <div class="analytics-metric-card">
-                    <span class="metric-label">گزارش‌های مفید و موثر</span>
-                    <strong class="metric-val text-emerald" id="ana-total-helpful">۰ <span class="metric-sub-pct"
-                            id="ana-helpful-pct">(۰٪)</span></strong>
-                </div>
-                <div class="analytics-metric-card">
-                    <span class="metric-label">گزارش‌های بی‌محتوا و فاقد ارزش</span>
-                    <strong class="metric-val text-slate-light" id="ana-total-useless">۰ <span class="metric-sub-pct"
-                            id="ana-useless-pct">(۰٪)</span></strong>
-                </div>
-                <div class="analytics-metric-card">
-                    <span class="metric-label">میانگین زمان پاسخگویی</span>
-                    <strong class="metric-val" id="ana-avg-response" style="color: #c084fc;">۰ ساعت</strong>
-                </div>
-            </div>
-
-            <div class="analytics-grid">
-
-                <div class="analytics-card">
-                    <div class="analytics-card-header">
-                        <h4 style="display: flex; align-items: center; gap: 8px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <path d="M12 2a10 10 0 0 1 10 10H12V2z"></path>
-                            </svg>
-                            <span>تحلیل کیفیت و سودمندی گزارش‌ها</span>
-                        </h4>
-                        <span class="chart-subtitle-tag" id="chart-quality-total-tag">۰ پرونده ارزیابی‌شده</span>
+                <div class="analytics-metrics-grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px;">
+                    <div class="analytics-metric-card">
+                        <span class="metric-label">کل گزارش‌های ثبت‌شده</span>
+                        <strong class="metric-val text-cyan" id="ana-total-reports">۰</strong>
                     </div>
-                    <div id="chart-classification-pie" class="chart-container"></div>
-                </div>
-
-                <div class="analytics-card">
-                    <div class="analytics-card-header">
-                        <h4 style="display: flex; align-items: center; gap: 8px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
-                                <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
-                            </svg>
-                            <span>توزیع موضوعی گزارش‌ها</span>
-                        </h4>
-                        <span class="chart-subtitle-tag" id="chart-categories-total-tag">۰ پرونده</span>
+                    <div class="analytics-metric-card">
+                        <span class="metric-label">رسیدگی و پاسخ‌داده‌شده</span>
+                        <strong class="metric-val text-emerald" id="ana-total-responded">۰</strong>
                     </div>
-                    <div id="chart-categories" class="chart-container"></div>
-                </div>
-
-
-                <div class="analytics-card">
-                    <div class="analytics-card-header">
-                        <h4 style="display: flex; align-items: center; gap: 8px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                            </svg>
-                            <span>توزیع اولویت و فوریت پرونده‌ها</span>
-                        </h4>
-                        <span class="chart-subtitle-tag" id="chart-priorities-total-tag">۰ پرونده</span>
+                    <div class="analytics-metric-card">
+                        <span class="metric-label">در انتظار بررسی</span>
+                        <strong class="metric-val text-amber" id="ana-total-unread">۰</strong>
                     </div>
-                    <div id="chart-priorities" class="chart-container"></div>
-                </div>
-
-
-                <div class="analytics-card analytics-card-full">
-                    <div class="analytics-card-header">
-                        <h4 style="display: flex; align-items: center; gap: 8px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                                <polyline points="17 6 23 6 23 12"></polyline>
-                            </svg>
-                            <span>روند ماهانه ثبت گزارش‌ها در سال جاری</span>
-                        </h4>
+                    <div class="analytics-metric-card">
+                        <span class="metric-label">گزارش‌های مفید و موثر</span>
+                        <strong class="metric-val text-emerald" id="ana-total-helpful">۰ <span class="metric-sub-pct"
+                                id="ana-helpful-pct">(۰٪)</span></strong>
                     </div>
-                    <div id="chart-monthly" class="chart-container-bar"></div>
+                    <div class="analytics-metric-card">
+                        <span class="metric-label">گزارش‌های بی‌محتوا و فاقد ارزش</span>
+                        <strong class="metric-val text-slate-light" id="ana-total-useless">۰ <span
+                                class="metric-sub-pct" id="ana-useless-pct">(۰٪)</span></strong>
+                    </div>
+                    <div class="analytics-metric-card">
+                        <span class="metric-label">میانگین زمان پاسخگویی</span>
+                        <strong class="metric-val" id="ana-avg-response" style="color: #c084fc;">۰ ساعت</strong>
+                    </div>
                 </div>
-            </div>
+
+                <div class="analytics-grid">
+
+                    <div class="analytics-card">
+                        <div class="analytics-card-header">
+                            <h4 style="display: flex; align-items: center; gap: 8px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 2a10 10 0 0 1 10 10H12V2z"></path>
+                                </svg>
+                                <span>تحلیل کیفیت و سودمندی گزارش‌ها</span>
+                            </h4>
+                            <span class="chart-subtitle-tag" id="chart-quality-total-tag">۰ پرونده ارزیابی‌شده</span>
+                        </div>
+                        <div id="chart-classification-pie" class="chart-container"></div>
+                    </div>
+
+                    <div class="analytics-card">
+                        <div class="analytics-card-header">
+                            <h4 style="display: flex; align-items: center; gap: 8px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                                    <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                                </svg>
+                                <span>توزیع موضوعی گزارش‌ها</span>
+                            </h4>
+                            <span class="chart-subtitle-tag" id="chart-categories-total-tag">۰ پرونده</span>
+                        </div>
+                        <div id="chart-categories" class="chart-container"></div>
+                    </div>
+
+
+                    <div class="analytics-card">
+                        <div class="analytics-card-header">
+                            <h4 style="display: flex; align-items: center; gap: 8px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                                <span>توزیع اولویت و فوریت پرونده‌ها</span>
+                            </h4>
+                            <span class="chart-subtitle-tag" id="chart-priorities-total-tag">۰ پرونده</span>
+                        </div>
+                        <div id="chart-priorities" class="chart-container"></div>
+                    </div>
+
+
+                    <div class="analytics-card analytics-card-full">
+                        <div class="analytics-card-header">
+                            <h4 style="display: flex; align-items: center; gap: 8px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                    <polyline points="17 6 23 6 23 12"></polyline>
+                                </svg>
+                                <span>روند ماهانه ثبت گزارش‌ها در سال جاری</span>
+                            </h4>
+                        </div>
+                        <div id="chart-monthly" class="chart-container-bar"></div>
+                    </div>
+                </div>
             </div> <!-- End analytics-actual-content -->
         </section>
     </div>
@@ -1638,8 +1702,7 @@
             <form id="form-create-user">
                 <div class="form-group">
                     <label for="new_full_name">نام و نام خانوادگی:</label>
-                    <input type="text" id="new_full_name" required placeholder="مثال: علی حسینی"
-                        autocomplete="off">
+                    <input type="text" id="new_full_name" required placeholder="مثال: علی حسینی" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="new_username">نام کاربری اداری:</label>
@@ -1654,8 +1717,7 @@
                         <button type="button" id="toggleNewPasswordBtn" class="btn-toggle-pw"
                             data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                             <svg id="eye-icon-show-new" viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
@@ -1683,13 +1745,12 @@
                         <button type="button" id="toggleNewPasswordConfirmBtn" class="btn-toggle-pw"
                             data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                             <svg id="eye-icon-show-new-confirm" viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
-                            <svg id="eye-icon-hide-new-confirm" class="d-none" viewBox="0 0 24 24" width="18" height="18"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            <svg id="eye-icon-hide-new-confirm" class="d-none" viewBox="0 0 24 24" width="18"
+                                height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
                                 <path d="m15 18-.722-3.25"></path>
                                 <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
@@ -1988,30 +2049,37 @@
         <div class="admin-modal-box" style="max-width: 520px;">
             <div class="admin-modal-header">
                 <h3 style="display: flex; align-items: center; gap: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                     </svg>
                     <span>تغییر ارزیابی کیفیت و سودمندی پرونده</span>
                 </h3>
-                <button type="button" class="btn-close-modal" id="btn-close-change-classification-modal" aria-label="بستن پنجره">&times;</button>
+                <button type="button" class="btn-close-modal" id="btn-close-change-classification-modal"
+                    aria-label="بستن پنجره">&times;</button>
             </div>
             <form id="form-change-classification">
                 <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;">
-                    شما به عنوان ثبت‌کننده ارزیابی اولیه، می‌توانید وضعیت ارزش اطلاعاتی و کیفیت این گزارش را ویرایش فرمایید:
+                    شما به عنوان ثبت‌کننده ارزیابی اولیه، می‌توانید وضعیت ارزش اطلاعاتی و کیفیت این گزارش را ویرایش
+                    فرمایید:
                 </p>
-                <div class="classify-modal-options" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+                <div class="classify-modal-options"
+                    style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
                     <div class="classify-option-card" id="option-card-helpful">
                         <input type="radio" name="modal_classification" id="radio-helpful" value="helpful">
                         <div class="classify-card-content">
                             <div class="classify-card-icon helpful">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
                                 </svg>
                             </div>
                             <div class="classify-card-texts">
                                 <strong class="classify-title">گزارش مفید و موثر</strong>
-                                <span class="classify-desc">حاوی اطلاعات مستند، معتبر، مشخصات دقیق و ارزش پیگیری اداری</span>
+                                <span class="classify-desc">حاوی اطلاعات مستند، معتبر، مشخصات دقیق و ارزش پیگیری
+                                    اداری</span>
                             </div>
                         </div>
                     </div>
@@ -2020,23 +2088,27 @@
                         <input type="radio" name="modal_classification" id="radio-useless" value="useless">
                         <div class="classify-card-content">
                             <div class="classify-card-icon useless">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
                                 </svg>
                             </div>
                             <div class="classify-card-texts">
                                 <strong class="classify-title">گزارش بی‌محتوا و فاقد ارزش</strong>
-                                <span class="classify-desc">فاقد ادله و مستندات، تکراری، نامفهوم یا بدون قابلیت رسیدگی قانونی</span>
+                                <span class="classify-desc">فاقد ادله و مستندات، تکراری، نامفهوم یا بدون قابلیت رسیدگی
+                                    قانونی</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="changeClassificationStatusMsg" class="response-box" style="display: none; margin-bottom: 14px;"></div>
+                <div id="changeClassificationStatusMsg" class="response-box"
+                    style="display: none; margin-bottom: 14px;"></div>
 
                 <div class="admin-modal-footer">
-                    <button type="button" class="btn-action btn-secondary" id="btn-cancel-change-classification">انصراف</button>
+                    <button type="button" class="btn-action btn-secondary"
+                        id="btn-cancel-change-classification">انصراف</button>
                     <button type="submit" class="btn-action btn-submit" id="btn-submit-change-classification">
                         <span class="btn-text">ثبت و بروزرسانی ارزیابی</span>
                         <span class="btn-spinner d-none" aria-hidden="true"></span>
@@ -2053,46 +2125,60 @@
             <div class="admin-modal-header">
                 <div>
                     <h3 style="display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan">
                             <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
                             <polyline points="16 6 12 2 8 6"></polyline>
                             <line x1="12" y1="2" x2="12" y2="15"></line>
                         </svg>
                         <span>ارجاع خبر به کارشناسان حراست</span>
                     </h3>
-                    <div class="modal-header-sub text-muted" id="forward-modal-tracking-sub" style="font-size: 12px; margin-top: 4px;">
-                        شماره پرونده: <strong id="forward-modal-tracking-code" class="ltr text-cyan font-tahoma">...</strong>
+                    <div class="modal-header-sub text-muted" id="forward-modal-tracking-sub"
+                        style="font-size: 12px; margin-top: 4px;">
+                        شماره پرونده: <strong id="forward-modal-tracking-code"
+                            class="ltr text-cyan font-tahoma">...</strong>
                     </div>
                 </div>
-                <button type="button" class="btn-close-modal" id="btn-close-forward-modal" aria-label="بستن">&times;</button>
+                <button type="button" class="btn-close-modal" id="btn-close-forward-modal"
+                    aria-label="بستن">&times;</button>
             </div>
             <form id="form-forward-report">
                 <input type="hidden" id="forward_report_id">
-                
+
                 <div class="forward-search-bar" style="margin-bottom: 12px;">
                     <div style="position: relative;">
                         <input type="text" id="forward-search-input" placeholder="جستجوی نام کارشناس یا ناحیه/منطقه..."
                             style="width: 100%; height: 38px; background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 0 34px 0 12px; color: var(--text-main); font-family: inherit; font-size: 13px;">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; right: 10px; top: 11px; color: var(--text-muted); pointer-events: none;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                            stroke-width="2"
+                            style="position: absolute; right: 10px; top: 11px; color: var(--text-muted); pointer-events: none;">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
                     </div>
                 </div>
 
-                <div class="forward-actions-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12px; color: var(--text-muted);">
+                <div class="forward-actions-bar"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12px; color: var(--text-muted);">
                     <div style="display: flex; gap: 10px;">
-                        <button type="button" id="btn-select-all-recipients" class="btn-link-action" style="background:none; border:none; color:var(--color-primary); cursor:pointer; font-family:inherit; font-size:12px; padding:0;">انتخاب همه</button>
+                        <button type="button" id="btn-select-all-recipients" class="btn-link-action"
+                            style="background:none; border:none; color:var(--color-primary); cursor:pointer; font-family:inherit; font-size:12px; padding:0;">انتخاب
+                            همه</button>
                         <span>|</span>
-                        <button type="button" id="btn-deselect-all-recipients" class="btn-link-action" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-family:inherit; font-size:12px; padding:0;">لغو انتخاب</button>
+                        <button type="button" id="btn-deselect-all-recipients" class="btn-link-action"
+                            style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-family:inherit; font-size:12px; padding:0;">لغو
+                            انتخاب</button>
                     </div>
                     <div>
-                        تعداد انتخاب‌شده: <strong id="forward-selected-count" class="text-cyan font-bold">۰</strong> کارشناس
+                        تعداد انتخاب‌شده: <strong id="forward-selected-count" class="text-cyan font-bold">۰</strong>
+                        کارشناس
                     </div>
                 </div>
 
-                <div id="forward-recipients-container" class="forward-recipients-list" style="max-height: 260px; overflow-y: auto; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 8px; background: rgba(15, 23, 42, 0.35); margin-bottom: 14px;">
-                    <div id="forward-recipients-loading" style="text-align: center; padding: 25px; color: var(--text-muted); font-size: 13px;">
+                <div id="forward-recipients-container" class="forward-recipients-list"
+                    style="max-height: 260px; overflow-y: auto; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 8px; background: rgba(15, 23, 42, 0.35); margin-bottom: 14px;">
+                    <div id="forward-recipients-loading"
+                        style="text-align: center; padding: 25px; color: var(--text-muted); font-size: 13px;">
                         در حال بارگذاری لیست کارشناسان نواحی و مناطق...
                     </div>
                 </div>
@@ -2112,28 +2198,34 @@
 
     <!-- Modal Forward History (نمودار و تاریخچه ارجاع) -->
     <div id="modal-forward-history" class="admin-modal-overlay" style="display: none;">
-        <div class="admin-modal-box forward-history-modal-box" style="max-width: 820px; width: 95%; max-height: 90vh; display: flex; flex-direction: column;">
+        <div class="admin-modal-box forward-history-modal-box"
+            style="max-width: 820px; width: 95%; max-height: 90vh; display: flex; flex-direction: column;">
             <div class="admin-modal-header" style="flex-shrink: 0;">
                 <div>
                     <h3 style="display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo">
                             <circle cx="12" cy="12" r="10"></circle>
                             <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
                         <span>تاریخچه و نمودار جریان ارجاع خبر</span>
                     </h3>
                     <div class="modal-header-sub text-muted" style="font-size: 12px; margin-top: 4px;">
-                        شماره پرونده: <strong id="history-modal-tracking-code" class="ltr text-cyan font-tahoma">...</strong>
+                        شماره پرونده: <strong id="history-modal-tracking-code"
+                            class="ltr text-cyan font-tahoma">...</strong>
                     </div>
                 </div>
-                <button type="button" class="btn-close-modal" id="btn-close-history-modal" aria-label="بستن">&times;</button>
+                <button type="button" class="btn-close-modal" id="btn-close-history-modal"
+                    aria-label="بستن">&times;</button>
             </div>
 
-            <div id="forward-history-body" class="forward-history-scroll" style="flex: 1; overflow-y: auto; min-height: 220px;">
+            <div id="forward-history-body" class="forward-history-scroll"
+                style="flex: 1; overflow-y: auto; min-height: 220px;">
                 <!-- Flowchart diagrams rendered here dynamically -->
             </div>
 
-            <div class="admin-modal-footer" style="flex-shrink: 0; margin-top: 14px; border-top: 1px solid var(--border-subtle); padding-top: 12px;">
+            <div class="admin-modal-footer"
+                style="flex-shrink: 0; margin-top: 14px; border-top: 1px solid var(--border-subtle); padding-top: 12px;">
                 <button type="button" class="btn-action btn-secondary" id="btn-close-history-footer">بستن</button>
             </div>
         </div>

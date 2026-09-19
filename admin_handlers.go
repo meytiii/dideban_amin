@@ -216,7 +216,7 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 	admin := r.Context().Value("admin").(AdminSession)
 
 	page := 1
-	pageSize := 50
+	pageSize := 25
 	if p := r.URL.Query().Get("page"); p != "" {
 		if parsed, err := strconv.Atoi(p); err == nil && parsed > 0 {
 			page = parsed

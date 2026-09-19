@@ -619,7 +619,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let allReports = [];
     let filteredReports = [];
     let currentPage = 1;
-    const itemsPerPage = 50;
+    const itemsPerPage = 25;
+    let totalReportsCount = 0;
     const selectedReportIds = new Set();
     let currentViewingIndex = -1;
     let previousUnreadCount = -1;
@@ -765,13 +766,46 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('kpi-read-card')?.addEventListener('click', () => handleKPICardFilter('read'));
     document.getElementById('kpi-responded-card')?.addEventListener('click', () => handleKPICardFilter('responded'));
 
-    document.getElementById('btn-first')?.addEventListener('click', () => { currentPage = 1; renderCurrentPage(); });
-    document.getElementById('btn-prev')?.addEventListener('click', () => { currentPage--; renderCurrentPage(); });
-    document.getElementById('btn-next')?.addEventListener('click', () => { currentPage++; renderCurrentPage(); });
-    document.getElementById('btn-last')?.addEventListener('click', () => {
-        currentPage = Math.ceil(filteredReports.length / itemsPerPage) || 1;
-        renderCurrentPage();
-    });
+    const paginationControls = document.getElementById('pagination-controls');
+    if (paginationControls && !paginationControls._delegated) {
+        paginationControls._delegated = true;
+        paginationControls.addEventListener('click', async (e) => {
+            const btn = e.target.closest('.pagination-btn');
+            if (!btn || btn.disabled || btn.getAttribute('aria-disabled') === 'true') return;
+
+            const action = btn.getAttribute('data-action');
+            const pageStr = btn.getAttribute('data-page');
+
+            const totalItems = (totalReportsCount > 0) ? totalReportsCount : filteredReports.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+            if (action === 'prev') {
+                if (currentPage > 1) {
+                    currentPage--;
+                    await fetchReports();
+                }
+            } else if (action === 'next') {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    await fetchReports();
+                }
+            } else if (pageStr) {
+                const targetPage = parseInt(pageStr, 10);
+                if (!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages && targetPage !== currentPage) {
+                    currentPage = targetPage;
+                    await fetchReports();
+                }
+            }
+        });
+    }
+
+    window.addEventListener('resize', debounce(() => {
+        if (filteredReports && filteredReports.length > 0) {
+            const totalItems = (totalReportsCount > 0) ? totalReportsCount : filteredReports.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+            renderPaginationControls(currentPage, totalPages);
+        }
+    }, 200));
 
     // Compensate for Iran DST / Windows Server timezone shift (+1 hour = +60 min)
     // Can be adjusted or overridden via window.HERASAT_TIME_OFFSET_MINUTES (default: 60)
@@ -1092,7 +1126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const queryParams = new URLSearchParams();
             queryParams.set('page', currentPage || 1);
-            queryParams.set('page_size', itemsPerPage || 50);
+            queryParams.set('page_size', itemsPerPage || 25);
             if (typeof searchTracking !== 'undefined' && searchTracking && searchTracking.value.trim()) {
                 queryParams.set('q', searchTracking.value.trim());
             }
@@ -1117,16 +1151,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             let fetchedReports = [];
-            // Handle both paginated object and flat array format
             if (Array.isArray(data)) {
                 fetchedReports = data;
+                totalReportsCount = data.length;
             } else if (data && Array.isArray(data.reports)) {
                 fetchedReports = data.reports;
+                totalReportsCount = (typeof data.total === 'number') ? data.total : data.reports.length;
             } else {
                 fetchedReports = [];
+                totalReportsCount = 0;
             }
 
-            // Real-time unread report notification (C4)
             let currentUnread = 0;
             for (let i = 0; i < fetchedReports.length; i++) {
                 if (!fetchedReports[i].is_read) currentUnread++;
@@ -1138,9 +1173,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             previousUnreadCount = currentUnread;
 
-            // Signature check: avoid tearing down and rebuilding DOM when poll returned unchanged data
             const firstReport = fetchedReports[0];
-            const newSignature = `${fetchedReports.length}_${currentUnread}_${firstReport ? firstReport.id : 0}_${firstReport ? (firstReport.updated_at || firstReport.created_at) : ''}`;
+            const newSignature = `${currentPage}_${totalReportsCount}_${fetchedReports.length}_${currentUnread}_${firstReport ? firstReport.id : 0}_${firstReport ? (firstReport.updated_at || firstReport.created_at) : ''}`;
             if (!forceSkeleton && allReports.length > 0 && newSignature === lastReportsSignature) {
                 resetSessionTimer();
                 return true;
@@ -1228,17 +1262,160 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCurrentPage();
     }
 
+    function calculatePagination({ currentPage, totalPages, paginationItemsToDisplay = 7 }) {
+        if (totalPages <= paginationItemsToDisplay) {
+            return {
+                pages: Array.from({ length: totalPages }, (_, i) => i + 1),
+                showLeftEllipsis: false,
+                showRightEllipsis: false
+            };
+        }
+
+        const showLeftEllipsis = currentPage - 1 > paginationItemsToDisplay / 2;
+        const showRightEllipsis = totalPages - currentPage + 1 > paginationItemsToDisplay / 2;
+
+        const halfDisplay = Math.floor(paginationItemsToDisplay / 2);
+        const initialRange = {
+            start: currentPage - halfDisplay,
+            end: currentPage + halfDisplay,
+        };
+
+        const adjustedRange = {
+            start: Math.max(1, initialRange.start),
+            end: Math.min(totalPages, initialRange.end),
+        };
+
+        if (adjustedRange.start === 1) {
+            adjustedRange.end = paginationItemsToDisplay;
+        }
+        if (adjustedRange.end === totalPages) {
+            adjustedRange.start = totalPages - paginationItemsToDisplay + 1;
+        }
+
+        if (showLeftEllipsis) adjustedRange.start++;
+        if (showRightEllipsis) adjustedRange.end--;
+
+        const pages = Array.from(
+            { length: adjustedRange.end - adjustedRange.start + 1 },
+            (_, i) => adjustedRange.start + i
+        );
+
+        return {
+            pages,
+            showLeftEllipsis,
+            showRightEllipsis,
+        };
+    }
+
+    function renderPaginationControls(currPage, totalPgs) {
+        const controls = document.getElementById('pagination-controls');
+        if (!controls) return;
+
+        if (totalPgs <= 1) {
+            controls.innerHTML = '';
+            return;
+        }
+
+        const isMobile = window.innerWidth < 640;
+        const paginationItemsToDisplay = isMobile ? 5 : 7;
+        const { pages, showLeftEllipsis, showRightEllipsis } = calculatePagination({
+            currentPage: currPage,
+            totalPages: totalPgs,
+            paginationItemsToDisplay
+        });
+
+        let html = '';
+
+        const prevDisabled = currPage <= 1;
+        html += `
+            <li class="pagination-item">
+                <button type="button" class="pagination-btn pagination-prev" data-action="prev" ${prevDisabled ? 'disabled aria-disabled="true"' : ''} title="صفحه قبل (جدیدتر)" aria-label="صفحه قبل">
+                    <svg viewBox="0 0 24 24" class="pagination-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6"/>
+                    </svg>
+                </button>
+            </li>
+        `;
+
+        if (showLeftEllipsis) {
+            html += `
+                <li class="pagination-item">
+                    <button type="button" class="pagination-btn pagination-link" data-page="1" aria-label="صفحه ۱">
+                        ${toPersianNum(1)}
+                    </button>
+                </li>
+                <li class="pagination-item">
+                    <span class="pagination-ellipsis" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" class="pagination-ellipsis-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+                        </svg>
+                        <span class="sr-only">صفحات بیشتر</span>
+                    </span>
+                </li>
+            `;
+        }
+
+        for (const p of pages) {
+            const isActive = p === currPage;
+            html += `
+                <li class="pagination-item">
+                    <button type="button" class="pagination-btn pagination-link ${isActive ? 'is-active' : ''}" data-page="${p}" ${isActive ? 'aria-current="page"' : ''} aria-label="صفحه ${toPersianNum(p)}">
+                        ${toPersianNum(p)}
+                    </button>
+                </li>
+            `;
+        }
+
+        if (showRightEllipsis) {
+            html += `
+                <li class="pagination-item">
+                    <span class="pagination-ellipsis" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" class="pagination-ellipsis-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+                        </svg>
+                        <span class="sr-only">صفحات بیشتر</span>
+                    </span>
+                </li>
+                <li class="pagination-item">
+                    <button type="button" class="pagination-btn pagination-link" data-page="${totalPgs}" aria-label="صفحه ${toPersianNum(totalPgs)}">
+                        ${toPersianNum(totalPgs)}
+                    </button>
+                </li>
+            `;
+        }
+
+        const nextDisabled = currPage >= totalPgs;
+        html += `
+            <li class="pagination-item">
+                <button type="button" class="pagination-btn pagination-next" data-action="next" ${nextDisabled ? 'disabled aria-disabled="true"' : ''} title="صفحه بعد (قدیمی‌تر)" aria-label="صفحه بعد">
+                    <svg viewBox="0 0 24 24" class="pagination-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                </button>
+            </li>
+        `;
+
+        controls.innerHTML = html;
+    }
+
     function renderCurrentPage() {
-        const totalItems = filteredReports.length;
+        const totalItems = (totalReportsCount > 0) ? totalReportsCount : filteredReports.length;
         const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
 
         if (currentPage < 1) currentPage = 1;
         if (currentPage > totalPages) currentPage = totalPages;
 
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+        let startIndex = (currentPage - 1) * itemsPerPage;
+        let endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+        let pageData;
 
-        const pageData = filteredReports.slice(startIndex, endIndex);
+        if (allReports.length <= itemsPerPage && totalItems > itemsPerPage) {
+            pageData = filteredReports;
+            endIndex = Math.min(startIndex + pageData.length, totalItems);
+        } else {
+            pageData = filteredReports.slice(startIndex, endIndex);
+        }
+
         renderTable(pageData);
         updateBulkToolbar();
 
@@ -1250,15 +1427,7 @@ document.addEventListener('DOMContentLoaded', () => {
             infoEl.textContent = `گزارش ${startFa} تا ${endFa} از ${totalFa}`;
         }
 
-        const btnFirst = document.getElementById('btn-first');
-        const btnPrev = document.getElementById('btn-prev');
-        const btnNext = document.getElementById('btn-next');
-        const btnLast = document.getElementById('btn-last');
-
-        if (btnFirst) btnFirst.disabled = currentPage === 1;
-        if (btnPrev) btnPrev.disabled = currentPage === 1;
-        if (btnNext) btnNext.disabled = currentPage === totalPages;
-        if (btnLast) btnLast.disabled = currentPage === totalPages;
+        renderPaginationControls(currentPage, totalPages);
     }
 
     function renderTable(reports) {
