@@ -217,15 +217,20 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 
 	page := 1
 	pageSize := 25
+	fetchAll := r.URL.Query().Get("all") == "true" || r.URL.Query().Get("page_size") == "all"
 	if p := r.URL.Query().Get("page"); p != "" {
 		if parsed, err := strconv.Atoi(p); err == nil && parsed > 0 {
 			page = parsed
 		}
 	}
-	if ps := r.URL.Query().Get("page_size"); ps != "" {
-		if parsed, err := strconv.Atoi(ps); err == nil && parsed > 0 && parsed <= 100 {
+	if ps := r.URL.Query().Get("page_size"); ps != "" && ps != "all" {
+		if parsed, err := strconv.Atoi(ps); err == nil && parsed > 0 && parsed <= 10000 {
 			pageSize = parsed
 		}
+	}
+	if fetchAll {
+		pageSize = 100000
+		page = 1
 	}
 
 	offset := (page - 1) * pageSize
@@ -1866,25 +1871,36 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var req struct {
-		ReportID int64 `json:"report_id"`
+		ReportID  int64   `json:"report_id"`
+		ReportIDs []int64 `json:"report_ids"`
 	}
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.ReportID <= 0 {
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "داده‌های درخواست نامعتبر است", http.StatusBadRequest)
+		return
+	}
+
+	idMap := make(map[int64]bool)
+	if req.ReportID > 0 {
+		idMap[req.ReportID] = true
+	}
+	for _, id := range req.ReportIDs {
+		if id > 0 {
+			idMap[id] = true
+		}
+	}
+
+	var ids []int64
+	for id := range idMap {
+		ids = append(ids, id)
+	}
+
+	if len(ids) == 0 {
 		http.Error(w, "شناسه پرونده نامعتبر است", http.StatusBadRequest)
 		return
 	}
 
-	var trackingCode string
-	err := DB.QueryRow("SELECT tracking_code FROM reports WHERE id = $1", req.ReportID).Scan(&trackingCode)
-	if err == sql.ErrNoRows {
-		http.Error(w, "پرونده مورد نظر در پایگاه داده یافت نشد", http.StatusNotFound)
-		return
-	} else if err != nil {
-		http.Error(w, "خطای پایگاه داده", http.StatusInternalServerError)
-		return
-	}
-
 	var filesToDelete []string
-	rows, err := DB.Query("SELECT file_path FROM evidence_files WHERE report_id = $1", req.ReportID)
+	rows, err := DB.Query("SELECT file_path FROM evidence_files WHERE report_id = ANY($1)", pq.Array(ids))
 	if err == nil {
 		defer rows.Close()
 		absUploadDir, _ := filepath.Abs("./secure_uploads")
@@ -1901,9 +1917,6 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-		if err := rows.Err(); err != nil {
-			log.Printf("Error iterating evidence files for deletion: %v", err)
-		}
 	}
 
 	tx, err := DB.BeginTx(r.Context(), nil)
@@ -1913,15 +1926,18 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer tx.Rollback()
 
-	_, err = tx.Exec("DELETE FROM reports WHERE id = $1", req.ReportID)
+	_, err = tx.Exec("DELETE FROM reports WHERE id = ANY($1)", pq.Array(ids))
 	if err != nil {
 		http.Error(w, "خطا در حذف رکورد پرونده از پایگاه داده", http.StatusInternalServerError)
 		return
 	}
 
-	if err := logAuditTx(tx, admin.Username, admin.Title, "DELETE_REPORT_AND_ATTACHMENTS", &req.ReportID, getIP(r)); err != nil {
-		http.Error(w, "سیستم ثبت لاگ با خطا مواجه شد. عملیات متوقف گردید.", http.StatusServiceUnavailable)
-		return
+	for _, repID := range ids {
+		repIDCopy := repID
+		if err := logAuditTx(tx, admin.Username, admin.Title, "DELETE_REPORT_AND_ATTACHMENTS", &repIDCopy, getIP(r)); err != nil {
+			http.Error(w, "سیستم ثبت لاگ با خطا مواجه شد. عملیات متوقف گردید.", http.StatusServiceUnavailable)
+			return
+		}
 	}
 
 	if err := tx.Commit(); err != nil {
@@ -1931,16 +1947,22 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 
 	for _, absFilePath := range filesToDelete {
 		if err := os.Remove(absFilePath); err != nil && !os.IsNotExist(err) {
-			_ = logAudit(admin.Username, admin.Title, "FILE_DELETE_WARNING", &req.ReportID, getIP(r))
+			_ = logAudit(admin.Username, admin.Title, "FILE_DELETE_WARNING", nil, getIP(r))
 		}
+	}
+
+	var msg string
+	if len(ids) == 1 {
+		msg = "پرونده و فایل‌های ضمیمه آن با موفقیت حذف گردیدند."
+	} else {
+		msg = fmt.Sprintf("%d پرونده با موفقیت حذف گردیدند.", len(ids))
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"status":        "success",
-		"message":       fmt.Sprintf("پرونده با کد پیگیری %s و فایل‌های ضمیمه آن با موفقیت حذف گردیدند.", trackingCode),
-		"deleted_id":    req.ReportID,
-		"tracking_code": trackingCode,
+		"message":       msg,
+		"deleted_count": len(ids),
 	})
 }
 

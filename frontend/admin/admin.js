@@ -620,7 +620,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let filteredReports = [];
     let currentPage = 1;
     const itemsPerPage = 25;
-    let totalReportsCount = 0;
     const selectedReportIds = new Set();
     let currentViewingIndex = -1;
     let previousUnreadCount = -1;
@@ -769,31 +768,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const paginationControls = document.getElementById('pagination-controls');
     if (paginationControls && !paginationControls._delegated) {
         paginationControls._delegated = true;
-        paginationControls.addEventListener('click', async (e) => {
+        paginationControls.addEventListener('click', (e) => {
             const btn = e.target.closest('.pagination-btn');
             if (!btn || btn.disabled || btn.getAttribute('aria-disabled') === 'true') return;
 
             const action = btn.getAttribute('data-action');
             const pageStr = btn.getAttribute('data-page');
 
-            const totalItems = (totalReportsCount > 0) ? totalReportsCount : filteredReports.length;
+            const totalItems = filteredReports.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
 
             if (action === 'prev') {
                 if (currentPage > 1) {
                     currentPage--;
-                    await fetchReports();
+                    renderCurrentPage();
                 }
             } else if (action === 'next') {
                 if (currentPage < totalPages) {
                     currentPage++;
-                    await fetchReports();
+                    renderCurrentPage();
                 }
             } else if (pageStr) {
                 const targetPage = parseInt(pageStr, 10);
                 if (!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages && targetPage !== currentPage) {
                     currentPage = targetPage;
-                    await fetchReports();
+                    renderCurrentPage();
                 }
             }
         });
@@ -801,7 +800,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('resize', debounce(() => {
         if (filteredReports && filteredReports.length > 0) {
-            const totalItems = (totalReportsCount > 0) ? totalReportsCount : filteredReports.length;
+            const totalItems = filteredReports.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
             renderPaginationControls(currentPage, totalPages);
         }
@@ -1027,7 +1026,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (_elBulkCount) _elBulkCount.textContent = toPersianNum(count);
         if (_elBulkToolbar) _elBulkToolbar.style.display = count > 0 ? 'flex' : 'none';
 
-        // Check if all visible items on current page are selected
+        const btnBulkDelete = document.getElementById('btnBulkDelete');
+        if (btnBulkDelete) {
+            const isSuper = Boolean(currentAdmin && (currentAdmin.is_superuser || currentAdmin.role === 'superuser'));
+            btnBulkDelete.style.display = (count > 0 && isSuper) ? 'inline-flex' : 'none';
+        }
+
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = Math.min(startIndex + itemsPerPage, filteredReports.length);
         const currentPageItems = filteredReports.slice(startIndex, endIndex);
@@ -1046,7 +1050,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Bulk Toolbar Event Handlers
     document.getElementById('selectAllReports')?.addEventListener('change', (e) => {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = Math.min(startIndex + itemsPerPage, filteredReports.length);
@@ -1065,6 +1068,48 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedReportIds.clear();
         renderCurrentPage();
         updateBulkToolbar();
+    });
+
+    document.getElementById('btnBulkDelete')?.addEventListener('click', async () => {
+        if (!currentAdmin || (!currentAdmin.is_superuser && currentAdmin.role !== 'superuser')) {
+            showToast('تنها پشتیبانی سامانه مجاز به حذف پرونده می‌باشد.', 3000, 'warning');
+            return;
+        }
+
+        const ids = Array.from(selectedReportIds);
+        if (ids.length === 0) return;
+
+        const countFa = toPersianNum(ids.length);
+        const confirmed = await showConfirmDialog({
+            title: 'حذف گروهی پرونده‌ها',
+            description: `اخطار امنیتی پشتیبانی سامانه: آیا از حذف دائمی ${countFa} پرونده انتخاب‌شده و کلیه فایل‌های ضمیمه آن‌ها از پایگاه داده و سرور اطمینان دارید؟ این عملیات غیرقابل بازگشت است و در لاگ‌های بازرسی ثبت می‌گردد.`,
+            confirmText: `بله، حذف دائمی ${countFa} پرونده`,
+            cancelText: 'انصراف',
+            variant: 'danger',
+            iconType: 'trash'
+        });
+        if (!confirmed) return;
+
+        try {
+            const response = await adminFetch('/api/admin/report/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ report_ids: ids })
+            });
+
+            if (!response.ok) {
+                const errText = await response.text();
+                throw new Error(errText || 'خطا در حذف گروهی پرونده‌ها');
+            }
+
+            const data = await response.json();
+            showToast(data.message || `${countFa} پرونده با موفقیت حذف گردید`, 3500, 'success');
+            selectedReportIds.clear();
+            updateBulkToolbar();
+            await fetchReports().catch(() => { });
+        } catch (err) {
+            showToast('خطا در اجرای عملیات حذف گروهی: ' + err.message, 4000, 'error');
+        }
     });
 
     document.getElementById('btnBulkMarkRead')?.addEventListener('click', async () => {
@@ -1091,6 +1136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ));
             showToast(`${toPersianNum(unreadSelected.length)} پرونده به عنوان بررسی‌شده علامت‌گذاری شدند`, 2500, 'success');
             selectedReportIds.clear();
+            updateBulkToolbar();
             await fetchReports().catch(() => { });
         } catch (err) {
             showToast('خطا در انجام عملیات گروهی', 3000, 'error');
@@ -1125,20 +1171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         try {
             const queryParams = new URLSearchParams();
-            queryParams.set('page', currentPage || 1);
-            queryParams.set('page_size', itemsPerPage || 25);
-            if (typeof searchTracking !== 'undefined' && searchTracking && searchTracking.value.trim()) {
-                queryParams.set('q', searchTracking.value.trim());
-            }
-            if (typeof filterType !== 'undefined' && filterType && filterType.value !== 'all') {
-                queryParams.set('category', filterType.value);
-            }
-            if (typeof filterPriority !== 'undefined' && filterPriority && filterPriority.value !== 'all') {
-                queryParams.set('priority', filterPriority.value);
-            }
-            if (typeof filterReadStatus !== 'undefined' && filterReadStatus && filterReadStatus.value !== 'all') {
-                queryParams.set('read_status', filterReadStatus.value);
-            }
+            queryParams.set('all', 'true');
             const reportsUrl = `/api/admin/reports?${queryParams.toString()}`;
             const response = await adminFetch(reportsUrl);
             if (response.status === 401) {
@@ -1153,13 +1186,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let fetchedReports = [];
             if (Array.isArray(data)) {
                 fetchedReports = data;
-                totalReportsCount = data.length;
             } else if (data && Array.isArray(data.reports)) {
                 fetchedReports = data.reports;
-                totalReportsCount = (typeof data.total === 'number') ? data.total : data.reports.length;
             } else {
                 fetchedReports = [];
-                totalReportsCount = 0;
             }
 
             let currentUnread = 0;
@@ -1174,7 +1204,7 @@ document.addEventListener('DOMContentLoaded', () => {
             previousUnreadCount = currentUnread;
 
             const firstReport = fetchedReports[0];
-            const newSignature = `${currentPage}_${totalReportsCount}_${fetchedReports.length}_${currentUnread}_${firstReport ? firstReport.id : 0}_${firstReport ? (firstReport.updated_at || firstReport.created_at) : ''}`;
+            const newSignature = `${fetchedReports.length}_${currentUnread}_${firstReport ? firstReport.id : 0}_${firstReport ? (firstReport.updated_at || firstReport.created_at) : ''}`;
             if (!forceSkeleton && allReports.length > 0 && newSignature === lastReportsSignature) {
                 resetSessionTimer();
                 return true;
@@ -1399,22 +1429,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderCurrentPage() {
-        const totalItems = (totalReportsCount > 0) ? totalReportsCount : filteredReports.length;
+        const totalItems = filteredReports.length;
         const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
 
         if (currentPage < 1) currentPage = 1;
         if (currentPage > totalPages) currentPage = totalPages;
 
-        let startIndex = (currentPage - 1) * itemsPerPage;
-        let endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-        let pageData;
-
-        if (allReports.length <= itemsPerPage && totalItems > itemsPerPage) {
-            pageData = filteredReports;
-            endIndex = Math.min(startIndex + pageData.length, totalItems);
-        } else {
-            pageData = filteredReports.slice(startIndex, endIndex);
-        }
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+        const pageData = filteredReports.slice(startIndex, endIndex);
 
         renderTable(pageData);
         updateBulkToolbar();
