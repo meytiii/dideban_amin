@@ -102,6 +102,10 @@ body::before {
     contain-intrinsic-size: 0 900px;
 }
 
+#trackResultBox {
+    scroll-margin-top: 24px;
+}
+
 .header {
     text-align: center;
     margin-bottom: 30px;

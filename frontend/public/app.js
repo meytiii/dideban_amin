@@ -2081,6 +2081,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadCaptcha('followup-captcha-img', 'followup_captcha_id', 'followup_captcha_answer');
 
                 trackResultBox?.classList.remove('d-none');
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        trackResultBox?.scrollIntoView({
+                            behavior: getScrollBehavior(),
+                            block: 'start'
+                        });
+                    }, 50);
+                });
             } catch (err) {
                 clearTimeout(skeletonTimer);
                 if (trackResultSkeleton) {
