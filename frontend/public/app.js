@@ -1,6 +1,24 @@
 
+// [HARDEN-5a] Global error safety net
+window.addEventListener('error', (e) => {
+    console.error('[GLOBAL ERROR]', e.error || e.message, e.filename, e.lineno);
+});
+
+window.addEventListener('unhandledrejection', (e) => {
+    console.error('[UNHANDLED PROMISE]', e.reason);
+});
+
+// [HARDEN-5b] Fetch wrapper with hard timeout to prevent indefinite hangs
+function fetchWithTimeout(url, options = {}, ms = 20000) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, { ...options, signal: ctrl.signal })
+        .finally(() => clearTimeout(timer));
+}
+
+// [HARDEN-1] Reduced artificial delay; removed fonts.ready gate that compounded load time
 (function initPreloader() {
-    const PRELOADER_MIN_MS = 3000;
+    const PRELOADER_MIN_MS = 200;
     const startTime = performance.now();
     let pageLoaded = false;
     let dismissed = false;
@@ -28,19 +46,10 @@
     }
 
     if (document.readyState === 'complete') {
-        if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(onComplete).catch(onComplete);
-        } else {
-            onComplete();
-        }
+        onComplete();
     } else {
-        window.addEventListener('load', () => {
-            if (document.fonts && document.fonts.ready) {
-                document.fonts.ready.then(onComplete).catch(onComplete);
-            } else {
-                onComplete();
-            }
-        });
+        window.addEventListener('load', onComplete);
+        document.addEventListener('DOMContentLoaded', onComplete);
     }
 
     setTimeout(() => {
@@ -255,7 +264,8 @@ function initAppTooltips() {
     }, { passive: true });
 }
 
-initAppTooltips();
+// [HARDEN-5c] Non-critical init must not break the app
+try { initAppTooltips(); } catch (e) { console.error('Tooltips init failed:', e); }
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -270,9 +280,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${toPersianNum(formatted)} ${sizes[i]}`;
     };
 
-    // Compensate for Iran DST / Windows Server timezone shift (+1 hour = +60 min)
-    // Can be adjusted or overridden via window.HERASAT_TIME_OFFSET_MINUTES (default: 60)
-    const TIME_OFFSET_MS = ((typeof window.HERASAT_TIME_OFFSET_MINUTES !== 'undefined' ? window.HERASAT_TIME_OFFSET_MINUTES : 60) * 60 * 1000);
+    // [HARDEN-4] Removed manual timezone offset hack; parse naive ISO as UTC
+    function parseTimestamp(isoStr) {
+        if (!isoStr) return null;
+        // If the server returns naive ISO (no 'Z', no offset), treat as UTC.
+        const hasTz = /Z$|[+-]\d{2}:?\d{2}$/.test(isoStr);
+        const d = new Date(hasTz ? isoStr : isoStr + 'Z');
+        return isNaN(d.getTime()) ? null : d;
+    }
 
     // Cached high-performance Intl singletons (prevents GC pressure and repeated parser construction)
     const cachedJalaliFormatterFull = new Intl.DateTimeFormat('fa-IR', {
@@ -314,11 +329,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const formatJalaliDateTime = (isoStr, includeSeconds = false) => {
         if (!isoStr) return 'نامشخص';
         try {
-            let dateObj = new Date(isoStr);
-            if (isNaN(dateObj.getTime())) return 'نامشخص';
-            if (TIME_OFFSET_MS) {
-                dateObj = new Date(dateObj.getTime() + TIME_OFFSET_MS);
-            }
+            const dateObj = parseTimestamp(isoStr);
+            if (!dateObj) return 'نامشخص';
             return (includeSeconds ? cachedJalaliFormatterFull : cachedJalaliFormatterShort).format(dateObj);
         } catch (e) {
             return 'نامشخص';
@@ -328,10 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateOfficialReceipt(info) {
         if (!info) return;
         const code = info.tracking_code || '';
-        let now = info.timestamp ? new Date(info.timestamp) : new Date();
-        if (TIME_OFFSET_MS) {
-            now = new Date(now.getTime() + TIME_OFFSET_MS);
-        }
+        const now = info.timestamp ? (parseTimestamp(info.timestamp) || new Date()) : new Date();
 
         const dateEl = document.getElementById('receipt-date');
         const timeEl = document.getElementById('receipt-time');
@@ -380,13 +389,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!toastContainer) return;
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
+        // [HARDEN-2] Set user-provided text via textContent to prevent XSS
         toast.innerHTML = `
             <span class="toast-icon">${TOAST_ICONS[type] || TOAST_ICONS.info}</span>
-            <span class="toast-body">${message}</span>
+            <span class="toast-body"></span>
             <button class="toast-close" aria-label="بستن">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
         `;
+        toast.querySelector('.toast-body').textContent = message;
         toast.querySelector('.toast-close').addEventListener('click', () => dismissToast(toast));
         toastContainer.appendChild(toast);
         if (duration > 0) {
@@ -562,18 +573,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const connector = document.getElementById(`connector-${i}`);
             const circle = tracker?.querySelector('.step-circle');
 
+            // [HARDEN-10] Update aria-current="step" for screen readers and manage clickable semantics
             if (i < currentStep) {
                 tracker?.classList.add('completed');
                 tracker?.classList.remove('active');
-                if (circle) circle.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                tracker?.removeAttribute('aria-current');
+                tracker?.setAttribute('tabindex', '0');
+                tracker?.setAttribute('role', 'button');
+                tracker?.setAttribute('aria-label', `بازگشت به مرحله ${toPersianNum(i)}`);
+                if (circle) circle.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>';
                 if (connector) connector.classList.add('completed');
             } else if (i === currentStep) {
                 tracker?.classList.add('active');
                 tracker?.classList.remove('completed');
+                tracker?.setAttribute('aria-current', 'step');
+                tracker?.removeAttribute('tabindex');
+                tracker?.removeAttribute('role');
+                tracker?.removeAttribute('aria-label');
                 if (circle) circle.innerHTML = `<span class="step-num">${toPersianNum(i)}</span>`;
                 if (connector) connector.classList.remove('completed');
             } else {
                 tracker?.classList.remove('active', 'completed');
+                tracker?.removeAttribute('aria-current');
+                tracker?.removeAttribute('tabindex');
+                tracker?.removeAttribute('role');
+                tracker?.removeAttribute('aria-label');
                 if (circle) circle.innerHTML = `<span class="step-num">${toPersianNum(i)}</span>`;
                 if (connector) connector.classList.remove('completed');
             }
@@ -776,11 +800,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     stepTrackers.forEach(item => {
-        item.addEventListener('click', () => {
+        const handleStepNav = () => {
             const targetStep = parseInt(item.getAttribute('data-step'), 10);
             if (targetStep && targetStep < currentStep) {
                 currentStep = targetStep;
                 updateStepTracker();
+            }
+        };
+        item.addEventListener('click', handleStepNav);
+        // [HARDEN-10] Keyboard activation for clickable step-tracker items
+        item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleStepNav();
             }
         });
     });
@@ -1103,7 +1135,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const imgEl = document.getElementById(imgId);
         if (imgEl) imgEl.classList.add('skeleton-shimmer');
         try {
-            const res = await fetch('/api/captcha');
+            // [HARDEN-5b] Fetch wrapper with hard timeout
+            const res = await fetchWithTimeout('/api/captcha');
             if (res.ok) {
                 const data = await res.json();
                 const tokenEl = document.getElementById(tokenInputId);
@@ -1419,7 +1452,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('/api/report', {
+            // [HARDEN-5b] Fetch wrapper with hard timeout
+            const response = await fetchWithTimeout('/api/report', {
                 method: 'POST',
                 body: formData
             });
@@ -1864,7 +1898,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const res = await fetch('/api/report/follow-up', {
+                // [HARDEN-5b] Fetch wrapper with hard timeout
+                const res = await fetchWithTimeout('/api/report/follow-up', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -2022,7 +2057,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 80);
 
             try {
-                const res = await fetch('/api/report/track', {
+                // [HARDEN-5b] Fetch wrapper with hard timeout
+                const res = await fetchWithTimeout('/api/report/track', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

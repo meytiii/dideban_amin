@@ -36,7 +36,8 @@
         </div>
     </div>
 
-    <div id="toast-container" class="toast-container"></div>
+    <!-- [HARDEN-9] aria-live for SR announcement -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="false"></div>
 
 
     <div id="draft-saved-indicator" class="draft-saved-indicator">
@@ -100,22 +101,23 @@
         <main id="submitSection">
             <form id="reportForm" enctype="multipart/form-data" novalidate>
 
-                <div class="step-tracker">
-                    <div class="step-item active" id="tracker-1" data-step="1">
-                        <div class="step-circle"><span class="step-num">۱</span></div>
+                <!-- [HARDEN-10] Proper list semantics and accessibility for step progression -->
+                <ol class="step-tracker" role="list" aria-label="مراحل ثبت گزارش">
+                    <li class="step-item active" id="tracker-1" data-step="1" aria-current="step">
+                        <div class="step-circle" aria-hidden="true"><span class="step-num">۱</span></div>
                         <div class="step-label">هویت گزارش‌دهنده</div>
-                    </div>
-                    <div class="step-connector" id="connector-1"></div>
-                    <div class="step-item" id="tracker-2" data-step="2">
-                        <div class="step-circle"><span class="step-num">۲</span></div>
+                    </li>
+                    <li class="step-connector" aria-hidden="true" id="connector-1"></li>
+                    <li class="step-item" id="tracker-2" data-step="2">
+                        <div class="step-circle" aria-hidden="true"><span class="step-num">۲</span></div>
                         <div class="step-label">موضوع و شرح</div>
-                    </div>
-                    <div class="step-connector" id="connector-2"></div>
-                    <div class="step-item" id="tracker-3" data-step="3">
-                        <div class="step-circle"><span class="step-num">۳</span></div>
+                    </li>
+                    <li class="step-connector" aria-hidden="true" id="connector-2"></li>
+                    <li class="step-item" id="tracker-3" data-step="3">
+                        <div class="step-circle" aria-hidden="true"><span class="step-num">۳</span></div>
                         <div class="step-label">مستندات و ثبت</div>
-                    </div>
-                </div>
+                    </li>
+                </ol>
 
 
                 <div class="form-step active" id="step-1">
@@ -410,10 +412,11 @@
                         <div class="captcha-row">
                             <div class="captcha-box">
                                 <img id="submit-captcha-img" src="" alt="کد امنیتی" class="captcha-img" width="130" height="48" decoding="async">
+                                <!-- [HARDEN-11] Accessible captcha refresh with aria-hidden icon -->
                                 <button type="button" id="submit-captcha-refresh" class="btn-refresh"
                                     data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
                                     <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                         <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
                                         <path d="M21 3v5h-5"></path>
                                         <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
@@ -504,7 +507,8 @@
                 </div>
             </div>
 
-            <div id="responseMessage" class="response-box" style="display: none;"></div>
+            <!-- [HARDEN-9] aria-live for SR announcement -->
+            <div id="responseMessage" class="response-box" role="status" style="display: none;"></div>
         </main>
 
 
@@ -558,10 +562,11 @@
                     <div class="captcha-row">
                         <div class="captcha-box">
                             <img id="track-captcha-img" src="" alt="کد امنیتی" class="captcha-img" width="130" height="48" loading="lazy" decoding="async">
+                            <!-- [HARDEN-11] Accessible captcha refresh with aria-hidden icon -->
                             <button type="button" id="track-captcha-refresh" class="btn-refresh"
                                 data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
                                 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
                                     <path d="M21 3v5h-5"></path>
                                     <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
@@ -586,7 +591,8 @@
                 </button>
             </form>
 
-            <div id="trackErrorBox" class="response-box error" style="display: none;"></div>
+            <!-- [HARDEN-9] aria-live for SR announcement -->
+            <div id="trackErrorBox" class="response-box error" role="alert" style="display: none;"></div>
 
             <div id="trackResultSkeleton" class="skeleton-track-result d-none" aria-hidden="true" role="status" aria-label="در حال بارگذاری اطلاعات پرونده...">
                 <div class="skeleton-detail-grid">
@@ -653,7 +659,8 @@
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">وضعیت بررسی:</span>
-                        <div id="track-status"></div>
+                        <!-- [HARDEN-9] aria-live for SR announcement -->
+                        <div id="track-status" aria-live="polite"></div>
                     </div>
                 </div>
 
@@ -689,10 +696,11 @@
                     <div class="followup-captcha-row">
                         <div class="captcha-box captcha-box-compact">
                             <img id="followup-captcha-img" src="" alt="کد امنیتی" class="captcha-img" width="130" height="48" loading="lazy" decoding="async">
+                            <!-- [HARDEN-11] Accessible captcha refresh with aria-hidden icon -->
                             <button type="button" id="followup-captcha-refresh" class="btn-refresh"
                                 data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
                                     <path d="M21 3v5h-5"></path>
                                     <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
@@ -713,7 +721,8 @@
                             <span class="btn-spinner d-none" aria-hidden="true"></span>
                         </button>
                     </div>
-                    <div id="followup-status-msg" class="response-box" style="display: none; margin-top: 12px;"></div>
+                    <!-- [HARDEN-9] aria-live for SR announcement -->
+                    <div id="followup-status-msg" class="response-box" role="status" style="display: none; margin-top: 12px;"></div>
                 </div>
             </div>
 
@@ -833,9 +842,10 @@
                         <p class="drawer-subtitle">پاسخ به سوالات پرتکرار پیرامون امنیت، پیگیری و مستندات</p>
                     </div>
                 </div>
+                <!-- [HARDEN-11] Close drawer icon marked aria-hidden -->
                 <button type="button" id="closeDrawerBtn" class="btn-close-drawer" aria-label="بستن راهنما">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
-                        stroke-linecap="round" stroke-linejoin="round">
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M18 6 6 18"></path>
                         <path d="m6 6 12 12"></path>
                     </svg>
@@ -857,7 +867,7 @@
                                 </div>
                                 <span class="faq-item-title">امنیت و محرمانگی گزارش‌ها چگونه تضمین می‌شود؟</span>
                             </div>
-                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m6 9 6 6 6-6"></path>
                             </svg>
@@ -887,7 +897,7 @@
                                 </div>
                                 <span class="faq-item-title">چه اطلاعاتی به تسریع روند رسیدگی کمک می‌کند؟</span>
                             </div>
-                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m6 9 6 6 6-6"></path>
                             </svg>
@@ -914,7 +924,7 @@
                                 </div>
                                 <span class="faq-item-title">چگونه می‌توانم نتیجه گزارش خود را پیگیری کنم؟</span>
                             </div>
-                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m6 9 6 6 6-6"></path>
                             </svg>
@@ -942,7 +952,7 @@
                                 </div>
                                 <span class="faq-item-title">فایل‌ها و مستندات مجاز چیست؟</span>
                             </div>
-                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m6 9 6 6 6-6"></path>
                             </svg>
@@ -971,7 +981,7 @@
                                 <span class="faq-item-title">چه موضوعاتی در حیطه صلاحیت رسیدگی ستاد خبری قرار
                                     دارد؟</span>
                             </div>
-                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m6 9 6 6 6-6"></path>
                             </svg>
@@ -999,7 +1009,7 @@
                                 <span class="faq-item-title">در صورت مفقود شدن کد پیگیری، امکان بازیابی وجود
                                     دارد؟</span>
                             </div>
-                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m6 9 6 6 6-6"></path>
                             </svg>
@@ -1025,7 +1035,7 @@
                                 </div>
                                 <span class="faq-item-title">زمان بررسی اولیه و پاسخ‌دهی به گزارش‌ها چقدر است؟</span>
                             </div>
-                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m6 9 6 6 6-6"></path>
                             </svg>
@@ -1055,7 +1065,7 @@
                                 <span class="faq-item-title">آیا امکان ارتباط تلفنی یا مراجعه حضوری نیز وجود
                                     دارد؟</span>
                             </div>
-                            <svg class="faq-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m6 9 6 6 6-6"></path>
                             </svg>

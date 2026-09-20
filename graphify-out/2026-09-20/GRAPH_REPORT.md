@@ -1,16 +1,16 @@
-# Graph Report - Setad_Khabari_HMD  (2026-09-19)
+# Graph Report - Setad_Khabari_HMD  (2026-09-20)
 
 ## Corpus Check
-- 178 files · ~261,717 words
+- 178 files · ~262,387 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1373 nodes · 2056 edges · 105 communities (69 shown, 36 thin omitted)
-- Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 203 edges (avg confidence: 0.85)
+- 1375 nodes · 2067 edges · 104 communities (68 shown, 36 thin omitted)
+- Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 205 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c92715a6`
+- Built from commit: `2d8b3b5e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -89,7 +89,6 @@
 - captcha.go
 - crypto_test.go
 - workflows/hallmark.md
-- InitDB
 - NewIPRateLimiter
 - rules/graphify.md
 - workflows/graphify.md
@@ -119,14 +118,14 @@
 - public/confirm.js
 
 ## God Nodes (most connected - your core abstractions)
-1. `getIP()` - 29 edges
-2. `adminFetch()` - 24 edges
+1. `getIP()` - 30 edges
+2. `adminFetch()` - 25 edges
 3. `viewReport()` - 22 edges
 4. `Major (looks AI-generated)` - 20 edges
 5. `Slop test — 58 gates + pre-emit self-critique` - 19 edges
-6. `SessionManager` - 18 edges
-7. `Theme — Hum` - 18 edges
-8. `logAudit()` - 17 edges
+6. `logAudit()` - 18 edges
+7. `SessionManager` - 18 edges
+8. `Theme — Hum` - 18 edges
 9. `Critical (ships as slop)` - 17 edges
 10. `Theme — Lumen` - 17 edges
 
@@ -145,7 +144,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (105 total, 36 thin omitted)
+## Communities (104 total, 36 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.07
@@ -205,7 +204,7 @@ Nodes (26): After the file is written, Emitting a `design.md` from `study`, Imag
 
 ### Community 14 - "admin.js"
 Cohesion: 0.05
-Nodes (84): adminFetch(), applyAuditFiltersAndPagination(), applyFilters(), calculatePagination(), checkAdminProfile(), checkMustChangePasswordPolicy(), closeDetailView(), deleteReportPermanently() (+76 more)
+Nodes (85): adminFetch(), applyAuditFiltersAndPagination(), applyFilters(), calculatePagination(), checkAdminProfile(), checkMustChangePasswordPolicy(), closeDetailView(), deleteReportPermanently() (+77 more)
 
 ### Community 15 - "Hero enrichment — when, what, and how much"
 Cohesion: 0.09
@@ -340,8 +339,8 @@ Cohesion: 0.23
 Nodes (16): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES(), EncryptFileBytes() (+8 more)
 
 ### Community 68 - "getTestDB"
-Cohesion: 0.16
-Nodes (11): NewUsedCaptchaStore(), NewSessionManager(), TestAuditFailClosed(), TestCaptchaPersistenceTryRedeem(), TestAccountLockoutConcurrentFailures(), TestGetReportsPaginationAndFiltering(), TestSecurityStoresInitOrder(), getTestDB() (+3 more)
+Cohesion: 0.14
+Nodes (13): NewUsedCaptchaStore(), NewAccountLockoutManager(), NewSessionManager(), TestAuditFailClosed(), TestCaptchaPersistenceTryRedeem(), TestAccountLockoutConcurrentFailures(), TestGetReportsPaginationAndFiltering(), TestSecurityStoresInitOrder() (+5 more)
 
 ### Community 71 - "captcha.go"
 Cohesion: 0.24
@@ -350,10 +349,6 @@ Nodes (14): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), g
 ### Community 72 - "crypto_test.go"
 Cohesion: 0.40
 Nodes (5): VerifyPassword(), VerifyPasswordWithRehash(), TestArgon2idDualFormatAndRehash(), TestDeriveKeyDeterministic(), TestValidatePasswordComplexity()
-
-### Community 74 - "InitDB"
-Cohesion: 0.47
-Nodes (4): enforceImmutableAuditLogs(), InitDB(), runMigrations(), TestReportsUpdatedAtTrigger()
 
 ### Community 75 - "NewIPRateLimiter"
 Cohesion: 0.50
@@ -389,15 +384,15 @@ Nodes (7): initAppTooltips(), convertTitles(), getOrCreateTooltip(), hide(), isM
 
 ### Community 108 - "testing.T"
 Cohesion: 0.15
-Nodes (17): testing.T, InitCookieSecurity(), TestClassificationValidationAndMath(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization() (+9 more)
+Nodes (18): testing.T, InitCookieSecurity(), TestClassificationValidationAndMath(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization() (+10 more)
 
 ### Community 115 - "security.go"
 Cohesion: 0.09
-Nodes (19): database/sql.DB, sync.Mutex, sync.Once, sync.RWMutex, time.Duration, time.Time, hashToken(), NewAccountLockoutManager() (+11 more)
+Nodes (18): database/sql.DB, sync.Mutex, sync.Once, sync.RWMutex, time.Duration, time.Time, hashToken(), RateLimitMiddleware() (+10 more)
 
 ### Community 116 - "main"
-Cohesion: 0.15
-Nodes (14): AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed(), net/http.Handler, net/http.HandlerFunc, main(), secureHeadersMiddleware() (+6 more)
+Cohesion: 0.12
+Nodes (17): AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed(), enforceImmutableAuditLogs(), InitDB(), runMigrations(), net/http.Handler (+9 more)
 
 ### Community 118 - "admin/confirm.js"
 Cohesion: 0.70
@@ -420,13 +415,13 @@ Nodes (3): getOrCreateDialog(), promoteTemporarily(), showConfirmDialog()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Anti-patterns — the named tells` connect `Minor (small taste issues)` to `Major (looks AI-generated)`, `SKILL.md`, `Microinteraction tells`, `Critical (ships as slop)`?**
-  _High betweenness centrality (0.050) - this node is a cross-community bridge._
+  _High betweenness centrality (0.049) - this node is a cross-community bridge._
+- **Why does `Hero enrichment — when, what, and how much` connect `Hero enrichment — when, what, and how much` to `SKILL.md`?**
+  _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **Why does `Assets — sourcing canon for icons, logos, illustrations, photography, video` connect `Assets — sourcing canon for icons, logos, illustrations, photography, video` to `SKILL.md`?**
   _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Why does `Study — extracting design DNA from a screenshot or URL` connect `Study — extracting design DNA from a screenshot or URL` to `SKILL.md`?**
-  _High betweenness centrality (0.022) - this node is a cross-community bridge._
-- **Are the 23 inferred relationships involving `getIP()` (e.g. with `ChangeMyPasswordHandler()` and `ClassifyReportHandler()`) actually correct?**
-  _`getIP()` has 23 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 24 inferred relationships involving `getIP()` (e.g. with `ChangeMyPasswordHandler()` and `ClassifyReportHandler()`) actually correct?**
+  _`getIP()` has 24 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `AdminUserItem`, `AuditLogItem`, `RecipientUserItem` to the rest of the system?**
   _673 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Components` be split into smaller, more focused modules?**

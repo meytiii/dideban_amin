@@ -1,6 +1,24 @@
 
+// [HARDEN-5a] Global error safety net
+window.addEventListener('error', (e) => {
+    console.error('[GLOBAL ERROR]', e.error || e.message, e.filename, e.lineno);
+});
+
+window.addEventListener('unhandledrejection', (e) => {
+    console.error('[UNHANDLED PROMISE]', e.reason);
+});
+
+// [HARDEN-5b] Fetch wrapper with hard timeout to prevent indefinite hangs
+function fetchWithTimeout(url, options = {}, ms = 20000) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, { ...options, signal: ctrl.signal })
+        .finally(() => clearTimeout(timer));
+}
+
+// [HARDEN-1] Reduced artificial delay; removed fonts.ready gate that compounded load time
 (function initAdminPreloader() {
-    const PRELOADER_MIN_MS = 3000;
+    const PRELOADER_MIN_MS = 200;
     const startTime = performance.now();
     let isReady = false;
     let dismissed = false;
@@ -27,17 +45,16 @@
         attemptDismiss();
     };
 
-    window.addEventListener('load', () => {
-        if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(() => {
-                if (window.__adminStartupComplete) window.markAdminReady();
-            }).catch(() => {
-                if (window.__adminStartupComplete) window.markAdminReady();
-            });
-        } else {
-            if (window.__adminStartupComplete) window.markAdminReady();
-        }
-    });
+    function onReadyCheck() {
+        if (window.__adminStartupComplete) window.markAdminReady();
+    }
+
+    if (document.readyState === 'complete') {
+        onReadyCheck();
+    } else {
+        window.addEventListener('load', onReadyCheck);
+        document.addEventListener('DOMContentLoaded', onReadyCheck);
+    }
 
     setTimeout(() => {
         window.markAdminReady();
@@ -46,7 +63,7 @@
 
 
 
-const nativeFetch = window.fetch.bind(window);
+// [HARDEN-5b] Request timeout helper used for all admin fetches
 function adminFetch(url, options = {}) {
     const opts = { credentials: 'same-origin', ...options };
     opts.headers = { ...(opts.headers || {}) };
@@ -54,7 +71,7 @@ function adminFetch(url, options = {}) {
     if (csrf && opts.method && opts.method.toUpperCase() !== 'GET') {
         opts.headers['X-CSRF-Token'] = csrf;
     }
-    return nativeFetch(url, opts);
+    return fetchWithTimeout(url, opts, 20000);
 }
 
 // [PERF-FIX-21] Respect prefers-reduced-motion for programmatic scroll
@@ -276,8 +293,8 @@ function initAppTooltips() {
     }, { passive: true });
 }
 
-// [PERF-FIX-30] Defer tooltip initialization to browser idle phase
-runWhenIdle(initAppTooltips);
+// [HARDEN-5c] Non-critical init must not break the app
+try { runWhenIdle(initAppTooltips); } catch (e) { console.error('Tooltips init failed:', e); }
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -292,6 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const toast = document.createElement('div');
         toast.className = 'toast' + (type ? ` toast-${type}` : '');
+        // [HARDEN-2] Set user-provided text via textContent to prevent XSS
         toast.textContent = message;
         const fadeDelay = Math.max(duration - 300, 200) / 1000;
         toast.style.animation = `toastIn 0.25s ease, toastOut 0.25s ease ${fadeDelay}s forwards`;
@@ -335,9 +353,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const SESSION_DURATION = 15 * 60;
     let remainingSeconds = SESSION_DURATION;
-    // [PERF-FIX-14] Tracked interval handles for tab visibility suspension
+    // [HARDEN-6] [HARDEN-7] Server-Sent Events stream replaces polling and redundant 8-second heartbeat
+    let _sseConnection = null;
+    let _refreshDebounceTimer = null;
     let timerInterval = null;
-    let heartbeatInterval = null;
     let reportPollingInterval = null;
     let notifPollingInterval = null;
 
@@ -532,7 +551,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     dashboardSection.style.display = 'block';
                 }
                 startSessionTimer();
-                startHeartbeat();
+                // [HARDEN-6] [HARDEN-7] Connect SSE stream instead of 8s polling heartbeat
+                connectAdminSSE();
                 switchMainTab('reports');
                 runWhenIdle(fetchNotifications);
             }
@@ -594,7 +614,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     dashboardSection.style.display = 'block';
                 }
                 startSessionTimer();
-                startHeartbeat();
+                // [HARDEN-6] [HARDEN-7] Connect SSE stream instead of 8s polling heartbeat
+                connectAdminSSE();
                 await checkAdminProfile();
                 switchMainTab('reports');
                 // [PERF-FIX-30] Fetch non-critical notifications in idle window
@@ -806,9 +827,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 200));
 
-    // Compensate for Iran DST / Windows Server timezone shift (+1 hour = +60 min)
-    // Can be adjusted or overridden via window.HERASAT_TIME_OFFSET_MINUTES (default: 60)
-    const TIME_OFFSET_MS = ((typeof window.HERASAT_TIME_OFFSET_MINUTES !== 'undefined' ? window.HERASAT_TIME_OFFSET_MINUTES : 60) * 60 * 1000);
+    // [HARDEN-4] Removed manual timezone offset hack; parse naive ISO as UTC
+    function parseTimestamp(isoStr) {
+        if (!isoStr) return null;
+        // If the server returns naive ISO (no 'Z', no offset), treat as UTC.
+        const hasTz = /Z$|[+-]\d{2}:?\d{2}$/.test(isoStr);
+        const d = new Date(hasTz ? isoStr : isoStr + 'Z');
+        return isNaN(d.getTime()) ? null : d;
+    }
 
     // Cached high-performance Intl singletons (prevents GC pressure and repeated parser construction)
     const cachedJalaliFormatterFull = new Intl.DateTimeFormat('fa-IR', {
@@ -840,11 +866,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function formatJalaliDateTime(isoStr, includeSeconds = false) {
         if (!isoStr) return 'نامشخص';
         try {
-            let dateObj = new Date(isoStr);
-            if (isNaN(dateObj.getTime())) return 'نامشخص';
-            if (TIME_OFFSET_MS) {
-                dateObj = new Date(dateObj.getTime() + TIME_OFFSET_MS);
-            }
+            const dateObj = parseTimestamp(isoStr);
+            if (!dateObj) return 'نامشخص';
             return (includeSeconds ? cachedJalaliFormatterFull : cachedJalaliFormatterShort).format(dateObj);
         } catch (e) {
             return 'نامشخص';
@@ -862,10 +885,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (report.created_at) {
             try {
-                let d = new Date(report.created_at);
-                if (TIME_OFFSET_MS) d = new Date(d.getTime() + TIME_OFFSET_MS);
-                report._shamsiMonth = cachedJalaliMonthFormatter.format(d);
-                report._timestamp = d.getTime();
+                const d = parseTimestamp(report.created_at);
+                if (d) {
+                    report._shamsiMonth = cachedJalaliMonthFormatter.format(d);
+                    report._timestamp = d.getTime();
+                } else {
+                    report._shamsiMonth = '';
+                    report._timestamp = 0;
+                }
             } catch (e) {
                 report._shamsiMonth = '';
                 report._timestamp = 0;
@@ -877,7 +904,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (report.updated_at) {
             try {
-                report._updateTimestamp = new Date(report.updated_at).getTime();
+                const ud = parseTimestamp(report.updated_at);
+                report._updateTimestamp = ud ? ud.getTime() : report._timestamp;
             } catch (e) {
                 report._updateTimestamp = report._timestamp;
             }
@@ -1653,12 +1681,13 @@ document.addEventListener('DOMContentLoaded', () => {
             actionsWrap.style.alignItems = 'center';
             actionsWrap.style.gap = '6px';
 
+            // [HARDEN-11] Ensure accessible names and aria-hidden on decorative SVGs
             const viewBtn = document.createElement('button');
             viewBtn.type = 'button';
             viewBtn.className = 'btn-action btn-icon-only btn-view-report';
             viewBtn.setAttribute('data-tooltip', 'مشاهده جزئیات گزارش');
             viewBtn.setAttribute('aria-label', 'مشاهده جزئیات گزارش');
-            viewBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+            viewBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
             actionsWrap.appendChild(viewBtn);
 
             if (!report.is_read) {
@@ -1667,7 +1696,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleBtn.className = 'btn-action btn-secondary btn-icon-only btn-toggle-read';
                 toggleBtn.setAttribute('data-tooltip', 'علامت‌گذاری به عنوان بررسی شده');
                 toggleBtn.setAttribute('aria-label', 'علامت‌گذاری به عنوان بررسی شده');
-                toggleBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+                toggleBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
                 actionsWrap.appendChild(toggleBtn);
             }
 
@@ -1678,7 +1707,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 forwardBtn.className = 'btn-action btn-secondary btn-icon-only btn-forward-report';
                 forwardBtn.setAttribute('data-tooltip', 'ارجاع خبر به کارشناسان حراست');
                 forwardBtn.setAttribute('aria-label', 'ارجاع خبر به کارشناسان حراست');
-                forwardBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>`;
+                forwardBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>`;
                 actionsWrap.appendChild(forwardBtn);
             }
 
@@ -1687,7 +1716,7 @@ document.addEventListener('DOMContentLoaded', () => {
             historyBtn.className = 'btn-action btn-secondary btn-icon-only btn-forward-history';
             historyBtn.setAttribute('data-tooltip', 'تاریخچه ارجاع');
             historyBtn.setAttribute('aria-label', 'تاریخچه ارجاع');
-            historyBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+            historyBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
             actionsWrap.appendChild(historyBtn);
 
             if (currentAdmin && currentAdmin.is_superuser) {
@@ -1696,7 +1725,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 deleteBtn.className = 'btn-action btn-danger btn-icon-only btn-delete-report';
                 deleteBtn.setAttribute('data-tooltip', 'حذف دائمی پرونده (پشتیبانی سامانه)');
                 deleteBtn.setAttribute('aria-label', 'حذف دائمی پرونده (پشتیبانی سامانه)');
-                deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+                deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
                 actionsWrap.appendChild(deleteBtn);
             }
 
@@ -2200,6 +2229,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const szText = att.file_size ? ` (${formatAdminFileSize(att.file_size)})` : '';
                     const nameText = att.file_name || 'فایل ضمیمه';
                     downloadBtn.setAttribute('data-tooltip', `دانلود مستقیم: ${nameText}`);
+                    // [HARDEN-3] escape user-controlled value before innerHTML
                     downloadBtn.innerHTML = `
                         <span class="attachment-icon-box">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -2210,7 +2240,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </span>
                         <span class="attachment-text-group">
                             <span class="attachment-primary-title">دانلود فایل پیوست</span>
-                            <span class="attachment-sub-meta">${nameText}${szText}</span>
+                            <span class="attachment-sub-meta">${escapeHTML(nameText)}${szText}</span>
                         </span>
                     `;
                     downloadBtn.onclick = () => {
@@ -4056,20 +4086,74 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // [PERF-FIX-14] Controllable background polling for live report count and notifications
-    function startBackgroundPolling() {
-        clearInterval(reportPollingInterval);
-        clearInterval(notifPollingInterval);
+    // [HARDEN-6] Server-Sent Events stream replaces polling
+    function connectAdminSSE() {
+        if (_sseConnection || typeof EventSource === 'undefined') return;
+        _sseConnection = new EventSource('/api/admin/events');
+
+        _sseConnection.addEventListener('new_report', () => {
+            scheduleReportsRefresh();
+        });
+
+        _sseConnection.addEventListener('new_message', (e) => {
+            try {
+                const data = JSON.parse(e.data);
+                markReportHasNewMessage(data.report_id);
+            } catch (_) { }
+            scheduleReportsRefresh();
+        });
+
+        _sseConnection.addEventListener('regional_response', () => {
+            scheduleReportsRefresh();
+        });
+
+        _sseConnection.addEventListener('session_revoked', () => {
+            triggerConcurrentLoginAlert();
+        });
+
+        _sseConnection.addEventListener('heartbeat', () => {
+            // Server heartbeat proves connection is alive; no action needed.
+        });
+
+        _sseConnection.addEventListener('error', () => {
+            if (_sseConnection && _sseConnection.readyState === EventSource.CLOSED) {
+                console.warn('[SSE] closed — falling back to polling');
+                _sseConnection = null;
+                startFallbackPolling();
+            }
+        });
+    }
+
+    function scheduleReportsRefresh() {
+        clearTimeout(_refreshDebounceTimer);
+        _refreshDebounceTimer = setTimeout(() => {
+            fetchReports().catch(() => { });
+            fetchNotifications().catch(() => { });
+        }, 800);
+    }
+
+    function markReportHasNewMessage(reportId) {
+        if (!reportId) return;
+        const rep = allReports.find(r => r.id === parseInt(reportId, 10));
+        if (rep) rep.has_new_message = true;
+        const tr = reportsBody ? reportsBody.querySelector(`tr[data-report-id="${reportId}"]`) : null;
+        if (tr) tr.classList.add('row-new-message');
+    }
+
+    function startFallbackPolling() {
+        if (reportPollingInterval) return;
         reportPollingInterval = setInterval(() => {
-            if (dashboardSection && dashboardSection.style.display !== 'none') {
-                fetchReports().catch(() => { });
-            }
-        }, 60000);
+            if (document.hidden) return;
+            fetchReports().catch(() => { });
+        }, 90000);
         notifPollingInterval = setInterval(() => {
-            if (dashboardSection && dashboardSection.style.display !== 'none') {
-                fetchNotifications();
-            }
-        }, 25000);
+            if (document.hidden) return;
+            fetchNotifications().catch(() => { });
+        }, 60000);
+    }
+
+    function startBackgroundPolling() {
+        connectAdminSSE();
     }
 
     function stopBackgroundPolling() {
@@ -4077,6 +4161,10 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(notifPollingInterval);
         reportPollingInterval = null;
         notifPollingInterval = null;
+        if (_sseConnection) {
+            _sseConnection.close();
+            _sseConnection = null;
+        }
     }
 
     startBackgroundPolling();
@@ -4262,7 +4350,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (activeEl) activeEl.textContent = toPersianNum(allAdminUsers.filter(u => u.is_active).length);
             if (superEl) superEl.textContent = toPersianNum(allAdminUsers.filter(u => u.is_superuser).length);
         } catch (e) {
-            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${e.message}</td></tr>`;
+            // [HARDEN-3] escape user-controlled value before innerHTML
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${escapeHTML(e.message)}</td></tr>`;
         }
     }
 
@@ -4957,7 +5046,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isKickoutHandled) return;
         isKickoutHandled = true;
         clearInterval(timerInterval);
-        clearInterval(heartbeatInterval);
+        // [HARDEN-7] Removed redundant 8-second heartbeat; replaced by SSE session_revoked event
+        if (_sseConnection) {
+            _sseConnection.close();
+            _sseConnection = null;
+        }
 
         if (modalConcurrentAlert) {
             modalConcurrentAlert.style.display = 'flex';
@@ -4980,25 +5073,6 @@ document.addEventListener('DOMContentLoaded', () => {
         location.reload();
     });
 
-    // [PERF-FIX-14] heartbeatInterval is declared at module scope
-    function startHeartbeat() {
-        clearInterval(heartbeatInterval);
-        heartbeatInterval = setInterval(async () => {
-            if (loginSection && loginSection.style.display !== 'none') return;
-            try {
-                const res = await adminFetch('/api/admin/me');
-                if (res.status === 401) {
-                    try {
-                        const data = await res.json();
-                        if (data && data.error === 'concurrent_login') {
-                            triggerConcurrentLoginAlert();
-                        }
-                    } catch (_) { }
-                }
-            } catch (_) { }
-        }, 8000);
-    }
-
     let allAuditLogs = [];
     let filteredAuditLogs = [];
     let auditCurrentPage = 1;
@@ -5014,8 +5088,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function getJalaliMonth(isoStr) {
         if (!isoStr) return '';
         try {
-            let d = new Date(isoStr);
-            if (TIME_OFFSET_MS) d = new Date(d.getTime() + TIME_OFFSET_MS);
+            const d = parseTimestamp(isoStr);
+            if (!d) return '';
             const m = cachedJalaliMonthFormatter.format(d);
             return m ? m.padStart(2, '0') : '';
         } catch (e) {
@@ -5204,7 +5278,8 @@ document.addEventListener('DOMContentLoaded', () => {
             populateAuditUsersDropdown(allAuditLogs);
             applyAuditFiltersAndPagination(true);
         } catch (e) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${e.message}</td></tr>`;
+            // [HARDEN-3] escape user-controlled value before innerHTML
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${escapeHTML(e.message)}</td></tr>`;
         }
     }
 
@@ -5345,7 +5420,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             showToast('لیست نشست‌های فعال بروزرسانی شد');
         } catch (e) {
-            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${e.message}</td></tr>`;
+            // [HARDEN-3] escape user-controlled value before innerHTML
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${escapeHTML(e.message)}</td></tr>`;
         }
     }
 
@@ -6219,8 +6295,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const isMainAdmin = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
                 const revokeBtnHtml = isMainAdmin ? `
+                    <!-- [HARDEN-11] Accessible revoke forward button with aria-hidden icon -->
                     <button type="button" class="btn-revoke-forward" data-fwd-id="${r.id}" data-rep-id="${r.report_id}" data-recip-name="${escapeHTML(r.recipient_name || r.recipient_username)}" data-recip-user="${escapeHTML(r.recipient_username)}" title="حذف ارجاع و قطع دسترسی این کارشناس" aria-label="حذف ارجاع">
-                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
                             <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
@@ -6340,17 +6417,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // [PERF-FIX-14] Suspend background work when tab is hidden
+    // [HARDEN-6] [HARDEN-7] Server-Sent Events stream replaces polling and redundant 8-second heartbeat
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             clearInterval(timerInterval);
-            clearInterval(heartbeatInterval);
             stopBackgroundPolling();
+            if (_sseConnection) { _sseConnection.close(); _sseConnection = null; }
         } else {
             if (dashboardSection && dashboardSection.style.display !== 'none') {
                 if (typeof resumeSessionTimer === 'function') resumeSessionTimer();
-                if (typeof startHeartbeat === 'function') startHeartbeat();
-                if (typeof startBackgroundPolling === 'function') startBackgroundPolling();
+                connectAdminSSE();
                 if (typeof fetchNotifications === 'function') fetchNotifications();
             }
         }

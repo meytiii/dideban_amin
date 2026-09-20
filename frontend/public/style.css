@@ -57,6 +57,25 @@
     padding: 0;
 }
 
+/* [HARDEN-12] Keyboard-visible focus indicator */
+:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: 1px;
+}
+
 body {
     font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
     background-color: var(--bg-primary);
@@ -560,6 +579,7 @@ body::before {
     align-items: center;
     margin-bottom: 30px;
     padding: 0 20px;
+    list-style: none;
 }
 
 .step-item {

@@ -27,6 +27,26 @@
     let cachedElements = null;
     let activeResolver = null;
 
+    // [HARDEN-8] Trap focus inside modal dialog
+    function trapFocus(container, e) {
+        const focusables = container.querySelectorAll(
+            'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
+    }
+
+    let previousActiveElement = null;
+    let previousBodyOverflow = '';
+
     function getOrCreateDialog() {
         if (cachedOverlay && document.body.contains(cachedOverlay)) {
             return cachedElements;
@@ -69,6 +89,10 @@
             promoteTemporarily(cachedElements.card, 'transform, opacity', 200);
             overlay.classList.remove('active');
             document.removeEventListener('keydown', onKey);
+            document.body.style.overflow = previousBodyOverflow;
+            if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+                try { previousActiveElement.focus(); } catch (_) { }
+            }
             setTimeout(() => {
                 overlay.style.display = 'none';
                 if (activeResolver) {
@@ -80,8 +104,11 @@
         };
 
         const onKey = (e) => {
-            if (e.key === 'Escape') cleanup(false);
-            else if (e.key === 'Enter' && document.activeElement !== cachedElements.cancelBtn) {
+            if (e.key === 'Tab') {
+                trapFocus(cachedElements.card, e);
+            } else if (e.key === 'Escape') {
+                cleanup(false);
+            } else if (e.key === 'Enter' && document.activeElement !== cachedElements.cancelBtn) {
                 e.preventDefault();
                 cleanup(true);
             }
@@ -120,6 +147,10 @@
         return new Promise((resolve) => {
             const els = getOrCreateDialog();
             activeResolver = resolve;
+
+            previousActiveElement = document.activeElement;
+            previousBodyOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
 
             const iconSvg = icons[iconType] || icons['shield-question'];
             els.badge.className = `pro-confirm-icon-badge pro-confirm-badge-${variant}`;
