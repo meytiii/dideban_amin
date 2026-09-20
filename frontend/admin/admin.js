@@ -1648,50 +1648,59 @@ document.addEventListener('DOMContentLoaded', () => {
             tr.appendChild(statusCell);
 
             const actionTd = document.createElement('td');
+            const actionsWrap = document.createElement('div');
+            actionsWrap.style.display = 'inline-flex';
+            actionsWrap.style.alignItems = 'center';
+            actionsWrap.style.gap = '6px';
 
             const viewBtn = document.createElement('button');
-            viewBtn.className = 'btn-action btn-view-report';
-            viewBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg><span>مشاهده</span>`;
-            viewBtn.style.marginLeft = '6px';
-            actionTd.appendChild(viewBtn);
+            viewBtn.type = 'button';
+            viewBtn.className = 'btn-action btn-icon-only btn-view-report';
+            viewBtn.setAttribute('data-tooltip', 'مشاهده جزئیات گزارش');
+            viewBtn.setAttribute('aria-label', 'مشاهده جزئیات گزارش');
+            viewBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+            actionsWrap.appendChild(viewBtn);
 
             if (!report.is_read) {
                 const toggleBtn = document.createElement('button');
-                toggleBtn.className = 'btn-action btn-secondary btn-toggle-read';
-                toggleBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg><span>علامت بررسی</span>`;
-                actionTd.appendChild(toggleBtn);
+                toggleBtn.type = 'button';
+                toggleBtn.className = 'btn-action btn-secondary btn-icon-only btn-toggle-read';
+                toggleBtn.setAttribute('data-tooltip', 'علامت‌گذاری به عنوان بررسی شده');
+                toggleBtn.setAttribute('aria-label', 'علامت‌گذاری به عنوان بررسی شده');
+                toggleBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+                actionsWrap.appendChild(toggleBtn);
             }
 
-            // Forward Report Action (Available to edare_kol and superuser)
             const canForward = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
             if (canForward) {
                 const forwardBtn = document.createElement('button');
+                forwardBtn.type = 'button';
                 forwardBtn.className = 'btn-action btn-secondary btn-icon-only btn-forward-report';
                 forwardBtn.setAttribute('data-tooltip', 'ارجاع خبر به کارشناسان حراست');
                 forwardBtn.setAttribute('aria-label', 'ارجاع خبر به کارشناسان حراست');
-                forwardBtn.style.marginRight = '6px';
                 forwardBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>`;
-                actionTd.appendChild(forwardBtn);
+                actionsWrap.appendChild(forwardBtn);
             }
 
-            // Forwarding History Action (Available to all authorized users for this report)
             const historyBtn = document.createElement('button');
+            historyBtn.type = 'button';
             historyBtn.className = 'btn-action btn-secondary btn-icon-only btn-forward-history';
             historyBtn.setAttribute('data-tooltip', 'تاریخچه ارجاع');
             historyBtn.setAttribute('aria-label', 'تاریخچه ارجاع');
-            historyBtn.style.marginRight = '6px';
             historyBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
-            actionTd.appendChild(historyBtn);
+            actionsWrap.appendChild(historyBtn);
 
             if (currentAdmin && currentAdmin.is_superuser) {
                 const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'btn-action btn-danger btn-delete-report';
-                deleteBtn.title = 'حذف دائمی پرونده و فایل ضمیمه (پشتیبانی سامانه)';
-                deleteBtn.style.marginRight = '6px';
-                deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg><span>حذف</span>`;
-                actionTd.appendChild(deleteBtn);
+                deleteBtn.type = 'button';
+                deleteBtn.className = 'btn-action btn-danger btn-icon-only btn-delete-report';
+                deleteBtn.setAttribute('data-tooltip', 'حذف دائمی پرونده (پشتیبانی سامانه)');
+                deleteBtn.setAttribute('aria-label', 'حذف دائمی پرونده (پشتیبانی سامانه)');
+                deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+                actionsWrap.appendChild(deleteBtn);
             }
 
+            actionTd.appendChild(actionsWrap);
             tr.appendChild(actionTd);
             fragment.appendChild(tr);
         });
@@ -4287,29 +4296,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const tr = document.createElement('tr');
             const isSelf = currentAdmin && currentAdmin.username === u.username;
 
-            let actionButtons = '';
-            if (u.is_superuser) {
-                actionButtons = `
-                    <button type="button" class="btn-action btn-submit" data-action="edit-user" data-id="${u.id}" style="font-size:12px; padding:5px 10px;">
-                        ویرایش
-                    </button>
-                    <button type="button" class="btn-action btn-secondary" data-action="reset-pwd" data-id="${u.id}" data-user="${escapeHTML(u.username)}" style="font-size:12px; padding:5px 10px;">
-                        تغییر رمز
-                    </button>
-                `;
-            } else {
-                actionButtons = `
-                    <button type="button" class="btn-action btn-submit" data-action="edit-user" data-id="${u.id}" style="font-size:12px; padding:5px 10px;">
-                        ویرایش
-                    </button>
-                    <button type="button" class="btn-action btn-secondary" data-action="reset-pwd" data-id="${u.id}" data-user="${escapeHTML(u.username)}" style="font-size:12px; padding:5px 10px;">
-                        تغییر رمز
-                    </button>
-                    <button type="button" class="btn-action btn-danger" data-action="delete-user" data-id="${u.id}" data-user="${escapeHTML(u.username)}" style="font-size:12px; padding:5px 10px;">
-                        حذف
-                    </button>
-                `;
+            let lockoutBadge = '';
+            if (u.is_locked) {
+                lockoutBadge = `<span class="badge-lockout" data-tooltip="قفل موقت ورود به دلیل تلاش‌های ناموفق (باقی‌مانده: ${escapeHTML(u.lockout_remaining || '۱۵ دقیقه')})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-left:3px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>قفل موقت ورود (${escapeHTML(u.lockout_remaining || '')})</span>`;
             }
+
+            const isSuper = u.is_superuser;
+            const actionButtons = `
+                <button type="button" class="btn-action btn-submit btn-icon-only" data-action="edit-user" data-id="${u.id}" data-tooltip="ویرایش مشخصات مدیر" aria-label="ویرایش مشخصات مدیر">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>
+                <button type="button" class="btn-action btn-secondary btn-icon-only" data-action="reset-pwd" data-id="${u.id}" data-user="${escapeHTML(u.username)}" data-tooltip="تغییر رمز عبور" aria-label="تغییر رمز عبور">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-1.5 1.5L14 9a5 5 0 1 0 3 3l3.5-3.5"></path><path d="M15.5 6.5l2 2"></path></svg>
+                </button>
+                <button type="button" class="btn-action ${u.is_locked ? 'btn-warning is-locked-pulse' : 'btn-secondary'} btn-icon-only btn-lift-ban" data-action="lift-ban" data-id="${u.id}" data-user="${escapeHTML(u.username)}" data-tooltip="${u.is_locked ? `رفع قفل موقت ورود (${escapeHTML(u.lockout_remaining || '۱۵ دقیقه')})` : 'رفع محدودیت و بازنشانی خطاهای ورود'}" aria-label="رفع قفل موقت ورود">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
+                </button>
+                ${!isSuper ? `
+                <button type="button" class="btn-action btn-danger btn-icon-only" data-action="delete-user" data-id="${u.id}" data-user="${escapeHTML(u.username)}" data-tooltip="حذف حساب کاربری مدیر" aria-label="حذف حساب کاربری مدیر">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+                ` : ''}
+            `;
 
             let pwdBadges = '';
             if (u.must_change_password) {
@@ -4336,12 +4344,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${escapeHTML(u.role_title)}</td>
                 <td>${roleBadge}</td>
                 <td>
+                    ${lockoutBadge ? `<div style="margin-bottom:4px;">${lockoutBadge}</div>` : ''}
                     ${u.is_active ? '<span class="badge-active">فعال</span>' : '<span class="badge-inactive">مسدود / غیرفعال</span>'}
                     ${pwdBadges ? `<div style="margin-top:4px;">${pwdBadges}</div>` : ''}
                 </td>
                 <td class="ltr" style="text-align:right;">${formatJalaliDateTime(u.created_at, false)}</td>
                 <td>
-                    <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                    <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
                         ${actionButtons}
                     </div>
                 </td>
@@ -4365,10 +4374,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (targetUser) openEditUserModal(targetUser);
                 } else if (action === 'reset-pwd') {
                     openResetPwdModal(b.getAttribute('data-id'), b.getAttribute('data-user'));
+                } else if (action === 'lift-ban') {
+                    liftUserLockout(b.getAttribute('data-id'), b.getAttribute('data-user'));
                 } else if (action === 'delete-user') {
                     deleteUser(b.getAttribute('data-id'), b.getAttribute('data-user'));
                 }
             });
+        }
+    }
+
+    async function liftUserLockout(userId, username) {
+        const confirmed = await showConfirmDialog({
+            title: 'رفع قفل موقت ورود',
+            description: `آیا از رفع مسدودی موقت و بازنشانی خطاهای ورود حساب کاربری «${username}» اطمینان دارید؟ پس از این اقدام، کاربر می‌تواند مجدداً وارد سامانه شود.`,
+            confirmText: 'بله، رفع قفل',
+            cancelText: 'انصراف'
+        });
+        if (!confirmed) return;
+
+        try {
+            const res = await adminFetch('/api/admin/users/lift-lockout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: parseInt(userId, 10), username: username })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'خطا در رفع قفل کاربر');
+            showToast(data.message || 'قفل ورود با موفقیت برداشته شد.', 3000, 'success');
+            fetchAdminUsers();
+        } catch (e) {
+            showToast(e.message, 3000, 'error');
         }
     }
 
@@ -4507,6 +4542,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (statusEl) statusEl.style.display = 'none';
+
+        const lockoutBanner = document.getElementById('edit-lockout-banner');
+        const lockoutText = document.getElementById('edit-lockout-text');
+        const btnModalLift = document.getElementById('btn-modal-lift-lockout');
+        if (lockoutBanner) {
+            if (user.is_locked) {
+                lockoutBanner.style.display = 'flex';
+                if (lockoutText) lockoutText.textContent = `حساب کاربری به دلیل تلاش‌های ناموفق ورود مسدود است (${user.lockout_remaining || '۱۵ دقیقه'}).`;
+                if (btnModalLift) {
+                    btnModalLift.onclick = async () => {
+                        await liftUserLockout(user.id, user.username);
+                        user.is_locked = false;
+                        lockoutBanner.style.display = 'none';
+                    };
+                }
+            } else {
+                lockoutBanner.style.display = 'none';
+            }
+        }
+
         if (modalEditUser) {
             // [PERF-FIX-28] Promote layer temporarily for modal enter transition
             const card = modalEditUser.querySelector('.modal-card') || modalEditUser;

@@ -1259,6 +1259,8 @@ type AdminUserItem struct {
 	PasswordChangedAt  string `json:"password_changed_at"`
 	MustChangePassword bool   `json:"must_change_password"`
 	IsPasswordExpired  bool   `json:"is_password_expired"`
+	IsLocked           bool   `json:"is_locked"`
+	LockoutRemaining   string `json:"lockout_remaining,omitempty"`
 	CreatedAt          string `json:"created_at"`
 }
 
@@ -1285,6 +1287,12 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 		u.PasswordChangedAt = pwdChangedAt.Format(time.RFC3339)
 		u.IsPasswordExpired = time.Since(pwdChangedAt) > 30*24*time.Hour
 		u.CreatedAt = createdAt.Format(time.RFC3339)
+
+		if isLocked, remaining := Lockouts.IsLocked(u.Username); isLocked {
+			u.IsLocked = true
+			u.LockoutRemaining = fmt.Sprintf("%d دقیقه", int(remaining.Minutes())+1)
+		}
+
 		users = append(users, u)
 	}
 
@@ -1599,6 +1607,34 @@ func ResetUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "رمز عبور با موفقیت تغییر کرد"}`))
+}
+
+func LiftUserLockoutHandler(w http.ResponseWriter, r *http.Request) {
+	admin := r.Context().Value("admin").(AdminSession)
+
+	var req struct {
+		UserID   int64  `json:"user_id"`
+		Username string `json:"username"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Bad request", http.StatusBadRequest)
+		return
+	}
+
+	req.Username = strings.TrimSpace(req.Username)
+	if req.Username == "" && req.UserID > 0 {
+		_ = DB.QueryRow("SELECT username FROM admin_users WHERE id = $1", req.UserID).Scan(&req.Username)
+	}
+	if req.Username == "" {
+		http.Error(w, "نام کاربری مشخص نشده است.", http.StatusBadRequest)
+		return
+	}
+
+	Lockouts.Reset(req.Username)
+	logAudit(admin.Username, admin.Title, "LIFT_LOCKOUT:"+req.Username, nil, getIP(r))
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "قفل موقت ورود با موفقیت برداشته شد و کاربر می‌تواند وارد شود."}`))
 }
 
 type AuditLogItem struct {
