@@ -826,7 +826,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = await res.json();
                     const secretDisplay = document.getElementById('2fa-secret-display');
                     const hiddenSecret = document.getElementById('enable_2fa_secret');
-                    if (secretDisplay) secretDisplay.textContent = data.secret;
+                    if (secretDisplay && data.secret) {
+                        const spaced = data.secret.match(/.{1,4}/g)?.join(' ') || data.secret;
+                        secretDisplay.textContent = spaced;
+                    }
                     if (hiddenSecret) hiddenSecret.value = data.secret;
                     if (setupSection2FA) setupSection2FA.style.display = 'block';
                     if (initialActions2FA) initialActions2FA.style.display = 'none';
@@ -839,11 +842,54 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function toAsciiDigits(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/[۰-۹]/g, d => String.fromCharCode(d.charCodeAt(0) - 1728))
+            .replace(/[٠-٩]/g, d => String.fromCharCode(d.charCodeAt(0) - 1584))
+            .replace(/[^0-9]/g, '');
+    }
+
+    const mfaCodeInput = document.getElementById('enable_2fa_code');
+    if (mfaCodeInput) {
+        mfaCodeInput.addEventListener('input', () => {
+            mfaCodeInput.value = toAsciiDigits(mfaCodeInput.value);
+        });
+    }
+
+    const mfaLoginCodeInput = document.getElementById('mfa_totp_code');
+    if (mfaLoginCodeInput) {
+        mfaLoginCodeInput.addEventListener('input', () => {
+            mfaLoginCodeInput.value = toAsciiDigits(mfaLoginCodeInput.value);
+        });
+    }
+
+    const btnCopy2FASecret = document.getElementById('btn-copy-2fa-secret');
+    if (btnCopy2FASecret) {
+        btnCopy2FASecret.addEventListener('click', () => {
+            const secret = document.getElementById('enable_2fa_secret')?.value || document.getElementById('2fa-secret-display')?.textContent;
+            if (secret && secret !== '...') {
+                navigator.clipboard.writeText(secret).then(() => {
+                    const textSpan = document.getElementById('copy-secret-text');
+                    if (textSpan) {
+                        const original = textSpan.textContent;
+                        textSpan.textContent = 'کپی شد!';
+                        setTimeout(() => { textSpan.textContent = original; }, 2000);
+                    }
+                    showToast('کلید امنیتی با موفقیت کپی شد', 2000, 'success');
+                }).catch(() => {
+                    showToast('امکان کپی خودکار فراهم نشد. لطفاً متن را دستی کپی کنید.', 3000, 'warning');
+                });
+            }
+        });
+    }
+
     if (formEnable2FA) {
         formEnable2FA.addEventListener('submit', async (e) => {
             e.preventDefault();
             const secret = document.getElementById('enable_2fa_secret').value;
-            const code = document.getElementById('enable_2fa_code').value.trim();
+            const rawCode = document.getElementById('enable_2fa_code').value;
+            const code = toAsciiDigits(rawCode);
             const pwdInput = document.getElementById('enable_2fa_pwd');
             const pwd = pwdInput ? pwdInput.value : '';
             const statusEl = document.getElementById('enable-2fa-status');
@@ -858,9 +904,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     reset2FAModalViews();
                     await refresh2FAStatus();
                 } else {
-                    const err = await res.text();
+                    const err = (await res.text()).trim();
                     if (statusEl) {
-                        statusEl.textContent = err || 'کد امنیتی تأیید نشد.';
+                        if (err === 'Unauthorized' || res.status === 401 && !err.includes('کلمه عبور')) {
+                            statusEl.textContent = 'نشست کاری شما منقضی شده است. در حال انتقال به صفحه ورود...';
+                            setTimeout(() => location.reload(), 1500);
+                        } else {
+                            statusEl.textContent = err || 'کد امنیتی تأیید نشد.';
+                        }
                         statusEl.className = 'response-box error';
                         statusEl.style.display = 'block';
                     }
@@ -899,9 +950,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     reset2FAModalViews();
                     await refresh2FAStatus();
                 } else {
-                    const err = await res.text();
+                    const err = (await res.text()).trim();
                     if (statusEl) {
-                        statusEl.textContent = err || 'اطلاعات وارد شده صحیح نمی‌باشد.';
+                        if (err === 'Unauthorized' || res.status === 401 && !err.includes('رمز عبور') && !err.includes('کلمه عبور')) {
+                            statusEl.textContent = 'نشست کاری شما منقضی شده است. در حال انتقال به صفحه ورود...';
+                            setTimeout(() => location.reload(), 1500);
+                        } else {
+                            statusEl.textContent = err || 'اطلاعات وارد شده صحیح نمی‌باشد.';
+                        }
                         statusEl.className = 'response-box error';
                         statusEl.style.display = 'block';
                     }
@@ -4404,9 +4460,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupSuperuserUI() {
         const fullnameEl = document.getElementById('header-admin-fullname');
         const roleEl = document.getElementById('header-admin-role');
+        const menuFullnameEl = document.getElementById('menu-admin-fullname');
+        const menuRoleEl = document.getElementById('menu-admin-role');
         if (currentAdmin) {
-            if (fullnameEl) fullnameEl.textContent = currentAdmin.full_name || currentAdmin.username;
-            if (roleEl) roleEl.textContent = currentAdmin.role_title || 'کارشناس حراست';
+            const name = currentAdmin.full_name || currentAdmin.username;
+            const role = currentAdmin.role_title || 'کارشناس حراست';
+            if (fullnameEl) fullnameEl.textContent = name;
+            if (roleEl) roleEl.textContent = role;
+            if (menuFullnameEl) menuFullnameEl.textContent = name;
+            if (menuRoleEl) menuRoleEl.textContent = role;
         }
 
         if (currentAdmin && currentAdmin.is_superuser) {
@@ -5961,6 +6023,43 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    const btnUserMenu = document.getElementById('btnUserMenu');
+    const userMenuDropdown = document.getElementById('userMenuDropdown');
+
+    if (btnUserMenu && userMenuDropdown) {
+        btnUserMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = userMenuDropdown.style.display === 'block';
+            if (isOpen) {
+                userMenuDropdown.style.display = 'none';
+                btnUserMenu.classList.remove('is-active');
+            } else {
+                userMenuDropdown.style.display = 'block';
+                btnUserMenu.classList.add('is-active');
+                if (notifDropdown) {
+                    notifDropdown.style.display = 'none';
+                    notifDropdown.classList.remove('is-open');
+                }
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (userMenuDropdown.style.display === 'block') {
+                if (!userMenuDropdown.contains(e.target) && !btnUserMenu.contains(e.target)) {
+                    userMenuDropdown.style.display = 'none';
+                    btnUserMenu.classList.remove('is-active');
+                }
+            }
+        });
+
+        userMenuDropdown.querySelectorAll('.user-menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                userMenuDropdown.style.display = 'none';
+                btnUserMenu.classList.remove('is-active');
+            });
+        });
+    }
 
     if (btnMarkAllNotifsRead) {
         btnMarkAllNotifsRead.addEventListener('click', async (e) => {

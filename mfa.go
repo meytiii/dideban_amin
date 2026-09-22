@@ -67,10 +67,25 @@ func GenerateBase32Secret() (string, error) {
 	return base32.StdEncoding.WithPadding(base32.NoPadding).EncodeToString(bytesArr), nil
 }
 
+func normalizeTOTPCode(code string) string {
+	var sb strings.Builder
+	for _, r := range code {
+		if r >= '0' && r <= '9' {
+			sb.WriteRune(r)
+		} else if r >= '۰' && r <= '۹' {
+			sb.WriteRune(r - '۰' + '0')
+		} else if r >= '٠' && r <= '٩' {
+			sb.WriteRune(r - '٠' + '0')
+		}
+	}
+	return sb.String()
+}
+
 func GenerateTOTPCode(secretBase32 string, timestep int64) (string, error) {
-	secretBytes, err := base32.StdEncoding.WithPadding(base32.NoPadding).DecodeString(strings.ToUpper(strings.TrimSpace(secretBase32)))
+	cleanSecret := strings.ToUpper(strings.ReplaceAll(strings.TrimSpace(secretBase32), " ", ""))
+	secretBytes, err := base32.StdEncoding.WithPadding(base32.NoPadding).DecodeString(cleanSecret)
 	if err != nil {
-		secretBytes, err = base32.StdEncoding.DecodeString(strings.ToUpper(strings.TrimSpace(secretBase32)))
+		secretBytes, err = base32.StdEncoding.DecodeString(cleanSecret)
 		if err != nil {
 			return "", err
 		}
@@ -94,10 +109,12 @@ func GenerateTOTPCode(secretBase32 string, timestep int64) (string, error) {
 }
 
 func VerifyTOTPCode(username, secretBase32, code string) (bool, error) {
-	code = strings.TrimSpace(code)
+	code = normalizeTOTPCode(code)
 	if len(code) != 6 {
 		return false, ErrInvalidTOTPCode
 	}
+
+	cleanSecret := strings.ToUpper(strings.ReplaceAll(strings.TrimSpace(secretBase32), " ", ""))
 
 	now := time.Now().Unix()
 	currentStep := now / 30
@@ -105,9 +122,9 @@ func VerifyTOTPCode(username, secretBase32, code string) (bool, error) {
 	totpReplays.mu.Lock()
 	defer totpReplays.mu.Unlock()
 
-	for stepOffset := int64(-1); stepOffset <= 1; stepOffset++ {
+	for stepOffset := int64(-2); stepOffset <= 2; stepOffset++ {
 		step := currentStep + stepOffset
-		expectedCode, err := GenerateTOTPCode(secretBase32, step)
+		expectedCode, err := GenerateTOTPCode(cleanSecret, step)
 		if err != nil {
 			continue
 		}
@@ -118,7 +135,7 @@ func VerifyTOTPCode(username, secretBase32, code string) (bool, error) {
 				return false, ErrTOTPReplayed
 			}
 
-			totpReplays.used[replayKey] = time.Now().Add(90 * time.Second)
+			totpReplays.used[replayKey] = time.Now().Add(120 * time.Second)
 			return true, nil
 		}
 	}
@@ -332,6 +349,7 @@ func Setup2FAHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{
 		"secret":      secret,
 		"otpauth_url": otpAuthURL,
+		"server_time": time.Now().Format("2006-01-02 15:04:05"),
 	})
 }
 
