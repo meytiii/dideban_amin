@@ -21,3 +21,7 @@
 
 NO DEPENDANCIES FOR THIS PROJECT... EVERYTHING MUST BE LOCAL FOR SECURITY REASONS (BY EVERYTHING I MEAN ASSETS AND NOT PLUGINS).
 PLUGINS OR EXTERNAL LIBRARIES ARE FORBIDDEN.
+
+## Mandatory Code Rule: NO COMMENTS
+- NEVER write comments in any code (Go, JavaScript, TypeScript, Python, SQL, HTML, CSS, etc.) ever.
+- All code files must remain 100% comment-free at all times.
