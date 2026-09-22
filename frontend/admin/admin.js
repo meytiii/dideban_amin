@@ -18,7 +18,7 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
 
 // [HARDEN-1] Reduced artificial delay; removed fonts.ready gate that compounded load time
 (function initAdminPreloader() {
-    const PRELOADER_MIN_MS = 200;
+    const PRELOADER_MIN_MS = 3000;
     const startTime = performance.now();
     let isReady = false;
     let dismissed = false;
