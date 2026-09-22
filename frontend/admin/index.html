@@ -2012,6 +2012,10 @@
                 <form id="form-enable-2fa">
                     <input type="hidden" id="enable_2fa_secret">
                     <div class="form-group">
+                        <label for="enable_2fa_pwd">کلمه عبور جاری حساب کاربری:</label>
+                        <input type="password" id="enable_2fa_pwd" required autocomplete="current-password">
+                    </div>
+                    <div class="form-group">
                         <label for="enable_2fa_code">کد ۶ رقمی تأیید نرم‌افزار:</label>
                         <input type="text" id="enable_2fa_code" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" placeholder="123456" class="ltr" style="text-align: center; font-size: 18px; font-weight: 700; letter-spacing: 4px;" required>
                     </div>

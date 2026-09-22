@@ -25,7 +25,7 @@ import (
 )
 
 func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+	return AdminIPWhitelistMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
 		w.Header().Set("Pragma", "no-cache")
 
@@ -66,7 +66,7 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 		ctx := context.WithValue(r.Context(), "admin", session)
 		next.ServeHTTP(w, r.WithContext(ctx))
-	}
+	})
 }
 
 func SuperuserAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
@@ -1379,6 +1379,8 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	_, _ = DB.Exec("INSERT INTO admin_password_history (user_id, password_hash, created_at) VALUES ($1, $2, NOW())", newID, passHash)
+
 	logAudit(admin.Username, admin.Title, "CREATE_ADMIN_USER:"+req.Username, nil, getIP(r))
 
 	w.Header().Set("Content-Type", "application/json")
@@ -1602,6 +1604,12 @@ func ResetUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	defer tx.Rollback()
 
 	_, err = tx.Exec("UPDATE admin_users SET password_hash = $1, password_changed_at = NOW(), must_change_password = $2 WHERE id = $3", passHash, req.MustChangePassword, req.UserID)
+	if err != nil {
+		http.Error(w, "Database error", http.StatusInternalServerError)
+		return
+	}
+
+	_, err = tx.Exec("INSERT INTO admin_password_history (user_id, password_hash, created_at) VALUES ($1, $2, NOW())", req.UserID, passHash)
 	if err != nil {
 		http.Error(w, "Database error", http.StatusInternalServerError)
 		return
@@ -1857,21 +1865,58 @@ func ChangeMyPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	req.CurrentPassword = strings.TrimSpace(req.CurrentPassword)
 	req.NewPassword = strings.TrimSpace(req.NewPassword)
 
+	if req.NewPassword == "" || req.CurrentPassword == "" {
+		http.Error(w, "اطلاعات ورودی ناقص است.", http.StatusBadRequest)
+		return
+	}
+
+	if req.NewPassword == req.CurrentPassword {
+		http.Error(w, "کلمه عبور جدید نمی‌تواند با کلمه عبور فعلی یکسان باشد.", http.StatusBadRequest)
+		return
+	}
+
 	if err := ValidatePasswordComplexity(req.NewPassword); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
+	var userID int64
 	var currentHash string
-	err := DB.QueryRow("SELECT password_hash FROM admin_users WHERE username = $1 AND is_active = true", admin.Username).Scan(&currentHash)
+	var passwordChangedAt time.Time
+	var mustChangePassword bool
+	err := DB.QueryRow("SELECT id, password_hash, password_changed_at, must_change_password FROM admin_users WHERE username = $1 AND is_active = true", admin.Username).Scan(&userID, &currentHash, &passwordChangedAt, &mustChangePassword)
 	if err != nil {
 		http.Error(w, "حساب کاربری یافت نشد یا غیرفعال است.", http.StatusUnauthorized)
+		return
+	}
+
+	if !mustChangePassword && time.Since(passwordChangedAt) < 24*time.Hour {
+		http.Error(w, "امکان تغییر کلمه عبور زودتر از ۲۴ ساعت از آخرین تغییر وجود ندارد.", http.StatusBadRequest)
 		return
 	}
 
 	if !VerifyPassword(req.CurrentPassword, currentHash) {
 		http.Error(w, "کلمه عبور فعلی وارد شده نادرست است.", http.StatusUnauthorized)
 		return
+	}
+
+	if VerifyPassword(req.NewPassword, currentHash) {
+		http.Error(w, "کلمه عبور جدید نمی‌تواند با کلمه عبور فعلی یکسان باشد.", http.StatusBadRequest)
+		return
+	}
+
+	rows, err := DB.Query("SELECT password_hash FROM admin_password_history WHERE user_id = $1 ORDER BY created_at DESC LIMIT 5", userID)
+	if err == nil {
+		defer rows.Close()
+		for rows.Next() {
+			var oldHash string
+			if err := rows.Scan(&oldHash); err == nil {
+				if VerifyPassword(req.NewPassword, oldHash) {
+					http.Error(w, "کلمه عبور جدید نمی‌تواند مشابه ۵ کلمه عبور اخیر شما باشد.", http.StatusBadRequest)
+					return
+				}
+			}
+		}
 	}
 
 	newHash, err := HashPassword(req.NewPassword)
@@ -1887,9 +1932,15 @@ func ChangeMyPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer tx.Rollback()
 
-	_, err = tx.Exec("UPDATE admin_users SET password_hash = $1, password_changed_at = NOW(), must_change_password = false WHERE username = $2", newHash, admin.Username)
+	_, err = tx.Exec("UPDATE admin_users SET password_hash = $1, password_changed_at = NOW(), must_change_password = false WHERE id = $2", newHash, userID)
 	if err != nil {
 		http.Error(w, "خطای دیتابیس در ذخیره رمز جدید", http.StatusInternalServerError)
+		return
+	}
+
+	_, err = tx.Exec("INSERT INTO admin_password_history (user_id, password_hash, created_at) VALUES ($1, $2, NOW())", userID, newHash)
+	if err != nil {
+		http.Error(w, "خطای دیتابیس در ثبت تاریخچه رمز عبور", http.StatusInternalServerError)
 		return
 	}
 

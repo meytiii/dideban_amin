@@ -1,7 +1,10 @@
 package main
 
 import (
+	"crypto/tls"
+	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"strings"
@@ -10,8 +13,28 @@ import (
 
 func secureHeadersMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		allowedHostsEnv := strings.TrimSpace(os.Getenv("HERASAT_ALLOWED_HOSTS"))
+		if allowedHostsEnv != "" {
+			host := r.Host
+			if h, _, err := net.SplitHostPort(host); err == nil {
+				host = h
+			}
+			allowed := false
+			for _, ah := range strings.Split(allowedHostsEnv, ",") {
+				if strings.EqualFold(strings.TrimSpace(ah), host) {
+					allowed = true
+					break
+				}
+			}
+			if !allowed {
+				http.Error(w, "Invalid Host header", http.StatusBadRequest)
+				return
+			}
+		}
 
-		w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';")
+		w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; report-uri /api/security/csp-report;")
+		w.Header().Set("Cross-Origin-Opener-Policy", "same-origin")
+		w.Header().Set("Cross-Origin-Resource-Policy", "same-origin")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("X-Frame-Options", "DENY")
 		if isCookieSecure() {
@@ -50,6 +73,15 @@ func healthCheck(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status": "secure_system_active"}`))
 }
 
+func CSPReportHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	_, _ = io.Copy(io.Discard, io.LimitReader(r.Body, 64<<10))
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func main() {
 	InitSyslogShipper()
 	defer GlobalSyslogShipper.Close()
@@ -83,6 +115,10 @@ func main() {
 		log.Fatalf("FATAL SECURITY ERROR: Environment variable HERASAT_AES_KEY must be set and exactly 32 bytes long.")
 	}
 	InitCrypto(aesMasterKey)
+
+	if err := RunCryptographicSelfTests(); err != nil {
+		log.Fatalf("FATAL SECURITY ERROR: Cryptographic self-tests failed: %v", err)
+	}
 
 	dbConnStr := strings.TrimSpace(os.Getenv("HERASAT_DB_CONN"))
 	if dbConnStr == "" && os.Getenv("HERASAT_DEV_MODE") == "1" {
@@ -135,8 +171,10 @@ func main() {
 	mux.HandleFunc("POST /api/report/track", RateLimitMiddleware(trackLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(TrackReportHandler))))
 	mux.HandleFunc("POST /api/report/follow-up", RateLimitMiddleware(submitLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(SubmitFollowUpHandler))))
 
-	mux.HandleFunc("POST /api/admin/login", RateLimitMiddleware(loginLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(LoginHandler))))
-	mux.HandleFunc("POST /api/admin/login/verify-mfa", RateLimitMiddleware(loginLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(VerifyMFAHandler))))
+	mux.HandleFunc("POST /api/security/csp-report", CSPReportHandler)
+
+	mux.HandleFunc("POST /api/admin/login", AdminIPWhitelistMiddleware(RateLimitMiddleware(loginLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(LoginHandler)))))
+	mux.HandleFunc("POST /api/admin/login/verify-mfa", AdminIPWhitelistMiddleware(RateLimitMiddleware(loginLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(VerifyMFAHandler)))))
 	mux.HandleFunc("GET /api/admin/events", AdminAuthMiddleware(AdminEventsHandler))
 	mux.HandleFunc("POST /api/admin/2fa/setup", AdminAuthMiddleware(CSRFMiddleware(Setup2FAHandler)))
 	mux.HandleFunc("POST /api/admin/2fa/enable", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(Enable2FAHandler)))))
@@ -181,7 +219,7 @@ func main() {
 	mux.HandleFunc("POST /api/admin/notifications/mark-all-read", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, MarkAllNotificationsReadHandler))))
 
 	mux.Handle("/", http.FileServer(http.Dir("./frontend/public")))
-	mux.Handle("/admin/", http.StripPrefix("/admin/", http.FileServer(http.Dir("./frontend/admin"))))
+	mux.Handle("/admin/", AdminIPWhitelistMiddleware(http.StripPrefix("/admin/", http.FileServer(http.Dir("./frontend/admin"))).ServeHTTP))
 
 	bindAddr := os.Getenv("HERASAT_BIND_ADDR")
 	if bindAddr == "" {
@@ -204,6 +242,18 @@ func main() {
 	}
 
 	if tlsConfigured {
+		server.TLSConfig = &tls.Config{
+			MinVersion:               tls.VersionTLS12,
+			PreferServerCipherSuites: true,
+			CipherSuites: []uint16{
+				tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+				tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+				tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+				tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,
+				tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
+			},
+		}
 		log.Printf("Herasat secure backend initialized with HTTPS on %s (AFTA Compliant)...", bindAddr)
 		log.Fatal(server.ListenAndServeTLS(certFile, keyFile))
 	} else {

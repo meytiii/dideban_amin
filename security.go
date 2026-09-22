@@ -154,7 +154,7 @@ func (sm *SessionManager) Get(token string) (AdminSession, bool) {
 
 	sm.mu.RLock()
 	if c, ok := sm.cache[tokenHash]; ok {
-		if now.Before(c.cachedUntil) && now.Before(c.session.Expiry) {
+		if now.Before(c.cachedUntil) && now.Before(c.session.Expiry) && now.Sub(c.session.LastActive) <= 15*time.Minute && now.Sub(c.session.CreatedAt) <= 12*time.Hour {
 			sess := c.session
 			sm.mu.RUnlock()
 			return sess, true
@@ -171,7 +171,7 @@ func (sm *SessionManager) Get(token string) (AdminSession, bool) {
 			&s.Username, &s.FullName, &s.Title, &s.Role, &s.IsSuperuser,
 			&s.IP, &s.UserAgent, &s.CreatedAt, &s.LastActive, &s.Expiry)
 		if err == nil {
-			if now.After(s.Expiry) {
+			if now.After(s.Expiry) || now.Sub(s.LastActive) > 15*time.Minute || now.Sub(s.CreatedAt) > 12*time.Hour {
 				sm.Delete(token)
 				return AdminSession{}, false
 			}
@@ -204,7 +204,7 @@ func (sm *SessionManager) Get(token string) (AdminSession, bool) {
 		return AdminSession{}, false
 	}
 
-	if now.After(session.Expiry) {
+	if now.After(session.Expiry) || now.Sub(session.LastActive) > 15*time.Minute || now.Sub(session.CreatedAt) > 12*time.Hour {
 		sm.Delete(token)
 		return AdminSession{}, false
 	}
@@ -410,7 +410,36 @@ func (sm *SessionManager) GetAllActiveSessions() []ActiveSessionItem {
 func (sm *SessionManager) UpdateActivity(token string) {
 	tokenHash := hashToken(token)
 	now := time.Now()
+
+	sm.mu.RLock()
+	var createdAt time.Time
+	if c, ok := sm.cache[tokenHash]; ok {
+		createdAt = c.session.CreatedAt
+	} else if s, ok := sm.sessions[token]; ok {
+		createdAt = s.CreatedAt
+	}
+	sm.mu.RUnlock()
+
+	if createdAt.IsZero() {
+		if db := sm.getDB(); db != nil {
+			_ = db.QueryRow(`SELECT created_at FROM admin_sessions WHERE token_hash = $1`, tokenHash).Scan(&createdAt)
+		}
+	}
+
+	if createdAt.IsZero() {
+		createdAt = now
+	}
+
+	maxExpiry := createdAt.Add(12 * time.Hour)
+	if now.After(maxExpiry) {
+		sm.Delete(token)
+		return
+	}
+
 	newExpiry := now.Add(15 * time.Minute)
+	if newExpiry.After(maxExpiry) {
+		newExpiry = maxExpiry
+	}
 
 	if db := sm.getDB(); db != nil {
 		_, _ = db.Exec(`UPDATE admin_sessions SET last_active = $1, expiry = $2 WHERE token_hash = $3`, now, newExpiry, tokenHash)

@@ -55,8 +55,18 @@ CREATE TABLE IF NOT EXISTS admin_users (
     totp_secret TEXT DEFAULT NULL,
     totp_enabled BOOLEAN NOT NULL DEFAULT FALSE,
     totp_enforced BOOLEAN NOT NULL DEFAULT FALSE,
+    last_login_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS admin_password_history (
+    id BIGSERIAL PRIMARY KEY,
+    admin_username VARCHAR(64) NOT NULL REFERENCES admin_users(username) ON DELETE CASCADE,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_pwd_hist_user_created ON admin_password_history(admin_username, created_at DESC);
 
 CREATE TABLE IF NOT EXISTS report_forwardings (
     id BIGSERIAL PRIMARY KEY,
@@ -95,10 +105,13 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     action VARCHAR(64) NOT NULL,
     target_report_id BIGINT DEFAULT NULL,
     ip_address VARCHAR(45) NOT NULL,
+    prev_hash VARCHAR(64) NOT NULL DEFAULT '0000000000000000000000000000000000000000000000000000000000000000',
+    entry_hash VARCHAR(64) NOT NULL DEFAULT '',
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS idx_audit_logs_admin ON audit_logs(admin_username);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_entry_hash ON audit_logs(entry_hash);
 
 CREATE TABLE IF NOT EXISTS report_messages (
     id BIGSERIAL PRIMARY KEY,

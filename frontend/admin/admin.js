@@ -773,6 +773,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (enableMsg) enableMsg.style.display = 'none';
         const disableMsg = document.getElementById('disable-2fa-status');
         if (disableMsg) disableMsg.style.display = 'none';
+        const epwd = document.getElementById('enable_2fa_pwd');
+        if (epwd) epwd.value = '';
+        const ecode = document.getElementById('enable_2fa_code');
+        if (ecode) ecode.value = '';
+        const dpwd = document.getElementById('disable_2fa_pwd');
+        if (dpwd) dpwd.value = '';
+        const dcode = document.getElementById('disable_2fa_code');
+        if (dcode) dcode.value = '';
     }
 
     async function refresh2FAStatus() {
@@ -836,12 +844,14 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const secret = document.getElementById('enable_2fa_secret').value;
             const code = document.getElementById('enable_2fa_code').value.trim();
+            const pwdInput = document.getElementById('enable_2fa_pwd');
+            const pwd = pwdInput ? pwdInput.value : '';
             const statusEl = document.getElementById('enable-2fa-status');
             try {
                 const res = await adminFetch('/api/admin/2fa/enable', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ secret, totp_code: code })
+                    body: JSON.stringify({ password: pwd, secret, totp_code: code })
                 });
                 if (res.ok) {
                     showToast('احراز هویت دومرحله‌ای با موفقیت فعال شد', 4000, 'success');

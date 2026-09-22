@@ -348,3 +348,52 @@ func ValidatePasswordComplexity(password string) error {
 
 	return nil
 }
+
+func RunCryptographicSelfTests() error {
+	testKey := []byte("01234567890123456789012345678901")
+	block, err := aes.NewCipher(testKey)
+	if err != nil {
+		return fmt.Errorf("KAT AES cipher creation failed: %w", err)
+	}
+
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return fmt.Errorf("KAT GCM creation failed: %w", err)
+	}
+
+	nonce := []byte("123456789012")
+	plaintext := []byte("AFTA_HERASAT_CRYPTO_SELF_TEST")
+	ciphertext := gcm.Seal(nil, nonce, plaintext, nil)
+
+	decrypted, err := gcm.Open(nil, nonce, ciphertext, nil)
+	if err != nil || !bytes.Equal(decrypted, plaintext) {
+		return fmt.Errorf("KAT AES-256-GCM round-trip failed")
+	}
+
+	tamperedCiphertext := make([]byte, len(ciphertext))
+	copy(tamperedCiphertext, ciphertext)
+	tamperedCiphertext[len(tamperedCiphertext)-1] ^= 0x01
+	if _, err := gcm.Open(nil, nonce, tamperedCiphertext, nil); err == nil {
+		return fmt.Errorf("KAT AES-256-GCM authentication failure detection failed")
+	}
+
+	derived1 := deriveKey(testKey, "AFTA_TEST_INFO")
+	derived2 := deriveKey(testKey, "AFTA_TEST_INFO")
+	if len(derived1) != 32 || !bytes.Equal(derived1, derived2) {
+		return fmt.Errorf("KAT key derivation determinism failed")
+	}
+
+	testPass := "TestAdminP@ss123!"
+	hashed, err := HashPassword(testPass)
+	if err != nil {
+		return fmt.Errorf("KAT Argon2id hashing failed: %w", err)
+	}
+	if !VerifyPassword(testPass, hashed) {
+		return fmt.Errorf("KAT Argon2id verification failed")
+	}
+	if VerifyPassword("WrongPassword123!", hashed) {
+		return fmt.Errorf("KAT Argon2id false positive verification detected")
+	}
+
+	return nil
+}

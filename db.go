@@ -49,7 +49,6 @@ func InitDB(connStr string) {
 
 func runMigrations() {
 	migrationSQL := `
-	-- Add priority column if not present
 	DO $$
 	BEGIN
 		IF NOT EXISTS (
@@ -107,7 +106,6 @@ func runMigrations() {
 			WHERE table_name = 'admin_users' AND column_name = 'role'
 		) THEN
 			ALTER TABLE admin_users ADD COLUMN role VARCHAR(32) NOT NULL DEFAULT 'edare_kol';
-			-- Initialize existing users into appropriate roles
 			UPDATE admin_users SET role = 'superuser' WHERE is_superuser = true;
 			UPDATE admin_users SET role = 'edare_kol' WHERE username IN ('admin_herasat', 'admin_personeli');
 			UPDATE admin_users SET role = 'navahi_manategh' WHERE username = 'nahie1';
@@ -186,9 +184,38 @@ func runMigrations() {
 		) THEN
 			ALTER TABLE admin_users ADD COLUMN totp_enforced BOOLEAN NOT NULL DEFAULT FALSE;
 		END IF;
+
+		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'admin_users' AND column_name = 'last_login_at'
+		) THEN
+			ALTER TABLE admin_users ADD COLUMN last_login_at TIMESTAMPTZ DEFAULT NULL;
+		END IF;
+
+		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'audit_logs' AND column_name = 'prev_hash'
+		) THEN
+			ALTER TABLE audit_logs ADD COLUMN prev_hash VARCHAR(64) NOT NULL DEFAULT '0000000000000000000000000000000000000000000000000000000000000000';
+		END IF;
+
+		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'audit_logs' AND column_name = 'entry_hash'
+		) THEN
+			ALTER TABLE audit_logs ADD COLUMN entry_hash VARCHAR(64) NOT NULL DEFAULT '';
+			CREATE INDEX IF NOT EXISTS idx_audit_logs_entry_hash ON audit_logs(entry_hash);
+		END IF;
 	END $$;
 
-	-- Create report_forwardings table for report assignments and visual history
+	CREATE TABLE IF NOT EXISTS admin_password_history (
+		id BIGSERIAL PRIMARY KEY,
+		admin_username VARCHAR(64) NOT NULL REFERENCES admin_users(username) ON DELETE CASCADE,
+		password_hash TEXT NOT NULL,
+		created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+	);
+	CREATE INDEX IF NOT EXISTS idx_pwd_hist_user_created ON admin_password_history(admin_username, created_at DESC);
+
 	CREATE TABLE IF NOT EXISTS report_forwardings (
 		id BIGSERIAL PRIMARY KEY,
 		report_id BIGINT NOT NULL REFERENCES reports(id) ON DELETE CASCADE,
@@ -207,21 +234,19 @@ func runMigrations() {
 	CREATE INDEX IF NOT EXISTS idx_report_forwardings_recipient ON report_forwardings(recipient_username);
 	CREATE UNIQUE INDEX IF NOT EXISTS idx_report_forwardings_unique ON report_forwardings(report_id, recipient_username);
 
-	-- Create report_messages table for interactive two-way follow-ups
 	CREATE TABLE IF NOT EXISTS report_messages (
 		id BIGSERIAL PRIMARY KEY,
 		report_id BIGINT NOT NULL REFERENCES reports(id) ON DELETE CASCADE,
-		sender_type VARCHAR(16) NOT NULL, -- 'reporter' or 'admin'
-		message_text TEXT NOT NULL,       -- Encrypted AES-256
+		sender_type VARCHAR(16) NOT NULL,
+		message_text TEXT NOT NULL,
 		admin_username VARCHAR(64) DEFAULT NULL,
 		created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 	);
 	CREATE INDEX IF NOT EXISTS idx_report_messages_report ON report_messages(report_id);
 
-	-- Create admin_notifications table for real-time notification center
 	CREATE TABLE IF NOT EXISTS admin_notifications (
 		id BIGSERIAL PRIMARY KEY,
-		notif_type VARCHAR(50) NOT NULL, -- 'new_report', 'new_reply', 'report_forwarded'
+		notif_type VARCHAR(50) NOT NULL,
 		title VARCHAR(255) NOT NULL,
 		message TEXT NOT NULL,
 		target_report_id BIGINT REFERENCES reports(id) ON DELETE CASCADE,
@@ -235,7 +260,6 @@ func runMigrations() {
 	CREATE INDEX IF NOT EXISTS idx_admin_notifs_created_at ON admin_notifications(created_at);
 	CREATE INDEX IF NOT EXISTS idx_admin_notifs_recipient ON admin_notifications(recipient_username);
 
-	-- Create admin_report_views table for per-user read/seen and new message tracking
 	CREATE TABLE IF NOT EXISTS admin_report_views (
 		id BIGSERIAL PRIMARY KEY,
 		admin_username VARCHAR(64) NOT NULL,
@@ -248,14 +272,12 @@ func runMigrations() {
 	CREATE INDEX IF NOT EXISTS idx_admin_report_views_user ON admin_report_views(admin_username);
 	CREATE INDEX IF NOT EXISTS idx_admin_report_views_report ON admin_report_views(report_id);
 
-	-- Seed historical read reports into admin_report_views
 	INSERT INTO admin_report_views (admin_username, report_id, viewed_at)
 	SELECT read_by, id, COALESCE(read_at, NOW())
 	FROM reports
 	WHERE is_read = true AND read_by IS NOT NULL AND read_by != ''
 	ON CONFLICT (admin_username, report_id) DO NOTHING;
 
-	-- Persistent admin sessions store (C-1)
 	CREATE TABLE IF NOT EXISTS admin_sessions (
 		token_hash CHAR(64) PRIMARY KEY,
 		username VARCHAR(64) NOT NULL,
@@ -278,7 +300,6 @@ func runMigrations() {
 		created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 	);
 
-	-- Persistent account lockout attempts store (C-2)
 	CREATE TABLE IF NOT EXISTS admin_login_attempts (
 		username VARCHAR(64) PRIMARY KEY,
 		consecutive_failures INT NOT NULL DEFAULT 0,
@@ -286,7 +307,6 @@ func runMigrations() {
 		updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 	);
 
-	-- Persistent redeemed captcha tokens (C-3)
 	CREATE TABLE IF NOT EXISTS used_captcha_tokens (
 		signature_b64 TEXT PRIMARY KEY,
 		expires_at TIMESTAMPTZ NOT NULL,
@@ -294,7 +314,6 @@ func runMigrations() {
 	);
 	CREATE INDEX IF NOT EXISTS idx_used_captcha_expires ON used_captcha_tokens(expires_at);
 
-	-- Auto-update updated_at timestamp on reports table (H-7)
 	CREATE OR REPLACE FUNCTION touch_reports_updated_at()
 	RETURNS TRIGGER AS $$
 	BEGIN

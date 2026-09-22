@@ -256,6 +256,7 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 	requiresPasswordChange := mustChangePassword || isPasswordExpired
 
 	Lockouts.Reset(payload.Username)
+	_, _ = DB.Exec("UPDATE admin_users SET last_login_at = NOW() WHERE username = $1", payload.Username)
 
 	sessionToken := generateSessionToken()
 	now := time.Now()
@@ -338,6 +339,7 @@ func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
 	admin := r.Context().Value("admin").(AdminSession)
 
 	var req struct {
+		Password string `json:"password"`
 		Secret   string `json:"secret"`
 		TOTPCode string `json:"totp_code"`
 	}
@@ -346,11 +348,24 @@ func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	req.Password = strings.TrimSpace(req.Password)
 	req.Secret = strings.TrimSpace(req.Secret)
 	req.TOTPCode = strings.TrimSpace(req.TOTPCode)
 
-	if req.Secret == "" || req.TOTPCode == "" {
-		http.Error(w, "کلید امنیتی و کد تأیید الزامی است.", http.StatusBadRequest)
+	if req.Password == "" || req.Secret == "" || req.TOTPCode == "" {
+		http.Error(w, "کلمه عبور جاری، کلید امنیتی و کد تأیید الزامی است.", http.StatusBadRequest)
+		return
+	}
+
+	var storedHash string
+	err := DB.QueryRow(`SELECT password_hash FROM admin_users WHERE username=$1`, admin.Username).Scan(&storedHash)
+	if err != nil {
+		http.Error(w, "کاربر یافت نشد.", http.StatusUnauthorized)
+		return
+	}
+
+	if !VerifyPassword(req.Password, storedHash) {
+		http.Error(w, "کلمه عبور جاری اشتباه است.", http.StatusUnauthorized)
 		return
 	}
 

@@ -2,14 +2,17 @@ package main
 
 import (
 	"crypto/rand"
+	"crypto/sha256"
 	"database/sql"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -57,14 +60,15 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var isSuperuser, totpEnabled bool
 	var passwordChangedAt time.Time
 	var mustChangePassword bool
+	var lastLoginAt sql.NullTime
 	err := DB.QueryRow(`
 		SELECT password_hash, COALESCE(full_name, ''), role_title, COALESCE(role, 'edare_kol'), is_superuser,
 		       COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false),
-		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false)
+		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), last_login_at
 		FROM admin_users
 		WHERE username=$1 AND is_active=true`, creds.Username).Scan(
 		&storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword,
-		&totpSecret, &totpEnabled)
+		&totpSecret, &totpEnabled, &lastLoginAt)
 	if err != nil {
 		log.Printf("-> LOGIN FAILED: Database error or user not found: %v", err)
 		if _, justLocked := Lockouts.RecordFailure(creds.Username); justLocked {
@@ -83,6 +87,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		logAudit(creds.Username, "UNKNOWN", "FAILED_LOGIN", nil, getIP(r))
 		http.Error(w, "نام کاربری یا رمز عبور اشتباه است.", http.StatusUnauthorized)
+		return
+	}
+
+	if lastLoginAt.Valid && time.Since(lastLoginAt.Time) > 90*24*time.Hour {
+		_, _ = DB.Exec(`UPDATE admin_users SET is_active = false WHERE username = $1`, creds.Username)
+		logAudit(creds.Username, roleTitle, "ACCOUNT_DORMANT_AUTO_LOCKED", nil, getIP(r))
+		http.Error(w, "حساب کاربری شما به دلیل عدم فعالیت بیش از ۹۰ روز به صورت خودکار غیرفعال شده است. لطفاً با مدیر ارشد تماس بگیرید.", http.StatusForbidden)
 		return
 	}
 
@@ -115,6 +126,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	requiresPasswordChange := mustChangePassword || isPasswordExpired
 
 	Lockouts.Reset(creds.Username)
+	_, _ = DB.Exec(`UPDATE admin_users SET last_login_at = NOW() WHERE username = $1`, creds.Username)
 
 	sessionToken := generateSessionToken()
 	now := time.Now()
@@ -279,6 +291,34 @@ func getIP(r *http.Request) string {
 	return remoteHost
 }
 
+func computeAuditHash(prevHash, username, title, action string, targetID *int64, ip string, t time.Time) string {
+	targetStr := "none"
+	if targetID != nil {
+		targetStr = strconv.FormatInt(*targetID, 10)
+	}
+	raw := fmt.Sprintf("%s|%s|%s|%s|%s|%s|%s", prevHash, username, title, action, targetStr, ip, t.Format(time.RFC3339Nano))
+	h := sha256.Sum256([]byte(raw))
+	return hex.EncodeToString(h[:])
+}
+
+func getLatestAuditHash(db *sql.DB) string {
+	var h string
+	err := db.QueryRow("SELECT COALESCE(entry_hash, '') FROM audit_logs ORDER BY id DESC LIMIT 1").Scan(&h)
+	if err != nil || h == "" {
+		return "0000000000000000000000000000000000000000000000000000000000000000"
+	}
+	return h
+}
+
+func getLatestAuditHashTx(tx *sql.Tx) string {
+	var h string
+	err := tx.QueryRow("SELECT COALESCE(entry_hash, '') FROM audit_logs ORDER BY id DESC LIMIT 1").Scan(&h)
+	if err != nil || h == "" {
+		return "0000000000000000000000000000000000000000000000000000000000000000"
+	}
+	return h
+}
+
 func logAudit(username, title, action string, targetID *int64, ip string) error {
 	ShipSyslogAudit(username, action, targetID, ip)
 	if DB == nil {
@@ -286,9 +326,12 @@ func logAudit(username, title, action string, targetID *int64, ip string) error 
 		log.Printf("CRITICAL AUDIT LOG FAILURE: DB is nil (user=%s, action=%s)", username, action)
 		return fmt.Errorf("DB is nil")
 	}
-	_, err := DB.Exec(`INSERT INTO audit_logs (admin_username, admin_title, action, target_report_id, ip_address)
-					VALUES ($1, $2, $3, $4, $5)`,
-		username, title, action, targetID, ip)
+	now := time.Now().UTC()
+	prevHash := getLatestAuditHash(DB)
+	entryHash := computeAuditHash(prevHash, username, title, action, targetID, ip, now)
+	_, err := DB.Exec(`INSERT INTO audit_logs (admin_username, admin_title, action, target_report_id, ip_address, prev_hash, entry_hash, created_at)
+					VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+		username, title, action, targetID, ip, prevHash, entryHash, now)
 	if err != nil {
 		atomic.AddUint64(&auditFailures, 1)
 		log.Printf("CRITICAL AUDIT LOG FAILURE: %v (user=%s, action=%s)", err, username, action)
@@ -304,9 +347,12 @@ func logAuditTx(tx *sql.Tx, username, title, action string, targetID *int64, ip 
 		log.Printf("CRITICAL AUDIT LOG TX FAILURE: tx is nil (user=%s, action=%s)", username, action)
 		return fmt.Errorf("tx is nil")
 	}
-	_, err := tx.Exec(`INSERT INTO audit_logs (admin_username, admin_title, action, target_report_id, ip_address)
-					VALUES ($1, $2, $3, $4, $5)`,
-		username, title, action, targetID, ip)
+	now := time.Now().UTC()
+	prevHash := getLatestAuditHashTx(tx)
+	entryHash := computeAuditHash(prevHash, username, title, action, targetID, ip, now)
+	_, err := tx.Exec(`INSERT INTO audit_logs (admin_username, admin_title, action, target_report_id, ip_address, prev_hash, entry_hash, created_at)
+					VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+		username, title, action, targetID, ip, prevHash, entryHash, now)
 	if err != nil {
 		atomic.AddUint64(&auditFailures, 1)
 		log.Printf("CRITICAL AUDIT LOG TX FAILURE: %v (user=%s, action=%s)", err, username, action)

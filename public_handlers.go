@@ -27,6 +27,9 @@ var dangerousArchiveExtensions = map[string]bool{
 	".msi": true, ".iso": true, ".hta": true, ".cpl": true,
 	".com": true, ".vbe": true, ".wsf": true, ".wsh": true,
 	".sys": true, ".bin": true, ".elf": true, ".so": true,
+	".zip": true, ".rar": true, ".7z": true, ".tar": true,
+	".gz": true, ".bz2": true, ".xz": true, ".cab": true,
+	".dmg": true, ".tgz": true,
 }
 
 func inspectZipArchive(rawBytes []byte) error {
@@ -44,6 +47,10 @@ func inspectZipArchive(rawBytes []byte) error {
 	}
 
 	for _, f := range reader.File {
+		if f.Flags&0x1 != 0 {
+			return errors.New("فایل‌های فشرده رمزگذاری‌شده یا دارای کلمه عبور به دلایل امنیتی غیرمجاز هستند")
+		}
+
 		cleanName := filepath.Clean(f.Name)
 
 		if strings.HasPrefix(cleanName, "..") || strings.HasPrefix(f.Name, "/") || strings.HasPrefix(f.Name, "\\") ||
@@ -53,7 +60,7 @@ func inspectZipArchive(rawBytes []byte) error {
 
 		innerExt := strings.ToLower(filepath.Ext(cleanName))
 		if dangerousArchiveExtensions[innerExt] {
-			return fmt.Errorf("فایل فشرده حاوی پسوند غیرمجاز است (%s)", innerExt)
+			return fmt.Errorf("فایل فشرده حاوی پسوند غیرمجاز یا آرشیو تودرتو است (%s)", innerExt)
 		}
 
 		totalUncompressedSize += f.UncompressedSize64
@@ -61,7 +68,7 @@ func inspectZipArchive(rawBytes []byte) error {
 			return errors.New("حجم غیرفشرده فایل‌های داخل آرشیو بیش از حد مجاز است (Zip Bomb)")
 		}
 
-		if f.CompressedSize64 > 0 && (f.UncompressedSize64/f.CompressedSize64) > 100 && f.UncompressedSize64 > (1<<20) {
+		if f.CompressedSize64 > 0 && (f.UncompressedSize64/f.CompressedSize64) > 20 && f.UncompressedSize64 > (512<<10) {
 			return errors.New("نسبت فشرده‌سازی فایل غیرعادی و مشکوک است (Zip Bomb)")
 		}
 	}
@@ -70,33 +77,7 @@ func inspectZipArchive(rawBytes []byte) error {
 }
 
 func validateMagicBytes(buff []byte, filename string) (bool, string) {
-	if len(buff) < 4 {
-		return false, ""
-	}
-
-	ext := strings.ToLower(filepath.Ext(filename))
-
-	if bytes.HasPrefix(buff, []byte("%PDF-")) && ext == ".pdf" {
-		return true, "application/pdf"
-	}
-
-	if len(buff) >= 8 && bytes.HasPrefix(buff, []byte("\x89PNG\r\n\x1a\n")) && ext == ".png" {
-		return true, "image/png"
-	}
-
-	if len(buff) >= 3 && buff[0] == 0xFF && buff[1] == 0xD8 && buff[2] == 0xFF && (ext == ".jpg" || ext == ".jpeg") {
-		return true, "image/jpeg"
-	}
-
-	if len(buff) >= 4 && buff[0] == 'P' && buff[1] == 'K' && (buff[2] == 3 || buff[2] == 5 || buff[2] == 7) && ext == ".zip" {
-		return true, "application/zip"
-	}
-
-	if bytes.HasPrefix(buff, []byte("Rar!\x1a\x07")) && ext == ".rar" {
-		return true, "application/x-rar-compressed"
-	}
-
-	return false, ""
+	return ValidateBinaryMagicBytes(buff, filename)
 }
 
 func generateTrackingCode() string {
@@ -270,6 +251,15 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			mimeType := detectedMime
+
+			if mimeType == "application/pdf" || strings.ToLower(filepath.Ext(header.Filename)) == ".pdf" {
+				if pdfErr := ScanPDFForActiveContent(rawBytes); pdfErr != nil {
+					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_ACTIVE_PDF_PAYLOAD", nil, getIP(r))
+					cleanupDiskFiles()
+					http.Error(w, fmt.Sprintf("فایل «%s» غیرمجاز است: %v", header.Filename, pdfErr), http.StatusBadRequest)
+					return
+				}
+			}
 
 			if mimeType == "application/zip" || strings.ToLower(filepath.Ext(header.Filename)) == ".zip" {
 				if zipErr := inspectZipArchive(rawBytes); zipErr != nil {
