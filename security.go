@@ -138,6 +138,7 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 		if oldSession.Username == session.Username && oldToken != token {
 			sm.kickedTokens[oldToken] = "CONCURRENT_LOGIN"
 			delete(sm.sessions, oldToken)
+			GlobalSSEBroker.BroadcastSessionRevoked(oldSession.Username, hashToken(oldToken))
 		}
 	}
 

@@ -52,6 +52,9 @@ CREATE TABLE IF NOT EXISTS admin_users (
     is_superuser BOOLEAN NOT NULL DEFAULT FALSE,
     password_changed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     must_change_password BOOLEAN NOT NULL DEFAULT FALSE,
+    totp_secret TEXT DEFAULT NULL,
+    totp_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    totp_enforced BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 

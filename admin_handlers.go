@@ -409,7 +409,7 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 			if decDesc, err := DecryptAES(encDesc.String); err == nil {
 				rep.Description = decDesc
 			} else {
-				rep.Description = encDesc.String
+				rep.Description = "[خطای رمزگشایی - اصالت محتوا تأیید نشد]"
 			}
 		}
 		reports = append(reports, rep)
@@ -602,19 +602,31 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encName.Valid && encName.String != "" {
-		rep.ReporterName, _ = DecryptAES(encName.String)
+		if dec, err := DecryptAES(encName.String); err == nil {
+			rep.ReporterName = dec
+		} else {
+			rep.ReporterName = "[خطای رمزگشایی]"
+		}
 	} else {
 		rep.ReporterName = "ندارد"
 	}
 
 	if encPhone.Valid && encPhone.String != "" {
-		rep.ReporterPhone, _ = DecryptAES(encPhone.String)
+		if dec, err := DecryptAES(encPhone.String); err == nil {
+			rep.ReporterPhone = dec
+		} else {
+			rep.ReporterPhone = "[خطای رمزگشایی]"
+		}
 	} else {
 		rep.ReporterPhone = "ندارد"
 	}
 
 	if encDesc.Valid && encDesc.String != "" {
-		rep.Description, _ = DecryptAES(encDesc.String)
+		if dec, err := DecryptAES(encDesc.String); err == nil {
+			rep.Description = dec
+		} else {
+			rep.Description = "[خطای رمزگشایی - اصالت محتوا تأیید نشد]"
+		}
 	} else {
 		rep.Description = "ندارد"
 	}
@@ -631,7 +643,11 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encResponse.Valid && encResponse.String != "" {
-		rep.AdminResponse, _ = DecryptAES(encResponse.String)
+		if dec, err := DecryptAES(encResponse.String); err == nil {
+			rep.AdminResponse = dec
+		} else {
+			rep.AdminResponse = "[خطای رمزگشایی]"
+		}
 	} else {
 		rep.AdminResponse = ""
 	}
@@ -1824,6 +1840,8 @@ func TerminateSessionHandler(w http.ResponseWriter, r *http.Request) {
 	Sessions.kickedTokens[req.Token] = "TERMINATED_BY_SUPERUSER"
 	Sessions.mu.Unlock()
 
+	GlobalSSEBroker.BroadcastSessionRevoked(targetUsername, tokenHash)
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "نشست کاربر با موفقیت خاتمه یافت."}`))
 }
@@ -2867,7 +2885,12 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	description, _ := DecryptAES(encDesc)
+	description := ""
+	if dec, err := DecryptAES(encDesc); err == nil {
+		description = dec
+	} else {
+		description = "[خطای رمزگشایی - اصالت محتوا تأیید نشد]"
+	}
 	reporterName := "ثبت نشده"
 	if encName.Valid && encName.String != "" {
 		if dec, err := DecryptAES(encName.String); err == nil && dec != "" {
@@ -3115,6 +3138,8 @@ func SubmitRegionalResponseHandler(w http.ResponseWriter, r *http.Request) {
 		req.ReportID,
 		trackingCode,
 	)
+
+	GlobalSSEBroker.BroadcastRegionalResponse(req.ReportID)
 
 	logAudit(admin.Username, admin.Title, "SUBMIT_REGIONAL_RESPONSE", &req.ReportID, getIP(r))
 

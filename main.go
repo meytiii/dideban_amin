@@ -11,7 +11,7 @@ import (
 func secureHeadersMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		w.Header().Set("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self';")
+		w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("X-Frame-Options", "DENY")
 		if isCookieSecure() {
@@ -21,7 +21,6 @@ func secureHeadersMiddleware(next http.Handler) http.Handler {
 		w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
 		w.Header().Set("Permissions-Policy", "geolocation=(), microphone=(), camera=(), payment=()")
 
-		// Dynamic CORS based on HERASAT_ALLOWED_ORIGINS (M-10)
 		origin := r.Header.Get("Origin")
 		allowedOriginsEnv := os.Getenv("HERASAT_ALLOWED_ORIGINS")
 		if origin != "" && allowedOriginsEnv != "" {
@@ -52,6 +51,10 @@ func healthCheck(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	InitSyslogShipper()
+	defer GlobalSyslogShipper.Close()
+	defer GlobalSSEBroker.Close()
+
 	certFile := os.Getenv("HERASAT_TLS_CERT")
 	keyFile := os.Getenv("HERASAT_TLS_KEY")
 	tlsConfigured := certFile != "" && keyFile != ""
@@ -133,6 +136,11 @@ func main() {
 	mux.HandleFunc("POST /api/report/follow-up", RateLimitMiddleware(submitLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(SubmitFollowUpHandler))))
 
 	mux.HandleFunc("POST /api/admin/login", RateLimitMiddleware(loginLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(LoginHandler))))
+	mux.HandleFunc("POST /api/admin/login/verify-mfa", RateLimitMiddleware(loginLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(VerifyMFAHandler))))
+	mux.HandleFunc("GET /api/admin/events", AdminAuthMiddleware(AdminEventsHandler))
+	mux.HandleFunc("POST /api/admin/2fa/setup", AdminAuthMiddleware(CSRFMiddleware(Setup2FAHandler)))
+	mux.HandleFunc("POST /api/admin/2fa/enable", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(Enable2FAHandler)))))
+	mux.HandleFunc("POST /api/admin/2fa/disable", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(Disable2FAHandler)))))
 	mux.HandleFunc("POST /api/admin/logout", LogoutHandler)
 	mux.HandleFunc("GET /api/admin/me", AdminAuthMiddleware(GetCurrentAdminHandler))
 	mux.HandleFunc("POST /api/admin/toggle-read", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(ToggleReadStatusHandler)))))

@@ -165,6 +165,27 @@ func runMigrations() {
 		) THEN
 			ALTER TABLE reports ADD COLUMN classified_at TIMESTAMPTZ DEFAULT NULL;
 		END IF;
+
+		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'admin_users' AND column_name = 'totp_secret'
+		) THEN
+			ALTER TABLE admin_users ADD COLUMN totp_secret TEXT DEFAULT NULL;
+		END IF;
+
+		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'admin_users' AND column_name = 'totp_enabled'
+		) THEN
+			ALTER TABLE admin_users ADD COLUMN totp_enabled BOOLEAN NOT NULL DEFAULT FALSE;
+		END IF;
+
+		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'admin_users' AND column_name = 'totp_enforced'
+		) THEN
+			ALTER TABLE admin_users ADD COLUMN totp_enforced BOOLEAN NOT NULL DEFAULT FALSE;
+		END IF;
 	END $$;
 
 	-- Create report_forwardings table for report assignments and visual history

@@ -92,37 +92,53 @@ func encryptWithKey(key []byte, prefix, plaintext string) (string, error) {
 	return prefix + base64.StdEncoding.EncodeToString(ciphertext), nil
 }
 
+var (
+	ErrAuthenticationFailed = errors.New("cryptographic authentication failure")
+	ErrInvalidCiphertext   = errors.New("invalid ciphertext format")
+)
+
 func DecryptAES(rawCiphertext string) (string, error) {
 	if rawCiphertext == "" {
 		return "", nil
 	}
 
-	// 1. File path subkey (v2:p:)
 	if strings.HasPrefix(rawCiphertext, "v2:p:") {
-		return decryptWithKey(keyFilePath, strings.TrimPrefix(rawCiphertext, "v2:p:"))
+		res, err := decryptWithKey(keyFilePath, strings.TrimPrefix(rawCiphertext, "v2:p:"))
+		if err != nil {
+			return "", fmt.Errorf("%w: %v", ErrAuthenticationFailed, err)
+		}
+		return res, nil
 	}
 
-	// 2. Report fields subkey (v2:f: or generic v2:)
 	if strings.HasPrefix(rawCiphertext, "v2:f:") {
-		return decryptWithKey(keyFields, strings.TrimPrefix(rawCiphertext, "v2:f:"))
+		res, err := decryptWithKey(keyFields, strings.TrimPrefix(rawCiphertext, "v2:f:"))
+		if err != nil {
+			return "", fmt.Errorf("%w: %v", ErrAuthenticationFailed, err)
+		}
+		return res, nil
 	}
 	if strings.HasPrefix(rawCiphertext, "v2:") {
-		return decryptWithKey(keyFields, strings.TrimPrefix(rawCiphertext, "v2:"))
+		res, err := decryptWithKey(keyFields, strings.TrimPrefix(rawCiphertext, "v2:"))
+		if err != nil {
+			return "", fmt.Errorf("%w: %v", ErrAuthenticationFailed, err)
+		}
+		return res, nil
 	}
 
-	// 3. Legacy master key (v1:)
 	if strings.HasPrefix(rawCiphertext, "v1:") {
-		return decryptWithKey(aesKey, strings.TrimPrefix(rawCiphertext, "v1:"))
+		res, err := decryptWithKey(aesKey, strings.TrimPrefix(rawCiphertext, "v1:"))
+		if err != nil {
+			return "", fmt.Errorf("%w: %v", ErrAuthenticationFailed, err)
+		}
+		return res, nil
 	}
 
-	// 4. Raw base64 with master key, or plaintext fallback
 	decrypted, err := decryptWithKey(aesKey, rawCiphertext)
 	if err == nil {
 		return decrypted, nil
 	}
 
-	// Legacy unencrypted plaintext fallback
-	return rawCiphertext, nil
+	return "", ErrAuthenticationFailed
 }
 
 func DecryptFilePath(rawCiphertext string) (string, error) {
@@ -182,14 +198,16 @@ func EncryptFileBytes(rawBytes []byte) ([]byte, error) {
 }
 
 func DecryptFileBytes(encryptedBytes []byte) ([]byte, error) {
+	if len(encryptedBytes) == 0 {
+		return nil, ErrAuthenticationFailed
+	}
 	if bytes.HasPrefix(encryptedBytes, []byte("HENC\x02")) {
 		return decryptFilePayload(keyFileBlob, encryptedBytes, 5)
 	}
 	if bytes.HasPrefix(encryptedBytes, []byte("HENC\x01")) {
 		return decryptFilePayload(aesKey, encryptedBytes, 5)
 	}
-	// Plaintext fallback
-	return encryptedBytes, nil
+	return nil, ErrAuthenticationFailed
 }
 
 func decryptFilePayload(key []byte, encryptedBytes []byte, headerLen int) ([]byte, error) {
@@ -213,7 +231,7 @@ func decryptFilePayload(key []byte, encryptedBytes []byte, headerLen int) ([]byt
 
 	plaintext, err := aesgcm.Open(nil, nonce, ciphertext, nil)
 	if err != nil {
-		return nil, fmt.Errorf("file decryption authentication failure: %w", err)
+		return nil, fmt.Errorf("%w: %v", ErrAuthenticationFailed, err)
 	}
 
 	return plaintext, nil

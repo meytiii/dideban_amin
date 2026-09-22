@@ -53,16 +53,18 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("-> LOGIN ATTEMPT: Username='%s'", creds.Username)
 
-	var storedHash, fullName, roleTitle, role string
-	var isSuperuser bool
+	var storedHash, fullName, roleTitle, role, totpSecret string
+	var isSuperuser, totpEnabled bool
 	var passwordChangedAt time.Time
 	var mustChangePassword bool
 	err := DB.QueryRow(`
 		SELECT password_hash, COALESCE(full_name, ''), role_title, COALESCE(role, 'edare_kol'), is_superuser,
-		       COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false)
+		       COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false),
+		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false)
 		FROM admin_users
 		WHERE username=$1 AND is_active=true`, creds.Username).Scan(
-		&storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword)
+		&storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword,
+		&totpSecret, &totpEnabled)
 	if err != nil {
 		log.Printf("-> LOGIN FAILED: Database error or user not found: %v", err)
 		if _, justLocked := Lockouts.RecordFailure(creds.Username); justLocked {
@@ -89,6 +91,24 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			_, _ = DB.Exec(`UPDATE admin_users SET password_hash = $1 WHERE username = $2`, newHash, creds.Username)
 			logAudit(creds.Username, roleTitle, "PASSWORD_REHASHED", nil, getIP(r))
 		}
+	}
+
+	if totpEnabled && totpSecret != "" {
+		mfaToken, err := GenerateMFAPendingToken(creds.Username)
+		if err != nil {
+			http.Error(w, "خطای تولید شناسه ورود دومرحله‌ای", http.StatusInternalServerError)
+			return
+		}
+
+		logAudit(creds.Username, roleTitle, "MFA_REQUIRED", nil, getIP(r))
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status":    "mfa_required",
+			"mfa_token": mfaToken,
+		})
+		return
 	}
 
 	isPasswordExpired := time.Since(passwordChangedAt) > 30*24*time.Hour
@@ -161,10 +181,11 @@ func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 	var passwordChangedAt time.Time
 	var mustChangePassword bool
 	var dbRole string
+	var totpEnabled bool
 	_ = DB.QueryRow(`
-		SELECT COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false), COALESCE(role, 'edare_kol')
+		SELECT COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false), COALESCE(role, 'edare_kol'), COALESCE(totp_enabled, false)
 		FROM admin_users
-		WHERE username = $1`, admin.Username).Scan(&passwordChangedAt, &mustChangePassword, &dbRole)
+		WHERE username = $1`, admin.Username).Scan(&passwordChangedAt, &mustChangePassword, &dbRole, &totpEnabled)
 
 	if dbRole != "" {
 		admin.Role = dbRole
@@ -184,6 +205,7 @@ func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 		"must_change_password":   requiresPasswordChange,
 		"is_password_expired":    isPasswordExpired,
 		"password_changed_at":    passwordChangedAt.Format(time.RFC3339),
+		"totp_enabled":           totpEnabled,
 	})
 }
 
@@ -258,6 +280,7 @@ func getIP(r *http.Request) string {
 }
 
 func logAudit(username, title, action string, targetID *int64, ip string) error {
+	ShipSyslogAudit(username, action, targetID, ip)
 	if DB == nil {
 		atomic.AddUint64(&auditFailures, 1)
 		log.Printf("CRITICAL AUDIT LOG FAILURE: DB is nil (user=%s, action=%s)", username, action)
@@ -275,6 +298,7 @@ func logAudit(username, title, action string, targetID *int64, ip string) error 
 }
 
 func logAuditTx(tx *sql.Tx, username, title, action string, targetID *int64, ip string) error {
+	ShipSyslogAudit(username, action, targetID, ip)
 	if tx == nil {
 		atomic.AddUint64(&auditFailures, 1)
 		log.Printf("CRITICAL AUDIT LOG TX FAILURE: tx is nil (user=%s, action=%s)", username, action)

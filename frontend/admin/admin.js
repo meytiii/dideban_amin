@@ -597,14 +597,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                try {
-                    const loginClone = response.clone();
-                    loginClone.json().then(data => {
-                        if (data && data.csrf_token) {
-                            sessionStorage.setItem('herasat_csrf', data.csrf_token);
-                        }
-                    }).catch(() => {});
-                } catch (e) {}
+                const data = await response.clone().json().catch(() => null);
+                if (data && data.status === 'mfa_required') {
+                    showMFAStep(data.mfa_token);
+                    return;
+                }
+                if (data && data.csrf_token) {
+                    sessionStorage.setItem('herasat_csrf', data.csrf_token);
+                }
                 if (loginSection) {
                     loginSection.classList.add('d-none');
                     loginSection.style.display = 'none';
@@ -614,11 +614,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     dashboardSection.style.display = 'block';
                 }
                 startSessionTimer();
-                // [HARDEN-6] [HARDEN-7] Connect SSE stream instead of 8s polling heartbeat
                 connectAdminSSE();
                 await checkAdminProfile();
                 switchMainTab('reports');
-                // [PERF-FIX-30] Fetch non-critical notifications in idle window
                 runWhenIdle(fetchNotifications);
             } else {
                 const errText = await response.text();
@@ -636,6 +634,294 @@ document.addEventListener('DOMContentLoaded', () => {
             if (btnSpinner) btnSpinner.classList.add('d-none');
         }
     });
+
+    let mfaCountdownInterval = null;
+
+    function showMFAStep(token) {
+        const mfaStep = document.getElementById('mfaStepContainer');
+        const mfaPendingToken = document.getElementById('mfa_pending_token');
+        const mfaTotpCode = document.getElementById('mfa_totp_code');
+        const mfaMsg = document.getElementById('mfaMessage');
+        const countdownEl = document.getElementById('mfaCountdownText');
+
+        if (loginForm) loginForm.style.display = 'none';
+        if (loginMessage) loginMessage.style.display = 'none';
+        if (mfaStep) mfaStep.style.display = 'block';
+        if (mfaPendingToken) mfaPendingToken.value = token;
+        if (mfaTotpCode) {
+            mfaTotpCode.value = '';
+            mfaTotpCode.focus();
+        }
+        if (mfaMsg) mfaMsg.style.display = 'none';
+
+        let secondsRemaining = 180;
+        if (mfaCountdownInterval) clearInterval(mfaCountdownInterval);
+        mfaCountdownInterval = setInterval(() => {
+            secondsRemaining--;
+            if (secondsRemaining <= 0) {
+                clearInterval(mfaCountdownInterval);
+                if (mfaMsg) {
+                    mfaMsg.textContent = 'زمان اعتبار کد منقضی شد. لطفاً مجدداً وارد شوید.';
+                    mfaMsg.className = 'response-box error';
+                    mfaMsg.style.display = 'block';
+                }
+                setTimeout(cancelMFAStep, 2000);
+            } else if (countdownEl) {
+                const m = Math.floor(secondsRemaining / 60);
+                const s = secondsRemaining % 60;
+                countdownEl.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            }
+        }, 1000);
+    }
+
+    function cancelMFAStep() {
+        if (mfaCountdownInterval) clearInterval(mfaCountdownInterval);
+        const mfaStep = document.getElementById('mfaStepContainer');
+        if (mfaStep) mfaStep.style.display = 'none';
+        if (loginForm) loginForm.style.display = 'block';
+        loadAdminCaptcha();
+    }
+
+    const btnCancelMFA = document.getElementById('btnCancelMFA');
+    if (btnCancelMFA) {
+        btnCancelMFA.addEventListener('click', cancelMFAStep);
+    }
+
+    const mfaForm = document.getElementById('mfaForm');
+    if (mfaForm) {
+        mfaForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const mfaPendingToken = document.getElementById('mfa_pending_token');
+            const mfaTotpCode = document.getElementById('mfa_totp_code');
+            const mfaMsg = document.getElementById('mfaMessage');
+            const mfaSubmitBtn = document.getElementById('mfaSubmitBtn');
+
+            const token = mfaPendingToken ? mfaPendingToken.value : '';
+            const code = mfaTotpCode ? mfaTotpCode.value.trim() : '';
+
+            if (code.length !== 6) {
+                if (mfaMsg) {
+                    mfaMsg.textContent = 'لطفاً کد ۶ رقمی امنیتی را به صورت کامل وارد نمایید.';
+                    mfaMsg.className = 'response-box error';
+                    mfaMsg.style.display = 'block';
+                }
+                return;
+            }
+
+            if (mfaSubmitBtn) mfaSubmitBtn.disabled = true;
+            if (mfaMsg) mfaMsg.style.display = 'none';
+
+            try {
+                const res = await adminFetch('/api/admin/login/verify-mfa', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mfa_token: token, totp_code: code })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.csrf_token) {
+                        sessionStorage.setItem('herasat_csrf', data.csrf_token);
+                    }
+                    if (mfaCountdownInterval) clearInterval(mfaCountdownInterval);
+                    const mfaStep = document.getElementById('mfaStepContainer');
+                    if (mfaStep) mfaStep.style.display = 'none';
+                    if (loginSection) {
+                        loginSection.classList.add('d-none');
+                        loginSection.style.display = 'none';
+                    }
+                    if (dashboardSection) {
+                        dashboardSection.classList.remove('d-none');
+                        dashboardSection.style.display = 'block';
+                    }
+                    startSessionTimer();
+                    connectAdminSSE();
+                    await checkAdminProfile();
+                    switchMainTab('reports');
+                    runWhenIdle(fetchNotifications);
+                } else {
+                    const errText = await res.text();
+                    if (mfaMsg) {
+                        mfaMsg.textContent = errText || 'کد امنیتی اشتباه است یا منقضی شده است.';
+                        mfaMsg.className = 'response-box error';
+                        mfaMsg.style.display = 'block';
+                    }
+                }
+            } catch (err) {
+                if (mfaMsg) {
+                    mfaMsg.textContent = 'خطای ارتباط با سرور.';
+                    mfaMsg.className = 'response-box error';
+                    mfaMsg.style.display = 'block';
+                }
+            } finally {
+                if (mfaSubmitBtn) mfaSubmitBtn.disabled = false;
+            }
+        });
+    }
+
+    const btnOpen2FAModal = document.getElementById('btnOpen2FAModal');
+    const modal2FA = document.getElementById('modal-2fa-management');
+    const btnClose2FAModal = document.getElementById('btn-close-2fa-modal');
+    const btnStartSetup2FA = document.getElementById('btn-start-setup-2fa');
+    const btnStartDisable2FA = document.getElementById('btn-start-disable-2fa');
+    const setupSection2FA = document.getElementById('2fa-setup-section');
+    const disableSection2FA = document.getElementById('2fa-disable-section');
+    const initialActions2FA = document.getElementById('2fa-initial-actions');
+    const formEnable2FA = document.getElementById('form-enable-2fa');
+    const formDisable2FA = document.getElementById('form-disable-2fa');
+    const btnCancelSetup2FA = document.getElementById('btn-cancel-setup-2fa');
+    const btnCancelDisable2FA = document.getElementById('btn-cancel-disable-2fa');
+
+    let currentAdmin2FAEnabled = false;
+
+    if (btnOpen2FAModal) {
+        btnOpen2FAModal.addEventListener('click', async () => {
+            if (modal2FA) modal2FA.style.display = 'flex';
+            reset2FAModalViews();
+            await refresh2FAStatus();
+        });
+    }
+
+    function reset2FAModalViews() {
+        if (setupSection2FA) setupSection2FA.style.display = 'none';
+        if (disableSection2FA) disableSection2FA.style.display = 'none';
+        if (initialActions2FA) initialActions2FA.style.display = 'flex';
+        const enableMsg = document.getElementById('enable-2fa-status');
+        if (enableMsg) enableMsg.style.display = 'none';
+        const disableMsg = document.getElementById('disable-2fa-status');
+        if (disableMsg) disableMsg.style.display = 'none';
+    }
+
+    async function refresh2FAStatus() {
+        try {
+            const res = await adminFetch('/api/admin/me');
+            if (res.ok) {
+                const data = await res.json();
+                currentAdmin2FAEnabled = !!data.totp_enabled;
+                const activeBanner = document.getElementById('2fa-active-banner');
+                const inactiveBanner = document.getElementById('2fa-inactive-banner');
+                if (currentAdmin2FAEnabled) {
+                    if (activeBanner) activeBanner.style.display = 'block';
+                    if (inactiveBanner) inactiveBanner.style.display = 'none';
+                    if (btnStartSetup2FA) btnStartSetup2FA.style.display = 'none';
+                    if (btnStartDisable2FA) btnStartDisable2FA.style.display = 'inline-flex';
+                } else {
+                    if (activeBanner) activeBanner.style.display = 'none';
+                    if (inactiveBanner) inactiveBanner.style.display = 'block';
+                    if (btnStartSetup2FA) btnStartSetup2FA.style.display = 'inline-flex';
+                    if (btnStartDisable2FA) btnStartDisable2FA.style.display = 'none';
+                }
+            }
+        } catch (_) {}
+    }
+
+    if (btnClose2FAModal) {
+        btnClose2FAModal.addEventListener('click', () => {
+            if (modal2FA) modal2FA.style.display = 'none';
+        });
+    }
+    if (btnCancelSetup2FA) {
+        btnCancelSetup2FA.addEventListener('click', reset2FAModalViews);
+    }
+    if (btnCancelDisable2FA) {
+        btnCancelDisable2FA.addEventListener('click', reset2FAModalViews);
+    }
+
+    if (btnStartSetup2FA) {
+        btnStartSetup2FA.addEventListener('click', async () => {
+            try {
+                const res = await adminFetch('/api/admin/2fa/setup', { method: 'POST' });
+                if (res.ok) {
+                    const data = await res.json();
+                    const secretDisplay = document.getElementById('2fa-secret-display');
+                    const hiddenSecret = document.getElementById('enable_2fa_secret');
+                    if (secretDisplay) secretDisplay.textContent = data.secret;
+                    if (hiddenSecret) hiddenSecret.value = data.secret;
+                    if (setupSection2FA) setupSection2FA.style.display = 'block';
+                    if (initialActions2FA) initialActions2FA.style.display = 'none';
+                } else {
+                    showToast('خطا در ایجاد کلید احراز هویت دومرحله‌ای', 3000, 'error');
+                }
+            } catch (_) {
+                showToast('خطای ارتباط با سرور', 3000, 'error');
+            }
+        });
+    }
+
+    if (formEnable2FA) {
+        formEnable2FA.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const secret = document.getElementById('enable_2fa_secret').value;
+            const code = document.getElementById('enable_2fa_code').value.trim();
+            const statusEl = document.getElementById('enable-2fa-status');
+            try {
+                const res = await adminFetch('/api/admin/2fa/enable', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ secret, totp_code: code })
+                });
+                if (res.ok) {
+                    showToast('احراز هویت دومرحله‌ای با موفقیت فعال شد', 4000, 'success');
+                    reset2FAModalViews();
+                    await refresh2FAStatus();
+                } else {
+                    const err = await res.text();
+                    if (statusEl) {
+                        statusEl.textContent = err || 'کد امنیتی تأیید نشد.';
+                        statusEl.className = 'response-box error';
+                        statusEl.style.display = 'block';
+                    }
+                }
+            } catch (_) {
+                if (statusEl) {
+                    statusEl.textContent = 'خطای ارتباط با سرور.';
+                    statusEl.className = 'response-box error';
+                    statusEl.style.display = 'block';
+                }
+            }
+        });
+    }
+
+    if (btnStartDisable2FA) {
+        btnStartDisable2FA.addEventListener('click', () => {
+            if (disableSection2FA) disableSection2FA.style.display = 'block';
+            if (initialActions2FA) initialActions2FA.style.display = 'none';
+        });
+    }
+
+    if (formDisable2FA) {
+        formDisable2FA.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const pwd = document.getElementById('disable_2fa_pwd').value;
+            const code = document.getElementById('disable_2fa_code').value.trim();
+            const statusEl = document.getElementById('disable-2fa-status');
+            try {
+                const res = await adminFetch('/api/admin/2fa/disable', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pwd, totp_code: code })
+                });
+                if (res.ok) {
+                    showToast('احراز هویت دومرحله‌ای غیرفعال شد', 4000, 'info');
+                    reset2FAModalViews();
+                    await refresh2FAStatus();
+                } else {
+                    const err = await res.text();
+                    if (statusEl) {
+                        statusEl.textContent = err || 'اطلاعات وارد شده صحیح نمی‌باشد.';
+                        statusEl.className = 'response-box error';
+                        statusEl.style.display = 'block';
+                    }
+                }
+            } catch (_) {
+                if (statusEl) {
+                    statusEl.textContent = 'خطای ارتباط با سرور.';
+                    statusEl.className = 'response-box error';
+                    statusEl.style.display = 'block';
+                }
+            }
+        });
+    }
 
     let allReports = [];
     let filteredReports = [];

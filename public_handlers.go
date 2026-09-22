@@ -280,11 +280,42 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
+			clam := NewClamAVScanner()
+			if clam.IsEnabled() {
+				clean, _, scanErr := clam.ScanBytes(rawBytes)
+				if scanErr != nil {
+					if errors.Is(scanErr, ErrMalwareDetected) {
+						logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_MALICIOUS_FILE", nil, getIP(r))
+						cleanupDiskFiles()
+						http.Error(w, "فایل ارسالی آلوده به بدافزار تشخیص داده شد", http.StatusBadRequest)
+						return
+					}
+					logAudit("system", "ANTIVIRUS", "CLAMAV_SERVICE_UNAVAILABLE", nil, getIP(r))
+					cleanupDiskFiles()
+					http.Error(w, "سامانه اسکن امنیتی موقتاً در دسترس نیست.", http.StatusServiceUnavailable)
+					return
+				}
+				if !clean {
+					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_MALICIOUS_FILE", nil, getIP(r))
+					cleanupDiskFiles()
+					http.Error(w, "فایل ارسالی آلوده به بدافزار تشخیص داده شد", http.StatusBadRequest)
+					return
+				}
+			}
+
+			sanitizedBytes, err := SanitizeAttachment(header.Filename, mimeType, rawBytes)
+			if err != nil {
+				cleanupDiskFiles()
+				http.Error(w, "خطا در پردازش و اعتبارسنجی ساختار فایل", http.StatusBadRequest)
+				return
+			}
+			canonicalBytes := sanitizedBytes
+
 			hasher := sha256.New()
-			hasher.Write(rawBytes)
+			hasher.Write(canonicalBytes)
 			fileHash := hex.EncodeToString(hasher.Sum(nil))
 
-			encryptedBytes, err := EncryptFileBytes(rawBytes)
+			encryptedBytes, err := EncryptFileBytes(canonicalBytes)
 			if err != nil {
 				cleanupDiskFiles()
 				http.Error(w, "File encryption failure", http.StatusInternalServerError)
@@ -307,7 +338,7 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 			_, err = tx.Exec(`
 				INSERT INTO evidence_files (report_id, file_path, file_hash, mime_type, file_name, file_size)
 				VALUES ($1, $2, $3, $4, $5, $6)`,
-				reportID, encPath, fileHash, mimeType, encFileName, int64(len(rawBytes)))
+				reportID, encPath, fileHash, mimeType, encFileName, int64(len(canonicalBytes)))
 			if err != nil {
 				_, err2 := tx.Exec(`
 					INSERT INTO evidence_files (report_id, file_path, file_hash, mime_type)
@@ -327,6 +358,8 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to commit report", http.StatusInternalServerError)
 		return
 	}
+
+	GlobalSSEBroker.BroadcastNewReport(reportID)
 
 	_, _ = DB.Exec(`
 		INSERT INTO admin_notifications (notif_type, title, message, target_report_id, target_tracking_code)
@@ -518,7 +551,8 @@ func SubmitFollowUpHandler(w http.ResponseWriter, r *http.Request) {
 
 	_, _ = DB.Exec("UPDATE reports SET has_new_message = true, updated_at = NOW() WHERE id = $1", reportID)
 
-	// Broadcast notification to Central Admins
+	GlobalSSEBroker.BroadcastNewMessage(reportID)
+
 	_, _ = DB.Exec(`
 		INSERT INTO admin_notifications (notif_type, title, message, target_report_id, target_tracking_code, recipient_username)
 		VALUES ($1, $2, $3, $4, $5, NULL)`,
