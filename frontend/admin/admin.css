@@ -2676,12 +2676,42 @@ button {
 .response-box {
     margin-top: 15px;
     padding: 14px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     text-align: center;
     font-size: 13.5px;
-    background: rgba(127, 29, 29, 0.3);
+    line-height: 1.6;
+    background: rgba(127, 29, 29, 0.25);
     color: #fca5a5;
     border: 1px solid rgba(248, 113, 113, 0.25);
+    transition: all var(--transition-fast);
+}
+
+.response-box.success {
+    background: rgba(16, 185, 129, 0.14) !important;
+    color: #6ee7b7 !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.12) !important;
+}
+
+.response-box.error {
+    background: rgba(239, 68, 68, 0.14) !important;
+    color: #fca5a5 !important;
+    border: 1px solid rgba(239, 68, 68, 0.35) !important;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.1) !important;
+}
+
+.response-box.warning {
+    background: rgba(245, 158, 11, 0.14) !important;
+    color: #fbbf24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.1) !important;
+}
+
+.response-box.info {
+    background: rgba(56, 189, 248, 0.12) !important;
+    color: #38bdf8 !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.1) !important;
 }
 
 .text-success { color: #86efac !important; }
