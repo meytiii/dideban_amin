@@ -17,11 +17,10 @@ func TestRoleDefinitionsAndRestrictions(t *testing.T) {
 		}
 	}
 
-	// navahi_manategh must not be superuser
 	nmSession := AdminSession{
-		Username: "nahie1",
-		FullName: "ارسلان میعادفر",
-		Role:     "navahi_manategh",
+		Username:    "nahie1",
+		FullName:    "ارسلان میعادفر",
+		Role:        "navahi_manategh",
 		IsSuperuser: false,
 	}
 
@@ -29,7 +28,6 @@ func TestRoleDefinitionsAndRestrictions(t *testing.T) {
 		t.Errorf("navahi_manategh session must not be superuser")
 	}
 
-	// Test canAdminAccessReport logic for superuser and edare_kol
 	superSession := AdminSession{Username: "admin_it", Role: "superuser", IsSuperuser: true}
 	edareKolSession := AdminSession{Username: "admin_herasat", Role: "edare_kol", IsSuperuser: false}
 
@@ -42,14 +40,13 @@ func TestRoleDefinitionsAndRestrictions(t *testing.T) {
 }
 
 func TestNavahiManateghClassificationForbidden(t *testing.T) {
-	// Test that navahi_manategh is blocked from calling ClassifyReportHandler
+
 	InitCrypto("01234567890123456789012345678901")
 
 	reqBody := `{"report_id": 1, "classification": "helpful"}`
 	req := httptest.NewRequest("POST", "/api/admin/report/classify", strings.NewReader(reqBody))
 	req.Header.Set("Content-Type", "application/json")
 
-	// Set context with navahi_manategh admin session
 	nmSession := AdminSession{
 		Username:    "nahie1",
 		FullName:    "ارسلان میعادفر",
@@ -72,7 +69,7 @@ func TestNavahiManateghClassificationForbidden(t *testing.T) {
 }
 
 func TestForwardingRequestValidation(t *testing.T) {
-	// Test that ForwardReportHandler rejects invalid / empty recipients
+
 	reqBody := `{"report_id": 1, "recipient_ids": []}`
 	req := httptest.NewRequest("POST", "/api/admin/report/forward", strings.NewReader(reqBody))
 	req.Header.Set("Content-Type", "application/json")
@@ -93,7 +90,6 @@ func TestForwardingRequestValidation(t *testing.T) {
 		t.Fatalf("Expected 400 Bad Request when recipient list is empty, got: %d", rr.Code)
 	}
 
-	// Test that navahi_manategh is blocked from forwarding
 	nmReq := httptest.NewRequest("POST", "/api/admin/report/forward", strings.NewReader(`{"report_id": 1, "recipient_ids": [7]}`))
 	nmSession := AdminSession{
 		Username:    "nahie1",
@@ -147,7 +143,7 @@ func TestForwardHistorySerialization(t *testing.T) {
 }
 
 func TestNavahiManateghNotificationScoping(t *testing.T) {
-	// Verify notification filtering rules
+
 	items := []AdminNotificationItem{
 		{
 			ID:                 1,
@@ -173,15 +169,13 @@ func TestNavahiManateghNotificationScoping(t *testing.T) {
 	*items[1].TargetReportID = 100
 	*items[1].TargetTrackingCode = "HMD-100"
 
-	// navahi_manategh admin 'nahie1'
 	nmUsername := "nahie1"
 	recipUsernameNotif2 := "nahie1"
 
-	// navahi_manategh MUST NOT receive general 'new_report'
 	visibleForNahie1 := []AdminNotificationItem{}
 	for _, it := range items {
 		if it.NotifType == "new_report" {
-			// Not forwarded, must not be visible
+
 			continue
 		}
 		if it.NotifType == "report_forwarded" && recipUsernameNotif2 == nmUsername {
@@ -208,7 +202,6 @@ func TestNavahiManateghRestrictions(t *testing.T) {
 		IsSuperuser: false,
 	}
 
-	// 1. Test RespondToReportHandler blocked
 	reqResp := httptest.NewRequest("POST", "/api/admin/respond", strings.NewReader(`{"report_id": 10, "response": "پاسخ تستی"}`))
 	reqResp = reqResp.WithContext(withAdminContext(reqResp.Context(), nmSession))
 	rrResp := httptest.NewRecorder()
@@ -221,7 +214,6 @@ func TestNavahiManateghRestrictions(t *testing.T) {
 		t.Errorf("Expected 'شما به این قسمت دسترسی ندارید' in response, got: %s", rrResp.Body.String())
 	}
 
-	// 2. Test UpdateInternalNotesHandler blocked
 	reqNotes := httptest.NewRequest("POST", "/api/admin/report/internal-notes", strings.NewReader(`{"report_id": 10, "internal_notes": "یادداشت تستی"}`))
 	reqNotes = reqNotes.WithContext(withAdminContext(reqNotes.Context(), nmSession))
 	rrNotes := httptest.NewRecorder()
@@ -234,7 +226,6 @@ func TestNavahiManateghRestrictions(t *testing.T) {
 		t.Errorf("Expected 'شما به این قسمت دسترسی ندارید' in notes response, got: %s", rrNotes.Body.String())
 	}
 
-	// 4. Test SetReportPriorityHandler blocked
 	reqPrio := httptest.NewRequest("POST", "/api/admin/report/set-priority", strings.NewReader(`{"report_id": 10, "priority": "urgent"}`))
 	reqPrio = reqPrio.WithContext(withAdminContext(reqPrio.Context(), nmSession))
 	rrPrio := httptest.NewRecorder()
@@ -248,7 +239,6 @@ func TestNavahiManateghRestrictions(t *testing.T) {
 	}
 }
 
-// helper
 func withAdminContext(ctx interface{ Value(any) any }, session AdminSession) contextWithAdmin {
 	return contextWithAdmin{ctx: ctx, session: session}
 }
@@ -269,7 +259,7 @@ func (c contextWithAdmin) Value(key any) any {
 }
 
 func TestRegionalResponseWorkflow(t *testing.T) {
-	// 1. Test validation on SubmitRegionalResponseHandler (empty response)
+
 	nmSession := AdminSession{
 		Username:    "nahie1",
 		FullName:    "ارسلان میعادفر",
@@ -286,7 +276,6 @@ func TestRegionalResponseWorkflow(t *testing.T) {
 		t.Errorf("Expected 400 Bad Request for empty regional response, got %d", rrEmpty.Code)
 	}
 
-	// 2. Test serialization of RegionalResponseItem and ReportDetail
 	now := time.Now()
 	regItem := RegionalResponseItem{
 		ID:                5,
@@ -333,7 +322,7 @@ type RepDetailTest struct {
 }
 
 func TestRemoveForwardingSecurity(t *testing.T) {
-	// 1. Regional admin (navahi_manategh) MUST be forbidden from revoking forwardings
+
 	nmSession := AdminSession{
 		Username:    "nahie1",
 		FullName:    "ارسلان میعادفر",
@@ -353,7 +342,6 @@ func TestRemoveForwardingSecurity(t *testing.T) {
 		t.Errorf("Expected permission error message, got: %s", rrNM.Body.String())
 	}
 
-	// 2. Central Admin with empty request payload receives 400 Bad Request
 	edareKolSession := AdminSession{
 		Username:    "admin_herasat",
 		FullName:    "حمیدرضا طاهری‌مجد",
@@ -370,7 +358,6 @@ func TestRemoveForwardingSecurity(t *testing.T) {
 		t.Errorf("Expected 400 Bad Request for empty RemoveForwarding payload, got %d", rrEmpty.Code)
 	}
 }
-
 
 func TestForwardHistoryItemWithRegionalResponse(t *testing.T) {
 	now := time.Now()
@@ -438,4 +425,3 @@ func TestReportSummaryRegionalResponseSerialization(t *testing.T) {
 		t.Errorf("Expected HasAnyRegionalResponse=true, got false")
 	}
 }
-

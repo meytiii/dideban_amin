@@ -14,7 +14,7 @@ interface AccordionItemProps {
 
 const AccordionItem = ({ value, title, content, icon, isOpen, onToggle }: AccordionItemProps) => {
   return (
-    <div 
+    <div
       className={`border rounded-2xl px-5 transition-all duration-300 ${
         isOpen
           ? 'bg-slate-900/80 border-blue-500/40 shadow-lg shadow-blue-500/5'
@@ -29,8 +29,8 @@ const AccordionItem = ({ value, title, content, icon, isOpen, onToggle }: Accord
         <div className="flex items-center gap-3 pr-1 min-w-0">
           {icon && (
             <div className={`p-2 rounded-xl border transition-colors ${
-              isOpen 
-                ? 'bg-blue-500/20 border-blue-500/40 text-blue-400' 
+              isOpen
+                ? 'bg-blue-500/20 border-blue-500/40 text-blue-400'
                 : 'bg-slate-800/60 border-slate-700/50 text-slate-400 group-hover:text-slate-300'
             }`}>
               {icon}
@@ -43,14 +43,14 @@ const AccordionItem = ({ value, title, content, icon, isOpen, onToggle }: Accord
           </span>
         </div>
 
-        <ChevronDown 
+        <ChevronDown
           className={`w-4.5 h-4.5 flex-shrink-0 text-slate-400 transition-transform duration-300 ${
             isOpen ? 'transform rotate-180 text-blue-400' : 'group-hover:text-slate-200'
           }`}
         />
       </button>
 
-      <div 
+      <div
         className={`overflow-hidden transition-all duration-300 ${
           isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
@@ -99,8 +99,8 @@ export function FAQAccordion() {
 
   return (
     <div className="w-full relative rounded-3xl overflow-hidden bg-slate-950 p-6 border border-slate-800/80">
-      {/* Orthogonal Grid Background */}
-      <div 
+
+      <div
         className="absolute inset-0 pointer-events-none opacity-20"
         style={{
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)',
@@ -108,7 +108,6 @@ export function FAQAccordion() {
         }}
       />
 
-      {/* Header */}
       <div className="relative z-10 mb-6 text-right">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-2.5">
           <HelpCircle className="w-3.5 h-3.5" />
@@ -122,7 +121,6 @@ export function FAQAccordion() {
         </p>
       </div>
 
-      {/* Accordion List */}
       <div className="relative z-10 space-y-1">
         {faqData.map((item) => (
           <AccordionItem

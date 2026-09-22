@@ -9,12 +9,9 @@ import (
 	"strings"
 )
 
-// reencryptLegacyData migrates existing database fields and file blobs from legacy v1 / unencrypted
-// formats to the HKDF-separated v2 format.
 func reencryptLegacyData(db *sql.DB) error {
 	log.Println("[MIGRATION-V2] Starting cryptographic key separation data migration...")
 
-	// 1. Migrate reports table
 	reportsMigrated := 0
 	rows, err := db.Query(`
 		SELECT id, description, reporter_name, reporter_phone, admin_response, internal_notes
@@ -159,7 +156,6 @@ func reencryptLegacyData(db *sql.DB) error {
 	}
 	log.Printf("[MIGRATION-V2] Migrated %d reports to v2 encryption.", reportsMigrated)
 
-	// 2. Migrate report_messages table
 	messagesMigrated := 0
 	msgRows, err := db.Query(`SELECT id, message FROM report_messages`)
 	if err == nil {
@@ -197,7 +193,6 @@ func reencryptLegacyData(db *sql.DB) error {
 	}
 	log.Printf("[MIGRATION-V2] Migrated %d messages to v2 encryption.", messagesMigrated)
 
-	// 3. Migrate evidence_files table & disk files
 	filesMigrated := 0
 	diskBlobsMigrated := 0
 	fileRows, err := db.Query(`SELECT id, file_path, file_name FROM evidence_files`)
@@ -218,10 +213,10 @@ func reencryptLegacyData(db *sql.DB) error {
 		fileRows.Close()
 
 		for _, fi := range fItems {
-			// Decrypt path to check on disk
+
 			realPath, decErr := DecryptFilePath(fi.encPath)
 			if decErr == nil && realPath != "" {
-				// Check disk blob
+
 				if fileData, readErr := os.ReadFile(realPath); readErr == nil {
 					if !bytes.HasPrefix(fileData, []byte("HENC\x02")) {
 						decBlob, decBlobErr := DecryptFileBytes(fileData)
@@ -242,7 +237,6 @@ func reencryptLegacyData(db *sql.DB) error {
 				}
 			}
 
-			// Check DB metadata
 			needsPathUpdate := !strings.HasPrefix(fi.encPath, "v2:p:")
 			needsNameUpdate := fi.fileName.Valid && fi.fileName.String != "" && !strings.HasPrefix(fi.fileName.String, "v2:p:")
 

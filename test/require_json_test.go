@@ -15,7 +15,6 @@ func TestRequireJSONMiddleware(t *testing.T) {
 
 	wrapped := RequireJSONMiddleware(dummyHandler)
 
-	// 1. Missing Content-Type
 	{
 		req := httptest.NewRequest("POST", "/api/admin/login", strings.NewReader(`{}`))
 		w := httptest.NewRecorder()
@@ -25,7 +24,6 @@ func TestRequireJSONMiddleware(t *testing.T) {
 		}
 	}
 
-	// 2. text/plain Content-Type
 	{
 		req := httptest.NewRequest("POST", "/api/admin/login", strings.NewReader(`{}`))
 		req.Header.Set("Content-Type", "text/plain")
@@ -36,7 +34,6 @@ func TestRequireJSONMiddleware(t *testing.T) {
 		}
 	}
 
-	// 3. application/x-www-form-urlencoded Content-Type
 	{
 		req := httptest.NewRequest("POST", "/api/admin/login", strings.NewReader(`username=admin`))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -47,7 +44,6 @@ func TestRequireJSONMiddleware(t *testing.T) {
 		}
 	}
 
-	// 4. application/json Content-Type
 	{
 		req := httptest.NewRequest("POST", "/api/admin/login", strings.NewReader(`{}`))
 		req.Header.Set("Content-Type", "application/json")
@@ -58,7 +54,6 @@ func TestRequireJSONMiddleware(t *testing.T) {
 		}
 	}
 
-	// 5. application/json; charset=utf-8 Content-Type
 	{
 		req := httptest.NewRequest("POST", "/api/admin/login", strings.NewReader(`{}`))
 		req.Header.Set("Content-Type", "application/json; charset=utf-8")

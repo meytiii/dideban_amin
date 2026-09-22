@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <!-- Luxury 3D Preloader Overlay (guaranteed >= 1.5s prestige animation) -->
+
     <div id="appPreloader" class="luxury-preloader" aria-label="در حال بارگذاری سامانه ستاد خبری" role="status">
         <div class="preloader-backdrop-glow"></div>
         <div class="preloader-content">
@@ -36,9 +36,7 @@
         </div>
     </div>
 
-    <!-- [HARDEN-9] aria-live for SR announcement -->
     <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="false"></div>
-
 
     <div id="draft-saved-indicator" class="draft-saved-indicator">
         <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"
@@ -58,7 +56,6 @@
             <h1>سامانه ستاد خبری و دریافت گزارشهای مردمی</h1>
             <p>اداره حراست آموزش و پرورش استان همدان</p>
         </header>
-
 
         <div class="top-nav-bar">
             <nav class="tabs-container" aria-label="تب‌های سامانه">
@@ -95,13 +92,9 @@
             </button>
         </div>
 
-
-
-
         <main id="submitSection">
             <form id="reportForm" enctype="multipart/form-data" novalidate>
 
-                <!-- [HARDEN-10] Proper list semantics and accessibility for step progression -->
                 <ol class="step-tracker" role="list" aria-label="مراحل ثبت گزارش">
                     <li class="step-item active" id="tracker-1" data-step="1" aria-current="step">
                         <div class="step-circle" aria-hidden="true"><span class="step-num">۱</span></div>
@@ -118,7 +111,6 @@
                         <div class="step-label">مستندات و ثبت</div>
                     </li>
                 </ol>
-
 
                 <div class="form-step active" id="step-1">
                     <div class="identity-notice-card">
@@ -159,7 +151,6 @@
                         </button>
                     </div>
                 </div>
-
 
                 <div class="form-step" id="step-2">
                     <div class="form-group custom-dropdown-wrapper">
@@ -361,18 +352,15 @@
                     </div>
                 </div>
 
-
                 <div class="form-step" id="step-3">
                     <div class="form-group">
                         <label for="evidence">پیوست مدارک و مستندات <span class="label-optional">(اختیاری - حداکثر ۲۰
                                 مگابایت)</span></label>
 
-
                         <div class="be-upload-container" id="be-upload-root">
                             <input type="file" id="evidence" name="evidence"
                                 accept=".pdf, .jpg, .jpeg, .png, .zip, .rar, application/zip, application/x-zip-compressed, application/x-rar-compressed, application/octet-stream"
                                 multiple class="sr-only-input">
-
 
                             <div class="be-dropzone centered" id="dropzone" role="button" tabindex="0"
                                 aria-label="بارگذاری مدارک و مستندات">
@@ -395,7 +383,6 @@
                                 </span>
                             </div>
 
-
                             <div class="be-file-queue d-none" id="be-file-queue">
                                 <div class="be-file-summary d-none" id="be-file-summary">
                                     <span class="be-file-summary-badge" id="be-file-summary-count">۰ فایل پیوست
@@ -412,7 +399,7 @@
                         <div class="captcha-row">
                             <div class="captcha-box">
                                 <img id="submit-captcha-img" src="" alt="کد امنیتی" class="captcha-img" width="130" height="48" decoding="async">
-                                <!-- [HARDEN-11] Accessible captcha refresh with aria-hidden icon -->
+
                                 <button type="button" id="submit-captcha-refresh" class="btn-refresh"
                                     data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
                                     <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
@@ -451,7 +438,6 @@
                     </div>
                 </div>
             </form>
-
 
             <div id="success-screen" class="d-none success-screen-container">
                 <div class="success-icon-wrapper">
@@ -507,10 +493,8 @@
                 </div>
             </div>
 
-            <!-- [HARDEN-9] aria-live for SR announcement -->
             <div id="responseMessage" class="response-box" role="status" style="display: none;"></div>
         </main>
-
 
         <section id="trackingSection" class="d-none">
             <form id="trackForm" style="margin-bottom: 25px;" novalidate>
@@ -562,7 +546,7 @@
                     <div class="captcha-row">
                         <div class="captcha-box">
                             <img id="track-captcha-img" src="" alt="کد امنیتی" class="captcha-img" width="130" height="48" loading="lazy" decoding="async">
-                            <!-- [HARDEN-11] Accessible captcha refresh with aria-hidden icon -->
+
                             <button type="button" id="track-captcha-refresh" class="btn-refresh"
                                 data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
                                 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
@@ -591,7 +575,6 @@
                 </button>
             </form>
 
-            <!-- [HARDEN-9] aria-live for SR announcement -->
             <div id="trackErrorBox" class="response-box error" role="alert" style="display: none;"></div>
 
             <div id="trackResultSkeleton" class="skeleton-track-result d-none" aria-hidden="true" role="status" aria-label="در حال بارگذاری اطلاعات پرونده...">
@@ -659,12 +642,11 @@
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">وضعیت بررسی:</span>
-                        <!-- [HARDEN-9] aria-live for SR announcement -->
+
                         <div id="track-status" aria-live="polite"></div>
                     </div>
                 </div>
 
-                <!-- Unified Timeline / Conversation Feed (Nexus Chat Bubble Style) -->
                 <div id="track-conversation-container" class="nexus-chat-card d-none">
                     <div class="nexus-chat-header">
                         <div class="nexus-chat-header-info">
@@ -684,7 +666,6 @@
                     <div id="track-messages-list" class="nexus-chat-stream"></div>
                 </div>
 
-
                 <div id="track-followup-box" class="followup-reply-card">
                     <h4>ارسال پیام یا توضیحات تکمیلی برای کارشناس حراست:</h4>
                     <p class="followup-hint">در صورتی که مدارک جدید، توضیحات یا شواهدی جهت ضمیمه به این گزارش دارید، در
@@ -696,7 +677,7 @@
                     <div class="followup-captcha-row">
                         <div class="captcha-box captcha-box-compact">
                             <img id="followup-captcha-img" src="" alt="کد امنیتی" class="captcha-img" width="130" height="48" loading="lazy" decoding="async">
-                            <!-- [HARDEN-11] Accessible captcha refresh with aria-hidden icon -->
+
                             <button type="button" id="followup-captcha-refresh" class="btn-refresh"
                                 data-tooltip="تغییر کد امنیتی" aria-label="تغییر کد امنیتی">
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
@@ -721,7 +702,7 @@
                             <span class="btn-spinner d-none" aria-hidden="true"></span>
                         </button>
                     </div>
-                    <!-- [HARDEN-9] aria-live for SR announcement -->
+
                     <div id="followup-status-msg" class="response-box" role="status" style="display: none; margin-top: 12px;"></div>
                 </div>
             </div>
@@ -751,7 +732,6 @@
                 </div>
             </div>
         </section>
-
 
         <footer class="portal-footer">
             <div class="footer-grid">
@@ -822,7 +802,6 @@
         </footer>
     </div>
 
-
     <div id="guidelinesDrawer" class="drawer-overlay d-none" role="dialog" aria-modal="true"
         aria-labelledby="faqDrawerTitle">
         <div class="drawer-panel faq-themed-drawer">
@@ -842,7 +821,7 @@
                         <p class="drawer-subtitle">پاسخ به سوالات پرتکرار پیرامون امنیت، پیگیری و مستندات</p>
                     </div>
                 </div>
-                <!-- [HARDEN-11] Close drawer icon marked aria-hidden -->
+
                 <button type="button" id="closeDrawerBtn" class="btn-close-drawer" aria-label="بستن راهنما">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -881,7 +860,6 @@
                         </div>
                     </div>
 
-
                     <div class="faq-accordion-item" data-faq="item-2">
                         <button type="button" class="faq-accordion-header" aria-expanded="false">
                             <div class="faq-header-content">
@@ -911,7 +889,6 @@
                         </div>
                     </div>
 
-
                     <div class="faq-accordion-item" data-faq="item-3">
                         <button type="button" class="faq-accordion-header" aria-expanded="false">
                             <div class="faq-header-content">
@@ -937,7 +914,6 @@
                             </div>
                         </div>
                     </div>
-
 
                     <div class="faq-accordion-item" data-faq="item-4">
                         <button type="button" class="faq-accordion-header" aria-expanded="false">
@@ -1082,13 +1058,11 @@
             </div>
         </div>
     </div>
-    <!-- =========================================================================
-         Standalone Official A5 Tracking Receipt (Exclusive Print/PDF Target)
-         ========================================================================= -->
+
     <section id="officialReceiptDoc" class="official-receipt-doc" aria-hidden="true">
         <div class="receipt-frame">
             <div class="receipt-inner-border">
-                <!-- 1. Institutional Header -->
+
                 <header class="receipt-header">
                     <div class="receipt-header-right">
                         <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش استان همدان" class="receipt-emblem" width="80" height="80" loading="lazy" decoding="async">
@@ -1118,7 +1092,6 @@
                     <span class="receipt-dec-diamond"></span>
                 </div>
 
-                <!-- 2. Tracking Code Hero Section -->
                 <div class="receipt-tracking-hero">
                     <div class="receipt-tracking-badge-row">
                         <span class="receipt-shield-icon">
@@ -1133,7 +1106,6 @@
                     </div>
                 </div>
 
-                <!-- 3. Report Metadata Structured Grid -->
                 <div class="receipt-meta-table">
                     <div class="receipt-meta-row">
                         <div class="receipt-meta-col">
@@ -1167,7 +1139,6 @@
                     </div>
                 </div>
 
-                <!-- 4. Citizen Guidelines & Security Advisory -->
                 <div class="receipt-guidelines-box">
                     <div class="receipt-guidelines-title">
                         <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -1184,7 +1155,6 @@
                     </ul>
                 </div>
 
-                <!-- 5. Verification Seal & Official Footer -->
                 <footer class="receipt-footer">
                     <div class="receipt-footer-right">
                         <span class="receipt-url">نشانی پیگیری برخط: setadkhabari.hedu.ir</span>
@@ -1200,7 +1170,6 @@
         </div>
     </section>
 
-    <!-- [PERF-FIX-18] Defer non-blocking script execution -->
     <script src="confirm.js" defer></script>
     <script src="app.js?v=73" defer></script>
 </body>

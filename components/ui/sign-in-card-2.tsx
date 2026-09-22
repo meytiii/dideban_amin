@@ -41,7 +41,6 @@ export function SignInCard({
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
 
-  // 3D card tilt effect
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const rotateX = useTransform(mouseY, [-300, 300], [10, -10]);
@@ -67,10 +66,9 @@ export function SignInCard({
 
   return (
     <div className="min-h-screen w-full bg-[#070b14] relative overflow-hidden flex items-center justify-center p-4">
-      {/* Background ambient lighting */}
+
       <div className="absolute inset-0 bg-gradient-to-b from-blue-950/30 via-[#070b14]/70 to-[#020617]" />
 
-      {/* Top radial glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120vh] h-[60vh] rounded-b-[50%] bg-blue-500/10 blur-[90px] pointer-events-none" />
       <motion.div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[90vh] h-[50vh] rounded-b-full bg-blue-400/10 blur-[70px] pointer-events-none"
@@ -95,8 +93,8 @@ export function SignInCard({
           whileHover={{ z: 10 }}
         >
           <div className="relative group">
-            {/* Ambient Card glow */}
-            <motion.div 
+
+            <motion.div
               className="absolute -inset-[1px] rounded-3xl opacity-0 group-hover:opacity-70 transition-opacity duration-700 pointer-events-none"
               animate={{
                 boxShadow: [
@@ -109,37 +107,35 @@ export function SignInCard({
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", repeatType: "mirror" }}
             />
 
-            {/* Traveling light beams on borders */}
             <div className="absolute -inset-[1px] rounded-3xl overflow-hidden pointer-events-none">
-              {/* Top beam */}
-              <motion.div 
+
+              <motion.div
                 className="absolute top-0 left-0 h-[3px] w-[50%] bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-85"
                 animate={{ left: ["-50%", "100%"], opacity: [0.3, 0.9, 0.3] }}
                 transition={{ left: { duration: 2.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 0.8 }, opacity: { duration: 1.2, repeat: Infinity, repeatType: "mirror" } }}
               />
-              {/* Right beam */}
-              <motion.div 
+
+              <motion.div
                 className="absolute top-0 right-0 h-[50%] w-[3px] bg-gradient-to-b from-transparent via-blue-400 to-transparent opacity-85"
                 animate={{ top: ["-50%", "100%"], opacity: [0.3, 0.9, 0.3] }}
                 transition={{ top: { duration: 2.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 0.8, delay: 0.6 }, opacity: { duration: 1.2, repeat: Infinity, repeatType: "mirror", delay: 0.6 } }}
               />
-              {/* Bottom beam */}
-              <motion.div 
+
+              <motion.div
                 className="absolute bottom-0 right-0 h-[3px] w-[50%] bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-85"
                 animate={{ right: ["-50%", "100%"], opacity: [0.3, 0.9, 0.3] }}
                 transition={{ right: { duration: 2.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 0.8, delay: 1.2 }, opacity: { duration: 1.2, repeat: Infinity, repeatType: "mirror", delay: 1.2 } }}
               />
-              {/* Left beam */}
-              <motion.div 
+
+              <motion.div
                 className="absolute bottom-0 left-0 h-[50%] w-[3px] bg-gradient-to-b from-transparent via-blue-400 to-transparent opacity-85"
                 animate={{ bottom: ["-50%", "100%"], opacity: [0.3, 0.9, 0.3] }}
                 transition={{ bottom: { duration: 2.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 0.8, delay: 1.8 }, opacity: { duration: 1.2, repeat: Infinity, repeatType: "mirror", delay: 1.8 } }}
               />
             </div>
 
-            {/* Glass Card Surface */}
             <div className="relative bg-[#0f172a]/90 backdrop-blur-2xl rounded-3xl p-8 sm:p-10 border border-blue-500/20 shadow-2xl overflow-hidden">
-              {/* Logo / Crest Header */}
+
               <div className="text-center space-y-2 mb-7">
                 <motion.div
                   initial={{ scale: 0.7, opacity: 0 }}
@@ -169,10 +165,9 @@ export function SignInCard({
                 </motion.p>
               </div>
 
-              {/* Login Form */}
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-4">
-                  {/* Username Field */}
+
                   <div className="space-y-1.5 text-right">
                     <label className="text-sm font-semibold text-slate-200">نام کاربری</label>
                     <div className="relative flex items-center">
@@ -192,7 +187,6 @@ export function SignInCard({
                     </div>
                   </div>
 
-                  {/* Password Field */}
                   <div className="space-y-1.5 text-right">
                     <label className="text-sm font-semibold text-slate-200">رمز عبور</label>
                     <div className="relative flex items-center">
@@ -221,7 +215,6 @@ export function SignInCard({
                   </div>
                 </div>
 
-                {/* Remember Me */}
                 <div className="flex items-center justify-start gap-2 pt-1 text-right">
                   <input
                     id="remember-me"
@@ -235,7 +228,6 @@ export function SignInCard({
                   </label>
                 </div>
 
-                {/* Submit Button */}
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}

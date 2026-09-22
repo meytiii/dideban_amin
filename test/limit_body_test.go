@@ -19,11 +19,10 @@ func TestLimitBodyMiddlewareRejectsOversizedPayload(t *testing.T) {
 		w.Write([]byte("OK"))
 	})
 
-	maxBytes := int64(256 << 10) // 256 KB
+	maxBytes := int64(256 << 10)
 	limitedHandler := LimitBodyMiddleware(maxBytes, echoHandler)
 
-	// 1. Normal payload (under 256KB) -> 200 OK
-	smallBody := bytes.Repeat([]byte("A"), 1024) // 1 KB
+	smallBody := bytes.Repeat([]byte("A"), 1024)
 	reqSmall := httptest.NewRequest(http.MethodPost, "/api/admin/respond", bytes.NewReader(smallBody))
 	recSmall := httptest.NewRecorder()
 	limitedHandler.ServeHTTP(recSmall, reqSmall)
@@ -31,7 +30,6 @@ func TestLimitBodyMiddlewareRejectsOversizedPayload(t *testing.T) {
 		t.Errorf("Expected small body to return 200, got %d", recSmall.Code)
 	}
 
-	// 2. Oversized payload (10 MB) -> 413 Request Entity Too Large
 	tenMB := 10 * 1024 * 1024
 	largeBody := bytes.Repeat([]byte("B"), tenMB)
 	reqLarge := httptest.NewRequest(http.MethodPost, "/api/admin/respond", bytes.NewReader(largeBody))

@@ -14,7 +14,7 @@ import (
 )
 
 func TestDocxSandboxMaliciousPayload(t *testing.T) {
-	// Check if python is available
+
 	if _, err := exec.LookPath("python"); err != nil {
 		t.Skip("python not found in PATH, skipping docx test")
 	}
@@ -26,7 +26,6 @@ func TestDocxSandboxMaliciousPayload(t *testing.T) {
 
 	InitCrypto("01234567890123456789012345678901")
 
-	// Create test report with injection attempt
 	maliciousPayload := "__import__('os').system('rm -rf /'); alert('xss'); {{7*7}}"
 	encDesc, err := EncryptAES(maliciousPayload)
 	if err != nil {
@@ -68,7 +67,6 @@ func TestDocxSandboxMaliciousPayload(t *testing.T) {
 		t.Fatalf("Expected non-empty docx bytes")
 	}
 
-	// Unzip docx in memory and verify document.xml contains the string literally
 	zipReader, err := zip.NewReader(bytes.NewReader(docxBytes), int64(len(docxBytes)))
 	if err != nil {
 		t.Fatalf("Failed to open output as zip (docx): %v", err)

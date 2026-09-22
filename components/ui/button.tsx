@@ -2,7 +2,6 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
-// Utility helper for className merging
 export function cn(...inputs: (string | undefined | null | false)[]) {
   return inputs.filter(Boolean).join(" ")
 }

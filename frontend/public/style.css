@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: 'Vazirmatn';
     src: url('./fonts/Vazirmatn-Regular.woff2') format('woff2');
@@ -57,7 +56,6 @@
     padding: 0;
 }
 
-/* [HARDEN-12] Keyboard-visible focus indicator */
 :focus-visible {
     outline: 2px solid #60a5fa;
     outline-offset: 2px;
@@ -91,7 +89,6 @@ body {
     position: relative;
 }
 
-/* [PERF-FIX-2] Remove translateZ and will-change on static background */
 body::before {
     content: '';
     position: fixed;
@@ -102,7 +99,6 @@ body::before {
     pointer-events: none;
 }
 
-/* [PERF-FIX-1] Solid surface replacing backdrop-filter; [PERF-FIX-2] remove translateZ; [PERF-FIX-10] layout/paint containment */
 .container {
     width: 100%;
     max-width: 1020px;
@@ -114,7 +110,6 @@ body::before {
     contain: layout paint;
 }
 
-/* [PERF-FIX-10] Off-screen section virtualization */
 #trackingSection,
 #submitSection {
     content-visibility: auto;
@@ -132,7 +127,6 @@ body::before {
     padding-bottom: 20px;
 }
 
-/* [PERF-FIX-7] Pseudo-element opacity fade for hover shadow; [PERF-FIX-27] capped blur */
 .admin-logo-crest {
     position: relative;
     width: 200px;
@@ -170,7 +164,6 @@ body::before {
     border-color: rgba(96, 165, 250, 0.7);
 }
 
-/* [PERF-FIX-8] Removed drop-shadow raster filter; TODO: replace logo.png with logo-white.png */
 .admin-crest-img {
     width: 100%;
     height: 100%;
@@ -196,7 +189,6 @@ body::before {
     font-size: 14.5px;
 }
 
-/* [PERF-FIX-24] Primary consolidated definition for top-nav-bar */
 .top-nav-bar {
     display: flex;
     align-items: center;
@@ -224,7 +216,7 @@ body::before {
     border-radius: var(--radius-md);
     cursor: pointer;
     white-space: nowrap;
-    /* [PERF-FIX-15] Explicit property transitions with fast timing */
+
     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     height: 48px;
@@ -247,7 +239,7 @@ body::before {
     width: 100vw;
     height: 100vh;
     height: 100dvh;
-    /* [PERF-FIX-1] High-opacity solid overlay replacing backdrop-filter */
+
     background: rgba(11, 17, 32, 0.9);
     z-index: 100000;
     display: flex;
@@ -336,7 +328,7 @@ body::before {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
     flex-shrink: 0;
 }
@@ -356,14 +348,12 @@ body::before {
     z-index: 2;
 }
 
-/* FAQ Themed Accordion-2 Styles */
 .faq-accordion-list {
     display: flex;
     flex-direction: column;
     gap: 11px;
 }
 
-/* [PERF-FIX-1] Removed backdrop-filter */
 .faq-accordion-item {
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
@@ -420,7 +410,7 @@ body::before {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
@@ -510,7 +500,7 @@ body::before {
     border-radius: var(--radius-full);
     cursor: pointer;
     overflow: hidden;
-    /* [PERF-FIX-15] Explicit transitions, shortened from 0.5s to 0.25s */
+
     transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease, padding 0.25s ease;
     user-select: none;
 }
@@ -551,7 +541,6 @@ body::before {
     transform: scale(1.06);
 }
 
-/* Active State: Icon smoothly slides across to the opposite side (left in RTL) */
 .tab-btn.active {
     background: linear-gradient(135deg, #2563eb, #1d4ed8);
     color: #ffffff;
@@ -607,7 +596,7 @@ body::before {
     justify-content: center;
     font-weight: 700;
     font-size: 14px;
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
     z-index: 2;
     position: relative;
@@ -679,7 +668,6 @@ body::before {
     }
 }
 
-/* [PERF-FIX-2] Removed will-change on static/intermittent step */
 .form-step {
     display: none;
     opacity: 0;
@@ -841,7 +829,6 @@ textarea:focus {
     40%, 60% { transform: translate3d(4px, 0, 0); }
 }
 
-/* Custom Animated Glass Dropdown */
 .native-select-hidden {
     position: absolute !important;
     width: 1px !important;
@@ -879,8 +866,7 @@ textarea:focus {
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    /* [PERF-FIX-1] Removed backdrop-filter */
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     user-select: none;
@@ -935,7 +921,6 @@ textarea:focus {
     color: #60a5fa;
 }
 
-/* [PERF-FIX-9] Only apply blur when dropdown is open */
 .custom-dropdown-menu {
     position: absolute;
     top: calc(100% + 8px);
@@ -962,7 +947,6 @@ textarea:focus {
     scrollbar-color: rgba(56, 189, 248, 0.4) transparent;
 }
 
-/* Elegant Slim Glassmorphic Scrollbar */
 .custom-dropdown-menu::-webkit-scrollbar {
     width: 6px;
 }
@@ -977,7 +961,7 @@ textarea:focus {
     background: linear-gradient(180deg, rgba(56, 189, 248, 0.45), rgba(59, 130, 246, 0.55));
     border-radius: 9999px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    /* [PERF-FIX-15] Explicit property transition */
+
     transition: background 0.2s ease;
 }
 
@@ -992,7 +976,6 @@ textarea:focus {
     height: 0 !important;
 }
 
-/* Global Subtle Modern Scrollbar across portal */
 ::-webkit-scrollbar {
     width: 7px;
     height: 7px;
@@ -1035,7 +1018,7 @@ textarea:focus {
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
     user-select: none;
 }
@@ -1095,7 +1078,6 @@ textarea:focus {
     40%, 80% { transform: translateX(4px); }
 }
 
-/* be-ui-file-upload Centered Component Styles */
 .be-upload-container {
     width: 100%;
     display: flex;
@@ -1130,7 +1112,7 @@ textarea:focus {
     text-align: center;
     border: 2px dashed rgba(255, 255, 255, 0.16);
     border-radius: 24px;
-    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+
     background: rgba(15, 23, 42, 0.72);
     cursor: pointer;
     outline: none;
@@ -1206,7 +1188,7 @@ textarea:focus {
     color: var(--text-main);
     font-size: 12.5px;
     font-weight: 600;
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
@@ -1216,7 +1198,6 @@ textarea:focus {
     color: #ffffff;
 }
 
-/* File Queue and Cards */
 .be-file-queue {
     width: 100%;
     margin-top: 14px;
@@ -1259,7 +1240,7 @@ textarea:focus {
     padding: 14px 18px;
     border: 1px solid rgba(59, 130, 246, 0.32);
     border-radius: 20px;
-    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+
     background: rgba(15, 23, 42, 0.94);
     box-shadow: 0 10px 28px -6px rgba(0, 0, 0, 0.45);
     animation: fileRowFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1271,7 +1252,7 @@ textarea:focus {
 .be-file-row.removing {
     opacity: 0;
     transform: translateY(-8px) scale(0.98);
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
@@ -1361,7 +1342,7 @@ textarea:focus {
     background: rgba(244, 63, 94, 0.16) !important;
     color: #fda4af !important;
     cursor: pointer;
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease !important;
     flex-shrink: 0;
 }
@@ -1388,7 +1369,6 @@ textarea:focus {
     transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Mobile Optimizations for Upload Dropzone */
 @media (max-width: 640px) {
     .be-dropzone.centered {
         min-height: 170px;
@@ -1447,7 +1427,7 @@ textarea:focus {
 button {
     font-family: inherit;
     cursor: pointer;
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), opacity var(--transition-fast);
 }
 
@@ -1566,7 +1546,7 @@ button:disabled {
     background: var(--bg-input);
     border: 1px solid var(--border-subtle);
     color: var(--text-main);
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
@@ -1607,7 +1587,7 @@ button:disabled {
     justify-content: center;
     cursor: pointer;
     box-shadow: none !important;
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -1674,7 +1654,7 @@ button:disabled {
     font-weight: 700;
     text-decoration: underline;
     text-underline-offset: 4px;
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: color var(--transition-fast), transform var(--transition-fast);
     cursor: pointer;
     display: inline-flex;
@@ -1733,7 +1713,7 @@ button:disabled {
     border-radius: var(--radius-sm);
     font-size: 13px;
     cursor: pointer;
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -1796,9 +1776,9 @@ button:disabled {
     border-radius: var(--radius-md);
     padding: 5px 6px 5px 12px;
     box-shadow: 0 4px 18px -3px rgba(0, 0, 0, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.04);
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: border-color 0.22s ease, background-color 0.22s ease;
-    /* [PERF-FIX-1] Removed backdrop-filter */
+
     gap: 8px;
 }
 
@@ -1856,7 +1836,7 @@ button:disabled {
     font-size: 13.5px;
     font-weight: 600;
     cursor: pointer;
-    /* [PERF-FIX-15] Explicit property transitions */
+
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     user-select: none;
@@ -2183,7 +2163,7 @@ button:disabled {
     width: 60px;
     height: 60px;
     object-fit: contain;
-    /* [PERF-FIX-8] Removed drop-shadow raster filter */
+
     filter: none;
     opacity: 1;
     flex-shrink: 0;
@@ -2275,7 +2255,7 @@ button:disabled {
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+
     background: rgba(15, 23, 42, 0.98);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2415,7 +2395,7 @@ button:disabled {
     left: 0;
     right: 0;
     bottom: 0;
-    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+
     background: rgba(0, 0, 0, 0.85);
     z-index: 99998;
     display: flex;
@@ -2534,7 +2514,6 @@ button:disabled {
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
 
-    /* Logo & Header */
     .admin-logo-crest,
     .public-header-crest {
         width: 104px !important;
@@ -2565,7 +2544,6 @@ button:disabled {
         font-size: 12.5px !important;
     }
 
-    /* Top Nav Bar & Tabs */
     .top-nav-bar {
         flex-direction: column !important;
         align-items: stretch !important;
@@ -2667,7 +2645,6 @@ button:disabled {
         border-radius: var(--radius-sm) !important;
     }
 
-    /* Stepper */
     .step-tracker {
         padding: 0 4px !important;
         margin-bottom: 22px !important;
@@ -2699,7 +2676,6 @@ button:disabled {
         align-self: flex-start !important;
     }
 
-    /* Inputs - Prevent iOS Auto-Zoom */
     input[type="text"],
     input[type="tel"],
     input[type="password"],
@@ -2714,7 +2690,6 @@ button:disabled {
         min-height: 120px !important;
     }
 
-    /* Notice Card */
     .identity-notice-card {
         padding: 12px 14px !important;
         gap: 12px !important;
@@ -2736,7 +2711,6 @@ button:disabled {
         line-height: 1.6 !important;
     }
 
-    /* Form Actions - Dual Button Row */
     .form-actions {
         display: flex !important;
         flex-direction: row !important;
@@ -2770,7 +2744,6 @@ button:disabled {
         width: 100% !important;
     }
 
-    /* Dropzone */
     .be-dropzone.centered {
         min-height: 120px !important;
         padding: 16px 12px !important;
@@ -2799,7 +2772,6 @@ button:disabled {
         font-size: 11.5px !important;
     }
 
-    /* Captcha Row - Stack on mobile */
     .captcha-row {
         flex-direction: column !important;
         gap: 8px !important;
@@ -2835,7 +2807,6 @@ button:disabled {
         height: 44px !important;
     }
 
-    /* Tracking & Helpline */
     .contact-helpline-card {
         padding: 14px 14px !important;
         margin-bottom: 18px !important;
@@ -2885,7 +2856,6 @@ button:disabled {
         min-height: 42px !important;
     }
 
-    /* Success Screen */
     .success-actions-row {
         flex-direction: column !important;
         gap: 10px !important;
@@ -2908,14 +2878,12 @@ button:disabled {
         padding: 9px 12px !important;
     }
 
-    /* Detail Grid */
     .detail-grid {
         grid-template-columns: 1fr !important;
         gap: 10px !important;
         padding: 12px !important;
     }
 
-    /* Followup Captcha */
     .followup-captcha-row {
         flex-direction: column !important;
         align-items: stretch !important;
@@ -2926,7 +2894,6 @@ button:disabled {
         max-width: 100% !important;
     }
 
-    /* Footer */
     .portal-footer {
         margin-top: 22px !important;
         padding-top: 16px !important;
@@ -2964,7 +2931,6 @@ button:disabled {
         line-height: 1.6 !important;
     }
 
-    /* Toast */
     .toast-container {
         top: 10px !important;
         left: 10px !important;
@@ -2980,7 +2946,6 @@ button:disabled {
         text-align: center !important;
     }
 
-    /* Confirm Dialog */
     .confirm-dialog {
         padding: 18px 16px !important;
         width: calc(100% - 24px) !important;
@@ -3041,10 +3006,6 @@ button:disabled {
     }
 }
 
-/* [PERF-FIX-24] Removed duplicate .top-nav-bar and .btn-faq-trigger (consolidated above) */
-
-
-
 .faq-card {
     background: rgba(30, 41, 59, 0.55);
     border: 1px solid rgba(255, 255, 255, 0.06);
@@ -3078,10 +3039,6 @@ button:disabled {
     flex: 1;
 }
 
-/* ==========================================================================
-   Nexus Chat Bubble Component (Citizen Tracking Portal - Unified Feed)
-   ========================================================================== */
-
 .nexus-chat-card {
     position: relative;
     display: flex;
@@ -3099,14 +3056,13 @@ button:disabled {
     border-color: rgba(255, 255, 255, 0.16);
 }
 
-/* Header */
 .nexus-chat-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 14px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+
     background: rgba(24, 24, 27, 0.95);
 }
 
@@ -3169,7 +3125,6 @@ button:disabled {
     font-weight: 600;
 }
 
-/* Stream / Messages Body */
 .nexus-chat-stream {
     display: flex;
     flex-direction: column;
@@ -3193,7 +3148,6 @@ button:disabled {
     background: transparent;
 }
 
-/* Bubble Row Layout (RTL-aware) */
 .nexus-bubble-row {
     display: flex;
     width: 100%;
@@ -3218,7 +3172,6 @@ button:disabled {
     flex-direction: row-reverse;
 }
 
-/* Avatars */
 .nexus-bubble-avatar {
     width: 32px;
     height: 32px;
@@ -3241,7 +3194,6 @@ button:disabled {
     box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
 }
 
-/* Bubble Cards */
 .nexus-bubble-card {
     padding: 13px 16px;
     font-size: 13.5px;
@@ -3255,7 +3207,6 @@ button:disabled {
     transform: translateY(-2px) scale(1.008);
 }
 
-/* Reporter Bubble (Indigo-Violet gradient per React component) */
 .nexus-bubble-reporter {
     border-radius: 18px 4px 18px 18px;
     background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
@@ -3264,11 +3215,10 @@ button:disabled {
     border: 1px solid rgba(199, 210, 254, 0.2);
 }
 
-/* Admin Bubble (Zinc-800 backdrop-blur per React component) */
 .nexus-bubble-admin {
     border-radius: 4px 18px 18px 18px;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+
     background: rgba(39, 39, 42, 0.98);
     color: #f4f4f5;
     box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
@@ -3280,7 +3230,6 @@ button:disabled {
     box-shadow: 0 6px 20px -2px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(16, 185, 129, 0.25);
 }
 
-/* Inside Bubble */
 .nexus-bubble-top {
     display: flex;
     align-items: center;
@@ -3317,7 +3266,6 @@ button:disabled {
     white-space: pre-wrap;
 }
 
-/* Empty State */
 .nexus-chat-empty {
     display: flex;
     flex-direction: column;
@@ -3354,7 +3302,6 @@ button:disabled {
     line-height: 1.6;
 }
 
-/* Backward-compatibility fallback */
 .conversation-thread-box {
     margin-top: 20px;
 }
@@ -3471,11 +3418,6 @@ button:disabled {
     }
 }
 
-/* ==========================================================================
-   Standalone Official A5 Tracking Receipt (Print / PDF Engine)
-   ========================================================================== */
-
-/* Conceal receipt in standard screen browsing */
 .official-receipt-doc {
     display: none !important;
 }
@@ -3498,7 +3440,6 @@ button:disabled {
         print-color-adjust: exact !important;
     }
 
-    /* Suppress entire web application shell */
     #appPreloader,
     #pageSkeleton,
     #toast-container,
@@ -3519,7 +3460,6 @@ button:disabled {
         overflow: hidden !important;
     }
 
-    /* Display ONLY the standalone official A5 receipt */
     #officialReceiptDoc.official-receipt-doc {
         display: block !important;
         visibility: visible !important;
@@ -3556,7 +3496,6 @@ button:disabled {
         border-radius: 2px;
     }
 
-    /* 1. Header */
     .receipt-header {
         display: flex;
         align-items: center;
@@ -3639,7 +3578,6 @@ button:disabled {
         color: #0369a1;
     }
 
-    /* Divider */
     .receipt-decorative-line {
         position: relative;
         height: 1px;
@@ -3657,7 +3595,6 @@ button:disabled {
         transform: rotate(45deg);
     }
 
-    /* 2. Tracking Hero */
     .receipt-tracking-hero {
         background: #f8fafc;
         border: 1.5px solid #cbd5e1;
@@ -3704,8 +3641,6 @@ button:disabled {
         line-height: 1 !important;
     }
 
-
-    /* 3. Metadata Table */
     .receipt-meta-table {
         border: 1px solid #e2e8f0;
         border-radius: 5px;
@@ -3753,7 +3688,6 @@ button:disabled {
         white-space: nowrap;
     }
 
-    /* 4. Guidelines */
     .receipt-guidelines-box {
         background: #f8fafc;
         border: 1px solid #e2e8f0;
@@ -3784,7 +3718,6 @@ button:disabled {
         margin-bottom: 1px;
     }
 
-    /* 5. Footer */
     .receipt-footer {
         display: flex;
         align-items: center;
@@ -3844,7 +3777,6 @@ button:disabled {
     }
 }
 
-/* Unified High-End Tooltip System (Matching Radix/shadcn tooltip component) */
 .app-tooltip {
     position: fixed;
     z-index: 999999;
@@ -3855,7 +3787,7 @@ button:disabled {
     font-weight: 500;
     line-height: 1.4;
     color: #ffffff;
-    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+
     background: rgba(15, 23, 42, 0.98);
     border: 1px solid rgba(59, 130, 246, 0.35);
     border-radius: 6px;
@@ -3897,7 +3829,6 @@ button:disabled {
     border-right: none;
 }
 
-/* Disable tooltips completely on mobile viewports and touch devices */
 @media (max-width: 768px), (hover: none), (pointer: coarse) {
     .app-tooltip {
         display: none !important;
@@ -3907,10 +3838,6 @@ button:disabled {
         transform: scale(0.95) !important;
     }
 }
-
-/* ==========================================================================
-   Luxury 3D Isometric Preloader & Skeleton Wireframe System
-   ========================================================================== */
 
 .luxury-preloader {
     position: fixed;
@@ -3956,7 +3883,6 @@ button:disabled {
     justify-content: center;
 }
 
-/* Morph Loading Animation */
 .morph-loader-container {
     position: relative;
     width: 128px;
@@ -4084,7 +4010,6 @@ button:disabled {
   }
 }
 
-/* Preloader Typography & Progress */
 .preloader-info {
     display: flex;
     flex-direction: column;
@@ -4148,7 +4073,6 @@ button:disabled {
     100% { width: 100%; }
 }
 
-/* Skeleton Layout Wireframe */
 .page-skeleton {
     width: 100%;
     max-width: 860px;
@@ -4170,7 +4094,6 @@ button:disabled {
     opacity: 0;
 }
 
-/* [PERF-FIX-12] Transform-based skeleton sweep replacing background-position paint loop */
 .skeleton-shimmer {
     position: relative;
     overflow: hidden;
@@ -4237,10 +4160,6 @@ button:disabled {
     border-radius: 18px;
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
-
-/* ==========================================================================
-   Public Panel Tracking Skeleton Wireframe
-   ========================================================================== */
 
 .skeleton-track-result {
     width: 100%;
@@ -4370,15 +4289,11 @@ button:disabled {
     }
 }
 
-/* ==========================================================================
-   Professional Confirmation Dialog (AlertDialog Pattern)
-   ========================================================================== */
-
 .pro-confirm-overlay {
     position: fixed;
     inset: 0;
     z-index: 999999;
-    /* [PERF-FIX-1] High-opacity solid overlay replacing backdrop-filter */
+
     background: rgba(0, 0, 0, 0.88);
     display: flex;
     align-items: center;
@@ -4397,7 +4312,7 @@ button:disabled {
     width: 100%;
     max-width: 440px;
     border-radius: 20px;
-    background: #0f172a; /* slate-900 / dark card */
+    background: #0f172a;
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     overflow: hidden;
@@ -4556,10 +4471,6 @@ button:disabled {
     color: #10b981;
 }
 
-/* ==========================================================================
-   Nexus Chat Bubble Component (Public Tracking Timeline Feed)
-   ========================================================================== */
-
 .nexus-chat-card {
     position: relative;
     display: flex;
@@ -4583,7 +4494,7 @@ button:disabled {
     justify-content: space-between;
     padding: 14px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+
     background: rgba(15, 23, 42, 0.95);
 }
 
@@ -4722,7 +4633,7 @@ button:disabled {
 .nexus-bubble-admin {
     border-radius: 4px 18px 18px 18px;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    /* [PERF-FIX-1] Solid background replacing backdrop-filter */
+
     background: rgba(30, 41, 59, 0.98);
     color: #f8fafc;
     box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
@@ -4799,4 +4710,3 @@ button:disabled {
     max-width: 480px;
     line-height: 1.6;
 }
-

@@ -126,7 +126,7 @@ func ToggleReadStatusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if isViewed {
-		// Toggle to unread for this admin
+
 		_, err = DB.Exec(`
 			DELETE FROM admin_report_views
 			WHERE admin_username = $1 AND report_id = $2
@@ -137,7 +137,7 @@ func ToggleReadStatusHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		logAudit(admin.Username, admin.Title, "MARK_UNREAD", &req.ReportID, getIP(r))
 	} else {
-		// Toggle to read for this admin
+
 		_, err = DB.Exec(`
 			INSERT INTO admin_report_views (admin_username, report_id, viewed_at, last_viewed_message_id)
 			VALUES ($1, $2, NOW(), COALESCE((SELECT MAX(id) FROM report_messages WHERE report_id = $2), 0))
@@ -235,11 +235,9 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 
 	offset := (page - 1) * pageSize
 
-	// Dynamic SQL filter building
 	var whereClauses []string
 	var args []interface{}
 
-	// $1 is always admin.Username for the arv left join
 	args = append(args, admin.Username)
 
 	if admin.Role == "navahi_manategh" {
@@ -294,7 +292,6 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 
 	whereSql := strings.Join(whereClauses, " AND ")
 
-	// Copy args for COUNT(*)
 	countArgs := make([]interface{}, len(args))
 	copy(countArgs, args)
 
@@ -320,7 +317,6 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Append pagination params
 	args = append(args, pageSize, offset)
 	limitIdx := len(args) - 1
 	offsetIdx := len(args)
@@ -443,33 +439,33 @@ type RegionalResponseItem struct {
 }
 
 type ReportDetail struct {
-	ID                int64                  `json:"id"`
-	TrackingCode      string                 `json:"tracking_code"`
-	Category          string                 `json:"category"`
-	ReportType        string                 `json:"report_type"`
-	Priority          string                 `json:"priority"`
-	ReporterName      string                 `json:"reporter_name"`
-	ReporterPhone     string                 `json:"reporter_phone"`
-	Description       string                 `json:"description"`
-	InternalNotes     string                 `json:"internal_notes"`
-	IsRead            bool                   `json:"is_read"`
-	HasNewMessage     bool                   `json:"has_new_message"`
-	CreatedAt         string                 `json:"created_at"`
-	ReadAt            string                 `json:"read_at"`
-	ReadBy            string                 `json:"read_by"`
-	ReadByName        string                 `json:"read_by_name"`
-	Classification    string                 `json:"classification"`
-	ClassifiedBy      string                 `json:"classified_by"`
-	ClassifiedByName  string                 `json:"classified_by_name"`
-	ClassifiedAt      string                 `json:"classified_at"`
-	HasAttachment     bool                   `json:"has_attachment"`
-	Attachments       []ReportAttachmentItem `json:"attachments"`
-	AdminResponse     string                 `json:"admin_response"`
-	RespondedAt       string                 `json:"responded_at"`
-	RespondedBy       string                 `json:"responded_by"`
-	Messages          []ReportMessageItem    `json:"messages"`
-	RegionalResponses []RegionalResponseItem `json:"regional_responses,omitempty"`
-	MyRegionalResponse *RegionalResponseItem `json:"my_regional_response,omitempty"`
+	ID                 int64                  `json:"id"`
+	TrackingCode       string                 `json:"tracking_code"`
+	Category           string                 `json:"category"`
+	ReportType         string                 `json:"report_type"`
+	Priority           string                 `json:"priority"`
+	ReporterName       string                 `json:"reporter_name"`
+	ReporterPhone      string                 `json:"reporter_phone"`
+	Description        string                 `json:"description"`
+	InternalNotes      string                 `json:"internal_notes"`
+	IsRead             bool                   `json:"is_read"`
+	HasNewMessage      bool                   `json:"has_new_message"`
+	CreatedAt          string                 `json:"created_at"`
+	ReadAt             string                 `json:"read_at"`
+	ReadBy             string                 `json:"read_by"`
+	ReadByName         string                 `json:"read_by_name"`
+	Classification     string                 `json:"classification"`
+	ClassifiedBy       string                 `json:"classified_by"`
+	ClassifiedByName   string                 `json:"classified_by_name"`
+	ClassifiedAt       string                 `json:"classified_at"`
+	HasAttachment      bool                   `json:"has_attachment"`
+	Attachments        []ReportAttachmentItem `json:"attachments"`
+	AdminResponse      string                 `json:"admin_response"`
+	RespondedAt        string                 `json:"responded_at"`
+	RespondedBy        string                 `json:"responded_by"`
+	Messages           []ReportMessageItem    `json:"messages"`
+	RegionalResponses  []RegionalResponseItem `json:"regional_responses,omitempty"`
+	MyRegionalResponse *RegionalResponseItem  `json:"my_regional_response,omitempty"`
 }
 
 type ReportAttachmentItem struct {
@@ -935,7 +931,7 @@ func ClassifyReportHandler(w http.ResponseWriter, r *http.Request) {
 
 	isUpdate := existingClassification.Valid && existingClassification.String != ""
 	if isUpdate {
-		// Only original classifier can modify their classification
+
 		if !existingClassifiedBy.Valid || existingClassifiedBy.String != admin.Username {
 			http.Error(w, "دسترسی غیرمجاز: تغییر ارزیابی تنها توسط کارشناس ثبت‌کننده اولیه امکان‌پذیر است.", http.StatusForbidden)
 			return
@@ -2020,7 +2016,6 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-
 type AnalyticsResponse struct {
 	CategoryBreakdown       []CategoryCount         `json:"category_breakdown"`
 	MonthlyTrend            []MonthCount            `json:"monthly_trend"`
@@ -2471,7 +2466,7 @@ func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
 
 		rowsAffected, _ := res.RowsAffected()
 		if rowsAffected > 0 {
-			// Targeted notification for this specific regional recipient
+
 			_, notifErr := tx.Exec(`
 				INSERT INTO admin_notifications (notif_type, title, message, target_report_id, target_tracking_code, recipient_username)
 				VALUES ($1, $2, $3, $4, $5, $6)
@@ -2634,9 +2629,7 @@ func GetNotificationsHandler(w http.ResponseWriter, r *http.Request) {
 	var args []interface{}
 
 	if admin.Role == "navahi_manategh" {
-		// Regional admins ONLY receive notifications for reports forwarded to them:
-		// 1. Direct targeted notifications (e.g. 'report_forwarded') where recipient_username = admin.Username
-		// 2. Citizen replies ('new_reply') on reports that were forwarded to this regional admin
+
 		unreadQuery = `
 			SELECT COUNT(*) FROM admin_notifications
 			WHERE is_read = false
@@ -2659,8 +2652,7 @@ func GetNotificationsHandler(w http.ResponseWriter, r *http.Request) {
 		`
 		args = append(args, admin.Username)
 	} else {
-		// superuser and edare_kol receive all general notifications (recipient_username IS NULL)
-		// plus any targeted specifically to their username
+
 		unreadQuery = `
 			SELECT COUNT(*) FROM admin_notifications
 			WHERE is_read = false
@@ -3078,7 +3070,6 @@ func SubmitRegionalResponseHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Verify that this report is actively forwarded to this admin
 	var fwdID int64
 	err := DB.QueryRow(`
 		SELECT id FROM report_forwardings
@@ -3116,10 +3107,8 @@ func SubmitRegionalResponseHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Update reports updated_at
 	_, _ = DB.Exec("UPDATE reports SET updated_at = NOW() WHERE id = $1", req.ReportID)
 
-	// Send notification to Central Admins (edare_kol / superuser)
 	senderDisplayName := admin.FullName
 	if strings.TrimSpace(senderDisplayName) == "" {
 		senderDisplayName = admin.Username
@@ -3159,7 +3148,6 @@ type RemoveForwardingRequest struct {
 func RemoveForwardingHandler(w http.ResponseWriter, r *http.Request) {
 	admin := r.Context().Value("admin").(AdminSession)
 
-	// Only superuser or edare_kol (Central Admins) can revoke forwardings
 	if admin.Role == "navahi_manategh" {
 		http.Error(w, "شما مجوز لغو ارجاع پرونده را ندارید.", http.StatusForbidden)
 		return
@@ -3212,20 +3200,17 @@ func RemoveForwardingHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer tx.Rollback()
 
-	// 1. Delete forwarding relation
 	_, err = tx.Exec("DELETE FROM report_forwardings WHERE id = $1", fwdID)
 	if err != nil {
 		http.Error(w, "خطا در حذف ارجاع", http.StatusInternalServerError)
 		return
 	}
 
-	// 2. Delete targeted notifications for this recipient on this report
 	_, _ = tx.Exec(`
 		DELETE FROM admin_notifications
 		WHERE target_report_id = $1 AND recipient_username = $2
 	`, reportID, recipUser)
 
-	// 3. Clean up read views for this recipient on this report
 	_, _ = tx.Exec(`
 		DELETE FROM admin_report_views
 		WHERE report_id = $1 AND admin_username = $2
@@ -3247,4 +3232,3 @@ func RemoveForwardingHandler(w http.ResponseWriter, r *http.Request) {
 		"message": "ارجاع پرونده با موفقیت لغو شد و دسترسی کاربر به این پرونده مسدود گردید.",
 	})
 }
-

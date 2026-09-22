@@ -42,50 +42,48 @@ var (
 		"nigger", "nigga", "cock", "blowjob", "prick", "twat", "wanker",
 	}
 
-	// Compiled regex patterns for obfuscated, symbol-injected, or wildcard masked vulgarities
 	slurRegexes = []*regexp.Regexp{
-		// Masked 'کیر' like ک*ر, ک..ر, ک_ر, ک-ر, ک#ر, ک!ر, ک*رم, ک*ری
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+ر(?:ی|م|ت|تون|مون|ش|ها)?(?:[^\p{L}\p{N}]|$)`),
-		// 'کیر' with arbitrary symbols or spaces between letters (ک*ی*ر, ک.ی.ر, ک_ی_ر, etc.)
+
 		regexp.MustCompile(`(?i)ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[یiي*]+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر`),
-		// Masked 'کسکش' / 'کصکش' / 'کسشعر' like ک*ص*ش, ک*س*ش, کص*ش, کس*ش
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+ش(?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'کسکش' / 'کصکش' / 'کوسکش' like ک*ص*ک*ش, ک*س*ک*ش, ک*صکش, ک*سکش, کص*کش, کس*کش
+
 		regexp.MustCompile(`(?i)ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[وo0u*]?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ک?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش`),
-		// Standalone masked 'کص' / 'کس' like ک*ص, ک*س, ک..ص, ک_س
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+[صس](?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'کسخل' / 'کصخل' like ک*ص*خ*ل, ک*صخل, ک*سخل
+
 		regexp.MustCompile(`(?i)ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*خ[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*و?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ل`),
-		// Obfuscated 'کسشعر' / 'کصشعر' / 'کسشر' / 'کصشر'
+
 		regexp.MustCompile(`(?i)ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[صس][\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[ع*]?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر`),
-		// Masked 'کون' / 'کونی' like ک*ن, ک*نی, ک..ن, ک_نی
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+ن[یiي*]?(?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'جنده' / 'ج*ده' / 'ج*نده' / 'ج*ن*ده'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])ج[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ن?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*](?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'قحبه' / 'ق*حبه' / 'ق*ح*به' / 'ق*به'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])ق[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ح?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ب[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*](?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'دیوث' / 'د*وث' / 'د*یوث' / 'د*ی*وث'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*و+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ث(?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'سیکتیر' / 'س*کتیر' / 'س*ی*ک*ت*ی*ر'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])س[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ت[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر(?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'پدرسگ' / 'پ*درسگ' / 'پ*د*ر*س*گ'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])پ[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*س[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*گ(?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'بیناموس' / 'بی ناموس' / 'ب*ناموس' / 'ب*ی*ناموس'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])ب[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ن[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*م[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*و+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*س(?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'بیشرف' / 'بی شرف' / 'ب*شرف'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])ب[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ف(?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'حرامزاده' / 'حرومزاده' / 'ح*رامزاده'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])ح[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[اوu]*[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*م[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ز[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*](?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'مادرجنده' / 'م*ادرجنده' / 'مادر*نده'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])م[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ج[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ن?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*](?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'خواهرجنده'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])خ[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*و[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ه[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ج[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ن?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[هه‌a*](?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'گاییدم' / 'گ*اییدم' / 'گ*ییدم'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])گ[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ی+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*د[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*م(?:[^\p{L}\p{N}]|$)`),
-		// Obfuscated 'لاشی' / 'ل*شی'
+
 		regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])ل[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ا?[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ش[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[یiي*]+(?:[^\p{L}\p{N}]|$)`),
 
-		// Finglish & English obfuscations
 		regexp.MustCompile(`(?i)\bk+[i|e|y]+r+\b`),
 		regexp.MustCompile(`(?i)\bk+[o|u]+s+\b`),
 		regexp.MustCompile(`(?i)\bk+[o|u]+n+\b`),
@@ -129,11 +127,11 @@ func cleanRune(r rune) rune {
 }
 
 func isDiacriticOrInvisible(r rune) bool {
-	// Arabic/Persian diacritics (Fatha, Damma, Kasra, Tashdid, Tanwin, Sukun) & Tatweel
+
 	if (r >= 0x064B && r <= 0x065F) || r == 0x0640 || r == 0x0670 {
 		return true
 	}
-	// Invisible markers, ZWNJ, ZWSP, BOM
+
 	if r == 0x200C || r == 0x200B || r == 0xFEFF || r == 0x200E || r == 0x200F {
 		return true
 	}
@@ -236,14 +234,12 @@ func ContainsVulgarLanguage(text string) (bool, string) {
 
 	lowered := strings.ToLower(trimmed)
 
-	// 1. Check Regex Patterns (Catches wildcard replacements like ک*ر, ک*ص*ش, and symbols between letters)
 	for _, re := range slurRegexes {
 		if re.MatchString(lowered) {
 			return true, "obfuscated_slur"
 		}
 	}
 
-	// 2. Token-level analysis (handles internal symbols, repeated stretching like کییییییر, ک*ی*ر, ک.ص.ک.ش)
 	rawTokens := strings.Fields(lowered)
 	var singleCharSeq strings.Builder
 
@@ -252,7 +248,6 @@ func ContainsVulgarLanguage(text string) (bool, string) {
 		collapsed := collapseRepeatedRunes(stripped)
 		collapsedPhonetic := toPhoneticPersian(collapsed)
 
-		// Check against Persian profanities
 		for _, term := range persianProfanities {
 			termClean := stripSymbolsAndDiacritics(term)
 			termPhonetic := toPhoneticPersian(termClean)
@@ -261,13 +256,11 @@ func ContainsVulgarLanguage(text string) (bool, string) {
 				return true, term
 			}
 
-			// Check if token starts with vulgar word + valid suffix (e.g. کسکش‌ها, کونی‌ها, لاشی‌ها)
 			if hasVulgarPrefix(stripped, termClean) || hasVulgarPrefix(collapsed, termClean) || hasVulgarPrefix(collapsedPhonetic, termPhonetic) {
 				return true, term
 			}
 		}
 
-		// Check against Finglish profanities
 		for _, term := range finglishProfanities {
 			if stripped == term || collapsed == term {
 				return true, term
@@ -277,7 +270,6 @@ func ContainsVulgarLanguage(text string) (bool, string) {
 			}
 		}
 
-		// Check against English profanities
 		for _, term := range englishProfanities {
 			if stripped == term || collapsed == term {
 				return true, term
@@ -287,7 +279,6 @@ func ContainsVulgarLanguage(text string) (bool, string) {
 			}
 		}
 
-		// Collect single-character runs for spaced-out tokens (e.g. "ک" "ی" "ر" or "ک" "ص" "ک" "ش")
 		runes := []rune(stripped)
 		if len(runes) == 1 {
 			singleCharSeq.WriteRune(runes[0])
@@ -308,7 +299,6 @@ func ContainsVulgarLanguage(text string) (bool, string) {
 		}
 	}
 
-	// Flush trailing single-character sequence if any
 	if singleCharSeq.Len() > 0 {
 		seqStr := singleCharSeq.String()
 		seqCollapsed := collapseRepeatedRunes(seqStr)
@@ -322,7 +312,6 @@ func ContainsVulgarLanguage(text string) (bool, string) {
 		}
 	}
 
-	// 3. Multi-word phrase matching with flexible spacing (e.g. "مادر جنده", "بی ناموس", "پدر سگ")
 	var textBuilder strings.Builder
 	for _, r := range lowered {
 		r = cleanRune(r)
@@ -342,7 +331,6 @@ func ContainsVulgarLanguage(text string) (bool, string) {
 		termSquashed := strings.ReplaceAll(termClean, " ", "")
 		termSquashedPhonetic := toPhoneticPersian(termSquashed)
 
-		// Multi-word phrases (contain spaces like "مادر جنده", "خواهر جنده", "بی ناموس", "پدر سگ")
 		if strings.Contains(term, " ") {
 			if containsBoundedPhrase(normalizedSentence, termClean) ||
 				containsBoundedPhrase(normalizedSentence, termSquashed) ||
@@ -357,7 +345,6 @@ func ContainsVulgarLanguage(text string) (bool, string) {
 
 const VulgarityLegalWarningMessage = "اخطار حقوقی و امنیتی: متن ارسالی حاوی الفاظ نامتعارف، توهین‌آمیز یا مصادیق توهین به اشخاص و کارکنان دولت می‌باشد. بر اساس ماده ۶۰۸ و ۶۰۹ قانون مجازات اسلامی و مقررات جرایم رایانه‌ای، هرگونه توهین، افترا و هتک حیثیت در سامانه‌های رسمی کشور، پیگرد قانونی به همراه داشته و مشخصات فنی مرتکب جهت رسیدگی به مراجع ذی‌صلاح قضایی و امنیتی منعکس خواهد گردید. لطفاً گزارش خود را با رعایت موازین قانونی و ادب بازنویسی فرمایید."
 
-// GetProfanityRulesHandler serves synchronized vulgarity detection lists with client caching (M-3)
 func GetProfanityRulesHandler(w http.ResponseWriter, r *http.Request) {
 	etag := `"herasat-profanity-rules-v1"`
 	if match := r.Header.Get("If-None-Match"); match == etag {
@@ -376,5 +363,3 @@ func GetProfanityRulesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	_ = json.NewEncoder(w).Encode(resp)
 }
-
-

@@ -49,9 +49,9 @@ type cachedSession struct {
 type SessionManager struct {
 	mu           sync.RWMutex
 	db           *sql.DB
-	cache        map[string]cachedSession // key: token_hash, 60s TTL
-	sessions     map[string]AdminSession  // in-memory fallback
-	kickedTokens map[string]string        // in-memory fallback
+	cache        map[string]cachedSession
+	sessions     map[string]AdminSession
+	kickedTokens map[string]string
 }
 
 func hashToken(token string) string {
@@ -88,7 +88,7 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 	session.Token = token
 
 	if db := sm.getDB(); db != nil {
-		// Kick any existing active sessions for this user with different token hash
+
 		rows, err := db.Query(`SELECT token_hash FROM admin_sessions WHERE username = $1 AND token_hash != $2`, session.Username, tokenHash)
 		if err == nil {
 			var oldHashes []string
@@ -128,7 +128,6 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
-	// Invalidate older cached entries for same user
 	for th, cs := range sm.cache {
 		if cs.session.Username == session.Username && th != tokenHash {
 			delete(sm.cache, th)
@@ -808,7 +807,6 @@ func isCookieSecure() bool {
 	return cachedCookieSecure
 }
 
-// truncateRunes truncates a string to max runes (H-8)
 func truncateRunes(s string, max int) string {
 	r := []rune(s)
 	if len(r) <= max {
@@ -817,12 +815,10 @@ func truncateRunes(s string, max int) string {
 	return string(r[:max])
 }
 
-// stripNul removes all NUL (\x00) bytes from a string (H-8)
 func stripNul(s string) string {
 	return strings.ReplaceAll(s, "\x00", "")
 }
 
-// sanitizePhone retains only characters allowed in telephone numbers (H-8)
 func sanitizePhone(s string) string {
 	var sb strings.Builder
 	for _, ch := range s {
@@ -833,7 +829,6 @@ func sanitizePhone(s string) string {
 	return sb.String()
 }
 
-// isValidTrackingCode verifies tracking codes contain only 1-32 uppercase alphanumeric characters (H-8)
 func isValidTrackingCode(code string) bool {
 	if len(code) == 0 || len(code) > 32 {
 		return false
@@ -845,4 +840,3 @@ func isValidTrackingCode(code string) bool {
 	}
 	return true
 }
-

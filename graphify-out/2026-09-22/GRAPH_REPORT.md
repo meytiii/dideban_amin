@@ -1,7 +1,7 @@
 # Graph Report - Setad_Khabari_HMD  (2026-09-22)
 
 ## Corpus Check
-- 189 files · ~270,582 words
+- 189 files · ~270,591 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary

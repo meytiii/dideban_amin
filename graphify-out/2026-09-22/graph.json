@@ -11538,7 +11538,7 @@
       "file_type": "code",
       "norm_label": "enable2fahandler()",
       "source_file": "mfa.go",
-      "source_location": "L335"
+      "source_location": "L337"
     },
     {
       "id": "mfa_setup2fahandler",
@@ -11549,7 +11549,7 @@
       "file_type": "code",
       "norm_label": "setup2fahandler()",
       "source_file": "mfa.go",
-      "source_location": "L317"
+      "source_location": "L319"
     },
     {
       "id": "mfa_verifymfahandler",
@@ -15502,7 +15502,7 @@
       "file_type": "code",
       "norm_label": "disable2fahandler()",
       "source_file": "mfa.go",
-      "source_location": "L382"
+      "source_location": "L384"
     },
     {
       "id": "test_crypto_test_testargon2iddualformatandrehash",
@@ -20758,7 +20758,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L413",
+      "source_location": "L415",
       "weight": 1.0
     },
     {
@@ -20770,7 +20770,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L355",
+      "source_location": "L357",
       "weight": 1.0
     },
     {
@@ -20782,7 +20782,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L320",
+      "source_location": "L322",
       "weight": 1.0
     },
     {
@@ -23458,7 +23458,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "mfa.go",
-      "source_location": "L382",
+      "source_location": "L384",
       "weight": 1.0
     },
     {
@@ -23470,7 +23470,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "mfa.go",
-      "source_location": "L382",
+      "source_location": "L384",
       "weight": 1.0
     },
     {
@@ -23482,7 +23482,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "mfa.go",
-      "source_location": "L335",
+      "source_location": "L337",
       "weight": 1.0
     },
     {
@@ -23494,7 +23494,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "mfa.go",
-      "source_location": "L335",
+      "source_location": "L337",
       "weight": 1.0
     },
     {
@@ -23506,7 +23506,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "mfa.go",
-      "source_location": "L317",
+      "source_location": "L319",
       "weight": 1.0
     },
     {
@@ -23518,7 +23518,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "mfa.go",
-      "source_location": "L317",
+      "source_location": "L319",
       "weight": 1.0
     },
     {
@@ -36625,7 +36625,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "mfa.go",
-      "source_location": "L317",
+      "source_location": "L319",
       "weight": 1.0
     },
     {
@@ -36636,7 +36636,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "mfa.go",
-      "source_location": "L335",
+      "source_location": "L337",
       "weight": 1.0
     },
     {
@@ -36658,7 +36658,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "mfa.go",
-      "source_location": "L382",
+      "source_location": "L384",
       "weight": 1.0
     },
     {
@@ -41587,7 +41587,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L402",
+      "source_location": "L404",
       "weight": 1.0
     },
     {
@@ -41599,7 +41599,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L407",
+      "source_location": "L409",
       "weight": 1.0
     },
     {
@@ -41611,7 +41611,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L425",
+      "source_location": "L427",
       "weight": 1.0
     },
     {
@@ -41623,7 +41623,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L425",
+      "source_location": "L427",
       "weight": 1.0
     },
     {
@@ -41635,7 +41635,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L361",
+      "source_location": "L363",
       "weight": 1.0
     },
     {
@@ -41647,7 +41647,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L373",
+      "source_location": "L375",
       "weight": 1.0
     },
     {
@@ -41659,7 +41659,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L373",
+      "source_location": "L375",
       "weight": 1.0
     },
     {
@@ -41731,7 +41731,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L258",
+      "source_location": "L260",
       "weight": 1.0
     },
     {
@@ -41743,7 +41743,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "mfa.go",
-      "source_location": "L281",
+      "source_location": "L283",
       "weight": 1.0
     },
     {

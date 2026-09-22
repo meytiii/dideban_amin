@@ -563,7 +563,6 @@ func SubmitFollowUpHandler(w http.ResponseWriter, r *http.Request) {
 		req.TrackingCode,
 	)
 
-	// Targeted notifications to each actively forwarded regional admin
 	fwdRows, err := DB.Query("SELECT recipient_username FROM report_forwardings WHERE report_id = $1", reportID)
 	if err == nil {
 		defer fwdRows.Close()

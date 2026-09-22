@@ -17,11 +17,9 @@ import (
 func TestReencryptLegacyData(t *testing.T) {
 	db := getTestDB(t)
 
-	// Setup legacy key
 	legacyMasterKey := "12345678901234567890123456789012"
 	InitCrypto(legacyMasterKey)
 
-	// Create legacy encrypted field
 	block, _ := aes.NewCipher(aesKey)
 	aesgcm, _ := cipher.NewGCM(block)
 	nonce := make([]byte, aesgcm.NonceSize())
@@ -41,7 +39,6 @@ func TestReencryptLegacyData(t *testing.T) {
 		t.Fatalf("Failed to insert test report: %v", err)
 	}
 
-	// Create temporary legacy evidence file on disk
 	tmpDir := t.TempDir()
 	testFilePath := filepath.Join(tmpDir, "legacy_evidence.bin")
 	rawFileBytes := []byte("Legacy evidence file content HENC01")
@@ -52,7 +49,6 @@ func TestReencryptLegacyData(t *testing.T) {
 		t.Fatalf("Failed to write test evidence file: %v", err)
 	}
 
-	// Insert evidence_files record with legacy path
 	legacyPathEnc := "v1:" + base64.StdEncoding.EncodeToString(aesgcm.Seal(nonce, nonce, []byte(testFilePath), nil))
 	_, err = db.Exec(`
 		INSERT INTO evidence_files (report_id, file_path, file_hash, mime_type, file_name, file_size)
@@ -62,12 +58,10 @@ func TestReencryptLegacyData(t *testing.T) {
 		t.Fatalf("Failed to insert evidence_files row: %v", err)
 	}
 
-	// Run migration
 	if err := reencryptLegacyData(db); err != nil {
 		t.Fatalf("reencryptLegacyData failed: %v", err)
 	}
 
-	// Assert report description migrated to v2:
 	var migratedDesc string
 	err = db.QueryRow(`SELECT description FROM reports WHERE id = $1`, reportID).Scan(&migratedDesc)
 	if err != nil {
@@ -81,7 +75,6 @@ func TestReencryptLegacyData(t *testing.T) {
 		t.Fatalf("Decryption failed on migrated description: %v (got %q)", err, decDesc)
 	}
 
-	// Assert disk blob migrated to HENC\x02
 	migratedDiskBytes, err := os.ReadFile(testFilePath)
 	if err != nil {
 		t.Fatalf("Failed to read migrated disk file: %v", err)

@@ -6,7 +6,7 @@ import (
 )
 
 func TestSecurityStoresInitOrder(t *testing.T) {
-	// 1. Fresh uninitialized store panics
+
 	uninitStore := NewUsedCaptchaStore(nil)
 	panicked := false
 	func() {
@@ -22,7 +22,6 @@ func TestSecurityStoresInitOrder(t *testing.T) {
 		t.Errorf("expected TryRedeem on uninitialized store to panic")
 	}
 
-	// 2. Fresh uninitialized lockout manager panics
 	uninitLockouts := NewAccountLockoutManager(nil)
 	lockoutPanicked := false
 	func() {
@@ -38,7 +37,6 @@ func TestSecurityStoresInitOrder(t *testing.T) {
 		t.Errorf("expected IsLocked on uninitialized lockout manager to panic")
 	}
 
-	// 3. Initialized stores succeed
 	db := getTestDB(t)
 	uninitStore.init(db)
 	uninitLockouts.init(db)

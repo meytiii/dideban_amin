@@ -162,16 +162,16 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"status":                 "login_successful",
-		"username":               creds.Username,
-		"full_name":              fullName,
-		"role_title":             roleTitle,
-		"role":                   role,
-		"is_superuser":           isSuperuser,
-		"must_change_password":   requiresPasswordChange,
-		"is_password_expired":    isPasswordExpired,
-		"password_changed_at":    passwordChangedAt.Format(time.RFC3339),
-		"csrf_token":             csrfToken,
+		"status":               "login_successful",
+		"username":             creds.Username,
+		"full_name":            fullName,
+		"role_title":           roleTitle,
+		"role":                 role,
+		"is_superuser":         isSuperuser,
+		"must_change_password": requiresPasswordChange,
+		"is_password_expired":  isPasswordExpired,
+		"password_changed_at":  passwordChangedAt.Format(time.RFC3339),
+		"csrf_token":           csrfToken,
 	})
 }
 
@@ -197,15 +197,15 @@ func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"username":               admin.Username,
-		"full_name":              admin.FullName,
-		"role_title":             admin.Title,
-		"role":                   admin.Role,
-		"is_superuser":           admin.IsSuperuser,
-		"must_change_password":   requiresPasswordChange,
-		"is_password_expired":    isPasswordExpired,
-		"password_changed_at":    passwordChangedAt.Format(time.RFC3339),
-		"totp_enabled":           totpEnabled,
+		"username":             admin.Username,
+		"full_name":            admin.FullName,
+		"role_title":           admin.Title,
+		"role":                 admin.Role,
+		"is_superuser":         admin.IsSuperuser,
+		"must_change_password": requiresPasswordChange,
+		"is_password_expired":  isPasswordExpired,
+		"password_changed_at":  passwordChangedAt.Format(time.RFC3339),
+		"totp_enabled":         totpEnabled,
 	})
 }
 

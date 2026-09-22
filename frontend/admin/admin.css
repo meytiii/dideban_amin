@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: 'Vazirmatn';
     src: url('./fonts/Vazirmatn-Regular.woff2') format('woff2');
@@ -46,7 +45,6 @@
     --radius-lg: 16px;
     --radius-full: 9999px;
 
-    /* [PERF-FIX-27] Cap shadow blur on large surfaces to eliminate GPU/CPU rasterization choke */
     --shadow-card: 0 8px 20px -6px rgba(0, 0, 0, 0.45);
     --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -58,7 +56,6 @@
     padding: 0;
 }
 
-/* [HARDEN-12] Keyboard-visible focus indicator */
 :focus-visible {
     outline: 2px solid #60a5fa;
     outline-offset: 2px;
@@ -90,7 +87,6 @@ body {
     position: relative;
 }
 
-/* [PERF-FIX-2] Remove translateZ and will-change on static background */
 body::before {
     content: '';
     position: fixed;
@@ -101,7 +97,6 @@ body::before {
     pointer-events: none;
 }
 
-/* [PERF-FIX-10] Containment and layout isolation */
 .dashboard-container {
     width: 96%;
     max-width: 1550px;
@@ -109,7 +104,6 @@ body::before {
     contain: layout paint;
 }
 
-/* [PERF-FIX-10] Off-screen section virtualization */
 #reports-inbox-section,
 #report-detail-section,
 #analytics-section,
@@ -120,7 +114,6 @@ body::before {
     contain-intrinsic-size: 0 900px;
 }
 
-/* [PERF-FIX-1] Solid surface replacing backdrop-filter; [PERF-FIX-2] remove translateZ */
 .dashboard-container, #report-detail-section {
     background: rgba(30, 41, 59, 0.88);
     border: 1px solid var(--border-subtle);
@@ -129,9 +122,6 @@ body::before {
     box-shadow: var(--shadow-card);
 }
 
-/* ==========================================================================
-   Admin 3D Login Card & Traveling Light Beams (sign-in-card-2)
-   ========================================================================== */
 .admin-login-wrapper {
     display: flex;
     align-items: center;
@@ -150,7 +140,6 @@ body::before {
     display: none !important;
 }
 
-/* [PERF-FIX-16] Explicitly pause infinite animations when login section hidden */
 #login-section[style*="display: none"] .beam,
 #login-section[style*="display: none"] .corner-glow,
 .admin-login-wrapper.d-none .beam,
@@ -164,7 +153,6 @@ body::before {
     margin: 0 auto;
 }
 
-/* [PERF-FIX-1] Solid background without backdrop-filter; [PERF-FIX-7] static shadow without transition */
 .admin-login-card {
     position: relative;
     border-radius: 22px;
@@ -179,7 +167,6 @@ body::before {
                 0 0 45px rgba(59, 130, 246, 0.3);
 }
 
-/* Traveling Light Beams */
 .card-beam-container {
     position: absolute;
     inset: -1px;
@@ -275,7 +262,6 @@ body::before {
     100% { opacity: 0.7; transform: scale(1.3); }
 }
 
-/* [PERF-FIX-1] Solid gradient replacing backdrop-filter */
 .admin-login-inner {
     position: relative;
     z-index: 2;
@@ -291,7 +277,6 @@ body::before {
     margin-bottom: 30px;
 }
 
-/* [PERF-FIX-7] [PERF-FIX-27] Opacity fade pseudo-element for hover glow; capped static shadow */
 .admin-logo-crest {
     position: relative;
     width: 200px;
@@ -328,8 +313,6 @@ body::before {
     opacity: 1;
 }
 
-/* [PERF-FIX-8] Removed expensive drop-shadow filter; white asset recommended */
-/* TODO: replace logo.png with logo-white.png */
 .admin-crest-img {
     width: 172px;
     height: 172px;
@@ -402,7 +385,7 @@ body::before {
     font-family: inherit !important;
     font-size: 15.5px !important;
     outline: none !important;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
     direction: rtl !important;
     text-align: right !important;
@@ -452,7 +435,7 @@ body::before {
     height: 36px !important;
     padding: 0 !important;
     border-radius: 8px !important;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease !important;
     z-index: 2;
     box-shadow: none !important;
@@ -464,7 +447,6 @@ body::before {
     transform: translateY(-50%) scale(1.08) !important;
 }
 
-/* Browser Autofill & Password Manager Highlight Overrides */
 .login-input-wrapper input:-webkit-autofill,
 .login-input-wrapper input:-webkit-autofill:hover,
 .login-input-wrapper input:-webkit-autofill:focus,
@@ -598,7 +580,7 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     position: relative;
     overflow: hidden;
@@ -712,7 +694,6 @@ body::before {
     text-align: center;
 }
 
-/* [PERF-FIX-7] [PERF-FIX-27] Opacity fade pseudo-element for hover glow; capped static blur */
 .dashboard-header-crest {
     position: relative;
     width: 210px !important;
@@ -787,7 +768,6 @@ body::before {
     transform: translateY(-1px);
 }
 
-/* [PERF-FIX-8] Removed drop-shadow raster filter */
 .office-logo {
     width: 110px;
     max-width: 100%;
@@ -805,7 +785,6 @@ body::before {
     margin-bottom: 25px;
 }
 
-/* [PERF-FIX-7] Replaced box-shadow hover transition with pseudo-element fade; [PERF-FIX-10] layout paint containment */
 .kpi-card {
     background: var(--bg-elevated);
     border: 1px solid var(--border-subtle);
@@ -1019,7 +998,7 @@ select option {
 button {
     font-family: inherit;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
@@ -1058,7 +1037,7 @@ button {
     align-items: center;
     gap: 6px;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
@@ -1082,7 +1061,7 @@ button {
     justify-content: center;
     gap: 6px;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
     box-sizing: border-box;
 }
@@ -1163,7 +1142,6 @@ button {
     animation: lockoutPulse 2s infinite ease-in-out;
 }
 
-/* Force change password modal action buttons */
 .force-pwd-actions {
     display: flex;
     align-items: center;
@@ -1187,7 +1165,7 @@ button {
     border: 1px solid rgba(59, 130, 246, 0.5);
     border-radius: var(--radius-md);
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
     box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
 }
@@ -1213,7 +1191,7 @@ button {
     border: 1px solid rgba(239, 68, 68, 0.35);
     border-radius: var(--radius-md);
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -1225,7 +1203,6 @@ button {
     transform: translateY(-1px);
 }
 
-/* Priority status dots */
 .priority-dot {
     display: inline-block;
     width: 8px;
@@ -1264,7 +1241,6 @@ button {
     to { transform: rotate(360deg); }
 }
 
-/* [PERF-FIX-10] layout paint containment */
 .filter-container {
     background: var(--bg-elevated);
     padding: 16px 20px;
@@ -1278,7 +1254,6 @@ button {
     contain: layout paint;
 }
 
-/* Hide filter container when viewing report review/detail */
 #reports-inbox-section.in-detail-view .filter-container,
 #reports-inbox-section.in-detail-view #reportsFilterContainer {
     display: none !important;
@@ -1479,13 +1454,12 @@ button {
         rgba(56, 189, 248, 0.8),
         transparent
     );
-    /* [PERF-FIX-26] GPU-only transform replacing layout 'left' */
+
     transform: translateX(-150%) skewX(-25deg);
     animation: shimmerSweep 2.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
 }
 
-/* [PERF-FIX-26] GPU-only transform replacing continuous left layout repaint */
 @keyframes shimmerSweep {
     0% {
         transform: translateX(-150%) skewX(-25deg);
@@ -1495,7 +1469,6 @@ button {
     }
 }
 
-/* Circular glowing beacon dot matching status indicator style */
 .badge-dot-beacon {
     position: relative;
     display: inline-block;
@@ -1538,7 +1511,6 @@ button {
     animation: chatIconPulse 2.2s infinite ease-in-out;
 }
 
-/* [PERF-FIX-26] GPU scale + opacity replacing drop-shadow re-rasterization */
 @keyframes chatIconPulse {
     0%, 100% {
         transform: scale(1);
@@ -1554,7 +1526,6 @@ button {
     }
 }
 
-/* Row with new message */
 #reportsTable tbody tr.row-new-message {
     background: linear-gradient(90deg, rgba(14, 165, 233, 0.07) 0%, rgba(14, 165, 233, 0.14) 100%) !important;
     position: relative;
@@ -1565,13 +1536,11 @@ button {
     background: rgba(14, 165, 233, 0.18) !important;
 }
 
-/* In RTL: the first column td on the right gets the glowing vertical accent bar */
 #reportsTable tbody tr.row-new-message td:first-child {
     border-right: 4px solid #38bdf8 !important;
     box-shadow: inset 8px 0 16px -3px rgba(56, 189, 248, 0.55);
 }
 
-/* Wrapper for multiple status badges */
 .status-badges-wrap {
     display: inline-flex;
     align-items: center;
@@ -1580,7 +1549,6 @@ button {
     flex-wrap: wrap;
 }
 
-/* Badge for Regional Response (Side Admins) */
 .badge-regional-response {
     position: relative;
     overflow: hidden;
@@ -1634,7 +1602,6 @@ button {
     animation: regionalIconPulse 2.2s infinite ease-in-out;
 }
 
-/* [PERF-FIX-26] GPU scale + opacity replacing drop-shadow re-rasterization */
 @keyframes regionalIconPulse {
     0%, 100% {
         transform: scale(1);
@@ -1650,7 +1617,6 @@ button {
     }
 }
 
-/* Row with regional response */
 #reportsTable tbody tr.row-regional-response {
     background: linear-gradient(90deg, rgba(99, 102, 241, 0.08) 0%, rgba(14, 165, 233, 0.12) 100%) !important;
     position: relative;
@@ -1661,13 +1627,11 @@ button {
     background: linear-gradient(90deg, rgba(99, 102, 241, 0.16) 0%, rgba(14, 165, 233, 0.20) 100%) !important;
 }
 
-/* In RTL: the first column td on the right gets the glowing vertical accent bar */
 #reportsTable tbody tr.row-regional-response td:first-child {
     border-right: 4px solid #818cf8 !important;
     box-shadow: inset 8px 0 16px -3px rgba(99, 102, 241, 0.55);
 }
 
-/* Combined row state: both whistleblower message AND regional response */
 #reportsTable tbody tr.row-new-message.row-regional-response td:first-child {
     border-right: 4px solid #38bdf8 !important;
     box-shadow: inset 8px 0 16px -3px rgba(56, 189, 248, 0.55), inset 12px 0 20px -3px rgba(99, 102, 241, 0.45);
@@ -1872,7 +1836,6 @@ button {
     }
 }
 
-/* [PERF-FIX-10] layout paint containment */
 .detail-header {
     display: flex;
     justify-content: space-between;
@@ -1964,7 +1927,7 @@ button {
     justify-content: center;
     padding: 0;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -1995,7 +1958,7 @@ button {
     padding: 8px 16px;
     cursor: pointer;
     box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
     text-decoration: none;
     width: fit-content;
@@ -2129,7 +2092,7 @@ button {
     border-radius: var(--radius-full);
     font-size: 12px;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -2199,7 +2162,7 @@ button {
     color: var(--text-muted);
     cursor: pointer;
     user-select: none;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
     outline: none;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
@@ -2250,7 +2213,6 @@ button {
     color: #f87171;
 }
 
-/* [PERF-FIX-1] Removed backdrop-filter; opaque background */
 .session-tooltip {
     position: absolute;
     top: calc(100% + 8px);
@@ -2394,7 +2356,7 @@ button {
     background: #10b981;
     box-shadow: 0 0 8px #10b981;
     flex-shrink: 0;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
@@ -2426,7 +2388,7 @@ button {
     font-size: 11.5px;
     font-family: inherit;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -2479,7 +2441,7 @@ button {
     justify-content: center;
     cursor: pointer;
     box-shadow: none !important;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -2588,7 +2550,7 @@ button {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
@@ -2634,7 +2596,7 @@ button {
     font-size: 13.5px;
     font-weight: 500;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit property transitions */
+
     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
 }
 
@@ -2810,7 +2772,6 @@ button {
     font-weight: 600;
 }
 
-/* [PERF-FIX-1] Removed backdrop-filter */
 .admin-modal-overlay {
     position: fixed;
     top: 0;
@@ -2991,7 +2952,7 @@ button {
     font-family: inherit;
     cursor: pointer;
     outline: none;
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing */
+
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
@@ -3088,7 +3049,6 @@ button {
     align-items: stretch;
 }
 
-/* [PERF-FIX-7] [PERF-FIX-15] Explicit property transition without box-shadow; [PERF-FIX-10] layout paint containment */
 .analytics-card {
     background: rgba(15, 23, 42, 0.65);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -3126,7 +3086,6 @@ button {
     padding: 4px 0;
 }
 
-/* Monthly Trend Line Chart (Modern Recharts/Shadcn Inspired) */
 .chart-container-bar {
     width: 100%;
     min-height: 380px;
@@ -3143,7 +3102,6 @@ button {
     gap: 16px;
 }
 
-/* Header & Quick Stats Row */
 .monthly-stats-header {
     display: flex;
     align-items: center;
@@ -3243,7 +3201,6 @@ button {
     background: rgba(255, 255, 255, 0.1);
 }
 
-/* Canvas Area */
 .monthly-chart-canvas-wrap {
     position: relative;
     width: 100%;
@@ -3292,7 +3249,6 @@ button {
     animation: pulseGlow 2.5s infinite ease-in-out;
 }
 
-/* [PERF-FIX-26] GPU scale + opacity replacing SVG geometry r recalculation */
 @keyframes pulseGlow {
     0%, 100% {
         transform: scale(0.85);
@@ -3304,7 +3260,6 @@ button {
     }
 }
 
-/* X-Axis Bar */
 .monthly-xaxis-bar {
     position: absolute;
     bottom: 0;
@@ -3337,7 +3292,6 @@ button {
     font-weight: 700;
 }
 
-/* [PERF-FIX-1] Removed backdrop-filter; opaque background */
 .monthly-custom-tooltip {
     position: absolute;
     pointer-events: none;
@@ -3571,7 +3525,7 @@ tr.row-priority-normal {
     border-radius: var(--radius-sm);
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.04);
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing */
+
     transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 
@@ -4135,7 +4089,6 @@ tr.row-priority-normal {
     75% { transform: rotate(4deg); }
 }
 
-/* [PERF-FIX-1] [PERF-FIX-9] Only apply blur when dropdown open; opaque fallback */
 .notif-dropdown {
     position: absolute;
     top: calc(100% + 8px);
@@ -4209,7 +4162,7 @@ tr.row-priority-normal {
     padding: 4px 8px;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing */
+
     transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
@@ -4332,7 +4285,6 @@ tr.row-priority-normal {
     font-size: 12.5px;
 }
 
-/* Unified High-End Tooltip System (Matching Radix/shadcn tooltip component) */
 .app-tooltip {
     position: fixed;
     z-index: 999999;
@@ -4347,7 +4299,7 @@ tr.row-priority-normal {
     border: 1px solid rgba(59, 130, 246, 0.35);
     border-radius: 6px;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.65), 0 0 15px rgba(59, 130, 246, 0.18);
-    /* [PERF-FIX-1] Removed backdrop-filter */
+
     opacity: 0;
     transform: scale(0.95);
     transition: opacity 0.16s cubic-bezier(0.16, 1, 0.3, 1),
@@ -4385,7 +4337,6 @@ tr.row-priority-normal {
     border-right: none;
 }
 
-/* Disable tooltips completely on mobile viewports and touch devices */
 @media (max-width: 768px), (hover: none), (pointer: coarse) {
     .app-tooltip {
         display: none !important;
@@ -4395,10 +4346,6 @@ tr.row-priority-normal {
         transform: scale(0.95) !important;
     }
 }
-
-/* ==========================================================================
-   Luxury 3D Isometric Preloader & Skeleton Wireframe System
-   ========================================================================== */
 
 .luxury-preloader {
     position: fixed;
@@ -4444,7 +4391,6 @@ tr.row-priority-normal {
     justify-content: center;
 }
 
-/* Morph Loading Animation */
 .morph-loader-container {
     position: relative;
     width: 128px;
@@ -4572,7 +4518,6 @@ tr.row-priority-normal {
   }
 }
 
-/* Preloader Typography & Progress */
 .preloader-info {
     display: flex;
     flex-direction: column;
@@ -4636,7 +4581,6 @@ tr.row-priority-normal {
     100% { width: 100%; }
 }
 
-/* Skeleton Layout Wireframe */
 .page-skeleton {
     width: 100%;
     max-width: 860px;
@@ -4658,7 +4602,6 @@ tr.row-priority-normal {
     opacity: 0;
 }
 
-/* [PERF-FIX-12] Transform-based skeleton sweep replacing background-position paint loop */
 .skeleton-shimmer {
     position: relative;
     overflow: hidden;
@@ -4726,11 +4669,6 @@ tr.row-priority-normal {
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* =========================================================================
-   Admin Panel Comprehensive Skeletons (Table, Detail, Analytics, Flowchart)
-   ========================================================================= */
-
-/* 1. Admin Reports Table Skeleton */
 .skeleton-tr {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     transition: background 0.2s ease;
@@ -4789,7 +4727,6 @@ tr.row-priority-normal {
     border-radius: 6px;
 }
 
-/* 2. Admin Report Detail Skeleton */
 .skeleton-detail-container {
     display: flex;
     flex-direction: column;
@@ -4851,7 +4788,6 @@ tr.row-priority-normal {
     gap: 14px;
 }
 
-/* 3. Admin Analytics Skeletons */
 .skeleton-analytics-kpi-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -4901,7 +4837,6 @@ tr.row-priority-normal {
     position: relative;
 }
 
-/* 4. Admin Forward Flowchart Skeleton */
 .skeleton-flowchart-container {
     display: flex;
     flex-direction: column;
@@ -4936,12 +4871,6 @@ tr.row-priority-normal {
     }
 }
 
-/* =========================================================================
-   Report Quality Classification & Analytics (C7 - Pure CSS & SVG)
-   ========================================================================= */
-
-/* 1. Detail Top Classification Status Banner */
-/* [PERF-FIX-1] Removed backdrop-filter; solid gradient fallback */
 .detail-classification-banner {
     margin-bottom: 18px;
     padding: 12px 18px;
@@ -5044,7 +4973,7 @@ tr.row-priority-normal {
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing */
+
     transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -5056,7 +4985,6 @@ tr.row-priority-normal {
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
-/* 2. End-of-Report One-Time Classification Prompt Box */
 .classification-prompt-box {
     margin: 20px 0 18px 0;
     padding: 16px 20px;
@@ -5064,7 +4992,7 @@ tr.row-priority-normal {
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.72), rgba(15, 23, 42, 0.88));
     border: 1px solid rgba(59, 130, 246, 0.35);
     box-shadow: 0 6px 22px rgba(0, 0, 0, 0.28);
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing and clamped <=0.25s */
+
     transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
@@ -5126,7 +5054,7 @@ tr.row-priority-normal {
     font-weight: 600;
     cursor: pointer;
     border: none;
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing */
+
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -5163,7 +5091,6 @@ tr.row-priority-normal {
     box-shadow: 0 6px 18px rgba(100, 116, 139, 0.3);
 }
 
-/* 3. Change Classification Modal Radio Cards */
 .change-classify-options {
     display: flex;
     flex-direction: column;
@@ -5179,7 +5106,7 @@ tr.row-priority-normal {
     border-radius: var(--radius-md);
     padding: 12px 14px;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing */
+
     transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
 }
@@ -5248,7 +5175,6 @@ tr.row-priority-normal {
     line-height: 1.5;
 }
 
-/* 4. Luxury Donut Chart & Interactive Segment Breakdown */
 .metric-sub-pct {
     font-size: 14px;
     font-weight: 500;
@@ -5361,7 +5287,6 @@ tr.row-priority-normal {
     letter-spacing: 0.2px;
 }
 
-/* Donut Legend List - Full Natural Height without Scrollbar */
 .donut-legend-list {
     display: flex;
     flex-direction: column;
@@ -5382,7 +5307,7 @@ tr.row-priority-normal {
     background: transparent;
     border: 1px solid transparent;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing */
+
     transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     user-select: none;
 }
@@ -5475,7 +5400,6 @@ tr.row-priority-normal {
     color: var(--text-subtle);
 }
 
-/* 5. Priority Segmented Progress Bar & Legend */
 .priority-segmented-card {
     display: flex;
     flex-direction: column;
@@ -5506,7 +5430,7 @@ tr.row-priority-normal {
     border-radius: var(--radius-full, 9999px);
     font-size: 12px;
     font-weight: 600;
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing */
+
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
@@ -5584,10 +5508,6 @@ tr.row-priority-normal {
     color: #10b981;
 }
 
-/* ==========================================================================
-   14. Report Forwarding (ارجاع خبر) & Flowchart History Styles
-   ========================================================================== */
-
 .btn-action.btn-icon-only {
     width: 32px;
     height: 30px;
@@ -5605,7 +5525,6 @@ tr.row-priority-normal {
     display: block;
 }
 
-/* Recipient Selector in Forward Modal */
 .forward-recipients-list {
     scrollbar-width: thin;
     scrollbar-color: rgba(56, 189, 248, 0.45) rgba(15, 23, 42, 0.6);
@@ -5621,10 +5540,6 @@ tr.row-priority-normal {
     box-shadow: 0 0 10px rgba(14, 165, 233, 0.15);
 }
 
-/* ==========================================================================
-   Forward History & Forwarding Modals Custom Scrollbar (Slider)
-   ========================================================================== */
-
 .forward-history-modal-box {
     background: linear-gradient(145deg, rgba(24, 34, 53, 0.98), rgba(15, 23, 42, 0.98)) !important;
     border: 1px solid rgba(99, 102, 241, 0.28) !important;
@@ -5639,7 +5554,6 @@ tr.row-priority-normal {
     padding: 14px 10px !important;
 }
 
-/* Chrome / Edge / Safari (WebKit) Custom Scrollbar */
 .forward-history-scroll::-webkit-scrollbar,
 #forward-history-body::-webkit-scrollbar,
 .forward-recipients-list::-webkit-scrollbar {
@@ -5693,14 +5607,12 @@ tr.row-priority-normal {
     background: transparent;
 }
 
-/* Flowchart Diagram Wrapper */
 .flowchart-wrapper {
     width: 100%;
     padding: 6px;
     direction: rtl;
 }
 
-/* [PERF-FIX-1] Removed backdrop-filter; solid background */
 .flow-group-card {
     background: rgba(15, 23, 42, 0.92);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -5718,7 +5630,7 @@ tr.row-priority-normal {
 .flow-node {
     border-radius: var(--radius-md, 10px);
     padding: 14px 16px;
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing */
+
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     position: relative;
 }
@@ -5837,7 +5749,6 @@ tr.row-priority-normal {
     margin-top: 10px;
 }
 
-/* Flow Connector Arrow */
 .flow-connector-wrapper {
     display: flex;
     flex-direction: column;
@@ -5862,7 +5773,6 @@ tr.row-priority-normal {
     animation: pulseArrow 2.2s infinite ease-in-out;
 }
 
-/* [PERF-FIX-26] GPU translateY + opacity replacing drop-shadow re-rasterization */
 @keyframes pulseArrow {
     0%, 100% { transform: translateY(0); opacity: 0.8; }
     50% { transform: translateY(3px); opacity: 1; }
@@ -5879,7 +5789,6 @@ tr.row-priority-normal {
     margin-top: 6px;
 }
 
-/* Destination Nodes Grid */
 .flow-destinations-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -5921,7 +5830,6 @@ tr.row-priority-normal {
     box-shadow: 0 6px 18px rgba(245, 158, 11, 0.14);
 }
 
-/* Seen / Unseen Status Badges */
 .flow-seen-badge {
     display: flex;
     align-items: center;
@@ -5982,10 +5890,6 @@ tr.row-priority-normal {
     font-weight: 600;
 }
 
-/* ==========================================================================
-   Revoke Forwarding Button (Flowchart) & Regional Responses Styling
-   ========================================================================== */
-
 .flow-node-header {
     display: flex;
     align-items: center;
@@ -6004,7 +5908,7 @@ tr.row-priority-normal {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing */
+
     transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     padding: 0;
     flex-shrink: 0;
@@ -6054,7 +5958,6 @@ tr.row-priority-normal {
     word-break: break-word;
 }
 
-/* Regional Section in Report Details */
 .detail-regional-section {
     background: rgba(15, 23, 42, 0.45);
     border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
@@ -6106,7 +6009,7 @@ tr.row-priority-normal {
     border-right: 3px solid #3b82f6;
     border-radius: var(--radius-sm, 6px);
     padding: 14px 16px;
-    /* [PERF-FIX-25] Explicit transitions to prevent layout thrashing */
+
     transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
@@ -6190,10 +6093,6 @@ tr.row-priority-normal {
     border-radius: var(--radius-sm, 6px);
 }
 
-/* ==========================================================================
-   Nexus Chat Bubble Component (Admin Report Review Follow-up Messages)
-   ========================================================================== */
-
 .nexus-chat-card {
     position: relative;
     display: flex;
@@ -6211,8 +6110,6 @@ tr.row-priority-normal {
     border-color: rgba(255, 255, 255, 0.16);
 }
 
-/* Header */
-/* [PERF-FIX-1] Removed backdrop-filter; opaque background */
 .nexus-chat-header {
     display: flex;
     align-items: center;
@@ -6288,7 +6185,6 @@ tr.row-priority-normal {
     font-weight: 600;
 }
 
-/* Stream / Messages Body */
 .nexus-chat-stream {
     display: flex;
     flex-direction: column;
@@ -6312,7 +6208,6 @@ tr.row-priority-normal {
     background: transparent;
 }
 
-/* Bubble Row Layout (RTL-aware) */
 .nexus-bubble-row {
     display: flex;
     width: 100%;
@@ -6337,7 +6232,6 @@ tr.row-priority-normal {
     flex-direction: row-reverse;
 }
 
-/* Avatars */
 .nexus-bubble-avatar {
     width: 32px;
     height: 32px;
@@ -6360,7 +6254,6 @@ tr.row-priority-normal {
     box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
 }
 
-/* Bubble Cards */
 .nexus-bubble-card {
     padding: 12px 16px;
     font-size: 13.5px;
@@ -6374,7 +6267,6 @@ tr.row-priority-normal {
     transform: translateY(-2px) scale(1.008);
 }
 
-/* Reporter Bubble (Indigo-Violet gradient per React component) */
 .nexus-bubble-reporter {
     border-radius: 18px 4px 18px 18px;
     background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
@@ -6383,7 +6275,6 @@ tr.row-priority-normal {
     border: 1px solid rgba(199, 210, 254, 0.2);
 }
 
-/* [PERF-FIX-1] Removed backdrop-filter; solid background */
 .nexus-bubble-admin {
     border-radius: 4px 18px 18px 18px;
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -6398,7 +6289,6 @@ tr.row-priority-normal {
     box-shadow: 0 6px 20px -2px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(16, 185, 129, 0.25);
 }
 
-/* Inside Bubble */
 .nexus-bubble-top {
     display: flex;
     align-items: center;
@@ -6435,7 +6325,6 @@ tr.row-priority-normal {
     white-space: pre-wrap;
 }
 
-/* Empty State */
 .nexus-chat-empty {
     display: flex;
     flex-direction: column;
@@ -6513,11 +6402,6 @@ tr.row-priority-normal {
     }
 }
 
-/* ==========================================================================
-   Professional Confirmation Dialog (AlertDialog Pattern)
-   ========================================================================== */
-
-/* [PERF-FIX-1] Removed backdrop-filter; opaque backdrop */
 .pro-confirm-overlay {
     position: fixed;
     inset: 0;
@@ -6540,7 +6424,7 @@ tr.row-priority-normal {
     width: 100%;
     max-width: 400px;
     border-radius: 20px;
-    background: #18181b; /* zinc-900 */
+    background: #18181b;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     overflow: hidden;

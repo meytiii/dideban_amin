@@ -18,23 +18,21 @@ import (
 )
 
 var (
-	aesKey        []byte // Master key
-	keyFields     []byte // Subkey: HERASAT_REPORT_FIELDS_V2
-	keyFilePath   []byte // Subkey: HERASAT_FILE_PATH_V2
-	keyFileBlob   []byte // Subkey: HERASAT_FILE_BLOB_V2
-	hmacKey       []byte // Subkey: HERASAT_CAPTCHA_HMAC_V2
-	legacyHmacKey []byte // Legacy HMAC key: HERASAT_CAPTCHA_HMAC_V1
+	aesKey        []byte
+	keyFields     []byte
+	keyFilePath   []byte
+	keyFileBlob   []byte
+	hmacKey       []byte
+	legacyHmacKey []byte
 )
 
-// deriveKey implements RFC 5869 HKDF-SHA256 to derive a 32-byte key for a specific purpose.
 func deriveKey(masterKey []byte, info string) []byte {
-	// HKDF-Extract: PRK = HMAC-Hash(salt, masterKey)
-	salt := make([]byte, sha256.Size) // RFC 5869: default salt is HashLen zeros
+
+	salt := make([]byte, sha256.Size)
 	extractMac := hmac.New(sha256.New, salt)
 	extractMac.Write(masterKey)
 	prk := extractMac.Sum(nil)
 
-	// HKDF-Expand: T(1) = HMAC-Hash(PRK, info | 0x01)
 	expandMac := hmac.New(sha256.New, prk)
 	expandMac.Write([]byte(info))
 	expandMac.Write([]byte{0x01})
@@ -94,7 +92,7 @@ func encryptWithKey(key []byte, prefix, plaintext string) (string, error) {
 
 var (
 	ErrAuthenticationFailed = errors.New("cryptographic authentication failure")
-	ErrInvalidCiphertext   = errors.New("invalid ciphertext format")
+	ErrInvalidCiphertext    = errors.New("invalid ciphertext format")
 )
 
 func DecryptAES(rawCiphertext string) (string, error) {
@@ -291,7 +289,6 @@ func VerifyPasswordWithRehash(password, encodedHash string) (ok bool, needsRehas
 		return true, needsRehash
 	}
 
-	// Legacy format: salt.hash (base64 raw-std, t=1)
 	parts := strings.Split(encodedHash, ".")
 	if len(parts) != 2 {
 		return false, false

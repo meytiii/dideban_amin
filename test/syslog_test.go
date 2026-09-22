@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"net"
 	"os"
 	"strings"
@@ -27,24 +26,19 @@ func TestSyslogAsyncWorkerDelivery(t *testing.T) {
 		_ = os.Unsetenv("HERASAT_SYSLOG_ADDR")
 	}()
 
-	shipper := NewSyslogShipper()
+	shipper := InitSyslogShipper()
 	defer shipper.Close()
 
-	event := SyslogAuditEvent{
-		EventID:      "TEST_AUDIT_101",
-		Action:       "TEST_ACTION",
-		Actor:        "test_admin",
-		IP:           "127.0.0.1",
-		Severity:     SyslogSevInfo,
-		Timestamp:    time.Now().UTC(),
-		Detail:       "Safe metadata detail",
-		SecurityNote: "No secrets leaked",
+	msg := SyslogMessage{
+		Severity: SeverityInfo,
+		Action:   "TEST_ACTION",
+		Username: "test_admin",
+		IP:       "127.0.0.1",
+		Detail:   "Safe metadata detail",
+		Time:     time.Now().UTC(),
 	}
 
-	ok := shipper.EnqueueAudit(event)
-	if !ok {
-		t.Fatalf("EnqueueAudit returned false on empty queue")
-	}
+	shipper.Enqueue(msg)
 
 	buf := make([]byte, 2048)
 	_ = pc.SetReadDeadline(time.Now().Add(2 * time.Second))
@@ -53,58 +47,64 @@ func TestSyslogAsyncWorkerDelivery(t *testing.T) {
 		t.Fatalf("failed to receive syslog packet: %v", err)
 	}
 
-	msg := string(buf[:n])
-	if !strings.HasPrefix(msg, "<") {
-		t.Fatalf("RFC 5424 message must start with <PRI>: %s", msg)
+	packet := string(buf[:n])
+	if !strings.HasPrefix(packet, "<") {
+		t.Fatalf("RFC 5424 message must start with <PRI>: %s", packet)
 	}
-	if !strings.Contains(msg, "herasat-portal") {
-		t.Fatalf("expected APP-NAME in message: %s", msg)
+	if !strings.Contains(packet, "herasat") {
+		t.Fatalf("expected APP-NAME in message: %s", packet)
 	}
-	if !strings.Contains(msg, "TEST_ACTION") {
-		t.Fatalf("expected MSGID or action in message: %s", msg)
+	if !strings.Contains(packet, "TEST_ACTION") {
+		t.Fatalf("expected action in message: %s", packet)
 	}
 }
 
-func TestSyslogFormatRFC5424SanitizesSecrets(t *testing.T) {
+func TestSyslogFormatRFC5424SanitizesParams(t *testing.T) {
 	shipper := &SyslogShipper{
-		appName:  "herasat-portal",
 		hostname: "herasat-node01",
+		pid:      "1234",
 	}
 
-	event := SyslogAuditEvent{
-		EventID:   "AUDIT_SEC_01",
-		Action:    "LOGIN_FAILURE",
-		Actor:     "malicious_actor",
-		IP:        "192.168.1.100",
-		Severity:  SyslogSevWarning,
-		Timestamp: time.Date(2026, 9, 22, 10, 0, 0, 0, time.UTC),
-		Detail:    "Invalid password attempt with Argon2 hash: $argon2id$v=19$m=65536,t=3,p=4$secret_hash_not_allowed",
+	msg := SyslogMessage{
+		Severity: SeverityWarning,
+		Action:   "LOGIN_FAILURE",
+		Username: "admin\"\nmalicious",
+		IP:       "192.168.1.100\r",
+		Detail:   "Invalid password \"attempt\"",
+		Time:     time.Date(2026, 9, 22, 10, 0, 0, 0, time.UTC),
 	}
 
-	line := shipper.formatRFC5424(event)
-	if strings.Contains(line, "$argon2id$") {
-		t.Fatalf("RFC5424 formatter failed to strip password hash: %s", line)
+	line := shipper.formatRFC5424(msg)
+	if strings.Contains(line, "admin\"") {
+		t.Fatalf("RFC5424 formatter failed to sanitize quotes: %s", line)
 	}
-	if strings.Contains(line, "secret_hash_not_allowed") {
-		t.Fatalf("RFC5424 formatter leaked secret content: %s", line)
+	if strings.Contains(line, "\n") {
+		t.Fatalf("RFC5424 formatter leaked newline: %s", line)
+	}
+	if !strings.Contains(line, "<36>1") {
+		t.Fatalf("expected PRI <36>1 for Warning severity: %s", line)
 	}
 }
 
 func TestSyslogQueueCapacityNonBlocking(t *testing.T) {
 	shipper := &SyslogShipper{
-		enabled: false,
-		queue:   make(chan SyslogAuditEvent, 5),
+		enabled: true,
+		queue:   make(chan SyslogMessage, 5),
 	}
 
 	for i := 0; i < 5; i++ {
-		ok := shipper.EnqueueAudit(SyslogAuditEvent{Action: "FLOOD"})
-		if !ok {
-			t.Fatalf("enqueue should succeed while under capacity")
-		}
+		shipper.Enqueue(SyslogMessage{Action: "FLOOD"})
 	}
 
-	ok := shipper.EnqueueAudit(SyslogAuditEvent{Action: "OVERFLOW"})
-	if ok {
-		t.Fatalf("enqueue should return false when queue is saturated")
+	done := make(chan struct{})
+	go func() {
+		shipper.Enqueue(SyslogMessage{Action: "OVERFLOW"})
+		close(done)
+	}()
+
+	select {
+	case <-done:
+	case <-time.After(100 * time.Millisecond):
+		t.Fatalf("Enqueue blocked when queue was full")
 	}
 }

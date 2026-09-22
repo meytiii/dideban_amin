@@ -15,18 +15,16 @@ func TestInputSanitizationAndLimits(t *testing.T) {
 	db := getTestDB(t)
 	DB = db
 
-	// Helper for generating CAPTCHA
 	token := GenerateCaptchaToken(15, 2*time.Minute)
 	answer := "15"
 
-	// 1. SubmitReportHandler: description > 5000 runes returns 400
 	{
 		body := &bytes.Buffer{}
 		writer := multipart.NewWriter(body)
 		_ = writer.WriteField("captcha_id", token)
 		_ = writer.WriteField("captcha_answer", answer)
 		_ = writer.WriteField("category", "financial")
-		_ = writer.WriteField("description", strings.Repeat("گزارش تستی ", 10000)) // ~110,000 runes
+		_ = writer.WriteField("description", strings.Repeat("گزارش تستی ", 10000))
 		_ = writer.Close()
 
 		req := httptest.NewRequest("POST", "/api/report", body)
@@ -39,7 +37,6 @@ func TestInputSanitizationAndLimits(t *testing.T) {
 		}
 	}
 
-	// 2. SubmitReportHandler: name > 100 runes returns 400
 	{
 		newToken := GenerateCaptchaToken(22, 2*time.Minute)
 		newAns := "22"
@@ -49,7 +46,7 @@ func TestInputSanitizationAndLimits(t *testing.T) {
 		_ = writer.WriteField("captcha_answer", newAns)
 		_ = writer.WriteField("category", "financial")
 		_ = writer.WriteField("description", strings.Repeat("شرح گزارش معتبر برای تست سیستم حراست استان همدان. ", 2))
-		_ = writer.WriteField("reporter_name", strings.Repeat("نام کاربری بسیار طولانی ", 10)) // > 100 runes
+		_ = writer.WriteField("reporter_name", strings.Repeat("نام کاربری بسیار طولانی ", 10))
 		_ = writer.Close()
 
 		req := httptest.NewRequest("POST", "/api/report", body)
@@ -62,7 +59,6 @@ func TestInputSanitizationAndLimits(t *testing.T) {
 		}
 	}
 
-	// 3. UpdateInternalNotesHandler: notes > 4000 runes returns 400
 	{
 		adminSession := AdminSession{
 			Username: "admin_test_notes",
@@ -80,7 +76,6 @@ func TestInputSanitizationAndLimits(t *testing.T) {
 		}
 	}
 
-	// 4. RespondToReportHandler: response > 3000 runes returns 400
 	{
 		adminSession := AdminSession{
 			Username: "admin_test_resp",
@@ -98,7 +93,6 @@ func TestInputSanitizationAndLimits(t *testing.T) {
 		}
 	}
 
-	// 5. Unit test helper functions: truncateRunes, stripNul, sanitizePhone, isValidTrackingCode
 	{
 		if stripNul("hello\x00world\x00") != "helloworld" {
 			t.Errorf("stripNul failed")

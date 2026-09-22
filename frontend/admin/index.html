@@ -35,9 +35,7 @@
         </div>
     </div>
 
-    <!-- [HARDEN-9] aria-live for SR announcement -->
     <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="false"></div>
-
 
     <div id="login-section" class="admin-login-wrapper">
         <div class="admin-login-card-3d-wrapper" id="loginCard3D">
@@ -53,7 +51,6 @@
                     <div class="corner-glow corner-br"></div>
                     <div class="corner-glow corner-bl"></div>
                 </div>
-
 
                 <div class="admin-login-inner">
                     <div class="admin-login-header">
@@ -205,7 +202,6 @@
         </div>
     </div>
 
-
     <div id="dashboard-section" class="dashboard-container" style="display: none;">
         <header class="dashboard-header">
             <div class="dashboard-brand">
@@ -234,10 +230,9 @@
                 <div class="session-timer-wrapper" id="sessionTimerWrapper">
                     <div class="session-timer-box" id="sessionTimerBox" tabindex="0" role="button" aria-haspopup="true"
                         aria-expanded="false" aria-label="اعتبار نشست کاری - راهنما و وضعیت">
-                        <!-- [HARDEN-9] aria-live for SR announcement -->
+
                         <strong id="sessionCountdown" class="ltr" aria-live="off">15:00</strong>
                     </div>
-
 
                     <div class="session-tooltip" id="sessionTooltip" role="tooltip">
                         <div class="session-tooltip-header">
@@ -301,7 +296,6 @@
                     </div>
                 </div>
 
-
                 <div class="notif-wrapper" id="notifWrapper">
                     <button type="button" id="btnNotifBell" class="btn-action btn-secondary btn-notif-bell"
                         aria-haspopup="true" aria-expanded="false" aria-label="مرکز اعلان‌ها و رویدادها"
@@ -314,7 +308,6 @@
                         <span>اعلان‌ها</span>
                         <span class="notif-badge-pill d-none" id="notifBadgeCount">۰</span>
                     </button>
-
 
                     <div class="notif-dropdown" id="notifDropdown" style="display: none;">
                         <div class="notif-dropdown-header">
@@ -385,7 +378,6 @@
             </div>
         </header>
 
-
         <div class="admin-main-nav">
             <button type="button" id="tab-btn-reports" class="main-nav-tab active">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
@@ -411,7 +403,6 @@
                 <span class="superuser-badge-pill">پشتیبانی سامانه</span>
             </button>
         </div>
-
 
         <div id="reports-inbox-section">
 
@@ -473,7 +464,6 @@
                     </div>
                 </div>
             </section>
-
 
             <div class="filter-container" id="reportsFilterContainer">
                 <div class="filter-group filter-search-group">
@@ -580,7 +570,6 @@
                 </div>
             </div>
 
-
             <div id="bulkActionsToolbar" class="bulk-actions-toolbar" style="display: none;">
                 <div class="bulk-info">
                     <span id="bulkSelectedCount">۰</span> مورد انتخاب شده است
@@ -609,7 +598,6 @@
                 </div>
             </div>
 
-
             <main id="reports-list-section" class="table-responsive">
                 <table id="reportsTable">
                     <thead>
@@ -631,7 +619,6 @@
                     </tbody>
                 </table>
 
-
                 <div class="pagination-container" aria-label="ناوبری صفحات گزارش‌ها">
                     <div class="pagination-info" id="pagination-info">گزارش ۰ از ۰</div>
                     <nav class="pagination-nav" aria-label="صفحات گزارش‌ها">
@@ -641,7 +628,6 @@
                 </div>
             </main>
         </div>
-
 
         <section id="report-detail-section" style="display: none;">
 
@@ -735,7 +721,6 @@
                 </div>
             </div>
 
-
             <div id="report-detail-skeleton" class="skeleton-detail-container d-none" aria-hidden="true">
                 <div class="skeleton-detail-grid-layout">
                     <div class="skeleton-detail-box">
@@ -810,7 +795,7 @@
                         <span class="detail-label">کد پیگیری:</span>
                         <div class="detail-value-with-copy">
                             <strong id="detail-tracking" class="detail-value ltr"></strong>
-                            <!-- [HARDEN-11] Accessible name for mini-copy button -->
+
                             <button type="button" class="btn-mini-copy" id="copyDetailTrackingBtn"
                                 data-tooltip="کپی کد پیگیری" aria-label="کپی کد پیگیری">
                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
@@ -856,7 +841,7 @@
                         <span class="detail-label">شماره تماس:</span>
                         <div class="detail-value-with-copy">
                             <strong id="detail-phone" class="detail-value ltr"></strong>
-                            <!-- [HARDEN-11] Accessible name for mini-copy button -->
+
                             <button type="button" class="btn-mini-copy" id="copyDetailPhoneBtn"
                                 data-tooltip="کپی شماره تماس" aria-label="کپی شماره تماس">
                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
@@ -900,8 +885,6 @@
                     <div id="detail-desc" class="detail-desc-box"></div>
                 </div>
 
-
-                <!-- Follow-up Conversation Thread (Nexus Chat Style) -->
                 <div id="detail-messages-container" class="nexus-chat-card d-none">
                     <div class="nexus-chat-header">
                         <div class="nexus-chat-header-info">
@@ -922,10 +905,9 @@
                     <div id="detail-messages-list" class="nexus-chat-stream"></div>
                 </div>
 
-                <!-- Regional Responses Section: Reports from Navahi & Manategh -->
                 <div id="detail-regional-responses-container" class="detail-regional-section"
                     style="margin-top: 20px; display: none;">
-                    <!-- Central Admins view: List of regional responses received -->
+
                     <div id="regional-responses-central-view" style="display: none;">
                         <div class="regional-section-header">
                             <div class="regional-section-title">
@@ -942,7 +924,6 @@
                         <div id="regional-responses-list" class="regional-responses-grid"></div>
                     </div>
 
-                    <!-- Side Admin view: Form to submit investigation report to Central Admin -->
                     <div id="regional-responses-side-view" style="display: none;">
                         <div class="regional-section-header">
                             <div class="regional-section-title">
@@ -958,7 +939,6 @@
                             </span>
                         </div>
 
-                        <!-- Previously submitted response card if any -->
                         <div id="regional-previous-response-card" class="existing-regional-card"
                             style="display: none; margin-bottom: 12px;">
                             <div class="existing-regional-header">
@@ -1018,7 +998,7 @@
                                 </button>
                             </div>
                         </form>
-                        <!-- [HARDEN-9] aria-live for SR announcement -->
+
                         <div id="regionalResponseStatusMsg" class="response-box" role="status"
                             style="display: none; margin-top: 10px;"></div>
                     </div>
@@ -1035,7 +1015,6 @@
                     <div id="print-no-response-placeholder" class="print-only-block print-box-content">در دست اقدام و
                         بررسی
                         کارشناسی می‌باشد.</div>
-
 
                     <div class="canned-responses-wrapper" id="admin-canned-wrapper">
                         <span class="canned-title">قالب‌های آماده پاسخ سریع:</span>
@@ -1069,7 +1048,7 @@
                             </button>
                         </div>
                     </form>
-                    <!-- [HARDEN-9] aria-live for SR announcement -->
+
                     <div id="responseStatusMsg" class="response-box" role="status" style="display: none; margin-top: 12px;"></div>
                 </div>
 
@@ -1142,10 +1121,9 @@
                             <span>ذخیره یادداشت محرمانه</span>
                         </button>
                     </div>
-                    <!-- [HARDEN-9] aria-live for SR announcement -->
+
                     <div id="internalNotesStatusMsg" class="response-box" role="status" style="display: none; margin-top: 8px;"></div>
                 </div>
-
 
                 <div class="print-official-footer">
                     <div class="print-sig-section-title">۴. صورت‌جلسه و تأییدیه نهایی بررسی پرونده:</div>
@@ -1180,9 +1158,8 @@
                         افشای مفاد آن پیگرد قانونی به همراه دارد.
                     </div>
                 </div>
-            </div> <!-- End report-detail-actual -->
+            </div>
         </section>
-
 
         <section id="advanced-section" style="display: none;">
             <div class="adv-subnav-bar">
@@ -1222,7 +1199,6 @@
                     <span>وضعیت و سلامت سامانه</span>
                 </button>
             </div>
-
 
             <div id="adv-view-users" class="adv-subview active">
                 <div class="adv-toolbar">
@@ -1264,7 +1240,6 @@
                     </table>
                 </div>
             </div>
-
 
             <div id="adv-view-audit" class="adv-subview" style="display: none;">
                 <div class="adv-audit-filters-grid">
@@ -1360,10 +1335,9 @@
                     </table>
                 </div>
 
-
                 <div class="pagination-container" id="audit-pagination-box" style="margin-top: 15px;">
                     <div class="pagination-info" id="audit-pagination-info">لاگ ۰ از ۰</div>
-                    <!-- [HARDEN-11] Accessible names for audit pagination buttons -->
+
                     <div class="pagination-controls" dir="ltr">
                         <button id="btn-audit-last" class="btn-page" data-tooltip="قدیمی‌ترین لاگ‌ها" aria-label="قدیمی‌ترین لاگ‌ها">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
@@ -1395,7 +1369,6 @@
                     </div>
                 </div>
             </div>
-
 
             <div id="adv-view-sessions" class="adv-subview" style="display: none;">
                 <div class="adv-toolbar">
@@ -1440,7 +1413,6 @@
                     </table>
                 </div>
             </div>
-
 
             <div id="adv-view-system" class="adv-subview" style="display: none;">
                 <div class="adv-toolbar" style="margin-bottom: 20px;">
@@ -1519,7 +1491,6 @@
                 </div>
             </div>
         </section>
-
 
         <section id="analytics-section" style="display: none;">
             <div class="analytics-header">
@@ -1670,7 +1641,6 @@
                         <div id="chart-categories" class="chart-container"></div>
                     </div>
 
-
                     <div class="analytics-card">
                         <div class="analytics-card-header">
                             <h4 style="display: flex; align-items: center; gap: 8px;">
@@ -1684,7 +1654,6 @@
                         </div>
                         <div id="chart-priorities" class="chart-container"></div>
                     </div>
-
 
                     <div class="analytics-card analytics-card-full">
                         <div class="analytics-card-header">
@@ -1700,10 +1669,9 @@
                         <div id="chart-monthly" class="chart-container-bar"></div>
                     </div>
                 </div>
-            </div> <!-- End analytics-actual-content -->
+            </div>
         </section>
     </div>
-
 
     <div id="modal-shortcuts" class="admin-modal-overlay" style="display: none;">
         <div class="admin-modal-box" style="max-width: 520px;">
@@ -1757,7 +1725,6 @@
             </div>
         </div>
     </div>
-
 
     <div id="modal-create-user" class="admin-modal-overlay" style="display: none;">
         <div class="admin-modal-box">
@@ -1849,7 +1816,7 @@
                         <span>اجبار کاربر به تغییر رمز عبور در اولین ورود</span>
                     </label>
                 </div>
-                <!-- [HARDEN-9] aria-live for SR announcement -->
+
                 <div id="create-user-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
                 <div class="admin-modal-footer">
                     <button type="button" class="btn-action btn-secondary" id="btn-cancel-create-user">انصراف</button>
@@ -1861,7 +1828,6 @@
             </form>
         </div>
     </div>
-
 
     <div id="modal-reset-password" class="admin-modal-overlay" style="display: none;">
         <div class="admin-modal-box">
@@ -1891,7 +1857,7 @@
                         <span>اجبار کاربر به تغییر مجدد رمز عبور در ورود بعدی</span>
                     </label>
                 </div>
-                <!-- [HARDEN-9] aria-live for SR announcement -->
+
                 <div id="reset-pwd-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
                 <div class="admin-modal-footer">
                     <button type="button" class="btn-action btn-secondary" id="btn-cancel-reset-pwd">انصراف</button>
@@ -1903,7 +1869,6 @@
             </form>
         </div>
     </div>
-
 
     <div id="modal-edit-user" class="admin-modal-overlay" style="display: none;">
         <div class="admin-modal-box">
@@ -1959,7 +1924,7 @@
                         <span>اجبار کاربر به تغییر رمز عبور در ورود بعدی</span>
                     </label>
                 </div>
-                <!-- [HARDEN-9] aria-live for SR announcement -->
+
                 <div id="edit-user-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
                 <div class="admin-modal-footer">
                     <button type="button" class="btn-action btn-secondary" id="btn-cancel-edit-user">انصراف</button>
@@ -1971,7 +1936,6 @@
             </form>
         </div>
     </div>
-
 
     <div id="modal-change-my-password" class="admin-modal-overlay" style="display: none;">
         <div class="admin-modal-box">
@@ -2002,7 +1966,7 @@
                     <input type="password" id="my_confirm_password" required placeholder="تکرار کلمه عبور جدید"
                         autocomplete="new-password">
                 </div>
-                <!-- [HARDEN-9] aria-live for SR announcement -->
+
                 <div id="change-my-pwd-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
                 <div class="admin-modal-footer">
                     <button type="button" class="btn-action btn-secondary" id="btn-cancel-change-my-pwd">انصراف</button>
@@ -2093,7 +2057,6 @@
         </div>
     </div>
 
-
     <div id="modal-force-change-password" class="admin-modal-overlay" style="display: none; z-index: 9995;">
         <div class="admin-modal-box"
             style="border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 0 35px rgba(245, 158, 11, 0.2);">
@@ -2139,7 +2102,7 @@
                     <input type="password" id="force_confirm_password" required placeholder="تکرار کلمه عبور جدید"
                         autocomplete="new-password">
                 </div>
-                <!-- [HARDEN-9] aria-live for SR announcement -->
+
                 <div id="force-change-pwd-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
                 <div class="force-pwd-actions">
                     <button type="submit" class="btn-force-submit" id="btn-submit-force-change-pwd">
@@ -2163,7 +2126,6 @@
             </form>
         </div>
     </div>
-
 
     <div id="modal-concurrent-alert" class="admin-modal-overlay" style="display: none; z-index: 9999;">
         <div class="admin-modal-box"
@@ -2200,8 +2162,6 @@
         </div>
     </div>
 
-
-    <!-- Modal Change Classification -->
     <div id="modal-change-classification" class="admin-modal-overlay" style="display: none;">
         <div class="admin-modal-box" style="max-width: 520px;">
             <div class="admin-modal-header">
@@ -2275,8 +2235,6 @@
         </div>
     </div>
 
-
-    <!-- Modal Forward Report (ارجاع خبر) -->
     <div id="modal-forward-report" class="admin-modal-overlay" style="display: none;">
         <div class="admin-modal-box forward-modal-box" style="max-width: 540px;">
             <div class="admin-modal-header">
@@ -2353,7 +2311,6 @@
         </div>
     </div>
 
-    <!-- Modal Forward History (نمودار و تاریخچه ارجاع) -->
     <div id="modal-forward-history" class="admin-modal-overlay" style="display: none;">
         <div class="admin-modal-box forward-history-modal-box"
             style="max-width: 820px; width: 95%; max-height: 90vh; display: flex; flex-direction: column;">
@@ -2378,7 +2335,7 @@
 
             <div id="forward-history-body" class="forward-history-scroll"
                 style="flex: 1; overflow-y: auto; min-height: 220px;">
-                <!-- Flowchart diagrams rendered here dynamically -->
+
             </div>
 
             <div class="admin-modal-footer"
@@ -2387,7 +2344,6 @@
             </div>
         </div>
     </div>
-
 
     <div id="sessionWarningModal" class="admin-modal-overlay" style="display: none; z-index: 9998;">
         <div class="admin-modal-box" style="max-width: 460px; text-align: center;">
@@ -2418,7 +2374,6 @@
         </div>
     </div>
 
-    <!-- [PERF-FIX-18] Defer non-blocking script execution -->
     <script src="confirm.js" defer></script>
     <script src="admin.js?v=82" defer></script>
 </body>

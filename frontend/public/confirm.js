@@ -1,9 +1,3 @@
-/**
- * Shared Modal Confirmation Dialog System (M-4) [PERF-FIX-17] [PERF-FIX-23]
- * Herasat Whistleblowing Portal - Education Department of Hamadan
- * Lazy DOM creation with element caching to eliminate GC thrash and HTML parsing on each call.
- */
-
 (function () {
     'use strict';
 
@@ -27,7 +21,6 @@
     let cachedElements = null;
     let activeResolver = null;
 
-    // [HARDEN-8] Trap focus inside modal dialog
     function trapFocus(container, e) {
         const focusables = container.querySelectorAll(
             'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
@@ -85,7 +78,7 @@
         };
 
         const cleanup = (result) => {
-            // [PERF-FIX-28] Temporarily promote modal card layer during exit transition
+
             promoteTemporarily(cachedElements.card, 'transform, opacity', 200);
             overlay.classList.remove('active');
             document.removeEventListener('keydown', onKey);
@@ -126,7 +119,6 @@
         return cachedElements;
     }
 
-    // [PERF-FIX-28] Dynamic will-change promotion helper with auto-cleanup
     function promoteTemporarily(el, props = 'transform, opacity', durationMs = 250) {
         if (!el || !el.style) return;
         el.style.willChange = props;
@@ -178,7 +170,6 @@
             els.okBtn.textContent = confirmText;
             els.okBtn.className = `pro-confirm-btn pro-confirm-btn-confirm btn-var-${variant}`;
 
-            // [PERF-FIX-28] Temporarily promote modal card layer during open transition
             promoteTemporarily(els.card, 'transform, opacity', 250);
 
             els.overlay.style.display = 'flex';

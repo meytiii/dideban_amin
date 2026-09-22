@@ -9,7 +9,7 @@ import (
 
 func TestCookieSecureStartupFatalWithoutTLSOrFlag(t *testing.T) {
 	if os.Getenv("TEST_SUBPROCESS_COOKIE_SECURE") == "1" {
-		// Run main startup check in subprocess with clean environment
+
 		certFile := os.Getenv("HERASAT_TLS_CERT")
 		keyFile := os.Getenv("HERASAT_TLS_KEY")
 		tlsConfigured := certFile != "" && keyFile != ""
@@ -21,7 +21,6 @@ func TestCookieSecureStartupFatalWithoutTLSOrFlag(t *testing.T) {
 		return
 	}
 
-	// Subprocess execution without TLS and without HERASAT_COOKIE_SECURE
 	cmd := exec.Command(os.Args[0], "-test.run=TestCookieSecureStartupFatalWithoutTLSOrFlag")
 	cmd.Env = []string{
 		"TEST_SUBPROCESS_COOKIE_SECURE=1",

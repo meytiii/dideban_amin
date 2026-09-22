@@ -13,7 +13,6 @@ func TestAccountLockoutConcurrentFailures(t *testing.T) {
 	testUser := "lockout_victim_test_" + time.Now().Format("20060102150405.000000")
 	alm := NewAccountLockoutManager(db)
 
-	// Clean any previous state
 	alm.Reset(testUser)
 
 	var wg sync.WaitGroup
@@ -27,7 +26,6 @@ func TestAccountLockoutConcurrentFailures(t *testing.T) {
 	}
 	wg.Wait()
 
-	// Create new manager instance to verify DB persistence without cache
 	alm2 := NewAccountLockoutManager(db)
 	isLocked, remaining := alm2.IsLocked(testUser)
 	if !isLocked {
@@ -38,7 +36,6 @@ func TestAccountLockoutConcurrentFailures(t *testing.T) {
 		t.Errorf("Expected lockout duration ~15 minutes, got %v", remaining)
 	}
 
-	// Reset should delete row
 	alm2.Reset(testUser)
 	isLockedAfterReset, _ := alm2.IsLocked(testUser)
 	if isLockedAfterReset {

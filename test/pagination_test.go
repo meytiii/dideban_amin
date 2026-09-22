@@ -13,14 +13,12 @@ func TestGetReportsPaginationAndFiltering(t *testing.T) {
 	db := getTestDB(t)
 	DB = db
 
-	// Clean up reports created during test
 	defer func() {
 		db.Exec("DELETE FROM reports WHERE tracking_code LIKE 'PAG_TEST_%'")
 		db.Exec("DELETE FROM admin_report_views WHERE admin_username = 'test_pag_admin'")
 		db.Exec("DELETE FROM admin_users WHERE username = 'test_pag_admin'")
 	}()
 
-	// Ensure test admin user exists
 	db.Exec("DELETE FROM admin_users WHERE username = 'test_pag_admin'")
 	_, err := db.Exec(`
 		INSERT INTO admin_users (username, password_hash, full_name, role_title, role, is_active, created_at)
@@ -30,7 +28,6 @@ func TestGetReportsPaginationAndFiltering(t *testing.T) {
 		t.Fatalf("failed to insert test admin user: %v", err)
 	}
 
-	// Seed 15 test reports with distinct categories, priorities, classifications
 	categories := []string{"financial", "administrative", "security"}
 	priorities := []string{"low", "normal", "high"}
 	classifications := []string{"confidential", "secret", "top_secret"}
@@ -52,7 +49,6 @@ func TestGetReportsPaginationAndFiltering(t *testing.T) {
 			t.Fatalf("failed to insert test report %d: %v", i, err)
 		}
 
-		// Mark first 5 as read
 		if i <= 5 {
 			db.Exec(`
 				INSERT INTO admin_report_views (report_id, admin_username, viewed_at)
@@ -66,7 +62,6 @@ func TestGetReportsPaginationAndFiltering(t *testing.T) {
 		Role:     "super_admin",
 	}
 
-	// 1. Test Default Pagination (page=1, page_size=25)
 	{
 		req := httptest.NewRequest("GET", "/api/admin/reports?q=PAG_TEST_", nil)
 		req = req.WithContext(context.WithValue(req.Context(), "admin", adminSession))
@@ -94,7 +89,6 @@ func TestGetReportsPaginationAndFiltering(t *testing.T) {
 		}
 	}
 
-	// 2. Test Pagination page_size limit clamp (max 100) and small page_size=5
 	{
 		req := httptest.NewRequest("GET", "/api/admin/reports?q=PAG_TEST_&page=1&page_size=5", nil)
 		req = req.WithContext(context.WithValue(req.Context(), "admin", adminSession))
@@ -114,7 +108,6 @@ func TestGetReportsPaginationAndFiltering(t *testing.T) {
 			t.Errorf("expected page=1, pageSize=5; got page=%d, pageSize=%d", result.Page, result.PageSize)
 		}
 
-		// Page 2
 		req2 := httptest.NewRequest("GET", "/api/admin/reports?q=PAG_TEST_&page=2&page_size=5", nil)
 		req2 = req2.WithContext(context.WithValue(req2.Context(), "admin", adminSession))
 		w2 := httptest.NewRecorder()
@@ -130,13 +123,11 @@ func TestGetReportsPaginationAndFiltering(t *testing.T) {
 			t.Errorf("expected page=2; got page=%d", result2.Page)
 		}
 
-		// Verify reports on page 1 and page 2 don't overlap
 		if result.Reports[0].ID == result2.Reports[0].ID {
 			t.Errorf("expected disjoint pages, but report IDs match: %d", result.Reports[0].ID)
 		}
 	}
 
-	// 3. Test Filter by Category
 	{
 		req := httptest.NewRequest("GET", "/api/admin/reports?q=PAG_TEST_&category=financial", nil)
 		req = req.WithContext(context.WithValue(req.Context(), "admin", adminSession))
@@ -156,7 +147,6 @@ func TestGetReportsPaginationAndFiltering(t *testing.T) {
 		}
 	}
 
-	// 4. Test Filter by Read Status (unread vs read)
 	{
 		reqUnread := httptest.NewRequest("GET", "/api/admin/reports?q=PAG_TEST_&read_status=unread", nil)
 		reqUnread = reqUnread.WithContext(context.WithValue(reqUnread.Context(), "admin", adminSession))

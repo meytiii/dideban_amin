@@ -1,5 +1,3 @@
-
-// [HARDEN-5a] Global error safety net
 window.addEventListener('error', (e) => {
     console.error('[GLOBAL ERROR]', e.error || e.message, e.filename, e.lineno);
 });
@@ -8,7 +6,6 @@ window.addEventListener('unhandledrejection', (e) => {
     console.error('[UNHANDLED PROMISE]', e.reason);
 });
 
-// [HARDEN-5b] Fetch wrapper with hard timeout to prevent indefinite hangs
 function fetchWithTimeout(url, options = {}, ms = 20000) {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), ms);
@@ -16,7 +13,6 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
         .finally(() => clearTimeout(timer));
 }
 
-// [HARDEN-1] Reduced artificial delay; removed fonts.ready gate that compounded load time
 (function initPreloader() {
     const PRELOADER_MIN_MS = 3000;
     const startTime = performance.now();
@@ -57,10 +53,8 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
     }, 10000);
 })();
 
-// [PERF-FIX-21] Respect prefers-reduced-motion for programmatic scroll
 const getScrollBehavior = () => (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
 
-// [PERF-FIX-28] Dynamic will-change promotion helper with auto-cleanup
 function promoteTemporarily(el, props = 'transform, opacity', durationMs = 300) {
     if (!el || !el.style) return;
     el.style.willChange = props;
@@ -71,7 +65,6 @@ function promoteTemporarily(el, props = 'transform, opacity', durationMs = 300) 
     }, durationMs);
 }
 
-// Unified High-End Tooltip System (matching Radix/shadcn component)
 function initAppTooltips() {
     let tooltipEl = null;
     let activeTarget = null;
@@ -264,7 +257,6 @@ function initAppTooltips() {
     }, { passive: true });
 }
 
-// [HARDEN-5c] Non-critical init must not break the app
 try { initAppTooltips(); } catch (e) { console.error('Tooltips init failed:', e); }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -280,16 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${toPersianNum(formatted)} ${sizes[i]}`;
     };
 
-    // [HARDEN-4] Removed manual timezone offset hack; parse naive ISO as UTC
     function parseTimestamp(isoStr) {
         if (!isoStr) return null;
-        // If the server returns naive ISO (no 'Z', no offset), treat as UTC.
+
         const hasTz = /Z$|[+-]\d{2}:?\d{2}$/.test(isoStr);
         const d = new Date(hasTz ? isoStr : isoStr + 'Z');
         return isNaN(d.getTime()) ? null : d;
     }
 
-    // Cached high-performance Intl singletons (prevents GC pressure and repeated parser construction)
     const cachedJalaliFormatterFull = new Intl.DateTimeFormat('fa-IR', {
         timeZone: 'Asia/Tehran',
         year: 'numeric',
@@ -389,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!toastContainer) return;
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
-        // [HARDEN-2] Set user-provided text via textContent to prevent XSS
+
         toast.innerHTML = `
             <span class="toast-icon">${TOAST_ICONS[type] || TOAST_ICONS.info}</span>
             <span class="toast-body"></span>
@@ -445,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveDraft() {
         try {
             const desc = document.getElementById('description')?.value?.trim() || '';
-            // If details/description is empty, do not save draft at all
+
             if (!desc) {
                 clearDraft();
                 return;
@@ -472,7 +462,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!saved) return;
             const draft = JSON.parse(saved);
 
-            // Only restore if report details (description) exists
             if (!draft.description || !draft.description.trim()) {
                 clearDraft();
                 return;
@@ -480,8 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (draft.reporter_name) { const el = document.getElementById('reporter_name'); if (el) el.value = draft.reporter_name; }
             if (draft.reporter_phone) { const el = document.getElementById('reporter_phone'); if (el) el.value = draft.reporter_phone; }
-            
-            // Category always stays at default unselected state
+
             const catEl = document.getElementById('category');
             if (catEl) {
                 catEl.value = '';
@@ -530,7 +518,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtns = document.querySelectorAll('.btn-prev');
     const stepTrackers = document.querySelectorAll('.step-item');
 
-    // [PERF-FIX-13] Throttle makeTextareaAutoExpand with requestAnimationFrame
     function makeTextareaAutoExpand(el) {
         if (!el) return;
         el.style.resize = 'none';
@@ -573,7 +560,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const connector = document.getElementById(`connector-${i}`);
             const circle = tracker?.querySelector('.step-circle');
 
-            // [HARDEN-10] Update aria-current="step" for screen readers and manage clickable semantics
             if (i < currentStep) {
                 tracker?.classList.add('completed');
                 tracker?.classList.remove('active');
@@ -602,7 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (connector) connector.classList.remove('completed');
             }
         }
-        // [PERF-FIX-21] Respect reduced-motion
+
         window.scrollTo({ top: 0, behavior: getScrollBehavior() });
 
         if (currentStep === 3) {
@@ -808,7 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         item.addEventListener('click', handleStepNav);
-        // [HARDEN-10] Keyboard activation for clickable step-tracker items
+
         item.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -885,7 +871,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let selectedFiles = [];
 
-    // [PERF-FIX-4] Fast pure-string HTML escape (bypasses expensive DOM element creation)
     const ESCAPE_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
     function escapeHtml(str) {
         if (str == null) return '';
@@ -964,7 +949,6 @@ document.addEventListener('DOMContentLoaded', () => {
             beFileList.appendChild(row);
         });
 
-        // Event delegation for file removal (single listener for entire list)
         if (beFileList && !beFileList._perfDelegated) {
             beFileList._perfDelegated = true;
             beFileList.addEventListener('click', (e) => {
@@ -1135,7 +1119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const imgEl = document.getElementById(imgId);
         if (imgEl) imgEl.classList.add('skeleton-shimmer');
         try {
-            // [HARDEN-5b] Fetch wrapper with hard timeout
+
             const res = await fetchWithTimeout('/api/captcha');
             if (res.ok) {
                 const data = await res.json();
@@ -1156,8 +1140,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (imgEl) imgEl.classList.remove('skeleton-shimmer');
         }
     }
-
-    // CAPTCHA is lazy-loaded on demand (when reaching Step 3 or opening Track tab)
 
     document.getElementById('submit-captcha-refresh')?.addEventListener('click', () => {
         loadCaptcha('submit-captcha-img', 'submit_captcha_id', 'submit_captcha_answer');
@@ -1195,11 +1177,9 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/[\u064B-\u065F\u0670\u200C\u200B\uFEFF\u200E\u200F]/g, '')
             .replace(/[@$013!45]/g, m => ({ '@': 'a', '$': 's', '0': 'o', '1': 'i', '3': 'e', '!': 'i', '4': 'a', '5': 's' })[m]);
 
-        // [PERF-FIX-22] Module-scoped precomputed profanity tokens, patterns, and phonetic map
         return _fastCheckClientVulgar(lowered);
     }
 
-    // [PERF-FIX-22] Precomputed once at startup to eliminate CPU spikes and string allocations on keystrokes
     const _vulgarPatterns = [
         /(?:^|[^\p{L}\p{N}])ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+ر(?:ی|م|ت|تون|مون|ش|ها)?(?:[^\p{L}\p{N}]|$)/iu,
         /ک[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*[یiي*]+[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]*ر/iu,
@@ -1329,7 +1309,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Multi-word phrase check
         const normalizedSentence = lowered.replace(/[\s*._~^#@$%&/\\|!?\-+=×÷·•…—–]+/gu, ' ').trim();
         for (let m = 0; m < _precomputedPhrases.length; m++) {
             if (normalizedSentence.includes(_precomputedPhrases[m].normPhrase)) return true;
@@ -1355,7 +1334,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     `;
 
-    // [PERF-FIX-17] Use shared cached modal confirmation dialog from confirm.js
     function showConfirmDialog() {
         const category = document.getElementById('category');
         const desc = descTextarea?.value || '';
@@ -1435,7 +1413,6 @@ document.addEventListener('DOMContentLoaded', () => {
         responseBox.style.display = 'none';
         responseBox.className = 'response-box';
 
-        // Preserve report submission metadata for the official A5 tracking receipt before form reset
         const categorySelectEl = document.getElementById('category');
         const submittedReceiptMeta = {
             category: categorySelectEl?.options[categorySelectEl.selectedIndex]?.text?.trim() || 'عمومی و سایر موضوعات',
@@ -1452,7 +1429,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            // [HARDEN-5b] Fetch wrapper with hard timeout
+
             const response = await fetchWithTimeout('/api/report', {
                 method: 'POST',
                 body: formData
@@ -1473,7 +1450,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (data.status === 'success') {
-                // Populate the dedicated official A5 receipt document
+
                 populateOfficialReceipt({
                     tracking_code: data.tracking_code,
                     category: submittedReceiptMeta.category,
@@ -1661,7 +1638,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // FAQ Drawer & Accordion-2 Controller
     const openDrawerBtn = document.getElementById('openDrawerBtn');
     const closeDrawerBtn = document.getElementById('closeDrawerBtn');
     const guidelinesDrawer = document.getElementById('guidelinesDrawer');
@@ -1674,7 +1650,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = 'hidden';
             const panel = guidelinesDrawer.querySelector('.drawer-panel');
             if (panel) {
-                // [PERF-FIX-28] Promote layer temporarily for sliding drawer animation
+
                 promoteTemporarily(panel, 'transform', 350);
                 panel.scrollTop = 0;
             }
@@ -1685,7 +1661,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (guidelinesDrawer) {
             const panel = guidelinesDrawer.querySelector('.drawer-panel');
             if (panel) {
-                // [PERF-FIX-28] Promote layer temporarily for drawer slide-out
+
                 promoteTemporarily(panel, 'transform', 350);
             }
             guidelinesDrawer.classList.add('d-none');
@@ -1707,7 +1683,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Accordion Toggle Logic
     const faqItems = document.querySelectorAll('.faq-accordion-item');
     faqItems.forEach((item) => {
         const header = item.querySelector('.faq-accordion-header');
@@ -1715,7 +1690,6 @@ document.addEventListener('DOMContentLoaded', () => {
             header.addEventListener('click', () => {
                 const isOpen = item.classList.contains('open');
 
-                // Close other items for smooth exclusive accordion
                 faqItems.forEach((other) => {
                     if (other !== item) {
                         other.classList.remove('open');
@@ -1733,7 +1707,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadCaptcha('followup-captcha-img', 'followup_captcha_id', 'followup_captcha_answer');
     });
 
-
     function renderConversationThread(reportData) {
         const threadContainer = document.getElementById('track-conversation-container');
         const messagesList = document.getElementById('track-messages-list');
@@ -1742,7 +1715,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         messagesList.innerHTML = '';
 
-        // Combine official admin response and any follow-up messages into unified chronological feed
         const allItems = [];
 
         if (reportData && reportData.admin_response && reportData.admin_response.trim() !== '') {
@@ -1768,7 +1740,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Sort chronologically ascending
         allItems.sort((a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
 
         if (countBadge) {
@@ -1865,7 +1836,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const threadContainer = document.getElementById('track-conversation-container');
             const countBadge = document.getElementById('track-messages-count-badge');
 
-            // Optimistic bubble preview
             let optimisticBubble = null;
             if (messagesList && threadContainer) {
                 threadContainer.classList.remove('d-none');
@@ -1898,7 +1868,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                // [HARDEN-5b] Fetch wrapper with hard timeout
+
                 const res = await fetchWithTimeout('/api/report/follow-up', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -2049,7 +2019,6 @@ document.addEventListener('DOMContentLoaded', () => {
             trackErrorBox.style.display = 'none';
             trackResultBox?.classList.add('d-none');
 
-            // Anti-flicker: show skeleton only if request takes longer than 80ms
             let skeletonTimer = setTimeout(() => {
                 if (trackResultSkeleton) {
                     trackResultSkeleton.classList.remove('d-none');
@@ -2057,7 +2026,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 80);
 
             try {
-                // [HARDEN-5b] Fetch wrapper with hard timeout
+
                 const res = await fetchWithTimeout('/api/report/track', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -2112,7 +2081,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     statusEl.appendChild(badge);
                 }
 
-                // Pass full data to render unified conversation thread (admin response + messages)
                 renderConversationThread(data);
                 loadCaptcha('followup-captcha-img', 'followup_captcha_id', 'followup_captcha_answer');
 

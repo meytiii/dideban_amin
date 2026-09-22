@@ -54,10 +54,10 @@ const buttonVariants = cva(
         icon: 'focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
         link: 'text-blue-400 h-auto p-0 bg-transparent rounded-none hover:bg-transparent data-[state=open]:bg-transparent',
         input: `
-            justify-start font-normal hover:bg-slate-900 [&_svg]:transition-colors [&_svg]:hover:text-white data-[state=open]:bg-slate-900 
-            focus-visible:border-blue-500 focus-visible:outline-hidden focus-visible:ring-[3px] focus-visible:ring-blue-500/30 
-            [[data-state=open]>&]:border-blue-500 [[data-state=open]>&]:outline-hidden [[data-state=open]>&]:ring-[3px] 
-            [[data-state=open]>&]:ring-blue-500/30 
+            justify-start font-normal hover:bg-slate-900 [&_svg]:transition-colors [&_svg]:hover:text-white data-[state=open]:bg-slate-900
+            focus-visible:border-blue-500 focus-visible:outline-hidden focus-visible:ring-[3px] focus-visible:ring-blue-500/30
+            [[data-state=open]>&]:border-blue-500 [[data-state=open]>&]:outline-hidden [[data-state=open]>&]:ring-[3px]
+            [[data-state=open]>&]:ring-blue-500/30
             aria-invalid:border-rose-500/60 aria-invalid:ring-rose-500/10 dark:aria-invalid:border-rose-500 dark:aria-invalid:ring-rose-500/20
             in-data-[invalid=true]:border-rose-500/60 in-data-[invalid=true]:ring-rose-500/10  dark:in-data-[invalid=true]:border-rose-500 dark:in-data-[invalid=true]:ring-rose-500/20
           `,

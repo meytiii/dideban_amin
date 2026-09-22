@@ -126,7 +126,7 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	const maxJSONBodyBytes = 256 << 10 // 256 KB
+	const maxJSONBodyBytes = 256 << 10
 
 	mux.HandleFunc("GET /health", healthCheck)
 	mux.HandleFunc("GET /api/captcha", RateLimitMiddleware(captchaLimiter, GetCaptchaHandler))

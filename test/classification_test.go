@@ -6,7 +6,7 @@ import (
 )
 
 func TestClassificationValidationAndMath(t *testing.T) {
-	// Test valid classifications
+
 	validTypes := []string{"helpful", "useless"}
 	for _, vt := range validTypes {
 		if vt != "helpful" && vt != "useless" {
@@ -14,7 +14,6 @@ func TestClassificationValidationAndMath(t *testing.T) {
 		}
 	}
 
-	// Test invalid classifications
 	invalidTypes := []string{"", "spam", "good", "bad", "HELPFUL", "none"}
 	for _, it := range invalidTypes {
 		if it == "helpful" || it == "useless" {
@@ -22,39 +21,38 @@ func TestClassificationValidationAndMath(t *testing.T) {
 		}
 	}
 
-	// Test analytics percentage calculations
 	testCases := []struct {
-		helpful        int64
-		useless        int64
-		expectedTotal  int64
+		helpful         int64
+		useless         int64
+		expectedTotal   int64
 		expectedHelpPct float64
 		expectedUselPct float64
 	}{
 		{
-			helpful:        0,
-			useless:        0,
-			expectedTotal:  0,
+			helpful:         0,
+			useless:         0,
+			expectedTotal:   0,
 			expectedHelpPct: 0.0,
 			expectedUselPct: 0.0,
 		},
 		{
-			helpful:        1,
-			useless:        1,
-			expectedTotal:  2,
+			helpful:         1,
+			useless:         1,
+			expectedTotal:   2,
 			expectedHelpPct: 50.0,
 			expectedUselPct: 50.0,
 		},
 		{
-			helpful:        3,
-			useless:        1,
-			expectedTotal:  4,
+			helpful:         3,
+			useless:         1,
+			expectedTotal:   4,
 			expectedHelpPct: 75.0,
 			expectedUselPct: 25.0,
 		},
 		{
-			helpful:        2,
-			useless:        1,
-			expectedTotal:  3,
+			helpful:         2,
+			useless:         1,
+			expectedTotal:   3,
 			expectedHelpPct: 66.7,
 			expectedUselPct: 33.3,
 		},

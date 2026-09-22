@@ -66,14 +66,12 @@ func TestValidatePasswordComplexity(t *testing.T) {
 func TestArgon2idDualFormatAndRehash(t *testing.T) {
 	password := "Herasat@SecretPassword2026!"
 
-	// 1. Generate legacy format hash (t=1, salt.hash)
 	salt := []byte("1234567890123456")
 	legacyHashBytes := argon2.IDKey([]byte(password), salt, 1, 64*1024, 4, 32)
 	b64Salt := base64.RawStdEncoding.EncodeToString(salt)
 	b64Hash := base64.RawStdEncoding.EncodeToString(legacyHashBytes)
 	legacyHash := b64Salt + "." + b64Hash
 
-	// Test legacy verification
 	ok, needsRehash := VerifyPasswordWithRehash(password, legacyHash)
 	if !ok {
 		t.Fatalf("Expected legacy hash to verify successfully")
@@ -85,7 +83,6 @@ func TestArgon2idDualFormatAndRehash(t *testing.T) {
 		t.Fatalf("Expected VerifyPassword to return true for legacy hash")
 	}
 
-	// 2. Generate new PHC format hash (t=3)
 	phcHash, err := HashPassword(password)
 	if err != nil {
 		t.Fatalf("Failed to generate PHC password hash: %v", err)
@@ -94,7 +91,6 @@ func TestArgon2idDualFormatAndRehash(t *testing.T) {
 		t.Fatalf("Expected PHC hash to start with $argon2id$v=19$m=65536,t=3,p=4$, got %s", phcHash)
 	}
 
-	// Test PHC verification
 	ok, needsRehash = VerifyPasswordWithRehash(password, phcHash)
 	if !ok {
 		t.Fatalf("Expected new PHC hash to verify successfully")
@@ -103,7 +99,6 @@ func TestArgon2idDualFormatAndRehash(t *testing.T) {
 		t.Fatalf("Expected needsRehash to be false for up-to-date PHC hash")
 	}
 
-	// Test incorrect password fails
 	badOk, _ := VerifyPasswordWithRehash("WrongPassword123!", phcHash)
 	if badOk {
 		t.Fatalf("Expected wrong password to fail verification")
@@ -114,7 +109,6 @@ func TestHKDFKeySeparationAndEncryption(t *testing.T) {
 	masterKey := "12345678901234567890123456789012"
 	InitCrypto(masterKey)
 
-	// 1. Verify subkeys are distinct
 	if bytes.Equal(keyFields, keyFilePath) || bytes.Equal(keyFields, keyFileBlob) || bytes.Equal(keyFilePath, keyFileBlob) {
 		t.Fatalf("Subkeys must be distinct across cryptographic purposes")
 	}
@@ -122,7 +116,6 @@ func TestHKDFKeySeparationAndEncryption(t *testing.T) {
 		t.Fatalf("Subkeys must not match master key")
 	}
 
-	// 2. Test field encryption roundtrip
 	plainText := "اطلاعات محرمانه گزارش تخلف اداری"
 	encField, err := EncryptAES(plainText)
 	if err != nil {
@@ -139,7 +132,6 @@ func TestHKDFKeySeparationAndEncryption(t *testing.T) {
 		t.Fatalf("Expected %q, got %q", plainText, decField)
 	}
 
-	// 3. Test file path encryption roundtrip
 	pathText := "uploads/2026/09/secret_evidence.pdf"
 	encPath, err := EncryptFilePath(pathText)
 	if err != nil {
@@ -155,7 +147,7 @@ func TestHKDFKeySeparationAndEncryption(t *testing.T) {
 	if decPath != pathText {
 		t.Fatalf("Expected %q, got %q", pathText, decPath)
 	}
-	// DecryptAES should also seamlessly decrypt path
+
 	decPathAES, err := DecryptAES(encPath)
 	if err != nil {
 		t.Fatalf("DecryptAES failed on file path: %v", err)
@@ -164,7 +156,6 @@ func TestHKDFKeySeparationAndEncryption(t *testing.T) {
 		t.Fatalf("Expected %q, got %q", pathText, decPathAES)
 	}
 
-	// 4. Test file bytes encryption roundtrip
 	fileBytes := []byte("Sensitive whistleblowing PDF evidence content \x00\xff\xfe")
 	encBlob, err := EncryptFileBytes(fileBytes)
 	if err != nil {
@@ -181,8 +172,6 @@ func TestHKDFKeySeparationAndEncryption(t *testing.T) {
 		t.Fatalf("Decrypted file blob mismatch")
 	}
 
-	// 5. Test backward compatibility: legacy v1 field ciphertext
-	// Manually create v1 encryption using master key
 	block, _ := aes.NewCipher(aesKey)
 	aesgcm, _ := cipher.NewGCM(block)
 	nonce := make([]byte, aesgcm.NonceSize())
@@ -198,7 +187,6 @@ func TestHKDFKeySeparationAndEncryption(t *testing.T) {
 		t.Fatalf("Expected %q from v1 ciphertext, got %q", plainText, decV1)
 	}
 
-	// 6. Test backward compatibility: legacy HENC\x01 file blob
 	header := []byte("HENC\x01")
 	out := append(header, nonce...)
 	legacyBlob := aesgcm.Seal(out, nonce, fileBytes, nil)
@@ -211,11 +199,10 @@ func TestHKDFKeySeparationAndEncryption(t *testing.T) {
 		t.Fatalf("Decrypted legacy file blob mismatch")
 	}
 
-	// 7. Test unencrypted plaintext fallback
 	rawPlain := "plain unencrypted description text"
-	decRaw, err := DecryptAES(rawPlain)
-	if err != nil || decRaw != rawPlain {
-		t.Fatalf("Expected plaintext fallback %q, got %q (err: %v)", rawPlain, decRaw, err)
+	_, err = DecryptAES(rawPlain)
+	if err == nil {
+		t.Fatalf("Expected error for unencrypted text, got nil")
 	}
 }
 
@@ -223,7 +210,6 @@ func TestCryptoUnicodeEmojiNulBytesAndTamper(t *testing.T) {
 	masterKey := "12345678901234567890123456789012"
 	InitCrypto(masterKey)
 
-	// Unicode, Emoji, Persian, and embedded NUL bytes
 	complexInput := "گزارش حراست: تخلف مالی 💰🚨 و جعل اسناد اداری \x00\x01\x02 پایان پیام"
 	enc, err := EncryptAES(complexInput)
 	if err != nil {
@@ -237,12 +223,11 @@ func TestCryptoUnicodeEmojiNulBytesAndTamper(t *testing.T) {
 		t.Fatalf("Mismatch in decrypted complex input: expected %q, got %q", complexInput, dec)
 	}
 
-	// Tamper detection: modify ciphertext payload
 	parts := strings.Split(enc, ":")
 	if len(parts) == 3 {
 		payloadBytes, err := base64.StdEncoding.DecodeString(parts[2])
 		if err == nil && len(payloadBytes) > 5 {
-			payloadBytes[len(payloadBytes)-1] ^= 0xFF // flip bits
+			payloadBytes[len(payloadBytes)-1] ^= 0xFF
 			tamperedEnc := parts[0] + ":" + parts[1] + ":" + base64.StdEncoding.EncodeToString(payloadBytes)
 			_, err = DecryptAES(tamperedEnc)
 			if err == nil {
@@ -251,13 +236,12 @@ func TestCryptoUnicodeEmojiNulBytesAndTamper(t *testing.T) {
 		}
 	}
 
-	// File bytes tamper detection
 	blob, err := EncryptFileBytes([]byte("Confidential Document Content"))
 	if err != nil {
 		t.Fatalf("EncryptFileBytes failed: %v", err)
 	}
 	if len(blob) > 20 {
-		blob[len(blob)-1] ^= 0xFF // flip last byte
+		blob[len(blob)-1] ^= 0xFF
 		_, err = DecryptFileBytes(blob)
 		if err == nil {
 			t.Fatalf("Expected error when decrypting tampered file blob, but succeeded")
@@ -286,24 +270,20 @@ func TestCaptchaVerificationSuite(t *testing.T) {
 	db := getTestDB(t)
 	UsedCaptchas.init(db)
 
-	// 1. Happy path: valid token and correct answer
 	token := GenerateCaptchaToken(42, 2*time.Minute)
 	if !VerifyCaptcha(token, "42") {
 		t.Fatalf("Expected captcha verification to succeed for correct answer")
 	}
 
-	// 2. Replay attack: same token reused
 	if VerifyCaptcha(token, "42") {
 		t.Fatalf("Expected captcha token reuse to fail (replay protection)")
 	}
 
-	// 3. Expired token
 	expiredToken := GenerateCaptchaToken(10, -5*time.Second)
 	if VerifyCaptcha(expiredToken, "10") {
 		t.Fatalf("Expected expired captcha token to be rejected")
 	}
 
-	// 4. Tampered token signature
 	parts := strings.Split(token, ".")
 	if len(parts) == 2 {
 		tamperedToken := parts[0] + ".tamperedSignature=="
@@ -312,13 +292,11 @@ func TestCaptchaVerificationSuite(t *testing.T) {
 		}
 	}
 
-	// 5. Wrong answer
 	token2 := GenerateCaptchaToken(99, 2*time.Minute)
 	if VerifyCaptcha(token2, "100") {
 		t.Fatalf("Expected wrong answer to be rejected")
 	}
 
-	// 6. Non-numeric answer
 	token3 := GenerateCaptchaToken(15, 2*time.Minute)
 	if VerifyCaptcha(token3, "abc") {
 		t.Fatalf("Expected non-numeric answer to be rejected")
@@ -328,7 +306,6 @@ func TestCaptchaVerificationSuite(t *testing.T) {
 func TestGenerateMathCaptchaSVGAndHandler(t *testing.T) {
 	InitCrypto("12345678901234567890123456789012")
 
-	// 1. GenerateMathCaptchaSVG generates valid token and SVG data URI
 	token, dataURI := GenerateMathCaptchaSVG()
 	if token == "" {
 		t.Fatalf("Expected non-empty token from GenerateMathCaptchaSVG")
@@ -337,7 +314,6 @@ func TestGenerateMathCaptchaSVGAndHandler(t *testing.T) {
 		t.Fatalf("Expected SVG data URI prefix, got %s", dataURI[:30])
 	}
 
-	// 2. GetCaptchaHandler returns 200 with JSON payload
 	req := httptest.NewRequest("GET", "/api/captcha", nil)
 	rr := httptest.NewRecorder()
 	GetCaptchaHandler(rr, req)
@@ -349,4 +325,3 @@ func TestGenerateMathCaptchaSVGAndHandler(t *testing.T) {
 		t.Fatalf("Expected JSON with captcha_id and image_base64, got: %s", rr.Body.String())
 	}
 }
-

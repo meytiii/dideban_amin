@@ -4,7 +4,6 @@ const Loader = () => {
   const loaderCss = `
     .loader {
       --duration: 3s;
-      /* Updated the color variables to use black and dark gray */
       --primary: rgba(0, 0, 0, 1);
       --primary-light: #333333;
       --primary-rgba: rgba(0, 0, 0, 0);
@@ -26,8 +25,7 @@ const Loader = () => {
       position: absolute;
       right: 32%;
       bottom: -11px;
-      /* This background color is crucial for the masking effect and must match the page background */
-      background: #e5e7eb; 
+      background: #e5e7eb;
       transform: translateZ(200px) rotate(var(--r));
       animation: mask var(--duration) linear forwards infinite;
     }
@@ -144,13 +142,12 @@ const Loader = () => {
     @keyframes box-scale6 { 30% { transform: rotateY(-47deg) rotateX(-15deg) rotateZ(15deg) scale(0); } 38%, 100% { transform: rotateY(-47deg) rotateX(-15deg) rotateZ(15deg) scale(1); } }
     @keyframes box-move7 { 40% { transform: translate(var(--x), var(--y)); } 53%, 52% { transform: translate(0, 0); } 80% { transform: translate(0, -32px); } 90%, 100% { transform: translate(0, 188px); } }
     @keyframes box-scale7 { 34% { transform: rotateY(-47deg) rotateX(-15deg) rotateZ(15deg) scale(0); } 42%, 100% { transform: rotateY(-47deg) rotateX(-15deg) rotateZ(15deg) scale(1); } }
-    
+
     @keyframes ground { 0%, 65% { transform: rotateX(90deg) rotateY(0deg) translate(-48px, -120px) translateZ(100px) scale(0); } 75%, 90% { transform: rotateX(90deg) rotateY(0deg) translate(-48px, -120px) translateZ(100px) scale(1); } 100% { transform: rotateX(90deg) rotateY(0deg) translate(-48px, -120px) translateZ(100px) scale(0); } }
     @keyframes ground-shine { 0%, 70% { opacity: 0; } 75%, 87% { opacity: 0.2; } 100% { opacity: 0; } }
     @keyframes mask { 0%, 65% { opacity: 0; } 66%, 100% { opacity: 1; } }
   `;
 
-  // Map over an array to avoid repeating the JSX for each box.
   const boxes = [...Array(8).keys()];
 
   return (

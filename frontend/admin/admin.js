@@ -1,5 +1,3 @@
-
-// [HARDEN-5a] Global error safety net
 window.addEventListener('error', (e) => {
     console.error('[GLOBAL ERROR]', e.error || e.message, e.filename, e.lineno);
 });
@@ -8,7 +6,6 @@ window.addEventListener('unhandledrejection', (e) => {
     console.error('[UNHANDLED PROMISE]', e.reason);
 });
 
-// [HARDEN-5b] Fetch wrapper with hard timeout to prevent indefinite hangs
 function fetchWithTimeout(url, options = {}, ms = 20000) {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), ms);
@@ -16,7 +13,6 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
         .finally(() => clearTimeout(timer));
 }
 
-// [HARDEN-1] Reduced artificial delay; removed fonts.ready gate that compounded load time
 (function initAdminPreloader() {
     const PRELOADER_MIN_MS = 3000;
     const startTime = performance.now();
@@ -61,9 +57,6 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
     }, 10000);
 })();
 
-
-
-// [HARDEN-5b] Request timeout helper used for all admin fetches
 function adminFetch(url, options = {}) {
     const opts = { credentials: 'same-origin', ...options };
     opts.headers = { ...(opts.headers || {}) };
@@ -74,10 +67,8 @@ function adminFetch(url, options = {}) {
     return fetchWithTimeout(url, opts, 20000);
 }
 
-// [PERF-FIX-21] Respect prefers-reduced-motion for programmatic scroll
 const getScrollBehavior = () => (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
 
-// [PERF-FIX-28] Dynamic will-change promotion helper with auto-cleanup
 function promoteTemporarily(el, props = 'transform, opacity', durationMs = 300) {
     if (!el || !el.style) return;
     el.style.willChange = props;
@@ -88,12 +79,10 @@ function promoteTemporarily(el, props = 'transform, opacity', durationMs = 300) 
     }, durationMs);
 }
 
-// [PERF-FIX-30] requestIdleCallback wrapper with fallback for deferred initialization
 const runWhenIdle = (typeof window !== 'undefined' && window.requestIdleCallback)
     ? (cb) => window.requestIdleCallback(cb, { timeout: 1500 })
     : (cb) => setTimeout(cb, 100);
 
-// Unified High-End Tooltip System (matching Radix/shadcn component)
 function initAppTooltips() {
     let tooltipEl = null;
     let activeTarget = null;
@@ -293,7 +282,6 @@ function initAppTooltips() {
     }, { passive: true });
 }
 
-// [HARDEN-5c] Non-critical init must not break the app
 try { runWhenIdle(initAppTooltips); } catch (e) { console.error('Tooltips init failed:', e); }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -309,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const toast = document.createElement('div');
         toast.className = 'toast' + (type ? ` toast-${type}` : '');
-        // [HARDEN-2] Set user-provided text via textContent to prevent XSS
+
         toast.textContent = message;
         const fadeDelay = Math.max(duration - 300, 200) / 1000;
         toast.style.animation = `toastIn 0.25s ease, toastOut 0.25s ease ${fadeDelay}s forwards`;
@@ -319,7 +307,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, duration);
     }
 
-    // [PERF-FIX-17] Use shared modal confirmation dialog from confirm.js
     const showConfirmDialog = window.showConfirmDialog || function () { return Promise.resolve(true); };
 
     const loginForm = document.getElementById('loginForm');
@@ -353,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const SESSION_DURATION = 15 * 60;
     let remainingSeconds = SESSION_DURATION;
-    // [HARDEN-6] [HARDEN-7] Server-Sent Events stream replaces polling and redundant 8-second heartbeat
+
     let _sseConnection = null;
     let _refreshDebounceTimer = null;
     let timerInterval = null;
@@ -446,7 +433,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // [PERF-FIX-14] Separate timer tick to allow pausing/resuming without resetting countdown
     function handleTimerTick() {
         remainingSeconds--;
         updateTimerDisplay();
@@ -520,9 +506,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     loadAdminCaptcha();
 
-
-
-    // Password Visibility Toggle
     const togglePasswordBtn = document.getElementById('togglePasswordBtn');
     const passwordInput = document.getElementById('password');
     const eyeShow = document.getElementById('eye-icon-show');
@@ -551,7 +534,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     dashboardSection.style.display = 'block';
                 }
                 startSessionTimer();
-                // [HARDEN-6] [HARDEN-7] Connect SSE stream instead of 8s polling heartbeat
+
                 connectAdminSSE();
                 switchMainTab('reports');
                 runWhenIdle(fetchNotifications);
@@ -951,7 +934,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // [PERF-FIX-11] Debounce search input to 300ms and batch renders via requestAnimationFrame
     if (searchTracking) {
         searchTracking.addEventListener('input', debounce(() => {
             requestAnimationFrame(() => applyFilters(true));
@@ -1113,16 +1095,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 200));
 
-    // [HARDEN-4] Removed manual timezone offset hack; parse naive ISO as UTC
     function parseTimestamp(isoStr) {
         if (!isoStr) return null;
-        // If the server returns naive ISO (no 'Z', no offset), treat as UTC.
+
         const hasTz = /Z$|[+-]\d{2}:?\d{2}$/.test(isoStr);
         const d = new Date(hasTz ? isoStr : isoStr + 'Z');
         return isNaN(d.getTime()) ? null : d;
     }
 
-    // Cached high-performance Intl singletons (prevents GC pressure and repeated parser construction)
     const cachedJalaliFormatterFull = new Intl.DateTimeFormat('fa-IR', {
         timeZone: 'Asia/Tehran',
         year: 'numeric',
@@ -1200,7 +1180,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // [PERF-FIX-23] Cache frequent DOM queries in hot paths
     let _elKPITotal = null;
     let _elKPIUnread = null;
     let _elKPIRead = null;
@@ -1240,7 +1219,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (_elKPIPulse) _elKPIPulse.style.display = unread > 0 ? 'block' : 'none';
     }
 
-    // [PERF-FIX-4] Fast pure-string HTML escape (consolidated single definition)
     const ESCAPE_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
     function escapeHTML(str) {
         if (str == null) return '';
@@ -1261,7 +1239,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .trim();
     }
 
-    // [PERF-FIX-5] Cache the compiled Persian search regex
     let _persianRegexCache = { term: null, regex: null };
 
     function makePersianRegex(term) {
@@ -1325,12 +1302,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return highlightSearchTerm(snippet, term, regex);
     }
 
-    // [PERF-FIX-23] Cache bulk toolbar elements
     let _elBulkToolbar = null;
     let _elBulkCount = null;
     let _elSelectAllReports = null;
 
-    // Bulk Selection Toolbar Sync (C3)
     function updateBulkToolbar() {
         if (!_elBulkToolbar) _elBulkToolbar = document.getElementById('bulkActionsToolbar');
         if (!_elBulkCount) _elBulkCount = document.getElementById('bulkSelectedCount');
@@ -1526,7 +1501,6 @@ document.addEventListener('DOMContentLoaded', () => {
             lastReportsSignature = newSignature;
             allReports = fetchedReports;
 
-            // Pre-index reports for fast sub-millisecond filtering and sorting
             for (let i = 0; i < allReports.length; i++) {
                 indexReportForSearch(allReports[i]);
             }
@@ -1544,13 +1518,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // [PERF-FIX-11] [PERF-FIX-20] Module-scoped cache for search regex and normalized term
     let activeSearchContext = { rawTerm: '', normTerm: '', lowerTerm: '', regex: null };
 
     function applyFilters(forceResetPage) {
         if (forceResetPage) currentPage = 1;
 
-        // [PERF-FIX-11] [PERF-FIX-20] Compute search regex and normalized term once
         const rawTerm = searchTracking ? searchTracking.value.trim() : '';
         if (activeSearchContext.rawTerm !== rawTerm) {
             activeSearchContext = {
@@ -1591,7 +1563,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return matchSearch && matchType && matchPriority && matchMonth && matchRead;
         });
 
-        // Dynamic sorting: reports with new messages OR new regional responses first, then latest activity (updated_at DESC, created_at DESC)
         filteredReports.sort((a, b) => {
             const prioA = (a.has_new_message ? 4 : 0) + (a.has_regional_response ? 2 : 0);
             const prioB = (b.has_new_message ? 4 : 0) + (b.has_regional_response ? 2 : 0);
@@ -1783,7 +1754,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Set up event delegation on reportsBody once to eliminate listener churn
         if (reportsBody && !reportsBody._perfDelegated) {
             reportsBody._perfDelegated = true;
 
@@ -1825,7 +1795,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const fragment = document.createDocumentFragment();
-        // [PERF-FIX-5] [PERF-FIX-11] [PERF-FIX-20] Reuse pre-compiled search regex and normalized term
+
         const searchTerm = activeSearchContext.rawTerm;
         const searchRegex = activeSearchContext.regex;
         const normSearch = activeSearchContext.normTerm;
@@ -1843,7 +1813,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 tr.classList.add('row-regional-response');
             }
 
-            // Checkbox Cell (C3)
             const checkTd = document.createElement('td');
             checkTd.className = 'bulk-td';
             const cb = document.createElement('input');
@@ -1856,7 +1825,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const shamsiDate = formatJalaliDateTime(report.created_at);
 
-            // Tracking Code Cell (with highlight C7)
             const codeTd = document.createElement('td');
             codeTd.style.fontFamily = 'Tahoma, Arial, sans-serif';
             codeTd.style.fontWeight = 'bold';
@@ -1865,7 +1833,6 @@ document.addEventListener('DOMContentLoaded', () => {
             codeTd.innerHTML = highlightSearchTerm(report.tracking_code, searchTerm, searchRegex);
             tr.appendChild(codeTd);
 
-            // Priority Badge Cell
             const priorityTd = document.createElement('td');
             const priorityBadge = document.createElement('span');
             if (prio === 'critical') {
@@ -1887,7 +1854,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dateTd.style.textAlign = 'right';
             tr.appendChild(dateTd);
 
-            // Category Cell (with highlight C7 and description search snippet)
             const catTd = document.createElement('td');
             const catBadge = document.createElement('div');
             catBadge.className = 'table-category-label';
@@ -1967,7 +1933,6 @@ document.addEventListener('DOMContentLoaded', () => {
             actionsWrap.style.alignItems = 'center';
             actionsWrap.style.gap = '6px';
 
-            // [HARDEN-11] Ensure accessible names and aria-hidden on decorative SVGs
             const viewBtn = document.createElement('button');
             viewBtn.type = 'button';
             viewBtn.className = 'btn-action btn-icon-only btn-view-report';
@@ -2023,7 +1988,6 @@ document.addEventListener('DOMContentLoaded', () => {
         reportsBody.appendChild(fragment);
     }
 
-    // Back to list navigation
     function closeDetailView() {
         if (detailSection) detailSection.style.display = "none";
         if (listSection) listSection.style.display = "block";
@@ -2037,7 +2001,6 @@ document.addEventListener('DOMContentLoaded', () => {
         backBtn.addEventListener('click', closeDetailView);
     }
 
-    // Prev / Next Report Navigation in Detail View (C5)
     const btnPrevReport = document.getElementById('btnPrevReportDetail');
     const btnNextReport = document.getElementById('btnNextReportDetail');
 
@@ -2058,7 +2021,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Keyboard Shortcuts Modal Handlers (C2)
     const modalShortcuts = document.getElementById('modal-shortcuts');
     const btnOpenShortcuts = document.getElementById('btnOpenShortcuts');
     const btnCloseShortcuts = document.getElementById('btn-close-shortcuts-modal');
@@ -2067,7 +2029,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function openShortcutsModal() {
         if (modalShortcuts) {
             const card = modalShortcuts.querySelector('.modal-card, .pro-card') || modalShortcuts;
-            // [PERF-FIX-28] Promote layer temporarily for modal enter transition
+
             promoteTemporarily(card, 'transform, opacity', 250);
             modalShortcuts.style.display = 'flex';
         }
@@ -2084,11 +2046,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === modalShortcuts) closeShortcutsModal();
     });
 
-    // Global Keyboard Shortcuts (C2)
     document.addEventListener('keydown', (e) => {
         const isEditing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
 
-        // Escape: Close detail or open modals
         if (e.key === 'Escape') {
             if (modalShortcuts && modalShortcuts.style.display !== 'none') {
                 closeShortcutsModal();
@@ -2098,14 +2058,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeDetailView();
                 return;
             }
-            // Close any open admin modals
+
             document.querySelectorAll('.admin-modal-overlay').forEach(m => {
                 if (m.id !== 'modal-concurrent-alert') m.style.display = 'none';
             });
             return;
         }
 
-        // Only trigger single-letter shortcuts when NOT typing in inputs/textareas
         if (!isEditing) {
             if (e.key === '?' || (e.shiftKey && e.key === '/')) {
                 e.preventDefault();
@@ -2140,14 +2099,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Dossier Word Template Generator & Print Trigger
     document.getElementById('btnPrintDossierBtn')?.addEventListener('click', () => {
         if (!currentViewingReportId) return;
         showToast('در حال صدور و دریافت برگ پرونده بر اساس قالب ورد...');
         window.location.href = `/api/admin/report/export-docx?id=${currentViewingReportId}`;
     });
 
-    // [PERF-FIX-23] Cache detail view elements
     let _elDetailSkeleton = null;
     let _elDetailActual = null;
 
@@ -2177,7 +2134,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             resetSessionTimer();
 
-            // Synchronize in-memory report states immediately
             const repInAll = allReports.find(r => r.id === id);
             if (repInAll) {
                 repInAll.is_read = true;
@@ -2197,7 +2153,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Immediately update the table row in DOM without needing page refresh
             const rowEl = reportsBody.querySelector(`tr[data-report-id="${id}"]`);
             if (rowEl) {
                 rowEl.classList.remove('row-new-message');
@@ -2214,7 +2169,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (toggleBtn) toggleBtn.remove();
             }
 
-            // Immediately update KPI count cards & notification bell counter
             updateKPICards();
             fetchNotifications();
 
@@ -2224,7 +2178,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('detail-tracking').textContent = data.tracking_code;
             document.getElementById('detail-date').textContent = shamsiDate;
 
-            // Print Header Elements
             const printTrackingEl = document.getElementById('print-header-tracking');
             const printRegDateEl = document.getElementById('print-header-regdate');
             const printDateEl = document.getElementById('print-header-date');
@@ -2232,7 +2185,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (printRegDateEl) printRegDateEl.textContent = shamsiDate;
             if (printDateEl) printDateEl.textContent = printCurrentDate;
 
-            // Priority Selector & Print Text
             const prioritySelect = document.getElementById('detail-priority-select');
             const priorityPrintEl = document.getElementById('detail-priority-print');
             const priorityLabels = {
@@ -2329,7 +2281,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Update Report Quality Classification Banner & One-Time Prompt
             updateClassificationUI(data, id);
 
             const messagesContainer = document.getElementById('detail-messages-container');
@@ -2418,7 +2369,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Confidential Internal Notes Box
             const notesInput = document.getElementById('detail-internal-notes-input');
             const printNotesText = document.getElementById('print-internal-notes-text');
             const saveNotesBtn = document.getElementById('btnSaveInternalNotes');
@@ -2515,7 +2465,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const szText = att.file_size ? ` (${formatAdminFileSize(att.file_size)})` : '';
                     const nameText = att.file_name || 'فایل ضمیمه';
                     downloadBtn.setAttribute('data-tooltip', `دانلود مستقیم: ${nameText}`);
-                    // [HARDEN-3] escape user-controlled value before innerHTML
+
                     downloadBtn.innerHTML = `
                         <span class="attachment-icon-box">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -2625,7 +2575,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Regional Responses Section (Internal Submissions from Navahi & Manategh)
             const regionalSection = document.getElementById('detail-regional-responses-container');
             const regionalCentralView = document.getElementById('regional-responses-central-view');
             const regionalSideView = document.getElementById('regional-responses-side-view');
@@ -2635,7 +2584,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 regionalSection.style.display = 'block';
 
                 if (!isNavahi) {
-                    // Central Admins: see all internal investigation reports
+
                     if (regionalCentralView) regionalCentralView.style.display = 'block';
                     if (regionalSideView) regionalSideView.style.display = 'none';
 
@@ -2675,7 +2624,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 } else {
-                    // Side Admins: submit/view own investigation report to Central Admin
+
                     if (regionalCentralView) regionalCentralView.style.display = 'none';
                     if (regionalSideView) regionalSideView.style.display = 'block';
 
@@ -2699,7 +2648,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Superuser Delete Button in Detail View Header
             const deleteReportBtn = document.getElementById('btnDeleteReportSuperuser');
             if (deleteReportBtn) {
                 if (currentAdmin && currentAdmin.is_superuser) {
@@ -2712,7 +2660,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Forwarding Button in Detail View Header (edare_kol and superuser only)
             const btnForwardDetail = document.getElementById('btnForwardReportDetail');
             const canForward = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
             if (btnForwardDetail) {
@@ -2724,7 +2671,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Forwarding History Button in Detail View Header (All authorized roles)
             const btnHistoryDetail = document.getElementById('btnHistoryReportDetail');
             if (btnHistoryDetail) {
                 btnHistoryDetail.onclick = () => openForwardHistoryModal(id, data.tracking_code);
@@ -2737,7 +2683,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (_elDetailSkeleton) _elDetailSkeleton.classList.add('d-none');
             if (_elDetailActual) _elDetailActual.classList.remove('d-none');
 
-            // Trigger auto-expand when elements are visible in the DOM
             if (notesInput) makeTextareaAutoExpand(notesInput);
             if (responseInput) makeTextareaAutoExpand(responseInput);
             const regionalTextarea = document.getElementById('regional_response_input');
@@ -2755,7 +2700,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Regional Side-Admin Investigation Report Submission to Central Admin
     const regionalResponseForm = document.getElementById('regionalResponseForm');
     regionalResponseForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -2812,7 +2756,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Superuser Permanent Report & Evidence File Deletion
     async function deleteReportPermanently(reportId, trackingCode, isInsideDetail = false) {
         if (!currentAdmin || !currentAdmin.is_superuser) {
             showToast('تنها پشتیبانی سامانه مجاز به حذف پرونده می‌باشد.', 3000, 'warning');
@@ -2909,7 +2852,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // [PERF-FIX-13] Throttle makeTextareaAutoExpand with requestAnimationFrame
     function makeTextareaAutoExpand(el) {
         if (!el) return;
         el.style.resize = 'none';
@@ -2930,10 +2872,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return adjustHeight;
     }
 
-    // Apply auto-expand to all textareas in admin dashboard
     document.querySelectorAll('textarea').forEach(ta => makeTextareaAutoExpand(ta));
 
-    // 3. Quick Canned Response Chips (Both Main Admin and Regional Sub-Admin)
     document.querySelectorAll('.canned-chip').forEach(chip => {
         chip.addEventListener('click', () => {
             const text = chip.getAttribute('data-text');
@@ -2947,7 +2887,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 4. Mini Copy Buttons in Detail View
     const copyTrackingBtn = document.getElementById('copyDetailTrackingBtn');
     const copyPhoneBtn = document.getElementById('copyDetailPhoneBtn');
 
@@ -2971,7 +2910,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. Submit Admin Response
     const adminResponseForm = document.getElementById('adminResponseForm');
     if (adminResponseForm) {
         adminResponseForm.addEventListener('submit', async (e) => {
@@ -3042,7 +2980,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 6. Admin Logout
     async function handleAdminLogout() {
         const confirmed = await showConfirmDialog({
             title: 'خروج از کارتابل حراست',
@@ -3069,10 +3006,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnLogoutSessionWarning) btnLogoutSessionWarning.addEventListener('click', handleAdminLogout);
 
-    // =========================================================================
-    // 7. Report Quality Classification Module (C7 - Anti-Slop, Pure JS)
-    // =========================================================================
-
     function updateClassificationUI(data, reportId) {
         const bannerEl = document.getElementById('detail-classification-note');
         const noteTextEl = document.getElementById('classificationNoteText');
@@ -3080,12 +3013,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const actionContainer = document.getElementById('classificationActionContainer');
         const promptContainer = document.getElementById('classification-prompt-container');
 
-        // navahi_manategh role cannot classify or change classification
         const isNavahi = currentAdmin && currentAdmin.role === 'navahi_manategh';
 
         const classification = data ? data.classification : null;
         if (classification && (classification === 'helpful' || classification === 'useless')) {
-            // Already classified: show top note, hide one-time prompt permanently
+
             if (promptContainer) promptContainer.style.display = 'none';
 
             if (bannerEl && noteTextEl && noteIconEl) {
@@ -3107,14 +3039,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     noteTextEl.innerHTML = `این گزارش توسط <strong>${escapeHTML(classifierName)}</strong> به عنوان <strong class="badge-tag-useless">بی‌محتوا و فاقد ارزش</strong> علامت‌گذاری شده است.`;
                 }
 
-                // Only original classifier can change their classification, and navahi_manategh is strictly forbidden
                 const isClassifier = !isNavahi && currentAdmin && data.classified_by && (currentAdmin.username === data.classified_by);
                 if (actionContainer) {
                     actionContainer.style.display = isClassifier ? 'flex' : 'none';
                 }
             }
         } else {
-            // Not classified yet: show one-time prompt only if not navahi_manategh
+
             if (bannerEl) bannerEl.style.display = 'none';
             if (promptContainer) {
                 if (isNavahi) {
@@ -3154,13 +3085,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const respData = await res.json();
                 showToast('ارزیابی کیفیت گزارش با موفقیت ثبت شد', 2500, 'success');
 
-                // Update in-memory collections
                 const repInAll = allReports ? allReports.find(r => r.id === currentViewingReportId) : null;
                 if (repInAll) repInAll.classification = classification;
                 const repInFiltered = filteredReports ? filteredReports.find(r => r.id === currentViewingReportId) : null;
                 if (repInFiltered) repInFiltered.classification = classification;
 
-                // Animate prompt out
                 const promptContainer = document.getElementById('classification-prompt-container');
                 if (promptContainer) {
                     promptContainer.style.opacity = '0';
@@ -3318,7 +3247,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Wire prompt buttons
         document.getElementById('btnClassifyHelpful')?.addEventListener('click', () => submitClassification('helpful'));
         document.getElementById('btnClassifyUseless')?.addEventListener('click', () => submitClassification('useless'));
     }
@@ -3357,8 +3285,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const size = 230;
         const strokeWidth = 24;
-        const radius = (size / 2) - (strokeWidth / 2); // 115 - 12 = 103
-        const circumference = 2 * Math.PI * radius; // ~647.168
+        const radius = (size / 2) - (strokeWidth / 2);
+        const circumference = 2 * Math.PI * radius;
 
         const segments = [
             {
@@ -3457,7 +3385,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // Trigger entrance animation for segments
         requestAnimationFrame(() => {
             nonZeroSegments.forEach(seg => {
                 const circleEl = document.getElementById(`donut-seg-${seg.key}`);
@@ -3468,7 +3395,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Interactive hover states linking segments and legend rows
         const centerLabel = document.getElementById('donutCenterLabel');
         const centerValue = document.getElementById('donutCenterValue');
         const centerPct = document.getElementById('donutCenterPct');
@@ -3525,7 +3451,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Attach listeners to chart wrapper & SVG circles
         const donutWrapper = container.querySelector('.donut-chart-wrapper');
         if (donutWrapper) {
             donutWrapper.addEventListener('mouseleave', resetHoveredState);
@@ -3538,7 +3463,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Attach listeners to legend items & list
         const legendListEl = container.querySelector('.donut-legend-list');
         if (legendListEl) {
             legendListEl.addEventListener('mouseleave', resetHoveredState);
@@ -3580,21 +3504,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const palette = [
-            '#38bdf8', // Sky
-            '#34d399', // Emerald
-            '#818cf8', // Indigo
-            '#fbbf24', // Amber
-            '#f43f5e', // Rose
-            '#a78bfa', // Purple
-            '#2dd4bf', // Teal
-            '#fb923c', // Orange
-            '#94a3b8'  // Slate
+            '#38bdf8',
+            '#34d399',
+            '#818cf8',
+            '#fbbf24',
+            '#f43f5e',
+            '#a78bfa',
+            '#2dd4bf',
+            '#fb923c',
+            '#94a3b8'
         ];
 
         const size = 230;
         const strokeWidth = 24;
-        const radius = (size / 2) - (strokeWidth / 2); // 103
-        const circumference = 2 * Math.PI * radius; // ~647.168
+        const radius = (size / 2) - (strokeWidth / 2);
+        const circumference = 2 * Math.PI * radius;
 
         const segments = validItems.map((item, idx) => {
             const pct = Math.round((item.count / total) * 1000) / 10;
@@ -3682,7 +3606,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // Entrance animation
         requestAnimationFrame(() => {
             segments.forEach(seg => {
                 const circleEl = document.getElementById(`donut-cat-seg-${seg.id}`);
@@ -3693,7 +3616,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Hover state handlers
         const centerLabel = document.getElementById('donutCatCenterLabel');
         const centerValue = document.getElementById('donutCatCenterValue');
         const centerPct = document.getElementById('donutCatCenterPct');
@@ -3750,7 +3672,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Attach listeners to chart wrapper & SVG circles
         const donutWrapper = container.querySelector('.donut-chart-wrapper');
         if (donutWrapper) {
             donutWrapper.addEventListener('mouseleave', resetHoveredCat);
@@ -3768,7 +3689,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Attach listeners to legend list
         const legendListEl = container.querySelector('.donut-legend-list');
         if (legendListEl) {
             legendListEl.addEventListener('mouseleave', resetHoveredCat);
@@ -3919,7 +3839,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // Trigger entrance animation for progress segments
         requestAnimationFrame(() => {
             prioItems.forEach(item => {
                 const el = document.getElementById(`prio-bar-${item.key}`);
@@ -3929,7 +3848,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Hover linkages
         prioItems.forEach(item => {
             const barEl = document.getElementById(`prio-bar-${item.key}`);
             const legendEl = document.getElementById(`prio-legend-${item.key}`);
@@ -3961,16 +3879,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // =========================================================================
-    // 8. Analytics & Statistics Module (C6 - Pure SVG / HTML, Zero Deps)
-    // =========================================================================
-
     let cachedAnalyticsData = null;
     let lastAnalyticsFetchTime = 0;
     const ANALYTICS_CACHE_TTL = 60000;
 
     function populateAnalyticsDOM(data) {
-        // 1. Update Analytics Metric Cards
+
         const totalEl = document.getElementById('ana-total-reports');
         const respEl = document.getElementById('ana-total-responded');
         const unreadEl = document.getElementById('ana-total-unread');
@@ -3996,13 +3910,10 @@ document.addEventListener('DOMContentLoaded', () => {
             renderClassificationPieChart(null);
         }
 
-        // 2. Render Category Distribution (Interactive Luxury Donut Chart)
         renderCategoryPieChart(data.category_breakdown, data.total_reports);
 
-        // 3. Priorities Breakdown (Segmented Progress Bar & Rich Legend)
         renderPrioritiesSegmentedBar(data.priority_breakdown, data.total_reports);
 
-        // 4. Monthly Trends (12 Months of Solar Year)
         renderMonthlyChart(data.monthly_trend);
     }
 
@@ -4081,7 +3992,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const lowestMonthText = `${monthNames[lowestIdx]} (${toPersianNum(minVal)})`;
         const activeMonths = monthCounts.filter(c => c > 0).length;
 
-        // SVG Coordinate System (RTL: Month 0 at right, Month 11 at left)
         const svgWidth = 960;
         const svgHeight = 240;
         const padX = 55;
@@ -4093,12 +4003,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const points = monthNames.map((name, i) => {
             const count = monthCounts[i];
             const ratio = count / effectiveMax;
-            const x = (svgWidth - padX) - (i * stepX); // RTL: Farvardin on right, Esfand on left
+            const x = (svgWidth - padX) - (i * stepX);
             const y = yBottom - (ratio * (yBottom - yTop));
             return { x, y, count, name, index: i };
         });
 
-        // Generate smooth Catmull-Rom -> Cubic Bezier curve
         function generateSpline(pts) {
             if (!pts || pts.length === 0) return '';
             if (pts.length === 1) return `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
@@ -4122,7 +4031,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const linePath = generateSpline(points);
         const areaPath = `${linePath} L ${points[11].x.toFixed(1)} ${yBottom} L ${points[0].x.toFixed(1)} ${yBottom} Z`;
 
-        // Horizontal Grid Lines & Ticks
         const gridLevels = [0, 0.33, 0.66, 1];
         const gridLinesHtml = gridLevels.map(lvl => {
             const y = yBottom - lvl * (yBottom - yTop);
@@ -4133,7 +4041,6 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join('');
 
-        // Dots on points
         const dotsHtml = points.map(p => {
             const isPeak = p.count === maxVal && maxVal > 0;
             if (isPeak) {
@@ -4152,7 +4059,6 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join('');
 
-        // X-Axis month items (RTL positioning)
         const xLabelsHtml = points.map((p, i) => {
             const isPeak = p.count === maxVal && maxVal > 0;
             const rightPct = ((svgWidth - p.x) / svgWidth * 100).toFixed(2);
@@ -4260,7 +4166,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // Interactive mouse hover event bindings
         const canvasWrap = document.getElementById('monthlyChartCanvasWrap');
         const refLine = document.getElementById('monthlyRefLine');
         const activeDot = document.getElementById('monthlyActiveDot');
@@ -4270,7 +4175,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const tooltipPct = document.getElementById('monthlyTooltipPct');
         const tooltipBadge = document.getElementById('monthlyTooltipBadge');
 
-        // [PERF-FIX-29] RAF-throttled mousemove with passive event listener to eliminate layout thrashing
         if (canvasWrap) {
             let chartMoveRaf = null;
             let lastEvent = null;
@@ -4286,7 +4190,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const mouseX = ev.clientX - rect.left;
                     const svgX = (mouseX / rect.width) * svgWidth;
 
-                    // Find nearest point
                     let nearestPt = points[0];
                     let minDiff = Infinity;
                     for (let i = 0; i < points.length; i++) {
@@ -4372,7 +4275,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // [HARDEN-6] Server-Sent Events stream replaces polling
     function connectAdminSSE() {
         if (_sseConnection || typeof EventSource === 'undefined') return;
         _sseConnection = new EventSource('/api/admin/events');
@@ -4398,7 +4300,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         _sseConnection.addEventListener('heartbeat', () => {
-            // Server heartbeat proves connection is alive; no action needed.
+
         });
 
         _sseConnection.addEventListener('error', () => {
@@ -4454,10 +4356,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startBackgroundPolling();
-
-    // =========================================================================
-    // 9. Superuser Advanced Management & Role-Based UI Module
-    // =========================================================================
 
     async function checkAdminProfile() {
         try {
@@ -4556,7 +4454,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabBtnAnalytics?.addEventListener('click', () => switchMainTab('analytics'));
     tabBtnAdvanced?.addEventListener('click', () => switchMainTab('advanced'));
 
-    // Advanced Sub-Tabs Switching
     document.querySelectorAll('.adv-subnav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const targetId = btn.getAttribute('data-target');
@@ -4586,9 +4483,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // -------------------------------------------------------------
-    // User Management Sub-Module
-    // -------------------------------------------------------------
     let allAdminUsers = [];
 
     function renderUsersTableSkeleton(count = 5) {
@@ -4628,7 +4522,6 @@ document.addEventListener('DOMContentLoaded', () => {
             allAdminUsers = await res.json();
             renderUsersTable(allAdminUsers);
 
-            // Update user counts
             const totalEl = document.getElementById('adv-users-total');
             const activeEl = document.getElementById('adv-users-active');
             const superEl = document.getElementById('adv-users-super');
@@ -4636,12 +4529,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (activeEl) activeEl.textContent = toPersianNum(allAdminUsers.filter(u => u.is_active).length);
             if (superEl) superEl.textContent = toPersianNum(allAdminUsers.filter(u => u.is_superuser).length);
         } catch (e) {
-            // [HARDEN-3] escape user-controlled value before innerHTML
+
             tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${escapeHTML(e.message)}</td></tr>`;
         }
     }
 
-    // Password Complexity Validator
     function validatePasswordComplexity(pwd) {
         if (!pwd || pwd.length < 12) {
             return 'رمز عبور باید حداقل ۱۲ کاراکتر باشد.';
@@ -4736,7 +4628,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tbody.appendChild(fragment);
 
-        // [PERF-FIX-6] Event delegation on users tbody with _delegated guard
         if (!tbody._delegated) {
             tbody._delegated = true;
             tbody.addEventListener('click', (e) => {
@@ -4938,7 +4829,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (modalEditUser) {
-            // [PERF-FIX-28] Promote layer temporarily for modal enter transition
+
             const card = modalEditUser.querySelector('.modal-card') || modalEditUser;
             promoteTemporarily(card, 'transform, opacity', 250);
             modalEditUser.style.display = 'flex';
@@ -5089,7 +4980,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (labelEl) labelEl.textContent = username;
         if (statusEl) statusEl.style.display = 'none';
         if (modalResetPassword) {
-            // [PERF-FIX-28] Promote layer temporarily for modal enter transition
+
             const card = modalResetPassword.querySelector('.modal-card') || modalResetPassword;
             promoteTemporarily(card, 'transform, opacity', 250);
             modalResetPassword.style.display = 'flex';
@@ -5170,7 +5061,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const status = document.getElementById('change-my-pwd-status');
         if (status) status.style.display = 'none';
         if (modalChangeMyPwd) {
-            // [PERF-FIX-28] Promote layer temporarily for modal enter transition
+
             const card = modalChangeMyPwd.querySelector('.modal-card') || modalChangeMyPwd;
             promoteTemporarily(card, 'transform, opacity', 250);
             modalChangeMyPwd.style.display = 'flex';
@@ -5332,7 +5223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isKickoutHandled) return;
         isKickoutHandled = true;
         clearInterval(timerInterval);
-        // [HARDEN-7] Removed redundant 8-second heartbeat; replaced by SSE session_revoked event
+
         if (_sseConnection) {
             _sseConnection.close();
             _sseConnection = null;
@@ -5473,7 +5364,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     btnRefreshAudit?.addEventListener('click', () => fetchAuditLogs());
-    // [PERF-FIX-11] Debounce audit search input to 300ms and batch renders via requestAnimationFrame
+
     auditFilterSearch?.addEventListener('input', debounce(() => {
         requestAnimationFrame(() => applyAuditFiltersAndPagination(true));
     }, 300));
@@ -5498,7 +5389,6 @@ document.addEventListener('DOMContentLoaded', () => {
         applyAuditFiltersAndPagination(false);
     });
 
-    // [PERF-FIX-6] Delegated copy listener with _delegated guard
     const auditTbody = document.getElementById('adv-audit-tbody');
     if (auditTbody && !auditTbody._delegated) {
         auditTbody._delegated = true;
@@ -5564,7 +5454,7 @@ document.addEventListener('DOMContentLoaded', () => {
             populateAuditUsersDropdown(allAuditLogs);
             applyAuditFiltersAndPagination(true);
         } catch (e) {
-            // [HARDEN-3] escape user-controlled value before innerHTML
+
             tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${escapeHTML(e.message)}</td></tr>`;
         }
     }
@@ -5706,7 +5596,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             showToast('لیست نشست‌های فعال بروزرسانی شد');
         } catch (e) {
-            // [HARDEN-3] escape user-controlled value before innerHTML
+
             tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${escapeHTML(e.message)}</td></tr>`;
         }
     }
@@ -5787,7 +5677,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tbody.appendChild(fragment);
 
-        // [PERF-FIX-6] Event delegation on sessions tbody with _delegated guard
         if (!tbody._delegated) {
             tbody._delegated = true;
             tbody.addEventListener('click', (e) => {
@@ -5896,7 +5785,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             previousNotifUnreadCount = unreadCount;
 
-            // Performance: Only render the notification list if dropdown is currently visible
             if (notifDropdown && notifDropdown.style.display === 'block') {
                 renderNotificationsList(allNotifications);
             }
@@ -5924,7 +5812,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Set up event delegation on notifListContainer once
         if (notifListContainer && !notifListContainer._perfDelegated) {
             notifListContainer._perfDelegated = true;
             notifListContainer.addEventListener('click', async (e) => {
@@ -6083,15 +5970,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // =========================================================================
-    // 13. Report Forwarding (ارجاع خبر) & Visual Flowchart History Module
-    // =========================================================================
-
     let cachedForwardingRecipients = null;
     let selectedRecipientUsernames = new Set();
     let currentForwardReportId = null;
 
-    // --- Forwarding Modal ---
     const modalForward = document.getElementById('modal-forward-report');
     const btnCloseForward = document.getElementById('btn-close-forward-modal');
     const btnCancelForward = document.getElementById('btn-cancel-forward');
@@ -6184,7 +6066,6 @@ document.addEventListener('DOMContentLoaded', () => {
             item.style.cursor = 'pointer';
             item.style.transition = 'all 0.15s ease';
 
-            // Display ONLY Full Name and District/Position Title - NEVER EXPOSE USERNAME (Requirement 9)
             item.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <input type="checkbox" class="recipient-checkbox" value="${escapeHTML(u.username)}" ${isChecked ? 'checked' : ''} style="width: 17px; height: 17px; accent-color: var(--color-primary, #0ea5e9); cursor: pointer;">
@@ -6282,7 +6163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (forwardSearchInput) forwardSearchInput.value = '';
 
         if (modalForward) {
-            // [PERF-FIX-28] Promote layer temporarily for modal enter transition
+
             const card = modalForward.querySelector('.modal-card') || modalForward;
             promoteTemporarily(card, 'transform, opacity', 250);
             modalForward.style.display = 'flex';
@@ -6359,7 +6240,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Visual Flowchart Forwarding History Modal ---
     const modalHistory = document.getElementById('modal-forward-history');
     const btnCloseHistory = document.getElementById('btn-close-history-modal');
     const btnCloseHistoryFooter = document.getElementById('btn-close-history-footer');
@@ -6458,14 +6338,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Group history events by forwarder and forwarding timestamp (within same minute)
         const groups = [];
         items.forEach(item => {
             const fwdAt = item.forwarded_at || '';
             const key = `${item.forwarded_by}_${fwdAt.length >= 16 ? fwdAt.substring(0, 16) : fwdAt}`;
             let group = groups.find(g => g.key === key);
             if (!group) {
-                // Resolve human-readable full name (strictly avoid raw usernames like admin_herasat)
+
                 let resolvedForwarderName = item.forwarder_name || item.forwarded_by_name;
                 if (!resolvedForwarderName || resolvedForwarderName === item.forwarded_by) {
                     const matchUser = (typeof allAdminUsers !== 'undefined' && Array.isArray(allAdminUsers)) ? allAdminUsers.find(u => u.username === item.forwarded_by) : null;
@@ -6504,7 +6383,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const forwardDateFa = formatJalaliDateTime(group.forwarded_at, true);
 
-            // 1. Source Node (Forwarder - اداره کل / مقام ارجاع‌دهنده)
             const sourceHtml = `
                 <div class="flow-node-source-container">
                     <div class="flow-node flow-node-source">
@@ -6534,7 +6412,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
-            // 2. Visual Directional Arrow Downwards (↓)
             const connectorHtml = `
                 <div class="flow-connector-wrapper">
                     <div class="flow-connector-line"></div>
@@ -6548,7 +6425,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
-            // 3. Destination Nodes Grid (Recipients - کارشناسان دریافت‌کننده)
             let destinationsHtml = `<div class="flow-destinations-grid count-${Math.min(group.recipients.length, 4)}">`;
 
             group.recipients.forEach(r => {
@@ -6641,7 +6517,6 @@ document.addEventListener('DOMContentLoaded', () => {
             window.convertTitles(forwardHistoryBody);
         }
 
-        // [PERF-FIX-6] Event delegation on forwardHistoryBody with _delegated guard
         if (!forwardHistoryBody._delegated) {
             forwardHistoryBody._delegated = true;
             forwardHistoryBody.addEventListener('click', async (e) => {
@@ -6687,10 +6562,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const resData = await res.json();
                     showToast(resData.message || 'ارجاع پرونده با موفقیت لغو گردید.');
 
-                    // Re-fetch and redraw forward history modal
                     openForwardHistoryModal(parseInt(repId, 10), historyModalTrackingCode?.textContent || '');
 
-                    // Refresh report details if current report is open
                     if (currentViewingReportId && currentViewingReportId === parseInt(repId, 10)) {
                         viewReport(currentViewingReportId);
                     }
@@ -6703,7 +6576,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // [HARDEN-6] [HARDEN-7] Server-Sent Events stream replaces polling and redundant 8-second heartbeat
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             clearInterval(timerInterval);
@@ -6718,7 +6590,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // [PERF-FIX-16] [PERF-FIX-30] Suspend infinite animations when elements are off-screen, registered during idle phase
     runWhenIdle(() => {
         if ('IntersectionObserver' in window) {
             const animObserver = new IntersectionObserver((entries) => {

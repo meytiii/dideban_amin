@@ -24,7 +24,6 @@ func getTestDB(t *testing.T) *sql.DB {
 		t.Skipf("Skipping PostgreSQL integration test (ping failed): %v", err)
 	}
 
-	// Ensure tables exist
 	migrationSQL := `
 	CREATE TABLE IF NOT EXISTS admin_sessions (
 		token_hash CHAR(64) PRIMARY KEY,
@@ -92,7 +91,6 @@ func TestSessionPersistenceAcrossReinstantiation(t *testing.T) {
 
 	sm1.Set(testToken, sess)
 
-	// Simulate restart by creating a completely new SessionManager instance with empty in-memory cache
 	sm2 := NewSessionManager(db)
 
 	retrieved, ok := sm2.Get(testToken)
@@ -107,7 +105,6 @@ func TestSessionPersistenceAcrossReinstantiation(t *testing.T) {
 		t.Errorf("Expected role superuser, got %s", retrieved.Role)
 	}
 
-	// Clean up
 	sm2.Delete(testToken)
 	if _, ok := sm2.Get(testToken); ok {
 		t.Errorf("Expected session to be deleted, but was still found")
@@ -152,7 +149,6 @@ func TestSessionRevokeAllUserSessions(t *testing.T) {
 		Expiry:      expiry,
 	}
 
-	// Force insert two sessions directly to simulate concurrent sessions before revoke
 	th1 := hashToken(token1)
 	th2 := hashToken(token2)
 	_, _ = db.Exec(`INSERT INTO admin_sessions (token_hash, username, full_name, role_title, role, is_superuser, ip, user_agent, created_at, last_active, expiry)
@@ -167,13 +163,11 @@ func TestSessionRevokeAllUserSessions(t *testing.T) {
 		t.Errorf("Expected RevokeAllUserSessions to revoke 2 sessions, got %d", revokedCount)
 	}
 
-	// Verify both tokens return kicked reason
 	reason1, kicked1 := sm.GetKickedReason(token1)
 	if !kicked1 || reason1 != "SECURITY_INCIDENT" {
 		t.Errorf("Expected token1 kicked with SECURITY_INCIDENT, got reason=%q, kicked=%v", reason1, kicked1)
 	}
 
-	// Second read must be false because single-use
 	if _, kickedAgain := sm.GetKickedReason(token1); kickedAgain {
 		t.Errorf("Expected GetKickedReason to be single-use, but second read was true")
 	}
@@ -202,13 +196,11 @@ func TestSessionManagementAndRateLimiter(t *testing.T) {
 
 	sm.Set(token, sess)
 
-	// 1. Active count
 	count := sm.ActiveCount()
 	if count < 1 {
 		t.Errorf("Expected ActiveCount >= 1, got %d", count)
 	}
 
-	// 2. GetAllActiveSessions
 	sessions := sm.GetAllActiveSessions()
 	found := false
 	for _, s := range sessions {
@@ -221,25 +213,20 @@ func TestSessionManagementAndRateLimiter(t *testing.T) {
 		t.Errorf("Expected user %s to be listed in GetAllActiveSessions", testUser)
 	}
 
-	// 3. UpdateActivity
 	sm.UpdateActivity(token)
 
-	// 4. RevokeSessionByToken
 	revokedUser, ok := sm.RevokeSessionByToken(token, "ADMIN_TERMINATION")
 	if !ok || revokedUser != testUser {
 		t.Errorf("Expected RevokeSessionByToken to succeed for %s, got user=%q, ok=%v", testUser, revokedUser, ok)
 	}
 
-	// Verify kicked reason
 	reason, kicked := sm.GetKickedReason(token)
 	if !kicked || reason != "ADMIN_TERMINATION" {
 		t.Errorf("Expected kicked reason ADMIN_TERMINATION, got reason=%q, kicked=%v", reason, kicked)
 	}
 
-	// 5. Delete session
 	sm.Delete(token)
 
-	// 6. RateLimitMiddleware
 	limiter := NewIPRateLimiter(2.0, 2)
 	dummyHandler := func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -250,25 +237,21 @@ func TestSessionManagementAndRateLimiter(t *testing.T) {
 	req := httptest.NewRequest("GET", "/", nil)
 	req.RemoteAddr = "203.0.113.195:12345"
 
-	// Request 1: allowed
 	rr1 := httptest.NewRecorder()
 	wrapped(rr1, req)
 	if rr1.Code != http.StatusOK {
 		t.Errorf("Expected 200 on first request, got %d", rr1.Code)
 	}
 
-	// Request 2: allowed
 	rr2 := httptest.NewRecorder()
 	wrapped(rr2, req)
 	if rr2.Code != http.StatusOK {
 		t.Errorf("Expected 200 on second request, got %d", rr2.Code)
 	}
 
-	// Request 3: rate limited
 	rr3 := httptest.NewRecorder()
 	wrapped(rr3, req)
 	if rr3.Code != http.StatusTooManyRequests {
 		t.Errorf("Expected 429 Too Many Requests on burst limit exceeded, got %d", rr3.Code)
 	}
 }
-

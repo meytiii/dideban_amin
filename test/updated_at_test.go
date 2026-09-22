@@ -9,7 +9,6 @@ func TestReportsUpdatedAtTrigger(t *testing.T) {
 	db := getTestDB(t)
 	DB = db
 
-	// Ensure trigger migration has run
 	runMigrations()
 
 	var reportID int64
@@ -27,23 +26,19 @@ func TestReportsUpdatedAtTrigger(t *testing.T) {
 		db.Exec("DELETE FROM reports WHERE id = $1", reportID)
 	}()
 
-	// Query updated_at right after insert
 	var createdAt, updatedAtBefore time.Time
 	err = db.QueryRow(`SELECT created_at, updated_at FROM reports WHERE id = $1`, reportID).Scan(&createdAt, &updatedAtBefore)
 	if err != nil {
 		t.Fatalf("failed to query initial timestamps: %v", err)
 	}
 
-	// Wait 50ms so time advances noticeably
 	time.Sleep(50 * time.Millisecond)
 
-	// Perform update without explicitly setting updated_at
 	_, err = db.Exec(`UPDATE reports SET priority = 'urgent' WHERE id = $1`, reportID)
 	if err != nil {
 		t.Fatalf("failed to update report priority: %v", err)
 	}
 
-	// Query updated_at after update
 	var updatedAtAfter time.Time
 	err = db.QueryRow(`SELECT updated_at FROM reports WHERE id = $1`, reportID).Scan(&updatedAtAfter)
 	if err != nil {
