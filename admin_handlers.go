@@ -1274,12 +1274,14 @@ type AdminUserItem struct {
 	IsLocked           bool   `json:"is_locked"`
 	LockoutRemaining   string `json:"lockout_remaining,omitempty"`
 	CreatedAt          string `json:"created_at"`
+	TotpEnabled        bool   `json:"totp_enabled"`
 }
 
 func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	rows, err := DB.Query(`
 		SELECT id, username, COALESCE(full_name, ''), role_title, COALESCE(role, 'edare_kol'), is_active, is_superuser,
-		       COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false), created_at
+		       COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false), created_at,
+		       COALESCE(totp_enabled, false)
 		FROM admin_users
 		ORDER BY id ASC
 	`)
@@ -1293,7 +1295,7 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var u AdminUserItem
 		var pwdChangedAt, createdAt time.Time
-		if err := rows.Scan(&u.ID, &u.Username, &u.FullName, &u.RoleTitle, &u.Role, &u.IsActive, &u.IsSuperuser, &pwdChangedAt, &u.MustChangePassword, &createdAt); err != nil {
+		if err := rows.Scan(&u.ID, &u.Username, &u.FullName, &u.RoleTitle, &u.Role, &u.IsActive, &u.IsSuperuser, &pwdChangedAt, &u.MustChangePassword, &createdAt, &u.TotpEnabled); err != nil {
 			continue
 		}
 		u.PasswordChangedAt = pwdChangedAt.Format(time.RFC3339)
@@ -1655,6 +1657,47 @@ func LiftUserLockoutHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "قفل موقت ورود با موفقیت برداشته شد و کاربر می‌تواند وارد شود."}`))
+}
+
+func DisableUser2FAHandler(w http.ResponseWriter, r *http.Request) {
+	admin := r.Context().Value("admin").(AdminSession)
+
+	var req struct {
+		UserID   int64  `json:"user_id"`
+		Username string `json:"username"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Bad request", http.StatusBadRequest)
+		return
+	}
+
+	req.Username = strings.TrimSpace(req.Username)
+	if req.Username == "" && req.UserID > 0 {
+		_ = DB.QueryRow("SELECT username FROM admin_users WHERE id = $1", req.UserID).Scan(&req.Username)
+	}
+	if req.Username == "" {
+		http.Error(w, "نام کاربری یا شناسه کاربر مشخص نشده است.", http.StatusBadRequest)
+		return
+	}
+
+	var targetRoleTitle string
+	var targetID int64
+	err := DB.QueryRow("SELECT id, role_title FROM admin_users WHERE username = $1", req.Username).Scan(&targetID, &targetRoleTitle)
+	if err != nil {
+		http.Error(w, "کاربر مورد نظر یافت نشد.", http.StatusNotFound)
+		return
+	}
+
+	_, err = DB.Exec("UPDATE admin_users SET totp_secret = NULL, totp_enabled = false WHERE id = $1", targetID)
+	if err != nil {
+		http.Error(w, "خطای پایگاه داده در غیرفعال‌سازی احراز هویت دومرحله‌ای", http.StatusInternalServerError)
+		return
+	}
+
+	logAudit(admin.Username, admin.Title, "SUPERUSER_DISABLE_2FA:"+req.Username, &targetID, getIP(r))
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "احراز هویت دومرحله‌ای برای این حساب با موفقیت غیرفعال شد."}`))
 }
 
 type AuditLogItem struct {

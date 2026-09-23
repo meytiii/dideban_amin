@@ -4685,6 +4685,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>
                     ${lockoutBadge ? `<div style="margin-bottom:4px;">${lockoutBadge}</div>` : ''}
                     ${u.is_active ? '<span class="badge-active">فعال</span>' : '<span class="badge-inactive">مسدود / غیرفعال</span>'}
+                    ${u.totp_enabled ? '<span class="badge-active" style="display:inline-flex; align-items:center; gap:3px; margin-top:4px;" data-tooltip="احراز هویت دومرحله‌ای فعال است"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>۲FA فعال</span>' : ''}
                     ${pwdBadges ? `<div style="margin-top:4px;">${pwdBadges}</div>` : ''}
                 </td>
                 <td class="ltr" style="text-align:right;">${formatJalaliDateTime(u.created_at, false)}</td>
@@ -4898,6 +4899,84 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 lockoutBanner.style.display = 'none';
             }
+        }
+
+        const iconContainer = document.getElementById('edit_2fa_icon_container');
+        const iconActive = document.getElementById('edit_2fa_icon_active');
+        const iconInactive = document.getElementById('edit_2fa_icon_inactive');
+        const badge2FA = document.getElementById('edit_2fa_badge');
+        const text2FA = document.getElementById('edit_2fa_status_text');
+        const disableBtn2FA = document.getElementById('btn-edit-disable-2fa');
+
+        const update2FAState = (has2FA) => {
+            if (has2FA) {
+                if (iconContainer) {
+                    iconContainer.style.background = 'rgba(16, 185, 129, 0.15)';
+                    iconContainer.style.color = '#34d399';
+                }
+                if (iconActive) iconActive.style.display = 'block';
+                if (iconInactive) iconInactive.style.display = 'none';
+                if (badge2FA) badge2FA.className = 'badge-2fa-has';
+                if (text2FA) text2FA.textContent = 'این کاربر احراز هویت دو مرحله ای دارد';
+                if (disableBtn2FA) {
+                    disableBtn2FA.style.display = 'inline-flex';
+                    disableBtn2FA.disabled = false;
+                }
+            } else {
+                if (iconContainer) {
+                    iconContainer.style.background = 'rgba(244, 63, 94, 0.15)';
+                    iconContainer.style.color = '#f43f5e';
+                }
+                if (iconActive) iconActive.style.display = 'none';
+                if (iconInactive) iconInactive.style.display = 'block';
+                if (badge2FA) badge2FA.className = 'badge-2fa-none';
+                if (text2FA) text2FA.textContent = 'این کاربر احراز هویت دو مرحله ای ندارد';
+                if (disableBtn2FA) disableBtn2FA.style.display = 'none';
+            }
+        };
+
+        update2FAState(!!user.totp_enabled);
+
+        if (disableBtn2FA) {
+            disableBtn2FA.onclick = async () => {
+                const confirmed = await showConfirmDialog({
+                    title: 'غیرفعال‌سازی احراز هویت دومرحله‌ای',
+                    description: `آیا از غیرفعال‌سازی احراز هویت دومرحله‌ای حساب «${user.username}» اطمینان دارید؟`,
+                    confirmText: 'بله، غیرفعال کن',
+                    cancelText: 'انصراف',
+                    variant: 'danger',
+                    iconType: 'shield-alert'
+                });
+                if (!confirmed) return;
+
+                disableBtn2FA.disabled = true;
+                try {
+                    const res = await adminFetch('/api/admin/users/disable-2fa', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: user.id, username: user.username })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.message || 'خطا در غیرفعال‌سازی احراز هویت دومرحله‌ای');
+
+                    user.totp_enabled = false;
+                    const match = allAdminUsers.find(u => u.id === user.id);
+                    if (match) match.totp_enabled = false;
+
+                    update2FAState(false);
+                    showToast(data.message || 'احراز هویت دومرحله‌ای با موفقیت غیرفعال شد.', 3500, 'success');
+                    renderUsersTable(allAdminUsers);
+
+                    if (currentAdmin && currentAdmin.id === user.id) {
+                        currentAdmin2FAEnabled = false;
+                        const statusBadge = document.getElementById('current-admin-2fa-status');
+                        if (statusBadge) statusBadge.textContent = 'غیرفعال';
+                    }
+                } catch (err) {
+                    showToast(err.message || 'خطا در غیرفعال‌سازی ۲FA', 3500, 'error');
+                    disableBtn2FA.disabled = false;
+                }
+            };
         }
 
         if (modalEditUser) {

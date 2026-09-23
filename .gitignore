@@ -31,6 +31,6 @@ templates/*.docx
 coverage*
 *.out
 
+#Utilities
 start_env.txt
-
 assets/*
