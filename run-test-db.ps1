@@ -1,0 +1,1 @@
+docker run --rm --name herasat-test-db -e POSTGRES_USER=herasat_user -e POSTGRES_PASSWORD=herasat1405@ -e POSTGRES_DB=herasat_db -v "${PSScriptRoot}/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro" -p 5432:5432 -d postgres:16-alpine
