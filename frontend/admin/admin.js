@@ -2748,6 +2748,7 @@ document.addEventListener('DOMContentLoaded', () => {
             reportsInboxSection?.classList.add('in-detail-view');
             if (_elDetailSkeleton) _elDetailSkeleton.classList.add('d-none');
             if (_elDetailActual) _elDetailActual.classList.remove('d-none');
+            if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
 
             if (notesInput) makeTextareaAutoExpand(notesInput);
             if (responseInput) makeTextareaAutoExpand(responseInput);
@@ -4520,6 +4521,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = activeSubBtn ? activeSubBtn.getAttribute('data-target') : 'adv-view-users';
             loadAdvSubView(target);
         }
+        if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
     }
 
     tabBtnReports?.addEventListener('click', () => switchMainTab('reports'));
@@ -4543,6 +4545,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 v.style.display = 'none';
             }
         });
+        if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
 
         if (targetId === 'adv-view-users') {
             fetchAdminUsers();

@@ -1471,6 +1471,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const trackingEl = document.getElementById('final-tracking-code');
                     if (trackingEl) trackingEl.textContent = data.tracking_code;
                     successScreen?.classList.remove('d-none');
+                    if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
 
                     form.reset();
                     clearFileInput();
@@ -1621,6 +1622,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tabTrack.classList.remove('active');
             submitSection?.classList.remove('d-none');
             trackingSection?.classList.add('d-none');
+            if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
 
             const successScreen = document.getElementById('success-screen');
             const isSuccessVisible = successScreen && !successScreen.classList.contains('d-none');
@@ -1634,6 +1636,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tabSubmit.classList.remove('active');
             trackingSection?.classList.remove('d-none');
             submitSection?.classList.add('d-none');
+            if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
             loadCaptcha('track-captcha-img', 'track_captcha_id', 'track_captcha_answer');
         });
     }
