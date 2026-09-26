@@ -19,6 +19,13 @@
 - RTL-aware interface navigation: Next buttons point left (`←`), Previous buttons point right (`→`).
 - Enforce anti-slop principles, responsive stability (`min-h-[100dvh]`, no viewport overflow), single color lock, and tactile micro-interactions.
 
+## UI Performance & Hardware Acceleration Discipline (Anti-Lag Rules)
+- FORBIDDEN: Never use `backdrop-filter: blur(...)` on large surfaces, hero cards, or scrollable containers. Blurring large viewports drops framerates to 15-20fps on low-end hardware and mobile devices. Use calibrated solid/semi-translucent surfaces (`#162032`, `#1e293b`) with subtle 1px border outlines.
+- ALWAYS isolate fixed backgrounds (`body::before`) to their own GPU compositor layer using `transform: translateZ(0); will-change: transform;` to eliminate scroll repaints.
+- Compositor-Only Transitions: Only animate `transform` (with `translateZ(0)`) and `opacity`. Never transition `box-shadow`, `filter`, or layout dimensions (`margin`, `padding`, `width`, `height`) on hover.
+- CSS Containment: Always apply `contain: layout style;` or `content-visibility: auto; contain-intrinsic-size: ...;` to major views and sections to prevent layout recalculation cascades.
+- Asset Dimension Discipline: Never load multi-megapixel textures for small UI badges or logos. Scale assets to 2x retina max (e.g. 400x400 for 200x200 display) to prevent GPU memory texture thrashing.
+
 NO DEPENDANCIES FOR THIS PROJECT... EVERYTHING MUST BE LOCAL FOR SECURITY REASONS (BY EVERYTHING I MEAN ASSETS AND NOT PLUGINS).
 PLUGINS OR EXTERNAL LIBRARIES ARE FORBIDDEN.
 

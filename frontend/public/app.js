@@ -1611,18 +1611,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 250);
     });
 
-    const tabHome = document.getElementById('tab-home');
+    const topNavBar = document.getElementById('topNavBar');
     const tabSubmit = document.getElementById('tab-submit');
     const tabTrack = document.getElementById('tab-track');
     const landingSection = document.getElementById('landingSection');
     const submitSection = document.getElementById('submitSection');
     const trackingSection = document.getElementById('trackingSection');
+    const btnBackToHome = document.getElementById('btnBackToHome');
+    const headerLogoCrest = document.getElementById('headerLogoCrest');
+    const headerTitleLink = document.getElementById('headerTitleLink');
 
     function switchView(viewName) {
         if (viewName === 'home') {
-            tabHome?.classList.add('active');
-            tabSubmit?.classList.remove('active');
-            tabTrack?.classList.remove('active');
+            topNavBar?.classList.add('d-none');
             landingSection?.classList.remove('d-none');
             submitSection?.classList.add('d-none');
             trackingSection?.classList.add('d-none');
@@ -1630,10 +1631,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 history.replaceState(null, '', window.location.pathname + window.location.search);
             }
         } else if (viewName === 'submit') {
-            tabSubmit?.classList.add('active');
-            tabHome?.classList.remove('active');
-            tabTrack?.classList.remove('active');
             landingSection?.classList.add('d-none');
+            topNavBar?.classList.remove('d-none');
+            tabSubmit?.classList.add('active');
+            tabTrack?.classList.remove('active');
             submitSection?.classList.remove('d-none');
             trackingSection?.classList.add('d-none');
             const successScreen = document.getElementById('success-screen');
@@ -1642,10 +1643,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadCaptcha('submit-captcha-img', 'submit_captcha_id', 'submit_captcha_answer');
             }
         } else if (viewName === 'track') {
-            tabTrack?.classList.add('active');
-            tabHome?.classList.remove('active');
-            tabSubmit?.classList.remove('active');
             landingSection?.classList.add('d-none');
+            topNavBar?.classList.remove('d-none');
+            tabTrack?.classList.add('active');
+            tabSubmit?.classList.remove('active');
             submitSection?.classList.add('d-none');
             trackingSection?.classList.remove('d-none');
             loadCaptcha('track-captcha-img', 'track_captcha_id', 'track_captcha_answer');
@@ -1653,10 +1654,38 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
     }
 
-    if (tabHome) {
-        tabHome.addEventListener('click', () => {
+    if (btnBackToHome) {
+        btnBackToHome.addEventListener('click', () => {
             switchView('home');
             window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        });
+    }
+
+    if (headerLogoCrest) {
+        headerLogoCrest.addEventListener('click', () => {
+            switchView('home');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        });
+        headerLogoCrest.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                switchView('home');
+                window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+            }
+        });
+    }
+
+    if (headerTitleLink) {
+        headerTitleLink.addEventListener('click', () => {
+            switchView('home');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        });
+        headerTitleLink.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                switchView('home');
+                window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+            }
         });
     }
 

@@ -203,6 +203,14 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 ### 9. Assistant Communication & Chat Language
 - **Assistant Chat Language:** ALWAYS speak, respond, and chat in English with user in all conversations and chats, while preserving Persian for client-facing UI strings and portal content.
 
+## Hardware Acceleration & Anti-Lag Performance Rules
+
+- **Zero Backdrop-Filter on Large Surfaces:** Never use `backdrop-filter: blur(...)` across full cards, hero panels, or scrollable surfaces. Real-time multi-pass Gaussian blur over 1000px surfaces drops framerates to 15-20fps on low-end laptops and mobile phones. Use calibrated dark opaque or semi-translucent surfaces (`#162032`, `#1e293b`) with 1px border outlines.
+- **Fixed Layer Isolation:** All fullscreen `position: fixed` backgrounds (`body::before`) must enforce `transform: translateZ(0); will-change: transform;` to permanently separate background rasterization from scrolling content.
+- **Compositor-Only Animations:** Only animate `transform` (with `translateZ(0)`) and `opacity`. Never animate `box-shadow`, `filter`, or layout dimensions (`margin`, `padding`, `width`, `height`) on hover.
+- **CSS Containment:** Apply `contain: layout style;` and `content-visibility: auto; contain-intrinsic-size: ...;` to major views (`#landingSection`, `#submitSection`, `#trackingSection`) to prevent layout recalculation cascades.
+- **Asset Dimension Discipline:** Never load multi-megapixel images for small UI badges or logos. Scale assets to 2x retina max (e.g. 400x400 for 200x200 display) to prevent GPU memory texture thrashing.
+
 ---
 
 ## Do's and Don'ts
@@ -212,12 +220,16 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Do** point forward navigation arrows to the Left (`←`) and backward arrows to the Right (`→`) in RTL mode.
 - **Do** provide clear feedback cycles for every async action (spinner + disabled state).
 - **Do** preserve LTR direction on tracking codes, phone numbers, and CAPTCHA fields.
+- **Do** isolate fixed background elements to their own GPU compositor layer (`translateZ(0)`).
+- **Do** enforce CSS containment (`contain: layout style`) on modular page views.
 
 ### Don't:
 - **Don't** mix multiple icon sets or introduce emoji icons inside critical UI buttons.
 - **Don't** use pure black `#000000` for dark mode surfaces—use layered obsidian/slate tones.
 - **Don't** allow form inputs or buttons to wrap text onto multiple lines at desktop breakpoints.
 - **Don't** bypass validation checks or profanity screening before submission.
+- **Don't** use `backdrop-filter: blur(...)` on large content containers or scrollable cards.
+- **Don't** transition expensive `box-shadow` blurs on hover; animate `transform` instead.
 - **Don't** put comments in codes.
 
 NO DEPENDANCIES FOR THIS PROJECT... EVERYTHING MUST BE LOCAL FOR SECURITY REASONS (BY EVERYTHING I MEAN ASSETS AND NOT PLUGINS).

@@ -30,15 +30,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1790411788.1892052,
-    "seen": 1790412751.43488,
+    "mtime": 1790413677.6510887,
+    "seen": 1790415224.6742277,
     "ast_hash": "c2a18a6a0ddd627e2bb9e76c493f3938",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
-    "mtime": 1790411842.4715223,
-    "seen": 1790412751.4350739,
-    "ast_hash": "9dd3a93aa6628b13e3e74e80a09008df",
+    "mtime": 1790414858.9752498,
+    "seen": 1790415224.6744163,
+    "ast_hash": "70e4485a480988d8e8ba082e8953e5fe",
     "semantic_hash": ""
   },
   "go.mod": {
@@ -84,15 +84,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1790411691.1331031,
-    "seen": 1790412751.446696,
-    "ast_hash": "05f7aaadce523f10a705ce430d6cc72b",
+    "mtime": 1790414074.1259503,
+    "seen": 1790415224.685382,
+    "ast_hash": "0814af90acecd53d3d797f7f3bf603d7",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1790411881.4437358,
-    "seen": 1790412751.4466977,
-    "ast_hash": "668bd896120c1c171cb3f67655f6c6bc",
+    "mtime": 1790414153.32733,
+    "seen": 1790415224.685383,
+    "ast_hash": "086fa0f76c4b09ad6fb08e224123da09",
     "semantic_hash": ""
   },
   "frontend/admin/bg.jpg": {
@@ -126,9 +126,9 @@
     "semantic_hash": ""
   },
   "frontend/public/logo.png": {
-    "mtime": 1789791270.1723747,
-    "seen": 1790405583.7021368,
-    "ast_hash": "0b3b70163bae807ff705647a6e0ce7c0",
+    "mtime": 1790416032.0648713,
+    "seen": 1790416314.6991646,
+    "ast_hash": "d9dba290e4a1ba8652ffe6730035e54d",
     "semantic_hash": ""
   },
   "frontend/public/logo_it.png": {
@@ -162,9 +162,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1790060384.061952,
-    "seen": 1790405583.7021093,
-    "ast_hash": "dcf019506d228ed82e32a6cf5c7ab00b",
+    "mtime": 1790416272.2937322,
+    "seen": 1790416314.6975782,
+    "ast_hash": "e69ffc6828a9900a14b427d7f60985ea",
     "semantic_hash": ""
   },
   ".impeccable/design.json": {
@@ -198,15 +198,15 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1789786712.2875144,
-    "seen": 1790405583.7021105,
-    "ast_hash": "9f3fbfd5adf42707733c6b615691e2dc",
+    "mtime": 1790416296.5053053,
+    "seen": 1790416314.6975803,
+    "ast_hash": "20623507192eb9197bc5208e53ea87dd",
     "semantic_hash": ""
   },
   "GEMINI.md": {
-    "mtime": 1790060389.052327,
-    "seen": 1790405583.7021112,
-    "ast_hash": "5a25e824288bfb9975da795154a93a0e",
+    "mtime": 1790416281.544889,
+    "seen": 1790416314.6975815,
+    "ast_hash": "1943fb59f436ac4b28b5891790acff90",
     "semantic_hash": ""
   },
   "components/ui/button-with-icon.tsx": {
@@ -1251,6 +1251,12 @@
     "mtime": 1790403783.9031394,
     "seen": 1790405583.7019598,
     "ast_hash": "be3d0e54a66de8fcf4b9f7db6ddda1fc",
+    "semantic_hash": ""
+  },
+  "frontend/public/logo_orig.png": {
+    "mtime": 1790416031.8504243,
+    "seen": 1790416314.6992369,
+    "ast_hash": "0b3b70163bae807ff705647a6e0ce7c0",
     "semantic_hash": ""
   }
 }
