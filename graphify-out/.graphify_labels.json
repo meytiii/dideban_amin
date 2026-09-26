@@ -62,7 +62,7 @@
   "60": "metadata.go",
   "61": "escapeHTML",
   "62": "captcha.go",
-  "63": "renderTable",
+  "63": "applyFilters",
   "64": "c1-outlined-chip.md",
   "65": "c4-sticky-bottom-bar.md",
   "66": "getTestDB",

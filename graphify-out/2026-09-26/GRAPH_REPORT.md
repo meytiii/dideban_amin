@@ -1,7 +1,7 @@
 # Graph Report - Setad_Khabari_HMD  (2026-09-26)
 
 ## Corpus Check
-- 192 files · ~275,481 words
+- 192 files · ~275,599 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -41,7 +41,7 @@
 - Critical (ships as slop)
 - Typography
 - seed_50_reports.go
-- net/http.Request
+- ipInCIDRs
 - admin_handlers.go
 - Microinteraction tells
 - Archetype index — load ONLY the picks you need
@@ -73,12 +73,12 @@
 - no_comments.md
 - SubmitReportHandler
 - NewClamAVScanner
-- getIP
+- net/http.Request
 - populateAnalyticsDOM
 - metadata.go
 - escapeHTML
 - captcha.go
-- applyFilters
+- renderTable
 - c1-outlined-chip.md
 - c4-sticky-bottom-bar.md
 - getTestDB
@@ -146,8 +146,6 @@
 10. `DecryptAES()` - 17 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `VerifyCaptcha()` --calls--> `GetLegacyHMACKey()`  [INFERRED]
-  captcha.go → crypto.go
 - `SubmitReportHandler()` --calls--> `ScanPDFForActiveContent()`  [INFERRED]
   public_handlers.go → metadata.go
 - `TestInputSanitizationAndLimits()` --calls--> `truncateRunes()`  [INFERRED]
@@ -156,6 +154,8 @@
   admin_auth.go → captcha.go
 - `LoginHandler()` --calls--> `GenerateMFAPendingToken()`  [INFERRED]
   admin_auth.go → mfa.go
+- `LoginHandler()` --calls--> `isCookieSecure()`  [INFERRED]
+  admin_auth.go → security.go
 
 ## Import Cycles
 - None detected.
@@ -179,8 +179,8 @@ Cohesion: 0.05
 Nodes (44): Abstract backgrounds, App mockups / device frames, Assets — sourcing canon for icons, logos, illustrations, photography, video, Avoid, Avoid, Avoid, Avoid, Avoid (+36 more)
 
 ### Community 4 - "adminFetch"
-Cohesion: 0.16
-Nodes (23): adminFetch(), deleteUser(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), handleAdminLogout() (+15 more)
+Cohesion: 0.17
+Nodes (24): adminFetch(), deleteUser(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), formatJalaliDateTime() (+16 more)
 
 ### Community 5 - "macrostructures.md"
 Cohesion: 0.05
@@ -262,9 +262,9 @@ Nodes (17): Banned defaults, Bans, Body text rules, Free body faces, Free displa
 Cohesion: 0.70
 Nodes (4): deriveKey(), encryptWithKey(), genTrackingCode(), main()
 
-### Community 26 - "net/http.Request"
-Cohesion: 0.19
-Nodes (17): GetActiveSessionsHandler(), GetAnalyticsHandler(), GetAuditLogsHandler(), GetForwardingRecipientsHandler(), GetNotificationsHandler(), GetReportsHandler(), GetSystemStatusHandler(), GetUsersHandler() (+9 more)
+### Community 26 - "ipInCIDRs"
+Cohesion: 0.50
+Nodes (4): ipInCIDRs(), parseTrustedProxies(), net.IP, net.IPNet
 
 ### Community 27 - "admin_handlers.go"
 Cohesion: 0.11
@@ -367,24 +367,24 @@ Cohesion: 0.24
 Nodes (14): GetHMACKey(), GenerateBase32Secret(), GenerateMFAPendingToken(), GenerateTOTPCode(), normalizeTOTPCode(), Setup2FAHandler(), ValidateMFAPendingToken(), VerifyTOTPCode() (+6 more)
 
 ### Community 53 - "viewReport"
-Cohesion: 0.22
-Nodes (18): closeDetailView(), deleteReportPermanently(), fetchNotifications(), fetchReports(), formatJalaliDateTime(), makeTextareaAutoExpand(), renderNotificationsList(), renderReportsTableSkeleton() (+10 more)
+Cohesion: 0.25
+Nodes (14): deleteReportPermanently(), fetchNotifications(), fetchReports(), makeTextareaAutoExpand(), renderNotificationsList(), renderReportsTableSkeleton(), renewSessionInteractive(), resetSessionTimer() (+6 more)
 
 ### Community 54 - "public/tatweel.js"
 Cohesion: 0.38
 Nodes (9): applyWrapperToNode(), canConnect(), enhanceElement(), enhanceText(), enhanceWord(), getViewportIntensity(), init(), recheckOverflow() (+1 more)
 
 ### Community 56 - "SubmitReportHandler"
-Cohesion: 0.19
-Nodes (17): RespondToReportHandler(), SubmitRegionalResponseHandler(), UpdateInternalNotesHandler(), VerifyCaptcha(), EncryptAES(), generateTrackingCode(), inspectZipArchive(), SubmitFollowUpHandler() (+9 more)
+Cohesion: 0.24
+Nodes (13): RespondToReportHandler(), UpdateInternalNotesHandler(), generateTrackingCode(), inspectZipArchive(), SubmitFollowUpHandler(), SubmitReportHandler(), TrackReportHandler(), isValidTrackingCode() (+5 more)
 
 ### Community 57 - "NewClamAVScanner"
 Cohesion: 0.24
 Nodes (8): NewClamAVScanner(), io.Reader, ClamAVScanner, startMockClamAVServer(), TestClamAVCleanFile(), TestClamAVDisabledBypassesNetwork(), TestClamAVFailClosedWhenUnreachable(), TestClamAVMalwareFound()
 
-### Community 58 - "getIP"
+### Community 58 - "net/http.Request"
 Cohesion: 0.12
-Nodes (32): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getIP(), getLatestAuditHash(), getLatestAuditHashTx(), ipInCIDRs(), logAudit() (+24 more)
+Nodes (46): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getIP(), getLatestAuditHash(), getLatestAuditHashTx(), logAudit(), logAuditTx() (+38 more)
 
 ### Community 59 - "populateAnalyticsDOM"
 Cohesion: 0.15
@@ -395,32 +395,32 @@ Cohesion: 0.23
 Nodes (11): SanitizeAttachment(), SanitizeJPEG(), SanitizePNG(), ScanPDFForActiveContent(), ValidateBinaryMagicBytes(), validateMagicBytes(), createTestJPEGWithEXIF(), createTestPNG() (+3 more)
 
 ### Community 61 - "escapeHTML"
-Cohesion: 0.31
-Nodes (9): applyAuditFiltersAndPagination(), escapeHTML(), fetchAuditLogs(), openForwardHistoryModal(), populateAuditUsersDropdown(), renderAuditTable(), renderAuditTableSkeleton(), renderForwardHistoryFlowchart() (+1 more)
+Cohesion: 0.32
+Nodes (8): applyAuditFiltersAndPagination(), escapeHTML(), fetchAuditLogs(), openForwardHistoryModal(), populateAuditUsersDropdown(), renderAuditTable(), renderAuditTableSkeleton(), renderForwardHistorySkeleton()
 
 ### Community 62 - "captcha.go"
-Cohesion: 0.38
-Nodes (9): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), CaptchaPayload, CaptchaResponse (+1 more)
+Cohesion: 0.21
+Nodes (14): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), VerifyCaptcha(), GetLegacyHMACKey() (+6 more)
 
-### Community 63 - "applyFilters"
-Cohesion: 0.25
-Nodes (9): applyFilters(), calculatePagination(), getMatchSnippet(), getScrollBehavior(), handleKPICardFilter(), highlightSearchTerm(), makePersianRegex(), renderCurrentPage() (+1 more)
+### Community 63 - "renderTable"
+Cohesion: 0.21
+Nodes (13): applyFilters(), calculatePagination(), closeDetailView(), getMatchSnippet(), getScrollBehavior(), handleKPICardFilter(), highlightSearchTerm(), makePersianRegex() (+5 more)
 
 ### Community 66 - "getTestDB"
 Cohesion: 0.19
 Nodes (10): NewAccountLockoutManager(), NewSessionManager(), TestAuditFailClosed(), TestAccountLockoutConcurrentFailures(), TestSecurityStoresInitOrder(), getTestDB(), TestSessionManagementAndRateLimiter(), TestSessionPersistenceAcrossReinstantiation() (+2 more)
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.16
-Nodes (21): DeleteReportHandler(), GetForwardingHistoryHandler(), DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey() (+13 more)
+Cohesion: 0.17
+Nodes (20): GetReportsHandler(), DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES() (+12 more)
 
 ### Community 68 - "TestCookieSecureCachedResolution"
 Cohesion: 0.50
 Nodes (3): InitCookieSecurity(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag()
 
 ### Community 72 - "LoginHandler"
-Cohesion: 0.24
-Nodes (12): LoginHandler(), ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), VerifyPassword(), VerifyPasswordWithRehash() (+4 more)
+Cohesion: 0.27
+Nodes (11): LoginHandler(), ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), VerifyPassword(), VerifyPasswordWithRehash() (+3 more)
 
 ### Community 77 - "security.go"
 Cohesion: 0.16

@@ -1,7 +1,7 @@
 # Graph Report - Setad_Khabari_HMD  (2026-09-26)
 
 ## Corpus Check
-- 192 files · ~275,599 words
+- 192 files · ~275,492 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `01a2d7b4`
+- Built from commit: `47fbe888`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -78,7 +78,7 @@
 - metadata.go
 - escapeHTML
 - captcha.go
-- renderTable
+- applyFilters
 - c1-outlined-chip.md
 - c4-sticky-bottom-bar.md
 - getTestDB
@@ -179,8 +179,8 @@ Cohesion: 0.05
 Nodes (44): Abstract backgrounds, App mockups / device frames, Assets — sourcing canon for icons, logos, illustrations, photography, video, Avoid, Avoid, Avoid, Avoid, Avoid (+36 more)
 
 ### Community 4 - "adminFetch"
-Cohesion: 0.17
-Nodes (24): adminFetch(), deleteUser(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), formatJalaliDateTime() (+16 more)
+Cohesion: 0.16
+Nodes (23): adminFetch(), deleteUser(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), handleAdminLogout() (+15 more)
 
 ### Community 5 - "macrostructures.md"
 Cohesion: 0.05
@@ -367,8 +367,8 @@ Cohesion: 0.24
 Nodes (14): GetHMACKey(), GenerateBase32Secret(), GenerateMFAPendingToken(), GenerateTOTPCode(), normalizeTOTPCode(), Setup2FAHandler(), ValidateMFAPendingToken(), VerifyTOTPCode() (+6 more)
 
 ### Community 53 - "viewReport"
-Cohesion: 0.25
-Nodes (14): deleteReportPermanently(), fetchNotifications(), fetchReports(), makeTextareaAutoExpand(), renderNotificationsList(), renderReportsTableSkeleton(), renewSessionInteractive(), resetSessionTimer() (+6 more)
+Cohesion: 0.22
+Nodes (18): closeDetailView(), deleteReportPermanently(), fetchNotifications(), fetchReports(), formatJalaliDateTime(), makeTextareaAutoExpand(), renderNotificationsList(), renderReportsTableSkeleton() (+10 more)
 
 ### Community 54 - "public/tatweel.js"
 Cohesion: 0.38
@@ -395,16 +395,16 @@ Cohesion: 0.23
 Nodes (11): SanitizeAttachment(), SanitizeJPEG(), SanitizePNG(), ScanPDFForActiveContent(), ValidateBinaryMagicBytes(), validateMagicBytes(), createTestJPEGWithEXIF(), createTestPNG() (+3 more)
 
 ### Community 61 - "escapeHTML"
-Cohesion: 0.32
-Nodes (8): applyAuditFiltersAndPagination(), escapeHTML(), fetchAuditLogs(), openForwardHistoryModal(), populateAuditUsersDropdown(), renderAuditTable(), renderAuditTableSkeleton(), renderForwardHistorySkeleton()
+Cohesion: 0.31
+Nodes (9): applyAuditFiltersAndPagination(), escapeHTML(), fetchAuditLogs(), openForwardHistoryModal(), populateAuditUsersDropdown(), renderAuditTable(), renderAuditTableSkeleton(), renderForwardHistoryFlowchart() (+1 more)
 
 ### Community 62 - "captcha.go"
 Cohesion: 0.21
 Nodes (14): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), VerifyCaptcha(), GetLegacyHMACKey() (+6 more)
 
-### Community 63 - "renderTable"
-Cohesion: 0.21
-Nodes (13): applyFilters(), calculatePagination(), closeDetailView(), getMatchSnippet(), getScrollBehavior(), handleKPICardFilter(), highlightSearchTerm(), makePersianRegex() (+5 more)
+### Community 63 - "applyFilters"
+Cohesion: 0.25
+Nodes (9): applyFilters(), calculatePagination(), getMatchSnippet(), getScrollBehavior(), handleKPICardFilter(), highlightSearchTerm(), makePersianRegex(), renderCurrentPage() (+1 more)
 
 ### Community 66 - "getTestDB"
 Cohesion: 0.19
@@ -423,11 +423,11 @@ Cohesion: 0.27
 Nodes (11): LoginHandler(), ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), VerifyPassword(), VerifyPasswordWithRehash() (+3 more)
 
 ### Community 77 - "security.go"
-Cohesion: 0.16
-Nodes (13): sync.Mutex, time.Ticker, time.Time, NewIPRateLimiter(), RateLimitMiddleware(), truncateRunes(), AdminSession, cachedAccountFailure (+5 more)
+Cohesion: 0.15
+Nodes (14): sync.Mutex, time.Ticker, time.Time, NewIPRateLimiter(), RateLimitMiddleware(), truncateRunes(), AdminSession, cachedAccountFailure (+6 more)
 
 ### Community 83 - "database/sql.DB"
-Cohesion: 0.39
+Cohesion: 0.29
 Nodes (4): NewUsedCaptchaStore(), database/sql.DB, UsedCaptchaStore, TestCaptchaPersistenceTryRedeem()
 
 ### Community 84 - "generate_docx.py"
@@ -460,10 +460,10 @@ Nodes (7): initAppTooltips(), convertTitles(), getOrCreateTooltip(), hide(), isM
 
 ### Community 108 - "testing.T"
 Cohesion: 0.13
-Nodes (21): testing.T, TestClassificationValidationAndMath(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization(), TestForwardingRequestValidation(), TestNavahiManateghClassificationForbidden(), TestNavahiManateghNotificationScoping() (+13 more)
+Nodes (20): testing.T, TestClassificationValidationAndMath(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization(), TestForwardingRequestValidation(), TestNavahiManateghClassificationForbidden(), TestNavahiManateghNotificationScoping() (+12 more)
 
 ### Community 115 - "SessionManager"
-Cohesion: 0.17
+Cohesion: 0.20
 Nodes (6): sync.Once, time.Duration, hashToken(), AccountLockoutManager, ActiveSessionItem, SessionManager
 
 ### Community 116 - "main"

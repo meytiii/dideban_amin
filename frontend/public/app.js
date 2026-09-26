@@ -1618,8 +1618,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitSection = document.getElementById('submitSection');
     const trackingSection = document.getElementById('trackingSection');
     const btnBackToHome = document.getElementById('btnBackToHome');
-    const headerLogoCrest = document.getElementById('headerLogoCrest');
-    const headerTitleLink = document.getElementById('headerTitleLink');
 
     function switchView(viewName) {
         if (viewName === 'home') {
@@ -1658,34 +1656,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btnBackToHome.addEventListener('click', () => {
             switchView('home');
             window.scrollTo({ top: 0, behavior: getScrollBehavior() });
-        });
-    }
-
-    if (headerLogoCrest) {
-        headerLogoCrest.addEventListener('click', () => {
-            switchView('home');
-            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
-        });
-        headerLogoCrest.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                switchView('home');
-                window.scrollTo({ top: 0, behavior: getScrollBehavior() });
-            }
-        });
-    }
-
-    if (headerTitleLink) {
-        headerTitleLink.addEventListener('click', () => {
-            switchView('home');
-            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
-        });
-        headerTitleLink.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                switchView('home');
-                window.scrollTo({ top: 0, behavior: getScrollBehavior() });
-            }
         });
     }
 

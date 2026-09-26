@@ -1045,7 +1045,7 @@
       "file_type": "code",
       "norm_label": "closeguidelinesdrawer()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1757"
+      "source_location": "L1727"
     },
     {
       "id": "frontend_public_app_dismisstoast",
@@ -1297,7 +1297,7 @@
       "file_type": "code",
       "norm_label": "openguidelinesdrawer()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1740"
+      "source_location": "L1710"
     },
     {
       "id": "frontend_public_app_parsetimestamp",
@@ -1357,7 +1357,7 @@
       "file_type": "code",
       "norm_label": "renderconversationthread()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1808"
+      "source_location": "L1778"
     },
     {
       "id": "frontend_public_app_renderfilequeue",
@@ -1465,7 +1465,7 @@
       "file_type": "code",
       "norm_label": "showtrackerror()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2060"
+      "source_location": "L2030"
     },
     {
       "id": "frontend_public_app_switchview",
@@ -1477,7 +1477,7 @@
       "file_type": "code",
       "norm_label": "switchview()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1624"
+      "source_location": "L1622"
     },
     {
       "id": "frontend_public_app_updatesteptracker",
@@ -1696,18 +1696,6 @@
       "source_location": "L9"
     },
     {
-      "id": "frontend_admin_admin_formatjalalidatetime",
-      "label": "formatJalaliDateTime()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "formatjalalidatetime()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L1198"
-    },
-    {
       "id": "frontend_admin_admin_handleadminlogout",
       "label": "handleAdminLogout()",
       "_callable": true,
@@ -1780,18 +1768,6 @@
       "source_location": "L786"
     },
     {
-      "id": "frontend_admin_admin_renderforwardhistoryflowchart",
-      "label": "renderForwardHistoryFlowchart()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "renderforwardhistoryflowchart()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L6512"
-    },
-    {
       "id": "frontend_admin_admin_rendersessionstable",
       "label": "renderSessionsTable()",
       "_callable": true,
@@ -1838,6 +1814,18 @@
       "norm_label": "renderuserstableskeleton()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L4563"
+    },
+    {
+      "id": "frontend_admin_admin_renewsessioninteractive",
+      "label": "renewSessionInteractive()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "renewsessioninteractive()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L389"
     },
     {
       "id": "frontend_admin_admin_setupclassificationmodal",
@@ -1900,6 +1888,18 @@
       "source_location": "L3076"
     },
     {
+      "id": "frontend_admin_admin_closedetailview",
+      "label": "closeDetailView()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "viewReport",
+      "file_type": "code",
+      "norm_label": "closedetailview()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L2057"
+    },
+    {
       "id": "frontend_admin_admin_deletereportpermanently",
       "label": "deleteReportPermanently()",
       "_callable": true,
@@ -1934,6 +1934,18 @@
       "norm_label": "fetchreports()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L1523"
+    },
+    {
+      "id": "frontend_admin_admin_formatjalalidatetime",
+      "label": "formatJalaliDateTime()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "viewReport",
+      "file_type": "code",
+      "norm_label": "formatjalalidatetime()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L1198"
     },
     {
       "id": "frontend_admin_admin_maketextareaautoexpand",
@@ -1972,16 +1984,16 @@
       "source_location": "L1501"
     },
     {
-      "id": "frontend_admin_admin_renewsessioninteractive",
-      "label": "renewSessionInteractive()",
+      "id": "frontend_admin_admin_rendertable",
+      "label": "renderTable()",
       "_callable": true,
       "_origin": "ast",
       "community": 53,
       "community_name": "viewReport",
       "file_type": "code",
-      "norm_label": "renewsessioninteractive()",
+      "norm_label": "rendertable()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L389"
+      "source_location": "L1807"
     },
     {
       "id": "frontend_admin_admin_resetsessiontimer",
@@ -2020,6 +2032,18 @@
       "source_location": "L4398"
     },
     {
+      "id": "frontend_admin_admin_switchmaintab",
+      "label": "switchMainTab()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "viewReport",
+      "file_type": "code",
+      "norm_label": "switchmaintab()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L4484"
+    },
+    {
       "id": "frontend_admin_admin_togglereadstatus",
       "label": "toggleReadStatus()",
       "_callable": true,
@@ -2030,6 +2054,18 @@
       "norm_label": "togglereadstatus()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L2866"
+    },
+    {
+      "id": "frontend_admin_admin_updatebulktoolbar",
+      "label": "updateBulkToolbar()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "viewReport",
+      "file_type": "code",
+      "norm_label": "updatebulktoolbar()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L1375"
     },
     {
       "id": "frontend_admin_admin_updatedetailnavbuttons",
@@ -2428,6 +2464,18 @@
       "source_location": "L5574"
     },
     {
+      "id": "frontend_admin_admin_renderforwardhistoryflowchart",
+      "label": "renderForwardHistoryFlowchart()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 61,
+      "community_name": "escapeHTML",
+      "file_type": "code",
+      "norm_label": "renderforwardhistoryflowchart()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L6512"
+    },
+    {
       "id": "frontend_admin_admin_renderforwardhistoryskeleton",
       "label": "renderForwardHistorySkeleton()",
       "_callable": true,
@@ -2445,7 +2493,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "renderTable",
+      "community_name": "applyFilters",
       "file_type": "code",
       "norm_label": "applyfilters()",
       "source_file": "frontend/admin/admin.js",
@@ -2457,23 +2505,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "renderTable",
+      "community_name": "applyFilters",
       "file_type": "code",
       "norm_label": "calculatepagination()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L1646"
-    },
-    {
-      "id": "frontend_admin_admin_closedetailview",
-      "label": "closeDetailView()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 63,
-      "community_name": "renderTable",
-      "file_type": "code",
-      "norm_label": "closedetailview()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L2057"
     },
     {
       "id": "frontend_admin_admin_getmatchsnippet",
@@ -2481,7 +2517,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "renderTable",
+      "community_name": "applyFilters",
       "file_type": "code",
       "norm_label": "getmatchsnippet()",
       "source_file": "frontend/admin/admin.js",
@@ -2493,7 +2529,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "renderTable",
+      "community_name": "applyFilters",
       "file_type": "code",
       "norm_label": "getscrollbehavior()",
       "source_file": "frontend/admin/admin.js",
@@ -2505,7 +2541,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "renderTable",
+      "community_name": "applyFilters",
       "file_type": "code",
       "norm_label": "handlekpicardfilter()",
       "source_file": "frontend/admin/admin.js",
@@ -2517,7 +2553,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "renderTable",
+      "community_name": "applyFilters",
       "file_type": "code",
       "norm_label": "highlightsearchterm()",
       "source_file": "frontend/admin/admin.js",
@@ -2529,7 +2565,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "renderTable",
+      "community_name": "applyFilters",
       "file_type": "code",
       "norm_label": "makepersianregex()",
       "source_file": "frontend/admin/admin.js",
@@ -2541,7 +2577,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "renderTable",
+      "community_name": "applyFilters",
       "file_type": "code",
       "norm_label": "rendercurrentpage()",
       "source_file": "frontend/admin/admin.js",
@@ -2553,47 +2589,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "renderTable",
+      "community_name": "applyFilters",
       "file_type": "code",
       "norm_label": "renderpaginationcontrols()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L1691"
-    },
-    {
-      "id": "frontend_admin_admin_rendertable",
-      "label": "renderTable()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 63,
-      "community_name": "renderTable",
-      "file_type": "code",
-      "norm_label": "rendertable()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L1807"
-    },
-    {
-      "id": "frontend_admin_admin_switchmaintab",
-      "label": "switchMainTab()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 63,
-      "community_name": "renderTable",
-      "file_type": "code",
-      "norm_label": "switchmaintab()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L4484"
-    },
-    {
-      "id": "frontend_admin_admin_updatebulktoolbar",
-      "label": "updateBulkToolbar()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 63,
-      "community_name": "renderTable",
-      "file_type": "code",
-      "norm_label": "updatebulktoolbar()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L1375"
     },
     {
       "id": "scripts_generate_docx_format_persian_text_with_dates",
@@ -4824,17 +4824,6 @@
       "source_location": "L57"
     },
     {
-      "id": "test_security_hardening_test_testipratelimiterboundedcapacity",
-      "label": "TestIPRateLimiterBoundedCapacity()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testipratelimiterboundedcapacity()",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L39"
-    },
-    {
       "id": "test_syslog_test",
       "label": "syslog_test.go",
       "_origin": "ast",
@@ -5469,17 +5458,6 @@
       "source_location": "L325"
     },
     {
-      "id": "setad_khabari_hmd_sessionmanager_getdb",
-      "label": ".getDB()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "SessionManager",
-      "file_type": "code",
-      "norm_label": ".getdb()",
-      "source_file": "security.go",
-      "source_location": "L79"
-    },
-    {
       "id": "setad_khabari_hmd_sessionmanager_getkickedreason",
       "label": ".GetKickedReason()",
       "_origin": "ast",
@@ -5489,17 +5467,6 @@
       "norm_label": ".getkickedreason()",
       "source_file": "security.go",
       "source_location": "L215"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager_init",
-      "label": ".init()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "SessionManager",
-      "file_type": "code",
-      "norm_label": ".init()",
-      "source_file": "security.go",
-      "source_location": "L73"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_revokeallusersessions",
@@ -16138,6 +16105,17 @@
       "source_location": "L254"
     },
     {
+      "id": "test_security_hardening_test_testipratelimiterboundedcapacity",
+      "label": "TestIPRateLimiterBoundedCapacity()",
+      "_origin": "ast",
+      "community": 77,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "testipratelimiterboundedcapacity()",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L39"
+    },
+    {
       "id": "agents_skills_hallmark_references_components_ft5_statement",
       "label": "ft5-statement.md",
       "_origin": "ast",
@@ -16646,6 +16624,28 @@
       "norm_label": "database/sql.db",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "setad_khabari_hmd_sessionmanager_getdb",
+      "label": ".getDB()",
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "database/sql.DB",
+      "file_type": "code",
+      "norm_label": ".getdb()",
+      "source_file": "security.go",
+      "source_location": "L79"
+    },
+    {
+      "id": "setad_khabari_hmd_sessionmanager_init",
+      "label": ".init()",
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "database/sql.DB",
+      "file_type": "code",
+      "norm_label": ".init()",
+      "source_file": "security.go",
+      "source_location": "L73"
     },
     {
       "id": "setad_khabari_hmd_usedcaptchastore",
@@ -21142,7 +21142,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1866",
+      "source_location": "L1836",
       "weight": 1.0
     },
     {
@@ -21238,7 +21238,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2069",
+      "source_location": "L2039",
       "weight": 1.0
     },
     {
@@ -21250,7 +21250,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2072",
+      "source_location": "L2042",
       "weight": 1.0
     },
     {
@@ -21262,7 +21262,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1643",
+      "source_location": "L1641",
       "weight": 1.0
     },
     {
@@ -37136,7 +37136,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1624",
+      "source_location": "L1622",
       "weight": 1.0
     },
     {
@@ -37147,7 +37147,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1740",
+      "source_location": "L1710",
       "weight": 1.0
     },
     {
@@ -37158,7 +37158,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1757",
+      "source_location": "L1727",
       "weight": 1.0
     },
     {
@@ -37169,7 +37169,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1808",
+      "source_location": "L1778",
       "weight": 1.0
     },
     {
@@ -37180,7 +37180,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L2060",
+      "source_location": "L2030",
       "weight": 1.0
     },
     {
@@ -44856,5 +44856,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "01a2d7b40485c3ef7cb3b69db702ba2802e24594"
+  "built_at_commit": "47fbe8884d76728984353f52c1e650a60b7a2d0e"
 }

@@ -139,39 +139,23 @@ body::before {
 
 .admin-logo-crest {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 190px;
+    height: 190px;
     margin: 0 auto 24px;
-    border-radius: 40px;
-    border: 1.5px solid rgba(59, 130, 246, 0.45);
-    background: rgba(30, 41, 59, 0.85);
+    border-radius: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #151f32;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.35), inset 0 0 15px rgba(59, 130, 246, 0.22);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
     transition: transform var(--transition-normal), border-color var(--transition-normal);
-}
-
-.admin-logo-crest::after {
-    content: '';
-    position: absolute;
-    inset: -8px;
-    border-radius: inherit;
-    box-shadow: 0 0 35px rgba(59, 130, 246, 0.45), inset 0 0 20px rgba(59, 130, 246, 0.25);
-    opacity: 0;
-    transition: opacity 0.25s ease;
-    pointer-events: none;
-    z-index: -1;
-}
-
-.admin-logo-crest:hover::after {
-    opacity: 1;
 }
 
 .admin-logo-crest:hover {
     transform: translateY(-2px);
-    border-color: rgba(96, 165, 250, 0.7);
+    border-color: rgba(255, 255, 255, 0.25);
 }
 
 .admin-crest-img {
@@ -239,11 +223,6 @@ body::before {
     gap: 8px;
 }
 
-#headerLogoCrest,
-#headerTitleLink {
-    cursor: pointer;
-}
-
 .btn-faq-trigger {
     display: inline-flex;
     align-items: center;
@@ -268,6 +247,13 @@ body::before {
     border-color: #3b82f6;
     color: #ffffff;
     transform: translateY(-1px);
+}
+
+#btnBackToHome {
+    width: 48px;
+    padding: 0;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .drawer-overlay {
@@ -2613,7 +2599,8 @@ button:disabled {
         margin: 0 auto 14px !important;
         border-radius: 24px !important;
         padding: 0 !important;
-        box-shadow: 0 0 32px rgba(59, 130, 246, 0.35), inset 0 0 16px rgba(59, 130, 246, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
     }
 
     .admin-crest-img {
@@ -5119,98 +5106,32 @@ button:disabled {
     }
 }
 
-.btn-landing-spinning {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2px;
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(0, 245, 255, 0.25), 0 4px 14px rgba(0, 0, 0, 0.4);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.btn-landing-spinning::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 350%;
-    height: 350%;
-    background: conic-gradient(from 0deg, #00f5ff, rgba(0, 245, 255, 0.2) 60deg, #00f5ff 180deg, rgba(0, 245, 255, 0.2) 240deg, #00f5ff 360deg);
-    animation: spin-gradient 4s linear infinite;
-    will-change: transform;
-    pointer-events: none;
-}
-
-.btn-landing-spinning:hover {
-    transform: scale(1.05) translateZ(0);
-    box-shadow: 0 0 32px rgba(0, 245, 255, 0.5), 0 8px 24px rgba(0, 0, 0, 0.5);
-}
-
-.btn-landing-spinning:active {
-    transform: scale(0.99) translateZ(0);
-}
-
-.btn-landing-spinning-inner {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 13px 34px;
-    border-radius: var(--radius-full);
-    background: #0f172a;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 700;
-    transition: background-color var(--transition-fast);
-    width: 100%;
-}
-
-.btn-landing-spinning:hover .btn-landing-spinning-inner {
-    background: #162032;
-}
-
 .btn-landing-primary {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    background: #2563eb;
     color: #ffffff;
-    font-size: 16px;
+    font-size: 15.5px;
     font-weight: 700;
     padding: 13px 32px;
     border-radius: var(--radius-md);
-    border: 1px solid rgba(96, 165, 250, 0.5);
+    border: 1px solid rgba(96, 165, 250, 0.4);
     cursor: pointer;
-    overflow: hidden;
-    box-shadow: 0 4px 18px rgba(37, 99, 235, 0.45);
-    transition: transform var(--transition-fast), border-color var(--transition-fast);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .btn-landing-primary:hover {
+    background: #1d4ed8;
+    border-color: #60a5fa;
     transform: translateY(-2px) translateZ(0);
-    border-color: rgba(147, 197, 253, 0.8);
 }
 
 .btn-landing-primary:active {
     transform: translateY(0);
-}
-
-.btn-landing-content {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    position: relative;
-    z-index: 1;
 }
 
 .btn-landing-secondary {
@@ -5252,15 +5173,8 @@ button:disabled {
         flex-direction: column;
         width: 100%;
     }
-    .btn-landing-spinning,
     .btn-landing-primary,
     .btn-landing-secondary {
         width: 100%;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .btn-landing-spinning::before {
-        animation: none;
     }
 }
