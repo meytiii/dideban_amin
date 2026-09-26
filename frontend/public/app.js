@@ -114,9 +114,6 @@ function initAppTooltips() {
         const rect = el.getBoundingClientRect();
         if (rect.width === 0 && rect.height === 0) return;
 
-        const side = rect.top < 46 ? 'bottom' : 'top';
-        tip.setAttribute('data-side', side);
-
         tip.style.left = '-9999px';
         tip.style.top = '-9999px';
         tip.style.visibility = 'hidden';
@@ -125,8 +122,11 @@ function initAppTooltips() {
         const tipWidth = tip.offsetWidth;
         const tipHeight = tip.offsetHeight;
 
+        const side = rect.top < (tipHeight + 14) ? 'bottom' : 'top';
+        tip.setAttribute('data-side', side);
+
         let left = rect.left + (rect.width / 2) - (tipWidth / 2);
-        left = Math.max(10, Math.min(window.innerWidth - tipWidth - 10, left));
+        left = Math.max(12, Math.min(window.innerWidth - tipWidth - 12, left));
 
         let top = side === 'top' ? (rect.top - tipHeight - 6) : (rect.bottom + 6);
 

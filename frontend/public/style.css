@@ -3838,13 +3838,12 @@ button:disabled {
     position: fixed;
     z-index: 999999;
     pointer-events: none;
-    padding: 6px 12px;
+    padding: 7px 13px;
     font-family: 'Vazirmatn', -apple-system, sans-serif;
     font-size: 12px;
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.55;
     color: #ffffff;
-
     background: rgba(15, 23, 42, 0.98);
     border: 1px solid rgba(59, 130, 246, 0.35);
     border-radius: 6px;
@@ -3853,11 +3852,15 @@ button:disabled {
     transform: scale(0.95);
     transition: opacity 0.16s cubic-bezier(0.16, 1, 0.3, 1),
                 transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
-    white-space: nowrap;
-    max-width: 320px;
+    white-space: normal;
+    width: max-content;
+    max-width: min(380px, calc(100vw - 32px));
+    word-break: normal;
+    overflow-wrap: break-word;
     direction: rtl;
     text-align: right;
     user-select: none;
+    box-sizing: border-box;
 }
 
 .app-tooltip.show {
