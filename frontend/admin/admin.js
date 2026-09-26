@@ -5236,9 +5236,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnText = submitBtn?.querySelector('.btn-text');
         const btnSpinner = submitBtn?.querySelector('.btn-spinner');
 
+        if (!curPwd || !newPwd || !confPwd) {
+            if (statusEl) {
+                statusEl.textContent = 'لطفاً تمامی فیلدهای کلمه عبور را تکمیل فرمایید.';
+                statusEl.style.display = 'block';
+            }
+            return;
+        }
+
         if (newPwd !== confPwd) {
             if (statusEl) {
                 statusEl.textContent = 'کلمه عبور جدید با تکرار آن مطابقت ندارد.';
+                statusEl.style.display = 'block';
+            }
+            return;
+        }
+
+        if (newPwd === curPwd) {
+            if (statusEl) {
+                statusEl.textContent = 'کلمه عبور جدید نمی‌تواند با کلمه عبور فعلی یکسان باشد.';
                 statusEl.style.display = 'block';
             }
             return;
@@ -5313,9 +5329,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnText = submitBtn?.querySelector('.btn-text');
         const btnSpinner = submitBtn?.querySelector('.btn-spinner');
 
+        if (!curPwd || !newPwd || !confPwd) {
+            if (statusEl) {
+                statusEl.textContent = 'لطفاً تمامی فیلدهای کلمه عبور را تکمیل فرمایید.';
+                statusEl.style.display = 'block';
+            }
+            return;
+        }
+
         if (newPwd !== confPwd) {
             if (statusEl) {
                 statusEl.textContent = 'کلمه عبور جدید با تکرار آن مطابقت ندارد.';
+                statusEl.style.display = 'block';
+            }
+            return;
+        }
+
+        if (newPwd === curPwd) {
+            if (statusEl) {
+                statusEl.textContent = 'کلمه عبور جدید نمی‌تواند با کلمه عبور فعلی یکسان باشد.';
                 statusEl.style.display = 'block';
             }
             return;
@@ -5367,6 +5399,31 @@ document.addEventListener('DOMContentLoaded', () => {
             if (btnSpinner) btnSpinner.classList.add('d-none');
         }
     });
+
+    function setupPasswordToggle(btnId, inputId, eyeShowId, eyeHideId) {
+        const btn = document.getElementById(btnId);
+        const input = document.getElementById(inputId);
+        const eyeShow = document.getElementById(eyeShowId);
+        const eyeHide = document.getElementById(eyeHideId);
+        if (btn && input) {
+            btn.addEventListener('click', () => {
+                const isPassword = input.type === 'password';
+                input.type = isPassword ? 'text' : 'password';
+                if (eyeShow && eyeHide) {
+                    eyeShow.classList.toggle('d-none', isPassword);
+                    eyeHide.classList.toggle('d-none', !isPassword);
+                }
+            });
+        }
+    }
+
+    setupPasswordToggle('toggleForceCurrentPasswordBtn', 'force_current_password', 'eye-icon-show-force-curr', 'eye-icon-hide-force-curr');
+    setupPasswordToggle('toggleForceNewPasswordBtn', 'force_new_password', 'eye-icon-show-force-new', 'eye-icon-hide-force-new');
+    setupPasswordToggle('toggleForceConfirmPasswordBtn', 'force_confirm_password', 'eye-icon-show-force-conf', 'eye-icon-hide-force-conf');
+
+    setupPasswordToggle('toggleMyCurrentPasswordBtn', 'my_current_password', 'eye-icon-show-my-curr', 'eye-icon-hide-my-curr');
+    setupPasswordToggle('toggleMyNewPasswordBtn', 'my_new_password', 'eye-icon-show-my-new', 'eye-icon-hide-my-new');
+    setupPasswordToggle('toggleMyConfirmPasswordBtn', 'my_confirm_password', 'eye-icon-show-my-conf', 'eye-icon-hide-my-conf');
 
     const modalConcurrentAlert = document.getElementById('modal-concurrent-alert');
     const btnAckConcurrentLogout = document.getElementById('btn-ack-concurrent-logout');

@@ -7,7 +7,7 @@
     <title>پنل مدیریت حراست - آموزش و پرورش همدان</title>
     <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="admin.css?v=82">
+    <link rel="stylesheet" href="admin.css?v=83">
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 
@@ -2010,13 +2010,51 @@
                 </p>
                 <div class="form-group">
                     <label for="my_current_password">کلمه عبور فعلی:</label>
-                    <input type="password" id="my_current_password" required
-                        placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
+                    <div class="password-wrapper">
+                        <input type="password" id="my_current_password" required
+                            placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
+                        <button type="button" id="toggleMyCurrentPasswordBtn" class="btn-toggle-pw"
+                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
+                            <svg id="eye-icon-show-my-curr" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg id="eye-icon-hide-my-curr" class="d-none" viewBox="0 0 24 24" width="18" height="18"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="m15 18-.722-3.25"></path>
+                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
+                                <path d="m20 15-1.726-2.05"></path>
+                                <path d="m4 15 1.726-2.05"></path>
+                                <path d="m9 18 .722-3.25"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="my_new_password">کلمه عبور جدید (حداقل ۱۲ کاراکتر):</label>
-                    <input type="password" id="my_new_password" required placeholder="کلمه عبور جدید امن"
-                        autocomplete="new-password">
+                    <div class="password-wrapper">
+                        <input type="password" id="my_new_password" required placeholder="کلمه عبور جدید امن"
+                            autocomplete="new-password">
+                        <button type="button" id="toggleMyNewPasswordBtn" class="btn-toggle-pw"
+                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
+                            <svg id="eye-icon-show-my-new" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg id="eye-icon-hide-my-new" class="d-none" viewBox="0 0 24 24" width="18" height="18"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="m15 18-.722-3.25"></path>
+                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
+                                <path d="m20 15-1.726-2.05"></path>
+                                <path d="m4 15 1.726-2.05"></path>
+                                <path d="m9 18 .722-3.25"></path>
+                            </svg>
+                        </button>
+                    </div>
                     <div class="pwd-requirements-hint">
                         <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
                         (!@#$%^&*)
@@ -2024,8 +2062,27 @@
                 </div>
                 <div class="form-group">
                     <label for="my_confirm_password">تکرار کلمه عبور جدید:</label>
-                    <input type="password" id="my_confirm_password" required placeholder="تکرار کلمه عبور جدید"
-                        autocomplete="new-password">
+                    <div class="password-wrapper">
+                        <input type="password" id="my_confirm_password" required placeholder="تکرار کلمه عبور جدید"
+                            autocomplete="new-password">
+                        <button type="button" id="toggleMyConfirmPasswordBtn" class="btn-toggle-pw"
+                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
+                            <svg id="eye-icon-show-my-conf" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg id="eye-icon-hide-my-conf" class="d-none" viewBox="0 0 24 24" width="18" height="18"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="m15 18-.722-3.25"></path>
+                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
+                                <path d="m20 15-1.726-2.05"></path>
+                                <path d="m4 15 1.726-2.05"></path>
+                                <path d="m9 18 .722-3.25"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <div id="change-my-pwd-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
@@ -2171,13 +2228,51 @@
                 </div>
                 <div class="form-group">
                     <label for="force_current_password">کلمه عبور فعلی:</label>
-                    <input type="password" id="force_current_password" required
-                        placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
+                    <div class="password-wrapper">
+                        <input type="password" id="force_current_password" required
+                            placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
+                        <button type="button" id="toggleForceCurrentPasswordBtn" class="btn-toggle-pw"
+                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
+                            <svg id="eye-icon-show-force-curr" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg id="eye-icon-hide-force-curr" class="d-none" viewBox="0 0 24 24" width="18" height="18"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="m15 18-.722-3.25"></path>
+                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
+                                <path d="m20 15-1.726-2.05"></path>
+                                <path d="m4 15 1.726-2.05"></path>
+                                <path d="m9 18 .722-3.25"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="force_new_password">کلمه عبور جدید (حداقل ۱۲ کاراکتر):</label>
-                    <input type="password" id="force_new_password" required placeholder="کلمه عبور جدید امن"
-                        autocomplete="new-password">
+                    <div class="password-wrapper">
+                        <input type="password" id="force_new_password" required placeholder="کلمه عبور جدید امن"
+                            autocomplete="new-password">
+                        <button type="button" id="toggleForceNewPasswordBtn" class="btn-toggle-pw"
+                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
+                            <svg id="eye-icon-show-force-new" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg id="eye-icon-hide-force-new" class="d-none" viewBox="0 0 24 24" width="18" height="18"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="m15 18-.722-3.25"></path>
+                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
+                                <path d="m20 15-1.726-2.05"></path>
+                                <path d="m4 15 1.726-2.05"></path>
+                                <path d="m9 18 .722-3.25"></path>
+                            </svg>
+                        </button>
+                    </div>
                     <div class="pwd-requirements-hint">
                         <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
                         (!@#$%^&*)
@@ -2185,8 +2280,27 @@
                 </div>
                 <div class="form-group">
                     <label for="force_confirm_password">تکرار کلمه عبور جدید:</label>
-                    <input type="password" id="force_confirm_password" required placeholder="تکرار کلمه عبور جدید"
-                        autocomplete="new-password">
+                    <div class="password-wrapper">
+                        <input type="password" id="force_confirm_password" required placeholder="تکرار کلمه عبور جدید"
+                            autocomplete="new-password">
+                        <button type="button" id="toggleForceConfirmPasswordBtn" class="btn-toggle-pw"
+                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
+                            <svg id="eye-icon-show-force-conf" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg id="eye-icon-hide-force-conf" class="d-none" viewBox="0 0 24 24" width="18" height="18"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="m15 18-.722-3.25"></path>
+                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
+                                <path d="m20 15-1.726-2.05"></path>
+                                <path d="m4 15 1.726-2.05"></path>
+                                <path d="m9 18 .722-3.25"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <div id="force-change-pwd-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
@@ -2462,7 +2576,7 @@
 
     <script src="confirm.js" defer></script>
     <script src="tatweel.js" defer></script>
-    <script src="admin.js?v=82" defer></script>
+    <script src="admin.js?v=83" defer></script>
 </body>
 
 </html>
