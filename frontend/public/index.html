@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سامانه ستاد خبری و دریافت گزارش‌های مردمی - همدان</title>
+    <title>سامانه دیده‌بان امین - ستاد خبری حراست آموزش و پرورش استان همدان</title>
     <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="style.css?v=76">
@@ -13,7 +13,7 @@
 
 <body>
 
-    <div id="appPreloader" class="luxury-preloader" aria-label="در حال بارگذاری سامانه ستاد خبری" role="status">
+    <div id="appPreloader" class="luxury-preloader" aria-label="در حال بارگذاری سامانه دیده‌بان امین" role="status">
         <div class="preloader-backdrop-glow"></div>
         <div class="preloader-content">
             <div class="morph-loader-container">
@@ -27,7 +27,7 @@
             <div class="preloader-info">
                 <div class="preloader-title-row">
                     <span class="preloader-pulse-dot"></span>
-                    <span class="preloader-title">در حال بارگذاری سامانه ستاد خبری</span>
+                    <span class="preloader-title">در حال بارگذاری سامانه دیده‌بان امین</span>
                 </div>
                 <div class="preloader-progress-track">
                     <div class="preloader-progress-bar"></div>
@@ -53,14 +53,27 @@
             <div class="admin-logo-crest public-header-crest">
                 <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش" class="admin-crest-img" width="200" height="200" decoding="async">
             </div>
-            <h1 class="persian-heading persian-heading--tatweel" data-tatweel-level="hero">سامانه ستاد خبری و دریافت گزارشهای مردمی</h1>
-            <p>اداره حراست آموزش و پرورش استان همدان</p>
+            <h1 class="persian-heading persian-heading--tatweel" data-tatweel-level="hero">دیده‌بان امین</h1>
+            <div class="header-subtitle-group">
+                <p class="header-subtitle-main">ستاد خبری و دریافت گزارش‌های مردمی</p>
+                <p class="header-subtitle-dept">اداره حراست آموزش و پرورش استان همدان</p>
+            </div>
         </header>
 
         <div class="top-nav-bar">
-            <nav class="tabs-container" aria-label="تب‌های سامانه">
-                <button type="button" id="tab-submit" class="tab-btn active">
-                    <span class="tab-label">ثبت گزارش جدید</span>
+            <nav class="tabs-container" aria-label="بخش‌های سامانه دیده‌بان امین">
+                <button type="button" id="tab-home" class="tab-btn active">
+                    <span class="tab-label">صفحه نخست</span>
+                    <div class="tab-icon-pill">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </div>
+                </button>
+                <button type="button" id="tab-submit" class="tab-btn">
+                    <span class="tab-label">ثبت گزارش</span>
                     <div class="tab-icon-pill">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -92,7 +105,210 @@
             </button>
         </div>
 
-        <main id="submitSection">
+        <section id="landingSection" class="landing-section">
+            <div class="landing-hero-card">
+                <div class="landing-hero-badge">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                    <span>درگاه رسمی نظارت مردمی و صیانت سازمانی آموزش و پرورش استان همدان</span>
+                </div>
+
+                <div class="landing-intro-box">
+                    <p class="landing-lead-text">
+                        سامانه «دیده‌بان امین» آماده دریافت، جمع‌آوری و پیگیری کاملاً محرمانه، امن و بدون واسطه گزارش‌ها و اخبار شما مردم شریف، اولیای گرامی و فرهنگیان محترم می‌باشد. تمامی گزارش‌های واصله با رعایت کامل اصل امانتداری و حفاظت اطلاعات بررسی و پیگیری خواهند شد.
+                    </p>
+
+                    <div class="landing-notice-card">
+                        <div class="landing-notice-icon">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                        </div>
+                        <div class="landing-notice-content">
+                            <h3 class="landing-notice-title">توجه مهم پیرامون تفکیک صلاحیت‌ها:</h3>
+                            <p class="landing-notice-desc">
+                                دقت بفرمایید که این سامانه تنها ویژه ثبت گزارش‌ها و اخبار محرمانه و حساس است. شکایات عمومی، آموزشی و اداری (نظیر شهریه مدارس، ثبت‌نام و سایر موضوعات رایج در مدارس) باید در <strong>«سامانه ارزیابی عملکرد و پاسخگویی به شکایات»</strong> ثبت و پیگیری گردند.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="landing-scopes-grid">
+                    <div class="scope-card scope-card--herasat">
+                        <div class="scope-card-header">
+                            <div class="scope-icon-wrap scope-icon-wrap--herasat">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    <path d="m9 12 2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="scope-pill scope-pill--herasat">صلاحیت و رسیدگی حراست</span>
+                                <h3 class="scope-card-title">اخبار و گزارش‌های در حیطه کاری حراست</h3>
+                            </div>
+                        </div>
+                        <p class="scope-card-intro">
+                            موضوعاتی که مستقیماً در صلاحیت حراست بوده و در سامانه دیده‌بان امین رسیدگی می‌شوند:
+                        </p>
+                        <ul class="scope-list scope-list--herasat">
+                            <li>
+                                <span class="scope-check-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </span>
+                                <span><strong>ادارات آموزش و پرورش:</strong> کلیه نواحی و مناطق تابعه در سطح استان همدان</span>
+                            </li>
+                            <li>
+                                <span class="scope-check-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </span>
+                                <span><strong>کادر اداری و آموزشی:</strong> مدیران، معاونان، معلمان و پرسنل اجرایی مدارس</span>
+                            </li>
+                            <li>
+                                <span class="scope-check-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </span>
+                                <span><strong>محیط‌های آموزشی و ورزشی:</strong> فضاهای آموزشی، ورزشی و پرورشی وابسته به آموزش و پرورش و کادر آنها</span>
+                            </li>
+                            <li>
+                                <span class="scope-check-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </span>
+                                <span><strong>مراکز رفاهی و اقامتی:</strong> خانه معلم و مکان‌های رفاهی متعلق به آموزش و پرورش</span>
+                            </li>
+                            <li>
+                                <span class="scope-check-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </span>
+                                <span><strong>تخلفات مالی، اداری و امنیتی:</strong> ارتشاء، سوءاستفاده از موقعیت شغلی، جعل مدارک و اسناد</span>
+                            </li>
+                            <li>
+                                <span class="scope-check-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </span>
+                                <span><strong>صیانت و ایمنی مدارس:</strong> ناهنجاری‌ها، تهدیدات ایمنی و اخلاقی آسیب‌رسان به دانش‌آموزان و محیط آموزشی</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="scope-card scope-card--external">
+                        <div class="scope-card-header">
+                            <div class="scope-icon-wrap scope-icon-wrap--external">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="15" y1="9" x2="9" y2="15"/>
+                                    <line x1="9" y1="9" x2="15" y2="15"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="scope-pill scope-pill--external">ارجاع به ارزیابی عملکرد</span>
+                                <h3 class="scope-card-title">اخبار و مواردی که در حیطه کاری حراست نمی‌باشند</h3>
+                            </div>
+                        </div>
+                        <p class="scope-card-intro">
+                            شکایات غیرمحرمانه و امور جاری که باید در «سامانه ارزیابی عملکرد و پاسخگویی به شکایات» پیگیری گردند:
+                        </p>
+                        <ul class="scope-list scope-list--external">
+                            <li>
+                                <span class="scope-cross-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </span>
+                                <span><strong>شهریه و هزینه‌های مدارس:</strong> شکایات مربوط به شهریه مدارس غیردولتی و هزینه‌های مصوب</span>
+                            </li>
+                            <li>
+                                <span class="scope-cross-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </span>
+                                <span><strong>ثبت‌نام دانش‌آموزان:</strong> شیوه‌نامه ثبت‌نام، ظرفیت‌ها و ضوابط محدوده جغرافیایی (کروکی) مدارس</span>
+                            </li>
+                            <li>
+                                <span class="scope-cross-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </span>
+                                <span><strong>انتقالی و جابه‌جایی:</strong> درخواست‌های انتقالی، جابه‌جایی و سازماندهی نیروها و کادر فرهنگیان</span>
+                            </li>
+                            <li>
+                                <span class="scope-cross-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </span>
+                                <span><strong>اعتراض به نمرات و تدریس:</strong> اعتراض به نمرات امتحانی، ارزیابی درسی و شیوه تدریس معلمان</span>
+                            </li>
+                            <li>
+                                <span class="scope-cross-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </span>
+                                <span><strong>امور رفاهی و تسهیلات:</strong> تقاضای وام، تسهیلات اسکان و بیمه فاقد جنبه تخلف یا جرم</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="landing-cta-block">
+                    <p class="landing-cta-prompt">
+                        چنانچه گزارش یا اخباری در حیطه کاری حراست در اختیار دارید، در ادامه با زدن دکمه زیر اقدام به ثبت گزارش نمایید:
+                    </p>
+                    <div class="landing-cta-actions">
+                        <button type="button" id="btnLandingStartReport" class="btn-landing-primary">
+                            <span class="btn-landing-glow"></span>
+                            <span class="btn-landing-content">
+                                <span>ثبت گزارش</span>
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 12H5"/>
+                                    <path d="m12 19-7-7 7-7"/>
+                                </svg>
+                            </span>
+                        </button>
+                        <button type="button" id="btnLandingOpenFaq" class="btn-landing-secondary btn-landing-faq">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                                <path d="M12 17h.01"/>
+                            </svg>
+                            <span>راهنما و سوالات متداول</span>
+                        </button>
+                        <button type="button" id="btnLandingTrackReport" class="btn-landing-secondary">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="m21 21-4.3-4.3"/>
+                            </svg>
+                            <span>پیگیری گزارش قبلی</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <main id="submitSection" class="d-none">
             <form id="reportForm" enctype="multipart/form-data" novalidate>
 
                 <ol class="step-tracker" role="list" aria-label="مراحل ثبت گزارش">
@@ -954,7 +1170,7 @@
                                         <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
                                     </svg>
                                 </div>
-                                <span class="faq-item-title">چه موضوعاتی در حیطه صلاحیت رسیدگی ستاد خبری قرار
+                                <span class="faq-item-title">چه موضوعاتی در حیطه صلاحیت رسیدگی سامانه دیده‌بان امین قرار
                                     دارد؟</span>
                             </div>
                             <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none"
@@ -1049,7 +1265,7 @@
                         <div class="faq-accordion-body">
                             <div class="faq-accordion-content">
                                 بله؛ علاوه بر سامانه برخط، در ساعات اداری می‌توانید از طریق شماره ۳۸۲۶۴۰۴۱ (داخلی ۱۱۸۶)
-                                با کارشناسان ستاد خبری ارتباط برقرار نمایید یا به صورت حضوری به اداره حراست در ساختمان
+                                با کارشناسان ستاد خبری دیده‌بان امین ارتباط برقرار نمایید یا به صورت حضوری به اداره حراست در ساختمان
                                 اداره کل آموزش و پرورش استان مراجعه فرمایید.
                             </div>
                         </div>
@@ -1070,7 +1286,7 @@
                     <div class="receipt-header-center">
                         <span class="receipt-gov-title">جمهوری اسلامی ایران</span>
                         <span class="receipt-ministry-title">وزارت آموزش و پرورش - اداره کل استان همدان</span>
-                        <span class="receipt-sub-org">اداره حراست · سامانه ستاد خبری و نظارت مردمی</span>
+                        <span class="receipt-sub-org">سامانه دیده‌بان امین · ستاد خبری و گزارش‌های مردمی حراست همدان</span>
                     </div>
                     <div class="receipt-header-left">
                         <div class="receipt-meta-item">
@@ -1134,7 +1350,7 @@
                         </div>
                         <div class="receipt-meta-col">
                             <span class="receipt-col-label">کانال دریافت:</span>
-                            <span class="receipt-col-value">سامانه برخط ستاد خبری حراست</span>
+                            <span class="receipt-col-value">سامانه دیده‌بان امین</span>
                         </div>
                     </div>
                 </div>
@@ -1151,7 +1367,7 @@
                     <ul class="receipt-guidelines-list">
                         <li>کد پیگیری فوق تنها شناسه هویتی پرونده است؛ جهت حفظ اصل محرمانگی، از افشای آن به دیگران خودداری فرمایید.</li>
                         <li>جهت اطلاع از نظر کارشناسان، روند بررسی یا ارسال توضیحات تکمیلی، با همین کد به بخش «پیگیری گزارش» در سامانه مراجعه فرمایید.</li>
-                        <li>در صورت نیاز به پیگیری تلفنی در ساعات اداری، کد رهگیری فوق را به کارشناس ستاد خبری اعلام فرمایید.</li>
+                        <li>در صورت نیاز به پیگیری تلفنی در ساعات اداری، کد رهگیری فوق را به کارشناسان ستاد خبری دیده‌بان امین اعلام فرمایید.</li>
                     </ul>
                 </div>
 

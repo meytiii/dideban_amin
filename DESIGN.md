@@ -71,11 +71,11 @@ components:
     padding: "14px 22px"
 ---
 
-# Design System: سامانه ستاد خبری و دریافت گزارشهای مردمی - همدان
+# Design System: سامانه دیده‌بان امین - ستاد خبری و دریافت گزارش‌های مردمی حراست همدان
 
 ## Overview
 
-**Creative North Star: "The Sovereign Digital Sentinel"**
+**Creative North Star: "The Sovereign Digital Sentinel - سامانه دیده‌بان امین"**
 
 The visual language of the Herasat Portal bridges high-security institutional trust with ultra-modern digital craftsmanship. Engineered specifically for confidential intelligence and report handling, the interface emits calm authority, strict privacy reassurance, and uncompromising clarity. Deep obsidian and navy tones (`#0b1120`, `#1e293b`) establish a solid cryptographic foundation, accented with laser-sharp cobalt blue (`#3b82f6`) and emerald validation accents (`#10b981`).
 

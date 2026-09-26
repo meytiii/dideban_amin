@@ -1611,34 +1611,96 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 250);
     });
 
+    const tabHome = document.getElementById('tab-home');
     const tabSubmit = document.getElementById('tab-submit');
     const tabTrack = document.getElementById('tab-track');
+    const landingSection = document.getElementById('landingSection');
     const submitSection = document.getElementById('submitSection');
     const trackingSection = document.getElementById('trackingSection');
 
-    if (tabSubmit && tabTrack) {
-        tabSubmit.addEventListener('click', () => {
-            tabSubmit.classList.add('active');
-            tabTrack.classList.remove('active');
+    function switchView(viewName) {
+        if (viewName === 'home') {
+            tabHome?.classList.add('active');
+            tabSubmit?.classList.remove('active');
+            tabTrack?.classList.remove('active');
+            landingSection?.classList.remove('d-none');
+            submitSection?.classList.add('d-none');
+            trackingSection?.classList.add('d-none');
+            if (window.location.hash) {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+        } else if (viewName === 'submit') {
+            tabSubmit?.classList.add('active');
+            tabHome?.classList.remove('active');
+            tabTrack?.classList.remove('active');
+            landingSection?.classList.add('d-none');
             submitSection?.classList.remove('d-none');
             trackingSection?.classList.add('d-none');
-            if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
-
             const successScreen = document.getElementById('success-screen');
             const isSuccessVisible = successScreen && !successScreen.classList.contains('d-none');
             if (!isSuccessVisible) {
                 loadCaptcha('submit-captcha-img', 'submit_captcha_id', 'submit_captcha_answer');
             }
-        });
-
-        tabTrack.addEventListener('click', () => {
-            tabTrack.classList.add('active');
-            tabSubmit.classList.remove('active');
-            trackingSection?.classList.remove('d-none');
+        } else if (viewName === 'track') {
+            tabTrack?.classList.add('active');
+            tabHome?.classList.remove('active');
+            tabSubmit?.classList.remove('active');
+            landingSection?.classList.add('d-none');
             submitSection?.classList.add('d-none');
-            if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
+            trackingSection?.classList.remove('d-none');
             loadCaptcha('track-captcha-img', 'track_captcha_id', 'track_captcha_answer');
+        }
+        if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
+    }
+
+    if (tabHome) {
+        tabHome.addEventListener('click', () => {
+            switchView('home');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
         });
+    }
+
+    if (tabSubmit) {
+        tabSubmit.addEventListener('click', () => {
+            switchView('submit');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        });
+    }
+
+    if (tabTrack) {
+        tabTrack.addEventListener('click', () => {
+            switchView('track');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        });
+    }
+
+    const btnLandingStartReport = document.getElementById('btnLandingStartReport');
+    if (btnLandingStartReport) {
+        btnLandingStartReport.addEventListener('click', () => {
+            switchView('submit');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        });
+    }
+
+    const btnLandingTrackReport = document.getElementById('btnLandingTrackReport');
+    if (btnLandingTrackReport) {
+        btnLandingTrackReport.addEventListener('click', () => {
+            switchView('track');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        });
+    }
+
+    const btnLandingOpenFaq = document.getElementById('btnLandingOpenFaq');
+    if (btnLandingOpenFaq) {
+        btnLandingOpenFaq.addEventListener('click', openGuidelinesDrawer);
+    }
+
+    if (window.location.hash === '#trackingSection' || window.location.hash === '#track') {
+        switchView('track');
+    } else if (window.location.hash === '#submit' || window.location.hash === '#submitSection') {
+        switchView('submit');
+    } else {
+        switchView('home');
     }
 
     const openDrawerBtn = document.getElementById('openDrawerBtn');

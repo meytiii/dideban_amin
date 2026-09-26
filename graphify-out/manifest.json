@@ -30,15 +30,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1790411788.1892052,
-    "seen": 1790412751.43488,
+    "mtime": 1790413677.6510887,
+    "seen": 1790415224.6742277,
     "ast_hash": "c2a18a6a0ddd627e2bb9e76c493f3938",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
-    "mtime": 1790411842.4715223,
-    "seen": 1790412751.4350739,
-    "ast_hash": "9dd3a93aa6628b13e3e74e80a09008df",
+    "mtime": 1790414858.9752498,
+    "seen": 1790415224.6744163,
+    "ast_hash": "70e4485a480988d8e8ba082e8953e5fe",
     "semantic_hash": ""
   },
   "go.mod": {
@@ -84,15 +84,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1790411691.1331031,
-    "seen": 1790412751.446696,
-    "ast_hash": "05f7aaadce523f10a705ce430d6cc72b",
+    "mtime": 1790414074.1259503,
+    "seen": 1790415224.685382,
+    "ast_hash": "0814af90acecd53d3d797f7f3bf603d7",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1790411881.4437358,
-    "seen": 1790412751.4466977,
-    "ast_hash": "668bd896120c1c171cb3f67655f6c6bc",
+    "mtime": 1790414153.32733,
+    "seen": 1790415224.685383,
+    "ast_hash": "086fa0f76c4b09ad6fb08e224123da09",
     "semantic_hash": ""
   },
   "frontend/admin/bg.jpg": {
@@ -198,9 +198,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1789786712.2875144,
-    "seen": 1790405583.7021105,
-    "ast_hash": "9f3fbfd5adf42707733c6b615691e2dc",
+    "mtime": 1790414086.7706444,
+    "seen": 1790415224.685009,
+    "ast_hash": "f3311d75aba8e0d1a301e0d52df6e7dc",
     "semantic_hash": ""
   },
   "GEMINI.md": {
