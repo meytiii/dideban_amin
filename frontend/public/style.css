@@ -4908,6 +4908,19 @@ button:disabled {
     margin-bottom: 28px;
 }
 
+.external-official-link {
+    color: #60a5fa;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1.5px;
+    transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+}
+
+.external-official-link:hover {
+    color: #93c5fd;
+    text-decoration-color: #93c5fd;
+}
+
 .landing-notice-card {
     display: flex;
     align-items: flex-start;
