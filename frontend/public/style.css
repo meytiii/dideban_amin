@@ -239,12 +239,18 @@ body::before {
     width: 100vw;
     height: 100vh;
     height: 100dvh;
-
-    background: rgba(11, 17, 32, 0.9);
+    background: rgba(11, 17, 32, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 100000;
     display: flex;
-    justify-content: flex-end;
-    animation: fadeInOverlay 0.2s ease-out;
+    justify-content: flex-start;
+    direction: rtl;
+    animation: fadeInOverlay 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer-overlay.is-closing {
+    animation: fadeOutOverlay 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
 .drawer-panel {
@@ -252,16 +258,44 @@ body::before {
     max-width: 520px;
     background: #090e1a;
     border-left: 1px solid rgba(59, 130, 246, 0.3);
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
     height: 100vh;
     height: 100dvh;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 24px 22px;
-    box-shadow: -15px 0 40px rgba(0, 0, 0, 0.75);
+    box-shadow: -15px 0 45px rgba(0, 0, 0, 0.75), -2px 0 12px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     position: relative;
+    direction: rtl;
+    text-align: right;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(59, 130, 246, 0.35) rgba(15, 23, 42, 0.3);
     animation: slideInDrawer 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer-overlay.is-closing .drawer-panel {
+    animation: slideOutDrawer 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.drawer-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.drawer-panel::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.3);
+}
+
+.drawer-panel::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.35);
+    border-radius: var(--radius-full);
+}
+
+.drawer-panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.6);
 }
 
 .drawer-grid-bg {
@@ -459,6 +493,8 @@ body::before {
     padding-top: 10px;
     margin-top: 2px;
     text-align: justify;
+    text-align-last: right;
+    word-break: normal;
 }
 
 @keyframes slideInDrawer {
@@ -466,9 +502,19 @@ body::before {
     to { transform: translateX(0); }
 }
 
+@keyframes slideOutDrawer {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+}
+
 @keyframes fadeInOverlay {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+@keyframes fadeOutOverlay {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 .tabs-container {

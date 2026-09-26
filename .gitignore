@@ -34,3 +34,4 @@ coverage*
 #Utilities
 start_env.txt
 assets/*
+.playwright-mcp/
