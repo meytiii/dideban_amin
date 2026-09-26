@@ -226,8 +226,10 @@ body::before {
 .btn-faq-trigger {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
     background: rgba(30, 41, 59, 0.85);
     border: 1px solid var(--border-accent);
     color: #93c5fd;
@@ -236,10 +238,9 @@ body::before {
     border-radius: var(--radius-md);
     cursor: pointer;
     white-space: nowrap;
-
     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    height: 48px;
+    flex-shrink: 0;
 }
 
 .btn-faq-trigger:hover {
@@ -247,13 +248,6 @@ body::before {
     border-color: #3b82f6;
     color: #ffffff;
     transform: translateY(-1px);
-}
-
-#btnBackToHome {
-    width: 48px;
-    padding: 0;
-    justify-content: center;
-    flex-shrink: 0;
 }
 
 .drawer-overlay {
@@ -2632,12 +2626,17 @@ button:disabled {
 
     .top-nav-actions {
         display: flex !important;
+        justify-content: center !important;
         width: 100% !important;
         gap: 8px !important;
     }
 
     .top-nav-actions .btn-faq-trigger {
-        flex: 1 !important;
+        width: 44px !important;
+        height: 44px !important;
+        min-height: 44px !important;
+        flex: 0 0 44px !important;
+        padding: 0 !important;
         justify-content: center !important;
     }
 
@@ -2727,11 +2726,11 @@ button:disabled {
     }
 
     .btn-faq-trigger {
-        width: 100% !important;
-        justify-content: center !important;
+        width: 42px !important;
+        height: 42px !important;
         min-height: 42px !important;
-        padding: 9px 12px !important;
-        font-size: 12.5px !important;
+        padding: 0 !important;
+        justify-content: center !important;
         border-radius: var(--radius-sm) !important;
     }
 
