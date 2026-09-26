@@ -1647,8 +1647,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let drawerCloseTimeout = null;
 
     function openGuidelinesDrawer() {
-        window.scrollTo({ top: 0, behavior: getScrollBehavior() });
-
         if (drawerCloseTimeout) {
             clearTimeout(drawerCloseTimeout);
             drawerCloseTimeout = null;
@@ -1660,7 +1658,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = 'hidden';
             const panel = guidelinesDrawer.querySelector('.drawer-panel');
             if (panel) {
-                promoteTemporarily(panel, 'transform', 350);
                 panel.scrollTop = 0;
             }
         }
@@ -1668,10 +1665,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeGuidelinesDrawer() {
         if (guidelinesDrawer && !guidelinesDrawer.classList.contains('d-none') && !guidelinesDrawer.classList.contains('is-closing')) {
-            const panel = guidelinesDrawer.querySelector('.drawer-panel');
-            if (panel) {
-                promoteTemporarily(panel, 'transform', 250);
-            }
             guidelinesDrawer.classList.add('is-closing');
             document.body.style.overflow = '';
             if (drawerCloseTimeout) clearTimeout(drawerCloseTimeout);

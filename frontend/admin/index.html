@@ -59,7 +59,8 @@
                                 decoding="async">
                             <div class="crest-glow"></div>
                         </div>
-                        <h1 class="persian-heading persian-heading--tatweel" data-tatweel-level="hero">ورود امن به پنل مدیریتی ستاد خبری</h1>
+                        <h1 class="persian-heading persian-heading--tatweel" data-tatweel-level="hero">ورود امن به پنل
+                            مدیریتی ستاد خبری</h1>
                         <p>اداره حراست آموزش و پرورش استان همدان</p>
                     </div>
 
@@ -155,26 +156,32 @@
 
                     <div id="mfaStepContainer" style="display: none;">
                         <div class="mfa-step-header" style="text-align: center; margin-bottom: 20px;">
-                            <div class="mfa-shield-icon" style="width: 52px; height: 52px; margin: 0 auto 12px; border-radius: 50%; background: rgba(56, 189, 248, 0.15); display: flex; align-items: center; justify-content: center; color: #38bdf8;">
-                                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                    <path d="m9 12 2 2 4-4"/>
+                            <div class="mfa-shield-icon"
+                                style="width: 52px; height: 52px; margin: 0 auto 12px; border-radius: 50%; background: rgba(56, 189, 248, 0.15); display: flex; align-items: center; justify-content: center; color: #38bdf8;">
+                                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    <path d="m9 12 2 2 4-4" />
                                 </svg>
                             </div>
-                            <h2 style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">احراز هویت دومرحله‌ای (MFA)</h2>
-                            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6;">کد ۶ رقمی نرم‌افزار احراز هویت (Google Authenticator) خود را وارد فرمایید.</p>
+                            <h2 style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">
+                                احراز هویت دومرحله‌ای (MFA)</h2>
+                            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6;">کد ۶ رقمی
+                                نرم‌افزار احراز هویت (Google Authenticator) خود را وارد فرمایید.</p>
                             <div style="margin-top: 6px; font-size: 11.5px; color: #f59e0b;">
-                                زمان باقی‌مانده اعتبار: <strong id="mfaCountdownText" class="ltr font-bold">۰۳:۰۰</strong>
+                                زمان باقی‌مانده اعتبار: <strong id="mfaCountdownText"
+                                    class="ltr font-bold">۰۳:۰۰</strong>
                             </div>
                         </div>
 
                         <form id="mfaForm" novalidate>
                             <input type="hidden" id="mfa_pending_token" name="mfa_token">
                             <div class="login-form-group">
-                                <label for="mfa_totp_code" style="text-align: center; display: block;">کد ۶ رقمی امنیتی</label>
+                                <label for="mfa_totp_code" style="text-align: center; display: block;">کد ۶ رقمی
+                                    امنیتی</label>
                                 <div class="login-input-wrapper" style="justify-content: center;">
-                                    <input type="text" id="mfa_totp_code" name="totp_code" required
-                                        maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code"
+                                    <input type="text" id="mfa_totp_code" name="totp_code" required maxlength="6"
+                                        pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code"
                                         placeholder="123456" class="ltr"
                                         style="text-align: center; letter-spacing: 6px; font-size: 20px; font-weight: 700; font-family: monospace;">
                                 </div>
@@ -183,7 +190,9 @@
                             <button type="submit" id="mfaSubmitBtn" class="btn-admin-login" style="margin-top: 16px;">
                                 <span class="btn-text">
                                     <span>تأیید و ورود به پنل</span>
-                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="login-arrow-icon">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="login-arrow-icon">
                                         <path d="M19 12H5"></path>
                                         <path d="m12 19-7-7 7-7"></path>
                                     </svg>
@@ -191,7 +200,8 @@
                                 <span class="btn-spinner d-none" aria-hidden="true"></span>
                             </button>
 
-                            <button type="button" id="btnCancelMFA" class="btn-action btn-secondary" style="width: 100%; margin-top: 10px; justify-content: center; height: 42px;">
+                            <button type="button" id="btnCancelMFA" class="btn-action btn-secondary"
+                                style="width: 100%; margin-top: 10px; justify-content: center; height: 42px;">
                                 بازگشت به صفحه ورود
                             </button>
                         </form>
@@ -205,7 +215,8 @@
     <div id="dashboard-section" class="dashboard-container" style="display: none;">
         <header class="dashboard-header">
             <div class="dashboard-brand">
-                <h2 class="persian-heading persian-heading--tatweel" data-tatweel-level="section">کارتابل محرمانه حراست</h2>
+                <h2 class="persian-heading persian-heading--tatweel" data-tatweel-level="section">کارتابل محرمانه حراست
+                </h2>
                 <span class="sub-brand">حفاظت اطلاعات اداره کل آموزش و پرورش همدان</span>
                 <div class="admin-profile-pill" id="header-admin-profile">
                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
@@ -349,12 +360,14 @@
                 <div class="user-menu-wrapper" id="userMenuWrapper">
                     <button type="button" id="btnUserMenu" class="btn-action btn-secondary btn-user-menu"
                         aria-haspopup="true" aria-expanded="false" aria-label="منوی حساب کاربری و امنیت">
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                         <span>حساب و امنیت</span>
-                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" class="menu-chevron">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+                            stroke-width="2.5" class="menu-chevron">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </button>
@@ -362,7 +375,8 @@
                     <div class="user-menu-dropdown" id="userMenuDropdown" style="display: none;">
                         <div class="user-menu-header">
                             <div class="user-menu-avatar">
-                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
@@ -375,15 +389,17 @@
 
                         <div class="user-menu-items">
                             <button type="button" id="btnOpen2FAModal" class="user-menu-item">
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                    <path d="m9 12 2 2 4-4"/>
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    <path d="m9 12 2 2 4-4" />
                                 </svg>
                                 <span>احراز هویت دومرحله‌ای (۲FA)</span>
                             </button>
 
                             <button type="button" id="btnOpenChangeMyPwd" class="user-menu-item">
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                 </svg>
@@ -395,7 +411,8 @@
 
                         <div class="user-menu-footer">
                             <button type="button" id="logoutBtn" class="user-menu-item item-danger">
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                     <polyline points="16 17 21 12 16 7"></polyline>
                                     <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -561,8 +578,8 @@
                     </select>
                 </div>
                 <div class="filter-group-auto">
-                    <button type="button" id="btnExportCSV" class="btn-export"
-                        data-tooltip="خروجی فایل اکسل (CSV)" aria-label="خروجی فایل اکسل (CSV)">
+                    <button type="button" id="btnExportCSV" class="btn-export" data-tooltip="خروجی فایل اکسل (CSV)"
+                        aria-label="خروجی فایل اکسل (CSV)">
                         <svg class="office-icon" viewBox="0 0 24 24" width="18" height="18" fill="none">
                             <path
                                 d="M14.5 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V7.5L14.5 2Z"
@@ -609,7 +626,9 @@
                         style="display: none; font-size: 12.5px; padding: 6px 14px;">
                         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <path
+                                d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                            </path>
                         </svg>
                         <span>حذف موارد انتخابی</span>
                     </button>
@@ -685,7 +704,8 @@
 
             <div class="detail-header">
                 <div>
-                    <h3 class="persian-heading persian-heading--tatweel" data-tatweel-level="card">جزئیات گزارش محرمانه</h3>
+                    <h3 class="persian-heading persian-heading--tatweel" data-tatweel-level="card">جزئیات گزارش محرمانه
+                    </h3>
                     <span class="detail-header-sub">اطلاعات پرونده و سابقه اقدامات</span>
                 </div>
                 <div class="detail-header-actions">
@@ -915,6 +935,45 @@
                     <div id="detail-desc" class="detail-desc-box"></div>
                 </div>
 
+                <div id="classification-prompt-container" class="classification-prompt-box" style="display: none;">
+                    <div class="prompt-header-row">
+                        <div class="prompt-badge-icon">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M9 11l3 3L22 4" />
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                            </svg>
+                        </div>
+                        <div class="prompt-text-group">
+                            <strong class="prompt-title">ارزیابی اولیه کیفیت و سودمندی گزارش واصله</strong>
+                            <p class="prompt-desc">آیا این گزارش حاوی اطلاعات مستند، ارزشمند و قابل پیگیری اداری است؟
+                                لطفاً
+                                وضعیت سودمندی پرونده را جهت تحلیل آماری مشخص فرمایید (یک‌بار برای هر پرونده):</p>
+                        </div>
+                    </div>
+                    <div class="prompt-btn-group">
+                        <button type="button" id="btnClassifyHelpful" class="btn-classify btn-classify-helpful">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+                            </svg>
+                            <span>گزارش مفید و موثر</span>
+                        </button>
+                        <button type="button" id="btnClassifyUseless" class="btn-classify btn-classify-useless">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                            </svg>
+                            <span>گزارش بی‌محتوا و فاقد ارزش</span>
+                        </button>
+                    </div>
+                    <div id="classificationPromptStatusMsg" class="response-box"
+                        style="display: none; margin-top: 10px;">
+                    </div>
+                </div>
+
                 <div id="detail-messages-container" class="nexus-chat-card d-none">
                     <div class="nexus-chat-header">
                         <div class="nexus-chat-header-info">
@@ -1079,46 +1138,8 @@
                         </div>
                     </form>
 
-                    <div id="responseStatusMsg" class="response-box" role="status" style="display: none; margin-top: 12px;"></div>
-                </div>
-
-                <div id="classification-prompt-container" class="classification-prompt-box" style="display: none;">
-                    <div class="prompt-header-row">
-                        <div class="prompt-badge-icon">
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M9 11l3 3L22 4" />
-                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                            </svg>
-                        </div>
-                        <div class="prompt-text-group">
-                            <strong class="prompt-title">ارزیابی اولیه کیفیت و سودمندی گزارش واصله</strong>
-                            <p class="prompt-desc">آیا این گزارش حاوی اطلاعات مستند، ارزشمند و قابل پیگیری اداری است؟
-                                لطفاً
-                                وضعیت سودمندی پرونده را جهت تحلیل آماری مشخص فرمایید (یک‌بار برای هر پرونده):</p>
-                        </div>
-                    </div>
-                    <div class="prompt-btn-group">
-                        <button type="button" id="btnClassifyHelpful" class="btn-classify btn-classify-helpful">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path
-                                    d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
-                            </svg>
-                            <span>گزارش مفید و موثر</span>
-                        </button>
-                        <button type="button" id="btnClassifyUseless" class="btn-classify btn-classify-useless">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-                            </svg>
-                            <span>گزارش بی‌محتوا و فاقد ارزش</span>
-                        </button>
-                    </div>
-                    <div id="classificationPromptStatusMsg" class="response-box"
-                        style="display: none; margin-top: 10px;">
-                    </div>
+                    <div id="responseStatusMsg" class="response-box" role="status"
+                        style="display: none; margin-top: 12px;"></div>
                 </div>
 
                 <div class="detail-internal-notes-container">
@@ -1152,7 +1173,8 @@
                         </button>
                     </div>
 
-                    <div id="internalNotesStatusMsg" class="response-box" role="status" style="display: none; margin-top: 8px;"></div>
+                    <div id="internalNotesStatusMsg" class="response-box" role="status"
+                        style="display: none; margin-top: 8px;"></div>
                 </div>
 
                 <div class="print-official-footer">
@@ -1325,8 +1347,8 @@
                     </div>
                     <div style="display: flex; gap: 8px; align-items: center;">
                         <button type="button" id="btn-refresh-audit" class="btn-action btn-secondary btn-icon-only"
-                            style="width: 38px; height: 38px;"
-                            data-tooltip="بروزرسانی لاگ‌های امنیتی" aria-label="بروزرسانی لاگ‌های امنیتی">
+                            style="width: 38px; height: 38px;" data-tooltip="بروزرسانی لاگ‌های امنیتی"
+                            aria-label="بروزرسانی لاگ‌های امنیتی">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
                                 stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path
@@ -1335,8 +1357,8 @@
                             </svg>
                         </button>
                         <button type="button" id="audit-clear-filters" class="btn-action btn-danger btn-icon-only"
-                            style="width: 38px; height: 38px;"
-                            data-tooltip="حذف تمام فیلترها" aria-label="حذف تمام فیلترها">
+                            style="width: 38px; height: 38px;" data-tooltip="حذف تمام فیلترها"
+                            aria-label="حذف تمام فیلترها">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
                                 stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -1369,7 +1391,8 @@
                     <div class="pagination-info" id="audit-pagination-info">لاگ ۰ از ۰</div>
 
                     <div class="pagination-controls" dir="ltr">
-                        <button id="btn-audit-last" class="btn-page" data-tooltip="قدیمی‌ترین لاگ‌ها" aria-label="قدیمی‌ترین لاگ‌ها">
+                        <button id="btn-audit-last" class="btn-page" data-tooltip="قدیمی‌ترین لاگ‌ها"
+                            aria-label="قدیمی‌ترین لاگ‌ها">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
                                 stroke-width="2" aria-hidden="true">
                                 <path d="M13 17l-5-5 5-5M6 17l-5-5 5-5" stroke-linecap="round"
@@ -1390,7 +1413,8 @@
                                 <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </button>
-                        <button id="btn-audit-first" class="btn-page" data-tooltip="جدیدترین لاگ‌ها" aria-label="جدیدترین لاگ‌ها">
+                        <button id="btn-audit-first" class="btn-page" data-tooltip="جدیدترین لاگ‌ها"
+                            aria-label="جدیدترین لاگ‌ها">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
                                 stroke-width="2" aria-hidden="true">
                                 <path d="M11 17l5-5-5-5M18 17l5-5-5-5" stroke-linecap="round" stroke-linejoin="round" />
@@ -1525,7 +1549,8 @@
         <section id="analytics-section" style="display: none;">
             <div class="analytics-header">
                 <div>
-                    <h3 class="persian-heading persian-heading--tatweel" data-tatweel-level="section">داشبورد آماری و تحلیل داده‌های گزارش‌ها</h3>
+                    <h3 class="persian-heading persian-heading--tatweel" data-tatweel-level="section">داشبورد آماری و
+                        تحلیل داده‌های گزارش‌ها</h3>
                     <span class="detail-header-sub">تحلیل آماری دسته‌بندی‌ها، روند زمانی و وضعیت رسیدگی پرونده‌ها</span>
                 </div>
                 <button type="button" id="btnRefreshAnalytics" class="btn-action btn-secondary">
@@ -1720,7 +1745,8 @@
                     </svg>
                     <span>راهنمای کلیدهای میانبر کارتابل</span>
                 </h3>
-                <button type="button" class="btn-close-modal" id="btn-close-shortcuts-modal" aria-label="بستن">&times;</button>
+                <button type="button" class="btn-close-modal" id="btn-close-shortcuts-modal"
+                    aria-label="بستن">&times;</button>
             </div>
             <div style="padding: 10px 0;">
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
@@ -1760,7 +1786,8 @@
         <div class="admin-modal-box">
             <div class="admin-modal-header">
                 <h3>افزودن کاربر اداری جدید</h3>
-                <button type="button" class="btn-close-modal" id="btn-close-create-user-modal" aria-label="بستن">&times;</button>
+                <button type="button" class="btn-close-modal" id="btn-close-create-user-modal"
+                    aria-label="بستن">&times;</button>
             </div>
             <form id="form-create-user">
                 <div class="form-group">
@@ -1847,7 +1874,8 @@
                     </label>
                 </div>
 
-                <div id="create-user-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
+                <div id="create-user-status" class="response-box" role="status"
+                    style="display: none; margin-bottom: 12px;"></div>
                 <div class="admin-modal-footer">
                     <button type="button" class="btn-action btn-secondary" id="btn-cancel-create-user">انصراف</button>
                     <button type="submit" class="btn-action btn-submit" id="btn-submit-create-user">
@@ -1863,7 +1891,8 @@
         <div class="admin-modal-box">
             <div class="admin-modal-header">
                 <h3>تغییر رمز عبور کاربر</h3>
-                <button type="button" class="btn-close-modal" id="btn-close-reset-pwd-modal" aria-label="بستن">&times;</button>
+                <button type="button" class="btn-close-modal" id="btn-close-reset-pwd-modal"
+                    aria-label="بستن">&times;</button>
             </div>
             <form id="form-reset-password">
                 <input type="hidden" id="reset_pwd_user_id">
@@ -1888,7 +1917,8 @@
                     </label>
                 </div>
 
-                <div id="reset-pwd-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
+                <div id="reset-pwd-status" class="response-box" role="status"
+                    style="display: none; margin-bottom: 12px;"></div>
                 <div class="admin-modal-footer">
                     <button type="button" class="btn-action btn-secondary" id="btn-cancel-reset-pwd">انصراف</button>
                     <button type="submit" class="btn-action btn-submit" id="btn-submit-reset-pwd">
@@ -1904,17 +1934,29 @@
         <div class="admin-modal-box">
             <div class="admin-modal-header">
                 <h3>ویرایش مشخصات کاربر اداری</h3>
-                <button type="button" class="btn-close-modal" id="btn-close-edit-user-modal" aria-label="بستن">&times;</button>
+                <button type="button" class="btn-close-modal" id="btn-close-edit-user-modal"
+                    aria-label="بستن">&times;</button>
             </div>
             <form id="form-edit-user">
                 <input type="hidden" id="edit_user_id">
-                <div id="edit-lockout-banner" style="display: none; margin-bottom: 14px; padding: 10px 14px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: var(--radius-md); align-items: center; justify-content: space-between; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 8px; color: #fbbf24; font-size: 12.5px; font-weight: 500;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <div id="edit-lockout-banner"
+                    style="display: none; margin-bottom: 14px; padding: 10px 14px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: var(--radius-md); align-items: center; justify-content: space-between; gap: 10px;">
+                    <div
+                        style="display: flex; align-items: center; gap: 8px; color: #fbbf24; font-size: 12.5px; font-weight: 500;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
                         <span id="edit-lockout-text">حساب کاربری به دلیل تلاش‌های ناموفق متعدد مسدود شده است.</span>
                     </div>
-                    <button type="button" class="btn-action btn-warning btn-icon-only is-locked-pulse" id="btn-modal-lift-lockout" data-tooltip="رفع قفل موقت ورود" aria-label="رفع قفل موقت ورود">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
+                    <button type="button" class="btn-action btn-warning btn-icon-only is-locked-pulse"
+                        id="btn-modal-lift-lockout" data-tooltip="رفع قفل موقت ورود" aria-label="رفع قفل موقت ورود">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+                        </svg>
                     </button>
                 </div>
                 <div class="form-group">
@@ -1955,29 +1997,41 @@
                     </label>
                 </div>
 
-                <div class="edit-2fa-section" id="edit_2fa_section" style="margin-top: 14px; margin-bottom: 14px; padding: 12px 14px; background: rgba(15, 23, 42, 0.45); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
-                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                <div class="edit-2fa-section" id="edit_2fa_section"
+                    style="margin-top: 14px; margin-bottom: 14px; padding: 12px 14px; background: rgba(15, 23, 42, 0.45); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <div id="edit_2fa_icon_container" style="width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(16, 185, 129, 0.15); color: #34d399;">
-                                <svg id="edit_2fa_icon_active" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <div id="edit_2fa_icon_container"
+                                style="width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(16, 185, 129, 0.15); color: #34d399;">
+                                <svg id="edit_2fa_icon_active" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                    stroke-linejoin="round">
                                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                     <polyline points="9 12 11 14 15 10"></polyline>
                                 </svg>
-                                <svg id="edit_2fa_icon_inactive" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <svg id="edit_2fa_icon_inactive" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="display: none;">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="12" y1="8" x2="12" y2="12"></line>
                                     <line x1="12" y1="16" x2="12.01" y2="16"></line>
                                 </svg>
                             </div>
                             <div>
-                                <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 2px;">احراز هویت دومرحله‌ای (۲FA):</div>
+                                <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 2px;">احراز هویت
+                                    دومرحله‌ای (۲FA):</div>
                                 <div id="edit_2fa_badge" class="badge-2fa-has">
                                     <span id="edit_2fa_status_text">این کاربر احراز هویت دو مرحله ای دارد</span>
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn-action btn-danger" id="btn-edit-disable-2fa" style="height: 32px; padding: 0 12px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border-radius: var(--radius-sm);" data-tooltip="غیرفعال‌سازی ورود دومرحله‌ای این مدیر" aria-label="غیرفعال‌سازی احراز هویت دومرحله‌ای">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <button type="button" class="btn-action btn-danger" id="btn-edit-disable-2fa"
+                            style="height: 32px; padding: 0 12px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border-radius: var(--radius-sm);"
+                            data-tooltip="غیرفعال‌سازی ورود دومرحله‌ای این مدیر"
+                            aria-label="غیرفعال‌سازی احراز هویت دومرحله‌ای">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
                             </svg>
@@ -1986,7 +2040,8 @@
                     </div>
                 </div>
 
-                <div id="edit-user-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
+                <div id="edit-user-status" class="response-box" role="status"
+                    style="display: none; margin-bottom: 12px;"></div>
                 <div class="admin-modal-footer">
                     <button type="button" class="btn-action btn-secondary" id="btn-cancel-edit-user">انصراف</button>
                     <button type="submit" class="btn-action btn-submit" id="btn-submit-edit-user">
@@ -2002,7 +2057,8 @@
         <div class="admin-modal-box">
             <div class="admin-modal-header">
                 <h3>تغییر کلمه عبور حساب کاربری</h3>
-                <button type="button" class="btn-close-modal" id="btn-close-change-my-pwd-modal" aria-label="بستن">&times;</button>
+                <button type="button" class="btn-close-modal" id="btn-close-change-my-pwd-modal"
+                    aria-label="بستن">&times;</button>
             </div>
             <form id="form-change-my-password">
                 <p style="margin-bottom: 15px; font-size: 13px; color: var(--text-muted);">
@@ -2010,51 +2066,13 @@
                 </p>
                 <div class="form-group">
                     <label for="my_current_password">کلمه عبور فعلی:</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="my_current_password" required
-                            placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
-                        <button type="button" id="toggleMyCurrentPasswordBtn" class="btn-toggle-pw"
-                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
-                            <svg id="eye-icon-show-my-curr" viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <svg id="eye-icon-hide-my-curr" class="d-none" viewBox="0 0 24 24" width="18" height="18"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m15 18-.722-3.25"></path>
-                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
-                                <path d="m20 15-1.726-2.05"></path>
-                                <path d="m4 15 1.726-2.05"></path>
-                                <path d="m9 18 .722-3.25"></path>
-                            </svg>
-                        </button>
-                    </div>
+                    <input type="password" id="my_current_password" required
+                        placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
                 </div>
                 <div class="form-group">
                     <label for="my_new_password">کلمه عبور جدید (حداقل ۱۲ کاراکتر):</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="my_new_password" required placeholder="کلمه عبور جدید امن"
-                            autocomplete="new-password">
-                        <button type="button" id="toggleMyNewPasswordBtn" class="btn-toggle-pw"
-                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
-                            <svg id="eye-icon-show-my-new" viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <svg id="eye-icon-hide-my-new" class="d-none" viewBox="0 0 24 24" width="18" height="18"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m15 18-.722-3.25"></path>
-                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
-                                <path d="m20 15-1.726-2.05"></path>
-                                <path d="m4 15 1.726-2.05"></path>
-                                <path d="m9 18 .722-3.25"></path>
-                            </svg>
-                        </button>
-                    </div>
+                    <input type="password" id="my_new_password" required placeholder="کلمه عبور جدید امن"
+                        autocomplete="new-password">
                     <div class="pwd-requirements-hint">
                         <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
                         (!@#$%^&*)
@@ -2062,30 +2080,12 @@
                 </div>
                 <div class="form-group">
                     <label for="my_confirm_password">تکرار کلمه عبور جدید:</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="my_confirm_password" required placeholder="تکرار کلمه عبور جدید"
-                            autocomplete="new-password">
-                        <button type="button" id="toggleMyConfirmPasswordBtn" class="btn-toggle-pw"
-                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
-                            <svg id="eye-icon-show-my-conf" viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <svg id="eye-icon-hide-my-conf" class="d-none" viewBox="0 0 24 24" width="18" height="18"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m15 18-.722-3.25"></path>
-                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
-                                <path d="m20 15-1.726-2.05"></path>
-                                <path d="m4 15 1.726-2.05"></path>
-                                <path d="m9 18 .722-3.25"></path>
-                            </svg>
-                        </button>
-                    </div>
+                    <input type="password" id="my_confirm_password" required placeholder="تکرار کلمه عبور جدید"
+                        autocomplete="new-password">
                 </div>
 
-                <div id="change-my-pwd-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
+                <div id="change-my-pwd-status" class="response-box" role="status"
+                    style="display: none; margin-bottom: 12px;"></div>
                 <div class="admin-modal-footer">
                     <button type="button" class="btn-action btn-secondary" id="btn-cancel-change-my-pwd">انصراف</button>
                     <button type="submit" class="btn-action btn-submit" id="btn-submit-change-my-pwd">
@@ -2101,19 +2101,23 @@
         <div class="admin-modal-box" style="max-width: 520px;">
             <div class="admin-modal-header">
                 <h3 style="display: flex; align-items: center; gap: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        <path d="m9 12 2 2 4-4"/>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="text-cyan">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        <path d="m9 12 2 2 4-4" />
                     </svg>
                     <span>تنظیمات احراز هویت دومرحله‌ای (MFA / TOTP)</span>
                 </h3>
-                <button type="button" class="btn-close-modal" id="btn-close-2fa-modal" aria-label="بستن">&times;</button>
+                <button type="button" class="btn-close-modal" id="btn-close-2fa-modal"
+                    aria-label="بستن">&times;</button>
             </div>
 
             <div id="2fa-status-view" style="margin-bottom: 16px;">
                 <div id="2fa-active-banner" class="response-box success" style="display: none; margin-bottom: 14px;">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600;">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                    <div
+                        style="display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                             <polyline points="9 12 11 14 15 10"></polyline>
                         </svg>
@@ -2122,7 +2126,8 @@
                 </div>
                 <div id="2fa-inactive-banner" class="response-box warning" style="display: none; margin-bottom: 14px;">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="12" y1="8" x2="12" y2="12"></line>
                             <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -2134,13 +2139,19 @@
 
             <div id="2fa-setup-section" style="display: none;">
                 <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
-                    کلید امنیتی زیر را در نرم‌افزار احراز هویت خود (Google Authenticator یا Microsoft Authenticator) وارد فرمایید:
+                    کلید امنیتی زیر را در نرم‌افزار احراز هویت خود (Google Authenticator یا Microsoft Authenticator)
+                    وارد فرمایید:
                 </p>
-                <div style="background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px; text-align: center; margin-bottom: 12px;">
-                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">کلید مخفی اختصاصی شما (Base32):</div>
-                    <code id="2fa-secret-display" class="ltr" style="display: block; font-size: 16px; font-weight: 700; color: #38bdf8; letter-spacing: 2px; user-select: all; margin-bottom: 8px; word-break: break-all;">...</code>
-                    <button type="button" id="btn-copy-2fa-secret" class="btn-action btn-secondary" style="height: 28px; font-size: 11px; padding: 0 10px; margin: 0 auto; display: inline-flex; align-items: center; gap: 5px;">
-                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                <div
+                    style="background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px; text-align: center; margin-bottom: 12px;">
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">کلید مخفی اختصاصی شما
+                        (Base32):</div>
+                    <code id="2fa-secret-display" class="ltr"
+                        style="display: block; font-size: 16px; font-weight: 700; color: #38bdf8; letter-spacing: 2px; user-select: all; margin-bottom: 8px; word-break: break-all;">...</code>
+                    <button type="button" id="btn-copy-2fa-secret" class="btn-action btn-secondary"
+                        style="height: 28px; font-size: 11px; padding: 0 10px; margin: 0 auto; display: inline-flex; align-items: center; gap: 5px;">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                         </svg>
@@ -2156,7 +2167,10 @@
                     </div>
                     <div class="form-group">
                         <label for="enable_2fa_code">کد ۶ رقمی تأیید نرم‌افزار:</label>
-                        <input type="text" id="enable_2fa_code" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" placeholder="123456" class="ltr" style="text-align: center; font-size: 18px; font-weight: 700; letter-spacing: 4px;" required>
+                        <input type="text" id="enable_2fa_code" maxlength="6" pattern="[0-9]{6}" inputmode="numeric"
+                            placeholder="123456" class="ltr"
+                            style="text-align: center; font-size: 18px; font-weight: 700; letter-spacing: 4px;"
+                            required>
                     </div>
                     <div id="enable-2fa-status" class="response-box" style="display: none; margin-bottom: 12px;"></div>
                     <div class="admin-modal-footer">
@@ -2180,11 +2194,15 @@
                     </div>
                     <div class="form-group">
                         <label for="disable_2fa_code">کد ۶ رقمی نرم‌افزار:</label>
-                        <input type="text" id="disable_2fa_code" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" placeholder="123456" class="ltr" style="text-align: center; font-size: 18px; font-weight: 700; letter-spacing: 4px;" required>
+                        <input type="text" id="disable_2fa_code" maxlength="6" pattern="[0-9]{6}" inputmode="numeric"
+                            placeholder="123456" class="ltr"
+                            style="text-align: center; font-size: 18px; font-weight: 700; letter-spacing: 4px;"
+                            required>
                     </div>
                     <div id="disable-2fa-status" class="response-box" style="display: none; margin-bottom: 12px;"></div>
                     <div class="admin-modal-footer">
-                        <button type="button" class="btn-action btn-secondary" id="btn-cancel-disable-2fa">انصراف</button>
+                        <button type="button" class="btn-action btn-secondary"
+                            id="btn-cancel-disable-2fa">انصراف</button>
                         <button type="submit" class="btn-action btn-danger" id="btn-submit-disable-2fa">
                             <span class="btn-text">غیرفعال‌سازی</span>
                             <span class="btn-spinner d-none"></span>
@@ -2193,9 +2211,12 @@
                 </form>
             </div>
 
-            <div id="2fa-initial-actions" style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px;">
-                <button type="button" class="btn-action btn-submit" id="btn-start-setup-2fa">راه‌اندازی ورود دومرحله‌ای</button>
-                <button type="button" class="btn-action btn-danger" id="btn-start-disable-2fa" style="display: none;">غیرفعال‌سازی ورود دومرحله‌ای</button>
+            <div id="2fa-initial-actions"
+                style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px;">
+                <button type="button" class="btn-action btn-submit" id="btn-start-setup-2fa">راه‌اندازی ورود
+                    دومرحله‌ای</button>
+                <button type="button" class="btn-action btn-danger" id="btn-start-disable-2fa"
+                    style="display: none;">غیرفعال‌سازی ورود دومرحله‌ای</button>
             </div>
         </div>
     </div>
@@ -2228,51 +2249,13 @@
                 </div>
                 <div class="form-group">
                     <label for="force_current_password">کلمه عبور فعلی:</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="force_current_password" required
-                            placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
-                        <button type="button" id="toggleForceCurrentPasswordBtn" class="btn-toggle-pw"
-                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
-                            <svg id="eye-icon-show-force-curr" viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <svg id="eye-icon-hide-force-curr" class="d-none" viewBox="0 0 24 24" width="18" height="18"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m15 18-.722-3.25"></path>
-                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
-                                <path d="m20 15-1.726-2.05"></path>
-                                <path d="m4 15 1.726-2.05"></path>
-                                <path d="m9 18 .722-3.25"></path>
-                            </svg>
-                        </button>
-                    </div>
+                    <input type="password" id="force_current_password" required
+                        placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
                 </div>
                 <div class="form-group">
                     <label for="force_new_password">کلمه عبور جدید (حداقل ۱۲ کاراکتر):</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="force_new_password" required placeholder="کلمه عبور جدید امن"
-                            autocomplete="new-password">
-                        <button type="button" id="toggleForceNewPasswordBtn" class="btn-toggle-pw"
-                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
-                            <svg id="eye-icon-show-force-new" viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <svg id="eye-icon-hide-force-new" class="d-none" viewBox="0 0 24 24" width="18" height="18"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m15 18-.722-3.25"></path>
-                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
-                                <path d="m20 15-1.726-2.05"></path>
-                                <path d="m4 15 1.726-2.05"></path>
-                                <path d="m9 18 .722-3.25"></path>
-                            </svg>
-                        </button>
-                    </div>
+                    <input type="password" id="force_new_password" required placeholder="کلمه عبور جدید امن"
+                        autocomplete="new-password">
                     <div class="pwd-requirements-hint">
                         <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
                         (!@#$%^&*)
@@ -2280,30 +2263,12 @@
                 </div>
                 <div class="form-group">
                     <label for="force_confirm_password">تکرار کلمه عبور جدید:</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="force_confirm_password" required placeholder="تکرار کلمه عبور جدید"
-                            autocomplete="new-password">
-                        <button type="button" id="toggleForceConfirmPasswordBtn" class="btn-toggle-pw"
-                            data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
-                            <svg id="eye-icon-show-force-conf" viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <svg id="eye-icon-hide-force-conf" class="d-none" viewBox="0 0 24 24" width="18" height="18"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m15 18-.722-3.25"></path>
-                                <path d="M2 8a10.645 10.645 0 0 0 20 0"></path>
-                                <path d="m20 15-1.726-2.05"></path>
-                                <path d="m4 15 1.726-2.05"></path>
-                                <path d="m9 18 .722-3.25"></path>
-                            </svg>
-                        </button>
-                    </div>
+                    <input type="password" id="force_confirm_password" required placeholder="تکرار کلمه عبور جدید"
+                        autocomplete="new-password">
                 </div>
 
-                <div id="force-change-pwd-status" class="response-box" role="status" style="display: none; margin-bottom: 12px;"></div>
+                <div id="force-change-pwd-status" class="response-box" role="status"
+                    style="display: none; margin-bottom: 12px;"></div>
                 <div class="force-pwd-actions">
                     <button type="submit" class="btn-force-submit" id="btn-submit-force-change-pwd">
                         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
