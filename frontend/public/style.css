@@ -114,11 +114,11 @@ body::before {
     border-radius: var(--radius-lg);
     padding: 35px 40px;
     box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
-    contain: layout paint;
+    contain: style;
 }
 
 #landingSection {
-    contain: layout style;
+    contain: style;
 }
 
 #trackingSection,

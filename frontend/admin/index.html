@@ -165,8 +165,7 @@
                             </div>
                             <h2 style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">
                                 احراز هویت دومرحله‌ای (MFA)</h2>
-                            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6;">کد ۶ رقمی
-                                نرم‌افزار احراز هویت (Google Authenticator) خود را وارد فرمایید.</p>
+                            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6;">کد ۶ رقمی نرم‌افزار احراز هویت (Google Authenticator) را وارد کنید.</p>
                             <div style="margin-top: 6px; font-size: 11.5px; color: #f59e0b;">
                                 زمان باقی‌مانده اعتبار: <strong id="mfaCountdownText"
                                     class="ltr font-bold">۰۳:۰۰</strong>
@@ -269,8 +268,7 @@
                                     <span class="bullet-dot"></span>
                                     <strong>نحوه عملکرد (Timeout):</strong>
                                 </div>
-                                <p>به‌صورت پیش‌فرض نشست شما ۱۵ دقیقه اعتبار دارد. در صورت اتمام زمان (۰:۰۰)، سیستم جهت
-                                    جلوگیری از سوءاستفاده به‌صورت خودکار خارج شده و قفل می‌شود.</p>
+                                <p>نشست کاری شما ۱۵ دقیقه اعتبار دارد. با اتمام این زمان، سیستم برای جلوگیری از دسترسی غیرمجاز به‌صورت خودکار قفل می‌شود.</p>
                             </div>
 
                             <div class="tooltip-section">
@@ -281,8 +279,7 @@
                                 <ul class="tooltip-list">
                                     <li><strong>خودکار:</strong> با هر فعالیت (باز کردن گزارش، ثبت پاسخ، فیلتر یا جستجو)
                                         تایمر خودکار به ۱۵:۰۰ بازنشانی می‌شود.</li>
-                                    <li><strong>دستی:</strong> با کلیک روی دکمه زیر یا کادر زمان‌سنج می‌توانید اعتبار
-                                        نشست را فوراً تمدید نمایید.</li>
+                                    <li><strong>دستی:</strong> با کلیک روی دکمه زیر یا کادر زمان‌سنج، اعتبار نشست کاری تمدید می‌شود.</li>
                                 </ul>
                             </div>
                         </div>
@@ -945,9 +942,7 @@
                         </div>
                         <div class="prompt-text-group">
                             <strong class="prompt-title">ارزیابی اولیه کیفیت و سودمندی گزارش واصله</strong>
-                            <p class="prompt-desc">آیا این گزارش حاوی اطلاعات مستند، ارزشمند و قابل پیگیری اداری است؟
-                                لطفاً
-                                وضعیت سودمندی پرونده را جهت تحلیل آماری مشخص فرمایید (یک‌بار برای هر پرونده):</p>
+                            <p class="prompt-desc">آیا این گزارش حاوی اطلاعات مستند و قابل پیگیری است؟ لطفاً وضعیت سودمندی پرونده را برای تحلیل آماری مشخص کنید:</p>
                         </div>
                     </div>
                     <div class="prompt-btn-group">
@@ -1023,7 +1018,7 @@
                                 <span>ثبت گزارش و نتیجه بررسی کارشناسی به اداره کل:</span>
                             </div>
                             <span class="regional-badge-confidential">
-                                مستقیماً جهت استحضار و تصمیم‌گیری نهایی اداره کل ارسال می‌شود
+                                برای بررسی و تصمیم‌گیری نهایی به اداره کل ارسال می‌شود
                             </span>
                         </div>
 
@@ -1052,30 +1047,25 @@
                                 <div class="canned-chips-list">
                                     <button type="button" class="canned-chip regional-canned-chip"
                                         data-target="regional_response_input"
-                                        data-text="تحقیقات و بررسی میدانی انجام گرفت؛ بر اساس شواهد و استعلامات، هیچ‌گونه تخلف اداری یا مغایرت قانونی در این موضوع احراز نگردید.">عدم
-                                        احراز تخلف در بررسی میدانی</button>
+                                        data-text="بررسی میدانی انجام شد؛ بر اساس شواهد و استعلام‌ها، تخلف اداری یا قانونی مشاهده نشد.">عدم احراز تخلف در بررسی میدانی</button>
                                     <button type="button" class="canned-chip regional-canned-chip"
                                         data-target="regional_response_input"
-                                        data-text="موضوع مورد بررسی دقیق میدانی قرار گرفت و صحت گزارش تأیید گردید؛ اقدامات لازم و تشکیل پرونده انضباطی جهت اقدام قانونی معمول شد.">تأیید
-                                        صحت تخلف و پیگیری قانونی</button>
+                                        data-text="بررسی میدانی انجام و صحت گزارش تأیید شد؛ پرونده انضباطی جهت پیگیری قانونی تشکیل گردید.">تأیید صحت تخلف و پیگیری قانونی</button>
                                     <button type="button" class="canned-chip regional-canned-chip"
                                         data-target="regional_response_input"
-                                        data-text="موضوع با حضور کارشناس در محل بررسی گردید؛ تذکرات قانونی لازم ابلاغ و تمهیدات اصلاحی جهت رفع نواقص اعمال شد.">تذکر
-                                        و رفع نقص در محل</button>
+                                        data-text="موضوع با حضور کارشناس در محل بررسی شد؛ تذکرات لازم ابلاغ و نواقص برطرف گردید.">تذکر و رفع نقص در محل</button>
                                     <button type="button" class="canned-chip regional-canned-chip"
                                         data-target="regional_response_input"
-                                        data-text="بررسی اولیه انجام شد؛ به دلیل فقدان شواهد و مستندات کافی، راستی‌آزمایی دقیق نیازمند ارائه مدارک تکمیلی از سوی گزارش‌دهنده است.">نیاز
-                                        به مدارک تکمیلی گزارش‌دهنده</button>
+                                        data-text="بررسی اولیه انجام شد؛ رسیدگی دقیق نیازمند مدارک تکمیلی از سوی گزارش‌دهنده است.">نیاز به مدارک تکمیلی گزارش‌دهنده</button>
                                     <button type="button" class="canned-chip regional-canned-chip"
                                         data-target="regional_response_input"
-                                        data-text="پرونده در دست تحقیقات میدانی و استعلام از بخش‌های مربوطه است؛ گزارش نهایی پس از تکمیل مستندات متعاقباً ارسال خواهد شد.">در
-                                        دست بررسی و استعلام تکمیلی</button>
+                                        data-text="تحقیقات میدانی و استعلام در دست اقدام است؛ گزارش نهایی پس از تکمیل مستندات ارسال می‌شود.">در دست بررسی و استعلام تکمیلی</button>
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-bottom: 10px;">
                                 <textarea id="regional_response_input" rows="4"
-                                    placeholder="شرح تحقیقات میدانی، مستندات بررسی‌شده، اقدامات انجام‌گرفته و نظر کارشناسی خود را جهت ارائه به اداره کل وارد نمایید..."
+                                    placeholder="شرح تحقیقات، مدارک بررسی‌شده و نظر کارشناسی خود را برای اداره کل بنویسید..."
                                     maxlength="8000" required></textarea>
                             </div>
                             <div style="display: flex; justify-content: flex-end; gap: 10px;">
@@ -1108,24 +1098,20 @@
                         <span class="canned-title">قالب‌های آماده پاسخ سریع:</span>
                         <div class="canned-chips-list">
                             <button type="button" class="canned-chip"
-                                data-text="گزارش شما دریافت و جهت بررسی و اقدام مقتضی به کارشناس مربوطه ارجاع گردید.">ارجاع
-                                به کارشناس مربوطه</button>
+                                data-text="گزارش شما دریافت شد و برای بررسی در اختیار کارشناس قرار گرفت.">ارجاع به کارشناس مربوطه</button>
                             <button type="button" class="canned-chip"
-                                data-text="موضوع مورد بررسی همه‌جانبه قرار گرفت و تدابیر و اقدامات قانونی لازم معمول گردید.">بررسی
-                                و اقدام قانونی</button>
+                                data-text="موضوع بررسی شد و اقدامات قانونی لازم انجام گرفت.">بررسی و اقدام قانونی</button>
                             <button type="button" class="canned-chip"
-                                data-text="جهت تکمیل پرونده و تسریع در پیگیری، مدارک و مستندات بیشتری مورد نیاز است. لطفاً گزارش تکمیلی ثبت فرمایید.">درخواست
-                                مستندات تکمیلی</button>
+                                data-text="برای تکمیل پرونده به مدارک بیشتری نیاز است. لطفاً در بخش پیام تکمیلی، توضیحات یا مدارک جدید را ارسال کنید.">درخواست مستندات تکمیلی</button>
                             <button type="button" class="canned-chip"
-                                data-text="موضوع گزارش با دقت بررسی شد و در حال حاضر تخلف اداری یا امنیتی احراز نگردید.">عدم
-                                احراز تخلف</button>
+                                data-text="گزارش با دقت بررسی شد و تخلف اداری یا امنیتی احراز نگردید.">عدم احراز تخلف</button>
                         </div>
                     </div>
 
                     <form id="adminResponseForm" style="margin-top: 15px;">
                         <div class="form-group" style="margin-bottom: 12px;">
                             <textarea id="admin_response_input" rows="4"
-                                placeholder="متن پاسخ یا نتیجه بررسی حراست را جهت مشاهده گزارش‌دهنده وارد نمایید..."
+                                placeholder="متن پاسخ یا نتیجه بررسی حراست را برای گزارش‌دهنده بنویسید..."
                                 maxlength="3000" required></textarea>
                         </div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px;">
@@ -1749,7 +1735,7 @@
             </div>
             <div style="padding: 10px 0;">
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
-                    برای افزایش سرعت کار در کارتابل حراست می‌توانید از کلیدهای میانبر زیر استفاده فرمایید:
+                    برای دسترسی سریع‌تر به بخش‌های مختلف، می‌توانید از کلیدهای میانبر زیر استفاده کنید:
                 </p>
                 <div class="shortcuts-table" style="display: flex; flex-direction: column; gap: 10px;">
                     <div class="shortcut-row"
@@ -2079,7 +2065,7 @@
             </div>
             <form id="form-change-my-password">
                 <p style="margin-bottom: 15px; font-size: 13px; color: var(--text-muted);">
-                    جهت افزایش امنیت و رعایت سیاست گردش ماهانه رمزها، لطفاً کلمه عبور جدید را تعیین فرمایید.
+                    برای حفظ امنیت حساب کاربری و گردش دوره‌ای رمزها، لطفاً کلمه عبور جدید را وارد کنید.
                 </p>
                 <div class="form-group">
                     <label for="my_current_password">کلمه عبور فعلی:</label>
@@ -2210,8 +2196,7 @@
 
             <div id="2fa-setup-section" style="display: none;">
                 <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
-                    کلید امنیتی زیر را در نرم‌افزار احراز هویت خود (Google Authenticator یا Microsoft Authenticator)
-                    وارد فرمایید:
+                    کلید امنیتی زیر را در نرم‌افزار احراز هویت (Google Authenticator یا Microsoft Authenticator) وارد کنید:
                 </p>
                 <div
                     style="background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px; text-align: center; margin-bottom: 12px;">
@@ -2256,7 +2241,7 @@
 
             <div id="2fa-disable-section" style="display: none;">
                 <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
-                    برای غیرفعال‌سازی ورود دومرحله‌ای، لطفاً کلمه عبور جاری و کد موقت نرم‌افزار را وارد فرمایید:
+                    برای غیرفعال‌سازی ورود دومرحله‌ای، کلمه عبور جاری و کد موقت نرم‌افزار را وارد کنید:
                 </p>
                 <form id="form-disable-2fa">
                     <div class="form-group">
@@ -2314,9 +2299,7 @@
                         <line x1="12" y1="8" x2="12" y2="12"></line>
                         <line x1="12" y1="16" x2="12.01" y2="16"></line>
                     </svg>
-                    <span id="force-pwd-reason-text">مدت زمان اعتبار ۳۰ روزه رمز عبور شما به پایان رسیده است یا تغییر آن
-                        توسط پشتیبانی سامانه الزامی شده است. لطفاً پیش از دسترسی به کارتابل، کلمه عبور جدید و امن خود را
-                        تعیین فرمایید.</span>
+                    <span id="force-pwd-reason-text">اعتبار ۳۰ روزه رمز عبور به پایان رسیده یا تغییر آن توسط مدیر سامانه الزامی شده است. لطفاً پیش از ورود به کارتابل، رمز عبور جدیدی تعیین کنید.</span>
                 </div>
                 <div class="form-group">
                     <label for="force_current_password">کلمه عبور فعلی:</label>
@@ -2440,8 +2423,7 @@
                     stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 </svg>
-                <span>چنانچه این ورود توسط شما نبوده است، لطفاً بلافاصله جهت بررسی‌های امنیتی با <strong>پشتیبانی
-                        سامانه</strong> تماس حاصل فرمایید.</span>
+                <span>اگر این ورود توسط شما انجام نشده است، بلافاصله با <strong>پشتیبانی سامانه</strong> تماس بگیرید.</span>
             </div>
             <div>
                 <button type="button" id="btn-ack-concurrent-logout" class="btn-action btn-danger"
@@ -2468,8 +2450,7 @@
             </div>
             <form id="form-change-classification">
                 <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;">
-                    شما به عنوان ثبت‌کننده ارزیابی اولیه، می‌توانید وضعیت ارزش اطلاعاتی و کیفیت این گزارش را ویرایش
-                    فرمایید:
+                    می‌توانید وضعیت ارزش اطلاعاتی و کیفیت این پرونده را ویرایش کنید:
                 </p>
                 <div class="classify-modal-options"
                     style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">

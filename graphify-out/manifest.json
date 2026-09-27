@@ -84,15 +84,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1790493155.8527226,
-    "seen": 1790493463.716627,
-    "ast_hash": "c7df39c7901124199014f8eb932890eb",
+    "mtime": 1790499110.6169267,
+    "seen": 1790499146.6704245,
+    "ast_hash": "ef0171a5d33dc0058a8efb84e96af4c5",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1790498024.7514207,
-    "seen": 1790498155.7739866,
-    "ast_hash": "fa4f34cb592d82256487cb9f2560479f",
+    "mtime": 1790499030.5729291,
+    "seen": 1790499146.670427,
+    "ast_hash": "c7a2c0fdf4aea9874704ffc0eac7ad6c",
     "semantic_hash": ""
   },
   "frontend/admin/bg.jpg": {
