@@ -14,18 +14,10 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
 }
 
 (function initAdminPreloader() {
-    const PRELOADER_MIN_MS = 3000;
-    const startTime = performance.now();
-    let isReady = false;
     let dismissed = false;
 
-    function attemptDismiss() {
-        if (dismissed || !isReady) return;
-        const elapsed = performance.now() - startTime;
-        if (elapsed < PRELOADER_MIN_MS) {
-            setTimeout(attemptDismiss, PRELOADER_MIN_MS - elapsed);
-            return;
-        }
+    function dismissAdminPreloader() {
+        if (dismissed) return;
         dismissed = true;
         const preloader = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
         const skeleton = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
@@ -37,8 +29,7 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
     }
 
     window.markAdminReady = function () {
-        isReady = true;
-        attemptDismiss();
+        dismissAdminPreloader();
     };
 
     function onReadyCheck() {

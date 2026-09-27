@@ -973,7 +973,7 @@
       "file_type": "code",
       "norm_label": "closeguidelinesdrawer()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1727"
+      "source_location": "L1775"
     },
     {
       "id": "frontend_public_app_dismisstoast",
@@ -1225,7 +1225,7 @@
       "file_type": "code",
       "norm_label": "openguidelinesdrawer()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1710"
+      "source_location": "L1758"
     },
     {
       "id": "frontend_public_app_parsetimestamp",
@@ -1285,7 +1285,7 @@
       "file_type": "code",
       "norm_label": "renderconversationthread()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1778"
+      "source_location": "L1826"
     },
     {
       "id": "frontend_public_app_renderfilequeue",
@@ -1393,7 +1393,7 @@
       "file_type": "code",
       "norm_label": "showtrackerror()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2030"
+      "source_location": "L2078"
     },
     {
       "id": "frontend_public_app_switchview",
@@ -21154,7 +21154,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1836",
+      "source_location": "L1884",
       "weight": 1.0
     },
     {
@@ -21250,7 +21250,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2039",
+      "source_location": "L2087",
       "weight": 1.0
     },
     {
@@ -21262,7 +21262,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2042",
+      "source_location": "L2090",
       "weight": 1.0
     },
     {
@@ -37170,7 +37170,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1710",
+      "source_location": "L1758",
       "weight": 1.0
     },
     {
@@ -37181,7 +37181,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1727",
+      "source_location": "L1775",
       "weight": 1.0
     },
     {
@@ -37192,7 +37192,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1778",
+      "source_location": "L1826",
       "weight": 1.0
     },
     {
@@ -37203,7 +37203,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L2030",
+      "source_location": "L2078",
       "weight": 1.0
     },
     {
@@ -44879,5 +44879,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "419777bdaf8566b1b481fe22f0157cc4721dc1ac"
+  "built_at_commit": "968613a06af65d9a6e31a976775be01c00675889"
 }

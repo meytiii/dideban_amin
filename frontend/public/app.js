@@ -14,18 +14,10 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
 }
 
 (function initPreloader() {
-    const PRELOADER_MIN_MS = 3000;
-    const startTime = performance.now();
-    let pageLoaded = false;
     let dismissed = false;
 
-    function attemptDismiss() {
-        if (dismissed || !pageLoaded) return;
-        const elapsed = performance.now() - startTime;
-        if (elapsed < PRELOADER_MIN_MS) {
-            setTimeout(attemptDismiss, PRELOADER_MIN_MS - elapsed);
-            return;
-        }
+    function dismissPreloader() {
+        if (dismissed) return;
         dismissed = true;
         const preloader = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
         const skeleton = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
@@ -36,21 +28,13 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
         if (skeleton) skeleton.remove();
     }
 
-    function onComplete() {
-        pageLoaded = true;
-        attemptDismiss();
-    }
-
     if (document.readyState === 'complete') {
-        onComplete();
+        dismissPreloader();
     } else {
-        window.addEventListener('load', onComplete);
-        document.addEventListener('DOMContentLoaded', onComplete);
+        window.addEventListener('load', dismissPreloader);
     }
 
-    setTimeout(() => {
-        onComplete();
-    }, 10000);
+    setTimeout(dismissPreloader, 10000);
 })();
 
 const getScrollBehavior = () => (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
@@ -1692,6 +1676,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnLandingOpenFaq = document.getElementById('btnLandingOpenFaq');
     if (btnLandingOpenFaq) {
         btnLandingOpenFaq.addEventListener('click', openGuidelinesDrawer);
+    }
+
+    const stickyBtnStartReport = document.getElementById('stickyBtnStartReport');
+    if (stickyBtnStartReport) {
+        stickyBtnStartReport.addEventListener('click', () => {
+            switchView('submit');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        });
+    }
+
+    const stickyBtnTrackReport = document.getElementById('stickyBtnTrackReport');
+    if (stickyBtnTrackReport) {
+        stickyBtnTrackReport.addEventListener('click', () => {
+            switchView('track');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        });
+    }
+
+    const stickyBtnFaq = document.getElementById('stickyBtnFaq');
+    if (stickyBtnFaq) {
+        stickyBtnFaq.addEventListener('click', openGuidelinesDrawer);
+    }
+
+    const tabScopeHerasat = document.getElementById('tabScopeHerasat');
+    const tabScopeExternal = document.getElementById('tabScopeExternal');
+    const scopeCardHerasat = document.getElementById('scopeCardHerasat');
+    const scopeCardExternal = document.getElementById('scopeCardExternal');
+
+    if (tabScopeHerasat && tabScopeExternal && scopeCardHerasat && scopeCardExternal) {
+        tabScopeHerasat.addEventListener('click', () => {
+            tabScopeHerasat.classList.add('active');
+            tabScopeHerasat.setAttribute('aria-selected', 'true');
+            tabScopeExternal.classList.remove('active');
+            tabScopeExternal.setAttribute('aria-selected', 'false');
+
+            scopeCardHerasat.classList.add('active');
+            scopeCardExternal.classList.remove('active');
+        });
+
+        tabScopeExternal.addEventListener('click', () => {
+            tabScopeExternal.classList.add('active');
+            tabScopeExternal.setAttribute('aria-selected', 'true');
+            tabScopeHerasat.classList.remove('active');
+            tabScopeHerasat.setAttribute('aria-selected', 'false');
+
+            scopeCardExternal.classList.add('active');
+            scopeCardHerasat.classList.remove('active');
+        });
     }
 
     if (window.location.hash === '#trackingSection' || window.location.hash === '#track') {
