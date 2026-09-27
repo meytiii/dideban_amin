@@ -484,11 +484,16 @@ body::before {
     flex: 1.15;
     min-width: 0;
     height: 52px;
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(11, 19, 41, 0.9);
     border: 1px solid rgba(56, 189, 248, 0.3);
     border-radius: 12px;
     padding: 4px 8px;
     box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.admin-captcha-box:hover {
+    border-color: rgba(56, 189, 248, 0.45);
 }
 
 .admin-captcha-box img,
@@ -498,7 +503,7 @@ body::before {
     min-width: 0;
     border-radius: 8px;
     cursor: pointer;
-    background: #ffffff;
+    background: #0b1329;
     display: block;
     object-fit: contain;
 }

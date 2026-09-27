@@ -5141,7 +5141,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const closeResetPwdModal = () => { if (modalResetPassword) modalResetPassword.style.display = 'none'; };
+    const closeResetPwdModal = () => {
+        if (modalResetPassword) {
+            modalResetPassword.style.display = 'none';
+            resetPasswordWrappers(modalResetPassword);
+        }
+    };
     btnCloseResetPwd?.addEventListener('click', closeResetPwdModal);
     btnCancelResetPwd?.addEventListener('click', closeResetPwdModal);
 
@@ -5222,7 +5227,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const closeChangeMyPwdModal = () => { if (modalChangeMyPwd) modalChangeMyPwd.style.display = 'none'; };
+    const closeChangeMyPwdModal = () => {
+        if (modalChangeMyPwd) {
+            modalChangeMyPwd.style.display = 'none';
+            resetPasswordWrappers(modalChangeMyPwd);
+        }
+    };
     btnCloseChangeMyPwd?.addEventListener('click', closeChangeMyPwdModal);
     btnCancelChangeMyPwd?.addEventListener('click', closeChangeMyPwdModal);
 
@@ -5344,7 +5354,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (res.ok) {
                 showToast('کلمه عبور با موفقیت تغییر یافت و ثبت گردید');
-                if (modalForceChangePwd) modalForceChangePwd.style.display = 'none';
+                if (modalForceChangePwd) {
+                    modalForceChangePwd.style.display = 'none';
+                    resetPasswordWrappers(modalForceChangePwd);
+                }
                 if (currentAdmin) {
                     currentAdmin.must_change_password = false;
                     currentAdmin.is_password_expired = false;
@@ -5365,6 +5378,37 @@ document.addEventListener('DOMContentLoaded', () => {
             if (submitBtn) submitBtn.disabled = false;
             if (btnText) btnText.textContent = 'ثبت کلمه عبور جدید و ورود';
             if (btnSpinner) btnSpinner.classList.add('d-none');
+        }
+    });
+
+    function resetPasswordWrappers(container) {
+        if (!container) return;
+        container.querySelectorAll('.password-wrapper').forEach(wrapper => {
+            const input = wrapper.querySelector('input');
+            if (input) input.type = 'password';
+            const eyeShow = wrapper.querySelector('.eye-icon-show');
+            const eyeHide = wrapper.querySelector('.eye-icon-hide');
+            if (eyeShow) eyeShow.classList.remove('d-none');
+            if (eyeHide) eyeHide.classList.add('d-none');
+        });
+    }
+
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.password-wrapper .btn-toggle-pw');
+        if (!btn) return;
+        if (btn.id === 'toggleNewPasswordBtn' || btn.id === 'toggleNewPasswordConfirmBtn' || btn.id === 'togglePasswordBtn') return;
+        e.preventDefault();
+        const wrapper = btn.closest('.password-wrapper');
+        if (!wrapper) return;
+        const input = wrapper.querySelector('input');
+        if (!input) return;
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        const eyeShow = btn.querySelector('.eye-icon-show');
+        const eyeHide = btn.querySelector('.eye-icon-hide');
+        if (eyeShow && eyeHide) {
+            eyeShow.classList.toggle('d-none', isPassword);
+            eyeHide.classList.toggle('d-none', !isPassword);
         }
     });
 

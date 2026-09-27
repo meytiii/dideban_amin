@@ -1643,7 +1643,7 @@ button:disabled {
     border-radius: var(--radius-sm);
     flex: 1;
     object-fit: contain;
-    background: rgba(255, 255, 255, 0.02);
+    background: #0b1329;
 }
 
 .btn-refresh {

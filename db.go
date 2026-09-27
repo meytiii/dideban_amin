@@ -206,15 +206,56 @@ func runMigrations() {
 			ALTER TABLE audit_logs ADD COLUMN entry_hash VARCHAR(64) NOT NULL DEFAULT '';
 			CREATE INDEX IF NOT EXISTS idx_audit_logs_entry_hash ON audit_logs(entry_hash);
 		END IF;
+
+		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.tables
+			WHERE table_name = 'admin_password_history'
+		) THEN
+			CREATE TABLE admin_password_history (
+				id BIGSERIAL PRIMARY KEY,
+				admin_username VARCHAR(64) DEFAULT '',
+				user_id BIGINT DEFAULT NULL,
+				password_hash TEXT NOT NULL,
+				created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+			);
+		END IF;
+
+		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'admin_password_history' AND column_name = 'user_id'
+		) THEN
+			ALTER TABLE admin_password_history ADD COLUMN user_id BIGINT DEFAULT NULL;
+		END IF;
+
+		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'admin_password_history' AND column_name = 'admin_username'
+		) THEN
+			ALTER TABLE admin_password_history ADD COLUMN admin_username VARCHAR(64) DEFAULT '';
+		END IF;
+
+		ALTER TABLE admin_password_history ALTER COLUMN admin_username DROP NOT NULL;
+
+		UPDATE admin_password_history h
+		SET user_id = u.id
+		FROM admin_users u
+		WHERE h.admin_username = u.username AND h.user_id IS NULL;
+
+		UPDATE admin_password_history h
+		SET admin_username = u.username
+		FROM admin_users u
+		WHERE h.user_id = u.id AND (h.admin_username IS NULL OR h.admin_username = '');
 	END $$;
 
 	CREATE TABLE IF NOT EXISTS admin_password_history (
 		id BIGSERIAL PRIMARY KEY,
-		admin_username VARCHAR(64) NOT NULL REFERENCES admin_users(username) ON DELETE CASCADE,
+		admin_username VARCHAR(64) DEFAULT '',
+		user_id BIGINT DEFAULT NULL,
 		password_hash TEXT NOT NULL,
 		created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 	);
 	CREATE INDEX IF NOT EXISTS idx_pwd_hist_user_created ON admin_password_history(admin_username, created_at DESC);
+	CREATE INDEX IF NOT EXISTS idx_pwd_hist_user_id ON admin_password_history(user_id, created_at DESC);
 
 	CREATE TABLE IF NOT EXISTS report_forwardings (
 		id BIGSERIAL PRIMARY KEY,

@@ -1,16 +1,16 @@
-# Graph Report - Setad_Khabari_HMD  (2026-09-26)
+# Graph Report - Setad_Khabari_HMD  (2026-09-27)
 
 ## Corpus Check
-- 192 files · ~275,492 words
+- 192 files · ~276,369 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1510 nodes · 2377 edges · 120 communities (83 shown, 37 thin omitted)
+- 1511 nodes · 2378 edges · 115 communities (80 shown, 35 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 268 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `47fbe888`
+- Built from commit: `419777bd`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -41,8 +41,8 @@
 - Critical (ships as slop)
 - Typography
 - seed_50_reports.go
-- ipInCIDRs
-- admin_handlers.go
+- SyslogShipper
+- openForwardModal
 - Microinteraction tells
 - Archetype index — load ONLY the picks you need
 - Theme — Cobalt
@@ -71,40 +71,40 @@
 - viewReport
 - public/tatweel.js
 - no_comments.md
-- SubmitReportHandler
+- f2-sticky-scroll-stack.md
 - NewClamAVScanner
-- net/http.Request
-- populateAnalyticsDOM
+- admin_handlers.go
+- switchMainTab
 - metadata.go
 - escapeHTML
 - captcha.go
 - applyFilters
 - c1-outlined-chip.md
 - c4-sticky-bottom-bar.md
-- getTestDB
+- ft3-index-style-category-list.md
 - crypto.go
 - TestCookieSecureCachedResolution
 - ft4-dense-typographic.md
 - herasat.local/backend
-- h3-quote-led.md
-- LoginHandler
+- h2-split-diptych.md
+- h6-photographic-fold.md
 - workflows/hallmark.md
-- h7-demo-video-clipped-by-viewport-edge.md
+- h8-mockup-split-browser-framed.md
 - h9-custom-illustration-centerpiece.md
-- n1b-saas-three-section.md
-- security.go
+- n1-wordmark-2-links.md
+- NewIPRateLimiter
 - ft5-statement.md
-- n3-side-rail.md
+- n2-floating-chip.md
 - rules/graphify.md
 - workflows/graphify.md
-- n5-floating-pill.md
-- database/sql.DB
+- n4-hidden-behind-k.md
+- n6-newspaper-masthead.md
 - generate_docx.py
 - rules/caveman.md
 - workflows/caveman.md
 - ContainsVulgarLanguage
-- ft6-letter-close.md
-- n7-brutal-slab.md
+- t3-single-huge-quote.md
+- t4-numbered-stat-strip.md
 - be-ui-file-upload.tsx
 - sign-in-card-2.tsx
 - Project Guidelines (HMD IT Herasat Portal)
@@ -115,19 +115,14 @@
 - tooltip.tsx
 - button-1.tsx
 - accordion-2.tsx
-- f4-step-sequence.md
 - button.tsx
-- h5-letter-hero.md
 - initAppTooltips
 - morph-loading.tsx
 - testing.T
-- n9-edge-aligned-minimal.md
-- s1-left-margin-numbered.md
 - README.md
 - f3-tabular-spec-sheet.md
 - s5-bottom-anchored.md
-- t2-logo-wall-hairline.md
-- SessionManager
+- security.go
 - main
 - admin/confirm.js
 - frontend/confirm.js
@@ -146,21 +141,21 @@
 10. `DecryptAES()` - 17 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `VerifyCaptcha()` --calls--> `GetLegacyHMACKey()`  [INFERRED]
+  captcha.go → crypto.go
 - `SubmitReportHandler()` --calls--> `ScanPDFForActiveContent()`  [INFERRED]
   public_handlers.go → metadata.go
-- `TestInputSanitizationAndLimits()` --calls--> `truncateRunes()`  [INFERRED]
-  test/input_limits_test.go → security.go
-- `LoginHandler()` --calls--> `VerifyCaptcha()`  [INFERRED]
-  admin_auth.go → captcha.go
 - `LoginHandler()` --calls--> `GenerateMFAPendingToken()`  [INFERRED]
   admin_auth.go → mfa.go
-- `LoginHandler()` --calls--> `isCookieSecure()`  [INFERRED]
-  admin_auth.go → security.go
+- `AdminIPWhitelistMiddleware()` --calls--> `parseTrustedProxies()`  [INFERRED]
+  middleware.go → admin_auth.go
+- `AdminIPWhitelistMiddleware()` --calls--> `ipInCIDRs()`  [INFERRED]
+  middleware.go → admin_auth.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (120 total, 37 thin omitted)
+## Communities (115 total, 35 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.07
@@ -168,7 +163,7 @@ Nodes (29): 1. Navigation & Pill Tab Bar, 2. Multi-Step Form Tracker, 3. Glass C
 
 ### Community 1 - "component-cookbook.md"
 Cohesion: 0.03
-Nodes (31): C2 · Inline form-as-CTA, C3 · Typographic link, F1 · Bento grid, F2 · Sticky-scroll stack, F5 · Annotated screenshot, F6 · Product card grid, Ft1 · Mast-headed, Ft2 · Inline-rule single line (+23 more)
+Nodes (31): C2 · Inline form-as-CTA, C3 · Typographic link, F1 · Bento grid, F4 · Step sequence, F5 · Annotated screenshot, F6 · Product card grid, Ft1 · Mast-headed, Ft2 · Inline-rule single line (+23 more)
 
 ### Community 2 - "Running Tests"
 Cohesion: 0.40
@@ -179,8 +174,8 @@ Cohesion: 0.05
 Nodes (44): Abstract backgrounds, App mockups / device frames, Assets — sourcing canon for icons, logos, illustrations, photography, video, Avoid, Avoid, Avoid, Avoid, Avoid (+36 more)
 
 ### Community 4 - "adminFetch"
-Cohesion: 0.16
-Nodes (23): adminFetch(), deleteUser(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), handleAdminLogout() (+15 more)
+Cohesion: 0.20
+Nodes (18): adminFetch(), deleteUser(), exportReportsToCSV(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), handleAdminLogout(), liftUserLockout() (+10 more)
 
 ### Community 5 - "macrostructures.md"
 Cohesion: 0.05
@@ -206,6 +201,10 @@ Nodes (29): § A · The one follow-up question, B.1 · Anchor accent first, B.2 
 Cohesion: 0.07
 Nodes (28): 0. Pre-flight scan, 1. Design-context gate, 2.5. Check project memory, 2.6. Theme route — studied-DNA, catalog, or custom, 2. Pick a macrostructure FIRST, 3. Load the visual ruleset, 4. Decide on hero enrichment, 5. Preview (+20 more)
 
+### Community 11 - "SKILL.md"
+Cohesion: 0.23
+Nodes (3): H7 · Demo Video — Clipped-by-viewport-edge, Preview-block worked examples, `hallmark audit`
+
 ### Community 12 - "Recipes"
 Cohesion: 0.07
 Nodes (27): Accessibility ground truth, Button press, Command palette navigation, Copy-to-clipboard, Drag handle, Dropdown / menu, Form validation, Hard rules for default-on motion (+19 more)
@@ -215,8 +214,8 @@ Cohesion: 0.08
 Nodes (26): After the file is written, Emitting a `design.md` from `study`, Image-mode template, Junk-or-blocked detection, Limits and disclaimers, Refusal — when not to study, Remote URL safety, Source mode — image or URL (+18 more)
 
 ### Community 14 - "admin.js"
-Cohesion: 0.08
-Nodes (26): cancelMFAStep(), checkAdminProfile(), checkMustChangePasswordPolicy(), connectAdminSSE(), fetchForwardingRecipients(), getJalaliMonth(), handleTimerTick(), indexReportForSearch() (+18 more)
+Cohesion: 0.09
+Nodes (19): calculatePagination(), cancelMFAStep(), checkAdminProfile(), checkMustChangePasswordPolicy(), closeDetailView(), connectAdminSSE(), handleTimerTick(), loadAdminCaptcha() (+11 more)
 
 ### Community 15 - "Hero enrichment — when, what, and how much"
 Cohesion: 0.09
@@ -262,13 +261,13 @@ Nodes (17): Banned defaults, Bans, Body text rules, Free body faces, Free displa
 Cohesion: 0.70
 Nodes (4): deriveKey(), encryptWithKey(), genTrackingCode(), main()
 
-### Community 26 - "ipInCIDRs"
-Cohesion: 0.50
-Nodes (4): ipInCIDRs(), parseTrustedProxies(), net.IP, net.IPNet
+### Community 26 - "SyslogShipper"
+Cohesion: 0.24
+Nodes (9): net.Conn, sync.WaitGroup, SyslogMessage, SyslogSeverity, SyslogShipper, InitSyslogShipper(), MapActionToSyslogSeverity(), sanitizeSyslogParam() (+1 more)
 
-### Community 27 - "admin_handlers.go"
-Cohesion: 0.11
-Nodes (26): ExportReportDocxHandler(), formatJalaliTime(), getRestrictedSubprocessEnv(), gregorianToJalali(), AdminNotificationItem, AdminNotificationsResponse, AdminUserItem, AnalyticsResponse (+18 more)
+### Community 27 - "openForwardModal"
+Cohesion: 0.29
+Nodes (8): fetchForwardingRecipients(), openForwardModal(), openResetPwdModal(), openShortcutsModal(), promoteTemporarily(), renderRecipientList(), renderRecipientListSkeleton(), updateSelectedRecipientsCounter()
 
 ### Community 28 - "Microinteraction tells"
 Cohesion: 0.14
@@ -335,7 +334,7 @@ Cohesion: 0.22
 Nodes (9): Bans, Durations, Easings, Motion, Page-load orchestration, Principles, Reduced motion, Scroll-linked motion (+1 more)
 
 ### Community 44 - "design.md — opt-in portable design system"
-Cohesion: 0.25
+Cohesion: 0.20
 Nodes (8): After the file is written, CTA — surface the offer in the Step 5 preview, design.md — opt-in portable design system, Format (the tight version), Scope, Triggers (phrase-only — no new verb), Two emission paths (default vs study), Why opt-in (not auto-emit)
 
 ### Community 45 - "Export formats"
@@ -368,67 +367,51 @@ Nodes (14): GetHMACKey(), GenerateBase32Secret(), GenerateMFAPendingToken(), Gen
 
 ### Community 53 - "viewReport"
 Cohesion: 0.22
-Nodes (18): closeDetailView(), deleteReportPermanently(), fetchNotifications(), fetchReports(), formatJalaliDateTime(), makeTextareaAutoExpand(), renderNotificationsList(), renderReportsTableSkeleton() (+10 more)
+Nodes (18): deleteReportPermanently(), fetchNotifications(), fetchReports(), formatJalaliDateTime(), makeTextareaAutoExpand(), openForwardHistoryModal(), renderForwardHistoryFlowchart(), renderForwardHistorySkeleton() (+10 more)
 
 ### Community 54 - "public/tatweel.js"
 Cohesion: 0.38
 Nodes (9): applyWrapperToNode(), canConnect(), enhanceElement(), enhanceText(), enhanceWord(), getViewportIntensity(), init(), recheckOverflow() (+1 more)
 
-### Community 56 - "SubmitReportHandler"
-Cohesion: 0.24
-Nodes (13): RespondToReportHandler(), UpdateInternalNotesHandler(), generateTrackingCode(), inspectZipArchive(), SubmitFollowUpHandler(), SubmitReportHandler(), TrackReportHandler(), isValidTrackingCode() (+5 more)
-
 ### Community 57 - "NewClamAVScanner"
 Cohesion: 0.24
 Nodes (8): NewClamAVScanner(), io.Reader, ClamAVScanner, startMockClamAVServer(), TestClamAVCleanFile(), TestClamAVDisabledBypassesNetwork(), TestClamAVFailClosedWhenUnreachable(), TestClamAVMalwareFound()
 
-### Community 58 - "net/http.Request"
-Cohesion: 0.12
-Nodes (46): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getIP(), getLatestAuditHash(), getLatestAuditHashTx(), logAudit(), logAuditTx() (+38 more)
+### Community 58 - "admin_handlers.go"
+Cohesion: 0.05
+Nodes (104): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getIP(), getLatestAuditHash(), getLatestAuditHashTx(), ipInCIDRs(), logAudit() (+96 more)
 
-### Community 59 - "populateAnalyticsDOM"
-Cohesion: 0.15
-Nodes (7): populateAnalyticsDOM(), renderAnalyticsDashboard(), renderCategoryPieChart(), renderClassificationPieChart(), renderClientSideAnalytics(), renderMonthlyChart(), renderPrioritiesSegmentedBar()
+### Community 59 - "switchMainTab"
+Cohesion: 0.14
+Nodes (8): populateAnalyticsDOM(), renderAnalyticsDashboard(), renderCategoryPieChart(), renderClassificationPieChart(), renderClientSideAnalytics(), renderMonthlyChart(), renderPrioritiesSegmentedBar(), switchMainTab()
 
 ### Community 60 - "metadata.go"
-Cohesion: 0.23
-Nodes (11): SanitizeAttachment(), SanitizeJPEG(), SanitizePNG(), ScanPDFForActiveContent(), ValidateBinaryMagicBytes(), validateMagicBytes(), createTestJPEGWithEXIF(), createTestPNG() (+3 more)
+Cohesion: 0.26
+Nodes (10): SanitizeAttachment(), SanitizeJPEG(), SanitizePNG(), ScanPDFForActiveContent(), ValidateBinaryMagicBytes(), createTestJPEGWithEXIF(), createTestPNG(), TestMetadataSanitizationJPEG() (+2 more)
 
 ### Community 61 - "escapeHTML"
-Cohesion: 0.31
-Nodes (9): applyAuditFiltersAndPagination(), escapeHTML(), fetchAuditLogs(), openForwardHistoryModal(), populateAuditUsersDropdown(), renderAuditTable(), renderAuditTableSkeleton(), renderForwardHistoryFlowchart() (+1 more)
+Cohesion: 0.25
+Nodes (11): applyAuditFiltersAndPagination(), escapeHTML(), fetchActiveSessions(), fetchAuditLogs(), parseUserAgent(), populateAuditUsersDropdown(), renderAuditTable(), renderAuditTableSkeleton() (+3 more)
 
 ### Community 62 - "captcha.go"
-Cohesion: 0.21
-Nodes (14): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), VerifyCaptcha(), GetLegacyHMACKey() (+6 more)
+Cohesion: 0.24
+Nodes (12): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), CaptchaPayload, CaptchaResponse (+4 more)
 
 ### Community 63 - "applyFilters"
-Cohesion: 0.25
-Nodes (9): applyFilters(), calculatePagination(), getMatchSnippet(), getScrollBehavior(), handleKPICardFilter(), highlightSearchTerm(), makePersianRegex(), renderCurrentPage() (+1 more)
-
-### Community 66 - "getTestDB"
-Cohesion: 0.19
-Nodes (10): NewAccountLockoutManager(), NewSessionManager(), TestAuditFailClosed(), TestAccountLockoutConcurrentFailures(), TestSecurityStoresInitOrder(), getTestDB(), TestSessionManagementAndRateLimiter(), TestSessionPersistenceAcrossReinstantiation() (+2 more)
+Cohesion: 0.22
+Nodes (10): applyFilters(), getJalaliMonth(), getMatchSnippet(), getScrollBehavior(), handleKPICardFilter(), highlightSearchTerm(), indexReportForSearch(), makePersianRegex() (+2 more)
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.17
-Nodes (20): GetReportsHandler(), DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES() (+12 more)
+Cohesion: 0.19
+Nodes (19): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES(), EncryptFileBytes() (+11 more)
 
 ### Community 68 - "TestCookieSecureCachedResolution"
 Cohesion: 0.50
 Nodes (3): InitCookieSecurity(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag()
 
-### Community 72 - "LoginHandler"
-Cohesion: 0.27
-Nodes (11): LoginHandler(), ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), VerifyPassword(), VerifyPasswordWithRehash() (+3 more)
-
-### Community 77 - "security.go"
-Cohesion: 0.15
-Nodes (14): sync.Mutex, time.Ticker, time.Time, NewIPRateLimiter(), RateLimitMiddleware(), truncateRunes(), AdminSession, cachedAccountFailure (+6 more)
-
-### Community 83 - "database/sql.DB"
-Cohesion: 0.29
-Nodes (4): NewUsedCaptchaStore(), database/sql.DB, UsedCaptchaStore, TestCaptchaPersistenceTryRedeem()
+### Community 77 - "NewIPRateLimiter"
+Cohesion: 0.40
+Nodes (4): NewIPRateLimiter(), TestCaptchaReplayPrevention(), TestInspectZipArchive(), TestIPRateLimiterBoundedCapacity()
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -460,15 +443,15 @@ Nodes (7): initAppTooltips(), convertTitles(), getOrCreateTooltip(), hide(), isM
 
 ### Community 108 - "testing.T"
 Cohesion: 0.13
-Nodes (20): testing.T, TestClassificationValidationAndMath(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization(), TestForwardingRequestValidation(), TestNavahiManateghClassificationForbidden(), TestNavahiManateghNotificationScoping() (+12 more)
+Nodes (19): testing.T, TestClassificationValidationAndMath(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization(), TestForwardingRequestValidation(), TestNavahiManateghClassificationForbidden(), TestNavahiManateghNotificationScoping() (+11 more)
 
-### Community 115 - "SessionManager"
-Cohesion: 0.20
-Nodes (6): sync.Once, time.Duration, hashToken(), AccountLockoutManager, ActiveSessionItem, SessionManager
+### Community 115 - "security.go"
+Cohesion: 0.07
+Nodes (30): NewUsedCaptchaStore(), database/sql.DB, sync.Mutex, sync.Once, time.Duration, time.Ticker, time.Time, hashToken() (+22 more)
 
 ### Community 116 - "main"
-Cohesion: 0.09
-Nodes (25): AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed(), enforceImmutableAuditLogs(), InitDB(), runMigrations(), net.Conn (+17 more)
+Cohesion: 0.13
+Nodes (17): AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed(), enforceImmutableAuditLogs(), InitDB(), runMigrations(), net/http.HandlerFunc (+9 more)
 
 ### Community 118 - "admin/confirm.js"
 Cohesion: 0.60
@@ -485,7 +468,7 @@ Nodes (4): getOrCreateDialog(), promoteTemporarily(), showConfirmDialog(), trapF
 ## Knowledge Gaps
 - **679 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+674 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **37 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **35 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

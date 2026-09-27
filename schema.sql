@@ -61,12 +61,14 @@ CREATE TABLE IF NOT EXISTS admin_users (
 
 CREATE TABLE IF NOT EXISTS admin_password_history (
     id BIGSERIAL PRIMARY KEY,
-    admin_username VARCHAR(64) NOT NULL REFERENCES admin_users(username) ON DELETE CASCADE,
+    admin_username VARCHAR(64) DEFAULT '',
+    user_id BIGINT DEFAULT NULL,
     password_hash TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS idx_pwd_hist_user_created ON admin_password_history(admin_username, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_pwd_hist_user_id ON admin_password_history(user_id, created_at DESC);
 
 CREATE TABLE IF NOT EXISTS report_forwardings (
     id BIGSERIAL PRIMARY KEY,

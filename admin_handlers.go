@@ -1381,7 +1381,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, _ = DB.Exec("INSERT INTO admin_password_history (user_id, password_hash, created_at) VALUES ($1, $2, NOW())", newID, passHash)
+	_, _ = DB.Exec("INSERT INTO admin_password_history (admin_username, user_id, password_hash, created_at) VALUES ($1, $2, $3, NOW())", req.Username, newID, passHash)
 
 	logAudit(admin.Username, admin.Title, "CREATE_ADMIN_USER:"+req.Username, nil, getIP(r))
 
@@ -1611,7 +1611,7 @@ func ResetUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = tx.Exec("INSERT INTO admin_password_history (user_id, password_hash, created_at) VALUES ($1, $2, NOW())", req.UserID, passHash)
+	_, err = tx.Exec("INSERT INTO admin_password_history (admin_username, user_id, password_hash, created_at) VALUES ($1, $2, $3, NOW())", targetUsername, req.UserID, passHash)
 	if err != nil {
 		http.Error(w, "Database error", http.StatusInternalServerError)
 		return
@@ -1948,7 +1948,7 @@ func ChangeMyPasswordHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rows, err := DB.Query("SELECT password_hash FROM admin_password_history WHERE user_id = $1 ORDER BY created_at DESC LIMIT 5", userID)
+	rows, err := DB.Query("SELECT password_hash FROM admin_password_history WHERE admin_username = $1 OR user_id = $2 ORDER BY created_at DESC LIMIT 5", admin.Username, userID)
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
@@ -1981,7 +1981,7 @@ func ChangeMyPasswordHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = tx.Exec("INSERT INTO admin_password_history (user_id, password_hash, created_at) VALUES ($1, $2, NOW())", userID, newHash)
+	_, err = tx.Exec("INSERT INTO admin_password_history (admin_username, user_id, password_hash, created_at) VALUES ($1, $2, $3, NOW())", admin.Username, userID, newHash)
 	if err != nil {
 		http.Error(w, "خطای دیتابیس در ثبت تاریخچه رمز عبور", http.StatusInternalServerError)
 		return
