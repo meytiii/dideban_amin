@@ -1604,8 +1604,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnBackToHome = document.getElementById('btnBackToHome');
 
     function switchView(viewName) {
+        const headerSubtitleRow = document.getElementById('headerSubtitleRow');
+        const topNavAnchor = document.getElementById('topNavAnchor');
         if (viewName === 'home') {
             topNavBar?.classList.add('d-none');
+            topNavAnchor?.classList.add('d-none');
+            topNavBar?.classList.remove('is-sticky-top');
+            topNavAnchor?.classList.remove('has-sticky');
+            headerSubtitleRow?.classList.add('is-home-view');
             landingSection?.classList.remove('d-none');
             submitSection?.classList.add('d-none');
             trackingSection?.classList.add('d-none');
@@ -1617,6 +1623,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else if (viewName === 'submit') {
             landingSection?.classList.add('d-none');
+            headerSubtitleRow?.classList.remove('is-home-view');
+            topNavAnchor?.classList.remove('d-none');
             topNavBar?.classList.remove('d-none');
             tabSubmit?.classList.add('active');
             tabTrack?.classList.remove('active');
@@ -1627,14 +1635,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isSuccessVisible) {
                 loadCaptcha('submit-captcha-img', 'submit_captcha_id', 'submit_captcha_answer');
             }
+            if (typeof updateTopNavStickyBar === 'function') {
+                updateTopNavStickyBar();
+            }
         } else if (viewName === 'track') {
             landingSection?.classList.add('d-none');
+            headerSubtitleRow?.classList.remove('is-home-view');
+            topNavAnchor?.classList.remove('d-none');
             topNavBar?.classList.remove('d-none');
             tabTrack?.classList.add('active');
             tabSubmit?.classList.remove('active');
             submitSection?.classList.add('d-none');
             trackingSection?.classList.remove('d-none');
             loadCaptcha('track-captcha-img', 'track_captcha_id', 'track_captcha_answer');
+            if (typeof updateTopNavStickyBar === 'function') {
+                updateTopNavStickyBar();
+            }
         }
         if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
     }
@@ -1707,6 +1723,62 @@ document.addEventListener('DOMContentLoaded', () => {
     const scopeCardHerasat = document.getElementById('scopeCardHerasat');
     const scopeCardExternal = document.getElementById('scopeCardExternal');
 
+    function syncNavActionsPosition() {
+        const btnHome = document.getElementById('btnBackToHome');
+        const btnFaq = document.getElementById('openDrawerBtn');
+        const headerHomeSlot = document.getElementById('headerHomeSlot');
+        const headerFaqSlot = document.getElementById('headerFaqSlot');
+        const topNavActions = document.getElementById('topNavActions');
+
+        if (!btnHome || !btnFaq || !headerHomeSlot || !headerFaqSlot || !topNavActions) return;
+
+        if (window.innerWidth <= 860) {
+            if (headerHomeSlot.firstElementChild !== btnHome) {
+                headerHomeSlot.appendChild(btnHome);
+            }
+            if (headerFaqSlot.firstElementChild !== btnFaq) {
+                headerFaqSlot.appendChild(btnFaq);
+            }
+        } else {
+            if (!topNavActions.contains(btnHome)) {
+                topNavActions.appendChild(btnHome);
+            }
+            if (!topNavActions.contains(btnFaq)) {
+                topNavActions.appendChild(btnFaq);
+            }
+        }
+    }
+
+    function updateTopNavStickyBar() {
+        const anchor = document.getElementById('topNavAnchor');
+        const bar = document.getElementById('topNavBar');
+        const landing = document.getElementById('landingSection');
+        if (!anchor || !bar) return;
+        if (landing && !landing.classList.contains('d-none')) {
+            bar.classList.remove('is-sticky-top');
+            anchor.classList.remove('has-sticky');
+            return;
+        }
+        if (window.innerWidth > 860) {
+            bar.classList.remove('is-sticky-top');
+            anchor.classList.remove('has-sticky');
+            return;
+        }
+
+        const anchorRect = anchor.getBoundingClientRect();
+        if (anchorRect.top <= 0) {
+            if (!bar.classList.contains('is-sticky-top')) {
+                bar.classList.add('is-sticky-top');
+                anchor.classList.add('has-sticky');
+            }
+        } else {
+            if (bar.classList.contains('is-sticky-top')) {
+                bar.classList.remove('is-sticky-top');
+                anchor.classList.remove('has-sticky');
+            }
+        }
+    }
+
     function updateLandingStickyBar() {
         const anchor = document.getElementById('landingCtaAnchor');
         const bar = document.getElementById('landingStickyBar');
@@ -1733,16 +1805,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let stickyRafId = null;
-    function onLandingScroll() {
+    function onUnifiedScroll() {
         if (stickyRafId) return;
         stickyRafId = requestAnimationFrame(() => {
             stickyRafId = null;
-            updateLandingStickyBar();
+            if (typeof updateLandingStickyBar === 'function') {
+                updateLandingStickyBar();
+            }
+            if (typeof updateTopNavStickyBar === 'function') {
+                updateTopNavStickyBar();
+            }
         });
     }
 
-    window.addEventListener('scroll', onLandingScroll, { passive: true });
-    window.addEventListener('resize', onLandingScroll, { passive: true });
+    window.addEventListener('scroll', onUnifiedScroll, { passive: true });
+    window.addEventListener('resize', () => {
+        syncNavActionsPosition();
+        onUnifiedScroll();
+    }, { passive: true });
 
     if (tabScopeHerasat && tabScopeExternal && scopeCardHerasat && scopeCardExternal) {
         tabScopeHerasat.addEventListener('click', () => {
@@ -1768,6 +1848,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    syncNavActionsPosition();
     if (window.location.hash === '#trackingSection' || window.location.hash === '#track') {
         switchView('track');
     } else if (window.location.hash === '#submit' || window.location.hash === '#submitSection') {
@@ -1776,6 +1857,7 @@ document.addEventListener('DOMContentLoaded', () => {
         switchView('home');
     }
     updateLandingStickyBar();
+    updateTopNavStickyBar();
 
     const openDrawerBtn = document.getElementById('openDrawerBtn');
     const closeDrawerBtn = document.getElementById('closeDrawerBtn');

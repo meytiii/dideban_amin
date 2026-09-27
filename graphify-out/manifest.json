@@ -36,9 +36,9 @@
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
-    "mtime": 1790498136.9361322,
-    "seen": 1790498155.763083,
-    "ast_hash": "42ff5730c126636c9a272fd9dc562903",
+    "mtime": 1790499953.6887236,
+    "seen": 1790500091.208309,
+    "ast_hash": "cfc33664f7414aab3810a3cc1f2fae72",
     "semantic_hash": ""
   },
   "go.mod": {
@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1790499030.5729291,
-    "seen": 1790499146.670427,
-    "ast_hash": "c7a2c0fdf4aea9874704ffc0eac7ad6c",
+    "mtime": 1790499939.927115,
+    "seen": 1790500091.2194304,
+    "ast_hash": "0fa4c675f7ea679fddf30b835996813e",
     "semantic_hash": ""
   },
   "frontend/admin/bg.jpg": {
@@ -1257,6 +1257,30 @@
     "mtime": 1790416031.8504243,
     "seen": 1790416314.6992369,
     "ast_hash": "0b3b70163bae807ff705647a6e0ce7c0",
+    "semantic_hash": ""
+  },
+  "scripts/generate_afta_report.py": {
+    "mtime": 1790501828.7070975,
+    "seen": 1790501892.084797,
+    "ast_hash": "76e4803ac01109045b406077805c6653",
+    "semantic_hash": ""
+  },
+  "docs/AFTA_Security_Audit_Report.html": {
+    "mtime": 1790501836.5564795,
+    "seen": 1790501892.0948672,
+    "ast_hash": "4959c6427a865debbfd597d1bc51589f",
+    "semantic_hash": ""
+  },
+  "docs/AFTA_Security_Audit_Report.md": {
+    "mtime": 1790501875.8747008,
+    "seen": 1790501892.0948684,
+    "ast_hash": "93f114ab64c380a3d222d5b2269f0780",
+    "semantic_hash": ""
+  },
+  "docs/AFTA_Security_Audit_Report.pdf": {
+    "mtime": 1790501838.7179956,
+    "seen": 1790501892.095314,
+    "ast_hash": "e683a7ab47dad7a1ca3dee0ae7afef26",
     "semantic_hash": ""
   }
 }
