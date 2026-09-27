@@ -5280,6 +5280,10 @@ button:disabled {
     transform: translateY(0);
 }
 
+.landing-cta-anchor {
+    display: none;
+}
+
 .landing-sticky-bar {
     display: none;
 }
@@ -5328,36 +5332,43 @@ button:disabled {
     }
 
     .landing-cta-actions {
-        flex-direction: column;
-        width: 100%;
+        display: none !important;
     }
 
-    .btn-landing-primary,
-    .btn-landing-secondary {
+    .landing-cta-anchor {
+        display: block;
+        min-height: 48px;
         width: 100%;
-    }
-}
-
-@media (max-width: 768px) {
-    .landing-section {
-        padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
-        margin-bottom: 0;
+        position: relative;
+        margin-top: 14px;
     }
 
     .landing-sticky-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .landing-sticky-bar.is-sticky {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
         z-index: 990;
-        display: flex;
-        align-items: center;
-        gap: 8px;
         padding: 8px 12px;
         padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
         background: #0f172a;
         border-top: 1px solid rgba(56, 189, 248, 0.25);
         box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.5);
+    }
+
+    .landing-sticky-bar:not(.is-sticky) {
+        position: static;
+        padding: 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
     }
 
     .btn-sticky-primary {

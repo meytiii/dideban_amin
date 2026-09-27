@@ -1612,6 +1612,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.location.hash) {
                 history.replaceState(null, '', window.location.pathname + window.location.search);
             }
+            if (typeof updateLandingStickyBar === 'function') {
+                updateLandingStickyBar();
+            }
         } else if (viewName === 'submit') {
             landingSection?.classList.add('d-none');
             topNavBar?.classList.remove('d-none');
@@ -1704,6 +1707,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const scopeCardHerasat = document.getElementById('scopeCardHerasat');
     const scopeCardExternal = document.getElementById('scopeCardExternal');
 
+    function updateLandingStickyBar() {
+        const anchor = document.getElementById('landingCtaAnchor');
+        const bar = document.getElementById('landingStickyBar');
+        const landing = document.getElementById('landingSection');
+        if (!anchor || !bar || !landing || landing.classList.contains('d-none')) return;
+        if (window.innerWidth > 860) {
+            bar.classList.remove('is-sticky');
+            return;
+        }
+
+        const anchorRect = anchor.getBoundingClientRect();
+        const barHeight = bar.offsetHeight || 52;
+        const threshold = window.innerHeight - barHeight + 2;
+
+        if (anchorRect.top > threshold) {
+            if (!bar.classList.contains('is-sticky')) {
+                bar.classList.add('is-sticky');
+            }
+        } else {
+            if (bar.classList.contains('is-sticky')) {
+                bar.classList.remove('is-sticky');
+            }
+        }
+    }
+
+    let stickyRafId = null;
+    function onLandingScroll() {
+        if (stickyRafId) return;
+        stickyRafId = requestAnimationFrame(() => {
+            stickyRafId = null;
+            updateLandingStickyBar();
+        });
+    }
+
+    window.addEventListener('scroll', onLandingScroll, { passive: true });
+    window.addEventListener('resize', onLandingScroll, { passive: true });
+
     if (tabScopeHerasat && tabScopeExternal && scopeCardHerasat && scopeCardExternal) {
         tabScopeHerasat.addEventListener('click', () => {
             tabScopeHerasat.classList.add('active');
@@ -1713,6 +1753,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             scopeCardHerasat.classList.add('active');
             scopeCardExternal.classList.remove('active');
+            updateLandingStickyBar();
         });
 
         tabScopeExternal.addEventListener('click', () => {
@@ -1723,6 +1764,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             scopeCardExternal.classList.add('active');
             scopeCardHerasat.classList.remove('active');
+            updateLandingStickyBar();
         });
     }
 
@@ -1733,6 +1775,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         switchView('home');
     }
+    updateLandingStickyBar();
 
     const openDrawerBtn = document.getElementById('openDrawerBtn');
     const closeDrawerBtn = document.getElementById('closeDrawerBtn');
