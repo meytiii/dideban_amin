@@ -1259,28 +1259,64 @@
     "ast_hash": "0b3b70163bae807ff705647a6e0ce7c0",
     "semantic_hash": ""
   },
-  "scripts/generate_afta_report.py": {
-    "mtime": 1790501828.7070975,
-    "seen": 1790501892.084797,
-    "ast_hash": "76e4803ac01109045b406077805c6653",
-    "semantic_hash": ""
-  },
-  "docs/AFTA_Security_Audit_Report.html": {
-    "mtime": 1790501836.5564795,
-    "seen": 1790501892.0948672,
-    "ast_hash": "4959c6427a865debbfd597d1bc51589f",
-    "semantic_hash": ""
-  },
-  "docs/AFTA_Security_Audit_Report.md": {
-    "mtime": 1790501875.8747008,
-    "seen": 1790501892.0948684,
-    "ast_hash": "93f114ab64c380a3d222d5b2269f0780",
-    "semantic_hash": ""
-  },
   "docs/AFTA_Security_Audit_Report.pdf": {
     "mtime": 1790501838.7179956,
     "seen": 1790501892.095314,
     "ast_hash": "e683a7ab47dad7a1ca3dee0ae7afef26",
+    "semantic_hash": ""
+  },
+  "scripts/build_presentation_pdf.py": {
+    "mtime": 1790577841.2107892,
+    "seen": 1790578192.1607802,
+    "ast_hash": "e81609be77839f5c746b8d9c97739611",
+    "semantic_hash": ""
+  },
+  "scripts/generate_report_content.py": {
+    "mtime": 1790580469.3906853,
+    "seen": 1790582061.186198,
+    "ast_hash": "38dd0252efa163f497d41cc94f4336d7",
+    "semantic_hash": ""
+  },
+  "scripts/report_chapters_part1.py": {
+    "mtime": 1790580469.3906853,
+    "seen": 1790582061.1862004,
+    "ast_hash": "ad7472a79effb577e3f8de9bfd29b682",
+    "semantic_hash": ""
+  },
+  "scripts/report_chapters_part2.py": {
+    "mtime": 1790580469.3906853,
+    "seen": 1790582061.1862018,
+    "ast_hash": "20efdf93a09bbee21c158e846ab80864",
+    "semantic_hash": ""
+  },
+  "scripts/report_diagrams.py": {
+    "mtime": 1790581050.5317912,
+    "seen": 1790582061.1862028,
+    "ast_hash": "ba7eadc8a9b4b925ca0fca8803975d93",
+    "semantic_hash": ""
+  },
+  "scripts/report_styles.py": {
+    "mtime": 1790581170.5356755,
+    "seen": 1790582061.186204,
+    "ast_hash": "4c6f15654e5eccf510871428da82d755",
+    "semantic_hash": ""
+  },
+  "docs/presentation_report.html": {
+    "mtime": 1790581181.4473145,
+    "seen": 1790582061.196014,
+    "ast_hash": "01f3a82bb4901cc79918ea1d5e10bfdd",
+    "semantic_hash": ""
+  },
+  "docs/Dideban_Amin_Technical_Architecture_and_Security_Report.pdf": {
+    "mtime": 1790581183.6306238,
+    "seen": 1790582061.1965256,
+    "ast_hash": "2eeaeae7f3ff72f8926b8099513f45a8",
+    "semantic_hash": ""
+  },
+  "docs/\u06af\u0632\u0627\u0631\u0634_\u062c\u0627\u0645\u0639_\u0645\u0639\u0645\u0627\u0631\u06cc_\u0641\u0646\u06cc_\u0648_\u0627\u0631\u0632\u06cc\u0627\u0628\u06cc_\u0627\u0645\u0646\u06cc\u062a\u06cc_\u0633\u0627\u0645\u0627\u0646\u0647_\u062f\u06cc\u062f\u0647_\u0628\u0627\u0646_\u0627\u0645\u06cc\u0646.pdf": {
+    "mtime": 1790581183.3714533,
+    "seen": 1790582061.1966574,
+    "ast_hash": "2eeaeae7f3ff72f8926b8099513f45a8",
     "semantic_hash": ""
   }
 }
