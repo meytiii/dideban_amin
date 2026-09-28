@@ -36,9 +36,9 @@
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
-    "mtime": 1790499953.6887236,
-    "seen": 1790500091.208309,
-    "ast_hash": "cfc33664f7414aab3810a3cc1f2fae72",
+    "mtime": 1790583940.580796,
+    "seen": 1790586895.8915203,
+    "ast_hash": "d1488aff0e2d198c05d1ff80bcfad8f2",
     "semantic_hash": ""
   },
   "go.mod": {
@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "main.go": {
-    "mtime": 1790140331.6956677,
-    "seen": 1790405583.7019627,
-    "ast_hash": "b8caa6286c895fb86be894e8c6e2738d",
+    "mtime": 1790583912.7700696,
+    "seen": 1790586895.8917737,
+    "ast_hash": "247c9329403a269e6919d20bd2dc8e8a",
     "semantic_hash": ""
   },
   "public_handlers.go": {
@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1790499939.927115,
-    "seen": 1790500091.2194304,
-    "ast_hash": "0fa4c675f7ea679fddf30b835996813e",
+    "mtime": 1790586966.737254,
+    "seen": 1790587427.8835542,
+    "ast_hash": "bb4564f91f5458c3b1b6cd31364cb41e",
     "semantic_hash": ""
   },
   "frontend/admin/bg.jpg": {
@@ -318,9 +318,9 @@
     "semantic_hash": ""
   },
   "middleware.go": {
-    "mtime": 1790065077.716277,
-    "seen": 1790405583.7019653,
-    "ast_hash": "9a7cc084507d1ee306a8e50fdeaf2cbb",
+    "mtime": 1790583899.8782444,
+    "seen": 1790586895.8918958,
+    "ast_hash": "0eb5bc74c319ecad2c33d006e0090d86",
     "semantic_hash": ""
   },
   "migration_v2.go": {
@@ -330,9 +330,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1789547313.8855877,
-    "seen": 1790405583.7021122,
-    "ast_hash": "7e1fdd195eaf55b591e81139ecc03aaa",
+    "mtime": 1790582150.4970808,
+    "seen": 1790586895.9028254,
+    "ast_hash": "db19877da9018473fe8710590d3529fe",
     "semantic_hash": ""
   },
   "test/audit_fail_test.go": {
@@ -1127,42 +1127,6 @@
     "ast_hash": "957a914167b57c2063cace5b11e9754c",
     "semantic_hash": ""
   },
-  "docs/query/build exe code.txt": {
-    "mtime": 1787725437.7503176,
-    "seen": 1790405583.7021158,
-    "ast_hash": "0aeafd690a77b57a7792e9035e4d8b27",
-    "semantic_hash": ""
-  },
-  "docs/query/db_time_query.txt": {
-    "mtime": 1787551577.5892594,
-    "seen": 1790405583.7021165,
-    "ast_hash": "33aa00dd8bbbca1d6e5ab9e8b1070a13",
-    "semantic_hash": ""
-  },
-  "docs/query/fresh DB for deploy query.txt": {
-    "mtime": 1789363377.5155337,
-    "seen": 1790405583.7021177,
-    "ast_hash": "0904a205ae04eaa74641a12d6d4206da",
-    "semantic_hash": ""
-  },
-  "docs/query/remove audit log from DB.txt": {
-    "mtime": 1789363407.612038,
-    "seen": 1790405583.7021186,
-    "ast_hash": "ffabc0dc443301b62246cc78c228f3fc",
-    "semantic_hash": ""
-  },
-  "docs/PostgreSQL_Migration_Guide.pdf": {
-    "mtime": 1789442310.0491683,
-    "seen": 1790405583.7021222,
-    "ast_hash": "c555ba86365e303e61d64939d3c43c8f",
-    "semantic_hash": ""
-  },
-  "docs/\u06af\u0632\u0627\u0631\u0634 \u0641\u0646\u06cc \u0648 \u0639\u0645\u0644\u06a9\u0631\u062f\u06cc \u0633\u0627\u0645\u0627\u0646\u0647 \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u062d\u0631\u0627\u0633\u062a.pdf": {
-    "mtime": 1788590922.4496238,
-    "seen": 1790405583.7021253,
-    "ast_hash": "085541ab4feaeb30337ecdeef8d911ee",
-    "semantic_hash": ""
-  },
   "scripts/seed_50_reports.go": {
     "mtime": 1790060588.7400913,
     "seen": 1790405583.70197,
@@ -1259,64 +1223,40 @@
     "ast_hash": "0b3b70163bae807ff705647a6e0ce7c0",
     "semantic_hash": ""
   },
-  "docs/AFTA_Security_Audit_Report.pdf": {
-    "mtime": 1790501838.7179956,
-    "seen": 1790501892.095314,
-    "ast_hash": "e683a7ab47dad7a1ca3dee0ae7afef26",
+  "frontend/public/bg.webp": {
+    "mtime": 1790583808.9877691,
+    "seen": 1790586895.9033322,
+    "ast_hash": "5b21c9c90b70ae3a9b127d84001d63fc",
     "semantic_hash": ""
   },
-  "scripts/build_presentation_pdf.py": {
-    "mtime": 1790577841.2107892,
-    "seen": 1790578192.1607802,
-    "ast_hash": "e81609be77839f5c746b8d9c97739611",
+  "frontend/public/logo.webp": {
+    "mtime": 1790583808.4688823,
+    "seen": 1790586895.9034576,
+    "ast_hash": "73d93f4c21b9155d685ebfe4cc19d2d2",
     "semantic_hash": ""
   },
-  "scripts/generate_report_content.py": {
-    "mtime": 1790580469.3906853,
-    "seen": 1790582061.186198,
-    "ast_hash": "38dd0252efa163f497d41cc94f4336d7",
+  "frontend/public/logo_it.webp": {
+    "mtime": 1790583808.6873407,
+    "seen": 1790586895.90352,
+    "ast_hash": "99820d0c621f01e77bf6b78b2ed51c25",
     "semantic_hash": ""
   },
-  "scripts/report_chapters_part1.py": {
-    "mtime": 1790580469.3906853,
-    "seen": 1790582061.1862004,
-    "ast_hash": "ad7472a79effb577e3f8de9bfd29b682",
+  "frontend/public/logo_it_opt.png": {
+    "mtime": 1790583808.6890125,
+    "seen": 1790586895.903521,
+    "ast_hash": "c66f46b56fa255fbd64c2eae594cd2f6",
     "semantic_hash": ""
   },
-  "scripts/report_chapters_part2.py": {
-    "mtime": 1790580469.3906853,
-    "seen": 1790582061.1862018,
-    "ast_hash": "20efdf93a09bbee21c158e846ab80864",
+  "frontend/public/logo_opt.png": {
+    "mtime": 1790583808.4814203,
+    "seen": 1790586895.9035223,
+    "ast_hash": "90bed6531443f165bf0f9f29a9acc2b9",
     "semantic_hash": ""
   },
-  "scripts/report_diagrams.py": {
-    "mtime": 1790581050.5317912,
-    "seen": 1790582061.1862028,
-    "ast_hash": "ba7eadc8a9b4b925ca0fca8803975d93",
-    "semantic_hash": ""
-  },
-  "scripts/report_styles.py": {
-    "mtime": 1790581170.5356755,
-    "seen": 1790582061.186204,
-    "ast_hash": "4c6f15654e5eccf510871428da82d755",
-    "semantic_hash": ""
-  },
-  "docs/presentation_report.html": {
-    "mtime": 1790581181.4473145,
-    "seen": 1790582061.196014,
-    "ast_hash": "01f3a82bb4901cc79918ea1d5e10bfdd",
-    "semantic_hash": ""
-  },
-  "docs/Dideban_Amin_Technical_Architecture_and_Security_Report.pdf": {
-    "mtime": 1790581183.6306238,
-    "seen": 1790582061.1965256,
-    "ast_hash": "2eeaeae7f3ff72f8926b8099513f45a8",
-    "semantic_hash": ""
-  },
-  "docs/\u06af\u0632\u0627\u0631\u0634_\u062c\u0627\u0645\u0639_\u0645\u0639\u0645\u0627\u0631\u06cc_\u0641\u0646\u06cc_\u0648_\u0627\u0631\u0632\u06cc\u0627\u0628\u06cc_\u0627\u0645\u0646\u06cc\u062a\u06cc_\u0633\u0627\u0645\u0627\u0646\u0647_\u062f\u06cc\u062f\u0647_\u0628\u0627\u0646_\u0627\u0645\u06cc\u0646.pdf": {
-    "mtime": 1790581183.3714533,
-    "seen": 1790582061.1966574,
-    "ast_hash": "2eeaeae7f3ff72f8926b8099513f45a8",
+  "frontend/public/preloader.js": {
+    "mtime": 1790586939.6417925,
+    "seen": 1790587427.8728087,
+    "ast_hash": "65ded39e733fe1b8a96d819e60078578",
     "semantic_hash": ""
   }
 }

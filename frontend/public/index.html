@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="سامانه دیده‌بان امین - ستاد خبری و دریافت گزارش‌های مردمی اداره حراست آموزش و پرورش استان همدان">
     <title>سامانه دیده‌بان امین - ستاد خبری حراست آموزش و پرورش استان همدان</title>
     <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
@@ -35,6 +36,7 @@
             </div>
         </div>
     </div>
+    <script src="preloader.js"></script>
 
     <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="false"></div>
 
@@ -51,8 +53,11 @@
     <div class="container">
         <header class="header">
             <div class="admin-logo-crest public-header-crest">
-                <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش" class="admin-crest-img" width="200" height="200"
-                    decoding="async">
+                <picture>
+                    <source srcset="logo.webp" type="image/webp">
+                    <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش" class="admin-crest-img" width="102" height="102"
+                        decoding="async">
+                </picture>
             </div>
             <h1 class="persian-heading persian-heading--tatweel" data-tatweel-level="hero">دیده‌بان امین</h1>
             <div class="header-subtitle-row is-home-view" id="headerSubtitleRow">
@@ -111,7 +116,7 @@
         </div>
     </div>
 
-        <section id="landingSection" class="landing-section">
+        <main id="landingSection" class="landing-section">
             <div class="landing-hero-card">
                 <div class="landing-intro-box">
                     <p class="landing-lead-text">
@@ -173,7 +178,7 @@
                             </div>
                             <div>
                                 <span class="scope-pill scope-pill--herasat">صلاحیت و رسیدگی حراست</span>
-                                <h3 class="scope-card-title">اخبار و گزارش‌های در حیطه کاری حراست</h3>
+                                <h2 class="scope-card-title">اخبار و گزارش‌های در حیطه کاری حراست</h2>
                             </div>
                         </div>
                         <p class="scope-card-intro">
@@ -255,7 +260,7 @@
                             </div>
                             <div>
                                 <span class="scope-pill scope-pill--external">ارجاع به ارزیابی عملکرد</span>
-                                <h3 class="scope-card-title">اخبار و مواردی که در حیطه کاری حراست نمی‌باشند</h3>
+                                <h2 class="scope-card-title">اخبار و مواردی که در حیطه کاری حراست نمی‌باشند</h2>
                             </div>
                         </div>
                         <a href="https://shekayat.medu.ir" target="_blank" rel="noopener noreferrer" class="external-redirect-banner" aria-label="ورود به سامانه ارزیابی عملکرد و پاسخگویی به شکایات">
@@ -396,9 +401,9 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </main>
 
-        <main id="submitSection" class="d-none">
+        <section id="submitSection" class="d-none">
             <form id="reportForm" enctype="multipart/form-data" novalidate>
 
                 <ol class="step-tracker" role="list" aria-label="مراحل ثبت گزارش">
@@ -799,7 +804,7 @@
             </div>
 
             <div id="responseMessage" class="response-box" role="status" style="display: none;"></div>
-        </main>
+        </section>
 
         <section id="trackingSection" class="d-none">
             <form id="trackForm" style="margin-bottom: 25px;" novalidate>
@@ -968,7 +973,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="nexus-chat-title">گفتگو و پاسخ‌های پرونده</h4>
+                                <h3 class="nexus-chat-title">گفتگو و پاسخ‌های پرونده</h3>
                             </div>
                         </div>
                         <div class="nexus-chat-header-actions">
@@ -979,7 +984,7 @@
                 </div>
 
                 <div id="track-followup-box" class="followup-reply-card">
-                    <h4>ارسال پیام یا توضیحات تکمیلی برای کارشناس حراست:</h4>
+                    <h3>ارسال پیام یا توضیحات تکمیلی برای کارشناس حراست:</h3>
                     <p class="followup-hint">اگر مدرک یا توضیح جدیدی درباره این گزارش دارید، در کادر زیر بنویسید. برای تسریع در رسیدگی، از ارسال پیام‌های تکراری خودداری کنید.</p>
                     <textarea id="followup-message-input" rows="3" placeholder="توضیحات تکمیلی خود را بنویسید..."
                         maxlength="4000"></textarea>
@@ -1049,8 +1054,11 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <div class="footer-brand">
-                        <img src="logo_it.png" alt="IT Protection Logo" class="footer-logo" loading="lazy"
-                            decoding="async" width="60" height="60">
+                        <picture>
+                            <source srcset="logo_it.webp" type="image/webp">
+                            <img src="logo_it.png" alt="IT Protection Logo" class="footer-logo" loading="lazy"
+                                decoding="async" width="44" height="44">
+                        </picture>
                         <div>
                             <strong>حفاظت فناوری اطلاعات اداره حراست</strong>
                             <p style="font-size: 12px; color: #94a3b8; margin-top: 2px;">اداره کل آموزش و پرورش استان
@@ -1095,10 +1103,10 @@
                         راه‌های ارتباطی
                     </span>
                     <p class="footer-text">
-                        <strong>تلفنخانه:</strong> <a href="tel:08138264041" class="footer-phone-link" aria-label="تماس با تلفنخانه"><span class="ltr">۰۸۱-۳۸۲۶۴۰۴۱-۶</span></a>
+                        <strong>تلفنخانه:</strong> <a href="tel:08138264041" class="footer-phone-link" aria-label="تماس با تلفنخانه ۰۸۱-۳۸۲۶۴۰۴۱-۶"><span class="ltr">۰۸۱-۳۸۲۶۴۰۴۱-۶</span></a>
                     </p>
                     <p class="footer-text">
-                        <strong>داخلی حراست:</strong> <a href="tel:08138264041,1186" class="footer-phone-link highlight-ext" aria-label="تماس با داخلی حراست"><span class="ltr">۱۱۸۶</span></a>
+                        <strong>داخلی حراست:</strong> <a href="tel:08138264041,1186" class="footer-phone-link highlight-ext" aria-label="تماس با داخلی حراست ۱۱۸۶"><span class="ltr">۱۱۸۶</span></a>
                     </p>
                     <p class="footer-text">
                         <strong>کد پستی:</strong> <span class="ltr">۶۵۱۵۷۳۸۴۴۸</span>
@@ -1369,8 +1377,11 @@
 
                 <header class="receipt-header">
                     <div class="receipt-header-right">
-                        <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش استان همدان" class="receipt-emblem"
-                            width="80" height="80" loading="lazy" decoding="async">
+                        <picture>
+                            <source srcset="logo.webp" type="image/webp">
+                            <img src="logo.png" alt="لوگوی اداره کل آموزش و پرورش استان همدان" class="receipt-emblem"
+                                width="80" height="80" loading="lazy" decoding="async">
+                        </picture>
                     </div>
                     <div class="receipt-header-center">
                         <span class="receipt-gov-title">جمهوری اسلامی ایران</span>

@@ -28,13 +28,14 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
         if (skeleton) skeleton.remove();
     }
 
-    if (document.readyState === 'complete') {
+    if (document.readyState !== 'loading') {
         dismissPreloader();
     } else {
+        document.addEventListener('DOMContentLoaded', dismissPreloader);
         window.addEventListener('load', dismissPreloader);
     }
 
-    setTimeout(dismissPreloader, 10000);
+    setTimeout(dismissPreloader, 2500);
 })();
 
 const getScrollBehavior = () => (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
