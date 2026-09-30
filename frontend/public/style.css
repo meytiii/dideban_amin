@@ -149,9 +149,18 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
+    padding: 18px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
     transition: transform var(--transition-normal), border-color var(--transition-normal);
+}
+
+.admin-logo-crest picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    line-height: 0;
 }
 
 .admin-logo-crest:hover {
@@ -165,6 +174,7 @@ body::before {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    display: block;
     filter: brightness(0) invert(1);
     user-select: none;
     pointer-events: none;
@@ -2662,7 +2672,7 @@ button:disabled {
         height: 104px !important;
         margin: 0 auto 14px !important;
         border-radius: 24px !important;
-        padding: 0 !important;
+        padding: 10px !important;
         border: 1px solid rgba(255, 255, 255, 0.12) !important;
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
     }
@@ -3215,7 +3225,7 @@ button:disabled {
         height: 88px !important;
         margin: 0 auto 10px !important;
         border-radius: 20px !important;
-        padding: 0 !important;
+        padding: 8px !important;
     }
 
     .admin-crest-img {
