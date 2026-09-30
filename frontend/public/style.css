@@ -140,16 +140,16 @@ body::before {
 
 .admin-logo-crest {
     position: relative;
-    width: 190px;
-    height: 190px;
+    width: 160px;
+    height: 160px;
     margin: 0 auto 24px;
-    border-radius: 36px;
+    border-radius: 32px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     background: #151f32;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 18px;
+    padding: 8px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
     transition: transform var(--transition-normal), border-color var(--transition-normal);
 }
@@ -2668,11 +2668,11 @@ button:disabled {
 
     .admin-logo-crest,
     .public-header-crest {
-        width: 104px !important;
-        height: 104px !important;
+        width: 100px !important;
+        height: 100px !important;
         margin: 0 auto 14px !important;
-        border-radius: 24px !important;
-        padding: 10px !important;
+        border-radius: 22px !important;
+        padding: 6px !important;
         border: 1px solid rgba(255, 255, 255, 0.12) !important;
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
     }
@@ -3221,11 +3221,11 @@ button:disabled {
 
     .admin-logo-crest,
     .public-header-crest {
-        width: 88px !important;
-        height: 88px !important;
+        width: 84px !important;
+        height: 84px !important;
         margin: 0 auto 10px !important;
-        border-radius: 20px !important;
-        padding: 8px !important;
+        border-radius: 18px !important;
+        padding: 5px !important;
     }
 
     .admin-crest-img {
