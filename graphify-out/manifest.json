@@ -36,9 +36,9 @@
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
-    "mtime": 1790583940.580796,
-    "seen": 1790586895.8915203,
-    "ast_hash": "d1488aff0e2d198c05d1ff80bcfad8f2",
+    "mtime": 1791002803.5095096,
+    "seen": 1791002841.675637,
+    "ast_hash": "9c40f8d8eb317341ce143415de49706a",
     "semantic_hash": ""
   },
   "go.mod": {
