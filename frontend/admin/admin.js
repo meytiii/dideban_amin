@@ -1111,6 +1111,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function initShamsiDateRangePicker() {
         const trigger = document.getElementById('dateRangeTrigger');
         const popover = document.getElementById('dateRangePopover');
+        const wrapper = document.getElementById('dateRangePickerWrapper');
+        const filterContainer = document.getElementById('reportsFilterContainer') || (trigger ? trigger.closest('.filter-container') : null);
         const textSpan = document.getElementById('dateRangeText');
         const clearBtn = document.getElementById('dateRangeClear');
         const prevBtn = document.getElementById('calPrevMonth');
@@ -1343,18 +1345,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.resetShamsiDateRangePicker = resetRange;
 
+        function closePopover() {
+            popover.style.display = 'none';
+            trigger.classList.remove('active');
+            trigger.setAttribute('aria-expanded', 'false');
+            if (wrapper) wrapper.classList.remove('popover-open');
+            if (filterContainer) filterContainer.classList.remove('popover-open');
+        }
+
+        function openPopover() {
+            popover.style.display = 'flex';
+            trigger.classList.add('active');
+            trigger.setAttribute('aria-expanded', 'true');
+            if (wrapper) wrapper.classList.add('popover-open');
+            if (filterContainer) filterContainer.classList.add('popover-open');
+
+            const rect = popover.getBoundingClientRect();
+            if (rect.left < 10) {
+                popover.style.right = 'auto';
+                popover.style.left = '0';
+            } else {
+                popover.style.right = '0';
+                popover.style.left = 'auto';
+            }
+            renderCalendar();
+        }
+
         trigger.addEventListener('click', (e) => {
             if (e.target === clearBtn) return;
             const isOpen = popover.style.display === 'flex';
             if (isOpen) {
-                popover.style.display = 'none';
-                trigger.classList.remove('active');
-                trigger.setAttribute('aria-expanded', 'false');
+                closePopover();
             } else {
-                popover.style.display = 'flex';
-                trigger.classList.add('active');
-                trigger.setAttribute('aria-expanded', 'true');
-                renderCalendar();
+                openPopover();
             }
         });
 
@@ -1386,16 +1409,12 @@ document.addEventListener('DOMContentLoaded', () => {
         resetBtn.addEventListener('click', resetRange);
 
         confirmBtn.addEventListener('click', () => {
-            popover.style.display = 'none';
-            trigger.classList.remove('active');
-            trigger.setAttribute('aria-expanded', 'false');
+            closePopover();
         });
 
         document.addEventListener('click', (e) => {
             if (!popover.contains(e.target) && !trigger.contains(e.target)) {
-                popover.style.display = 'none';
-                trigger.classList.remove('active');
-                trigger.setAttribute('aria-expanded', 'false');
+                closePopover();
             }
         });
 

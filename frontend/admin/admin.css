@@ -1435,7 +1435,13 @@ button {
     align-items: center;
     border: 1px solid var(--border-subtle);
     flex-wrap: wrap;
-    contain: layout style;
+    position: relative;
+    z-index: 100;
+}
+
+.filter-container.popover-open,
+.filter-container:has(.date-range-trigger.active) {
+    z-index: 200;
 }
 
 #reports-inbox-section.in-detail-view .filter-container,
@@ -1451,6 +1457,12 @@ button {
 .date-picker-filter-group {
     position: relative;
     min-width: 220px;
+    z-index: 101;
+}
+
+.date-picker-filter-group.popover-open,
+.date-picker-filter-group:has(.date-range-trigger.active) {
+    z-index: 201;
 }
 
 .date-range-trigger {
@@ -1528,6 +1540,7 @@ button {
     right: 0;
     z-index: 10000;
     width: 320px;
+    max-width: calc(100vw - 32px);
     background: #131b2e;
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 14px;
