@@ -1159,7 +1159,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cell = document.createElement('div');
                 cell.className = 'cal-day-cell outside';
                 cell.textContent = toPersianDigits(dayNum);
-                cell.addEventListener('click', () => {
+                cell.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     currentViewJm = prevMonth;
                     currentViewJy = prevYear;
                     renderCalendar();
@@ -1170,7 +1171,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const startMs = tempStart ? tempStart.startMs : null;
             let endMs = tempEnd ? tempEnd.endMs : null;
             if (pickingState && tempStart && hoveredDay) {
-                endMs = hoveredDay.startMs > tempStart.startMs ? hoveredDay.endMs : hoveredDay.startMs;
+                endMs = hoveredDay.startMs >= tempStart.startMs ? hoveredDay.endMs : null;
             }
 
             let rangeMin = null;
@@ -1220,7 +1221,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-                cell.addEventListener('click', () => {
+                cell.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     if (!pickingState || !tempStart) {
                         tempStart = {
                             jy: currentViewJy,
@@ -1232,6 +1234,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         tempEnd = null;
                         pickingState = true;
                         hoveredDay = null;
+                        textSpan.textContent = toPersianDigits(tempStart.jy) + '/' + padZero(tempStart.jm) + '/' + padZero(tempStart.jd) + ' تا ...';
+                        textSpan.classList.add('has-range');
+                        clearBtn.style.display = 'inline-flex';
                         renderCalendar();
                     } else {
                         const secondDay = {
@@ -1242,15 +1247,39 @@ document.addEventListener('DOMContentLoaded', () => {
                             endMs: dayEnd
                         };
                         if (secondDay.startMs < tempStart.startMs) {
-                            tempEnd = { ...tempStart, endMs: tempStart.endMs };
-                            tempStart = secondDay;
-                        } else {
-                            tempEnd = secondDay;
+                            showToast('تاریخ پایان نمی‌تواند قبل از تاریخ شروع باشد', 3000, 'warning');
+                            return;
                         }
+                        tempEnd = secondDay;
                         pickingState = false;
                         hoveredDay = null;
                         commitDateRange();
                     }
+                });
+
+                cell.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    const clickedDay = {
+                        jy: currentViewJy,
+                        jm: currentViewJm,
+                        jd: d,
+                        startMs: dayStart,
+                        endMs: dayEnd
+                    };
+                    if (pickingState && tempStart) {
+                        if (clickedDay.startMs < tempStart.startMs) {
+                            showToast('تاریخ پایان نمی‌تواند قبل از تاریخ شروع باشد', 3000, 'warning');
+                            return;
+                        }
+                        tempEnd = clickedDay;
+                    } else {
+                        tempStart = clickedDay;
+                        tempEnd = clickedDay;
+                    }
+                    pickingState = false;
+                    hoveredDay = null;
+                    commitDateRange();
+                    closePopover();
                 });
 
                 gridEl.appendChild(cell);
@@ -1265,7 +1294,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cell = document.createElement('div');
                 cell.className = 'cal-day-cell outside';
                 cell.textContent = toPersianDigits(i);
-                cell.addEventListener('click', () => {
+                cell.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     currentViewJm = nextMonth;
                     currentViewJy = nextYear;
                     renderCalendar();
@@ -1277,8 +1307,9 @@ document.addEventListener('DOMContentLoaded', () => {
         function renderCalendarHighlights() {
             if (!gridEl || !tempStart || !hoveredDay) return;
             const cells = gridEl.querySelectorAll('.cal-day-cell:not(.outside)');
-            const minT = Math.min(tempStart.startMs, hoveredDay.startMs);
-            const maxT = Math.max(tempStart.endMs, hoveredDay.endMs);
+            const isHoverEarlier = hoveredDay.startMs < tempStart.startMs;
+            const minT = tempStart.startMs;
+            const maxT = isHoverEarlier ? tempStart.endMs : hoveredDay.endMs;
 
             cells.forEach(cell => {
                 const d = parseInt(cell.textContent.replace(/[۰-۹]/g, c => '۰۱۲۳۴۵۶۷۸۹'.indexOf(c)), 10);
@@ -1286,7 +1317,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cellStart = getJalaliDayStartMs(currentViewJy, currentViewJm, d);
                 const cellEnd = getJalaliDayEndMs(currentViewJy, currentViewJm, d);
 
-                cell.classList.remove('range-start', 'range-end', 'range-middle', 'range-single');
+                cell.classList.remove('range-start', 'range-end', 'range-middle', 'range-single', 'date-not-allowed');
+
+                if (isHoverEarlier && cellStart === hoveredDay.startMs) {
+                    cell.classList.add('date-not-allowed');
+                }
 
                 if (cellStart === minT && cellEnd === maxT) {
                     cell.classList.add('range-single');
@@ -1329,7 +1364,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tempEnd = null;
             pickingState = false;
             hoveredDay = null;
-            textSpan.textContent = 'انتخاب بازه زمانی (شمسی)';
+            textSpan.textContent = 'انتخاب بازه زمانی';
             textSpan.classList.remove('has-range');
             clearBtn.style.display = 'none';
 
@@ -1371,6 +1406,10 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCalendar();
         }
 
+        popover.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
         trigger.addEventListener('click', (e) => {
             if (e.target === clearBtn) return;
             const isOpen = popover.style.display === 'flex';
@@ -1386,7 +1425,8 @@ document.addEventListener('DOMContentLoaded', () => {
             resetRange();
         });
 
-        prevBtn.addEventListener('click', () => {
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (currentViewJm === 1) {
                 currentViewJm = 12;
                 currentViewJy--;
@@ -1396,7 +1436,8 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCalendar();
         });
 
-        nextBtn.addEventListener('click', () => {
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (currentViewJm === 12) {
                 currentViewJm = 1;
                 currentViewJy++;
@@ -1406,16 +1447,22 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCalendar();
         });
 
-        resetBtn.addEventListener('click', resetRange);
+        resetBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetRange();
+        });
 
-        confirmBtn.addEventListener('click', () => {
+        confirmBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             closePopover();
         });
 
         document.addEventListener('click', (e) => {
-            if (!popover.contains(e.target) && !trigger.contains(e.target)) {
-                closePopover();
+            if (popover.style.display !== 'flex') return;
+            if (e.target && e.target.closest && (e.target.closest('#dateRangePopover') || e.target.closest('#dateRangeTrigger'))) {
+                return;
             }
+            closePopover();
         });
 
         presetChips.forEach(chip => {

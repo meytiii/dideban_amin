@@ -55,7 +55,7 @@
   "53": "viewReport",
   "54": "public/tatweel.js",
   "55": "no_comments.md",
-  "56": "contextWithAdmin",
+  "56": "admin_handlers.go",
   "57": "f3-tabular-spec-sheet.md",
   "58": "TestCookieSecureCachedResolution",
   "59": "populateAnalyticsDOM",
@@ -63,7 +63,7 @@
   "61": "calendar.tsx",
   "62": "Output contract & scope",
   "63": "applyFilters",
-  "64": "admin_handlers.go",
+  "64": "net/http.Request",
   "65": "h9-custom-illustration-centerpiece.md",
   "66": "captcha.go",
   "67": "crypto.go",
@@ -122,5 +122,10 @@
   "120": "public/confirm.js",
   "121": "t2-logo-wall-hairline.md",
   "122": "popover.tsx",
-  "123": "TestGetReportsPaginationAndFiltering"
+  "123": "logAuditTx",
+  "124": "SubmitReportHandler",
+  "125": "getTestDB",
+  "126": "ChangeMyPasswordHandler",
+  "127": "fetchAdminUsers",
+  "128": "TestCaptchaReplayPrevention"
 }

@@ -1702,6 +1702,13 @@ button {
     border-radius: 0 !important;
 }
 
+.cal-day-cell.date-not-allowed {
+    opacity: 0.35;
+    cursor: not-allowed !important;
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #f87171 !important;
+}
+
 .cal-footer-actions {
     display: flex;
     align-items: center;

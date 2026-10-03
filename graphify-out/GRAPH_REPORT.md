@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-03)
 
 ## Corpus Check
-- 198 files · ~216,507 words
+- 198 files · ~216,630 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1553 nodes · 2457 edges · 129 communities (85 shown, 44 thin omitted)
+- 1553 nodes · 2460 edges · 129 communities (85 shown, 44 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 270 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4fddbe5c`
+- Built from commit: `196d88ef`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -67,7 +67,7 @@
 - SSEBroker
 - c4-sticky-bottom-bar.md
 - Hallmark Design Directives
-- initShamsiDateRangePicker
+- renderCalendar
 - viewReport
 - public/tatweel.js
 - no_comments.md
@@ -138,7 +138,7 @@
 - SubmitReportHandler
 - getTestDB
 - ChangeMyPasswordHandler
-- fetchAdminUsers
+- escapeHTML
 - TestCaptchaReplayPrevention
 
 ## God Nodes (most connected - your core abstractions)
@@ -223,8 +223,8 @@ Cohesion: 0.08
 Nodes (26): After the file is written, Emitting a `design.md` from `study`, Image-mode template, Junk-or-blocked detection, Limits and disclaimers, Refusal — when not to study, Remote URL safety, Source mode — image or URL (+18 more)
 
 ### Community 14 - "admin.js"
-Cohesion: 0.08
-Nodes (22): applyAuditFiltersAndPagination(), calculatePagination(), cancelMFAStep(), checkAdminProfile(), checkMustChangePasswordPolicy(), closeDetailView(), connectAdminSSE(), getJalaliMonth() (+14 more)
+Cohesion: 0.09
+Nodes (17): calculatePagination(), cancelMFAStep(), checkAdminProfile(), checkMustChangePasswordPolicy(), connectAdminSSE(), handleTimerTick(), loadAdminCaptcha(), markReportHasNewMessage() (+9 more)
 
 ### Community 15 - "Hero enrichment — when, what, and how much"
 Cohesion: 0.09
@@ -271,8 +271,8 @@ Cohesion: 0.70
 Nodes (4): deriveKey(), encryptWithKey(), genTrackingCode(), main()
 
 ### Community 26 - "adminFetch"
-Cohesion: 0.15
-Nodes (27): adminFetch(), escapeHTML(), exportReportsToCSV(), fetchActiveSessions(), fetchAuditLogs(), fetchSystemStatus(), fetchWithTimeout(), formatJalaliDateTime() (+19 more)
+Cohesion: 0.13
+Nodes (30): adminFetch(), deleteUser(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), formatJalaliDateTime() (+22 more)
 
 ### Community 27 - "NewClamAVScanner"
 Cohesion: 0.24
@@ -366,13 +366,13 @@ Nodes (6): Anti-patterns Hallmark refuses, Floating nav on scroll — the cross-
 Cohesion: 0.19
 Nodes (7): NewSSEBroker(), sync.RWMutex, SSEBroker, SSEClient, TestAdminEventsHandlerStreamAndContextDone(), TestSSEBrokerClientLifecycleAndBroadcast(), TestSSESlowClientDoesNotBlockBroker()
 
-### Community 52 - "initShamsiDateRangePicker"
+### Community 52 - "renderCalendar"
 Cohesion: 0.33
-Nodes (12): getJalaliDayEndMs(), getJalaliDayStartMs(), getJalaliMonthDays(), gregorianToJalali(), initShamsiDateRangePicker(), commitDateRange(), openPopover(), renderCalendar() (+4 more)
+Nodes (14): getJalaliDayEndMs(), getJalaliDayStartMs(), getJalaliMonthDays(), gregorianToJalali(), initShamsiDateRangePicker(), closePopover(), commitDateRange(), openPopover() (+6 more)
 
 ### Community 53 - "viewReport"
-Cohesion: 0.24
-Nodes (16): deleteReportPermanently(), fetchNotifications(), fetchReports(), getMatchSnippet(), highlightSearchTerm(), makePersianRegex(), makeTextareaAutoExpand(), renderReportsTableSkeleton() (+8 more)
+Cohesion: 0.19
+Nodes (20): closeDetailView(), deleteReportPermanently(), fetchNotifications(), fetchReports(), getMatchSnippet(), highlightSearchTerm(), makePersianRegex(), makeTextareaAutoExpand() (+12 more)
 
 ### Community 54 - "public/tatweel.js"
 Cohesion: 0.38
@@ -399,8 +399,8 @@ Cohesion: 0.50
 Nodes (3): Output contract, Output contract & scope, Scope and limits
 
 ### Community 63 - "applyFilters"
-Cohesion: 0.20
-Nodes (12): applyFilters(), fetchForwardingRecipients(), getScrollBehavior(), handleKPICardFilter(), indexReportForSearch(), resetRange(), normalizePersianForSearch(), openForwardModal() (+4 more)
+Cohesion: 0.22
+Nodes (11): applyFilters(), fetchForwardingRecipients(), getScrollBehavior(), handleKPICardFilter(), indexReportForSearch(), normalizePersianForSearch(), openForwardModal(), parseTimestamp() (+3 more)
 
 ### Community 64 - "net/http.Request"
 Cohesion: 0.18
@@ -486,9 +486,9 @@ Nodes (11): NewUsedCaptchaStore(), NewSessionManager(), TestAuditFailClosed(), T
 Cohesion: 0.29
 Nodes (10): ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), VerifyPassword(), VerifyPasswordWithRehash(), Disable2FAHandler() (+2 more)
 
-### Community 127 - "fetchAdminUsers"
-Cohesion: 0.33
-Nodes (9): deleteUser(), fetchAdminUsers(), liftUserLockout(), openEditUserModal(), openResetPwdModal(), openShortcutsModal(), promoteTemporarily(), renderUsersTable() (+1 more)
+### Community 127 - "escapeHTML"
+Cohesion: 0.38
+Nodes (7): applyAuditFiltersAndPagination(), escapeHTML(), fetchAuditLogs(), getJalaliMonth(), populateAuditUsersDropdown(), renderAuditTable(), renderAuditTableSkeleton()
 
 ### Community 128 - "TestCaptchaReplayPrevention"
 Cohesion: 0.40
