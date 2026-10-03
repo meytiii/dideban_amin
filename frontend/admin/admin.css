@@ -1435,7 +1435,7 @@ button {
     align-items: center;
     border: 1px solid var(--border-subtle);
     flex-wrap: wrap;
-    contain: layout paint;
+    contain: layout style;
 }
 
 #reports-inbox-section.in-detail-view .filter-container,
@@ -1446,6 +1446,296 @@ button {
 .filter-group {
     flex: 1;
     min-width: 170px;
+}
+
+.date-picker-filter-group {
+    position: relative;
+    min-width: 220px;
+}
+
+.date-range-trigger {
+    width: 100%;
+    height: 42px;
+    background: var(--bg-surface, #1e293b);
+    border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.12));
+    border-radius: var(--radius-sm, 8px);
+    color: var(--text-main, #f8fafc);
+    font-family: inherit;
+    font-size: 13px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+    transition: border-color var(--transition-fast, 0.15s), background var(--transition-fast, 0.15s);
+    outline: none;
+    text-align: right;
+    direction: rtl;
+}
+
+.date-range-trigger:hover {
+    border-color: var(--border-focus, #38bdf8);
+    background: #243247;
+}
+
+.date-range-trigger.active {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.25);
+}
+
+.date-range-trigger .date-icon {
+    color: var(--text-muted, #94a3b8);
+    flex-shrink: 0;
+}
+
+.date-range-text {
+    flex: 1;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.date-range-text.has-range {
+    color: #38bdf8;
+    font-weight: 600;
+}
+
+.date-range-clear {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--text-muted, #94a3b8);
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+}
+
+.date-range-clear:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.date-range-popover {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 10000;
+    width: 320px;
+    background: #131b2e;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    animation: datePickerSlideIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    direction: rtl;
+    user-select: none;
+}
+
+@keyframes datePickerSlideIn {
+    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.date-picker-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.preset-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-family: inherit;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.preset-chip:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #f8fafc;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.preset-chip.active {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+    font-weight: 600;
+}
+
+.date-picker-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+}
+
+.cal-month-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f8fafc;
+}
+
+.cal-nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.cal-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #64748b;
+    padding: 4px 0;
+}
+
+.cal-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    row-gap: 3px;
+}
+
+.cal-day-cell {
+    position: relative;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #cbd5e1;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.12s, color 0.12s;
+    outline: none;
+}
+
+.cal-day-cell:hover:not(.range-start):not(.range-end):not(.range-single) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.cal-day-cell.outside {
+    color: rgba(100, 116, 139, 0.45);
+}
+
+.cal-day-cell.today::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #38bdf8;
+}
+
+.cal-day-cell.range-start {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    border-radius: 0 8px 8px 0 !important;
+}
+
+.cal-day-cell.range-end {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    border-radius: 8px 0 0 8px !important;
+}
+
+.cal-day-cell.range-single {
+    border-radius: 8px !important;
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.cal-day-cell.range-middle {
+    background: rgba(14, 165, 233, 0.2) !important;
+    color: #38bdf8 !important;
+    border-radius: 0 !important;
+}
+
+.cal-footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cal-action-btn {
+    padding: 6px 14px;
+    font-size: 12px;
+    font-family: inherit;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.cal-reset-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #94a3b8;
+}
+
+.cal-reset-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.cal-confirm-btn {
+    background: #0284c7;
+    border: 1px solid #0284c7;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.cal-confirm-btn:hover {
+    background: #0369a1;
+}
+
+@media (max-width: 480px) {
+    .date-range-popover {
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: 95vw;
+    }
 }
 
 .filter-search-group {

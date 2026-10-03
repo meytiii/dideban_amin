@@ -640,40 +640,16 @@
       "source_location": "L19"
     },
     {
-      "id": "frontend_admin_admin_fetchforwardingrecipients",
-      "label": "fetchForwardingRecipients()",
+      "id": "frontend_admin_admin_handletimertick",
+      "label": "handleTimerTick()",
       "_callable": true,
       "_origin": "ast",
       "community": 14,
       "community_name": "admin.js",
       "file_type": "code",
-      "norm_label": "fetchforwardingrecipients()",
+      "norm_label": "handletimertick()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6229"
-    },
-    {
-      "id": "frontend_admin_admin_getjalalimonth",
-      "label": "getJalaliMonth()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "getjalalimonth()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L5454"
-    },
-    {
-      "id": "frontend_admin_admin_indexreportforsearch",
-      "label": "indexReportForSearch()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "indexreportforsearch()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L1200"
+      "source_location": "L427"
     },
     {
       "id": "frontend_admin_admin_loadadmincaptcha",
@@ -700,18 +676,6 @@
       "source_location": "L4381"
     },
     {
-      "id": "frontend_admin_admin_normalizepersianforsearch",
-      "label": "normalizePersianForSearch()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "normalizepersianforsearch()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L1285"
-    },
-    {
       "id": "frontend_admin_admin_onreadycheck",
       "label": "onReadyCheck()",
       "_callable": true,
@@ -722,90 +686,6 @@
       "norm_label": "onreadycheck()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L35"
-    },
-    {
-      "id": "frontend_admin_admin_openforwardmodal",
-      "label": "openForwardModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "openforwardmodal()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L6380"
-    },
-    {
-      "id": "frontend_admin_admin_openresetpwdmodal",
-      "label": "openResetPwdModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "openresetpwdmodal()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L5118"
-    },
-    {
-      "id": "frontend_admin_admin_openshortcutsmodal",
-      "label": "openShortcutsModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "openshortcutsmodal()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L2086"
-    },
-    {
-      "id": "frontend_admin_admin_parsetimestamp",
-      "label": "parseTimestamp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "parsetimestamp()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L1155"
-    },
-    {
-      "id": "frontend_admin_admin_promotetemporarily",
-      "label": "promoteTemporarily()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "promotetemporarily()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L63"
-    },
-    {
-      "id": "frontend_admin_admin_renderrecipientlist",
-      "label": "renderRecipientList()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "renderrecipientlist()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L6248"
-    },
-    {
-      "id": "frontend_admin_admin_renderrecipientlistskeleton",
-      "label": "renderRecipientListSkeleton()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "renderrecipientlistskeleton()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L6360"
     },
     {
       "id": "frontend_admin_admin_reset2famodalviews",
@@ -844,6 +724,30 @@
       "source_location": "L5375"
     },
     {
+      "id": "frontend_admin_admin_resetsessiontimer",
+      "label": "resetSessionTimer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "resetsessiontimer()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L374"
+    },
+    {
+      "id": "frontend_admin_admin_resumesessiontimer",
+      "label": "resumeSessionTimer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "resumesessiontimer()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L456"
+    },
+    {
       "id": "frontend_admin_admin_setupsuperuserui",
       "label": "setupSuperuserUI()",
       "_callable": true,
@@ -878,6 +782,18 @@
       "norm_label": "startbackgroundpolling()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L4401"
+    },
+    {
+      "id": "frontend_admin_admin_startsessiontimer",
+      "label": "startSessionTimer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "startsessiontimer()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L463"
     },
     {
       "id": "frontend_admin_admin_stopbackgroundpolling",
@@ -916,16 +832,16 @@
       "source_location": "L5411"
     },
     {
-      "id": "frontend_admin_admin_updateselectedrecipientscounter",
-      "label": "updateSelectedRecipientsCounter()",
+      "id": "frontend_admin_admin_updatetimerdisplay",
+      "label": "updateTimerDisplay()",
       "_callable": true,
       "_origin": "ast",
       "community": 14,
       "community_name": "admin.js",
       "file_type": "code",
-      "norm_label": "updateselectedrecipientscounter()",
+      "norm_label": "updatetimerdisplay()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6242"
+      "source_location": "L350"
     },
     {
       "id": "frontend_admin_admin_validatepasswordcomplexity",
@@ -949,7 +865,7 @@
       "file_type": "code",
       "norm_label": "addfiles()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L964"
+      "source_location": "L1071"
     },
     {
       "id": "frontend_public_app_checkclientvulgarlanguage",
@@ -961,7 +877,19 @@
       "file_type": "code",
       "norm_label": "checkclientvulgarlanguage()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1152"
+      "source_location": "L1259"
+    },
+    {
+      "id": "frontend_public_app_checkhostconnection",
+      "label": "checkHostConnection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "checkhostconnection()",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L458"
     },
     {
       "id": "frontend_public_app_cleardraft",
@@ -973,7 +901,7 @@
       "file_type": "code",
       "norm_label": "cleardraft()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L475"
+      "source_location": "L582"
     },
     {
       "id": "frontend_public_app_clearfileinput",
@@ -985,7 +913,7 @@
       "file_type": "code",
       "norm_label": "clearfileinput()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1029"
+      "source_location": "L1136"
     },
     {
       "id": "frontend_public_app_closeguidelinesdrawer",
@@ -997,7 +925,7 @@
       "file_type": "code",
       "norm_label": "closeguidelinesdrawer()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1885"
+      "source_location": "L1992"
     },
     {
       "id": "frontend_public_app_dismisspreloader",
@@ -1009,7 +937,7 @@
       "file_type": "code",
       "norm_label": "dismisspreloader()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L19"
+      "source_location": "L25"
     },
     {
       "id": "frontend_public_app_dismisstoast",
@@ -1021,7 +949,7 @@
       "file_type": "code",
       "norm_label": "dismisstoast()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L383"
+      "source_location": "L389"
     },
     {
       "id": "frontend_public_app_escapehtml",
@@ -1033,7 +961,7 @@
       "file_type": "code",
       "norm_label": "escapehtml()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L860"
+      "source_location": "L967"
     },
     {
       "id": "frontend_public_app_fastcheckclientvulgar",
@@ -1045,7 +973,7 @@
       "file_type": "code",
       "norm_label": "_fastcheckclientvulgar()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1248"
+      "source_location": "L1355"
     },
     {
       "id": "frontend_public_app_fetchwithtimeout",
@@ -1069,7 +997,7 @@
       "file_type": "code",
       "norm_label": "getbefileiconsvg()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L837"
+      "source_location": "L944"
     },
     {
       "id": "frontend_public_app_getscrollbehavior",
@@ -1081,7 +1009,7 @@
       "file_type": "code",
       "norm_label": "getscrollbehavior()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L41"
+      "source_location": "L47"
     },
     {
       "id": "frontend_public_app_hideofflinebanner",
@@ -1093,7 +1021,7 @@
       "file_type": "code",
       "norm_label": "hideofflinebanner()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L401"
+      "source_location": "L422"
     },
     {
       "id": "frontend_public_app_initapptooltips",
@@ -1105,7 +1033,7 @@
       "file_type": "code",
       "norm_label": "initapptooltips()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L53"
+      "source_location": "L59"
     },
     {
       "id": "frontend_public_app_initapptooltips_converttitles",
@@ -1117,7 +1045,7 @@
       "file_type": "code",
       "norm_label": "converttitles()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L70"
+      "source_location": "L76"
     },
     {
       "id": "frontend_public_app_initapptooltips_getorcreatetooltip",
@@ -1129,7 +1057,7 @@
       "file_type": "code",
       "norm_label": "getorcreatetooltip()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L59"
+      "source_location": "L65"
     },
     {
       "id": "frontend_public_app_initapptooltips_hide",
@@ -1141,7 +1069,7 @@
       "file_type": "code",
       "norm_label": "hide()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L153"
+      "source_location": "L159"
     },
     {
       "id": "frontend_public_app_initapptooltips_ismobileortouch",
@@ -1153,7 +1081,7 @@
       "file_type": "code",
       "norm_label": "ismobileortouch()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L81"
+      "source_location": "L87"
     },
     {
       "id": "frontend_public_app_initapptooltips_positiontooltip",
@@ -1165,7 +1093,7 @@
       "file_type": "code",
       "norm_label": "positiontooltip()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L91"
+      "source_location": "L97"
     },
     {
       "id": "frontend_public_app_initapptooltips_show",
@@ -1177,7 +1105,7 @@
       "file_type": "code",
       "norm_label": "show()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L135"
+      "source_location": "L141"
     },
     {
       "id": "frontend_public_app_initcategorydropdown",
@@ -1189,7 +1117,7 @@
       "file_type": "code",
       "norm_label": "initcategorydropdown()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L661"
+      "source_location": "L768"
     },
     {
       "id": "frontend_public_app_initcategorydropdown_syncfromnative",
@@ -1201,7 +1129,7 @@
       "file_type": "code",
       "norm_label": "syncfromnative()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L712"
+      "source_location": "L819"
     },
     {
       "id": "frontend_public_app_initcategorydropdown_togglemenu",
@@ -1213,7 +1141,7 @@
       "file_type": "code",
       "norm_label": "togglemenu()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L672"
+      "source_location": "L779"
     },
     {
       "id": "frontend_public_app_loadcaptcha",
@@ -1225,7 +1153,7 @@
       "file_type": "code",
       "norm_label": "loadcaptcha()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1103"
+      "source_location": "L1210"
     },
     {
       "id": "frontend_public_app_maketextareaautoexpand",
@@ -1237,7 +1165,7 @@
       "file_type": "code",
       "norm_label": "maketextareaautoexpand()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L506"
+      "source_location": "L613"
     },
     {
       "id": "frontend_public_app_onunifiedscroll",
@@ -1249,7 +1177,7 @@
       "file_type": "code",
       "norm_label": "onunifiedscroll()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1809"
+      "source_location": "L1916"
     },
     {
       "id": "frontend_public_app_openguidelinesdrawer",
@@ -1261,7 +1189,7 @@
       "file_type": "code",
       "norm_label": "openguidelinesdrawer()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1868"
+      "source_location": "L1975"
     },
     {
       "id": "frontend_public_app_parsetimestamp",
@@ -1273,7 +1201,19 @@
       "file_type": "code",
       "norm_label": "parsetimestamp()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L260"
+      "source_location": "L266"
+    },
+    {
+      "id": "frontend_public_app_pinghost",
+      "label": "pingHost()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "pinghost()",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L441"
     },
     {
       "id": "frontend_public_app_populateofficialreceipt",
@@ -1285,7 +1225,7 @@
       "file_type": "code",
       "norm_label": "populateofficialreceipt()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L315"
+      "source_location": "L321"
     },
     {
       "id": "frontend_public_app_promotetemporarily",
@@ -1297,7 +1237,7 @@
       "file_type": "code",
       "norm_label": "promotetemporarily()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L43"
+      "source_location": "L49"
     },
     {
       "id": "frontend_public_app_removefile",
@@ -1309,7 +1249,7 @@
       "file_type": "code",
       "norm_label": "removefile()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1014"
+      "source_location": "L1121"
     },
     {
       "id": "frontend_public_app_renderconversationthread",
@@ -1321,7 +1261,7 @@
       "file_type": "code",
       "norm_label": "renderconversationthread()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1936"
+      "source_location": "L2043"
     },
     {
       "id": "frontend_public_app_renderfilequeue",
@@ -1333,7 +1273,7 @@
       "file_type": "code",
       "norm_label": "renderfilequeue()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L865"
+      "source_location": "L972"
     },
     {
       "id": "frontend_public_app_restoredraft",
@@ -1345,7 +1285,7 @@
       "file_type": "code",
       "norm_label": "restoredraft()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L444"
+      "source_location": "L551"
     },
     {
       "id": "frontend_public_app_savedraft",
@@ -1357,7 +1297,7 @@
       "file_type": "code",
       "norm_label": "savedraft()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L420"
+      "source_location": "L527"
     },
     {
       "id": "frontend_public_app_scheduledraftsave",
@@ -1369,7 +1309,7 @@
       "file_type": "code",
       "norm_label": "scheduledraftsave()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L479"
+      "source_location": "L586"
     },
     {
       "id": "frontend_public_app_setbtnloading",
@@ -1381,7 +1321,7 @@
       "file_type": "code",
       "norm_label": "setbtnloading()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1137"
+      "source_location": "L1244"
     },
     {
       "id": "frontend_public_app_showconfirmdialog",
@@ -1393,7 +1333,7 @@
       "file_type": "code",
       "norm_label": "showconfirmdialog()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1322"
+      "source_location": "L1429"
     },
     {
       "id": "frontend_public_app_showofflinebanner",
@@ -1405,7 +1345,7 @@
       "file_type": "code",
       "norm_label": "showofflinebanner()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L390"
+      "source_location": "L401"
     },
     {
       "id": "frontend_public_app_showtoast",
@@ -1417,7 +1357,7 @@
       "file_type": "code",
       "norm_label": "showtoast()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L363"
+      "source_location": "L369"
     },
     {
       "id": "frontend_public_app_showtrackerror",
@@ -1429,7 +1369,31 @@
       "file_type": "code",
       "norm_label": "showtrackerror()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2188"
+      "source_location": "L2295"
+    },
+    {
+      "id": "frontend_public_app_startrecoverypolling",
+      "label": "startRecoveryPolling()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "startrecoverypolling()",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L480"
+    },
+    {
+      "id": "frontend_public_app_stoprecoverypolling",
+      "label": "stopRecoveryPolling()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "stoprecoverypolling()",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L489"
     },
     {
       "id": "frontend_public_app_switchview",
@@ -1441,7 +1405,7 @@
       "file_type": "code",
       "norm_label": "switchview()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1607"
+      "source_location": "L1714"
     },
     {
       "id": "frontend_public_app_syncnavactionsposition",
@@ -1453,7 +1417,7 @@
       "file_type": "code",
       "norm_label": "syncnavactionsposition()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1727"
+      "source_location": "L1834"
     },
     {
       "id": "frontend_public_app_updatelandingstickybar",
@@ -1465,7 +1429,7 @@
       "file_type": "code",
       "norm_label": "updatelandingstickybar()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1783"
+      "source_location": "L1890"
     },
     {
       "id": "frontend_public_app_updatesteptracker",
@@ -1477,7 +1441,7 @@
       "file_type": "code",
       "norm_label": "updatesteptracker()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L528"
+      "source_location": "L635"
     },
     {
       "id": "frontend_public_app_updatetopnavstickybar",
@@ -1489,7 +1453,7 @@
       "file_type": "code",
       "norm_label": "updatetopnavstickybar()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1753"
+      "source_location": "L1860"
     },
     {
       "id": "frontend_public_app_validatecurrentstep",
@@ -1501,7 +1465,7 @@
       "file_type": "code",
       "norm_label": "validatecurrentstep()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L593"
+      "source_location": "L700"
     },
     {
       "id": "frontend_admin_admin_applyauditfiltersandpagination",
@@ -1540,6 +1504,18 @@
       "source_location": "L1036"
     },
     {
+      "id": "frontend_admin_admin_fetchactivesessions",
+      "label": "fetchActiveSessions()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "escapeHTML",
+      "file_type": "code",
+      "norm_label": "fetchactivesessions()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L5761"
+    },
+    {
       "id": "frontend_admin_admin_fetchauditlogs",
       "label": "fetchAuditLogs()",
       "_callable": true,
@@ -1550,6 +1526,18 @@
       "norm_label": "fetchauditlogs()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L5629"
+    },
+    {
+      "id": "frontend_admin_admin_fetchsystemstatus",
+      "label": "fetchSystemStatus()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "escapeHTML",
+      "file_type": "code",
+      "norm_label": "fetchsystemstatus()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L5696"
     },
     {
       "id": "frontend_admin_admin_formatjalalidatetime",
@@ -1564,6 +1552,30 @@
       "source_location": "L1189"
     },
     {
+      "id": "frontend_admin_admin_getjalalimonth",
+      "label": "getJalaliMonth()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "escapeHTML",
+      "file_type": "code",
+      "norm_label": "getjalalimonth()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L5454"
+    },
+    {
+      "id": "frontend_admin_admin_loadadvsubview",
+      "label": "loadAdvSubView()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "escapeHTML",
+      "file_type": "code",
+      "norm_label": "loadadvsubview()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L4531"
+    },
+    {
       "id": "frontend_admin_admin_openforwardhistorymodal",
       "label": "openForwardHistoryModal()",
       "_callable": true,
@@ -1574,6 +1586,18 @@
       "norm_label": "openforwardhistorymodal()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L6511"
+    },
+    {
+      "id": "frontend_admin_admin_parsetimestamp",
+      "label": "parseTimestamp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "escapeHTML",
+      "file_type": "code",
+      "norm_label": "parsetimestamp()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L1155"
     },
     {
       "id": "frontend_admin_admin_parseuseragent",
@@ -1648,6 +1672,18 @@
       "source_location": "L6486"
     },
     {
+      "id": "frontend_admin_admin_rendernotificationslist",
+      "label": "renderNotificationsList()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "escapeHTML",
+      "file_type": "code",
+      "norm_label": "rendernotificationslist()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L5985"
+    },
+    {
       "id": "frontend_admin_admin_rendersessionstable",
       "label": "renderSessionsTable()",
       "_callable": true,
@@ -1658,6 +1694,30 @@
       "norm_label": "rendersessionstable()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L5793"
+    },
+    {
+      "id": "frontend_admin_admin_rendersessionstableskeleton",
+      "label": "renderSessionsTableSkeleton()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "escapeHTML",
+      "file_type": "code",
+      "norm_label": "rendersessionstableskeleton()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L5739"
+    },
+    {
+      "id": "frontend_admin_admin_terminatesession",
+      "label": "terminateSession()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "escapeHTML",
+      "file_type": "code",
+      "norm_label": "terminatesession()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L5881"
     },
     {
       "id": "frontend_admin_tatweel_applywrappertonode",
@@ -1780,18 +1840,6 @@
       "source_location": "L51"
     },
     {
-      "id": "frontend_admin_admin_deletereportpermanently",
-      "label": "deleteReportPermanently()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "deletereportpermanently()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L2817"
-    },
-    {
       "id": "frontend_admin_admin_deleteuser",
       "label": "deleteUser()",
       "_callable": true,
@@ -1804,18 +1852,6 @@
       "source_location": "L4743"
     },
     {
-      "id": "frontend_admin_admin_fetchactivesessions",
-      "label": "fetchActiveSessions()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "fetchactivesessions()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L5761"
-    },
-    {
       "id": "frontend_admin_admin_fetchadminusers",
       "label": "fetchAdminUsers()",
       "_callable": true,
@@ -1826,18 +1862,6 @@
       "norm_label": "fetchadminusers()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L4575"
-    },
-    {
-      "id": "frontend_admin_admin_fetchsystemstatus",
-      "label": "fetchSystemStatus()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "fetchsystemstatus()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L5696"
     },
     {
       "id": "frontend_admin_admin_fetchwithtimeout",
@@ -1876,18 +1900,6 @@
       "source_location": "L4719"
     },
     {
-      "id": "frontend_admin_admin_loadadvsubview",
-      "label": "loadAdvSubView()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "loadadvsubview()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L4531"
-    },
-    {
       "id": "frontend_admin_admin_openeditusermodal",
       "label": "openEditUserModal()",
       "_callable": true,
@@ -1900,6 +1912,42 @@
       "source_location": "L4847"
     },
     {
+      "id": "frontend_admin_admin_openresetpwdmodal",
+      "label": "openResetPwdModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "openresetpwdmodal()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L5118"
+    },
+    {
+      "id": "frontend_admin_admin_openshortcutsmodal",
+      "label": "openShortcutsModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "openshortcutsmodal()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L2086"
+    },
+    {
+      "id": "frontend_admin_admin_promotetemporarily",
+      "label": "promoteTemporarily()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "promotetemporarily()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L63"
+    },
+    {
       "id": "frontend_admin_admin_refresh2fastatus",
       "label": "refresh2FAStatus()",
       "_callable": true,
@@ -1910,18 +1958,6 @@
       "norm_label": "refresh2fastatus()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L777"
-    },
-    {
-      "id": "frontend_admin_admin_rendersessionstableskeleton",
-      "label": "renderSessionsTableSkeleton()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "rendersessionstableskeleton()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L5739"
     },
     {
       "id": "frontend_admin_admin_renderuserstable",
@@ -1948,64 +1984,100 @@
       "source_location": "L4554"
     },
     {
-      "id": "frontend_admin_admin_setupclassificationmodal",
-      "label": "setupClassificationModal()",
+      "id": "frontend_admin_admin_fetchforwardingrecipients",
+      "label": "fetchForwardingRecipients()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
+      "community": 52,
+      "community_name": "openForwardModal",
       "file_type": "code",
-      "norm_label": "setupclassificationmodal()",
+      "norm_label": "fetchforwardingrecipients()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3181"
+      "source_location": "L6229"
     },
     {
-      "id": "frontend_admin_admin_showtoast",
-      "label": "showToast()",
+      "id": "frontend_admin_admin_indexreportforsearch",
+      "label": "indexReportForSearch()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
+      "community": 52,
+      "community_name": "openForwardModal",
       "file_type": "code",
-      "norm_label": "showtoast()",
+      "norm_label": "indexreportforsearch()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L283"
+      "source_location": "L1200"
     },
     {
-      "id": "frontend_admin_admin_submitclassification",
-      "label": "submitClassification()",
+      "id": "frontend_admin_admin_normalizepersianforsearch",
+      "label": "normalizePersianForSearch()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
+      "community": 52,
+      "community_name": "openForwardModal",
       "file_type": "code",
-      "norm_label": "submitclassification()",
+      "norm_label": "normalizepersianforsearch()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3124"
+      "source_location": "L1285"
     },
     {
-      "id": "frontend_admin_admin_terminatesession",
-      "label": "terminateSession()",
+      "id": "frontend_admin_admin_openforwardmodal",
+      "label": "openForwardModal()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
+      "community": 52,
+      "community_name": "openForwardModal",
       "file_type": "code",
-      "norm_label": "terminatesession()",
+      "norm_label": "openforwardmodal()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5881"
+      "source_location": "L6380"
     },
     {
-      "id": "frontend_admin_admin_updateclassificationui",
-      "label": "updateClassificationUI()",
+      "id": "frontend_admin_admin_renderrecipientlist",
+      "label": "renderRecipientList()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "adminFetch",
+      "community": 52,
+      "community_name": "openForwardModal",
       "file_type": "code",
-      "norm_label": "updateclassificationui()",
+      "norm_label": "renderrecipientlist()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3067"
+      "source_location": "L6248"
+    },
+    {
+      "id": "frontend_admin_admin_renderrecipientlistskeleton",
+      "label": "renderRecipientListSkeleton()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 52,
+      "community_name": "openForwardModal",
+      "file_type": "code",
+      "norm_label": "renderrecipientlistskeleton()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L6360"
+    },
+    {
+      "id": "frontend_admin_admin_updateselectedrecipientscounter",
+      "label": "updateSelectedRecipientsCounter()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 52,
+      "community_name": "openForwardModal",
+      "file_type": "code",
+      "norm_label": "updateselectedrecipientscounter()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L6242"
+    },
+    {
+      "id": "frontend_admin_admin_deletereportpermanently",
+      "label": "deleteReportPermanently()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "viewReport",
+      "file_type": "code",
+      "norm_label": "deletereportpermanently()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L2817"
     },
     {
       "id": "frontend_admin_admin_fetchnotifications",
@@ -2032,18 +2104,6 @@
       "source_location": "L1514"
     },
     {
-      "id": "frontend_admin_admin_handletimertick",
-      "label": "handleTimerTick()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 53,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "handletimertick()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L427"
-    },
-    {
       "id": "frontend_admin_admin_maketextareaautoexpand",
       "label": "makeTextareaAutoExpand()",
       "_callable": true,
@@ -2054,18 +2114,6 @@
       "norm_label": "maketextareaautoexpand()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L2913"
-    },
-    {
-      "id": "frontend_admin_admin_rendernotificationslist",
-      "label": "renderNotificationsList()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 53,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "rendernotificationslist()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L5985"
     },
     {
       "id": "frontend_admin_admin_renderreportstableskeleton",
@@ -2092,30 +2140,6 @@
       "source_location": "L380"
     },
     {
-      "id": "frontend_admin_admin_resetsessiontimer",
-      "label": "resetSessionTimer()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 53,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "resetsessiontimer()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L374"
-    },
-    {
-      "id": "frontend_admin_admin_resumesessiontimer",
-      "label": "resumeSessionTimer()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 53,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "resumesessiontimer()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L456"
-    },
-    {
       "id": "frontend_admin_admin_schedulereportsrefresh",
       "label": "scheduleReportsRefresh()",
       "_callable": true,
@@ -2126,6 +2150,30 @@
       "norm_label": "schedulereportsrefresh()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L4373"
+    },
+    {
+      "id": "frontend_admin_admin_setupclassificationmodal",
+      "label": "setupClassificationModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "viewReport",
+      "file_type": "code",
+      "norm_label": "setupclassificationmodal()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L3181"
+    },
+    {
+      "id": "frontend_admin_admin_showtoast",
+      "label": "showToast()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "viewReport",
+      "file_type": "code",
+      "norm_label": "showtoast()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L283"
     },
     {
       "id": "frontend_admin_admin_startfallbackpolling",
@@ -2140,16 +2188,16 @@
       "source_location": "L4389"
     },
     {
-      "id": "frontend_admin_admin_startsessiontimer",
-      "label": "startSessionTimer()",
+      "id": "frontend_admin_admin_submitclassification",
+      "label": "submitClassification()",
       "_callable": true,
       "_origin": "ast",
       "community": 53,
       "community_name": "viewReport",
       "file_type": "code",
-      "norm_label": "startsessiontimer()",
+      "norm_label": "submitclassification()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L463"
+      "source_location": "L3124"
     },
     {
       "id": "frontend_admin_admin_switchmaintab",
@@ -2176,6 +2224,18 @@
       "source_location": "L2857"
     },
     {
+      "id": "frontend_admin_admin_updateclassificationui",
+      "label": "updateClassificationUI()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "viewReport",
+      "file_type": "code",
+      "norm_label": "updateclassificationui()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L3067"
+    },
+    {
       "id": "frontend_admin_admin_updatedetailnavbuttons",
       "label": "updateDetailNavButtons()",
       "_callable": true,
@@ -2198,18 +2258,6 @@
       "norm_label": "updatekpicards()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L1246"
-    },
-    {
-      "id": "frontend_admin_admin_updatetimerdisplay",
-      "label": "updateTimerDisplay()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 53,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "updatetimerdisplay()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L350"
     },
     {
       "id": "frontend_admin_admin_viewreport",
@@ -3404,27 +3452,27 @@
       "source_location": "L2"
     },
     {
-      "id": "agents_skills_hallmark_references_components_f3_tabular_spec_sheet",
-      "label": "f3-tabular-spec-sheet.md",
+      "id": "agents_skills_hallmark_references_components_f2_sticky_scroll_stack",
+      "label": "f2-sticky-scroll-stack.md",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "f3-tabular-spec-sheet.md",
-      "source_file": ".agents/skills/hallmark/references/components/f3-tabular-spec-sheet.md",
+      "norm_label": "f2-sticky-scroll-stack.md",
+      "source_file": ".agents/skills/hallmark/references/components/f2-sticky-scroll-stack.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_f3_tabular_spec_sheet_f3_tabular_spec_sheet",
-      "label": "F3 \u00b7 Tabular spec sheet",
+      "id": "agents_skills_hallmark_references_components_f2_sticky_scroll_stack_f2_sticky_scroll_stack",
+      "label": "F2 \u00b7 Sticky-scroll stack",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "f3 \u00b7 tabular spec sheet",
-      "source_file": ".agents/skills/hallmark/references/components/f3-tabular-spec-sheet.md",
+      "norm_label": "f2 \u00b7 sticky-scroll stack",
+      "source_file": ".agents/skills/hallmark/references/components/f2-sticky-scroll-stack.md",
       "source_location": "L1"
     },
     {
@@ -3668,30 +3716,6 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_h4_stat_led",
-      "label": "h4-stat-led.md",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "h4-stat-led.md",
-      "source_file": ".agents/skills/hallmark/references/components/h4-stat-led.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_h4_stat_led_h4_stat_led",
-      "label": "H4 \u00b7 Stat-Led",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "h4 \u00b7 stat-led",
-      "source_file": ".agents/skills/hallmark/references/components/h4-stat-led.md",
-      "source_location": "L1"
-    },
-    {
       "id": "agents_skills_hallmark_references_components_h5_letter_hero",
       "label": "h5-letter-hero.md",
       "_origin": "ast",
@@ -3884,51 +3908,27 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n8_terminal_command",
-      "label": "n8-terminal-command.md",
+      "id": "agents_skills_hallmark_references_components_n7_brutal_slab",
+      "label": "n7-brutal-slab.md",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "n8-terminal-command.md",
-      "source_file": ".agents/skills/hallmark/references/components/n8-terminal-command.md",
+      "norm_label": "n7-brutal-slab.md",
+      "source_file": ".agents/skills/hallmark/references/components/n7-brutal-slab.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n8_terminal_command_n8_terminal_command",
-      "label": "N8 \u00b7 Terminal command",
+      "id": "agents_skills_hallmark_references_components_n7_brutal_slab_n7_brutal_slab",
+      "label": "N7 \u00b7 Brutal slab",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "n8 \u00b7 terminal command",
-      "source_file": ".agents/skills/hallmark/references/components/n8-terminal-command.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal",
-      "label": "n9-edge-aligned-minimal.md",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "n9-edge-aligned-minimal.md",
-      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal_n9_edge_aligned_minimal",
-      "label": "N9 \u00b7 Edge-aligned minimal",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "n9 \u00b7 edge-aligned minimal",
-      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
+      "norm_label": "n7 \u00b7 brutal slab",
+      "source_file": ".agents/skills/hallmark/references/components/n7-brutal-slab.md",
       "source_location": "L1"
     },
     {
@@ -3980,6 +3980,30 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_hallmark_references_components_s3_sticky_pinned",
+      "label": "s3-sticky-pinned.md",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "s3-sticky-pinned.md",
+      "source_file": ".agents/skills/hallmark/references/components/s3-sticky-pinned.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_s3_sticky_pinned_s3_sticky_pinned",
+      "label": "S3 \u00b7 Sticky pinned",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "s3 \u00b7 sticky pinned",
+      "source_file": ".agents/skills/hallmark/references/components/s3-sticky-pinned.md",
+      "source_location": "L1"
+    },
+    {
       "id": "agents_skills_hallmark_references_components_s4_inline_no_break",
       "label": "s4-inline-no-break.md",
       "_origin": "ast",
@@ -4001,6 +4025,30 @@
       "node_kind": "heading",
       "norm_label": "s4 \u00b7 inline (no break)",
       "source_file": ".agents/skills/hallmark/references/components/s4-inline-no-break.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_s5_bottom_anchored",
+      "label": "s5-bottom-anchored.md",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "s5-bottom-anchored.md",
+      "source_file": ".agents/skills/hallmark/references/components/s5-bottom-anchored.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_s5_bottom_anchored_s5_bottom_anchored",
+      "label": "S5 \u00b7 Bottom-anchored",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "s5 \u00b7 bottom-anchored",
+      "source_file": ".agents/skills/hallmark/references/components/s5-bottom-anchored.md",
       "source_location": "L1"
     },
     {
@@ -4516,30 +4564,6 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_s3_sticky_pinned",
-      "label": "s3-sticky-pinned.md",
-      "_origin": "ast",
-      "community": 103,
-      "community_name": "s3-sticky-pinned.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "s3-sticky-pinned.md",
-      "source_file": ".agents/skills/hallmark/references/components/s3-sticky-pinned.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_s3_sticky_pinned_s3_sticky_pinned",
-      "label": "S3 \u00b7 Sticky pinned",
-      "_origin": "ast",
-      "community": 103,
-      "community_name": "s3-sticky-pinned.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "s3 \u00b7 sticky pinned",
-      "source_file": ".agents/skills/hallmark/references/components/s3-sticky-pinned.md",
-      "source_location": "L1"
-    },
-    {
       "id": "components_ui_button",
       "label": "button.tsx",
       "_origin": "ast",
@@ -4595,30 +4619,6 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n7_brutal_slab",
-      "label": "n7-brutal-slab.md",
-      "_origin": "ast",
-      "community": 105,
-      "community_name": "n7-brutal-slab.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "n7-brutal-slab.md",
-      "source_file": ".agents/skills/hallmark/references/components/n7-brutal-slab.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_n7_brutal_slab_n7_brutal_slab",
-      "label": "N7 \u00b7 Brutal slab",
-      "_origin": "ast",
-      "community": 105,
-      "community_name": "n7-brutal-slab.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "n7 \u00b7 brutal slab",
-      "source_file": ".agents/skills/hallmark/references/components/n7-brutal-slab.md",
-      "source_location": "L1"
-    },
-    {
       "id": "components_ui_morph_loading",
       "label": "morph-loading.tsx",
       "_origin": "ast",
@@ -4630,6 +4630,50 @@
       "source_location": "L1"
     },
     {
+      "id": "clamav",
+      "label": "clamav.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "clamav.go",
+      "source_file": "clamav.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "clamav_newclamavscanner",
+      "label": "NewClamAVScanner()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "newclamavscanner()",
+      "source_file": "clamav.go",
+      "source_location": "L26"
+    },
+    {
+      "id": "crypto_gethmackey",
+      "label": "GetHMACKey()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "gethmackey()",
+      "source_file": "crypto.go",
+      "source_location": "L57"
+    },
+    {
+      "id": "go_type_io_reader",
+      "label": "io.Reader",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "io.reader",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "go_type_testing_t",
       "label": "testing.T",
       "_origin": "ast",
@@ -4639,6 +4683,369 @@
       "norm_label": "testing.t",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "mfa",
+      "label": "mfa.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "mfa.go",
+      "source_file": "mfa.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "mfa_generatebase32secret",
+      "label": "GenerateBase32Secret()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "generatebase32secret()",
+      "source_file": "mfa.go",
+      "source_location": "L62"
+    },
+    {
+      "id": "mfa_generatemfapendingtoken",
+      "label": "GenerateMFAPendingToken()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "generatemfapendingtoken()",
+      "source_file": "mfa.go",
+      "source_location": "L146"
+    },
+    {
+      "id": "mfa_generatetotpcode",
+      "label": "GenerateTOTPCode()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "generatetotpcode()",
+      "source_file": "mfa.go",
+      "source_location": "L84"
+    },
+    {
+      "id": "mfa_init",
+      "label": "init()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "init()",
+      "source_file": "mfa.go",
+      "source_location": "L46"
+    },
+    {
+      "id": "mfa_normalizetotpcode",
+      "label": "normalizeTOTPCode()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "normalizetotpcode()",
+      "source_file": "mfa.go",
+      "source_location": "L70"
+    },
+    {
+      "id": "mfa_validatemfapendingtoken",
+      "label": "ValidateMFAPendingToken()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "validatemfapendingtoken()",
+      "source_file": "mfa.go",
+      "source_location": "L174"
+    },
+    {
+      "id": "mfa_verifytotpcode",
+      "label": "VerifyTOTPCode()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "verifytotpcode()",
+      "source_file": "mfa.go",
+      "source_location": "L111"
+    },
+    {
+      "id": "security_initcookiesecurity",
+      "label": "InitCookieSecurity()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "initcookiesecurity()",
+      "source_file": "security.go",
+      "source_location": "L825"
+    },
+    {
+      "id": "security_newaccountlockoutmanager",
+      "label": "NewAccountLockoutManager()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "newaccountlockoutmanager()",
+      "source_file": "security.go",
+      "source_location": "L656"
+    },
+    {
+      "id": "security_newsessionmanager",
+      "label": "NewSessionManager()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "newsessionmanager()",
+      "source_file": "security.go",
+      "source_location": "L62"
+    },
+    {
+      "id": "setad_khabari_hmd_clamavscanner",
+      "label": "ClamAVScanner",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "clamavscanner",
+      "source_file": "clamav.go",
+      "source_location": "L20"
+    },
+    {
+      "id": "setad_khabari_hmd_clamavscanner_isenabled",
+      "label": ".IsEnabled()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": ".isenabled()",
+      "source_file": "clamav.go",
+      "source_location": "L46"
+    },
+    {
+      "id": "setad_khabari_hmd_clamavscanner_scanbytes",
+      "label": ".ScanBytes()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": ".scanbytes()",
+      "source_file": "clamav.go",
+      "source_location": "L131"
+    },
+    {
+      "id": "setad_khabari_hmd_clamavscanner_scanstream",
+      "label": ".ScanStream()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": ".scanstream()",
+      "source_file": "clamav.go",
+      "source_location": "L50"
+    },
+    {
+      "id": "setad_khabari_hmd_mfapendingpayload",
+      "label": "MFAPendingPayload",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "mfapendingpayload",
+      "source_file": "mfa.go",
+      "source_location": "L28"
+    },
+    {
+      "id": "test_audit_fail_test",
+      "label": "audit_fail_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "audit_fail_test.go",
+      "source_file": "test/audit_fail_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_audit_fail_test_testauditfailclosed",
+      "label": "TestAuditFailClosed()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testauditfailclosed()",
+      "source_file": "test/audit_fail_test.go",
+      "source_location": "L12"
+    },
+    {
+      "id": "test_captcha_persistence_test",
+      "label": "captcha_persistence_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "captcha_persistence_test.go",
+      "source_file": "test/captcha_persistence_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_captcha_persistence_test_testcaptchapersistencetryredeem",
+      "label": "TestCaptchaPersistenceTryRedeem()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testcaptchapersistencetryredeem()",
+      "source_file": "test/captcha_persistence_test.go",
+      "source_location": "L8"
+    },
+    {
+      "id": "test_clamav_test",
+      "label": "clamav_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "clamav_test.go",
+      "source_file": "test/clamav_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_clamav_test_startmockclamavserver",
+      "label": "startMockClamAVServer()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "startmockclamavserver()",
+      "source_file": "test/clamav_test.go",
+      "source_location": "L14"
+    },
+    {
+      "id": "test_clamav_test_testclamavcleanfile",
+      "label": "TestClamAVCleanFile()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testclamavcleanfile()",
+      "source_file": "test/clamav_test.go",
+      "source_location": "L65"
+    },
+    {
+      "id": "test_clamav_test_testclamavdisabledbypassesnetwork",
+      "label": "TestClamAVDisabledBypassesNetwork()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testclamavdisabledbypassesnetwork()",
+      "source_file": "test/clamav_test.go",
+      "source_location": "L131"
+    },
+    {
+      "id": "test_clamav_test_testclamavfailclosedwhenunreachable",
+      "label": "TestClamAVFailClosedWhenUnreachable()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testclamavfailclosedwhenunreachable()",
+      "source_file": "test/clamav_test.go",
+      "source_location": "L111"
+    },
+    {
+      "id": "test_clamav_test_testclamavmalwarefound",
+      "label": "TestClamAVMalwareFound()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testclamavmalwarefound()",
+      "source_file": "test/clamav_test.go",
+      "source_location": "L86"
+    },
+    {
+      "id": "test_classification_test",
+      "label": "classification_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "classification_test.go",
+      "source_file": "test/classification_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_classification_test_testclassificationvalidationandmath",
+      "label": "TestClassificationValidationAndMath()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testclassificationvalidationandmath()",
+      "source_file": "test/classification_test.go",
+      "source_location": "L8"
+    },
+    {
+      "id": "test_cookie_secure_test",
+      "label": "cookie_secure_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "cookie_secure_test.go",
+      "source_file": "test/cookie_secure_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_cookie_secure_test_testcookiesecurecachedresolution",
+      "label": "TestCookieSecureCachedResolution()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testcookiesecurecachedresolution()",
+      "source_file": "test/cookie_secure_test.go",
+      "source_location": "L44"
+    },
+    {
+      "id": "test_cookie_secure_test_testcookiesecurestartupfatalwithouttlsorflag",
+      "label": "TestCookieSecureStartupFatalWithoutTLSOrFlag()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testcookiesecurestartupfatalwithouttlsorflag()",
+      "source_file": "test/cookie_secure_test.go",
+      "source_location": "L10"
+    },
+    {
+      "id": "test_db_credentials_test",
+      "label": "db_credentials_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "db_credentials_test.go",
+      "source_file": "test/db_credentials_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_db_credentials_test_testdbcredentialsrequiredatstartup",
+      "label": "TestDBCredentialsRequiredAtStartup()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testdbcredentialsrequiredatstartup()",
+      "source_file": "test/db_credentials_test.go",
+      "source_location": "L10"
     },
     {
       "id": "test_forwarding_test",
@@ -4773,6 +5180,193 @@
       "source_location": "L242"
     },
     {
+      "id": "test_get_ip_test",
+      "label": "get_ip_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "get_ip_test.go",
+      "source_file": "test/get_ip_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_get_ip_test_testgetiphardening",
+      "label": "TestGetIPHardening()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testgetiphardening()",
+      "source_file": "test/get_ip_test.go",
+      "source_location": "L9"
+    },
+    {
+      "id": "test_lockout_persistence_test",
+      "label": "lockout_persistence_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "lockout_persistence_test.go",
+      "source_file": "test/lockout_persistence_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_lockout_persistence_test_testaccountlockoutconcurrentfailures",
+      "label": "TestAccountLockoutConcurrentFailures()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testaccountlockoutconcurrentfailures()",
+      "source_file": "test/lockout_persistence_test.go",
+      "source_location": "L9"
+    },
+    {
+      "id": "test_mfa_test",
+      "label": "mfa_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "mfa_test.go",
+      "source_file": "test/mfa_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_mfa_test_testconcurrenttotpverificationrace",
+      "label": "TestConcurrentTOTPVerificationRace()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testconcurrenttotpverificationrace()",
+      "source_file": "test/mfa_test.go",
+      "source_location": "L114"
+    },
+    {
+      "id": "test_mfa_test_testgeneratetotpsecret",
+      "label": "TestGenerateTOTPSecret()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testgeneratetotpsecret()",
+      "source_file": "test/mfa_test.go",
+      "source_location": "L17"
+    },
+    {
+      "id": "test_mfa_test_testmfapendingtokenlifecycle",
+      "label": "TestMFAPendingTokenLifecycle()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testmfapendingtokenlifecycle()",
+      "source_file": "test/mfa_test.go",
+      "source_location": "L151"
+    },
+    {
+      "id": "test_mfa_test_testtotpgenerationandverification",
+      "label": "TestTOTPGenerationAndVerification()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testtotpgenerationandverification()",
+      "source_file": "test/mfa_test.go",
+      "source_location": "L41"
+    },
+    {
+      "id": "test_mfa_test_testtotptolerancewindow",
+      "label": "TestTOTPToleranceWindow()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testtotptolerancewindow()",
+      "source_file": "test/mfa_test.go",
+      "source_location": "L79"
+    },
+    {
+      "id": "test_security_init_order_test",
+      "label": "security_init_order_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "security_init_order_test.go",
+      "source_file": "test/security_init_order_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_security_init_order_test_testsecuritystoresinitorder",
+      "label": "TestSecurityStoresInitOrder()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testsecuritystoresinitorder()",
+      "source_file": "test/security_init_order_test.go",
+      "source_location": "L8"
+    },
+    {
+      "id": "test_session_persistence_test",
+      "label": "session_persistence_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "session_persistence_test.go",
+      "source_file": "test/session_persistence_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_session_persistence_test_gettestdb",
+      "label": "getTestDB()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "gettestdb()",
+      "source_file": "test/session_persistence_test.go",
+      "source_location": "L14"
+    },
+    {
+      "id": "test_session_persistence_test_testsessionmanagementandratelimiter",
+      "label": "TestSessionManagementAndRateLimiter()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testsessionmanagementandratelimiter()",
+      "source_file": "test/session_persistence_test.go",
+      "source_location": "L176"
+    },
+    {
+      "id": "test_session_persistence_test_testsessionpersistenceacrossreinstantiation",
+      "label": "TestSessionPersistenceAcrossReinstantiation()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testsessionpersistenceacrossreinstantiation()",
+      "source_file": "test/session_persistence_test.go",
+      "source_location": "L69"
+    },
+    {
+      "id": "test_session_persistence_test_testsessionrevokeallusersessions",
+      "label": "TestSessionRevokeAllUserSessions()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testsessionrevokeallusersessions()",
+      "source_file": "test/session_persistence_test.go",
+      "source_location": "L114"
+    },
+    {
       "id": "test_syslog_test",
       "label": "syslog_test.go",
       "_origin": "ast",
@@ -4817,28 +5411,26 @@
       "source_location": "L89"
     },
     {
-      "id": "agents_skills_hallmark_references_components_s5_bottom_anchored",
-      "label": "s5-bottom-anchored.md",
+      "id": "test_updated_at_test",
+      "label": "updated_at_test.go",
       "_origin": "ast",
-      "community": 109,
-      "community_name": "s5-bottom-anchored.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "s5-bottom-anchored.md",
-      "source_file": ".agents/skills/hallmark/references/components/s5-bottom-anchored.md",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "updated_at_test.go",
+      "source_file": "test/updated_at_test.go",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_s5_bottom_anchored_s5_bottom_anchored",
-      "label": "S5 \u00b7 Bottom-anchored",
+      "id": "test_updated_at_test_testreportsupdatedattrigger",
+      "label": "TestReportsUpdatedAtTrigger()",
       "_origin": "ast",
-      "community": 109,
-      "community_name": "s5-bottom-anchored.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "s5 \u00b7 bottom-anchored",
-      "source_file": ".agents/skills/hallmark/references/components/s5-bottom-anchored.md",
-      "source_location": "L1"
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testreportsupdatedattrigger()",
+      "source_file": "test/updated_at_test.go",
+      "source_location": "L8"
     },
     {
       "id": "agents_skills_hallmark_skill",
@@ -4894,27 +5486,27 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_h9_custom_illustration_centerpiece",
-      "label": "h9-custom-illustration-centerpiece.md",
+      "id": "agents_skills_hallmark_references_components_h7_demo_video_clipped_by_viewport_edge",
+      "label": "h7-demo-video-clipped-by-viewport-edge.md",
       "_origin": "ast",
       "community": 11,
       "community_name": "SKILL.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "h9-custom-illustration-centerpiece.md",
-      "source_file": ".agents/skills/hallmark/references/components/h9-custom-illustration-centerpiece.md",
+      "norm_label": "h7-demo-video-clipped-by-viewport-edge.md",
+      "source_file": ".agents/skills/hallmark/references/components/h7-demo-video-clipped-by-viewport-edge.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_h9_custom_illustration_centerpiece_h9_custom_illustration_centerpiece",
-      "label": "H9 \u00b7 Custom Illustration Centerpiece",
+      "id": "agents_skills_hallmark_references_components_h7_demo_video_clipped_by_viewport_edge_h7_demo_video_clipped_by_viewport_edge",
+      "label": "H7 \u00b7 Demo Video \u2014 Clipped-by-viewport-edge",
       "_origin": "ast",
       "community": 11,
       "community_name": "SKILL.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "h9 \u00b7 custom illustration centerpiece",
-      "source_file": ".agents/skills/hallmark/references/components/h9-custom-illustration-centerpiece.md",
+      "norm_label": "h7 \u00b7 demo video \u2014 clipped-by-viewport-edge",
+      "source_file": ".agents/skills/hallmark/references/components/h7-demo-video-clipped-by-viewport-edge.md",
       "source_location": "L1"
     },
     {
@@ -5205,50 +5797,6 @@
       "source_location": "L1"
     },
     {
-      "id": "test_db_credentials_test",
-      "label": "db_credentials_test.go",
-      "_origin": "ast",
-      "community": 113,
-      "community_name": "TestDBCredentialsRequiredAtStartup",
-      "file_type": "code",
-      "norm_label": "db_credentials_test.go",
-      "source_file": "test/db_credentials_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_db_credentials_test_testdbcredentialsrequiredatstartup",
-      "label": "TestDBCredentialsRequiredAtStartup()",
-      "_origin": "ast",
-      "community": 113,
-      "community_name": "TestDBCredentialsRequiredAtStartup",
-      "file_type": "code",
-      "norm_label": "testdbcredentialsrequiredatstartup()",
-      "source_file": "test/db_credentials_test.go",
-      "source_location": "L10"
-    },
-    {
-      "id": "test_get_ip_test",
-      "label": "get_ip_test.go",
-      "_origin": "ast",
-      "community": 114,
-      "community_name": "TestGetIPHardening",
-      "file_type": "code",
-      "norm_label": "get_ip_test.go",
-      "source_file": "test/get_ip_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_get_ip_test_testgetiphardening",
-      "label": "TestGetIPHardening()",
-      "_origin": "ast",
-      "community": 114,
-      "community_name": "TestGetIPHardening",
-      "file_type": "code",
-      "norm_label": "testgetiphardening()",
-      "source_file": "test/get_ip_test.go",
-      "source_location": "L9"
-    },
-    {
       "id": "captcha",
       "label": "captcha.go",
       "_origin": "ast",
@@ -5425,28 +5973,6 @@
       "source_location": "L57"
     },
     {
-      "id": "security_isvalidtrackingcode",
-      "label": "isValidTrackingCode()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "isvalidtrackingcode()",
-      "source_file": "security.go",
-      "source_location": "L861"
-    },
-    {
-      "id": "security_newaccountlockoutmanager",
-      "label": "NewAccountLockoutManager()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "newaccountlockoutmanager()",
-      "source_file": "security.go",
-      "source_location": "L656"
-    },
-    {
       "id": "security_newipratelimiter",
       "label": "NewIPRateLimiter()",
       "_origin": "ast",
@@ -5458,17 +5984,6 @@
       "source_location": "L543"
     },
     {
-      "id": "security_newsessionmanager",
-      "label": "NewSessionManager()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "newsessionmanager()",
-      "source_file": "security.go",
-      "source_location": "L62"
-    },
-    {
       "id": "security_ratelimitmiddleware",
       "label": "RateLimitMiddleware()",
       "_origin": "ast",
@@ -5478,17 +5993,6 @@
       "norm_label": "ratelimitmiddleware()",
       "source_file": "security.go",
       "source_location": "L632"
-    },
-    {
-      "id": "security_sanitizephone",
-      "label": "sanitizePhone()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "sanitizephone()",
-      "source_file": "security.go",
-      "source_location": "L851"
     },
     {
       "id": "security_truncaterunes",
@@ -5887,28 +6391,6 @@
       "source_location": "L529"
     },
     {
-      "id": "test_captcha_persistence_test",
-      "label": "captcha_persistence_test.go",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "captcha_persistence_test.go",
-      "source_file": "test/captcha_persistence_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_captcha_persistence_test_testcaptchapersistencetryredeem",
-      "label": "TestCaptchaPersistenceTryRedeem()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testcaptchapersistencetryredeem()",
-      "source_file": "test/captcha_persistence_test.go",
-      "source_location": "L8"
-    },
-    {
       "id": "test_contextwithadmin",
       "label": "contextWithAdmin",
       "_origin": "ast",
@@ -5975,50 +6457,6 @@
       "source_location": "L306"
     },
     {
-      "id": "test_input_limits_test",
-      "label": "input_limits_test.go",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "input_limits_test.go",
-      "source_file": "test/input_limits_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_input_limits_test_testinputsanitizationandlimits",
-      "label": "TestInputSanitizationAndLimits()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testinputsanitizationandlimits()",
-      "source_file": "test/input_limits_test.go",
-      "source_location": "L14"
-    },
-    {
-      "id": "test_lockout_persistence_test",
-      "label": "lockout_persistence_test.go",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "lockout_persistence_test.go",
-      "source_file": "test/lockout_persistence_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_lockout_persistence_test_testaccountlockoutconcurrentfailures",
-      "label": "TestAccountLockoutConcurrentFailures()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testaccountlockoutconcurrentfailures()",
-      "source_file": "test/lockout_persistence_test.go",
-      "source_location": "L9"
-    },
-    {
       "id": "test_security_hardening_test_testipratelimiterboundedcapacity",
       "label": "TestIPRateLimiterBoundedCapacity()",
       "_origin": "ast",
@@ -6028,83 +6466,6 @@
       "norm_label": "testipratelimiterboundedcapacity()",
       "source_file": "test/security_hardening_test.go",
       "source_location": "L39"
-    },
-    {
-      "id": "test_security_init_order_test",
-      "label": "security_init_order_test.go",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "security_init_order_test.go",
-      "source_file": "test/security_init_order_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_security_init_order_test_testsecuritystoresinitorder",
-      "label": "TestSecurityStoresInitOrder()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testsecuritystoresinitorder()",
-      "source_file": "test/security_init_order_test.go",
-      "source_location": "L8"
-    },
-    {
-      "id": "test_session_persistence_test",
-      "label": "session_persistence_test.go",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "session_persistence_test.go",
-      "source_file": "test/session_persistence_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_session_persistence_test_gettestdb",
-      "label": "getTestDB()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "gettestdb()",
-      "source_file": "test/session_persistence_test.go",
-      "source_location": "L14"
-    },
-    {
-      "id": "test_session_persistence_test_testsessionmanagementandratelimiter",
-      "label": "TestSessionManagementAndRateLimiter()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testsessionmanagementandratelimiter()",
-      "source_file": "test/session_persistence_test.go",
-      "source_location": "L176"
-    },
-    {
-      "id": "test_session_persistence_test_testsessionpersistenceacrossreinstantiation",
-      "label": "TestSessionPersistenceAcrossReinstantiation()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testsessionpersistenceacrossreinstantiation()",
-      "source_file": "test/session_persistence_test.go",
-      "source_location": "L69"
-    },
-    {
-      "id": "test_session_persistence_test_testsessionrevokeallusersessions",
-      "label": "TestSessionRevokeAllUserSessions()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testsessionrevokeallusersessions()",
-      "source_file": "test/session_persistence_test.go",
-      "source_location": "L114"
     },
     {
       "id": "admin_handlers_adminauthmiddleware",
@@ -6457,28 +6818,6 @@
       "norm_label": "testrequirejsonmiddleware()",
       "source_file": "test/require_json_test.go",
       "source_location": "L10"
-    },
-    {
-      "id": "test_updated_at_test",
-      "label": "updated_at_test.go",
-      "_origin": "ast",
-      "community": 116,
-      "community_name": "main",
-      "file_type": "code",
-      "norm_label": "updated_at_test.go",
-      "source_file": "test/updated_at_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_updated_at_test_testreportsupdatedattrigger",
-      "label": "TestReportsUpdatedAtTrigger()",
-      "_origin": "ast",
-      "community": 116,
-      "community_name": "main",
-      "file_type": "code",
-      "norm_label": "testreportsupdatedattrigger()",
-      "source_file": "test/updated_at_test.go",
-      "source_location": "L8"
     },
     {
       "id": "frontend_admin_confirm",
@@ -9353,6 +9692,17 @@
       "norm_label": "parsetrustedproxies()",
       "source_file": "admin_auth.go",
       "source_location": "L224"
+    },
+    {
+      "id": "admin_handlers_deletereporthandler",
+      "label": "DeleteReportHandler()",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "logAuditTx",
+      "file_type": "code",
+      "norm_label": "deletereporthandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2004"
     },
     {
       "id": "admin_handlers_deleteuserhandler",
@@ -13196,193 +13546,6 @@
       "source_location": "L3"
     },
     {
-      "id": "crypto_gethmackey",
-      "label": "GetHMACKey()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "gethmackey()",
-      "source_file": "crypto.go",
-      "source_location": "L57"
-    },
-    {
-      "id": "mfa",
-      "label": "mfa.go",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "mfa.go",
-      "source_file": "mfa.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "mfa_generatebase32secret",
-      "label": "GenerateBase32Secret()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "generatebase32secret()",
-      "source_file": "mfa.go",
-      "source_location": "L62"
-    },
-    {
-      "id": "mfa_generatemfapendingtoken",
-      "label": "GenerateMFAPendingToken()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "generatemfapendingtoken()",
-      "source_file": "mfa.go",
-      "source_location": "L146"
-    },
-    {
-      "id": "mfa_generatetotpcode",
-      "label": "GenerateTOTPCode()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "generatetotpcode()",
-      "source_file": "mfa.go",
-      "source_location": "L84"
-    },
-    {
-      "id": "mfa_init",
-      "label": "init()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "init()",
-      "source_file": "mfa.go",
-      "source_location": "L46"
-    },
-    {
-      "id": "mfa_normalizetotpcode",
-      "label": "normalizeTOTPCode()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "normalizetotpcode()",
-      "source_file": "mfa.go",
-      "source_location": "L70"
-    },
-    {
-      "id": "mfa_setup2fahandler",
-      "label": "Setup2FAHandler()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "setup2fahandler()",
-      "source_file": "mfa.go",
-      "source_location": "L337"
-    },
-    {
-      "id": "mfa_validatemfapendingtoken",
-      "label": "ValidateMFAPendingToken()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "validatemfapendingtoken()",
-      "source_file": "mfa.go",
-      "source_location": "L174"
-    },
-    {
-      "id": "mfa_verifytotpcode",
-      "label": "VerifyTOTPCode()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "verifytotpcode()",
-      "source_file": "mfa.go",
-      "source_location": "L111"
-    },
-    {
-      "id": "setad_khabari_hmd_mfapendingpayload",
-      "label": "MFAPendingPayload",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "mfapendingpayload",
-      "source_file": "mfa.go",
-      "source_location": "L28"
-    },
-    {
-      "id": "test_mfa_test",
-      "label": "mfa_test.go",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "mfa_test.go",
-      "source_file": "test/mfa_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_mfa_test_testconcurrenttotpverificationrace",
-      "label": "TestConcurrentTOTPVerificationRace()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "testconcurrenttotpverificationrace()",
-      "source_file": "test/mfa_test.go",
-      "source_location": "L114"
-    },
-    {
-      "id": "test_mfa_test_testgeneratetotpsecret",
-      "label": "TestGenerateTOTPSecret()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "testgeneratetotpsecret()",
-      "source_file": "test/mfa_test.go",
-      "source_location": "L17"
-    },
-    {
-      "id": "test_mfa_test_testmfapendingtokenlifecycle",
-      "label": "TestMFAPendingTokenLifecycle()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "testmfapendingtokenlifecycle()",
-      "source_file": "test/mfa_test.go",
-      "source_location": "L151"
-    },
-    {
-      "id": "test_mfa_test_testtotpgenerationandverification",
-      "label": "TestTOTPGenerationAndVerification()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "testtotpgenerationandverification()",
-      "source_file": "test/mfa_test.go",
-      "source_location": "L41"
-    },
-    {
-      "id": "test_mfa_test_testtotptolerancewindow",
-      "label": "TestTOTPToleranceWindow()",
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "testtotptolerancewindow()",
-      "source_file": "test/mfa_test.go",
-      "source_location": "L79"
-    },
-    {
       "id": "frontend_public_tatweel",
       "label": "public/tatweel.js",
       "_origin": "ast",
@@ -13429,17 +13592,6 @@
       "source_location": "L1"
     },
     {
-      "id": "admin_handlers_exportreportdocxhandler",
-      "label": "ExportReportDocxHandler()",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "exportreportdocxhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2925"
-    },
-    {
       "id": "admin_handlers_formatjalalitime",
       "label": "formatJalaliTime()",
       "_origin": "ast",
@@ -13471,17 +13623,6 @@
       "norm_label": "gregoriantojalali()",
       "source_file": "admin_handlers.go",
       "source_location": "L2880"
-    },
-    {
-      "id": "admin_handlers_marknotificationreadhandler",
-      "label": "MarkNotificationReadHandler()",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "marknotificationreadhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2806"
     },
     {
       "id": "setad_khabari_hmd_adminnotificationitem",
@@ -13726,154 +13867,46 @@
       "source_location": "L317"
     },
     {
-      "id": "clamav",
-      "label": "clamav.go",
+      "id": "agents_skills_hallmark_references_components_f3_tabular_spec_sheet",
+      "label": "f3-tabular-spec-sheet.md",
       "_origin": "ast",
       "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": "clamav.go",
-      "source_file": "clamav.go",
+      "community_name": "f3-tabular-spec-sheet.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "f3-tabular-spec-sheet.md",
+      "source_file": ".agents/skills/hallmark/references/components/f3-tabular-spec-sheet.md",
       "source_location": "L1"
     },
     {
-      "id": "clamav_newclamavscanner",
-      "label": "NewClamAVScanner()",
+      "id": "agents_skills_hallmark_references_components_f3_tabular_spec_sheet_f3_tabular_spec_sheet",
+      "label": "F3 \u00b7 Tabular spec sheet",
       "_origin": "ast",
       "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": "newclamavscanner()",
-      "source_file": "clamav.go",
-      "source_location": "L26"
-    },
-    {
-      "id": "go_type_io_reader",
-      "label": "io.Reader",
-      "_origin": "ast",
-      "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": "io.reader",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "setad_khabari_hmd_clamavscanner",
-      "label": "ClamAVScanner",
-      "_origin": "ast",
-      "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": "clamavscanner",
-      "source_file": "clamav.go",
-      "source_location": "L20"
-    },
-    {
-      "id": "setad_khabari_hmd_clamavscanner_isenabled",
-      "label": ".IsEnabled()",
-      "_origin": "ast",
-      "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": ".isenabled()",
-      "source_file": "clamav.go",
-      "source_location": "L46"
-    },
-    {
-      "id": "setad_khabari_hmd_clamavscanner_scanbytes",
-      "label": ".ScanBytes()",
-      "_origin": "ast",
-      "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": ".scanbytes()",
-      "source_file": "clamav.go",
-      "source_location": "L131"
-    },
-    {
-      "id": "setad_khabari_hmd_clamavscanner_scanstream",
-      "label": ".ScanStream()",
-      "_origin": "ast",
-      "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": ".scanstream()",
-      "source_file": "clamav.go",
-      "source_location": "L50"
-    },
-    {
-      "id": "test_clamav_test",
-      "label": "clamav_test.go",
-      "_origin": "ast",
-      "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": "clamav_test.go",
-      "source_file": "test/clamav_test.go",
+      "community_name": "f3-tabular-spec-sheet.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "f3 \u00b7 tabular spec sheet",
+      "source_file": ".agents/skills/hallmark/references/components/f3-tabular-spec-sheet.md",
       "source_location": "L1"
     },
     {
-      "id": "test_clamav_test_startmockclamavserver",
-      "label": "startMockClamAVServer()",
+      "id": "admin_auth_loginhandler",
+      "label": "LoginHandler()",
       "_origin": "ast",
-      "community": 57,
-      "community_name": "NewClamAVScanner",
+      "community": 58,
+      "community_name": "crypto.go",
       "file_type": "code",
-      "norm_label": "startmockclamavserver()",
-      "source_file": "test/clamav_test.go",
-      "source_location": "L14"
-    },
-    {
-      "id": "test_clamav_test_testclamavcleanfile",
-      "label": "TestClamAVCleanFile()",
-      "_origin": "ast",
-      "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": "testclamavcleanfile()",
-      "source_file": "test/clamav_test.go",
-      "source_location": "L65"
-    },
-    {
-      "id": "test_clamav_test_testclamavdisabledbypassesnetwork",
-      "label": "TestClamAVDisabledBypassesNetwork()",
-      "_origin": "ast",
-      "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": "testclamavdisabledbypassesnetwork()",
-      "source_file": "test/clamav_test.go",
-      "source_location": "L131"
-    },
-    {
-      "id": "test_clamav_test_testclamavfailclosedwhenunreachable",
-      "label": "TestClamAVFailClosedWhenUnreachable()",
-      "_origin": "ast",
-      "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": "testclamavfailclosedwhenunreachable()",
-      "source_file": "test/clamav_test.go",
-      "source_location": "L111"
-    },
-    {
-      "id": "test_clamav_test_testclamavmalwarefound",
-      "label": "TestClamAVMalwareFound()",
-      "_origin": "ast",
-      "community": 57,
-      "community_name": "NewClamAVScanner",
-      "file_type": "code",
-      "norm_label": "testclamavmalwarefound()",
-      "source_file": "test/clamav_test.go",
-      "source_location": "L86"
+      "norm_label": "loginhandler()",
+      "source_file": "admin_auth.go",
+      "source_location": "L29"
     },
     {
       "id": "admin_handlers_changemypasswordhandler",
       "label": "ChangeMyPasswordHandler()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "ChangeMyPasswordHandler",
+      "community_name": "crypto.go",
       "file_type": "code",
       "norm_label": "changemypasswordhandler()",
       "source_file": "admin_handlers.go",
@@ -13884,7 +13917,7 @@
       "label": "CreateUserHandler()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "ChangeMyPasswordHandler",
+      "community_name": "crypto.go",
       "file_type": "code",
       "norm_label": "createuserhandler()",
       "source_file": "admin_handlers.go",
@@ -13895,29 +13928,84 @@
       "label": "ResetUserPasswordHandler()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "ChangeMyPasswordHandler",
+      "community_name": "crypto.go",
       "file_type": "code",
       "norm_label": "resetuserpasswordhandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L1569"
     },
     {
+      "id": "crypto",
+      "label": "crypto.go",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "crypto.go",
+      "source_file": "crypto.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "crypto_decryptfilepayload",
+      "label": "decryptFilePayload()",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "decryptfilepayload()",
+      "source_file": "crypto.go",
+      "source_location": "L211"
+    },
+    {
+      "id": "crypto_decryptwithkey",
+      "label": "decryptWithKey()",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "decryptwithkey()",
+      "source_file": "crypto.go",
+      "source_location": "L146"
+    },
+    {
+      "id": "crypto_derivekey",
+      "label": "deriveKey()",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "derivekey()",
+      "source_file": "crypto.go",
+      "source_location": "L29"
+    },
+    {
       "id": "crypto_hashpassword",
       "label": "HashPassword()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "ChangeMyPasswordHandler",
+      "community_name": "crypto.go",
       "file_type": "code",
       "norm_label": "hashpassword()",
       "source_file": "crypto.go",
       "source_location": "L245"
     },
     {
+      "id": "crypto_runcryptographicselftests",
+      "label": "RunCryptographicSelfTests()",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "runcryptographicselftests()",
+      "source_file": "crypto.go",
+      "source_location": "L352"
+    },
+    {
       "id": "crypto_validatepasswordcomplexity",
       "label": "ValidatePasswordComplexity()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "ChangeMyPasswordHandler",
+      "community_name": "crypto.go",
       "file_type": "code",
       "norm_label": "validatepasswordcomplexity()",
       "source_file": "crypto.go",
@@ -13928,7 +14016,7 @@
       "label": "VerifyPassword()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "ChangeMyPasswordHandler",
+      "community_name": "crypto.go",
       "file_type": "code",
       "norm_label": "verifypassword()",
       "source_file": "crypto.go",
@@ -13939,7 +14027,7 @@
       "label": "VerifyPasswordWithRehash()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "ChangeMyPasswordHandler",
+      "community_name": "crypto.go",
       "file_type": "code",
       "norm_label": "verifypasswordwithrehash()",
       "source_file": "crypto.go",
@@ -13950,11 +14038,22 @@
       "label": "TestArgon2idDualFormatAndRehash()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "ChangeMyPasswordHandler",
+      "community_name": "crypto.go",
       "file_type": "code",
       "norm_label": "testargon2iddualformatandrehash()",
       "source_file": "test/crypto_test.go",
       "source_location": "L66"
+    },
+    {
+      "id": "test_crypto_test_testvalidatepasswordcomplexity",
+      "label": "TestValidatePasswordComplexity()",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "testvalidatepasswordcomplexity()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L18"
     },
     {
       "id": "agents_skills_hallmark_references_themes_lumen",
@@ -14420,6 +14519,28 @@
       "source_location": "L59"
     },
     {
+      "id": "metadata_validatebinarymagicbytes",
+      "label": "ValidateBinaryMagicBytes()",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "metadata.go",
+      "file_type": "code",
+      "norm_label": "validatebinarymagicbytes()",
+      "source_file": "metadata.go",
+      "source_location": "L83"
+    },
+    {
+      "id": "public_handlers_validatemagicbytes",
+      "label": "validateMagicBytes()",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "metadata.go",
+      "file_type": "code",
+      "norm_label": "validatemagicbytes()",
+      "source_file": "public_handlers.go",
+      "source_location": "L79"
+    },
+    {
       "id": "test_metadata_test",
       "label": "metadata_test.go",
       "_origin": "ast",
@@ -14486,27 +14607,27 @@
       "source_location": "L102"
     },
     {
-      "id": "agents_skills_hallmark_references_components_f2_sticky_scroll_stack",
-      "label": "f2-sticky-scroll-stack.md",
+      "id": "agents_skills_hallmark_references_components_h4_stat_led",
+      "label": "h4-stat-led.md",
       "_origin": "ast",
       "community": 61,
-      "community_name": "f2-sticky-scroll-stack.md",
+      "community_name": "h4-stat-led.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "f2-sticky-scroll-stack.md",
-      "source_file": ".agents/skills/hallmark/references/components/f2-sticky-scroll-stack.md",
+      "norm_label": "h4-stat-led.md",
+      "source_file": ".agents/skills/hallmark/references/components/h4-stat-led.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_f2_sticky_scroll_stack_f2_sticky_scroll_stack",
-      "label": "F2 \u00b7 Sticky-scroll stack",
+      "id": "agents_skills_hallmark_references_components_h4_stat_led_h4_stat_led",
+      "label": "H4 \u00b7 Stat-Led",
       "_origin": "ast",
       "community": 61,
-      "community_name": "f2-sticky-scroll-stack.md",
+      "community_name": "h4-stat-led.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "f2 \u00b7 sticky-scroll stack",
-      "source_file": ".agents/skills/hallmark/references/components/f2-sticky-scroll-stack.md",
+      "norm_label": "h4 \u00b7 stat-led",
+      "source_file": ".agents/skills/hallmark/references/components/h4-stat-led.md",
       "source_location": "L1"
     },
     {
@@ -14591,17 +14712,6 @@
       "source_location": "L322"
     },
     {
-      "id": "admin_auth_loginhandler",
-      "label": "LoginHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "loginhandler()",
-      "source_file": "admin_auth.go",
-      "source_location": "L29"
-    },
-    {
       "id": "admin_auth_logouthandler",
       "label": "LogoutHandler()",
       "_origin": "ast",
@@ -14635,17 +14745,6 @@
       "source_location": "L888"
     },
     {
-      "id": "admin_handlers_deletereporthandler",
-      "label": "DeleteReportHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "deletereporthandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2004"
-    },
-    {
       "id": "admin_handlers_disableuser2fahandler",
       "label": "DisableUser2FAHandler()",
       "_origin": "ast",
@@ -14666,6 +14765,17 @@
       "norm_label": "downloadattachmenthandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L986"
+    },
+    {
+      "id": "admin_handlers_exportreportdocxhandler",
+      "label": "ExportReportDocxHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "exportreportdocxhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2925"
     },
     {
       "id": "admin_handlers_getactivesessionshandler",
@@ -14789,6 +14899,17 @@
       "source_location": "L2844"
     },
     {
+      "id": "admin_handlers_marknotificationreadhandler",
+      "label": "MarkNotificationReadHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "marknotificationreadhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2806"
+    },
+    {
       "id": "admin_handlers_removeforwardinghandler",
       "label": "RemoveForwardingHandler()",
       "_origin": "ast",
@@ -14800,17 +14921,6 @@
       "source_location": "L3242"
     },
     {
-      "id": "admin_handlers_respondtoreporthandler",
-      "label": "RespondToReportHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "respondtoreporthandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1208"
-    },
-    {
       "id": "admin_handlers_setreportpriorityhandler",
       "label": "SetReportPriorityHandler()",
       "_origin": "ast",
@@ -14820,17 +14930,6 @@
       "norm_label": "setreportpriorityhandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L848"
-    },
-    {
-      "id": "admin_handlers_submitregionalresponsehandler",
-      "label": "SubmitRegionalResponseHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "submitregionalresponsehandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L3147"
     },
     {
       "id": "admin_handlers_togglereadstatushandler",
@@ -14853,17 +14952,6 @@
       "norm_label": "toggleuseractivehandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L1396"
-    },
-    {
-      "id": "admin_handlers_updateinternalnoteshandler",
-      "label": "UpdateInternalNotesHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "updateinternalnoteshandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L793"
     },
     {
       "id": "admin_handlers_updateuserhandler",
@@ -14954,6 +15042,17 @@
       "source_location": "L356"
     },
     {
+      "id": "mfa_setup2fahandler",
+      "label": "Setup2FAHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "setup2fahandler()",
+      "source_file": "mfa.go",
+      "source_location": "L337"
+    },
+    {
       "id": "mfa_verifymfahandler",
       "label": "VerifyMFAHandler()",
       "_origin": "ast",
@@ -14976,17 +15075,6 @@
       "source_location": "L348"
     },
     {
-      "id": "public_handlers_submitfollowuphandler",
-      "label": "SubmitFollowUpHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "submitfollowuphandler()",
-      "source_file": "public_handlers.go",
-      "source_location": "L475"
-    },
-    {
       "id": "security_iscookiesecure",
       "label": "isCookieSecure()",
       "_origin": "ast",
@@ -14998,59 +15086,61 @@
       "source_location": "L830"
     },
     {
-      "id": "security_stripnul",
-      "label": "stripNul()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "stripnul()",
-      "source_file": "security.go",
-      "source_location": "L847"
-    },
-    {
-      "id": "test_audit_fail_test",
-      "label": "audit_fail_test.go",
+      "id": "agents_skills_hallmark_references_components_h9_custom_illustration_centerpiece",
+      "label": "h9-custom-illustration-centerpiece.md",
       "_origin": "ast",
       "community": 65,
-      "community_name": "TestAuditFailClosed",
-      "file_type": "code",
-      "norm_label": "audit_fail_test.go",
-      "source_file": "test/audit_fail_test.go",
+      "community_name": "h9-custom-illustration-centerpiece.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "h9-custom-illustration-centerpiece.md",
+      "source_file": ".agents/skills/hallmark/references/components/h9-custom-illustration-centerpiece.md",
       "source_location": "L1"
     },
     {
-      "id": "test_audit_fail_test_testauditfailclosed",
-      "label": "TestAuditFailClosed()",
+      "id": "agents_skills_hallmark_references_components_h9_custom_illustration_centerpiece_h9_custom_illustration_centerpiece",
+      "label": "H9 \u00b7 Custom Illustration Centerpiece",
       "_origin": "ast",
       "community": 65,
-      "community_name": "TestAuditFailClosed",
-      "file_type": "code",
-      "norm_label": "testauditfailclosed()",
-      "source_file": "test/audit_fail_test.go",
-      "source_location": "L12"
-    },
-    {
-      "id": "test_classification_test",
-      "label": "classification_test.go",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "TestAuditFailClosed",
-      "file_type": "code",
-      "norm_label": "classification_test.go",
-      "source_file": "test/classification_test.go",
+      "community_name": "h9-custom-illustration-centerpiece.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "h9 \u00b7 custom illustration centerpiece",
+      "source_file": ".agents/skills/hallmark/references/components/h9-custom-illustration-centerpiece.md",
       "source_location": "L1"
     },
     {
-      "id": "test_classification_test_testclassificationvalidationandmath",
-      "label": "TestClassificationValidationAndMath()",
+      "id": "admin_handlers_respondtoreporthandler",
+      "label": "RespondToReportHandler()",
       "_origin": "ast",
-      "community": 65,
-      "community_name": "TestAuditFailClosed",
+      "community": 66,
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
-      "norm_label": "testclassificationvalidationandmath()",
-      "source_file": "test/classification_test.go",
-      "source_location": "L8"
+      "norm_label": "respondtoreporthandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1208"
+    },
+    {
+      "id": "admin_handlers_submitregionalresponsehandler",
+      "label": "SubmitRegionalResponseHandler()",
+      "_origin": "ast",
+      "community": 66,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "submitregionalresponsehandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L3147"
+    },
+    {
+      "id": "admin_handlers_updateinternalnoteshandler",
+      "label": "UpdateInternalNotesHandler()",
+      "_origin": "ast",
+      "community": 66,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "updateinternalnoteshandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L793"
     },
     {
       "id": "captcha_verifycaptcha",
@@ -15073,17 +15163,6 @@
       "norm_label": "getlegacyhmackey()",
       "source_file": "crypto.go",
       "source_location": "L61"
-    },
-    {
-      "id": "metadata_validatebinarymagicbytes",
-      "label": "ValidateBinaryMagicBytes()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "validatebinarymagicbytes()",
-      "source_file": "metadata.go",
-      "source_location": "L83"
     },
     {
       "id": "public_handlers",
@@ -15119,6 +15198,17 @@
       "source_location": "L35"
     },
     {
+      "id": "public_handlers_submitfollowuphandler",
+      "label": "SubmitFollowUpHandler()",
+      "_origin": "ast",
+      "community": 66,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "submitfollowuphandler()",
+      "source_file": "public_handlers.go",
+      "source_location": "L475"
+    },
+    {
       "id": "public_handlers_submitreporthandler",
       "label": "SubmitReportHandler()",
       "_origin": "ast",
@@ -15141,15 +15231,37 @@
       "source_location": "L389"
     },
     {
-      "id": "public_handlers_validatemagicbytes",
-      "label": "validateMagicBytes()",
+      "id": "security_isvalidtrackingcode",
+      "label": "isValidTrackingCode()",
       "_origin": "ast",
       "community": 66,
       "community_name": "SubmitReportHandler",
       "file_type": "code",
-      "norm_label": "validatemagicbytes()",
-      "source_file": "public_handlers.go",
-      "source_location": "L79"
+      "norm_label": "isvalidtrackingcode()",
+      "source_file": "security.go",
+      "source_location": "L861"
+    },
+    {
+      "id": "security_sanitizephone",
+      "label": "sanitizePhone()",
+      "_origin": "ast",
+      "community": 66,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "sanitizephone()",
+      "source_file": "security.go",
+      "source_location": "L851"
+    },
+    {
+      "id": "security_stripnul",
+      "label": "stripNul()",
+      "_origin": "ast",
+      "community": 66,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "stripnul()",
+      "source_file": "security.go",
+      "source_location": "L847"
     },
     {
       "id": "setad_khabari_hmd_publicreportstatus",
@@ -15172,6 +15284,28 @@
       "norm_label": "reportmessageitem",
       "source_file": "public_handlers.go",
       "source_location": "L372"
+    },
+    {
+      "id": "test_input_limits_test",
+      "label": "input_limits_test.go",
+      "_origin": "ast",
+      "community": 66,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "input_limits_test.go",
+      "source_file": "test/input_limits_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_input_limits_test_testinputsanitizationandlimits",
+      "label": "TestInputSanitizationAndLimits()",
+      "_origin": "ast",
+      "community": 66,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testinputsanitizationandlimits()",
+      "source_file": "test/input_limits_test.go",
+      "source_location": "L14"
     },
     {
       "id": "test_security_hardening_test",
@@ -15211,29 +15345,18 @@
       "label": "GetReportsHandler()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "getreportshandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L215"
     },
     {
-      "id": "crypto",
-      "label": "crypto.go",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "crypto.go",
-      "source_file": "crypto.go",
-      "source_location": "L1"
-    },
-    {
       "id": "crypto_decryptaes",
       "label": "DecryptAES()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "decryptaes()",
       "source_file": "crypto.go",
@@ -15244,7 +15367,7 @@
       "label": "DecryptFileBytes()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "decryptfilebytes()",
       "source_file": "crypto.go",
@@ -15255,51 +15378,18 @@
       "label": "DecryptFilePath()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "decryptfilepath()",
       "source_file": "crypto.go",
       "source_location": "L142"
     },
     {
-      "id": "crypto_decryptfilepayload",
-      "label": "decryptFilePayload()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "decryptfilepayload()",
-      "source_file": "crypto.go",
-      "source_location": "L211"
-    },
-    {
-      "id": "crypto_decryptwithkey",
-      "label": "decryptWithKey()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "decryptwithkey()",
-      "source_file": "crypto.go",
-      "source_location": "L146"
-    },
-    {
-      "id": "crypto_derivekey",
-      "label": "deriveKey()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "derivekey()",
-      "source_file": "crypto.go",
-      "source_location": "L29"
-    },
-    {
       "id": "crypto_encryptaes",
       "label": "EncryptAES()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "encryptaes()",
       "source_file": "crypto.go",
@@ -15310,7 +15400,7 @@
       "label": "EncryptFileBytes()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "encryptfilebytes()",
       "source_file": "crypto.go",
@@ -15321,7 +15411,7 @@
       "label": "EncryptFilePath()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "encryptfilepath()",
       "source_file": "crypto.go",
@@ -15332,7 +15422,7 @@
       "label": "encryptWithKey()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "encryptwithkey()",
       "source_file": "crypto.go",
@@ -15343,29 +15433,18 @@
       "label": "InitCrypto()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "initcrypto()",
       "source_file": "crypto.go",
       "source_location": "L42"
     },
     {
-      "id": "crypto_runcryptographicselftests",
-      "label": "RunCryptographicSelfTests()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "runcryptographicselftests()",
-      "source_file": "crypto.go",
-      "source_location": "L352"
-    },
-    {
       "id": "migration_v2",
       "label": "migration_v2.go",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "migration_v2.go",
       "source_file": "migration_v2.go",
@@ -15376,7 +15455,7 @@
       "label": "reencryptLegacyData()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "reencryptlegacydata()",
       "source_file": "migration_v2.go",
@@ -15387,7 +15466,7 @@
       "label": "crypto_tamper_test.go",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "crypto_tamper_test.go",
       "source_file": "test/crypto_tamper_test.go",
@@ -15398,7 +15477,7 @@
       "label": "TestCryptoFailClosedNeverReturnsPlaintext()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "testcryptofailclosedneverreturnsplaintext()",
       "source_file": "test/crypto_tamper_test.go",
@@ -15409,7 +15488,7 @@
       "label": "crypto_test.go",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "crypto_test.go",
       "source_file": "test/crypto_test.go",
@@ -15420,7 +15499,7 @@
       "label": "TestCaptchaVerificationSuite()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "testcaptchaverificationsuite()",
       "source_file": "test/crypto_test.go",
@@ -15431,7 +15510,7 @@
       "label": "TestCryptoUnicodeEmojiNulBytesAndTamper()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "testcryptounicodeemojinulbytesandtamper()",
       "source_file": "test/crypto_test.go",
@@ -15442,7 +15521,7 @@
       "label": "TestDeriveKeyDeterministic()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "testderivekeydeterministic()",
       "source_file": "test/crypto_test.go",
@@ -15453,29 +15532,18 @@
       "label": "TestHKDFKeySeparationAndEncryption()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "testhkdfkeyseparationandencryption()",
       "source_file": "test/crypto_test.go",
       "source_location": "L108"
     },
     {
-      "id": "test_crypto_test_testvalidatepasswordcomplexity",
-      "label": "TestValidatePasswordComplexity()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testvalidatepasswordcomplexity()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L18"
-    },
-    {
       "id": "test_docx_sandbox_test",
       "label": "docx_sandbox_test.go",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "docx_sandbox_test.go",
       "source_file": "test/docx_sandbox_test.go",
@@ -15486,7 +15554,7 @@
       "label": "TestDocxSandboxMaliciousPayload()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "testdocxsandboxmaliciouspayload()",
       "source_file": "test/docx_sandbox_test.go",
@@ -15497,7 +15565,7 @@
       "label": "migration_v2_test.go",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "migration_v2_test.go",
       "source_file": "test/migration_v2_test.go",
@@ -15508,7 +15576,7 @@
       "label": "TestReencryptLegacyData()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "testreencryptlegacydata()",
       "source_file": "test/migration_v2_test.go",
@@ -15519,7 +15587,7 @@
       "label": "pagination_test.go",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "pagination_test.go",
       "source_file": "test/pagination_test.go",
@@ -15530,55 +15598,35 @@
       "label": "TestGetReportsPaginationAndFiltering()",
       "_origin": "ast",
       "community": 67,
-      "community_name": "crypto.go",
+      "community_name": "DecryptAES",
       "file_type": "code",
       "norm_label": "testgetreportspaginationandfiltering()",
       "source_file": "test/pagination_test.go",
       "source_location": "L12"
     },
     {
-      "id": "security_initcookiesecurity",
-      "label": "InitCookieSecurity()",
+      "id": "agents_skills_hallmark_references_components_n8_terminal_command",
+      "label": "n8-terminal-command.md",
       "_origin": "ast",
       "community": 68,
-      "community_name": "TestCookieSecureCachedResolution",
-      "file_type": "code",
-      "norm_label": "initcookiesecurity()",
-      "source_file": "security.go",
-      "source_location": "L825"
-    },
-    {
-      "id": "test_cookie_secure_test",
-      "label": "cookie_secure_test.go",
-      "_origin": "ast",
-      "community": 68,
-      "community_name": "TestCookieSecureCachedResolution",
-      "file_type": "code",
-      "norm_label": "cookie_secure_test.go",
-      "source_file": "test/cookie_secure_test.go",
+      "community_name": "n8-terminal-command.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "n8-terminal-command.md",
+      "source_file": ".agents/skills/hallmark/references/components/n8-terminal-command.md",
       "source_location": "L1"
     },
     {
-      "id": "test_cookie_secure_test_testcookiesecurecachedresolution",
-      "label": "TestCookieSecureCachedResolution()",
+      "id": "agents_skills_hallmark_references_components_n8_terminal_command_n8_terminal_command",
+      "label": "N8 \u00b7 Terminal command",
       "_origin": "ast",
       "community": 68,
-      "community_name": "TestCookieSecureCachedResolution",
-      "file_type": "code",
-      "norm_label": "testcookiesecurecachedresolution()",
-      "source_file": "test/cookie_secure_test.go",
-      "source_location": "L44"
-    },
-    {
-      "id": "test_cookie_secure_test_testcookiesecurestartupfatalwithouttlsorflag",
-      "label": "TestCookieSecureStartupFatalWithoutTLSOrFlag()",
-      "_origin": "ast",
-      "community": 68,
-      "community_name": "TestCookieSecureCachedResolution",
-      "file_type": "code",
-      "norm_label": "testcookiesecurestartupfatalwithouttlsorflag()",
-      "source_file": "test/cookie_secure_test.go",
-      "source_location": "L10"
+      "community_name": "n8-terminal-command.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "n8 \u00b7 terminal command",
+      "source_file": ".agents/skills/hallmark/references/components/n8-terminal-command.md",
+      "source_location": "L1"
     },
     {
       "id": "agents_skills_hallmark_references_components_ft3_index_style_category_list",
@@ -16277,27 +16325,27 @@
       "source_location": "L247"
     },
     {
-      "id": "agents_skills_hallmark_references_components_h7_demo_video_clipped_by_viewport_edge",
-      "label": "h7-demo-video-clipped-by-viewport-edge.md",
+      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal",
+      "label": "n9-edge-aligned-minimal.md",
       "_origin": "ast",
       "community": 75,
-      "community_name": "h7-demo-video-clipped-by-viewport-edge.md",
+      "community_name": "n9-edge-aligned-minimal.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "h7-demo-video-clipped-by-viewport-edge.md",
-      "source_file": ".agents/skills/hallmark/references/components/h7-demo-video-clipped-by-viewport-edge.md",
+      "norm_label": "n9-edge-aligned-minimal.md",
+      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_h7_demo_video_clipped_by_viewport_edge_h7_demo_video_clipped_by_viewport_edge",
-      "label": "H7 \u00b7 Demo Video \u2014 Clipped-by-viewport-edge",
+      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal_n9_edge_aligned_minimal",
+      "label": "N9 \u00b7 Edge-aligned minimal",
       "_origin": "ast",
       "community": 75,
-      "community_name": "h7-demo-video-clipped-by-viewport-edge.md",
+      "community_name": "n9-edge-aligned-minimal.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "h7 \u00b7 demo video \u2014 clipped-by-viewport-edge",
-      "source_file": ".agents/skills/hallmark/references/components/h7-demo-video-clipped-by-viewport-edge.md",
+      "norm_label": "n9 \u00b7 edge-aligned minimal",
+      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
       "source_location": "L1"
     },
     {
@@ -21103,18 +21151,6 @@
     },
     {
       "source": "frontend_public_app_addfiles",
-      "target": "frontend_public_app_renderfilequeue",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "frontend/public/app.js",
-      "source_location": "L1011",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_public_app_addfiles",
       "target": "frontend_public_app_showtoast",
       "relation": "calls",
       "_origin": "ast",
@@ -21122,7 +21158,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L999",
+      "source_location": "L1106",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app_addfiles",
+      "target": "frontend_public_app_renderfilequeue",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L1118",
       "weight": 1.0
     },
     {
@@ -21134,7 +21182,43 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1165",
+      "source_location": "L1272",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app_checkhostconnection",
+      "target": "frontend_public_app_showofflinebanner",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L461",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app_checkhostconnection",
+      "target": "frontend_public_app_pinghost",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L466",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app_checkhostconnection",
+      "target": "frontend_public_app_hideofflinebanner",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L469",
       "weight": 1.0
     },
     {
@@ -21146,19 +21230,31 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1032",
+      "source_location": "L1139",
       "weight": 1.0
     },
     {
-      "source": "frontend_public_app_initapptooltips_positiontooltip",
-      "target": "frontend_public_app_initapptooltips_ismobileortouch",
+      "source": "frontend_public_app_fetchwithtimeout",
+      "target": "frontend_public_app_checkhostconnection",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L92",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app_hideofflinebanner",
+      "target": "frontend_public_app_stoprecoverypolling",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L425",
       "weight": 1.0
     },
     {
@@ -21170,7 +21266,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L96",
+      "source_location": "L102",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app_initapptooltips_positiontooltip",
+      "target": "frontend_public_app_initapptooltips_ismobileortouch",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L98",
       "weight": 1.0
     },
     {
@@ -21182,7 +21290,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L136",
+      "source_location": "L142",
       "weight": 1.0
     },
     {
@@ -21194,7 +21302,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L144",
+      "source_location": "L150",
       "weight": 1.0
     },
     {
@@ -21206,7 +21314,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L148",
+      "source_location": "L154",
       "weight": 1.0
     },
     {
@@ -21218,7 +21326,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1108",
+      "source_location": "L1215",
       "weight": 1.0
     },
     {
@@ -21230,7 +21338,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1814",
+      "source_location": "L1921",
       "weight": 1.0
     },
     {
@@ -21242,7 +21350,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1817",
+      "source_location": "L1924",
       "weight": 1.0
     },
     {
@@ -21254,7 +21362,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L318",
+      "source_location": "L324",
       "weight": 1.0
     },
     {
@@ -21266,7 +21374,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1020",
+      "source_location": "L1127",
       "weight": 1.0
     },
     {
@@ -21278,7 +21386,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1021",
+      "source_location": "L1128",
       "weight": 1.0
     },
     {
@@ -21290,7 +21398,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1994",
+      "source_location": "L2101",
       "weight": 1.0
     },
     {
@@ -21302,7 +21410,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L906",
+      "source_location": "L1013",
       "weight": 1.0
     },
     {
@@ -21314,7 +21422,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L909",
+      "source_location": "L1016",
       "weight": 1.0
     },
     {
@@ -21326,7 +21434,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L451",
+      "source_location": "L558",
       "weight": 1.0
     },
     {
@@ -21338,7 +21446,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L471",
+      "source_location": "L578",
       "weight": 1.0
     },
     {
@@ -21350,7 +21458,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L425",
+      "source_location": "L532",
       "weight": 1.0
     },
     {
@@ -21362,7 +21470,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1329",
+      "source_location": "L1436",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app_showofflinebanner",
+      "target": "frontend_public_app_startrecoverypolling",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L419",
       "weight": 1.0
     },
     {
@@ -21374,7 +21494,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L376",
+      "source_location": "L382",
       "weight": 1.0
     },
     {
@@ -21386,7 +21506,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2197",
+      "source_location": "L2304",
       "weight": 1.0
     },
     {
@@ -21398,7 +21518,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2200",
+      "source_location": "L2307",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app_startrecoverypolling",
+      "target": "frontend_public_app_checkhostconnection",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/public/app.js",
+      "source_location": "L484",
       "weight": 1.0
     },
     {
@@ -21410,7 +21542,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1623",
+      "source_location": "L1730",
       "weight": 1.0
     },
     {
@@ -21422,7 +21554,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1637",
+      "source_location": "L1744",
       "weight": 1.0
     },
     {
@@ -21434,7 +21566,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1640",
+      "source_location": "L1747",
       "weight": 1.0
     },
     {
@@ -21446,7 +21578,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L577",
+      "source_location": "L684",
       "weight": 1.0
     },
     {
@@ -21458,7 +21590,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L582",
+      "source_location": "L689",
       "weight": 1.0
     },
     {
@@ -21470,7 +21602,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L606",
+      "source_location": "L713",
       "weight": 1.0
     },
     {
@@ -22790,7 +22922,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L135",
+      "source_location": "L141",
       "weight": 1.0
     },
     {
@@ -22802,7 +22934,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L153",
+      "source_location": "L159",
       "weight": 1.0
     },
     {
@@ -22814,7 +22946,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L70",
+      "source_location": "L76",
       "weight": 1.0
     },
     {
@@ -22826,7 +22958,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L81",
+      "source_location": "L87",
       "weight": 1.0
     },
     {
@@ -22838,7 +22970,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L672",
+      "source_location": "L779",
       "weight": 1.0
     },
     {
@@ -37296,13 +37428,24 @@
     },
     {
       "source": "frontend_public_app",
+      "target": "frontend_public_app_addfiles",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/public/app.js",
+      "source_location": "L1071",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app",
       "target": "frontend_public_app_removefile",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1014",
+      "source_location": "L1121",
       "weight": 1.0
     },
     {
@@ -37313,7 +37456,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1029",
+      "source_location": "L1136",
       "weight": 1.0
     },
     {
@@ -37324,7 +37467,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1103",
+      "source_location": "L1210",
       "weight": 1.0
     },
     {
@@ -37335,7 +37478,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1137",
+      "source_location": "L1244",
       "weight": 1.0
     },
     {
@@ -37346,7 +37489,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1152",
+      "source_location": "L1259",
       "weight": 1.0
     },
     {
@@ -37357,7 +37500,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1248",
+      "source_location": "L1355",
       "weight": 1.0
     },
     {
@@ -37368,7 +37511,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1322",
+      "source_location": "L1429",
       "weight": 1.0
     },
     {
@@ -37379,7 +37522,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1607",
+      "source_location": "L1714",
       "weight": 1.0
     },
     {
@@ -37390,7 +37533,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1727",
+      "source_location": "L1834",
       "weight": 1.0
     },
     {
@@ -37401,7 +37544,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1753",
+      "source_location": "L1860",
       "weight": 1.0
     },
     {
@@ -37412,7 +37555,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1783",
+      "source_location": "L1890",
       "weight": 1.0
     },
     {
@@ -37423,7 +37566,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1809",
+      "source_location": "L1916",
       "weight": 1.0
     },
     {
@@ -37434,7 +37577,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1868",
+      "source_location": "L1975",
       "weight": 1.0
     },
     {
@@ -37445,18 +37588,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1885",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_public_app",
-      "target": "frontend_public_app_dismisspreloader",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/public/app.js",
-      "source_location": "L19",
+      "source_location": "L1992",
       "weight": 1.0
     },
     {
@@ -37467,7 +37599,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1936",
+      "source_location": "L2043",
       "weight": 1.0
     },
     {
@@ -37478,7 +37610,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L2188",
+      "source_location": "L2295",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app",
+      "target": "frontend_public_app_dismisspreloader",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/public/app.js",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -37489,7 +37632,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L260",
+      "source_location": "L266",
       "weight": 1.0
     },
     {
@@ -37500,7 +37643,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L315",
+      "source_location": "L321",
       "weight": 1.0
     },
     {
@@ -37511,7 +37654,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L363",
+      "source_location": "L369",
       "weight": 1.0
     },
     {
@@ -37522,7 +37665,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L383",
+      "source_location": "L389",
       "weight": 1.0
     },
     {
@@ -37533,7 +37676,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L390",
+      "source_location": "L401",
       "weight": 1.0
     },
     {
@@ -37544,7 +37687,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L401",
+      "source_location": "L422",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app",
+      "target": "frontend_public_app_pinghost",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/public/app.js",
+      "source_location": "L441",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app",
+      "target": "frontend_public_app_checkhostconnection",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/public/app.js",
+      "source_location": "L458",
       "weight": 1.0
     },
     {
@@ -37555,18 +37720,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L41",
+      "source_location": "L47",
       "weight": 1.0
     },
     {
       "source": "frontend_public_app",
-      "target": "frontend_public_app_savedraft",
+      "target": "frontend_public_app_startrecoverypolling",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L420",
+      "source_location": "L480",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app",
+      "target": "frontend_public_app_stoprecoverypolling",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/public/app.js",
+      "source_location": "L489",
       "weight": 1.0
     },
     {
@@ -37577,7 +37753,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L43",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app",
+      "target": "frontend_public_app_savedraft",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/public/app.js",
+      "source_location": "L527",
       "weight": 1.0
     },
     {
@@ -37588,7 +37775,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L444",
+      "source_location": "L551",
       "weight": 1.0
     },
     {
@@ -37599,7 +37786,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L475",
+      "source_location": "L582",
       "weight": 1.0
     },
     {
@@ -37610,29 +37797,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L479",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_public_app",
-      "target": "frontend_public_app_maketextareaautoexpand",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/public/app.js",
-      "source_location": "L506",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_public_app",
-      "target": "frontend_public_app_updatesteptracker",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/public/app.js",
-      "source_location": "L528",
+      "source_location": "L586",
       "weight": 1.0
     },
     {
@@ -37643,7 +37808,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L53",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app",
+      "target": "frontend_public_app_maketextareaautoexpand",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/public/app.js",
+      "source_location": "L613",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app",
+      "target": "frontend_public_app_updatesteptracker",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/public/app.js",
+      "source_location": "L635",
       "weight": 1.0
     },
     {
@@ -37654,7 +37841,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L593",
+      "source_location": "L700",
       "weight": 1.0
     },
     {
@@ -37665,40 +37852,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L661",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_public_app",
-      "target": "frontend_public_app_getbefileiconsvg",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/public/app.js",
-      "source_location": "L837",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_public_app",
-      "target": "frontend_public_app_escapehtml",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/public/app.js",
-      "source_location": "L860",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_public_app",
-      "target": "frontend_public_app_renderfilequeue",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/public/app.js",
-      "source_location": "L865",
+      "source_location": "L768",
       "weight": 1.0
     },
     {
@@ -37714,13 +37868,35 @@
     },
     {
       "source": "frontend_public_app",
-      "target": "frontend_public_app_addfiles",
+      "target": "frontend_public_app_getbefileiconsvg",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L964",
+      "source_location": "L944",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app",
+      "target": "frontend_public_app_escapehtml",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/public/app.js",
+      "source_location": "L967",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_public_app",
+      "target": "frontend_public_app_renderfilequeue",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/public/app.js",
+      "source_location": "L972",
       "weight": 1.0
     },
     {
@@ -37731,7 +37907,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L59",
+      "source_location": "L65",
       "weight": 1.0
     },
     {
@@ -37742,7 +37918,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L91",
+      "source_location": "L97",
       "weight": 1.0
     },
     {
@@ -42096,7 +42272,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "frontend/public/app.js",
-      "source_location": "L736",
+      "source_location": "L843",
       "weight": 1.0
     },
     {
@@ -42108,7 +42284,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "frontend/public/app.js",
-      "source_location": "L481",
+      "source_location": "L588",
       "weight": 1.0
     },
     {
@@ -45233,5 +45409,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "38b36ded9d1d9224c96691043ee05aa835eeb6ad"
+  "built_at_commit": "3ed3a8aacb235ab7e8f1cb96b7618d580a2ab452"
 }

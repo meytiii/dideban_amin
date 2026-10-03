@@ -556,8 +556,54 @@
                         <option value="normal">عادی</option>
                     </select>
                 </div>
-                <div class="filter-group">
-                    <select id="filter-month">
+                <div class="filter-group date-picker-filter-group" id="dateRangePickerWrapper">
+                    <button type="button" id="dateRangeTrigger" class="date-range-trigger" aria-haspopup="dialog" aria-expanded="false" data-tooltip="فیلتر بر اساس بازه تاریخ شمسی">
+                        <svg class="date-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                            <line x1="16" x2="16" y1="2" y2="6"/>
+                            <line x1="8" x2="8" y1="2" y2="6"/>
+                            <line x1="3" x2="21" y1="10" y2="10"/>
+                        </svg>
+                        <span id="dateRangeText" class="date-range-text">انتخاب بازه زمانی (شمسی)</span>
+                        <span id="dateRangeClear" class="date-range-clear" title="حذف فیلتر تاریخ" style="display: none;">&times;</span>
+                    </button>
+                    <div id="dateRangePopover" class="date-range-popover" style="display: none;" role="dialog" aria-modal="true">
+                        <div class="date-picker-presets">
+                            <button type="button" class="preset-chip" data-preset="today">امروز</button>
+                            <button type="button" class="preset-chip" data-preset="last7">۷ روز اخیر</button>
+                            <button type="button" class="preset-chip" data-preset="last30">۳۰ روز اخیر</button>
+                            <button type="button" class="preset-chip" data-preset="thisMonth">ماه جاری</button>
+                            <button type="button" class="preset-chip active" data-preset="all">همه</button>
+                        </div>
+                        <div class="date-picker-calendar-header">
+                            <button type="button" id="calPrevMonth" class="cal-nav-btn" aria-label="ماه قبل" title="ماه قبل">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="9 18 15 12 9 6"/>
+                                </svg>
+                            </button>
+                            <div id="calMonthTitle" class="cal-month-title"></div>
+                            <button type="button" id="calNextMonth" class="cal-nav-btn" aria-label="ماه بعد" title="ماه بعد">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="15 18 9 12 15 6"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="cal-weekdays">
+                            <span>ش</span>
+                            <span>ی</span>
+                            <span>د</span>
+                            <span>س</span>
+                            <span>چ</span>
+                            <span>پ</span>
+                            <span>ج</span>
+                        </div>
+                        <div id="calDaysGrid" class="cal-days-grid"></div>
+                        <div class="cal-footer-actions">
+                            <button type="button" id="calResetBtn" class="cal-action-btn cal-reset-btn">پاک کردن</button>
+                            <button type="button" id="calConfirmBtn" class="cal-action-btn cal-confirm-btn">بستن</button>
+                        </div>
+                    </div>
+                    <select id="filter-month" style="display: none;" aria-hidden="true">
                         <option value="all">همه ماه‌ها</option>
                         <option value="01">فروردین</option>
                         <option value="02">اردیبهشت</option>

@@ -1029,9 +1029,465 @@ document.addEventListener('DOMContentLoaded', () => {
             if (filterPriority) filterPriority.value = 'all';
             if (filterMonth) filterMonth.value = 'all';
             if (filterReadStatus) filterReadStatus.value = 'all';
-            applyFilters(true);
+            if (typeof window.resetShamsiDateRangePicker === 'function') {
+                window.resetShamsiDateRangePicker();
+            } else {
+                applyFilters(true);
+            }
         });
     }
+
+    let activeShamsiDateRange = null;
+
+    function toPersianDigits(n) {
+        const f = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        return String(n).replace(/[0-9]/g, w => f[+w]);
+    }
+
+    function padZero(n) {
+        return n < 10 ? '۰' + toPersianDigits(n) : toPersianDigits(n);
+    }
+
+    function jalaliToGregorian(jy, jm, jd) {
+        jy += 1595;
+        let days = -355668 + (365 * jy) + Math.floor(jy / 33) * 8 + Math.floor(((jy % 33) + 3) / 4) + jd + (jm < 7 ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+        let gy = 400 * Math.floor(days / 146097);
+        days %= 146097;
+        if (days > 36524) {
+            gy += 100 * Math.floor(--days / 36524);
+            days %= 36524;
+            if (days >= 365) days++;
+        }
+        gy += 4 * Math.floor(days / 1461);
+        days %= 1461;
+        if (days > 365) {
+            gy += Math.floor((days - 1) / 365);
+            days = (days - 1) % 365;
+        }
+        const salA = [0, 31, ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        let gm = 0;
+        while (gm < 13 && days >= salA[gm]) {
+            days -= salA[gm];
+            gm++;
+        }
+        return { gy, gm, gd: days + 1 };
+    }
+
+    function gregorianToJalali(gy, gm, gd) {
+        const gD_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+        let gy2 = (gm > 2) ? (gy + 1) : gy;
+        let days = 355666 + (365 * gy) + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) + gd + gD_m[gm - 1];
+        let jy = -1595 + (33 * Math.floor(days / 12053));
+        days %= 12053;
+        jy += 4 * Math.floor(days / 1461);
+        days %= 1461;
+        if (days > 365) {
+            jy += Math.floor((days - 1) / 365);
+            days = (days - 1) % 365;
+        }
+        let jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+        let jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+        return { jy, jm, jd };
+    }
+
+    function getJalaliMonthDays(jy, jm) {
+        if (jm <= 6) return 31;
+        if (jm <= 11) return 30;
+        const g = jalaliToGregorian(jy, 12, 30);
+        const j = gregorianToJalali(g.gy, g.gm, g.gd);
+        return (j.jm === 12 && j.jd === 30) ? 30 : 29;
+    }
+
+    function getJalaliDayStartMs(jy, jm, jd) {
+        const g = jalaliToGregorian(jy, jm, jd);
+        return new Date(g.gy, g.gm - 1, g.gd, 0, 0, 0, 0).getTime();
+    }
+
+    function getJalaliDayEndMs(jy, jm, jd) {
+        const g = jalaliToGregorian(jy, jm, jd);
+        return new Date(g.gy, g.gm - 1, g.gd, 23, 59, 59, 999).getTime();
+    }
+
+    function initShamsiDateRangePicker() {
+        const trigger = document.getElementById('dateRangeTrigger');
+        const popover = document.getElementById('dateRangePopover');
+        const textSpan = document.getElementById('dateRangeText');
+        const clearBtn = document.getElementById('dateRangeClear');
+        const prevBtn = document.getElementById('calPrevMonth');
+        const nextBtn = document.getElementById('calNextMonth');
+        const titleEl = document.getElementById('calMonthTitle');
+        const gridEl = document.getElementById('calDaysGrid');
+        const resetBtn = document.getElementById('calResetBtn');
+        const confirmBtn = document.getElementById('calConfirmBtn');
+        const presetChips = document.querySelectorAll('.preset-chip');
+
+        if (!trigger || !popover || !gridEl) return;
+
+        const JALALI_MONTH_NAMES = [
+            'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+            'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+        ];
+
+        const todayDate = new Date();
+        const todayJ = gregorianToJalali(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate());
+
+        let currentViewJy = todayJ.jy;
+        let currentViewJm = todayJ.jm;
+        let pickingState = false;
+        let tempStart = null;
+        let tempEnd = null;
+        let hoveredDay = null;
+
+        function renderCalendar() {
+            if (!titleEl || !gridEl) return;
+            titleEl.textContent = JALALI_MONTH_NAMES[currentViewJm - 1] + ' ' + toPersianDigits(currentViewJy);
+            gridEl.innerHTML = '';
+
+            const daysInMonth = getJalaliMonthDays(currentViewJy, currentViewJm);
+            const firstDayG = jalaliToGregorian(currentViewJy, currentViewJm, 1);
+            const firstDayObj = new Date(firstDayG.gy, firstDayG.gm - 1, firstDayG.gd);
+            const startWeekday = (firstDayObj.getDay() + 1) % 7;
+
+            const prevMonth = currentViewJm === 1 ? 12 : currentViewJm - 1;
+            const prevYear = currentViewJm === 1 ? currentViewJy - 1 : currentViewJy;
+            const prevMonthDays = getJalaliMonthDays(prevYear, prevMonth);
+
+            for (let i = startWeekday - 1; i >= 0; i--) {
+                const dayNum = prevMonthDays - i;
+                const cell = document.createElement('div');
+                cell.className = 'cal-day-cell outside';
+                cell.textContent = toPersianDigits(dayNum);
+                cell.addEventListener('click', () => {
+                    currentViewJm = prevMonth;
+                    currentViewJy = prevYear;
+                    renderCalendar();
+                });
+                gridEl.appendChild(cell);
+            }
+
+            const startMs = tempStart ? tempStart.startMs : null;
+            let endMs = tempEnd ? tempEnd.endMs : null;
+            if (pickingState && tempStart && hoveredDay) {
+                endMs = hoveredDay.startMs > tempStart.startMs ? hoveredDay.endMs : hoveredDay.startMs;
+            }
+
+            let rangeMin = null;
+            let rangeMax = null;
+            if (startMs && endMs) {
+                rangeMin = Math.min(startMs, endMs);
+                rangeMax = Math.max(startMs, endMs);
+            } else if (startMs) {
+                rangeMin = startMs;
+                rangeMax = tempStart.endMs;
+            }
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const cell = document.createElement('div');
+                cell.className = 'cal-day-cell';
+                cell.textContent = toPersianDigits(d);
+
+                const dayStart = getJalaliDayStartMs(currentViewJy, currentViewJm, d);
+                const dayEnd = getJalaliDayEndMs(currentViewJy, currentViewJm, d);
+
+                if (currentViewJy === todayJ.jy && currentViewJm === todayJ.jm && d === todayJ.jd) {
+                    cell.classList.add('today');
+                }
+
+                if (rangeMin !== null && rangeMax !== null) {
+                    if (dayStart === rangeMin && dayEnd === rangeMax) {
+                        cell.classList.add('range-single');
+                    } else if (dayStart === rangeMin) {
+                        cell.classList.add('range-start');
+                    } else if (dayEnd === rangeMax) {
+                        cell.classList.add('range-end');
+                    } else if (dayStart > rangeMin && dayEnd < rangeMax) {
+                        cell.classList.add('range-middle');
+                    }
+                }
+
+                cell.addEventListener('mouseenter', () => {
+                    if (pickingState && tempStart) {
+                        hoveredDay = {
+                            jy: currentViewJy,
+                            jm: currentViewJm,
+                            jd: d,
+                            startMs: dayStart,
+                            endMs: dayEnd
+                        };
+                        renderCalendarHighlights();
+                    }
+                });
+
+                cell.addEventListener('click', () => {
+                    if (!pickingState || !tempStart) {
+                        tempStart = {
+                            jy: currentViewJy,
+                            jm: currentViewJm,
+                            jd: d,
+                            startMs: dayStart,
+                            endMs: dayEnd
+                        };
+                        tempEnd = null;
+                        pickingState = true;
+                        hoveredDay = null;
+                        renderCalendar();
+                    } else {
+                        const secondDay = {
+                            jy: currentViewJy,
+                            jm: currentViewJm,
+                            jd: d,
+                            startMs: dayStart,
+                            endMs: dayEnd
+                        };
+                        if (secondDay.startMs < tempStart.startMs) {
+                            tempEnd = { ...tempStart, endMs: tempStart.endMs };
+                            tempStart = secondDay;
+                        } else {
+                            tempEnd = secondDay;
+                        }
+                        pickingState = false;
+                        hoveredDay = null;
+                        commitDateRange();
+                    }
+                });
+
+                gridEl.appendChild(cell);
+            }
+
+            const totalRendered = startWeekday + daysInMonth;
+            const remaining = (7 - (totalRendered % 7)) % 7;
+            const nextMonth = currentViewJm === 12 ? 1 : currentViewJm + 1;
+            const nextYear = currentViewJm === 12 ? currentViewJy + 1 : currentViewJy;
+
+            for (let i = 1; i <= remaining; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cal-day-cell outside';
+                cell.textContent = toPersianDigits(i);
+                cell.addEventListener('click', () => {
+                    currentViewJm = nextMonth;
+                    currentViewJy = nextYear;
+                    renderCalendar();
+                });
+                gridEl.appendChild(cell);
+            }
+        }
+
+        function renderCalendarHighlights() {
+            if (!gridEl || !tempStart || !hoveredDay) return;
+            const cells = gridEl.querySelectorAll('.cal-day-cell:not(.outside)');
+            const minT = Math.min(tempStart.startMs, hoveredDay.startMs);
+            const maxT = Math.max(tempStart.endMs, hoveredDay.endMs);
+
+            cells.forEach(cell => {
+                const d = parseInt(cell.textContent.replace(/[۰-۹]/g, c => '۰۱۲۳۴۵۶۷۸۹'.indexOf(c)), 10);
+                if (!d) return;
+                const cellStart = getJalaliDayStartMs(currentViewJy, currentViewJm, d);
+                const cellEnd = getJalaliDayEndMs(currentViewJy, currentViewJm, d);
+
+                cell.classList.remove('range-start', 'range-end', 'range-middle', 'range-single');
+
+                if (cellStart === minT && cellEnd === maxT) {
+                    cell.classList.add('range-single');
+                } else if (cellStart === minT) {
+                    cell.classList.add('range-start');
+                } else if (cellEnd === maxT) {
+                    cell.classList.add('range-end');
+                } else if (cellStart > minT && cellEnd < maxT) {
+                    cell.classList.add('range-middle');
+                }
+            });
+        }
+
+        function commitDateRange() {
+            if (!tempStart) return;
+            if (!tempEnd) {
+                tempEnd = { ...tempStart };
+            }
+            activeShamsiDateRange = {
+                start: tempStart.startMs,
+                end: tempEnd.endMs,
+                startJ: tempStart,
+                endJ: tempEnd
+            };
+
+            const sStr = toPersianDigits(tempStart.jy) + '/' + padZero(tempStart.jm) + '/' + padZero(tempStart.jd);
+            const eStr = toPersianDigits(tempEnd.jy) + '/' + padZero(tempEnd.jm) + '/' + padZero(tempEnd.jd);
+            textSpan.textContent = sStr + ' تا ' + eStr;
+            textSpan.classList.add('has-range');
+            clearBtn.style.display = 'inline-flex';
+
+            presetChips.forEach(c => c.classList.remove('active'));
+            renderCalendar();
+            applyFilters(true);
+        }
+
+        function resetRange() {
+            activeShamsiDateRange = null;
+            tempStart = null;
+            tempEnd = null;
+            pickingState = false;
+            hoveredDay = null;
+            textSpan.textContent = 'انتخاب بازه زمانی (شمسی)';
+            textSpan.classList.remove('has-range');
+            clearBtn.style.display = 'none';
+
+            presetChips.forEach(c => {
+                c.classList.toggle('active', c.getAttribute('data-preset') === 'all');
+            });
+
+            currentViewJy = todayJ.jy;
+            currentViewJm = todayJ.jm;
+            renderCalendar();
+            applyFilters(true);
+        }
+
+        window.resetShamsiDateRangePicker = resetRange;
+
+        trigger.addEventListener('click', (e) => {
+            if (e.target === clearBtn) return;
+            const isOpen = popover.style.display === 'flex';
+            if (isOpen) {
+                popover.style.display = 'none';
+                trigger.classList.remove('active');
+                trigger.setAttribute('aria-expanded', 'false');
+            } else {
+                popover.style.display = 'flex';
+                trigger.classList.add('active');
+                trigger.setAttribute('aria-expanded', 'true');
+                renderCalendar();
+            }
+        });
+
+        clearBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetRange();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentViewJm === 1) {
+                currentViewJm = 12;
+                currentViewJy--;
+            } else {
+                currentViewJm--;
+            }
+            renderCalendar();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentViewJm === 12) {
+                currentViewJm = 1;
+                currentViewJy++;
+            } else {
+                currentViewJm++;
+            }
+            renderCalendar();
+        });
+
+        resetBtn.addEventListener('click', resetRange);
+
+        confirmBtn.addEventListener('click', () => {
+            popover.style.display = 'none';
+            trigger.classList.remove('active');
+            trigger.setAttribute('aria-expanded', 'false');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!popover.contains(e.target) && !trigger.contains(e.target)) {
+                popover.style.display = 'none';
+                trigger.classList.remove('active');
+                trigger.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        presetChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const p = chip.getAttribute('data-preset');
+                presetChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+
+                if (p === 'today') {
+                    tempStart = {
+                        jy: todayJ.jy,
+                        jm: todayJ.jm,
+                        jd: todayJ.jd,
+                        startMs: getJalaliDayStartMs(todayJ.jy, todayJ.jm, todayJ.jd),
+                        endMs: getJalaliDayEndMs(todayJ.jy, todayJ.jm, todayJ.jd)
+                    };
+                    tempEnd = { ...tempStart };
+                    currentViewJy = todayJ.jy;
+                    currentViewJm = todayJ.jm;
+                    commitDateRange();
+                } else if (p === 'last7') {
+                    const now = new Date();
+                    const past = new Date(now.getTime() - 6 * 86400000);
+                    const pastJ = gregorianToJalali(past.getFullYear(), past.getMonth() + 1, past.getDate());
+                    tempStart = {
+                        jy: pastJ.jy,
+                        jm: pastJ.jm,
+                        jd: pastJ.jd,
+                        startMs: getJalaliDayStartMs(pastJ.jy, pastJ.jm, pastJ.jd),
+                        endMs: getJalaliDayEndMs(pastJ.jy, pastJ.jm, pastJ.jd)
+                    };
+                    tempEnd = {
+                        jy: todayJ.jy,
+                        jm: todayJ.jm,
+                        jd: todayJ.jd,
+                        startMs: getJalaliDayStartMs(todayJ.jy, todayJ.jm, todayJ.jd),
+                        endMs: getJalaliDayEndMs(todayJ.jy, todayJ.jm, todayJ.jd)
+                    };
+                    currentViewJy = todayJ.jy;
+                    currentViewJm = todayJ.jm;
+                    commitDateRange();
+                } else if (p === 'last30') {
+                    const now = new Date();
+                    const past = new Date(now.getTime() - 29 * 86400000);
+                    const pastJ = gregorianToJalali(past.getFullYear(), past.getMonth() + 1, past.getDate());
+                    tempStart = {
+                        jy: pastJ.jy,
+                        jm: pastJ.jm,
+                        jd: pastJ.jd,
+                        startMs: getJalaliDayStartMs(pastJ.jy, pastJ.jm, pastJ.jd),
+                        endMs: getJalaliDayEndMs(pastJ.jy, pastJ.jm, pastJ.jd)
+                    };
+                    tempEnd = {
+                        jy: todayJ.jy,
+                        jm: todayJ.jm,
+                        jd: todayJ.jd,
+                        startMs: getJalaliDayStartMs(todayJ.jy, todayJ.jm, todayJ.jd),
+                        endMs: getJalaliDayEndMs(todayJ.jy, todayJ.jm, todayJ.jd)
+                    };
+                    currentViewJy = todayJ.jy;
+                    currentViewJm = todayJ.jm;
+                    commitDateRange();
+                } else if (p === 'thisMonth') {
+                    const daysInM = getJalaliMonthDays(todayJ.jy, todayJ.jm);
+                    tempStart = {
+                        jy: todayJ.jy,
+                        jm: todayJ.jm,
+                        jd: 1,
+                        startMs: getJalaliDayStartMs(todayJ.jy, todayJ.jm, 1),
+                        endMs: getJalaliDayEndMs(todayJ.jy, todayJ.jm, 1)
+                    };
+                    tempEnd = {
+                        jy: todayJ.jy,
+                        jm: todayJ.jm,
+                        jd: daysInM,
+                        startMs: getJalaliDayStartMs(todayJ.jy, todayJ.jm, daysInM),
+                        endMs: getJalaliDayEndMs(todayJ.jy, todayJ.jm, daysInM)
+                    };
+                    currentViewJy = todayJ.jy;
+                    currentViewJm = todayJ.jm;
+                    commitDateRange();
+                } else if (p === 'all') {
+                    resetRange();
+                }
+            });
+        });
+
+        renderCalendar();
+    }
+
+    initShamsiDateRangePicker();
 
     function exportReportsToCSV() {
         if (!filteredReports || filteredReports.length === 0) {
@@ -1609,6 +2065,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const matchPriority = priorityMode === 'all' || (report.priority || 'normal') === priorityMode;
             const matchMonth = targetMonth === 'all' || report._shamsiMonth === targetMonth;
 
+            let matchDate = true;
+            if (activeShamsiDateRange && activeShamsiDateRange.start && activeShamsiDateRange.end) {
+                const rTime = report._timestamp || (report.created_at ? parseTimestamp(report.created_at)?.getTime() : 0) || 0;
+                matchDate = rTime >= activeShamsiDateRange.start && rTime <= activeShamsiDateRange.end;
+            } else if (activeShamsiDateRange && activeShamsiDateRange.start) {
+                const rTime = report._timestamp || (report.created_at ? parseTimestamp(report.created_at)?.getTime() : 0) || 0;
+                matchDate = rTime >= activeShamsiDateRange.start;
+            }
+
             let matchRead = true;
             const hasResp = Boolean(report.has_response === true || (report.admin_response && report.admin_response.trim() !== ''));
             if (readMode === 'new_message') matchRead = report.has_new_message === true;
@@ -1617,7 +2082,7 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (readMode === 'unread') matchRead = !report.is_read;
             else if (readMode === 'responded') matchRead = hasResp;
 
-            return matchSearch && matchType && matchPriority && matchMonth && matchRead;
+            return matchSearch && matchType && matchPriority && matchMonth && matchDate && matchRead;
         });
 
         filteredReports.sort((a, b) => {
