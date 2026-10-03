@@ -32,3 +32,7 @@ PLUGINS OR EXTERNAL LIBRARIES ARE FORBIDDEN.
 ## Mandatory Code Rule: NO COMMENTS
 - NEVER write comments in any code (Go, JavaScript, TypeScript, Python, SQL, HTML, CSS, etc.) ever.
 - All code files must remain 100% comment-free at all times.
+
+## Mandatory Task Completion Rule: Commit Summary & Description
+- Whenever a task is done, ALWAYS write a commit summary (≤50 characters, Conventional Commits format) and a clear, descriptive commit description fit for the task done so the user can commit to the GitHub repository.
+- GitHub Repository: https://github.com/meytiii/dideban_amin

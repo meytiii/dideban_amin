@@ -447,6 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 variant: 'warning',
                 iconType: 'shield-alert'
             }).then(() => {
+                sessionStorage.removeItem('2fa_prompt_shown');
                 document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                 location.reload();
             });
@@ -579,6 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data && data.csrf_token) {
                     sessionStorage.setItem('herasat_csrf', data.csrf_token);
                 }
+                sessionStorage.removeItem('2fa_prompt_shown');
                 if (loginSection) {
                     loginSection.classList.add('d-none');
                     loginSection.style.display = 'none';
@@ -1074,6 +1076,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ password: pwd, secret, totp_code: code })
                 });
                 if (res.ok) {
+                    if (currentAdmin) currentAdmin.totp_enabled = true;
                     showToast('احراز هویت دومرحله‌ای با موفقیت فعال شد', 4000, 'success');
                     reset2FAModalViews();
                     await refresh2FAStatus();
@@ -1120,6 +1123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ password: pwd, totp_code: code })
                 });
                 if (res.ok) {
+                    if (currentAdmin) currentAdmin.totp_enabled = false;
                     showToast('احراز هویت دومرحله‌ای غیرفعال شد', 4000, 'info');
                     reset2FAModalViews();
                     await refresh2FAStatus();
@@ -3768,6 +3772,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error('Logout error:', err);
         } finally {
+            sessionStorage.removeItem('2fa_prompt_shown');
             document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             location.reload();
         }
@@ -5136,6 +5141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentAdmin = await res.json();
                 setupSuperuserUI();
                 checkMustChangePasswordPolicy();
+                check2FAEnforcementNotice();
                 return true;
             }
         } catch (e) {
@@ -5161,6 +5167,38 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             if (modalForcePwd) modalForcePwd.style.display = 'none';
         }
+    }
+
+    function check2FAEnforcementNotice() {
+        if (!currentAdmin || currentAdmin.totp_enabled) return;
+        if (currentAdmin.must_change_password) return;
+        if (sessionStorage.getItem('2fa_prompt_shown') === 'true') return;
+        sessionStorage.setItem('2fa_prompt_shown', 'true');
+
+        setTimeout(async () => {
+            if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none')) {
+                return;
+            }
+            if (!currentAdmin || currentAdmin.totp_enabled) return;
+            const adminFullName = (currentAdmin.full_name && currentAdmin.full_name.trim()) || currentAdmin.username || 'همکار گرامی';
+            const confirmed = await showConfirmDialog({
+                title: `همکار گرامی، ${adminFullName}`,
+                description: 'احراز هویت دومرحله‌ای حساب کاربری شما هنوز فعال نشده است. لطفاً جهت افزایش ضریب امنیت حساب خود، در اسرع وقت نسبت به فعال‌سازی آن اقدام فرمایید.',
+                confirmText: 'فعال‌سازی احراز هویت',
+                cancelText: 'بعداً یادآوری کن',
+                variant: 'warning',
+                iconType: 'shield-alert'
+            });
+
+            if (confirmed) {
+                if (modal2FA) modal2FA.style.display = 'flex';
+                reset2FAModalViews();
+                await refresh2FAStatus();
+                if (btnStartSetup2FA) {
+                    btnStartSetup2FA.click();
+                }
+            }
+        }, 400);
     }
 
     function setupSuperuserUI() {
@@ -6066,6 +6104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentAdmin) {
                     currentAdmin.must_change_password = false;
                     currentAdmin.is_password_expired = false;
+                    check2FAEnforcementNotice();
                 }
             } else {
                 const err = await res.text();
@@ -6149,6 +6188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     btnAckConcurrentLogout?.addEventListener('click', () => {
+        sessionStorage.removeItem('2fa_prompt_shown');
         document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         location.reload();
     });

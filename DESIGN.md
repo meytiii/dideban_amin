@@ -234,3 +234,7 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 
 NO DEPENDANCIES FOR THIS PROJECT... EVERYTHING MUST BE LOCAL FOR SECURITY REASONS (BY EVERYTHING I MEAN ASSETS AND NOT PLUGINS).
 PLUGINS OR EXTERNAL LIBRARIES ARE FORBIDDEN.
+
+## Mandatory Task Completion Rule: Commit Summary & Description
+- Whenever a task is done, ALWAYS write a commit summary (≤50 characters, Conventional Commits format) and a clear, descriptive commit description fit for the task done so the user can commit to the GitHub repository.
+- GitHub Repository: https://github.com/meytiii/dideban_amin
