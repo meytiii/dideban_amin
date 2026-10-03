@@ -1582,6 +1582,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (wrapper) wrapper.classList.add('popover-open');
             if (filterContainer) filterContainer.classList.add('popover-open');
 
+            popover.style.bottom = 'calc(100% + 8px)';
+            popover.style.top = 'auto';
+
             const rect = popover.getBoundingClientRect();
             if (rect.left < 10) {
                 popover.style.right = 'auto';

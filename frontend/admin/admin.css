@@ -1548,7 +1548,7 @@ button {
 
 .filter-container.popover-open,
 .filter-container:has(.date-range-trigger.active) {
-    z-index: 200;
+    z-index: 500;
 }
 
 #reports-inbox-section.in-detail-view .filter-container,
@@ -1569,7 +1569,7 @@ button {
 
 .date-picker-filter-group.popover-open,
 .date-picker-filter-group:has(.date-range-trigger.active) {
-    z-index: 201;
+    z-index: 501;
 }
 
 .date-range-trigger {
@@ -1643,7 +1643,8 @@ button {
 
 .date-range-popover {
     position: absolute;
-    top: calc(100% + 8px);
+    bottom: calc(100% + 8px);
+    top: auto;
     right: 0;
     z-index: 10000;
     width: 320px;
@@ -1652,17 +1653,17 @@ button {
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 14px;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
-    padding: 14px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     animation: datePickerSlideIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     direction: rtl;
     user-select: none;
 }
 
 @keyframes datePickerSlideIn {
-    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+    from { opacity: 0; transform: translateY(6px) scale(0.98); }
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
@@ -1745,16 +1746,16 @@ button {
 .cal-days-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    row-gap: 3px;
+    row-gap: 2px;
 }
 
 .cal-day-cell {
     position: relative;
-    height: 34px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12.5px;
+    font-size: 12px;
     font-weight: 500;
     color: #cbd5e1;
     cursor: pointer;
