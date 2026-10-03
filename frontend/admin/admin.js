@@ -1573,6 +1573,10 @@ document.addEventListener('DOMContentLoaded', () => {
             trigger.setAttribute('aria-expanded', 'false');
             if (wrapper) wrapper.classList.remove('popover-open');
             if (filterContainer) filterContainer.classList.remove('popover-open');
+            const inboxSection = document.getElementById('reports-inbox-section');
+            if (inboxSection) inboxSection.classList.remove('popover-active');
+            const dashContainer = inboxSection ? inboxSection.closest('.dashboard-container') : null;
+            if (dashContainer) dashContainer.classList.remove('popover-active');
         }
 
         function openPopover() {
@@ -1582,8 +1586,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (wrapper) wrapper.classList.add('popover-open');
             if (filterContainer) filterContainer.classList.add('popover-open');
 
-            popover.style.bottom = 'calc(100% + 8px)';
-            popover.style.top = 'auto';
+            const inboxSection = document.getElementById('reports-inbox-section');
+            if (inboxSection) inboxSection.classList.add('popover-active');
+            const dashContainer = inboxSection ? inboxSection.closest('.dashboard-container') : null;
+            if (dashContainer) dashContainer.classList.add('popover-active');
+
+            popover.style.top = 'calc(100% + 8px)';
+            popover.style.bottom = 'auto';
 
             const rect = popover.getBoundingClientRect();
             if (rect.left < 10) {
@@ -2524,7 +2533,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const td = document.createElement('td');
             td.colSpan = 8;
             td.style.textAlign = 'center';
-            td.style.padding = '50px 20px';
+            td.style.padding = '80px 20px';
             td.style.color = '#94a3b8';
             td.textContent = 'هیچ گزارشی با فیلترهای انتخابی یافت نشد.';
             tr.appendChild(td);

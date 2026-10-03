@@ -105,10 +105,24 @@ body::before {
 }
 
 #reports-inbox-section {
-    min-height: 520px;
+    min-height: 700px;
 }
 
-#reports-inbox-section,
+#reports-inbox-section.popover-active,
+#reports-inbox-section:has(.popover-open) {
+    min-height: 860px;
+    padding-bottom: 120px;
+    content-visibility: visible !important;
+    contain: none !important;
+}
+
+.dashboard-container.popover-active,
+.dashboard-container:has(.popover-open) {
+    min-height: 900px;
+    padding-bottom: 80px;
+    contain: none !important;
+}
+
 #report-detail-section,
 #analytics-section,
 #advanced-section,
@@ -1643,8 +1657,8 @@ button {
 
 .date-range-popover {
     position: absolute;
-    bottom: calc(100% + 8px);
-    top: auto;
+    top: calc(100% + 8px);
+    bottom: auto;
     right: 0;
     z-index: 10000;
     width: 320px;
@@ -1663,7 +1677,7 @@ button {
 }
 
 @keyframes datePickerSlideIn {
-    from { opacity: 0; transform: translateY(6px) scale(0.98); }
+    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
@@ -1949,8 +1963,12 @@ button {
 
 .table-responsive {
     overflow-x: auto;
-    contain: paint;
-    min-height: 280px;
+    min-height: 480px;
+}
+
+#reports-inbox-section.popover-active .table-responsive,
+.table-responsive:has(.popover-open) {
+    min-height: 520px;
 }
 
 #reportsTable {
