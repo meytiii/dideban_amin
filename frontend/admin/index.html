@@ -175,14 +175,21 @@
                         <form id="mfaForm" novalidate>
                             <input type="hidden" id="mfa_pending_token" name="mfa_token">
                             <div class="login-form-group">
-                                <label for="mfa_totp_code" style="text-align: center; display: block;">کد ۶ رقمی
-                                    امنیتی</label>
-                                <div class="login-input-wrapper" style="justify-content: center;">
-                                    <input type="text" id="mfa_totp_code" name="totp_code" required maxlength="6"
-                                        pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code"
-                                        placeholder="123456" class="ltr"
-                                        style="text-align: center; letter-spacing: 6px; font-size: 20px; font-weight: 700; font-family: monospace;">
+                                <label for="otp-cell-0" style="text-align: center; display: block; margin-bottom: 12px; font-weight: 600; color: var(--text-main); font-size: 13.5px;">کد ۶ رقمی امنیتی</label>
+                                <div class="otp-input-container" id="mfaOtpContainer" dir="ltr" role="group" aria-label="کد ۶ رقمی امنیتی">
+                                    <div class="otp-group">
+                                        <input type="text" class="otp-cell" id="otp-cell-0" data-index="0" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="رقم ۱">
+                                        <input type="text" class="otp-cell" id="otp-cell-1" data-index="1" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۲">
+                                        <input type="text" class="otp-cell" id="otp-cell-2" data-index="2" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۳">
+                                    </div>
+                                    <div class="otp-divider" aria-hidden="true"></div>
+                                    <div class="otp-group">
+                                        <input type="text" class="otp-cell" id="otp-cell-3" data-index="3" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۴">
+                                        <input type="text" class="otp-cell" id="otp-cell-4" data-index="4" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۵">
+                                        <input type="text" class="otp-cell" id="otp-cell-5" data-index="5" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۶">
+                                    </div>
                                 </div>
+                                <input type="hidden" id="mfa_totp_code" name="totp_code" required maxlength="6">
                             </div>
 
                             <button type="submit" id="mfaSubmitBtn" class="btn-admin-login" style="margin-top: 16px;">

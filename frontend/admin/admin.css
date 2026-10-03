@@ -101,7 +101,11 @@ body::before {
     width: 96%;
     max-width: 1550px;
     margin: 20px auto;
-    contain: layout paint;
+    contain: layout style;
+}
+
+#reports-inbox-section {
+    min-height: 520px;
 }
 
 #reports-inbox-section,
@@ -614,6 +618,109 @@ body::before {
 
 .btn-admin-login:hover:not(:disabled) .login-arrow-icon {
     transform: translateX(-4px);
+}
+
+.otp-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px 0 18px;
+    direction: ltr;
+    user-select: none;
+}
+
+.otp-group {
+    display: flex;
+    gap: 8px;
+}
+
+.otp-divider {
+    width: 8px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    margin: 0 4px;
+    flex-shrink: 0;
+}
+
+.otp-cell {
+    width: 44px;
+    height: 54px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1.5px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    color: #f8fafc;
+    font-size: 22px;
+    font-weight: 700;
+    font-family: 'Geist Mono', 'Courier New', monospace, 'Vazirmatn';
+    text-align: center;
+    outline: none;
+    transition: border-color var(--transition-fast, 0.15s), background-color var(--transition-fast, 0.15s), transform var(--transition-fast, 0.15s), box-shadow var(--transition-fast, 0.15s);
+    caret-color: #38bdf8;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
+    -webkit-appearance: none;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.otp-cell:hover {
+    border-color: rgba(56, 189, 248, 0.45);
+    background: rgba(30, 41, 59, 0.85);
+}
+
+.otp-cell:focus {
+    border-color: #38bdf8;
+    background: #162032;
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22), 0 4px 12px rgba(56, 189, 248, 0.15);
+}
+
+.otp-cell.has-value {
+    border-color: rgba(56, 189, 248, 0.55);
+    color: #38bdf8;
+    background: rgba(15, 23, 42, 0.9);
+}
+
+.otp-input-container.is-error .otp-cell {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.08) !important;
+    color: #fca5a5 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+}
+
+.otp-input-container.is-error {
+    animation: otpShake 0.36s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes otpShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+}
+
+.otp-input-container.is-success .otp-cell {
+    border-color: #10b981 !important;
+    background: rgba(16, 185, 129, 0.08) !important;
+    color: #86efac !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+}
+
+@media (max-width: 480px) {
+    .otp-cell {
+        width: 38px;
+        height: 48px;
+        font-size: 19px;
+    }
+    .otp-input-container, .otp-group {
+        gap: 5px;
+    }
+    .otp-divider {
+        margin: 0 2px;
+        width: 6px;
+    }
 }
 
 .header, .dashboard-header {
@@ -1842,6 +1949,7 @@ button {
 .table-responsive {
     overflow-x: auto;
     contain: paint;
+    min-height: 280px;
 }
 
 #reportsTable {

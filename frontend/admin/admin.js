@@ -610,11 +610,184 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     let mfaCountdownInterval = null;
+    let mfaOtpController = null;
+
+    function initMfaOtpInput() {
+        const container = document.getElementById('mfaOtpContainer');
+        const hiddenInput = document.getElementById('mfa_totp_code');
+        const mfaFormEl = document.getElementById('mfaForm');
+        if (!container || !hiddenInput) return null;
+
+        const cells = Array.from(container.querySelectorAll('.otp-cell'));
+
+        function syncValue() {
+            const val = cells.map(c => toAsciiDigits(c.value.trim())).join('');
+            hiddenInput.value = val;
+            cells.forEach(c => c.classList.toggle('has-value', c.value.trim().length > 0));
+            return val;
+        }
+
+        function clearAll() {
+            cells.forEach(c => {
+                c.value = '';
+                c.classList.remove('has-value');
+            });
+            hiddenInput.value = '';
+            container.classList.remove('is-error', 'is-success');
+        }
+
+        function showError() {
+            container.classList.remove('is-success');
+            container.classList.add('is-error');
+            setTimeout(() => {
+                container.classList.remove('is-error');
+                clearAll();
+                if (cells[0]) {
+                    cells[0].focus();
+                    cells[0].select();
+                }
+            }, 600);
+        }
+
+        function showSuccess() {
+            container.classList.remove('is-error');
+            container.classList.add('is-success');
+        }
+
+        cells.forEach((cell, idx) => {
+            cell.addEventListener('input', () => {
+                container.classList.remove('is-error');
+                const raw = toAsciiDigits(cell.value);
+                const digits = raw.replace(/[^0-9]/g, '');
+
+                if (digits.length === 0) {
+                    cell.value = '';
+                    syncValue();
+                    return;
+                }
+
+                if (digits.length === 1) {
+                    cell.value = digits;
+                    const val = syncValue();
+                    if (idx < cells.length - 1) {
+                        cells[idx + 1].focus();
+                        cells[idx + 1].select();
+                    } else if (val.length === 6 && mfaFormEl) {
+                        mfaFormEl.requestSubmit ? mfaFormEl.requestSubmit() : mfaFormEl.dispatchEvent(new Event('submit', { cancelable: true }));
+                    }
+                    return;
+                }
+
+                let cursor = idx;
+                for (let i = 0; i < digits.length && cursor < cells.length; i++) {
+                    cells[cursor].value = digits[i];
+                    cursor++;
+                }
+                const val = syncValue();
+                if (cursor < cells.length) {
+                    cells[cursor].focus();
+                    cells[cursor].select();
+                } else {
+                    cells[cells.length - 1].focus();
+                    cells[cells.length - 1].select();
+                    if (val.length === 6 && mfaFormEl) {
+                        mfaFormEl.requestSubmit ? mfaFormEl.requestSubmit() : mfaFormEl.dispatchEvent(new Event('submit', { cancelable: true }));
+                    }
+                }
+            });
+
+            cell.addEventListener('keydown', (e) => {
+                container.classList.remove('is-error');
+                if (e.key === 'Backspace') {
+                    if (cell.value) {
+                        cell.value = '';
+                        syncValue();
+                        e.preventDefault();
+                    } else if (idx > 0) {
+                        cells[idx - 1].value = '';
+                        cells[idx - 1].focus();
+                        cells[idx - 1].select();
+                        syncValue();
+                        e.preventDefault();
+                    }
+                } else if (e.key === 'Delete') {
+                    cell.value = '';
+                    syncValue();
+                    e.preventDefault();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    if (idx > 0) {
+                        cells[idx - 1].focus();
+                        cells[idx - 1].select();
+                    }
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    if (idx < cells.length - 1) {
+                        cells[idx + 1].focus();
+                        cells[idx + 1].select();
+                    }
+                } else if (e.key === 'Home') {
+                    e.preventDefault();
+                    cells[0].focus();
+                    cells[0].select();
+                } else if (e.key === 'End') {
+                    e.preventDefault();
+                    cells[cells.length - 1].focus();
+                    cells[cells.length - 1].select();
+                }
+            });
+
+            cell.addEventListener('paste', (e) => {
+                e.preventDefault();
+                container.classList.remove('is-error');
+                const text = (e.clipboardData || window.clipboardData).getData('text');
+                const digits = toAsciiDigits(text).replace(/[^0-9]/g, '').slice(0, 6);
+                if (!digits) return;
+
+                const startIdx = digits.length === 6 ? 0 : idx;
+                let cursor = startIdx;
+                for (let i = 0; i < digits.length && cursor < cells.length; i++) {
+                    cells[cursor].value = digits[i];
+                    cursor++;
+                }
+                const val = syncValue();
+                if (cursor < cells.length) {
+                    cells[cursor].focus();
+                    cells[cursor].select();
+                } else {
+                    cells[cells.length - 1].focus();
+                    cells[cells.length - 1].select();
+                    if (val.length === 6 && mfaFormEl) {
+                        mfaFormEl.requestSubmit ? mfaFormEl.requestSubmit() : mfaFormEl.dispatchEvent(new Event('submit', { cancelable: true }));
+                    }
+                }
+            });
+
+            cell.addEventListener('focus', () => {
+                cell.select();
+            });
+        });
+
+        return {
+            clear: clearAll,
+            showError,
+            showSuccess,
+            focus: () => {
+                const firstEmpty = cells.find(c => !c.value.trim());
+                if (firstEmpty) {
+                    firstEmpty.focus();
+                    firstEmpty.select();
+                } else {
+                    cells[0].focus();
+                    cells[0].select();
+                }
+            }
+        };
+    }
 
     function showMFAStep(token) {
         const mfaStep = document.getElementById('mfaStepContainer');
         const mfaPendingToken = document.getElementById('mfa_pending_token');
-        const mfaTotpCode = document.getElementById('mfa_totp_code');
         const mfaMsg = document.getElementById('mfaMessage');
         const countdownEl = document.getElementById('mfaCountdownText');
 
@@ -622,10 +795,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (loginMessage) loginMessage.style.display = 'none';
         if (mfaStep) mfaStep.style.display = 'block';
         if (mfaPendingToken) mfaPendingToken.value = token;
-        if (mfaTotpCode) {
-            mfaTotpCode.value = '';
-            mfaTotpCode.focus();
+
+        if (!mfaOtpController) {
+            mfaOtpController = initMfaOtpInput();
         }
+        if (mfaOtpController) {
+            mfaOtpController.clear();
+            setTimeout(() => mfaOtpController.focus(), 80);
+        }
+
         if (mfaMsg) mfaMsg.style.display = 'none';
 
         let secondsRemaining = 180;
@@ -653,6 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const mfaStep = document.getElementById('mfaStepContainer');
         if (mfaStep) mfaStep.style.display = 'none';
         if (loginForm) loginForm.style.display = 'block';
+        if (mfaOtpController) mfaOtpController.clear();
         loadAdminCaptcha();
     }
 
@@ -679,6 +858,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     mfaMsg.className = 'response-box error';
                     mfaMsg.style.display = 'block';
                 }
+                if (mfaOtpController) mfaOtpController.showError();
                 return;
             }
 
@@ -693,6 +873,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (res.ok) {
+                    if (mfaOtpController) mfaOtpController.showSuccess();
                     const data = await res.json();
                     if (data && data.csrf_token) {
                         sessionStorage.setItem('herasat_csrf', data.csrf_token);
@@ -715,6 +896,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     runWhenIdle(fetchNotifications);
                 } else {
                     const errText = await res.text();
+                    if (mfaOtpController) mfaOtpController.showError();
                     if (mfaMsg) {
                         mfaMsg.textContent = errText || 'کد امنیتی اشتباه است یا منقضی شده است.';
                         mfaMsg.className = 'response-box error';
@@ -722,6 +904,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             } catch (err) {
+                if (mfaOtpController) mfaOtpController.showError();
                 if (mfaMsg) {
                     mfaMsg.textContent = 'خطای ارتباط با سرور.';
                     mfaMsg.className = 'response-box error';
@@ -2334,7 +2517,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const td = document.createElement('td');
             td.colSpan = 8;
             td.style.textAlign = 'center';
-            td.style.padding = '30px';
+            td.style.padding = '50px 20px';
             td.style.color = '#94a3b8';
             td.textContent = 'هیچ گزارشی با فیلترهای انتخابی یافت نشد.';
             tr.appendChild(td);

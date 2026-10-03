@@ -51,7 +51,7 @@
   "49": "SSEBroker",
   "50": "c4-sticky-bottom-bar.md",
   "51": "Hallmark Design Directives",
-  "52": "initShamsiDateRangePicker",
+  "52": "renderCalendar",
   "53": "viewReport",
   "54": "public/tatweel.js",
   "55": "no_comments.md",
@@ -126,6 +126,6 @@
   "124": "SubmitReportHandler",
   "125": "getTestDB",
   "126": "ChangeMyPasswordHandler",
-  "127": "fetchAdminUsers",
+  "127": "escapeHTML",
   "128": "TestCaptchaReplayPrevention"
 }
