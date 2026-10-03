@@ -1985,6 +1985,52 @@ button {
     font-weight: 600;
     border-bottom: 2px solid rgba(255, 255, 255, 0.08);
     text-align: right;
+    white-space: nowrap;
+}
+
+#reportsTable th.sortable-th {
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+#reportsTable th.sortable-th:hover {
+    background: rgba(30, 41, 59, 0.95);
+    color: #f8fafc;
+}
+
+#reportsTable th.sortable-th:focus-visible {
+    outline: 2px solid #38bdf8;
+    outline-offset: -2px;
+}
+
+#reportsTable th.sortable-th .th-content {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#reportsTable th.sortable-th.is-filtered,
+#reportsTable th.sortable-th.is-sorted {
+    color: #38bdf8;
+}
+
+#reportsTable th.sortable-th .th-sort-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+#reportsTable th.sortable-th.is-filtered .th-sort-icon,
+#reportsTable th.sortable-th.is-sorted .th-sort-icon {
+    color: #38bdf8;
+    animation: sortIconPop 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes sortIconPop {
+    from { opacity: 0; transform: scale(0.7); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 #reportsTable tbody tr {

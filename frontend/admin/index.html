@@ -558,9 +558,16 @@
                 <div class="filter-group">
                     <select id="filter-priority">
                         <option value="all">همه اولویت‌ها</option>
-                        <option value="critical">آنی / بسیار مهم</option>
-                        <option value="urgent">فوری</option>
                         <option value="normal">عادی</option>
+                        <option value="urgent">فوری</option>
+                        <option value="critical">آنی / بسیار مهم</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="filter-report-type" aria-label="فیلتر نوع گزارش">
+                        <option value="all">همه انواع گزارش</option>
+                        <option value="anonymous">ناشناس</option>
+                        <option value="identified">با هویت</option>
                     </select>
                 </div>
                 <div class="filter-group date-picker-filter-group" id="dateRangePickerWrapper">
@@ -704,11 +711,21 @@
                                 <input type="checkbox" id="selectAllReports" data-tooltip="انتخاب همه موارد این صفحه">
                             </th>
                             <th>کد پیگیری</th>
-                            <th>اولویت</th>
-                            <th>تاریخ و زمان ثبت</th>
-                            <th>موضوع</th>
-                            <th>نوع گزارش</th>
-                            <th>وضعیت بررسی</th>
+                            <th class="sortable-th" id="th-priority" data-col="priority" role="button" tabindex="0" data-tooltip="کلیک جهت فیلتر بر اساس اولویت">
+                                <span class="th-content"><span class="th-title">اولویت</span><span class="th-sort-icon"></span></span>
+                            </th>
+                            <th class="sortable-th" id="th-date" data-col="date" role="button" tabindex="0" data-tooltip="کلیک جهت تغییر ترتیب زمانی">
+                                <span class="th-content"><span class="th-title">تاریخ و زمان ثبت</span><span class="th-sort-icon"></span></span>
+                            </th>
+                            <th class="sortable-th" id="th-category" data-col="category" role="button" tabindex="0" data-tooltip="کلیک جهت فیلتر بر اساس موضوع">
+                                <span class="th-content"><span class="th-title">موضوع</span><span class="th-sort-icon"></span></span>
+                            </th>
+                            <th class="sortable-th" id="th-type" data-col="type" role="button" tabindex="0" data-tooltip="کلیک جهت فیلتر بر اساس نوع گزارش">
+                                <span class="th-content"><span class="th-title">نوع گزارش</span><span class="th-sort-icon"></span></span>
+                            </th>
+                            <th class="sortable-th" id="th-status" data-col="status" role="button" tabindex="0" data-tooltip="کلیک جهت فیلتر بر اساس وضعیت بررسی">
+                                <span class="th-content"><span class="th-title">وضعیت بررسی</span><span class="th-sort-icon"></span></span>
+                            </th>
                             <th>عملیات</th>
                         </tr>
                     </thead>

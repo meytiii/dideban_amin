@@ -1161,10 +1161,151 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchTracking = document.getElementById('search-tracking');
     const filterType = document.getElementById('filter-type');
     const filterPriority = document.getElementById('filter-priority');
+    const filterReportType = document.getElementById('filter-report-type');
     const filterMonth = document.getElementById('filter-month');
     const filterReadStatus = document.getElementById('filter-read-status');
     const clearFiltersBtn = document.getElementById('clearFiltersBtn');
     const btnExportCSV = document.getElementById('btnExportCSV');
+
+    let currentSortDateDirection = 'desc';
+
+    const CATEGORICAL_CONFIG = {
+        priority: {
+            selectId: 'filter-priority',
+            defaultTitle: 'اولویت',
+            prefix: 'اولویت: ',
+            cycle: ['all', 'normal', 'urgent', 'critical'],
+            labels: {
+                normal: 'عادی',
+                urgent: 'فوری',
+                critical: 'آنی'
+            }
+        },
+        category: {
+            selectId: 'filter-type',
+            defaultTitle: 'موضوع',
+            prefix: 'موضوع: ',
+            cycle: ['all', 'مالی', 'امنیتی', 'تخلفات اداری', 'تخلفات آموزشی', 'پرسنلی', 'دانش آموزی', 'مدارس غیردولتی', 'آموزش مجازی', 'فضای مجازی', 'سایر'],
+            labels: {
+                'مالی': 'مالی',
+                'امنیتی': 'امنیتی',
+                'تخلفات اداری': 'اداری',
+                'تخلفات آموزشی': 'آموزشی',
+                'پرسنلی': 'پرسنلی',
+                'دانش آموزی': 'دانش‌آموزی',
+                'مدارس غیردولتی': 'غیردولتی',
+                'آموزش مجازی': 'مجازی',
+                'فضای مجازی': 'فضای مجازی',
+                'سایر': 'سایر'
+            }
+        },
+        type: {
+            selectId: 'filter-report-type',
+            defaultTitle: 'نوع گزارش',
+            prefix: 'نوع: ',
+            cycle: ['all', 'anonymous', 'identified'],
+            labels: {
+                anonymous: 'ناشناس',
+                identified: 'با هویت'
+            }
+        },
+        status: {
+            selectId: 'filter-read-status',
+            defaultTitle: 'وضعیت بررسی',
+            prefix: 'وضعیت: ',
+            cycle: ['all', 'unread', 'read', 'responded', 'new_message', 'regional_response'],
+            labels: {
+                unread: 'در نوبت بررسی',
+                read: 'بررسی شده',
+                responded: 'دارای پاسخ',
+                new_message: 'پیام جدید',
+                regional_response: 'پاسخ کارشناسی'
+            }
+        }
+    };
+
+    function updateTableHeadersFromFilters() {
+        Object.entries(CATEGORICAL_CONFIG).forEach(([colKey, conf]) => {
+            const th = document.getElementById(`th-${colKey}`);
+            if (!th) return;
+            const selectEl = document.getElementById(conf.selectId);
+            const val = selectEl ? selectEl.value : 'all';
+            const titleEl = th.querySelector('.th-title');
+            const iconEl = th.querySelector('.th-sort-icon');
+
+            if (val === 'all') {
+                if (titleEl) titleEl.textContent = conf.defaultTitle;
+                if (iconEl) iconEl.innerHTML = '';
+                th.classList.remove('is-filtered');
+            } else {
+                const label = conf.labels[val] || val;
+                if (titleEl) titleEl.textContent = `${conf.prefix}${label}`;
+                if (iconEl) {
+                    iconEl.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="th-chevron-icon"><polyline points="6 9 12 15 18 9"/></svg>';
+                }
+                th.classList.add('is-filtered');
+            }
+        });
+
+        const dateTh = document.getElementById('th-date');
+        if (dateTh) {
+            const dateIcon = dateTh.querySelector('.th-sort-icon');
+            if (dateIcon) {
+                if (currentSortDateDirection === 'asc') {
+                    dateIcon.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="th-chevron-icon"><polyline points="18 15 12 9 6 15"/></svg>';
+                    dateTh.classList.add('is-sorted');
+                    dateTh.setAttribute('data-tooltip', 'مرتب‌سازی: قدیمی‌ترین به جدیدترین (کلیک جهت تغییر به جدیدترین)');
+                } else {
+                    dateIcon.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="th-chevron-icon"><polyline points="6 9 12 15 18 9"/></svg>';
+                    dateTh.classList.add('is-sorted');
+                    dateTh.setAttribute('data-tooltip', 'مرتب‌سازی: جدیدترین به قدیمی‌ترین (کلیک جهت تغییر به قدیمی‌ترین)');
+                }
+            }
+        }
+    }
+
+    function initTableHeadersInteractions() {
+        Object.entries(CATEGORICAL_CONFIG).forEach(([colKey, conf]) => {
+            const th = document.getElementById(`th-${colKey}`);
+            if (!th) return;
+
+            const handleCycle = () => {
+                const selectEl = document.getElementById(conf.selectId);
+                if (!selectEl) return;
+                const currentVal = selectEl.value || 'all';
+                const cycle = conf.cycle;
+                const idx = cycle.indexOf(currentVal);
+                const nextVal = cycle[(idx + 1) % cycle.length];
+                selectEl.value = nextVal;
+                applyFilters(true);
+                updateTableHeadersFromFilters();
+            };
+
+            th.addEventListener('click', handleCycle);
+            th.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleCycle();
+                }
+            });
+        });
+
+        const dateTh = document.getElementById('th-date');
+        if (dateTh) {
+            const handleDateSort = () => {
+                currentSortDateDirection = currentSortDateDirection === 'desc' ? 'asc' : 'desc';
+                applyFilters(true);
+                updateTableHeadersFromFilters();
+            };
+            dateTh.addEventListener('click', handleDateSort);
+            dateTh.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleDateSort();
+                }
+            });
+        }
+    }
 
     function debounce(func, wait) {
         let timeout;
@@ -1183,10 +1324,14 @@ document.addEventListener('DOMContentLoaded', () => {
             requestAnimationFrame(() => applyFilters(true));
         }, 300));
     }
-    if (filterType) filterType.addEventListener('change', () => applyFilters(true));
-    if (filterPriority) filterPriority.addEventListener('change', () => applyFilters(true));
-    if (filterMonth) filterMonth.addEventListener('change', () => applyFilters(true));
-    if (filterReadStatus) filterReadStatus.addEventListener('change', () => applyFilters(true));
+    if (filterType) filterType.addEventListener('change', () => { applyFilters(true); updateTableHeadersFromFilters(); });
+    if (filterPriority) filterPriority.addEventListener('change', () => { applyFilters(true); updateTableHeadersFromFilters(); });
+    if (filterReportType) filterReportType.addEventListener('change', () => { applyFilters(true); updateTableHeadersFromFilters(); });
+    if (filterMonth) filterMonth.addEventListener('change', () => { applyFilters(true); updateTableHeadersFromFilters(); });
+    if (filterReadStatus) filterReadStatus.addEventListener('change', () => { applyFilters(true); updateTableHeadersFromFilters(); });
+
+    initTableHeadersInteractions();
+    updateTableHeadersFromFilters();
 
     const refreshReportsBtn = document.getElementById('refreshReportsBtn');
     if (refreshReportsBtn) {
@@ -1214,8 +1359,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (searchTracking) searchTracking.value = '';
             if (filterType) filterType.value = 'all';
             if (filterPriority) filterPriority.value = 'all';
+            if (filterReportType) filterReportType.value = 'all';
             if (filterMonth) filterMonth.value = 'all';
             if (filterReadStatus) filterReadStatus.value = 'all';
+            currentSortDateDirection = 'desc';
+            updateTableHeadersFromFilters();
             if (typeof window.resetShamsiDateRangePicker === 'function') {
                 window.resetShamsiDateRangePicker();
             } else {
@@ -2286,6 +2434,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resetSessionTimer();
             updateKPICards();
             applyFilters();
+            updateTableHeadersFromFilters();
             return true;
         } catch (error) {
             console.error("Failed to load reports:", error);
@@ -2313,6 +2462,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const { normTerm, lowerTerm } = activeSearchContext;
         const typeMode = filterType ? filterType.value : 'all';
         const priorityMode = filterPriority ? filterPriority.value : 'all';
+        const reportTypeFilter = document.getElementById('filter-report-type');
+        const reportTypeMode = reportTypeFilter ? reportTypeFilter.value : 'all';
         const targetMonth = filterMonth ? filterMonth.value : 'all';
         const readMode = filterReadStatus ? filterReadStatus.value : 'all';
 
@@ -2328,6 +2479,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const matchType = typeMode === 'all' || report.category === typeMode;
             const matchPriority = priorityMode === 'all' || (report.priority || 'normal') === priorityMode;
+            const matchReportType = reportTypeMode === 'all' || (report.report_type || 'identified') === reportTypeMode;
             const matchMonth = targetMonth === 'all' || report._shamsiMonth === targetMonth;
 
             let matchDate = true;
@@ -2347,7 +2499,7 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (readMode === 'unread') matchRead = !report.is_read;
             else if (readMode === 'responded') matchRead = hasResp;
 
-            return matchSearch && matchType && matchPriority && matchMonth && matchDate && matchRead;
+            return matchSearch && matchType && matchPriority && matchReportType && matchMonth && matchDate && matchRead;
         });
 
         filteredReports.sort((a, b) => {
@@ -2356,9 +2508,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (prioA !== prioB) {
                 return prioB - prioA;
             }
-            const timeA = a._updateTimestamp || a._timestamp || 0;
-            const timeB = b._updateTimestamp || b._timestamp || 0;
-            return timeB - timeA;
+            const timeA = a._timestamp || a._updateTimestamp || 0;
+            const timeB = b._timestamp || b._updateTimestamp || 0;
+            return currentSortDateDirection === 'asc' ? (timeA - timeB) : (timeB - timeA);
         });
 
         renderCurrentPage();
