@@ -1,7 +1,7 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-04)
 
 ## Corpus Check
-- 201 files · ~221,585 words
+- 201 files · ~221,626 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `036425b5`
+- Built from commit: `a6201515`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -67,7 +67,7 @@
 - SSEBroker
 - admin_handlers.go
 - Hallmark Design Directives
-- applyFilters
+- renderCalendar
 - security.go
 - public/tatweel.js
 - no_comments.md
@@ -78,10 +78,10 @@
 - metadata.go
 - calendar.tsx
 - Output contract & scope
-- escapeHTML
+- renderTable
 - net/http.Request
 - logAuditTx
-- openForwardModal
+- applyFilters
 - crypto.go
 - LoginHandler
 - input.tsx
@@ -278,8 +278,8 @@ Cohesion: 0.70
 Nodes (4): deriveKey(), encryptWithKey(), genTrackingCode(), main()
 
 ### Community 26 - "getTestDB"
-Cohesion: 0.19
-Nodes (10): NewAccountLockoutManager(), NewSessionManager(), TestAuditFailClosed(), TestAccountLockoutConcurrentFailures(), TestSecurityStoresInitOrder(), getTestDB(), TestSessionManagementAndRateLimiter(), TestSessionPersistenceAcrossReinstantiation() (+2 more)
+Cohesion: 0.24
+Nodes (8): NewSessionManager(), TestAuditFailClosed(), TestCaptchaPersistenceTryRedeem(), getTestDB(), TestSessionManagementAndRateLimiter(), TestSessionPersistenceAcrossReinstantiation(), TestSessionRevokeAllUserSessions(), TestReportsUpdatedAtTrigger()
 
 ### Community 27 - "NewClamAVScanner"
 Cohesion: 0.24
@@ -377,9 +377,9 @@ Nodes (7): NewSSEBroker(), sync.RWMutex, SSEBroker, SSEClient, TestAdminEventsHa
 Cohesion: 0.11
 Nodes (25): formatJalaliTime(), getRestrictedSubprocessEnv(), gregorianToJalali(), AdminNotificationItem, AdminNotificationsResponse, AdminUserItem, AnalyticsResponse, AuditLogItem (+17 more)
 
-### Community 52 - "applyFilters"
-Cohesion: 0.19
-Nodes (19): applyFilters(), getJalaliDateKeyFromDate(), getJalaliDayEndMs(), getJalaliDayStartMs(), getJalaliMonthDays(), gregorianToJalali(), indexReportForSearch(), initShamsiDateRangePicker() (+11 more)
+### Community 52 - "renderCalendar"
+Cohesion: 0.26
+Nodes (14): getJalaliDayEndMs(), getJalaliDayStartMs(), getJalaliMonthDays(), gregorianToJalali(), initShamsiDateRangePicker(), closePopover(), commitDateRange(), openPopover() (+6 more)
 
 ### Community 53 - "security.go"
 Cohesion: 0.15
@@ -413,9 +413,9 @@ Nodes (9): SanitizeAttachment(), SanitizeJPEG(), SanitizePNG(), ScanPDFForActive
 Cohesion: 0.50
 Nodes (3): Output contract, Output contract & scope, Scope and limits
 
-### Community 63 - "escapeHTML"
-Cohesion: 0.22
-Nodes (13): applyAuditFiltersAndPagination(), escapeHTML(), fetchAuditLogs(), getJalaliMonth(), getMatchSnippet(), highlightSearchTerm(), makePersianRegex(), openForwardHistoryModal() (+5 more)
+### Community 63 - "renderTable"
+Cohesion: 0.47
+Nodes (6): getMatchSnippet(), highlightSearchTerm(), makePersianRegex(), openForwardHistoryModal(), renderForwardHistorySkeleton(), renderTable()
 
 ### Community 64 - "net/http.Request"
 Cohesion: 0.17
@@ -425,9 +425,9 @@ Nodes (33): getIP(), logAudit(), LogoutHandler(), canAdminAccessReport(), Classi
 Cohesion: 0.17
 Nodes (14): computeAuditHash(), GetCurrentAdminHandler(), getLatestAuditHash(), getLatestAuditHashTx(), ipInCIDRs(), logAuditTx(), parseTrustedProxies(), DeleteReportHandler() (+6 more)
 
-### Community 66 - "openForwardModal"
-Cohesion: 0.50
-Nodes (5): fetchForwardingRecipients(), openForwardModal(), renderRecipientList(), renderRecipientListSkeleton(), updateSelectedRecipientsCounter()
+### Community 66 - "applyFilters"
+Cohesion: 0.20
+Nodes (12): applyAuditFiltersAndPagination(), applyFilters(), getJalaliDateKeyFromDate(), getJalaliMonth(), getScrollBehavior(), handleKPICardFilter(), indexReportForSearch(), initTableHeadersInteractions() (+4 more)
 
 ### Community 67 - "crypto.go"
 Cohesion: 0.16
@@ -438,16 +438,16 @@ Cohesion: 0.27
 Nodes (10): generateSessionToken(), LoginHandler(), ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), VerifyMFAHandler() (+2 more)
 
 ### Community 71 - "database/sql.DB"
-Cohesion: 0.39
-Nodes (4): NewUsedCaptchaStore(), database/sql.DB, UsedCaptchaStore, TestCaptchaPersistenceTryRedeem()
+Cohesion: 0.27
+Nodes (6): NewUsedCaptchaStore(), database/sql.DB, NewAccountLockoutManager(), UsedCaptchaStore, TestAccountLockoutConcurrentFailures(), TestSecurityStoresInitOrder()
 
 ### Community 74 - "SyslogShipper"
 Cohesion: 0.24
 Nodes (9): net.Conn, sync.WaitGroup, SyslogMessage, SyslogSeverity, SyslogShipper, InitSyslogShipper(), MapActionToSyslogSeverity(), sanitizeSyslogParam() (+1 more)
 
 ### Community 77 - "adminFetch"
-Cohesion: 0.14
-Nodes (28): adminFetch(), deleteUser(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), formatJalaliDateTime() (+20 more)
+Cohesion: 0.15
+Nodes (29): adminFetch(), deleteUser(), escapeHTML(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchAuditLogs(), fetchSystemStatus() (+21 more)
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -502,12 +502,12 @@ Cohesion: 0.60
 Nodes (4): getOrCreateDialog(), promoteTemporarily(), showConfirmDialog(), trapFocus()
 
 ### Community 123 - "initMfaOtpInput"
-Cohesion: 0.28
-Nodes (8): cancelMFAStep(), initMfaOtpInput(), clearAll(), showError(), syncValue(), loadAdminCaptcha(), showMFAStep(), toAsciiDigits()
+Cohesion: 0.47
+Nodes (5): initMfaOtpInput(), clearAll(), showError(), syncValue(), toAsciiDigits()
 
 ### Community 125 - "admin.js"
-Cohesion: 0.10
-Nodes (19): calculatePagination(), check2FAEnforcementNotice(), checkAdminProfile(), checkMustChangePasswordPolicy(), closeDetailView(), getScrollBehavior(), handleKPICardFilter(), handleTimerTick() (+11 more)
+Cohesion: 0.09
+Nodes (26): calculatePagination(), cancelMFAStep(), check2FAEnforcementNotice(), checkAdminProfile(), checkMustChangePasswordPolicy(), closeDetailView(), fetchForwardingRecipients(), handleTimerTick() (+18 more)
 
 ## Knowledge Gaps
 - **705 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+700 more)

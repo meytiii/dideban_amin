@@ -1185,10 +1185,10 @@ document.addEventListener('DOMContentLoaded', () => {
             selectId: 'filter-type',
             defaultTitle: 'موضوع',
             prefix: 'موضوع: ',
-            cycle: ['all', 'مالی', 'امنیتی', 'تخلفات اداری', 'تخلفات آموزشی', 'پرسنلی', 'دانش آموزی', 'مدارس غیردولتی', 'آموزش مجازی', 'فضای مجازی', 'سایر'],
+            cycle: ['all', 'تخلفات مالی', 'مسائل امنیتی', 'تخلفات اداری', 'تخلفات آموزشی', 'پرسنلی', 'دانش آموزی', 'مدارس غیردولتی', 'آموزش مجازی', 'فضای مجازی', 'سایر'],
             labels: {
-                'مالی': 'مالی',
-                'امنیتی': 'امنیتی',
+                'تخلفات مالی': 'مالی',
+                'مسائل امنیتی': 'امنیتی',
                 'تخلفات اداری': 'اداری',
                 'تخلفات آموزشی': 'آموزشی',
                 'پرسنلی': 'پرسنلی',
@@ -1196,7 +1196,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 'مدارس غیردولتی': 'غیردولتی',
                 'آموزش مجازی': 'مجازی',
                 'فضای مجازی': 'فضای مجازی',
-                'سایر': 'سایر'
+                'سایر': 'سایر',
+                'مالی': 'مالی',
+                'امنیتی': 'امنیتی'
             }
         },
         type: {
@@ -1229,11 +1231,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const th = document.getElementById(`th-${colKey}`);
             if (!th) return;
             const selectEl = document.getElementById(conf.selectId);
-            const val = selectEl ? selectEl.value : 'all';
+            const val = (selectEl && selectEl.value) ? selectEl.value : 'all';
             const titleEl = th.querySelector('.th-title');
             const iconEl = th.querySelector('.th-sort-icon');
 
-            if (val === 'all') {
+            if (!val || val === 'all') {
                 if (titleEl) titleEl.textContent = conf.defaultTitle;
                 if (iconEl) iconEl.innerHTML = '';
                 th.classList.remove('is-filtered');
@@ -1274,7 +1276,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!selectEl) return;
                 const currentVal = selectEl.value || 'all';
                 const cycle = conf.cycle;
-                const idx = cycle.indexOf(currentVal);
+                let idx = cycle.indexOf(currentVal);
+                if (idx === -1) {
+                    if (currentVal === 'مالی') idx = cycle.indexOf('تخلفات مالی');
+                    else if (currentVal === 'امنیتی') idx = cycle.indexOf('مسائل امنیتی');
+                    else idx = 0;
+                }
                 const nextVal = cycle[(idx + 1) % cycle.length];
                 selectEl.value = nextVal;
                 applyFilters(true);
@@ -2490,7 +2497,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         const { normTerm, lowerTerm } = activeSearchContext;
-        const typeMode = filterType ? filterType.value : 'all';
+        const typeMode = (filterType && filterType.value) ? filterType.value : 'all';
         const priorityMode = filterPriority ? filterPriority.value : 'all';
         const reportTypeFilter = document.getElementById('filter-report-type');
         const reportTypeMode = reportTypeFilter ? reportTypeFilter.value : 'all';

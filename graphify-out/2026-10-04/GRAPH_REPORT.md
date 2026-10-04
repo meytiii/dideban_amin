@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-04)
 
 ## Corpus Check
-- 201 files · ~220,892 words
+- 201 files · ~221,585 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1590 nodes · 2506 edges · 132 communities (89 shown, 43 thin omitted)
+- 1590 nodes · 2506 edges · 133 communities (89 shown, 44 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 273 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b37ce678`
+- Built from commit: `036425b5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -67,7 +67,7 @@
 - SSEBroker
 - admin_handlers.go
 - Hallmark Design Directives
-- renderCalendar
+- applyFilters
 - security.go
 - public/tatweel.js
 - no_comments.md
@@ -78,12 +78,12 @@
 - metadata.go
 - calendar.tsx
 - Output contract & scope
-- renderTable
+- escapeHTML
 - net/http.Request
-- admin_auth.go
-- applyFilters
+- logAuditTx
+- openForwardModal
 - crypto.go
-- ChangeMyPasswordHandler
+- LoginHandler
 - input.tsx
 - herasat.local/backend
 - database/sql.DB
@@ -142,6 +142,7 @@
 - s5-bottom-anchored.md
 - t3-single-huge-quote.md
 - commit_message.md
+- GetReportsHandler
 
 ## God Nodes (most connected - your core abstractions)
 1. `getIP()` - 35 edges
@@ -156,21 +157,21 @@
 10. `SessionManager` - 18 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `VerifyCaptcha()` --calls--> `GetLegacyHMACKey()`  [INFERRED]
+  captcha.go → crypto.go
 - `SubmitReportHandler()` --calls--> `ScanPDFForActiveContent()`  [INFERRED]
   public_handlers.go → metadata.go
 - `TestInputSanitizationAndLimits()` --calls--> `truncateRunes()`  [INFERRED]
   test/input_limits_test.go → security.go
 - `LoginHandler()` --calls--> `VerifyCaptcha()`  [INFERRED]
   admin_auth.go → captcha.go
-- `LoginHandler()` --calls--> `HashPassword()`  [INFERRED]
-  admin_auth.go → crypto.go
 - `LoginHandler()` --calls--> `VerifyPasswordWithRehash()`  [INFERRED]
   admin_auth.go → crypto.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (132 total, 43 thin omitted)
+## Communities (133 total, 44 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.05
@@ -376,9 +377,9 @@ Nodes (7): NewSSEBroker(), sync.RWMutex, SSEBroker, SSEClient, TestAdminEventsHa
 Cohesion: 0.11
 Nodes (25): formatJalaliTime(), getRestrictedSubprocessEnv(), gregorianToJalali(), AdminNotificationItem, AdminNotificationsResponse, AdminUserItem, AnalyticsResponse, AuditLogItem (+17 more)
 
-### Community 52 - "renderCalendar"
-Cohesion: 0.26
-Nodes (14): getJalaliDayEndMs(), getJalaliDayStartMs(), getJalaliMonthDays(), gregorianToJalali(), initShamsiDateRangePicker(), closePopover(), commitDateRange(), openPopover() (+6 more)
+### Community 52 - "applyFilters"
+Cohesion: 0.19
+Nodes (19): applyFilters(), getJalaliDateKeyFromDate(), getJalaliDayEndMs(), getJalaliDayStartMs(), getJalaliMonthDays(), gregorianToJalali(), indexReportForSearch(), initShamsiDateRangePicker() (+11 more)
 
 ### Community 53 - "security.go"
 Cohesion: 0.15
@@ -393,8 +394,8 @@ Cohesion: 0.17
 Nodes (12): ALLOW, CROSSFADE, EASE, OtpCellProps, OtpInput(), OtpInputHandle, OtpInputProps, OtpMode (+4 more)
 
 ### Community 57 - "SubmitReportHandler"
-Cohesion: 0.20
-Nodes (15): SubmitRegionalResponseHandler(), VerifyCaptcha(), GetLegacyHMACKey(), ValidateBinaryMagicBytes(), generateTrackingCode(), SubmitFollowUpHandler(), SubmitReportHandler(), TrackReportHandler() (+7 more)
+Cohesion: 0.18
+Nodes (18): RespondToReportHandler(), SubmitRegionalResponseHandler(), UpdateInternalNotesHandler(), VerifyCaptcha(), EncryptAES(), ValidateBinaryMagicBytes(), generateTrackingCode(), SubmitFollowUpHandler() (+10 more)
 
 ### Community 58 - "captcha.go"
 Cohesion: 0.23
@@ -412,29 +413,29 @@ Nodes (9): SanitizeAttachment(), SanitizeJPEG(), SanitizePNG(), ScanPDFForActive
 Cohesion: 0.50
 Nodes (3): Output contract, Output contract & scope, Scope and limits
 
-### Community 63 - "renderTable"
-Cohesion: 0.47
-Nodes (6): getMatchSnippet(), highlightSearchTerm(), makePersianRegex(), openForwardHistoryModal(), renderForwardHistorySkeleton(), renderTable()
+### Community 63 - "escapeHTML"
+Cohesion: 0.22
+Nodes (13): applyAuditFiltersAndPagination(), escapeHTML(), fetchAuditLogs(), getJalaliMonth(), getMatchSnippet(), highlightSearchTerm(), makePersianRegex(), openForwardHistoryModal() (+5 more)
 
 ### Community 64 - "net/http.Request"
-Cohesion: 0.16
-Nodes (38): getIP(), logAudit(), logAuditTx(), canAdminAccessReport(), ClassifyReportHandler(), DeleteReportHandler(), DeleteUserHandler(), DisableUser2FAHandler() (+30 more)
-
-### Community 65 - "admin_auth.go"
 Cohesion: 0.17
-Nodes (14): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getLatestAuditHash(), getLatestAuditHashTx(), ipInCIDRs(), LoginHandler(), LogoutHandler() (+6 more)
+Nodes (33): getIP(), logAudit(), LogoutHandler(), canAdminAccessReport(), ClassifyReportHandler(), DisableUser2FAHandler(), DownloadAttachmentHandler(), ExportReportDocxHandler() (+25 more)
 
-### Community 66 - "applyFilters"
-Cohesion: 0.20
-Nodes (12): applyAuditFiltersAndPagination(), applyFilters(), getJalaliDateKeyFromDate(), getJalaliMonth(), getScrollBehavior(), handleKPICardFilter(), indexReportForSearch(), initTableHeadersInteractions() (+4 more)
+### Community 65 - "logAuditTx"
+Cohesion: 0.17
+Nodes (14): computeAuditHash(), GetCurrentAdminHandler(), getLatestAuditHash(), getLatestAuditHashTx(), ipInCIDRs(), logAuditTx(), parseTrustedProxies(), DeleteReportHandler() (+6 more)
+
+### Community 66 - "openForwardModal"
+Cohesion: 0.50
+Nodes (5): fetchForwardingRecipients(), openForwardModal(), renderRecipientList(), renderRecipientListSkeleton(), updateSelectedRecipientsCounter()
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.14
-Nodes (23): GetReportsHandler(), DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES() (+15 more)
+Cohesion: 0.16
+Nodes (23): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptFileBytes(), EncryptFilePath() (+15 more)
 
-### Community 68 - "ChangeMyPasswordHandler"
-Cohesion: 0.29
-Nodes (10): ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), VerifyPassword(), VerifyPasswordWithRehash(), Disable2FAHandler() (+2 more)
+### Community 68 - "LoginHandler"
+Cohesion: 0.27
+Nodes (10): generateSessionToken(), LoginHandler(), ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), VerifyMFAHandler() (+2 more)
 
 ### Community 71 - "database/sql.DB"
 Cohesion: 0.39
@@ -445,8 +446,8 @@ Cohesion: 0.24
 Nodes (9): net.Conn, sync.WaitGroup, SyslogMessage, SyslogSeverity, SyslogShipper, InitSyslogShipper(), MapActionToSyslogSeverity(), sanitizeSyslogParam() (+1 more)
 
 ### Community 77 - "adminFetch"
-Cohesion: 0.15
-Nodes (29): adminFetch(), deleteUser(), escapeHTML(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchAuditLogs(), fetchSystemStatus() (+21 more)
+Cohesion: 0.14
+Nodes (28): adminFetch(), deleteUser(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), formatJalaliDateTime() (+20 more)
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -501,17 +502,17 @@ Cohesion: 0.60
 Nodes (4): getOrCreateDialog(), promoteTemporarily(), showConfirmDialog(), trapFocus()
 
 ### Community 123 - "initMfaOtpInput"
-Cohesion: 0.47
-Nodes (5): initMfaOtpInput(), clearAll(), showError(), syncValue(), toAsciiDigits()
+Cohesion: 0.28
+Nodes (8): cancelMFAStep(), initMfaOtpInput(), clearAll(), showError(), syncValue(), loadAdminCaptcha(), showMFAStep(), toAsciiDigits()
 
 ### Community 125 - "admin.js"
-Cohesion: 0.09
-Nodes (26): calculatePagination(), cancelMFAStep(), check2FAEnforcementNotice(), checkAdminProfile(), checkMustChangePasswordPolicy(), closeDetailView(), fetchForwardingRecipients(), handleTimerTick() (+18 more)
+Cohesion: 0.10
+Nodes (19): calculatePagination(), check2FAEnforcementNotice(), checkAdminProfile(), checkMustChangePasswordPolicy(), closeDetailView(), getScrollBehavior(), handleKPICardFilter(), handleTimerTick() (+11 more)
 
 ## Knowledge Gaps
 - **705 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+700 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **43 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **44 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
