@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T11:59:00Z",
+  "generatedAt": "2026-10-04T08:58:00Z",
   "title": "Design System: سامانه امن ستاد خبری حراست - همدان",
   "extensions": {
     "colorMeta": {
@@ -12,15 +12,27 @@
       },
       "neutral-bg": {
         "role": "neutral",
-        "displayName": "Obsidian Slate",
+        "displayName": "Obsidian Slate (Public)",
         "canonical": "#0b1120",
         "tonalRamp": ["#020617", "#0b1120", "#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8"]
+      },
+      "neutral-bg-admin": {
+        "role": "neutral",
+        "displayName": "Obsidian Dark Canvas (Admin)",
+        "canonical": "#090d16",
+        "tonalRamp": ["#030712", "#090d16", "#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8"]
       },
       "status-success": {
         "role": "status",
         "displayName": "Cryptographic Emerald",
         "canonical": "#10b981",
         "tonalRamp": ["#064e3b", "#065f46", "#047857", "#059669", "#10b981", "#34d399", "#6ee7b7", "#a7f3d0"]
+      },
+      "status-cyan": {
+        "role": "status",
+        "displayName": "Intelligence Cyan",
+        "canonical": "#06b6d4",
+        "tonalRamp": ["#164e63", "#155e75", "#0e7490", "#0891b2", "#06b6d4", "#22d3ee", "#67e8f9", "#a5f3fc"]
       }
     },
     "typographyMeta": {
@@ -31,6 +43,10 @@
       "body": {
         "displayName": "Body",
         "purpose": "General text, guideline paragraphs, and messages."
+      },
+      "tatweel": {
+        "displayName": "Persian Tatweel Heading Subsystem",
+        "purpose": "Kashida-elongated Persian headings with screen reader visual/sr duality."
       }
     },
     "shadows": [
@@ -53,9 +69,13 @@
       }
     ],
     "breakpoints": [
-      { "name": "mobile", "value": "640px" },
+      { "name": "mobile-xs", "value": "380px" },
+      { "name": "mobile", "value": "480px" },
+      { "name": "mobile-lg", "value": "640px" },
       { "name": "tablet", "value": "768px" },
-      { "name": "desktop", "value": "1024px" }
+      { "name": "desktop-sm", "value": "860px" },
+      { "name": "desktop", "value": "1024px" },
+      { "name": "admin-max", "value": "1550px" }
     ]
   },
   "components": [
@@ -82,6 +102,14 @@
       "description": "Orthogonal grid backed collapsible accordion with rotating chevron.",
       "html": "<div class=\"faq-accordion-item open\"><button class=\"faq-accordion-header\"><span class=\"faq-item-title\">عنوان سوال</span><svg class=\"faq-chevron\" viewBox=\"0 0 24 24\" width=\"18\" height=\"18\"><path d=\"m6 9 6 6 6-6\"/></svg></button><div class=\"faq-accordion-body\"><div class=\"faq-accordion-content\">پاسخ سوال</div></div></div>",
       "css": ".faq-accordion-item { border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; background: rgba(15,23,42,0.6); backdrop-filter: blur(12px); overflow: hidden; transition: all 0.22s ease; } .faq-accordion-item.open .faq-chevron { transform: rotate(180deg); color: #60a5fa; }"
+    },
+    {
+      "name": "Accessible Confirm Dialog",
+      "kind": "dialog",
+      "refersTo": "confirm-dialog",
+      "description": "Native modal replacement with focus trapping, keyboard escape, and intent styling.",
+      "html": "<div class=\"admin-modal-overlay\" role=\"dialog\" aria-modal=\"true\"><div class=\"modal-card pro-card\"><h3 class=\"modal-title\">تایید عملیات</h3><p class=\"confirm-msg\">آیا اطمینان دارید؟</p><div class=\"modal-footer-actions\"><button class=\"btn-action btn-danger\">تایید</button><button class=\"btn-action btn-secondary\">انصراف</button></div></div></div>",
+      "css": ".admin-modal-overlay { position: fixed; inset: 0; background: rgba(2,6,23,0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; } .modal-card { background: #162032; border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 24px; max-width: 440px; width: 92%; }"
     }
   ],
   "narrative": {
@@ -91,19 +119,23 @@
       "Directional RTL Excellence",
       "Standardized Iconography (Lucide / Tabler)",
       "Glassmorphism & Cryptographic Obsidian Depth",
-      "Micro-tactile Feedback"
+      "Micro-tactile Feedback",
+      "Persian Tatweel Calligraphic Harmony"
     ],
     "rules": [
       { "name": "The Single Accent Rule", "body": "The primary blue accent (#3b82f6) is preserved exclusively for interactive forward actions and focal identifiers.", "section": "colors" },
-      { "name": "The Persian Digit Rule", "body": "Numbers inside general Persian prose utilize localized Persian numerals (۰-۹), while tracking codes enforce LTR formatting.", "section": "typography" }
+      { "name": "The Persian Digit Rule", "body": "Numbers inside general Persian prose utilize localized Persian numerals (۰-۹), while tracking codes enforce LTR formatting.", "section": "typography" },
+      { "name": "Zero Blur on Large Viewports", "body": "Never use backdrop-filter blur on large cards, hero panels, or scrollable surfaces.", "section": "performance" }
     ],
     "dos": [
       "Do maintain standard 2.0px stroke-width on all SVG glyphs.",
-      "Do point forward navigation arrows to the Left (←) and backward arrows to the Right (→) in RTL mode."
+      "Do point forward navigation arrows to the Left (←) and backward arrows to the Right (→) in RTL mode.",
+      "Do wrap decorative elongated Persian headings in .persian-tatweel-wrapper with .tatweel-sr for screen readers."
     ],
     "donts": [
       "Don't mix multiple icon sets or introduce emoji icons inside critical UI buttons.",
-      "Don't use pure black #000000 for dark mode surfaces."
+      "Don't use pure black #000000 for dark mode surfaces.",
+      "Don't put comments in code files."
     ]
   }
 }

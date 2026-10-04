@@ -1,16 +1,16 @@
-# Graph Report - Setad_Khabari_HMD  (2026-10-03)
+# Graph Report - Setad_Khabari_HMD  (2026-10-04)
 
 ## Corpus Check
-- 201 files · ~219,738 words
+- 201 files · ~219,751 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1581 nodes · 2496 edges · 132 communities (87 shown, 45 thin omitted)
+- 1581 nodes · 2496 edges · 133 communities (88 shown, 45 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 273 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `19f5f3b1`
+- Built from commit: `8fa94bd3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -29,7 +29,7 @@
 - SKILL.md
 - Recipes
 - Study — extracting design DNA from a screenshot or URL
-- admin.js
+- fetchNotifications
 - Hero enrichment — when, what, and how much
 - Theme — Carnival
 - Interaction and states
@@ -135,13 +135,14 @@
 - t2-logo-wall-hairline.md
 - popover.tsx
 - initMfaOtpInput
-- applyFilters
+- admin.js
 - contextWithAdmin
 - logAuditTx
 - SubmitReportHandler
 - NewIPRateLimiter
 - TestCookieSecureCachedResolution
 - commit_message.md
+- resetSessionTimer
 
 ## God Nodes (most connected - your core abstractions)
 1. `getIP()` - 35 edges
@@ -170,7 +171,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (132 total, 45 thin omitted)
+## Communities (133 total, 45 thin omitted)
 
 ### Community 0 - "Design System: سامانه دیده‌بان امین - ستاد خبری و دریافت گزارش‌های مردمی حراست همدان"
 Cohesion: 0.06
@@ -224,9 +225,9 @@ Nodes (27): Accessibility ground truth, Button press, Command palette navigation
 Cohesion: 0.08
 Nodes (26): After the file is written, Emitting a `design.md` from `study`, Image-mode template, Junk-or-blocked detection, Limits and disclaimers, Refusal — when not to study, Remote URL safety, Source mode — image or URL (+18 more)
 
-### Community 14 - "admin.js"
-Cohesion: 0.10
-Nodes (21): cancelMFAStep(), check2FAEnforcementNotice(), checkAdminProfile(), checkMustChangePasswordPolicy(), connectAdminSSE(), fetchNotifications(), handleTimerTick(), loadAdminCaptcha() (+13 more)
+### Community 14 - "fetchNotifications"
+Cohesion: 0.33
+Nodes (7): connectAdminSSE(), fetchNotifications(), markReportHasNewMessage(), scheduleReportsRefresh(), startBackgroundPolling(), startFallbackPolling(), triggerConcurrentLoginAlert()
 
 ### Community 15 - "Hero enrichment — when, what, and how much"
 Cohesion: 0.09
@@ -401,8 +402,8 @@ Cohesion: 0.50
 Nodes (3): Output contract, Output contract & scope, Scope and limits
 
 ### Community 63 - "viewReport"
-Cohesion: 0.18
-Nodes (21): calculatePagination(), closeDetailView(), escapeHTML(), formatJalaliDateTime(), getMatchSnippet(), highlightSearchTerm(), makePersianRegex(), makeTextareaAutoExpand() (+13 more)
+Cohesion: 0.25
+Nodes (16): escapeHTML(), formatJalaliDateTime(), getMatchSnippet(), highlightSearchTerm(), makePersianRegex(), makeTextareaAutoExpand(), openForwardHistoryModal(), renderAuditTable() (+8 more)
 
 ### Community 64 - "net/http.Request"
 Cohesion: 0.14
@@ -477,12 +478,12 @@ Cohesion: 0.60
 Nodes (4): getOrCreateDialog(), promoteTemporarily(), showConfirmDialog(), trapFocus()
 
 ### Community 123 - "initMfaOtpInput"
-Cohesion: 0.47
-Nodes (5): initMfaOtpInput(), clearAll(), showError(), syncValue(), toAsciiDigits()
+Cohesion: 0.28
+Nodes (8): cancelMFAStep(), initMfaOtpInput(), clearAll(), showError(), syncValue(), loadAdminCaptcha(), showMFAStep(), toAsciiDigits()
 
-### Community 125 - "applyFilters"
-Cohesion: 0.12
-Nodes (18): applyAuditFiltersAndPagination(), applyFilters(), fetchAuditLogs(), fetchForwardingRecipients(), getJalaliMonth(), getScrollBehavior(), handleKPICardFilter(), indexReportForSearch() (+10 more)
+### Community 125 - "admin.js"
+Cohesion: 0.09
+Nodes (29): applyAuditFiltersAndPagination(), applyFilters(), calculatePagination(), check2FAEnforcementNotice(), checkAdminProfile(), checkMustChangePasswordPolicy(), closeDetailView(), fetchAuditLogs() (+21 more)
 
 ### Community 127 - "logAuditTx"
 Cohesion: 0.19
@@ -499,6 +500,10 @@ Nodes (5): inspectZipArchive(), NewIPRateLimiter(), TestCaptchaReplayPrevention(
 ### Community 130 - "TestCookieSecureCachedResolution"
 Cohesion: 0.50
 Nodes (3): InitCookieSecurity(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag()
+
+### Community 132 - "resetSessionTimer"
+Cohesion: 0.50
+Nodes (5): handleTimerTick(), resetSessionTimer(), resumeSessionTimer(), startSessionTimer(), updateTimerDisplay()
 
 ## Knowledge Gaps
 - **697 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+692 more)
