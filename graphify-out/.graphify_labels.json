@@ -51,7 +51,7 @@
   "49": "SSEBroker",
   "50": "admin_handlers.go",
   "51": "Hallmark Design Directives",
-  "52": "renderCalendar",
+  "52": "applyFilters",
   "53": "security.go",
   "54": "public/tatweel.js",
   "55": "no_comments.md",
@@ -62,12 +62,12 @@
   "60": "metadata.go",
   "61": "calendar.tsx",
   "62": "Output contract & scope",
-  "63": "renderTable",
+  "63": "escapeHTML",
   "64": "net/http.Request",
-  "65": "admin_auth.go",
-  "66": "applyFilters",
+  "65": "logAuditTx",
+  "66": "openForwardModal",
   "67": "crypto.go",
-  "68": "ChangeMyPasswordHandler",
+  "68": "LoginHandler",
   "69": "input.tsx",
   "70": "herasat.local/backend",
   "71": "database/sql.DB",
@@ -130,5 +130,6 @@
   "128": "s2-hanging.md",
   "129": "s5-bottom-anchored.md",
   "130": "t3-single-huge-quote.md",
-  "131": "commit_message.md"
+  "131": "commit_message.md",
+  "132": "GetReportsHandler"
 }

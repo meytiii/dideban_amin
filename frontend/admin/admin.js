@@ -2507,7 +2507,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     (report._lowerCategory && report._lowerCategory.includes(lowerTerm)) ||
                     (report._lowerDesc && report._lowerDesc.includes(lowerTerm));
             }
-            const matchType = typeMode === 'all' || report.category === typeMode;
+            const matchType = typeMode === 'all' || report.category === typeMode || (report.category && (report.category.includes(typeMode) || typeMode.includes(report.category)));
             const matchPriority = priorityMode === 'all' || (report.priority || 'normal') === priorityMode;
             const matchReportType = reportTypeMode === 'all' || (report.report_type || 'identified') === reportTypeMode;
             const matchMonth = targetMonth === 'all' || report._shamsiMonth === targetMonth;
