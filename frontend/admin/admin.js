@@ -1466,7 +1466,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         const todayDate = new Date();
-        const todayJ = gregorianToJalali(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate());
+        const computedTodayKey = getJalaliDateKeyFromDate(todayDate);
+        const fallbackTodayJ = gregorianToJalali(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate());
+        const todayJy = computedTodayKey ? Math.floor(computedTodayKey / 10000) : fallbackTodayJ.jy;
+        const todayJm = computedTodayKey ? Math.floor((computedTodayKey % 10000) / 100) : fallbackTodayJ.jm;
+        const todayJd = computedTodayKey ? (computedTodayKey % 100) : fallbackTodayJ.jd;
+        const todayKey = (todayJy * 10000) + (todayJm * 100) + todayJd;
+        const todayJ = { jy: todayJy, jm: todayJm, jd: todayJd, key: todayKey };
 
         let currentViewJy = todayJ.jy;
         let currentViewJm = todayJ.jm;
@@ -1503,20 +1509,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 gridEl.appendChild(cell);
             }
 
-            const startMs = tempStart ? tempStart.startMs : null;
-            let endMs = tempEnd ? tempEnd.endMs : null;
+            const startKey = tempStart ? tempStart.key : null;
+            let endKey = tempEnd ? tempEnd.key : null;
             if (pickingState && tempStart && hoveredDay) {
-                endMs = hoveredDay.startMs >= tempStart.startMs ? hoveredDay.endMs : null;
+                endKey = hoveredDay.key >= tempStart.key ? hoveredDay.key : null;
             }
 
-            let rangeMin = null;
-            let rangeMax = null;
-            if (startMs && endMs) {
-                rangeMin = Math.min(startMs, endMs);
-                rangeMax = Math.max(startMs, endMs);
-            } else if (startMs) {
-                rangeMin = startMs;
-                rangeMax = tempStart.endMs;
+            let rangeMinKey = null;
+            let rangeMaxKey = null;
+            if (startKey && endKey) {
+                rangeMinKey = Math.min(startKey, endKey);
+                rangeMaxKey = Math.max(startKey, endKey);
+            } else if (startKey) {
+                rangeMinKey = startKey;
+                rangeMaxKey = tempStart.key;
             }
 
             for (let d = 1; d <= daysInMonth; d++) {
@@ -1524,21 +1530,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 cell.className = 'cal-day-cell';
                 cell.textContent = toPersianDigits(d);
 
-                const dayStart = getJalaliDayStartMs(currentViewJy, currentViewJm, d);
-                const dayEnd = getJalaliDayEndMs(currentViewJy, currentViewJm, d);
+                const cellKey = (currentViewJy * 10000) + (currentViewJm * 100) + d;
 
-                if (currentViewJy === todayJ.jy && currentViewJm === todayJ.jm && d === todayJ.jd) {
+                if (cellKey === todayJ.key) {
                     cell.classList.add('today');
                 }
 
-                if (rangeMin !== null && rangeMax !== null) {
-                    if (dayStart === rangeMin && dayEnd === rangeMax) {
+                if (rangeMinKey !== null && rangeMaxKey !== null) {
+                    if (cellKey === rangeMinKey && cellKey === rangeMaxKey) {
                         cell.classList.add('range-single');
-                    } else if (dayStart === rangeMin) {
+                    } else if (cellKey === rangeMinKey) {
                         cell.classList.add('range-start');
-                    } else if (dayEnd === rangeMax) {
+                    } else if (cellKey === rangeMaxKey) {
                         cell.classList.add('range-end');
-                    } else if (dayStart > rangeMin && dayEnd < rangeMax) {
+                    } else if (cellKey > rangeMinKey && cellKey < rangeMaxKey) {
                         cell.classList.add('range-middle');
                     }
                 }
@@ -1549,8 +1554,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             jy: currentViewJy,
                             jm: currentViewJm,
                             jd: d,
-                            startMs: dayStart,
-                            endMs: dayEnd
+                            key: cellKey
                         };
                         renderCalendarHighlights();
                     }
@@ -1563,8 +1567,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             jy: currentViewJy,
                             jm: currentViewJm,
                             jd: d,
-                            startMs: dayStart,
-                            endMs: dayEnd
+                            key: cellKey
                         };
                         tempEnd = null;
                         pickingState = true;
@@ -1578,10 +1581,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             jy: currentViewJy,
                             jm: currentViewJm,
                             jd: d,
-                            startMs: dayStart,
-                            endMs: dayEnd
+                            key: cellKey
                         };
-                        if (secondDay.startMs < tempStart.startMs) {
+                        if (secondDay.key < tempStart.key) {
                             showToast('تاریخ پایان نمی‌تواند قبل از تاریخ شروع باشد', 3000, 'warning');
                             return;
                         }
@@ -1598,11 +1600,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         jy: currentViewJy,
                         jm: currentViewJm,
                         jd: d,
-                        startMs: dayStart,
-                        endMs: dayEnd
+                        key: cellKey
                     };
                     if (pickingState && tempStart) {
-                        if (clickedDay.startMs < tempStart.startMs) {
+                        if (clickedDay.key < tempStart.key) {
                             showToast('تاریخ پایان نمی‌تواند قبل از تاریخ شروع باشد', 3000, 'warning');
                             return;
                         }
@@ -1642,29 +1643,28 @@ document.addEventListener('DOMContentLoaded', () => {
         function renderCalendarHighlights() {
             if (!gridEl || !tempStart || !hoveredDay) return;
             const cells = gridEl.querySelectorAll('.cal-day-cell:not(.outside)');
-            const isHoverEarlier = hoveredDay.startMs < tempStart.startMs;
-            const minT = tempStart.startMs;
-            const maxT = isHoverEarlier ? tempStart.endMs : hoveredDay.endMs;
+            const isHoverEarlier = hoveredDay.key < tempStart.key;
+            const minKey = tempStart.key;
+            const maxKey = isHoverEarlier ? tempStart.key : hoveredDay.key;
 
             cells.forEach(cell => {
                 const d = parseInt(cell.textContent.replace(/[۰-۹]/g, c => '۰۱۲۳۴۵۶۷۸۹'.indexOf(c)), 10);
                 if (!d) return;
-                const cellStart = getJalaliDayStartMs(currentViewJy, currentViewJm, d);
-                const cellEnd = getJalaliDayEndMs(currentViewJy, currentViewJm, d);
+                const cellKey = (currentViewJy * 10000) + (currentViewJm * 100) + d;
 
                 cell.classList.remove('range-start', 'range-end', 'range-middle', 'range-single', 'date-not-allowed');
 
-                if (isHoverEarlier && cellStart === hoveredDay.startMs) {
+                if (isHoverEarlier && cellKey === hoveredDay.key) {
                     cell.classList.add('date-not-allowed');
                 }
 
-                if (cellStart === minT && cellEnd === maxT) {
+                if (cellKey === minKey && cellKey === maxKey) {
                     cell.classList.add('range-single');
-                } else if (cellStart === minT) {
+                } else if (cellKey === minKey) {
                     cell.classList.add('range-start');
-                } else if (cellEnd === maxT) {
+                } else if (cellKey === maxKey) {
                     cell.classList.add('range-end');
-                } else if (cellStart > minT && cellEnd < maxT) {
+                } else if (cellKey > minKey && cellKey < maxKey) {
                     cell.classList.add('range-middle');
                 }
             });
@@ -1675,9 +1675,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!tempEnd) {
                 tempEnd = { ...tempStart };
             }
+            const sKey = Math.min(tempStart.key, tempEnd.key);
+            const eKey = Math.max(tempStart.key, tempEnd.key);
             activeShamsiDateRange = {
-                start: tempStart.startMs,
-                end: tempEnd.endMs,
+                startKey: sKey,
+                endKey: eKey,
                 startJ: tempStart,
                 endJ: tempEnd
             };
@@ -1823,8 +1825,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         jy: todayJ.jy,
                         jm: todayJ.jm,
                         jd: todayJ.jd,
-                        startMs: getJalaliDayStartMs(todayJ.jy, todayJ.jm, todayJ.jd),
-                        endMs: getJalaliDayEndMs(todayJ.jy, todayJ.jm, todayJ.jd)
+                        key: todayJ.key
                     };
                     tempEnd = { ...tempStart };
                     currentViewJy = todayJ.jy;
@@ -1833,20 +1834,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (p === 'last7') {
                     const now = new Date();
                     const past = new Date(now.getTime() - 6 * 86400000);
-                    const pastJ = gregorianToJalali(past.getFullYear(), past.getMonth() + 1, past.getDate());
+                    const pastKey = getJalaliDateKeyFromDate(past) || todayJ.key;
+                    const pastJy = Math.floor(pastKey / 10000);
+                    const pastJm = Math.floor((pastKey % 10000) / 100);
+                    const pastJd = pastKey % 100;
                     tempStart = {
-                        jy: pastJ.jy,
-                        jm: pastJ.jm,
-                        jd: pastJ.jd,
-                        startMs: getJalaliDayStartMs(pastJ.jy, pastJ.jm, pastJ.jd),
-                        endMs: getJalaliDayEndMs(pastJ.jy, pastJ.jm, pastJ.jd)
+                        jy: pastJy,
+                        jm: pastJm,
+                        jd: pastJd,
+                        key: pastKey
                     };
                     tempEnd = {
                         jy: todayJ.jy,
                         jm: todayJ.jm,
                         jd: todayJ.jd,
-                        startMs: getJalaliDayStartMs(todayJ.jy, todayJ.jm, todayJ.jd),
-                        endMs: getJalaliDayEndMs(todayJ.jy, todayJ.jm, todayJ.jd)
+                        key: todayJ.key
                     };
                     currentViewJy = todayJ.jy;
                     currentViewJm = todayJ.jm;
@@ -1854,39 +1856,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (p === 'last30') {
                     const now = new Date();
                     const past = new Date(now.getTime() - 29 * 86400000);
-                    const pastJ = gregorianToJalali(past.getFullYear(), past.getMonth() + 1, past.getDate());
+                    const pastKey = getJalaliDateKeyFromDate(past) || todayJ.key;
+                    const pastJy = Math.floor(pastKey / 10000);
+                    const pastJm = Math.floor((pastKey % 10000) / 100);
+                    const pastJd = pastKey % 100;
                     tempStart = {
-                        jy: pastJ.jy,
-                        jm: pastJ.jm,
-                        jd: pastJ.jd,
-                        startMs: getJalaliDayStartMs(pastJ.jy, pastJ.jm, pastJ.jd),
-                        endMs: getJalaliDayEndMs(pastJ.jy, pastJ.jm, pastJ.jd)
+                        jy: pastJy,
+                        jm: pastJm,
+                        jd: pastJd,
+                        key: pastKey
                     };
                     tempEnd = {
                         jy: todayJ.jy,
                         jm: todayJ.jm,
                         jd: todayJ.jd,
-                        startMs: getJalaliDayStartMs(todayJ.jy, todayJ.jm, todayJ.jd),
-                        endMs: getJalaliDayEndMs(todayJ.jy, todayJ.jm, todayJ.jd)
+                        key: todayJ.key
                     };
                     currentViewJy = todayJ.jy;
                     currentViewJm = todayJ.jm;
                     commitDateRange();
                 } else if (p === 'thisMonth') {
                     const daysInM = getJalaliMonthDays(todayJ.jy, todayJ.jm);
+                    const startKey = (todayJ.jy * 10000) + (todayJ.jm * 100) + 1;
+                    const endKey = (todayJ.jy * 10000) + (todayJ.jm * 100) + daysInM;
                     tempStart = {
                         jy: todayJ.jy,
                         jm: todayJ.jm,
                         jd: 1,
-                        startMs: getJalaliDayStartMs(todayJ.jy, todayJ.jm, 1),
-                        endMs: getJalaliDayEndMs(todayJ.jy, todayJ.jm, 1)
+                        key: startKey
                     };
                     tempEnd = {
                         jy: todayJ.jy,
                         jm: todayJ.jm,
                         jd: daysInM,
-                        startMs: getJalaliDayStartMs(todayJ.jy, todayJ.jm, daysInM),
-                        endMs: getJalaliDayEndMs(todayJ.jy, todayJ.jm, daysInM)
+                        key: endKey
                     };
                     currentViewJy = todayJ.jy;
                     currentViewJm = todayJ.jm;
@@ -2055,6 +2058,29 @@ document.addEventListener('DOMContentLoaded', () => {
         month: '2-digit'
     });
 
+    const cachedJalaliPartsFormatter = new Intl.DateTimeFormat('fa-IR-u-nu-latn', {
+        timeZone: 'Asia/Tehran',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+
+    function getJalaliDateKeyFromDate(dateObj) {
+        if (!dateObj) return 0;
+        try {
+            const parts = cachedJalaliPartsFormatter.formatToParts(dateObj);
+            let y = 0, m = 0, d = 0;
+            for (let i = 0; i < parts.length; i++) {
+                if (parts[i].type === 'year') y = parseInt(parts[i].value, 10);
+                else if (parts[i].type === 'month') m = parseInt(parts[i].value, 10);
+                else if (parts[i].type === 'day') d = parseInt(parts[i].value, 10);
+            }
+            return (y * 10000) + (m * 100) + d;
+        } catch (_) {
+            return 0;
+        }
+    }
+
     function formatJalaliDateTime(isoStr, includeSeconds = false) {
         if (!isoStr) return 'نامشخص';
         try {
@@ -2081,17 +2107,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (d) {
                     report._shamsiMonth = cachedJalaliMonthFormatter.format(d);
                     report._timestamp = d.getTime();
+                    report._jalaliDateKey = getJalaliDateKeyFromDate(d);
                 } else {
                     report._shamsiMonth = '';
                     report._timestamp = 0;
+                    report._jalaliDateKey = 0;
                 }
             } catch (e) {
                 report._shamsiMonth = '';
                 report._timestamp = 0;
+                report._jalaliDateKey = 0;
             }
         } else {
             report._shamsiMonth = '';
             report._timestamp = 0;
+            report._jalaliDateKey = 0;
         }
 
         if (report.updated_at) {
@@ -2380,8 +2410,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let lastReportsSignature = '';
 
-    async function fetchReports(forceSkeleton = false) {
-        if (forceSkeleton || !allReports || allReports.length === 0) {
+    async function fetchReports(forceRefresh = false, showSkeleton = false) {
+        if (showSkeleton || !allReports || allReports.length === 0) {
             renderReportsTableSkeleton(8);
         }
         try {
@@ -2420,7 +2450,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const firstReport = fetchedReports[0];
             const newSignature = `${fetchedReports.length}_${currentUnread}_${firstReport ? firstReport.id : 0}_${firstReport ? (firstReport.updated_at || firstReport.created_at) : ''}`;
-            if (!forceSkeleton && allReports.length > 0 && newSignature === lastReportsSignature) {
+            if (!forceRefresh && allReports.length > 0 && newSignature === lastReportsSignature) {
                 resetSessionTimer();
                 return true;
             }
@@ -2483,12 +2513,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const matchMonth = targetMonth === 'all' || report._shamsiMonth === targetMonth;
 
             let matchDate = true;
-            if (activeShamsiDateRange && activeShamsiDateRange.start && activeShamsiDateRange.end) {
-                const rTime = report._timestamp || (report.created_at ? parseTimestamp(report.created_at)?.getTime() : 0) || 0;
-                matchDate = rTime >= activeShamsiDateRange.start && rTime <= activeShamsiDateRange.end;
-            } else if (activeShamsiDateRange && activeShamsiDateRange.start) {
-                const rTime = report._timestamp || (report.created_at ? parseTimestamp(report.created_at)?.getTime() : 0) || 0;
-                matchDate = rTime >= activeShamsiDateRange.start;
+            if (activeShamsiDateRange && activeShamsiDateRange.startKey && activeShamsiDateRange.endKey) {
+                const rKey = report._jalaliDateKey || (report.created_at ? getJalaliDateKeyFromDate(parseTimestamp(report.created_at)) : 0);
+                matchDate = rKey >= activeShamsiDateRange.startKey && rKey <= activeShamsiDateRange.endKey;
+            } else if (activeShamsiDateRange && activeShamsiDateRange.startKey) {
+                const rKey = report._jalaliDateKey || (report.created_at ? getJalaliDateKeyFromDate(parseTimestamp(report.created_at)) : 0);
+                matchDate = rKey >= activeShamsiDateRange.startKey;
             }
 
             let matchRead = true;
@@ -4874,7 +4904,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return true;
         }
 
-        if (anaSkeleton && anaActual && (!cachedAnalyticsData || force)) {
+        if (anaSkeleton && anaActual && !cachedAnalyticsData) {
             anaSkeleton.classList.remove('d-none');
             anaActual.classList.add('d-none');
         }
@@ -5261,9 +5291,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function scheduleReportsRefresh() {
         clearTimeout(_refreshDebounceTimer);
         _refreshDebounceTimer = setTimeout(() => {
-            fetchReports().catch(() => { });
+            fetchReports(true, false).catch(() => { });
             fetchNotifications().catch(() => { });
-        }, 800);
+        }, 200);
     }
 
     function markReportHasNewMessage(reportId) {
@@ -5278,16 +5308,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (reportPollingInterval) return;
         reportPollingInterval = setInterval(() => {
             if (document.hidden) return;
-            fetchReports().catch(() => { });
-        }, 90000);
+            fetchReports(false, false).catch(() => { });
+        }, 15000);
         notifPollingInterval = setInterval(() => {
             if (document.hidden) return;
             fetchNotifications().catch(() => { });
-        }, 60000);
+        }, 15000);
     }
 
     function startBackgroundPolling() {
         connectAdminSSE();
+        if (!reportPollingInterval) {
+            reportPollingInterval = setInterval(() => {
+                if (document.hidden) return;
+                fetchReports(false, false).catch(() => { });
+            }, 15000);
+        }
+        if (!notifPollingInterval) {
+            notifPollingInterval = setInterval(() => {
+                if (document.hidden) return;
+                fetchNotifications().catch(() => { });
+            }, 15000);
+        }
     }
 
     function stopBackgroundPolling() {
@@ -5300,6 +5342,13 @@ document.addEventListener('DOMContentLoaded', () => {
             _sseConnection = null;
         }
     }
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            fetchReports(false, false).catch(() => { });
+            fetchNotifications().catch(() => { });
+        }
+    });
 
     startBackgroundPolling();
 
@@ -5406,7 +5455,8 @@ document.addEventListener('DOMContentLoaded', () => {
             updateBulkToolbar();
             if (advancedSection) advancedSection.style.display = 'none';
             if (analyticsSection) analyticsSection.style.display = 'none';
-            fetchReports().catch(() => { });
+            fetchReports(true, false).catch(() => { });
+            fetchNotifications().catch(() => { });
         } else if (tabName === 'analytics') {
             tabBtnAnalytics?.classList.add('active');
             tabBtnReports?.classList.remove('active');
@@ -5415,7 +5465,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (detailSection) detailSection.style.display = 'none';
             if (advancedSection) advancedSection.style.display = 'none';
             if (analyticsSection) analyticsSection.style.display = 'block';
-            renderAnalyticsDashboard().catch(() => { });
+            renderAnalyticsDashboard(true).catch(() => { });
         } else if (tabName === 'advanced') {
             if (!currentAdmin || !currentAdmin.is_superuser) {
                 showToast('دسترسی به این بخش برای حساب شما مجاز نمی‌باشد.', 3000, 'error');
@@ -6894,6 +6944,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     void btnNotifBell.offsetWidth;
                     btnNotifBell.classList.add('bell-shake');
                 }
+                fetchReports(true, false).catch(() => { });
             }
             previousNotifUnreadCount = unreadCount;
 

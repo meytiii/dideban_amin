@@ -637,18 +637,6 @@
       "source_location": "L24"
     },
     {
-      "id": "frontend_admin_admin_cancelmfastep",
-      "label": "cancelMFAStep()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 123,
-      "community_name": "initMfaOtpInput",
-      "file_type": "code",
-      "norm_label": "cancelmfastep()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L831"
-    },
-    {
       "id": "frontend_admin_admin_initmfaotpinput",
       "label": "initMfaOtpInput()",
       "_callable": true,
@@ -709,30 +697,6 @@
       "source_location": "L625"
     },
     {
-      "id": "frontend_admin_admin_loadadmincaptcha",
-      "label": "loadAdminCaptcha()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 123,
-      "community_name": "initMfaOtpInput",
-      "file_type": "code",
-      "norm_label": "loadadmincaptcha()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L475"
-    },
-    {
-      "id": "frontend_admin_admin_showmfastep",
-      "label": "showMFAStep()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 123,
-      "community_name": "initMfaOtpInput",
-      "file_type": "code",
-      "norm_label": "showmfastep()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L790"
-    },
-    {
       "id": "frontend_admin_admin_toasciidigits",
       "label": "toAsciiDigits()",
       "_callable": true,
@@ -791,6 +755,18 @@
       "norm_label": "calculatepagination()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L2519"
+    },
+    {
+      "id": "frontend_admin_admin_cancelmfastep",
+      "label": "cancelMFAStep()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 125,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "cancelmfastep()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L831"
     },
     {
       "id": "frontend_admin_admin_check2faenforcementnotice",
@@ -985,6 +961,18 @@
       "source_location": "L1267"
     },
     {
+      "id": "frontend_admin_admin_loadadmincaptcha",
+      "label": "loadAdminCaptcha()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 125,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "loadadmincaptcha()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L475"
+    },
+    {
       "id": "frontend_admin_admin_normalizepersianforsearch",
       "label": "normalizePersianForSearch()",
       "_callable": true,
@@ -1163,6 +1151,18 @@
       "norm_label": "setupsuperuserui()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L5373"
+    },
+    {
+      "id": "frontend_admin_admin_showmfastep",
+      "label": "showMFAStep()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 125,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "showmfastep()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L790"
     },
     {
       "id": "frontend_admin_admin_stopbackgroundpolling",
@@ -3425,7 +3425,7 @@
       "label": "DESIGN.md",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "frontmatter": {
         "name": "Samaneh Amn Setad Khabari Herasat - Hamadan",
@@ -3437,364 +3437,460 @@
       "source_location": "L1"
     },
     {
+      "id": "design_10_persian_jalali_date_range_popover_date_range_popover",
+      "label": "10. Persian Jalali Date-Range Popover (`.date-range-popover`)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Components",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "10. persian jalali date-range popover (`.date-range-popover`)",
+      "source_file": "DESIGN.md",
+      "source_location": "L229"
+    },
+    {
+      "id": "design_11_intelligence_data_table_bulk_selection_action_bar_reportstable_bulkactionstoolbar",
+      "label": "11. Intelligence Data Table & Bulk Selection Action Bar (`#reportsTable`, `#bulkActionsToolbar`)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Components",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "11. intelligence data table & bulk selection action bar (`#reportstable`, `#bulkactionstoolbar`)",
+      "source_file": "DESIGN.md",
+      "source_location": "L233"
+    },
+    {
+      "id": "design_12_official_classified_dossier_word_document_export_report_detail_section",
+      "label": "12. Official Classified Dossier & Word Document Export (`#report-detail-section`)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Components",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "12. official classified dossier & word document export (`#report-detail-section`)",
+      "source_file": "DESIGN.md",
+      "source_location": "L238"
+    },
+    {
+      "id": "design_13_accessible_confirmation_dialog_system_frontend_confirm_js",
+      "label": "13. Accessible Confirmation Dialog System (`frontend/confirm.js`)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Components",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "13. accessible confirmation dialog system (`frontend/confirm.js`)",
+      "source_file": "DESIGN.md",
+      "source_location": "L244"
+    },
+    {
+      "id": "design_14_native_lightweight_tooltip_system_data_tooltip",
+      "label": "14. Native Lightweight Tooltip System (`data-tooltip`)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Components",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "14. native lightweight tooltip system (`data-tooltip`)",
+      "source_file": "DESIGN.md",
+      "source_location": "L250"
+    },
+    {
+      "id": "design_15_active_session_countdown_warning_modal",
+      "label": "15. Active Session Countdown & Warning Modal",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Components",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "15. active session countdown & warning modal",
+      "source_file": "DESIGN.md",
+      "source_location": "L254"
+    },
+    {
+      "id": "design_16_assistant_communication_chat_language",
+      "label": "16. Assistant Communication & Chat Language",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Components",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "16. assistant communication & chat language",
+      "source_file": "DESIGN.md",
+      "source_location": "L258"
+    },
+    {
       "id": "design_1_navigation_pill_tab_bar",
       "label": "1. Navigation & Pill Tab Bar",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "1. navigation & pill tab bar",
       "source_file": "DESIGN.md",
-      "source_location": "L168"
+      "source_location": "L189"
     },
     {
       "id": "design_2_multi_step_form_tracker",
       "label": "2. Multi-Step Form Tracker",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "2. multi-step form tracker",
       "source_file": "DESIGN.md",
-      "source_location": "L172"
+      "source_location": "L193"
     },
     {
       "id": "design_3_glass_category_dropdown_dropdown_menu",
       "label": "3. Glass Category Dropdown (`dropdown-menu`)",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "3. glass category dropdown (`dropdown-menu`)",
       "source_file": "DESIGN.md",
-      "source_location": "L176"
+      "source_location": "L197"
     },
     {
       "id": "design_4_centered_smart_evidence_upload_be_ui_file_upload",
       "label": "4. Centered Smart Evidence Upload (`be-ui-file-upload`)",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4. centered smart evidence upload (`be-ui-file-upload`)",
       "source_file": "DESIGN.md",
-      "source_location": "L180"
+      "source_location": "L201"
     },
     {
       "id": "design_5_faq_themed_accordion_accordion_2",
       "label": "5. FAQ Themed Accordion (`accordion-2`)",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "5. faq themed accordion (`accordion-2`)",
       "source_file": "DESIGN.md",
-      "source_location": "L185"
+      "source_location": "L206"
     },
     {
       "id": "design_6_admin_3d_sign_in_card_sign_in_card_2",
       "label": "6. Admin 3D Sign-in Card (`sign-in-card-2`)",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "6. admin 3d sign-in card (`sign-in-card-2`)",
       "source_file": "DESIGN.md",
-      "source_location": "L189"
+      "source_location": "L210"
     },
     {
-      "id": "design_7_action_buttons_directional_arrows",
-      "label": "7. Action Buttons & Directional Arrows",
+      "id": "design_7_action_buttons_directional_rtl_arrows",
+      "label": "7. Action Buttons & Directional RTL Arrows",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "7. action buttons & directional arrows",
+      "norm_label": "7. action buttons & directional rtl arrows",
       "source_file": "DESIGN.md",
-      "source_location": "L194"
+      "source_location": "L215"
     },
     {
       "id": "design_8_secure_tracking_follow_up_thread",
       "label": "8. Secure Tracking & Follow-up Thread",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "8. secure tracking & follow-up thread",
       "source_file": "DESIGN.md",
-      "source_location": "L199"
+      "source_location": "L220"
     },
     {
-      "id": "design_9_assistant_communication_chat_language",
-      "label": "9. Assistant Communication & Chat Language",
+      "id": "design_9_admin_kpi_stat_grid_real_time_pulse_indicators_kpi_grid",
+      "label": "9. Admin KPI Stat Grid & Real-Time Pulse Indicators (`.kpi-grid`)",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "9. assistant communication & chat language",
+      "norm_label": "9. admin kpi stat grid & real-time pulse indicators (`.kpi-grid`)",
       "source_file": "DESIGN.md",
-      "source_location": "L203"
+      "source_location": "L224"
     },
     {
       "id": "design_colors",
       "label": "Colors",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "colors",
       "source_file": "DESIGN.md",
-      "source_location": "L94"
+      "source_location": "L97"
     },
     {
       "id": "design_components",
       "label": "Components",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "components",
       "source_file": "DESIGN.md",
-      "source_location": "L166"
+      "source_location": "L187"
     },
     {
       "id": "design_design_system_\u0633\u0627\u0645\u0627\u0646\u0647_\u062f\u06cc\u062f\u0647_\u0628\u0627\u0646_\u0627\u0645\u06cc\u0646_\u0633\u062a\u0627\u062f_\u062e\u0628\u0631\u06cc_\u0648_\u062f\u0631\u06cc\u0627\u0641\u062a_\u06af\u0632\u0627\u0631\u0634_\u0647\u0627\u06cc_\u0645\u0631\u062f\u0645\u06cc_\u062d\u0631\u0627\u0633\u062a_\u0647\u0645\u062f\u0627\u0646",
       "label": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "design system: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
       "source_file": "DESIGN.md",
-      "source_location": "L74"
+      "source_location": "L76"
     },
     {
       "id": "design_do",
       "label": "Do:",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "do:",
       "source_file": "DESIGN.md",
-      "source_location": "L218"
+      "source_location": "L275"
     },
     {
       "id": "design_do_s_and_don_ts",
       "label": "Do's and Don'ts",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "do's and don'ts",
       "source_file": "DESIGN.md",
-      "source_location": "L216"
+      "source_location": "L273"
     },
     {
       "id": "design_don_t",
       "label": "Don't:",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "don't:",
       "source_file": "DESIGN.md",
-      "source_location": "L226"
+      "source_location": "L285"
     },
     {
       "id": "design_elevation_depth",
       "label": "Elevation & Depth",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "elevation & depth",
       "source_file": "DESIGN.md",
-      "source_location": "L146"
+      "source_location": "L166"
     },
     {
       "id": "design_hardware_acceleration_anti_lag_performance_rules",
       "label": "Hardware Acceleration & Anti-Lag Performance Rules",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "hardware acceleration & anti-lag performance rules",
       "source_file": "DESIGN.md",
-      "source_location": "L206"
+      "source_location": "L263"
     },
     {
       "id": "design_hierarchy",
       "label": "Hierarchy",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "hierarchy",
       "source_file": "DESIGN.md",
-      "source_location": "L125"
+      "source_location": "L130"
     },
     {
       "id": "design_key_characteristics",
       "label": "Key Characteristics:",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "key characteristics:",
       "source_file": "DESIGN.md",
-      "source_location": "L86"
+      "source_location": "L88"
     },
     {
-      "id": "design_layout",
-      "label": "Layout",
+      "id": "design_layout_responsive_breakpoints",
+      "label": "Layout & Responsive Breakpoints",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "layout",
+      "norm_label": "layout & responsive breakpoints",
       "source_file": "DESIGN.md",
-      "source_location": "L137"
+      "source_location": "L149"
     },
     {
       "id": "design_mandatory_task_completion_rule_commit_summary_description",
       "label": "Mandatory Task Completion Rule: Commit Summary & Description",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "mandatory task completion rule: commit summary & description",
       "source_file": "DESIGN.md",
-      "source_location": "L238"
+      "source_location": "L297"
     },
     {
       "id": "design_named_rules",
       "label": "Named Rules",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "named rules",
       "source_file": "DESIGN.md",
-      "source_location": "L115"
+      "source_location": "L120"
     },
     {
-      "id": "design_named_rules_132",
+      "id": "design_named_rules_144",
       "label": "Named Rules",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "named rules",
       "source_file": "DESIGN.md",
-      "source_location": "L132"
+      "source_location": "L144"
     },
     {
       "id": "design_neutral",
       "label": "Neutral",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "neutral",
       "source_file": "DESIGN.md",
-      "source_location": "L102"
+      "source_location": "L105"
     },
     {
       "id": "design_overview",
       "label": "Overview",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "overview",
       "source_file": "DESIGN.md",
-      "source_location": "L76"
+      "source_location": "L78"
+    },
+    {
+      "id": "design_persian_tatweel_typography_subsystem",
+      "label": "Persian Tatweel Typography Subsystem",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Components",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "persian tatweel typography subsystem",
+      "source_file": "DESIGN.md",
+      "source_location": "L137"
     },
     {
       "id": "design_primary",
       "label": "Primary",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "primary",
       "source_file": "DESIGN.md",
-      "source_location": "L98"
+      "source_location": "L101"
     },
     {
       "id": "design_shadow_vocabulary",
       "label": "Shadow Vocabulary",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "shadow vocabulary",
       "source_file": "DESIGN.md",
-      "source_location": "L150"
+      "source_location": "L170"
     },
     {
-      "id": "design_shapes",
-      "label": "Shapes",
+      "id": "design_shapes_radii",
+      "label": "Shapes & Radii",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "shapes",
+      "norm_label": "shapes & radii",
       "source_file": "DESIGN.md",
-      "source_location": "L157"
+      "source_location": "L178"
     },
     {
       "id": "design_status_accents",
       "label": "Status & Accents",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "status & accents",
       "source_file": "DESIGN.md",
-      "source_location": "L110"
+      "source_location": "L114"
     },
     {
       "id": "design_typography",
       "label": "Typography",
       "_origin": "ast",
       "community": 0,
-      "community_name": "Design System: \u0633\u0627\u0645\u0627\u0646\u0647 \u062f\u06cc\u062f\u0647\u200c\u0628\u0627\u0646 \u0627\u0645\u06cc\u0646 - \u0633\u062a\u0627\u062f \u062e\u0628\u0631\u06cc \u0648 \u062f\u0631\u06cc\u0627\u0641\u062a \u06af\u0632\u0627\u0631\u0634\u200c\u0647\u0627\u06cc \u0645\u0631\u062f\u0645\u06cc \u062d\u0631\u0627\u0633\u062a \u0647\u0645\u062f\u0627\u0646",
+      "community_name": "Components",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "typography",
       "source_file": "DESIGN.md",
-      "source_location": "L120"
+      "source_location": "L125"
     },
     {
       "id": "agents_skills_hallmark_references_component_cookbook",
@@ -3830,30 +3926,6 @@
       "node_kind": "heading",
       "norm_label": "c2 \u00b7 inline form-as-cta",
       "source_file": ".agents/skills/hallmark/references/components/c2-inline-form-as-cta.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_c3_typographic_link",
-      "label": "c3-typographic-link.md",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "c3-typographic-link.md",
-      "source_file": ".agents/skills/hallmark/references/components/c3-typographic-link.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_c3_typographic_link_c3_typographic_link",
-      "label": "C3 \u00b7 Typographic link",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "c3 \u00b7 typographic link",
-      "source_file": ".agents/skills/hallmark/references/components/c3-typographic-link.md",
       "source_location": "L1"
     },
     {
@@ -3902,6 +3974,30 @@
       "node_kind": "heading",
       "norm_label": "f2 \u00b7 sticky-scroll stack",
       "source_file": ".agents/skills/hallmark/references/components/f2-sticky-scroll-stack.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_f4_step_sequence",
+      "label": "f4-step-sequence.md",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "f4-step-sequence.md",
+      "source_file": ".agents/skills/hallmark/references/components/f4-step-sequence.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_f4_step_sequence_f4_step_sequence",
+      "label": "F4 \u00b7 Step sequence",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "f4 \u00b7 step sequence",
+      "source_file": ".agents/skills/hallmark/references/components/f4-step-sequence.md",
       "source_location": "L1"
     },
     {
@@ -4145,6 +4241,30 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_hallmark_references_components_h5_letter_hero",
+      "label": "h5-letter-hero.md",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "h5-letter-hero.md",
+      "source_file": ".agents/skills/hallmark/references/components/h5-letter-hero.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_h5_letter_hero_h5_letter_hero",
+      "label": "H5 \u00b7 Letter Hero",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "h5 \u00b7 letter hero",
+      "source_file": ".agents/skills/hallmark/references/components/h5-letter-hero.md",
+      "source_location": "L1"
+    },
+    {
       "id": "agents_skills_hallmark_references_components_h6_photographic_fold",
       "label": "h6-photographic-fold.md",
       "_origin": "ast",
@@ -4385,6 +4505,54 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal",
+      "label": "n9-edge-aligned-minimal.md",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "n9-edge-aligned-minimal.md",
+      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal_n9_edge_aligned_minimal",
+      "label": "N9 \u00b7 Edge-aligned minimal",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "n9 \u00b7 edge-aligned minimal",
+      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_s1_left_margin_numbered",
+      "label": "s1-left-margin-numbered.md",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "s1-left-margin-numbered.md",
+      "source_file": ".agents/skills/hallmark/references/components/s1-left-margin-numbered.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_s1_left_margin_numbered_s1_left_margin_numbered",
+      "label": "S1 \u00b7 Left-margin numbered",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "s1 \u00b7 left-margin numbered",
+      "source_file": ".agents/skills/hallmark/references/components/s1-left-margin-numbered.md",
+      "source_location": "L2"
+    },
+    {
       "id": "agents_skills_hallmark_references_components_s2_hanging",
       "label": "s2-hanging.md",
       "_origin": "ast",
@@ -4433,52 +4601,52 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_s4_inline_no_break",
-      "label": "s4-inline-no-break.md",
+      "id": "agents_skills_hallmark_references_components_s5_bottom_anchored",
+      "label": "s5-bottom-anchored.md",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "s4-inline-no-break.md",
-      "source_file": ".agents/skills/hallmark/references/components/s4-inline-no-break.md",
+      "norm_label": "s5-bottom-anchored.md",
+      "source_file": ".agents/skills/hallmark/references/components/s5-bottom-anchored.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_s4_inline_no_break_s4_inline_no_break",
-      "label": "S4 \u00b7 Inline (no break)",
+      "id": "agents_skills_hallmark_references_components_s5_bottom_anchored_s5_bottom_anchored",
+      "label": "S5 \u00b7 Bottom-anchored",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "s4 \u00b7 inline (no break)",
-      "source_file": ".agents/skills/hallmark/references/components/s4-inline-no-break.md",
+      "norm_label": "s5 \u00b7 bottom-anchored",
+      "source_file": ".agents/skills/hallmark/references/components/s5-bottom-anchored.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_t1_pull_quote_with_marginalia",
-      "label": "t1-pull-quote-with-marginalia.md",
+      "id": "agents_skills_hallmark_references_components_t2_logo_wall_hairline",
+      "label": "t2-logo-wall-hairline.md",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "t1-pull-quote-with-marginalia.md",
-      "source_file": ".agents/skills/hallmark/references/components/t1-pull-quote-with-marginalia.md",
+      "norm_label": "t2-logo-wall-hairline.md",
+      "source_file": ".agents/skills/hallmark/references/components/t2-logo-wall-hairline.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_t1_pull_quote_with_marginalia_t1_pull_quote_with_marginalia",
-      "label": "T1 \u00b7 Pull-quote with marginalia",
+      "id": "agents_skills_hallmark_references_components_t2_logo_wall_hairline_t2_logo_wall_hairline",
+      "label": "T2 \u00b7 Logo wall (hairline)",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "t1 \u00b7 pull-quote with marginalia",
-      "source_file": ".agents/skills/hallmark/references/components/t1-pull-quote-with-marginalia.md",
-      "source_location": "L2"
+      "norm_label": "t2 \u00b7 logo wall (hairline)",
+      "source_file": ".agents/skills/hallmark/references/components/t2-logo-wall-hairline.md",
+      "source_location": "L1"
     },
     {
       "id": "agents_skills_hallmark_references_components_t3_single_huge_quote",
@@ -4502,30 +4670,6 @@
       "node_kind": "heading",
       "norm_label": "t3 \u00b7 single huge quote",
       "source_file": ".agents/skills/hallmark/references/components/t3-single-huge-quote.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_t4_numbered_stat_strip",
-      "label": "t4-numbered-stat-strip.md",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "t4-numbered-stat-strip.md",
-      "source_file": ".agents/skills/hallmark/references/components/t4-numbered-stat-strip.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_t4_numbered_stat_strip_t4_numbered_stat_strip",
-      "label": "T4 \u00b7 Numbered stat strip",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t4 \u00b7 numbered stat strip",
-      "source_file": ".agents/skills/hallmark/references/components/t4-numbered-stat-strip.md",
       "source_location": "L1"
     },
     {
@@ -5292,6 +5436,50 @@
       "source_location": "L9"
     },
     {
+      "id": "test_security_hardening_test",
+      "label": "security_hardening_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "security_hardening_test.go",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_security_hardening_test_testcaptchareplayprevention",
+      "label": "TestCaptchaReplayPrevention()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testcaptchareplayprevention()",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L11"
+    },
+    {
+      "id": "test_security_hardening_test_testinspectziparchive",
+      "label": "TestInspectZipArchive()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testinspectziparchive()",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L57"
+    },
+    {
+      "id": "test_security_hardening_test_testipratelimiterboundedcapacity",
+      "label": "TestIPRateLimiterBoundedCapacity()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testipratelimiterboundedcapacity()",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L39"
+    },
+    {
       "id": "test_syslog_test",
       "label": "syslog_test.go",
       "_origin": "ast",
@@ -5724,96 +5912,6 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_s1_left_margin_numbered",
-      "label": "s1-left-margin-numbered.md",
-      "_origin": "ast",
-      "community": 114,
-      "community_name": "s1-left-margin-numbered.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "s1-left-margin-numbered.md",
-      "source_file": ".agents/skills/hallmark/references/components/s1-left-margin-numbered.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_s1_left_margin_numbered_s1_left_margin_numbered",
-      "label": "S1 \u00b7 Left-margin numbered",
-      "_origin": "ast",
-      "community": 114,
-      "community_name": "s1-left-margin-numbered.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "s1 \u00b7 left-margin numbered",
-      "source_file": ".agents/skills/hallmark/references/components/s1-left-margin-numbered.md",
-      "source_location": "L2"
-    },
-    {
-      "id": "captcha",
-      "label": "captcha.go",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "captcha.go",
-      "source_file": "captcha.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "captcha_cryptorandint",
-      "label": "cryptoRandInt()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "cryptorandint()",
-      "source_file": "captcha.go",
-      "source_location": "L197"
-    },
-    {
-      "id": "captcha_generatecaptchatoken",
-      "label": "GenerateCaptchaToken()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "generatecaptchatoken()",
-      "source_file": "captcha.go",
-      "source_location": "L134"
-    },
-    {
-      "id": "captcha_generatemathcaptchasvg",
-      "label": "GenerateMathCaptchaSVG()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "generatemathcaptchasvg()",
-      "source_file": "captcha.go",
-      "source_location": "L262"
-    },
-    {
-      "id": "captcha_generatenoiseelements",
-      "label": "generateNoiseElements()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "generatenoiseelements()",
-      "source_file": "captcha.go",
-      "source_location": "L205"
-    },
-    {
-      "id": "captcha_getcaptchahandler",
-      "label": "GetCaptchaHandler()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "getcaptchahandler()",
-      "source_file": "captcha.go",
-      "source_location": "L309"
-    },
-    {
       "id": "captcha_newusedcaptchastore",
       "label": "NewUsedCaptchaStore()",
       "_origin": "ast",
@@ -5823,17 +5921,6 @@
       "norm_label": "newusedcaptchastore()",
       "source_file": "captcha.go",
       "source_location": "L36"
-    },
-    {
-      "id": "captcha_renderobfuscatedchars",
-      "label": "renderObfuscatedChars()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "renderobfuscatedchars()",
-      "source_file": "captcha.go",
-      "source_location": "L233"
     },
     {
       "id": "go_type_database_sql_db",
@@ -5924,6 +6011,28 @@
       "source_location": "L57"
     },
     {
+      "id": "security_newaccountlockoutmanager",
+      "label": "NewAccountLockoutManager()",
+      "_origin": "ast",
+      "community": 115,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "newaccountlockoutmanager()",
+      "source_file": "security.go",
+      "source_location": "L656"
+    },
+    {
+      "id": "security_newipratelimiter",
+      "label": "NewIPRateLimiter()",
+      "_origin": "ast",
+      "community": 115,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "newipratelimiter()",
+      "source_file": "security.go",
+      "source_location": "L543"
+    },
+    {
       "id": "security_ratelimitmiddleware",
       "label": "RateLimitMiddleware()",
       "_origin": "ast",
@@ -5933,17 +6042,6 @@
       "norm_label": "ratelimitmiddleware()",
       "source_file": "security.go",
       "source_location": "L632"
-    },
-    {
-      "id": "security_truncaterunes",
-      "label": "truncateRunes()",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "truncaterunes()",
-      "source_file": "security.go",
-      "source_location": "L839"
     },
     {
       "id": "setad_khabari_hmd_accountlockoutmanager",
@@ -6054,28 +6152,6 @@
       "norm_label": "cachedsession",
       "source_file": "security.go",
       "source_location": "L44"
-    },
-    {
-      "id": "setad_khabari_hmd_captchapayload",
-      "label": "CaptchaPayload",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "captchapayload",
-      "source_file": "captcha.go",
-      "source_location": "L19"
-    },
-    {
-      "id": "setad_khabari_hmd_captcharesponse",
-      "label": "CaptchaResponse",
-      "_origin": "ast",
-      "community": 115,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "captcharesponse",
-      "source_file": "captcha.go",
-      "source_location": "L24"
     },
     {
       "id": "setad_khabari_hmd_ipratelimiter",
@@ -6331,15 +6407,103 @@
       "source_location": "L529"
     },
     {
-      "id": "test_crypto_test_testgeneratemathcaptchasvgandhandler",
-      "label": "TestGenerateMathCaptchaSVGAndHandler()",
+      "id": "test_contextwithadmin",
+      "label": "contextWithAdmin",
       "_origin": "ast",
       "community": 115,
       "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "testgeneratemathcaptchasvgandhandler()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L306"
+      "norm_label": "contextwithadmin",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L246"
+    },
+    {
+      "id": "test_contextwithadmin_deadline",
+      "label": ".Deadline()",
+      "_origin": "ast",
+      "community": 115,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": ".deadline()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L251"
+    },
+    {
+      "id": "test_contextwithadmin_done",
+      "label": ".Done()",
+      "_origin": "ast",
+      "community": 115,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": ".done()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L252"
+    },
+    {
+      "id": "test_contextwithadmin_err",
+      "label": ".Err()",
+      "_origin": "ast",
+      "community": 115,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": ".err()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L253"
+    },
+    {
+      "id": "test_contextwithadmin_value",
+      "label": ".Value()",
+      "_origin": "ast",
+      "community": 115,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": ".value()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L254"
+    },
+    {
+      "id": "test_lockout_persistence_test",
+      "label": "lockout_persistence_test.go",
+      "_origin": "ast",
+      "community": 115,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "lockout_persistence_test.go",
+      "source_file": "test/lockout_persistence_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_lockout_persistence_test_testaccountlockoutconcurrentfailures",
+      "label": "TestAccountLockoutConcurrentFailures()",
+      "_origin": "ast",
+      "community": 115,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "testaccountlockoutconcurrentfailures()",
+      "source_file": "test/lockout_persistence_test.go",
+      "source_location": "L9"
+    },
+    {
+      "id": "test_security_init_order_test",
+      "label": "security_init_order_test.go",
+      "_origin": "ast",
+      "community": 115,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "security_init_order_test.go",
+      "source_file": "test/security_init_order_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_security_init_order_test_testsecuritystoresinitorder",
+      "label": "TestSecurityStoresInitOrder()",
+      "_origin": "ast",
+      "community": 115,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "testsecuritystoresinitorder()",
+      "source_file": "test/security_init_order_test.go",
+      "source_location": "L8"
     },
     {
       "id": "admin_handlers_adminauthmiddleware",
@@ -6692,30 +6856,6 @@
       "norm_label": "testrequirejsonmiddleware()",
       "source_file": "test/require_json_test.go",
       "source_location": "L10"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_s5_bottom_anchored",
-      "label": "s5-bottom-anchored.md",
-      "_origin": "ast",
-      "community": 117,
-      "community_name": "s5-bottom-anchored.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "s5-bottom-anchored.md",
-      "source_file": ".agents/skills/hallmark/references/components/s5-bottom-anchored.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_s5_bottom_anchored_s5_bottom_anchored",
-      "label": "S5 \u00b7 Bottom-anchored",
-      "_origin": "ast",
-      "community": 117,
-      "community_name": "s5-bottom-anchored.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "s5 \u00b7 bottom-anchored",
-      "source_file": ".agents/skills/hallmark/references/components/s5-bottom-anchored.md",
-      "source_location": "L1"
     },
     {
       "id": "frontend_admin_confirm",
@@ -7075,30 +7215,6 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_t2_logo_wall_hairline",
-      "label": "t2-logo-wall-hairline.md",
-      "_origin": "ast",
-      "community": 121,
-      "community_name": "t2-logo-wall-hairline.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "t2-logo-wall-hairline.md",
-      "source_file": ".agents/skills/hallmark/references/components/t2-logo-wall-hairline.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_t2_logo_wall_hairline_t2_logo_wall_hairline",
-      "label": "T2 \u00b7 Logo wall (hairline)",
-      "_origin": "ast",
-      "community": 121,
-      "community_name": "t2-logo-wall-hairline.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t2 \u00b7 logo wall (hairline)",
-      "source_file": ".agents/skills/hallmark/references/components/t2-logo-wall-hairline.md",
-      "source_location": "L1"
-    },
-    {
       "id": "components_ui_popover",
       "label": "popover.tsx",
       "_origin": "ast",
@@ -7141,424 +7257,6 @@
       "norm_label": "admin.js",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L1"
-    },
-    {
-      "id": "test_contextwithadmin",
-      "label": "contextWithAdmin",
-      "_origin": "ast",
-      "community": 126,
-      "community_name": "contextWithAdmin",
-      "file_type": "code",
-      "norm_label": "contextwithadmin",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L246"
-    },
-    {
-      "id": "test_contextwithadmin_deadline",
-      "label": ".Deadline()",
-      "_origin": "ast",
-      "community": 126,
-      "community_name": "contextWithAdmin",
-      "file_type": "code",
-      "norm_label": ".deadline()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L251"
-    },
-    {
-      "id": "test_contextwithadmin_done",
-      "label": ".Done()",
-      "_origin": "ast",
-      "community": 126,
-      "community_name": "contextWithAdmin",
-      "file_type": "code",
-      "norm_label": ".done()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L252"
-    },
-    {
-      "id": "test_contextwithadmin_err",
-      "label": ".Err()",
-      "_origin": "ast",
-      "community": 126,
-      "community_name": "contextWithAdmin",
-      "file_type": "code",
-      "norm_label": ".err()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L253"
-    },
-    {
-      "id": "test_contextwithadmin_value",
-      "label": ".Value()",
-      "_origin": "ast",
-      "community": 126,
-      "community_name": "contextWithAdmin",
-      "file_type": "code",
-      "norm_label": ".value()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L254"
-    },
-    {
-      "id": "admin_auth",
-      "label": "admin_auth.go",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "admin_auth.go",
-      "source_file": "admin_auth.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "admin_auth_computeaudithash",
-      "label": "computeAuditHash()",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "computeaudithash()",
-      "source_file": "admin_auth.go",
-      "source_location": "L294"
-    },
-    {
-      "id": "admin_auth_getcurrentadminhandler",
-      "label": "GetCurrentAdminHandler()",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "getcurrentadminhandler()",
-      "source_file": "admin_auth.go",
-      "source_location": "L190"
-    },
-    {
-      "id": "admin_auth_getlatestaudithash",
-      "label": "getLatestAuditHash()",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "getlatestaudithash()",
-      "source_file": "admin_auth.go",
-      "source_location": "L304"
-    },
-    {
-      "id": "admin_auth_getlatestaudithashtx",
-      "label": "getLatestAuditHashTx()",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "getlatestaudithashtx()",
-      "source_file": "admin_auth.go",
-      "source_location": "L313"
-    },
-    {
-      "id": "admin_auth_ipincidrs",
-      "label": "ipInCIDRs()",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "ipincidrs()",
-      "source_file": "admin_auth.go",
-      "source_location": "L249"
-    },
-    {
-      "id": "admin_auth_logaudittx",
-      "label": "logAuditTx()",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "logaudittx()",
-      "source_file": "admin_auth.go",
-      "source_location": "L343"
-    },
-    {
-      "id": "admin_auth_parsetrustedproxies",
-      "label": "parseTrustedProxies()",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "parsetrustedproxies()",
-      "source_file": "admin_auth.go",
-      "source_location": "L224"
-    },
-    {
-      "id": "admin_handlers_deleteuserhandler",
-      "label": "DeleteUserHandler()",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "deleteuserhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1511"
-    },
-    {
-      "id": "admin_handlers_forwardreporthandler",
-      "label": "ForwardReportHandler()",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "forwardreporthandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2459"
-    },
-    {
-      "id": "admin_handlers_terminatesessionhandler",
-      "label": "TerminateSessionHandler()",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "terminatesessionhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1818"
-    },
-    {
-      "id": "go_type_database_sql_tx",
-      "label": "database/sql.Tx",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "database/sql.tx",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_net_ip",
-      "label": "net.IP",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "net.ip",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_net_ipnet",
-      "label": "net.IPNet",
-      "_origin": "ast",
-      "community": 127,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "net.ipnet",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "captcha_verifycaptcha",
-      "label": "VerifyCaptcha()",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "verifycaptcha()",
-      "source_file": "captcha.go",
-      "source_location": "L150"
-    },
-    {
-      "id": "crypto_getlegacyhmackey",
-      "label": "GetLegacyHMACKey()",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "getlegacyhmackey()",
-      "source_file": "crypto.go",
-      "source_location": "L61"
-    },
-    {
-      "id": "metadata_validatebinarymagicbytes",
-      "label": "ValidateBinaryMagicBytes()",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "validatebinarymagicbytes()",
-      "source_file": "metadata.go",
-      "source_location": "L83"
-    },
-    {
-      "id": "public_handlers",
-      "label": "public_handlers.go",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "public_handlers.go",
-      "source_file": "public_handlers.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "public_handlers_generatetrackingcode",
-      "label": "generateTrackingCode()",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "generatetrackingcode()",
-      "source_file": "public_handlers.go",
-      "source_location": "L83"
-    },
-    {
-      "id": "public_handlers_submitfollowuphandler",
-      "label": "SubmitFollowUpHandler()",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "submitfollowuphandler()",
-      "source_file": "public_handlers.go",
-      "source_location": "L475"
-    },
-    {
-      "id": "public_handlers_submitreporthandler",
-      "label": "SubmitReportHandler()",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "submitreporthandler()",
-      "source_file": "public_handlers.go",
-      "source_location": "L95"
-    },
-    {
-      "id": "public_handlers_trackreporthandler",
-      "label": "TrackReportHandler()",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "trackreporthandler()",
-      "source_file": "public_handlers.go",
-      "source_location": "L389"
-    },
-    {
-      "id": "public_handlers_validatemagicbytes",
-      "label": "validateMagicBytes()",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "validatemagicbytes()",
-      "source_file": "public_handlers.go",
-      "source_location": "L79"
-    },
-    {
-      "id": "security_isvalidtrackingcode",
-      "label": "isValidTrackingCode()",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "isvalidtrackingcode()",
-      "source_file": "security.go",
-      "source_location": "L861"
-    },
-    {
-      "id": "security_sanitizephone",
-      "label": "sanitizePhone()",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "sanitizephone()",
-      "source_file": "security.go",
-      "source_location": "L851"
-    },
-    {
-      "id": "setad_khabari_hmd_publicreportstatus",
-      "label": "PublicReportStatus",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "publicreportstatus",
-      "source_file": "public_handlers.go",
-      "source_location": "L379"
-    },
-    {
-      "id": "setad_khabari_hmd_reportmessageitem",
-      "label": "ReportMessageItem",
-      "_origin": "ast",
-      "community": 128,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "reportmessageitem",
-      "source_file": "public_handlers.go",
-      "source_location": "L372"
-    },
-    {
-      "id": "public_handlers_inspectziparchive",
-      "label": "inspectZipArchive()",
-      "_origin": "ast",
-      "community": 129,
-      "community_name": "NewIPRateLimiter",
-      "file_type": "code",
-      "norm_label": "inspectziparchive()",
-      "source_file": "public_handlers.go",
-      "source_location": "L35"
-    },
-    {
-      "id": "security_newipratelimiter",
-      "label": "NewIPRateLimiter()",
-      "_origin": "ast",
-      "community": 129,
-      "community_name": "NewIPRateLimiter",
-      "file_type": "code",
-      "norm_label": "newipratelimiter()",
-      "source_file": "security.go",
-      "source_location": "L543"
-    },
-    {
-      "id": "test_security_hardening_test",
-      "label": "security_hardening_test.go",
-      "_origin": "ast",
-      "community": 129,
-      "community_name": "NewIPRateLimiter",
-      "file_type": "code",
-      "norm_label": "security_hardening_test.go",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_security_hardening_test_testcaptchareplayprevention",
-      "label": "TestCaptchaReplayPrevention()",
-      "_origin": "ast",
-      "community": 129,
-      "community_name": "NewIPRateLimiter",
-      "file_type": "code",
-      "norm_label": "testcaptchareplayprevention()",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L11"
-    },
-    {
-      "id": "test_security_hardening_test_testinspectziparchive",
-      "label": "TestInspectZipArchive()",
-      "_origin": "ast",
-      "community": 129,
-      "community_name": "NewIPRateLimiter",
-      "file_type": "code",
-      "norm_label": "testinspectziparchive()",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L57"
-    },
-    {
-      "id": "test_security_hardening_test_testipratelimiterboundedcapacity",
-      "label": "TestIPRateLimiterBoundedCapacity()",
-      "_origin": "ast",
-      "community": 129,
-      "community_name": "NewIPRateLimiter",
-      "file_type": "code",
-      "norm_label": "testipratelimiterboundedcapacity()",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L39"
     },
     {
       "id": "agents_skills_hallmark_references_study_after_the_file_is_written",
@@ -10059,17 +9757,6 @@
       "source_location": "L61"
     },
     {
-      "id": "security_newaccountlockoutmanager",
-      "label": "NewAccountLockoutManager()",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "getTestDB",
-      "file_type": "code",
-      "norm_label": "newaccountlockoutmanager()",
-      "source_file": "security.go",
-      "source_location": "L656"
-    },
-    {
       "id": "security_newsessionmanager",
       "label": "NewSessionManager()",
       "_origin": "ast",
@@ -10125,26 +9812,26 @@
       "source_location": "L8"
     },
     {
-      "id": "test_lockout_persistence_test",
-      "label": "lockout_persistence_test.go",
+      "id": "test_docx_sandbox_test",
+      "label": "docx_sandbox_test.go",
       "_origin": "ast",
       "community": 26,
       "community_name": "getTestDB",
       "file_type": "code",
-      "norm_label": "lockout_persistence_test.go",
-      "source_file": "test/lockout_persistence_test.go",
+      "norm_label": "docx_sandbox_test.go",
+      "source_file": "test/docx_sandbox_test.go",
       "source_location": "L1"
     },
     {
-      "id": "test_lockout_persistence_test_testaccountlockoutconcurrentfailures",
-      "label": "TestAccountLockoutConcurrentFailures()",
+      "id": "test_docx_sandbox_test_testdocxsandboxmaliciouspayload",
+      "label": "TestDocxSandboxMaliciousPayload()",
       "_origin": "ast",
       "community": 26,
       "community_name": "getTestDB",
       "file_type": "code",
-      "norm_label": "testaccountlockoutconcurrentfailures()",
-      "source_file": "test/lockout_persistence_test.go",
-      "source_location": "L9"
+      "norm_label": "testdocxsandboxmaliciouspayload()",
+      "source_file": "test/docx_sandbox_test.go",
+      "source_location": "L16"
     },
     {
       "id": "test_pagination_test",
@@ -10167,28 +9854,6 @@
       "norm_label": "testgetreportspaginationandfiltering()",
       "source_file": "test/pagination_test.go",
       "source_location": "L12"
-    },
-    {
-      "id": "test_security_init_order_test",
-      "label": "security_init_order_test.go",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "getTestDB",
-      "file_type": "code",
-      "norm_label": "security_init_order_test.go",
-      "source_file": "test/security_init_order_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_security_init_order_test_testsecuritystoresinitorder",
-      "label": "TestSecurityStoresInitOrder()",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "getTestDB",
-      "file_type": "code",
-      "norm_label": "testsecuritystoresinitorder()",
-      "source_file": "test/security_init_order_test.go",
-      "source_location": "L8"
     },
     {
       "id": "test_session_persistence_test",
@@ -12635,17 +12300,6 @@
       "source_location": "L70"
     },
     {
-      "id": "mfa_setup2fahandler",
-      "label": "Setup2FAHandler()",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "setup2fahandler()",
-      "source_file": "mfa.go",
-      "source_location": "L337"
-    },
-    {
       "id": "mfa_validatemfapendingtoken",
       "label": "ValidateMFAPendingToken()",
       "_origin": "ast",
@@ -14476,312 +14130,114 @@
       "source_location": "L1"
     },
     {
-      "id": "admin_handlers",
-      "label": "admin_handlers.go",
+      "id": "captcha",
+      "label": "captcha.go",
       "_origin": "ast",
       "community": 58,
-      "community_name": "admin_handlers.go",
+      "community_name": "captcha.go",
       "file_type": "code",
-      "norm_label": "admin_handlers.go",
-      "source_file": "admin_handlers.go",
+      "norm_label": "captcha.go",
+      "source_file": "captcha.go",
       "source_location": "L1"
     },
     {
-      "id": "admin_handlers_exportreportdocxhandler",
-      "label": "ExportReportDocxHandler()",
+      "id": "captcha_cryptorandint",
+      "label": "cryptoRandInt()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "admin_handlers.go",
+      "community_name": "captcha.go",
       "file_type": "code",
-      "norm_label": "exportreportdocxhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2925"
+      "norm_label": "cryptorandint()",
+      "source_file": "captcha.go",
+      "source_location": "L197"
     },
     {
-      "id": "admin_handlers_formatjalalitime",
-      "label": "formatJalaliTime()",
+      "id": "captcha_generatecaptchatoken",
+      "label": "GenerateCaptchaToken()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "admin_handlers.go",
+      "community_name": "captcha.go",
       "file_type": "code",
-      "norm_label": "formatjalalitime()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2919"
+      "norm_label": "generatecaptchatoken()",
+      "source_file": "captcha.go",
+      "source_location": "L134"
     },
     {
-      "id": "admin_handlers_getreportshandler",
-      "label": "GetReportsHandler()",
+      "id": "captcha_generatemathcaptchasvg",
+      "label": "GenerateMathCaptchaSVG()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "admin_handlers.go",
+      "community_name": "captcha.go",
       "file_type": "code",
-      "norm_label": "getreportshandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L215"
+      "norm_label": "generatemathcaptchasvg()",
+      "source_file": "captcha.go",
+      "source_location": "L262"
     },
     {
-      "id": "admin_handlers_getrestrictedsubprocessenv",
-      "label": "getRestrictedSubprocessEnv()",
+      "id": "captcha_generatenoiseelements",
+      "label": "generateNoiseElements()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "admin_handlers.go",
+      "community_name": "captcha.go",
       "file_type": "code",
-      "norm_label": "getrestrictedsubprocessenv()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L3125"
+      "norm_label": "generatenoiseelements()",
+      "source_file": "captcha.go",
+      "source_location": "L205"
     },
     {
-      "id": "admin_handlers_gregoriantojalali",
-      "label": "gregorianToJalali()",
+      "id": "captcha_getcaptchahandler",
+      "label": "GetCaptchaHandler()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "admin_handlers.go",
+      "community_name": "captcha.go",
       "file_type": "code",
-      "norm_label": "gregoriantojalali()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2880"
+      "norm_label": "getcaptchahandler()",
+      "source_file": "captcha.go",
+      "source_location": "L309"
     },
     {
-      "id": "setad_khabari_hmd_adminnotificationitem",
-      "label": "AdminNotificationItem",
+      "id": "captcha_renderobfuscatedchars",
+      "label": "renderObfuscatedChars()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "admin_handlers.go",
+      "community_name": "captcha.go",
       "file_type": "code",
-      "norm_label": "adminnotificationitem",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2699"
+      "norm_label": "renderobfuscatedchars()",
+      "source_file": "captcha.go",
+      "source_location": "L233"
     },
     {
-      "id": "setad_khabari_hmd_adminnotificationsresponse",
-      "label": "AdminNotificationsResponse",
+      "id": "setad_khabari_hmd_captchapayload",
+      "label": "CaptchaPayload",
       "_origin": "ast",
       "community": 58,
-      "community_name": "admin_handlers.go",
+      "community_name": "captcha.go",
       "file_type": "code",
-      "norm_label": "adminnotificationsresponse",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2710"
+      "norm_label": "captchapayload",
+      "source_file": "captcha.go",
+      "source_location": "L19"
     },
     {
-      "id": "setad_khabari_hmd_adminuseritem",
-      "label": "AdminUserItem",
+      "id": "setad_khabari_hmd_captcharesponse",
+      "label": "CaptchaResponse",
       "_origin": "ast",
       "community": 58,
-      "community_name": "admin_handlers.go",
+      "community_name": "captcha.go",
       "file_type": "code",
-      "norm_label": "adminuseritem",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1263"
+      "norm_label": "captcharesponse",
+      "source_file": "captcha.go",
+      "source_location": "L24"
     },
     {
-      "id": "setad_khabari_hmd_analyticsresponse",
-      "label": "AnalyticsResponse",
+      "id": "test_crypto_test_testgeneratemathcaptchasvgandhandler",
+      "label": "TestGenerateMathCaptchaSVGAndHandler()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "admin_handlers.go",
+      "community_name": "captcha.go",
       "file_type": "code",
-      "norm_label": "analyticsresponse",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2113"
-    },
-    {
-      "id": "setad_khabari_hmd_auditlogitem",
-      "label": "AuditLogItem",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "auditlogitem",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1703"
-    },
-    {
-      "id": "setad_khabari_hmd_categorycount",
-      "label": "CategoryCount",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "categorycount",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2140"
-    },
-    {
-      "id": "setad_khabari_hmd_classificationanalytics",
-      "label": "ClassificationAnalytics",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "classificationanalytics",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2131"
-    },
-    {
-      "id": "setad_khabari_hmd_classificationcount",
-      "label": "ClassificationCount",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "classificationcount",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2125"
-    },
-    {
-      "id": "setad_khabari_hmd_forwardhistoryitem",
-      "label": "ForwardHistoryItem",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "forwardhistoryitem",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2599"
-    },
-    {
-      "id": "setad_khabari_hmd_forwardreportrequest",
-      "label": "ForwardReportRequest",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "forwardreportrequest",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2453"
-    },
-    {
-      "id": "setad_khabari_hmd_monthcount",
-      "label": "MonthCount",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "monthcount",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2145"
-    },
-    {
-      "id": "setad_khabari_hmd_paginatedreportsresponse",
-      "label": "PaginatedReportsResponse",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "paginatedreportsresponse",
-      "source_file": "admin_handlers.go",
-      "source_location": "L192"
-    },
-    {
-      "id": "setad_khabari_hmd_prioritycount",
-      "label": "PriorityCount",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "prioritycount",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2150"
-    },
-    {
-      "id": "setad_khabari_hmd_recipientuseritem",
-      "label": "RecipientUserItem",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "recipientuseritem",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2412"
-    },
-    {
-      "id": "setad_khabari_hmd_regionalresponseitem",
-      "label": "RegionalResponseItem",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "regionalresponseitem",
-      "source_file": "admin_handlers.go",
-      "source_location": "L432"
-    },
-    {
-      "id": "setad_khabari_hmd_removeforwardingrequest",
-      "label": "RemoveForwardingRequest",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "removeforwardingrequest",
-      "source_file": "admin_handlers.go",
-      "source_location": "L3236"
-    },
-    {
-      "id": "setad_khabari_hmd_reportattachmentitem",
-      "label": "ReportAttachmentItem",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "reportattachmentitem",
-      "source_file": "admin_handlers.go",
-      "source_location": "L471"
-    },
-    {
-      "id": "setad_khabari_hmd_reportdetail",
-      "label": "ReportDetail",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "reportdetail",
-      "source_file": "admin_handlers.go",
-      "source_location": "L441"
-    },
-    {
-      "id": "setad_khabari_hmd_reportsummary",
-      "label": "ReportSummary",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "reportsummary",
-      "source_file": "admin_handlers.go",
-      "source_location": "L174"
-    },
-    {
-      "id": "setad_khabari_hmd_submitregionalresponserequest",
-      "label": "SubmitRegionalResponseRequest",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "submitregionalresponserequest",
-      "source_file": "admin_handlers.go",
-      "source_location": "L3142"
-    },
-    {
-      "id": "setad_khabari_hmd_typecount",
-      "label": "TypeCount",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "typecount",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2155"
-    },
-    {
-      "id": "test_repdetailtest",
-      "label": "RepDetailTest",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "repdetailtest",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L317"
+      "norm_label": "testgeneratemathcaptchasvgandhandler()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L306"
     },
     {
       "id": "agents_skills_hallmark_references_themes_lumen",
@@ -15247,6 +14703,17 @@
       "source_location": "L59"
     },
     {
+      "id": "metadata_validatebinarymagicbytes",
+      "label": "ValidateBinaryMagicBytes()",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "metadata.go",
+      "file_type": "code",
+      "norm_label": "validatebinarymagicbytes()",
+      "source_file": "metadata.go",
+      "source_location": "L83"
+    },
+    {
       "id": "test_metadata_test",
       "label": "metadata_test.go",
       "_origin": "ast",
@@ -15372,88 +14839,231 @@
       "source_location": "L16"
     },
     {
+      "id": "admin_auth",
+      "label": "admin_auth.go",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "admin_auth.go",
+      "source_file": "admin_auth.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "admin_auth_computeaudithash",
+      "label": "computeAuditHash()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "computeaudithash()",
+      "source_file": "admin_auth.go",
+      "source_location": "L294"
+    },
+    {
       "id": "admin_auth_generatesessiontoken",
       "label": "generateSessionToken()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "generatesessiontoken()",
       "source_file": "admin_auth.go",
       "source_location": "L23"
     },
     {
+      "id": "admin_auth_getcurrentadminhandler",
+      "label": "GetCurrentAdminHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "getcurrentadminhandler()",
+      "source_file": "admin_auth.go",
+      "source_location": "L190"
+    },
+    {
       "id": "admin_auth_getip",
       "label": "getIP()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "getip()",
       "source_file": "admin_auth.go",
       "source_location": "L261"
     },
     {
+      "id": "admin_auth_getlatestaudithash",
+      "label": "getLatestAuditHash()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "getlatestaudithash()",
+      "source_file": "admin_auth.go",
+      "source_location": "L304"
+    },
+    {
+      "id": "admin_auth_getlatestaudithashtx",
+      "label": "getLatestAuditHashTx()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "getlatestaudithashtx()",
+      "source_file": "admin_auth.go",
+      "source_location": "L313"
+    },
+    {
+      "id": "admin_auth_ipincidrs",
+      "label": "ipInCIDRs()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "ipincidrs()",
+      "source_file": "admin_auth.go",
+      "source_location": "L249"
+    },
+    {
       "id": "admin_auth_logaudit",
       "label": "logAudit()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "logaudit()",
       "source_file": "admin_auth.go",
       "source_location": "L322"
     },
     {
+      "id": "admin_auth_logaudittx",
+      "label": "logAuditTx()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "logaudittx()",
+      "source_file": "admin_auth.go",
+      "source_location": "L343"
+    },
+    {
+      "id": "admin_auth_loginhandler",
+      "label": "LoginHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "loginhandler()",
+      "source_file": "admin_auth.go",
+      "source_location": "L29"
+    },
+    {
       "id": "admin_auth_logouthandler",
       "label": "LogoutHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "logouthandler()",
       "source_file": "admin_auth.go",
       "source_location": "L364"
     },
     {
+      "id": "admin_auth_parsetrustedproxies",
+      "label": "parseTrustedProxies()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "parsetrustedproxies()",
+      "source_file": "admin_auth.go",
+      "source_location": "L224"
+    },
+    {
+      "id": "admin_handlers",
+      "label": "admin_handlers.go",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "admin_handlers.go",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1"
+    },
+    {
       "id": "admin_handlers_canadminaccessreport",
       "label": "canAdminAccessReport()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "canadminaccessreport()",
       "source_file": "admin_handlers.go",
       "source_location": "L83"
     },
     {
+      "id": "admin_handlers_changemypasswordhandler",
+      "label": "ChangeMyPasswordHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "changemypasswordhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1896"
+    },
+    {
       "id": "admin_handlers_classifyreporthandler",
       "label": "ClassifyReportHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "classifyreporthandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L888"
     },
     {
+      "id": "admin_handlers_createuserhandler",
+      "label": "CreateUserHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "createuserhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1326"
+    },
+    {
       "id": "admin_handlers_deletereporthandler",
       "label": "DeleteReportHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "deletereporthandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L2004"
     },
     {
+      "id": "admin_handlers_deleteuserhandler",
+      "label": "DeleteUserHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "deleteuserhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1511"
+    },
+    {
       "id": "admin_handlers_disableuser2fahandler",
       "label": "DisableUser2FAHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "disableuser2fahandler()",
       "source_file": "admin_handlers.go",
@@ -15464,18 +15074,51 @@
       "label": "DownloadAttachmentHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "downloadattachmenthandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L986"
     },
     {
+      "id": "admin_handlers_exportreportdocxhandler",
+      "label": "ExportReportDocxHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "exportreportdocxhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2925"
+    },
+    {
+      "id": "admin_handlers_formatjalalitime",
+      "label": "formatJalaliTime()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "formatjalalitime()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2919"
+    },
+    {
+      "id": "admin_handlers_forwardreporthandler",
+      "label": "ForwardReportHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "forwardreporthandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2459"
+    },
+    {
       "id": "admin_handlers_getactivesessionshandler",
       "label": "GetActiveSessionsHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "getactivesessionshandler()",
       "source_file": "admin_handlers.go",
@@ -15486,7 +15129,7 @@
       "label": "GetAnalyticsHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "getanalyticshandler()",
       "source_file": "admin_handlers.go",
@@ -15497,7 +15140,7 @@
       "label": "GetAuditLogsHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "getauditlogshandler()",
       "source_file": "admin_handlers.go",
@@ -15508,7 +15151,7 @@
       "label": "GetForwardingHistoryHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "getforwardinghistoryhandler()",
       "source_file": "admin_handlers.go",
@@ -15519,7 +15162,7 @@
       "label": "GetForwardingRecipientsHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "getforwardingrecipientshandler()",
       "source_file": "admin_handlers.go",
@@ -15530,7 +15173,7 @@
       "label": "GetNotificationsHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "getnotificationshandler()",
       "source_file": "admin_handlers.go",
@@ -15541,18 +15184,40 @@
       "label": "GetReportDetailsHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "getreportdetailshandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L478"
     },
     {
+      "id": "admin_handlers_getreportshandler",
+      "label": "GetReportsHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "getreportshandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L215"
+    },
+    {
+      "id": "admin_handlers_getrestrictedsubprocessenv",
+      "label": "getRestrictedSubprocessEnv()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "getrestrictedsubprocessenv()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L3125"
+    },
+    {
       "id": "admin_handlers_getsystemstatushandler",
       "label": "GetSystemStatusHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "getsystemstatushandler()",
       "source_file": "admin_handlers.go",
@@ -15563,18 +15228,29 @@
       "label": "GetUsersHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "getusershandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L1280"
     },
     {
+      "id": "admin_handlers_gregoriantojalali",
+      "label": "gregorianToJalali()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "gregoriantojalali()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2880"
+    },
+    {
       "id": "admin_handlers_liftuserlockouthandler",
       "label": "LiftUserLockoutHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "liftuserlockouthandler()",
       "source_file": "admin_handlers.go",
@@ -15585,7 +15261,7 @@
       "label": "MarkAllNotificationsReadHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "markallnotificationsreadhandler()",
       "source_file": "admin_handlers.go",
@@ -15596,7 +15272,7 @@
       "label": "MarkNotificationReadHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "marknotificationreadhandler()",
       "source_file": "admin_handlers.go",
@@ -15607,18 +15283,29 @@
       "label": "RemoveForwardingHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "removeforwardinghandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L3242"
     },
     {
+      "id": "admin_handlers_resetuserpasswordhandler",
+      "label": "ResetUserPasswordHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "resetuserpasswordhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1569"
+    },
+    {
       "id": "admin_handlers_respondtoreporthandler",
       "label": "RespondToReportHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "respondtoreporthandler()",
       "source_file": "admin_handlers.go",
@@ -15629,7 +15316,7 @@
       "label": "SetReportPriorityHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "setreportpriorityhandler()",
       "source_file": "admin_handlers.go",
@@ -15640,18 +15327,29 @@
       "label": "SubmitRegionalResponseHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "submitregionalresponsehandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L3147"
     },
     {
+      "id": "admin_handlers_terminatesessionhandler",
+      "label": "TerminateSessionHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "terminatesessionhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1818"
+    },
+    {
       "id": "admin_handlers_togglereadstatushandler",
       "label": "ToggleReadStatusHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "togglereadstatushandler()",
       "source_file": "admin_handlers.go",
@@ -15662,7 +15360,7 @@
       "label": "ToggleUserActiveHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "toggleuseractivehandler()",
       "source_file": "admin_handlers.go",
@@ -15673,7 +15371,7 @@
       "label": "UpdateInternalNotesHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "updateinternalnoteshandler()",
       "source_file": "admin_handlers.go",
@@ -15684,29 +15382,95 @@
       "label": "UpdateUserHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "updateuserhandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L1437"
     },
     {
+      "id": "captcha_verifycaptcha",
+      "label": "VerifyCaptcha()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "verifycaptcha()",
+      "source_file": "captcha.go",
+      "source_location": "L150"
+    },
+    {
+      "id": "crypto_hashpassword",
+      "label": "HashPassword()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "hashpassword()",
+      "source_file": "crypto.go",
+      "source_location": "L245"
+    },
+    {
+      "id": "crypto_validatepasswordcomplexity",
+      "label": "ValidatePasswordComplexity()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "validatepasswordcomplexity()",
+      "source_file": "crypto.go",
+      "source_location": "L325"
+    },
+    {
+      "id": "crypto_verifypassword",
+      "label": "VerifyPassword()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "verifypassword()",
+      "source_file": "crypto.go",
+      "source_location": "L320"
+    },
+    {
+      "id": "crypto_verifypasswordwithrehash",
+      "label": "VerifyPasswordWithRehash()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "verifypasswordwithrehash()",
+      "source_file": "crypto.go",
+      "source_location": "L260"
+    },
+    {
       "id": "events_admineventshandler",
       "label": "AdminEventsHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "admineventshandler()",
       "source_file": "events.go",
       "source_location": "L111"
     },
     {
+      "id": "go_type_database_sql_tx",
+      "label": "database/sql.Tx",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "database/sql.tx",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "go_type_net_http_request",
       "label": "net/http.Request",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "net/http.request",
       "source_file": "",
@@ -15717,9 +15481,31 @@
       "label": "net/http.ResponseWriter",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "net/http.responsewriter",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "go_type_net_ip",
+      "label": "net.IP",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "net.ip",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "go_type_net_ipnet",
+      "label": "net.IPNet",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "net.ipnet",
       "source_file": "",
       "source_location": ""
     },
@@ -15728,7 +15514,7 @@
       "label": "CSPReportHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "cspreporthandler()",
       "source_file": "main.go",
@@ -15739,18 +15525,51 @@
       "label": "healthCheck()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "healthcheck()",
       "source_file": "main.go",
       "source_location": "L70"
     },
     {
+      "id": "mfa_disable2fahandler",
+      "label": "Disable2FAHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "disable2fahandler()",
+      "source_file": "mfa.go",
+      "source_location": "L417"
+    },
+    {
+      "id": "mfa_enable2fahandler",
+      "label": "Enable2FAHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "enable2fahandler()",
+      "source_file": "mfa.go",
+      "source_location": "L356"
+    },
+    {
+      "id": "mfa_setup2fahandler",
+      "label": "Setup2FAHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "setup2fahandler()",
+      "source_file": "mfa.go",
+      "source_location": "L337"
+    },
+    {
       "id": "mfa_verifymfahandler",
       "label": "VerifyMFAHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "verifymfahandler()",
       "source_file": "mfa.go",
@@ -15761,40 +15580,414 @@
       "label": "GetProfanityRulesHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "getprofanityruleshandler()",
       "source_file": "profanity.go",
       "source_location": "L348"
     },
     {
+      "id": "public_handlers",
+      "label": "public_handlers.go",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "public_handlers.go",
+      "source_file": "public_handlers.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "public_handlers_generatetrackingcode",
+      "label": "generateTrackingCode()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "generatetrackingcode()",
+      "source_file": "public_handlers.go",
+      "source_location": "L83"
+    },
+    {
+      "id": "public_handlers_inspectziparchive",
+      "label": "inspectZipArchive()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "inspectziparchive()",
+      "source_file": "public_handlers.go",
+      "source_location": "L35"
+    },
+    {
+      "id": "public_handlers_submitfollowuphandler",
+      "label": "SubmitFollowUpHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "submitfollowuphandler()",
+      "source_file": "public_handlers.go",
+      "source_location": "L475"
+    },
+    {
+      "id": "public_handlers_submitreporthandler",
+      "label": "SubmitReportHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "submitreporthandler()",
+      "source_file": "public_handlers.go",
+      "source_location": "L95"
+    },
+    {
+      "id": "public_handlers_trackreporthandler",
+      "label": "TrackReportHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "trackreporthandler()",
+      "source_file": "public_handlers.go",
+      "source_location": "L389"
+    },
+    {
+      "id": "public_handlers_validatemagicbytes",
+      "label": "validateMagicBytes()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "validatemagicbytes()",
+      "source_file": "public_handlers.go",
+      "source_location": "L79"
+    },
+    {
       "id": "security_iscookiesecure",
       "label": "isCookieSecure()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "iscookiesecure()",
       "source_file": "security.go",
       "source_location": "L830"
     },
     {
+      "id": "security_isvalidtrackingcode",
+      "label": "isValidTrackingCode()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "isvalidtrackingcode()",
+      "source_file": "security.go",
+      "source_location": "L861"
+    },
+    {
+      "id": "security_sanitizephone",
+      "label": "sanitizePhone()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "sanitizephone()",
+      "source_file": "security.go",
+      "source_location": "L851"
+    },
+    {
       "id": "security_stripnul",
       "label": "stripNul()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "stripnul()",
       "source_file": "security.go",
       "source_location": "L847"
     },
     {
+      "id": "security_truncaterunes",
+      "label": "truncateRunes()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "truncaterunes()",
+      "source_file": "security.go",
+      "source_location": "L839"
+    },
+    {
+      "id": "setad_khabari_hmd_adminnotificationitem",
+      "label": "AdminNotificationItem",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "adminnotificationitem",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2699"
+    },
+    {
+      "id": "setad_khabari_hmd_adminnotificationsresponse",
+      "label": "AdminNotificationsResponse",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "adminnotificationsresponse",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2710"
+    },
+    {
+      "id": "setad_khabari_hmd_adminuseritem",
+      "label": "AdminUserItem",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "adminuseritem",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1263"
+    },
+    {
+      "id": "setad_khabari_hmd_analyticsresponse",
+      "label": "AnalyticsResponse",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "analyticsresponse",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2113"
+    },
+    {
+      "id": "setad_khabari_hmd_auditlogitem",
+      "label": "AuditLogItem",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "auditlogitem",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1703"
+    },
+    {
+      "id": "setad_khabari_hmd_categorycount",
+      "label": "CategoryCount",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "categorycount",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2140"
+    },
+    {
+      "id": "setad_khabari_hmd_classificationanalytics",
+      "label": "ClassificationAnalytics",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "classificationanalytics",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2131"
+    },
+    {
+      "id": "setad_khabari_hmd_classificationcount",
+      "label": "ClassificationCount",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "classificationcount",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2125"
+    },
+    {
+      "id": "setad_khabari_hmd_forwardhistoryitem",
+      "label": "ForwardHistoryItem",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "forwardhistoryitem",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2599"
+    },
+    {
+      "id": "setad_khabari_hmd_forwardreportrequest",
+      "label": "ForwardReportRequest",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "forwardreportrequest",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2453"
+    },
+    {
+      "id": "setad_khabari_hmd_monthcount",
+      "label": "MonthCount",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "monthcount",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2145"
+    },
+    {
+      "id": "setad_khabari_hmd_paginatedreportsresponse",
+      "label": "PaginatedReportsResponse",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "paginatedreportsresponse",
+      "source_file": "admin_handlers.go",
+      "source_location": "L192"
+    },
+    {
+      "id": "setad_khabari_hmd_prioritycount",
+      "label": "PriorityCount",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "prioritycount",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2150"
+    },
+    {
+      "id": "setad_khabari_hmd_publicreportstatus",
+      "label": "PublicReportStatus",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "publicreportstatus",
+      "source_file": "public_handlers.go",
+      "source_location": "L379"
+    },
+    {
+      "id": "setad_khabari_hmd_recipientuseritem",
+      "label": "RecipientUserItem",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "recipientuseritem",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2412"
+    },
+    {
+      "id": "setad_khabari_hmd_regionalresponseitem",
+      "label": "RegionalResponseItem",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "regionalresponseitem",
+      "source_file": "admin_handlers.go",
+      "source_location": "L432"
+    },
+    {
+      "id": "setad_khabari_hmd_removeforwardingrequest",
+      "label": "RemoveForwardingRequest",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "removeforwardingrequest",
+      "source_file": "admin_handlers.go",
+      "source_location": "L3236"
+    },
+    {
+      "id": "setad_khabari_hmd_reportattachmentitem",
+      "label": "ReportAttachmentItem",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "reportattachmentitem",
+      "source_file": "admin_handlers.go",
+      "source_location": "L471"
+    },
+    {
+      "id": "setad_khabari_hmd_reportdetail",
+      "label": "ReportDetail",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "reportdetail",
+      "source_file": "admin_handlers.go",
+      "source_location": "L441"
+    },
+    {
+      "id": "setad_khabari_hmd_reportmessageitem",
+      "label": "ReportMessageItem",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "reportmessageitem",
+      "source_file": "public_handlers.go",
+      "source_location": "L372"
+    },
+    {
+      "id": "setad_khabari_hmd_reportsummary",
+      "label": "ReportSummary",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "reportsummary",
+      "source_file": "admin_handlers.go",
+      "source_location": "L174"
+    },
+    {
+      "id": "setad_khabari_hmd_submitregionalresponserequest",
+      "label": "SubmitRegionalResponseRequest",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "submitregionalresponserequest",
+      "source_file": "admin_handlers.go",
+      "source_location": "L3142"
+    },
+    {
+      "id": "setad_khabari_hmd_typecount",
+      "label": "TypeCount",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "typecount",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2155"
+    },
+    {
+      "id": "test_crypto_test_testargon2iddualformatandrehash",
+      "label": "TestArgon2idDualFormatAndRehash()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "testargon2iddualformatandrehash()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L66"
+    },
+    {
       "id": "test_input_limits_test",
       "label": "input_limits_test.go",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "input_limits_test.go",
       "source_file": "test/input_limits_test.go",
@@ -15805,11 +15998,22 @@
       "label": "TestInputSanitizationAndLimits()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "admin_handlers.go",
       "file_type": "code",
       "norm_label": "testinputsanitizationandlimits()",
       "source_file": "test/input_limits_test.go",
       "source_location": "L14"
+    },
+    {
+      "id": "test_repdetailtest",
+      "label": "RepDetailTest",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "repdetailtest",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L317"
     },
     {
       "id": "agents_skills_hallmark_references_components_h9_custom_illustration_centerpiece",
@@ -15836,147 +16040,28 @@
       "source_location": "L1"
     },
     {
-      "id": "admin_auth_loginhandler",
-      "label": "LoginHandler()",
+      "id": "agents_skills_hallmark_references_components_c3_typographic_link",
+      "label": "c3-typographic-link.md",
       "_origin": "ast",
       "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "loginhandler()",
-      "source_file": "admin_auth.go",
-      "source_location": "L29"
+      "community_name": "c3-typographic-link.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "c3-typographic-link.md",
+      "source_file": ".agents/skills/hallmark/references/components/c3-typographic-link.md",
+      "source_location": "L1"
     },
     {
-      "id": "admin_handlers_changemypasswordhandler",
-      "label": "ChangeMyPasswordHandler()",
+      "id": "agents_skills_hallmark_references_components_c3_typographic_link_c3_typographic_link",
+      "label": "C3 \u00b7 Typographic link",
       "_origin": "ast",
       "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "changemypasswordhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1896"
-    },
-    {
-      "id": "admin_handlers_createuserhandler",
-      "label": "CreateUserHandler()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "createuserhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1326"
-    },
-    {
-      "id": "admin_handlers_resetuserpasswordhandler",
-      "label": "ResetUserPasswordHandler()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "resetuserpasswordhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1569"
-    },
-    {
-      "id": "crypto_hashpassword",
-      "label": "HashPassword()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "hashpassword()",
-      "source_file": "crypto.go",
-      "source_location": "L245"
-    },
-    {
-      "id": "crypto_runcryptographicselftests",
-      "label": "RunCryptographicSelfTests()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "runcryptographicselftests()",
-      "source_file": "crypto.go",
-      "source_location": "L352"
-    },
-    {
-      "id": "crypto_validatepasswordcomplexity",
-      "label": "ValidatePasswordComplexity()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "validatepasswordcomplexity()",
-      "source_file": "crypto.go",
-      "source_location": "L325"
-    },
-    {
-      "id": "crypto_verifypassword",
-      "label": "VerifyPassword()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "verifypassword()",
-      "source_file": "crypto.go",
-      "source_location": "L320"
-    },
-    {
-      "id": "crypto_verifypasswordwithrehash",
-      "label": "VerifyPasswordWithRehash()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "verifypasswordwithrehash()",
-      "source_file": "crypto.go",
-      "source_location": "L260"
-    },
-    {
-      "id": "mfa_disable2fahandler",
-      "label": "Disable2FAHandler()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "disable2fahandler()",
-      "source_file": "mfa.go",
-      "source_location": "L417"
-    },
-    {
-      "id": "mfa_enable2fahandler",
-      "label": "Enable2FAHandler()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "enable2fahandler()",
-      "source_file": "mfa.go",
-      "source_location": "L356"
-    },
-    {
-      "id": "test_crypto_test_testargon2iddualformatandrehash",
-      "label": "TestArgon2idDualFormatAndRehash()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "testargon2iddualformatandrehash()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L66"
-    },
-    {
-      "id": "test_crypto_test_testvalidatepasswordcomplexity",
-      "label": "TestValidatePasswordComplexity()",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "testvalidatepasswordcomplexity()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L18"
+      "community_name": "c3-typographic-link.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "c3 \u00b7 typographic link",
+      "source_file": ".agents/skills/hallmark/references/components/c3-typographic-link.md",
+      "source_location": "L1"
     },
     {
       "id": "crypto",
@@ -16100,6 +16185,17 @@
       "source_location": "L73"
     },
     {
+      "id": "crypto_getlegacyhmackey",
+      "label": "GetLegacyHMACKey()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "getlegacyhmackey()",
+      "source_file": "crypto.go",
+      "source_location": "L61"
+    },
+    {
       "id": "crypto_initcrypto",
       "label": "InitCrypto()",
       "_origin": "ast",
@@ -16109,6 +16205,17 @@
       "norm_label": "initcrypto()",
       "source_file": "crypto.go",
       "source_location": "L42"
+    },
+    {
+      "id": "crypto_runcryptographicselftests",
+      "label": "RunCryptographicSelfTests()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "runcryptographicselftests()",
+      "source_file": "crypto.go",
+      "source_location": "L352"
     },
     {
       "id": "migration_v2",
@@ -16210,26 +16317,15 @@
       "source_location": "L108"
     },
     {
-      "id": "test_docx_sandbox_test",
-      "label": "docx_sandbox_test.go",
+      "id": "test_crypto_test_testvalidatepasswordcomplexity",
+      "label": "TestValidatePasswordComplexity()",
       "_origin": "ast",
       "community": 67,
       "community_name": "crypto.go",
       "file_type": "code",
-      "norm_label": "docx_sandbox_test.go",
-      "source_file": "test/docx_sandbox_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_docx_sandbox_test_testdocxsandboxmaliciouspayload",
-      "label": "TestDocxSandboxMaliciousPayload()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testdocxsandboxmaliciouspayload()",
-      "source_file": "test/docx_sandbox_test.go",
-      "source_location": "L16"
+      "norm_label": "testvalidatepasswordcomplexity()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L18"
     },
     {
       "id": "test_migration_v2_test",
@@ -16981,27 +17077,27 @@
       "source_location": "L247"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal",
-      "label": "n9-edge-aligned-minimal.md",
+      "id": "agents_skills_hallmark_references_components_s4_inline_no_break",
+      "label": "s4-inline-no-break.md",
       "_origin": "ast",
       "community": 75,
-      "community_name": "n9-edge-aligned-minimal.md",
+      "community_name": "s4-inline-no-break.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "n9-edge-aligned-minimal.md",
-      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
+      "norm_label": "s4-inline-no-break.md",
+      "source_file": ".agents/skills/hallmark/references/components/s4-inline-no-break.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal_n9_edge_aligned_minimal",
-      "label": "N9 \u00b7 Edge-aligned minimal",
+      "id": "agents_skills_hallmark_references_components_s4_inline_no_break_s4_inline_no_break",
+      "label": "S4 \u00b7 Inline (no break)",
       "_origin": "ast",
       "community": 75,
-      "community_name": "n9-edge-aligned-minimal.md",
+      "community_name": "s4-inline-no-break.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "n9 \u00b7 edge-aligned minimal",
-      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
+      "norm_label": "s4 \u00b7 inline (no break)",
+      "source_file": ".agents/skills/hallmark/references/components/s4-inline-no-break.md",
       "source_location": "L1"
     },
     {
@@ -17502,28 +17598,28 @@
       "source_location": "L6"
     },
     {
-      "id": "agents_skills_hallmark_references_components_f4_step_sequence",
-      "label": "f4-step-sequence.md",
+      "id": "agents_skills_hallmark_references_components_t1_pull_quote_with_marginalia",
+      "label": "t1-pull-quote-with-marginalia.md",
       "_origin": "ast",
       "community": 82,
-      "community_name": "f4-step-sequence.md",
+      "community_name": "t1-pull-quote-with-marginalia.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "f4-step-sequence.md",
-      "source_file": ".agents/skills/hallmark/references/components/f4-step-sequence.md",
+      "norm_label": "t1-pull-quote-with-marginalia.md",
+      "source_file": ".agents/skills/hallmark/references/components/t1-pull-quote-with-marginalia.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_f4_step_sequence_f4_step_sequence",
-      "label": "F4 \u00b7 Step sequence",
+      "id": "agents_skills_hallmark_references_components_t1_pull_quote_with_marginalia_t1_pull_quote_with_marginalia",
+      "label": "T1 \u00b7 Pull-quote with marginalia",
       "_origin": "ast",
       "community": 82,
-      "community_name": "f4-step-sequence.md",
+      "community_name": "t1-pull-quote-with-marginalia.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "f4 \u00b7 step sequence",
-      "source_file": ".agents/skills/hallmark/references/components/f4-step-sequence.md",
-      "source_location": "L1"
+      "norm_label": "t1 \u00b7 pull-quote with marginalia",
+      "source_file": ".agents/skills/hallmark/references/components/t1-pull-quote-with-marginalia.md",
+      "source_location": "L2"
     },
     {
       "id": "agents_skills_hallmark_references_components_ft6_letter_close",
@@ -17806,27 +17902,27 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_h5_letter_hero",
-      "label": "h5-letter-hero.md",
+      "id": "agents_skills_hallmark_references_components_t4_numbered_stat_strip",
+      "label": "t4-numbered-stat-strip.md",
       "_origin": "ast",
       "community": 89,
-      "community_name": "h5-letter-hero.md",
+      "community_name": "t4-numbered-stat-strip.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "h5-letter-hero.md",
-      "source_file": ".agents/skills/hallmark/references/components/h5-letter-hero.md",
+      "norm_label": "t4-numbered-stat-strip.md",
+      "source_file": ".agents/skills/hallmark/references/components/t4-numbered-stat-strip.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_h5_letter_hero_h5_letter_hero",
-      "label": "H5 \u00b7 Letter Hero",
+      "id": "agents_skills_hallmark_references_components_t4_numbered_stat_strip_t4_numbered_stat_strip",
+      "label": "T4 \u00b7 Numbered stat strip",
       "_origin": "ast",
       "community": 89,
-      "community_name": "h5-letter-hero.md",
+      "community_name": "t4-numbered-stat-strip.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "h5 \u00b7 letter hero",
-      "source_file": ".agents/skills/hallmark/references/components/h5-letter-hero.md",
+      "norm_label": "t4 \u00b7 numbered stat strip",
+      "source_file": ".agents/skills/hallmark/references/components/t4-numbered-stat-strip.md",
       "source_location": "L1"
     },
     {
@@ -37154,40 +37250,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L74",
-      "weight": 1.0
-    },
-    {
-      "source": "design_colors",
-      "target": "design_neutral",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "DESIGN.md",
-      "source_location": "L102",
-      "weight": 1.0
-    },
-    {
-      "source": "design_colors",
-      "target": "design_status_accents",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "DESIGN.md",
-      "source_location": "L110",
-      "weight": 1.0
-    },
-    {
-      "source": "design_colors",
-      "target": "design_named_rules",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "DESIGN.md",
-      "source_location": "L115",
+      "source_location": "L76",
       "weight": 1.0
     },
     {
@@ -37198,7 +37261,40 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L98",
+      "source_location": "L101",
+      "weight": 1.0
+    },
+    {
+      "source": "design_colors",
+      "target": "design_neutral",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "L105",
+      "weight": 1.0
+    },
+    {
+      "source": "design_colors",
+      "target": "design_status_accents",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "L114",
+      "weight": 1.0
+    },
+    {
+      "source": "design_colors",
+      "target": "design_named_rules",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "L120",
       "weight": 1.0
     },
     {
@@ -37209,7 +37305,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L168",
+      "source_location": "L189",
       "weight": 1.0
     },
     {
@@ -37220,7 +37316,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L172",
+      "source_location": "L193",
       "weight": 1.0
     },
     {
@@ -37231,7 +37327,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L176",
+      "source_location": "L197",
       "weight": 1.0
     },
     {
@@ -37242,7 +37338,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L180",
+      "source_location": "L201",
       "weight": 1.0
     },
     {
@@ -37253,7 +37349,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L185",
+      "source_location": "L206",
       "weight": 1.0
     },
     {
@@ -37264,18 +37360,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L189",
+      "source_location": "L210",
       "weight": 1.0
     },
     {
       "source": "design_components",
-      "target": "design_7_action_buttons_directional_arrows",
+      "target": "design_7_action_buttons_directional_rtl_arrows",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L194",
+      "source_location": "L215",
       "weight": 1.0
     },
     {
@@ -37286,18 +37382,95 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L199",
+      "source_location": "L220",
       "weight": 1.0
     },
     {
       "source": "design_components",
-      "target": "design_9_assistant_communication_chat_language",
+      "target": "design_9_admin_kpi_stat_grid_real_time_pulse_indicators_kpi_grid",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L203",
+      "source_location": "L224",
+      "weight": 1.0
+    },
+    {
+      "source": "design_components",
+      "target": "design_10_persian_jalali_date_range_popover_date_range_popover",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "L229",
+      "weight": 1.0
+    },
+    {
+      "source": "design_components",
+      "target": "design_11_intelligence_data_table_bulk_selection_action_bar_reportstable_bulkactionstoolbar",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "L233",
+      "weight": 1.0
+    },
+    {
+      "source": "design_components",
+      "target": "design_12_official_classified_dossier_word_document_export_report_detail_section",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "L238",
+      "weight": 1.0
+    },
+    {
+      "source": "design_components",
+      "target": "design_13_accessible_confirmation_dialog_system_frontend_confirm_js",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "L244",
+      "weight": 1.0
+    },
+    {
+      "source": "design_components",
+      "target": "design_14_native_lightweight_tooltip_system_data_tooltip",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "L250",
+      "weight": 1.0
+    },
+    {
+      "source": "design_components",
+      "target": "design_15_active_session_countdown_warning_modal",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "L254",
+      "weight": 1.0
+    },
+    {
+      "source": "design_components",
+      "target": "design_16_assistant_communication_chat_language",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "L258",
       "weight": 1.0
     },
     {
@@ -37308,18 +37481,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L120",
+      "source_location": "L125",
       "weight": 1.0
     },
     {
       "source": "design_design_system_\u0633\u0627\u0645\u0627\u0646\u0647_\u062f\u06cc\u062f\u0647_\u0628\u0627\u0646_\u0627\u0645\u06cc\u0646_\u0633\u062a\u0627\u062f_\u062e\u0628\u0631\u06cc_\u0648_\u062f\u0631\u06cc\u0627\u0641\u062a_\u06af\u0632\u0627\u0631\u0634_\u0647\u0627\u06cc_\u0645\u0631\u062f\u0645\u06cc_\u062d\u0631\u0627\u0633\u062a_\u0647\u0645\u062f\u0627\u0646",
-      "target": "design_layout",
+      "target": "design_layout_responsive_breakpoints",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L137",
+      "source_location": "L149",
       "weight": 1.0
     },
     {
@@ -37330,18 +37503,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L146",
+      "source_location": "L166",
       "weight": 1.0
     },
     {
       "source": "design_design_system_\u0633\u0627\u0645\u0627\u0646\u0647_\u062f\u06cc\u062f\u0647_\u0628\u0627\u0646_\u0627\u0645\u06cc\u0646_\u0633\u062a\u0627\u062f_\u062e\u0628\u0631\u06cc_\u0648_\u062f\u0631\u06cc\u0627\u0641\u062a_\u06af\u0632\u0627\u0631\u0634_\u0647\u0627\u06cc_\u0645\u0631\u062f\u0645\u06cc_\u062d\u0631\u0627\u0633\u062a_\u0647\u0645\u062f\u0627\u0646",
-      "target": "design_shapes",
+      "target": "design_shapes_radii",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L157",
+      "source_location": "L178",
       "weight": 1.0
     },
     {
@@ -37352,7 +37525,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L166",
+      "source_location": "L187",
       "weight": 1.0
     },
     {
@@ -37363,7 +37536,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L206",
+      "source_location": "L263",
       "weight": 1.0
     },
     {
@@ -37374,7 +37547,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L216",
+      "source_location": "L273",
       "weight": 1.0
     },
     {
@@ -37385,7 +37558,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L238",
+      "source_location": "L297",
       "weight": 1.0
     },
     {
@@ -37396,7 +37569,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L76",
+      "source_location": "L78",
       "weight": 1.0
     },
     {
@@ -37407,7 +37580,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L94",
+      "source_location": "L97",
       "weight": 1.0
     },
     {
@@ -37418,7 +37591,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L218",
+      "source_location": "L275",
       "weight": 1.0
     },
     {
@@ -37429,7 +37602,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L226",
+      "source_location": "L285",
       "weight": 1.0
     },
     {
@@ -37440,7 +37613,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L150",
+      "source_location": "L170",
       "weight": 1.0
     },
     {
@@ -37451,7 +37624,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L86",
+      "source_location": "L88",
       "weight": 1.0
     },
     {
@@ -37462,18 +37635,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L125",
+      "source_location": "L130",
       "weight": 1.0
     },
     {
       "source": "design_typography",
-      "target": "design_named_rules_132",
+      "target": "design_persian_tatweel_typography_subsystem",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DESIGN.md",
-      "source_location": "L132",
+      "source_location": "L137",
+      "weight": 1.0
+    },
+    {
+      "source": "design_typography",
+      "target": "design_named_rules_144",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "L144",
       "weight": 1.0
     },
     {
@@ -47068,5 +47252,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8fa94bd3a56aa88b16d41c6458e56c56cbbf99d1"
+  "built_at_commit": "cf176ffc44ea6dbbe0d3f57735761d6a6e7f5e37"
 }

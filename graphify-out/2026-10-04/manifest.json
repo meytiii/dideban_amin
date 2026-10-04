@@ -138,9 +138,9 @@
     "semantic_hash": ""
   },
   ".impeccable/design.json": {
-    "mtime": 1788163817.38438,
-    "seen": 1790405583.7019262,
-    "ast_hash": "2e63e3b7f4737fb5d0d713c59cf65230",
+    "mtime": 1791104394.7554011,
+    "seen": 1791104436.2206962,
+    "ast_hash": "252f921633d1a12b48bbb451cce0f2a1",
     "semantic_hash": ""
   },
   ".agents/rules/impeccable.md": {
@@ -168,9 +168,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1791007195.8865578,
-    "seen": 1791007213.671133,
-    "ast_hash": "ba0fd5affb0db457da0cedca46c8ca60",
+    "mtime": 1791104364.5880718,
+    "seen": 1791104436.24855,
+    "ast_hash": "534bb200efe24703bfb5ab6fa8113bfa",
     "semantic_hash": ""
   },
   "GEMINI.md": {
