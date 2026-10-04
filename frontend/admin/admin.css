@@ -1565,6 +1565,11 @@ button {
     z-index: 500;
 }
 
+#reports-inbox-section.in-detail-view {
+    min-height: 0 !important;
+    padding-bottom: 0 !important;
+}
+
 #reports-inbox-section.in-detail-view .filter-container,
 #reports-inbox-section.in-detail-view #reportsFilterContainer {
     display: none !important;

@@ -3056,6 +3056,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!_elDetailActual) _elDetailActual = document.getElementById('report-detail-actual');
 
         if (listSection) listSection.style.display = 'none';
+        if (filterContainer) filterContainer.style.display = 'none';
+        if (bulkActionsToolbar) bulkActionsToolbar.style.display = 'none';
+        reportsInboxSection?.classList.add('in-detail-view');
+        reportsInboxSection?.classList.remove('popover-active');
+        dashboardSection?.classList.remove('popover-active');
         if (detailSection) detailSection.style.display = 'block';
         if (_elDetailSkeleton) _elDetailSkeleton.classList.remove('d-none');
         if (_elDetailActual) _elDetailActual.classList.add('d-none');
