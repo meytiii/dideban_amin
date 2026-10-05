@@ -1326,6 +1326,342 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    function initActionSearchBar() {
+        const wrapper = document.getElementById('actionSearchWrapper');
+        const input = document.getElementById('search-tracking');
+        const dropdown = document.getElementById('actionSearchDropdown');
+        const list = document.getElementById('actionSearchList');
+        const titleEl = document.getElementById('actionSearchDropdownTitle');
+        const countEl = document.getElementById('actionSearchCount');
+        const iconSearch = document.getElementById('actionIconSearch');
+        const iconSend = document.getElementById('actionIconSend');
+        const iconBox = document.getElementById('searchIconBox');
+        const kbdBadge = document.getElementById('searchKbdBadge');
+
+        if (!wrapper || !input || !dropdown || !list) return;
+
+        let activeIndex = -1;
+        let currentItems = [];
+
+        const defaultActions = [
+            {
+                id: 'act-unread',
+                title: 'گزارش‌های بررسی‌نشده',
+                desc: 'فیلتر موارد جدید و نیازمند بررسی در کارتابل',
+                tag: 'کارتابل',
+                short: '⌘1',
+                iconBoxClass: 'action-icon-amber',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
+                run: () => {
+                    if (filterReadStatus) filterReadStatus.value = 'unread';
+                    applyFilters(true);
+                    updateTableHeadersFromFilters();
+                }
+            },
+            {
+                id: 'act-critical',
+                title: 'اولویت آنی و فوری',
+                desc: 'فیلتر موارد بسیار مهم با فوریت بالا',
+                tag: 'اولویت',
+                short: '⌘2',
+                iconBoxClass: 'action-icon-rose',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
+                run: () => {
+                    if (filterPriority) filterPriority.value = 'critical';
+                    applyFilters(true);
+                    updateTableHeadersFromFilters();
+                }
+            },
+            {
+                id: 'act-export',
+                title: 'دریافت خروجی اکسل و CSV',
+                desc: 'دانلود پرونده گزارش‌های کارتابل جاری',
+                tag: 'عملیات',
+                short: '⌘E',
+                iconBoxClass: 'action-icon-emerald',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>',
+                run: () => {
+                    if (btnExportCSV) btnExportCSV.click();
+                }
+            },
+            {
+                id: 'act-analytics',
+                title: 'آمار و تحلیل داده‌ها',
+                desc: 'مشاهده شاخص‌ها و تحلیل فراوانی گزارش‌ها',
+                tag: 'ناوبری',
+                short: '⌘A',
+                iconBoxClass: 'action-icon-blue',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>',
+                run: () => {
+                    document.getElementById('tab-btn-analytics')?.click();
+                }
+            },
+            {
+                id: 'act-2fa',
+                title: 'احراز هویت دومرحله‌ای (۲FA)',
+                desc: 'مدیریت و پیکربندی امنیت ورود دو عاملی',
+                tag: 'امنیت',
+                short: '⌘S',
+                iconBoxClass: 'action-icon-cyan',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>',
+                run: () => {
+                    document.getElementById('btnOpen2FAModal')?.click();
+                }
+            },
+            {
+                id: 'act-shortcuts',
+                title: 'راهنمای کلیدهای میانبر',
+                desc: 'مشاهده کلیدهای دسترسی سریع کیبورد',
+                tag: 'راهنما',
+                short: '?',
+                iconBoxClass: 'action-icon-purple',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+                run: () => {
+                    openShortcutsModal();
+                }
+            },
+            {
+                id: 'act-clear',
+                title: 'بازنشانی فیلترها',
+                desc: 'حذف تمامی فیلترها و نمایش کلیه گزارش‌ها',
+                tag: 'بازنشانی',
+                short: 'ESC',
+                iconBoxClass: 'action-icon-blue',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>',
+                run: () => {
+                    if (clearFiltersBtn) clearFiltersBtn.click();
+                }
+            }
+        ];
+
+        function normalizeQuery(str) {
+            if (!str) return '';
+            const fa2en = { '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9' };
+            const ar2en = { '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9' };
+            return String(str).replace(/[۰-۹]/g, c => fa2en[c]).replace(/[٠-٩]/g, c => ar2en[c]).toLowerCase().trim();
+        }
+
+        function renderItems(items, title) {
+            currentItems = items;
+            activeIndex = -1;
+            list.innerHTML = '';
+            if (titleEl) titleEl.textContent = title;
+            if (countEl) countEl.textContent = toPersianDigits(items.length);
+
+            if (items.length === 0) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'action-search-empty';
+                emptyDiv.innerHTML = '<svg class="action-empty-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg><span>موردی برای نمایش یافت نشد</span>';
+                list.appendChild(emptyDiv);
+                return;
+            }
+
+            items.forEach((item, idx) => {
+                const row = document.createElement('div');
+                row.className = 'action-search-item';
+                row.setAttribute('role', 'option');
+                row.setAttribute('id', `action-item-${idx}`);
+                row.dataset.index = String(idx);
+
+                const mainCol = document.createElement('div');
+                mainCol.className = 'action-search-item-main';
+
+                const iconBox = document.createElement('span');
+                iconBox.className = `action-item-icon-box ${item.iconBoxClass || 'action-icon-blue'}`;
+                iconBox.innerHTML = item.iconSvg || '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
+
+                const texts = document.createElement('div');
+                texts.className = 'action-item-texts';
+
+                const title = document.createElement('span');
+                title.className = 'action-item-title';
+                title.textContent = item.title;
+
+                const desc = document.createElement('span');
+                desc.className = 'action-item-desc';
+                desc.textContent = item.desc;
+
+                texts.appendChild(title);
+                texts.appendChild(desc);
+                mainCol.appendChild(iconBox);
+                mainCol.appendChild(texts);
+
+                const meta = document.createElement('div');
+                meta.className = 'action-item-meta';
+
+                if (item.short) {
+                    const kbd = document.createElement('kbd');
+                    kbd.className = 'action-kbd-shortcut';
+                    kbd.textContent = item.short;
+                    meta.appendChild(kbd);
+                }
+
+                if (item.tag) {
+                    const tag = document.createElement('span');
+                    tag.className = 'action-end-tag';
+                    tag.textContent = item.tag;
+                    meta.appendChild(tag);
+                }
+
+                row.appendChild(mainCol);
+                row.appendChild(meta);
+
+                row.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    executeItem(item);
+                });
+
+                list.appendChild(row);
+            });
+        }
+
+        function updateSelection() {
+            const rows = list.querySelectorAll('.action-search-item');
+            rows.forEach((r, idx) => {
+                if (idx === activeIndex) {
+                    r.classList.add('is-selected');
+                    r.scrollIntoView({ block: 'nearest' });
+                    input.setAttribute('aria-activedescendant', r.id);
+                } else {
+                    r.classList.remove('is-selected');
+                }
+            });
+            if (activeIndex === -1) {
+                input.removeAttribute('aria-activedescendant');
+            }
+        }
+
+        function executeItem(item) {
+            closeDropdown();
+            if (typeof item.run === 'function') {
+                item.run();
+            }
+        }
+
+        function openDropdown() {
+            dropdown.style.display = 'block';
+            input.setAttribute('aria-expanded', 'true');
+            computeAndRender();
+        }
+
+        function closeDropdown() {
+            dropdown.style.display = 'none';
+            input.setAttribute('aria-expanded', 'false');
+            activeIndex = -1;
+            updateSelection();
+        }
+
+        function computeAndRender() {
+            const rawVal = input.value || '';
+            const q = normalizeQuery(rawVal);
+
+            if (rawVal.trim().length > 0) {
+                if (iconSearch) iconSearch.classList.add('d-none');
+                if (iconSend) iconSend.classList.remove('d-none');
+                if (iconBox) iconBox.classList.add('is-active');
+                if (kbdBadge) kbdBadge.style.opacity = '0';
+            } else {
+                if (iconSearch) iconSearch.classList.remove('d-none');
+                if (iconSend) iconSend.classList.add('d-none');
+                if (iconBox) iconBox.classList.remove('is-active');
+                if (kbdBadge) kbdBadge.style.opacity = '1';
+            }
+
+            if (!q) {
+                renderItems(defaultActions, 'دستورات و پیشنهادات سریع');
+                return;
+            }
+
+            const matchedActions = defaultActions.filter(act => {
+                const normTitle = normalizeQuery(act.title);
+                const normDesc = normalizeQuery(act.desc);
+                return normTitle.includes(q) || normDesc.includes(q);
+            });
+
+            const matchedReports = [];
+            if (Array.isArray(allReports)) {
+                for (let i = 0; i < allReports.length; i++) {
+                    const r = allReports[i];
+                    if (!r) continue;
+                    const rTracking = normalizeQuery(r.tracking_code || r.id || '');
+                    const rSubject = normalizeQuery(r.subject || '');
+                    const rType = normalizeQuery(r.type || r.category || '');
+                    const rMsg = normalizeQuery(r.message_text || '');
+
+                    if (rTracking.includes(q) || rSubject.includes(q) || rType.includes(q) || rMsg.includes(q)) {
+                        const priClass = r.priority === 'critical' ? 'action-icon-rose' : (r.priority === 'urgent' ? 'action-icon-amber' : 'action-icon-blue');
+                        const priTag = r.priority === 'critical' ? 'آنی' : (r.priority === 'urgent' ? 'فوری' : 'عادی');
+                        matchedReports.push({
+                            id: `rep-${r.id}`,
+                            title: `کد پیگیری: ${toPersianDigits(r.tracking_code || r.id)}`,
+                            desc: `${r.subject || 'بدون موضوع'} · ${r.type || 'گزارش'}`,
+                            tag: priTag,
+                            short: 'نمایش',
+                            iconBoxClass: priClass,
+                            iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>',
+                            run: () => {
+                                viewReport(r.id);
+                            }
+                        });
+                        if (matchedReports.length >= 6) break;
+                    }
+                }
+            }
+
+            const combined = [...matchedActions, ...matchedReports];
+            renderItems(combined, `یافته‌ها برای «${rawVal.trim()}»`);
+        }
+
+        input.addEventListener('focus', () => {
+            openDropdown();
+        });
+
+        input.addEventListener('click', () => {
+            if (dropdown.style.display === 'none') openDropdown();
+        });
+
+        input.addEventListener('input', () => {
+            computeAndRender();
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (dropdown.style.display !== 'none' && currentItems.length > 0) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex + 1) % currentItems.length;
+                    updateSelection();
+                    return;
+                }
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex - 1 + currentItems.length) % currentItems.length;
+                    updateSelection();
+                    return;
+                }
+                if (e.key === 'Enter') {
+                    if (activeIndex >= 0 && activeIndex < currentItems.length) {
+                        e.preventDefault();
+                        executeItem(currentItems[activeIndex]);
+                        return;
+                    }
+                    closeDropdown();
+                    return;
+                }
+            }
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                closeDropdown();
+                input.blur();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
+                closeDropdown();
+            }
+        });
+    }
+
     if (searchTracking) {
         searchTracking.addEventListener('input', debounce(() => {
             requestAnimationFrame(() => applyFilters(true));
@@ -1339,6 +1675,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initTableHeadersInteractions();
     updateTableHeadersFromFilters();
+    initActionSearchBar();
 
     const refreshReportsBtn = document.getElementById('refreshReportsBtn');
     if (refreshReportsBtn) {
@@ -3025,7 +3362,31 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         const isEditing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
 
+        if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+            e.preventDefault();
+            const reportsTab = document.getElementById('tab-btn-reports');
+            if (reportsTab && !reportsTab.classList.contains('active')) {
+                reportsTab.click();
+            }
+            const searchEl = document.getElementById('search-tracking');
+            if (searchEl) {
+                searchEl.focus();
+                searchEl.select();
+            }
+            return;
+        }
+
         if (e.key === 'Escape') {
+            const actionDropdown = document.getElementById('actionSearchDropdown');
+            if (actionDropdown && actionDropdown.style.display !== 'none') {
+                actionDropdown.style.display = 'none';
+                const searchEl = document.getElementById('search-tracking');
+                if (searchEl && document.activeElement === searchEl) {
+                    searchEl.blur();
+                }
+                return;
+            }
+
             if (modalShortcuts && modalShortcuts.style.display !== 'none') {
                 closeShortcutsModal();
                 return;

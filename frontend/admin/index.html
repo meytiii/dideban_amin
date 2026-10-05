@@ -517,17 +517,43 @@
 
             <div class="filter-container" id="reportsFilterContainer">
                 <div class="filter-group filter-search-group">
-                    <div class="search-input-wrapper"
-                        data-tooltip="جستجوی سریع در کد پیگیری، موضوع یا متن کامل گزارش...">
-                        <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                        <input type="text" id="search-tracking"
-                            placeholder="جستجوی سریع در کد پیگیری، موضوع یا متن گزارش..."
-                            data-tooltip="جستجوی سریع در کد پیگیری، موضوع یا متن کامل گزارش..."
-                            aria-label="جستجوی سریع در گزارش‌ها">
+                    <div class="action-search-wrapper" id="actionSearchWrapper">
+                        <div class="search-input-wrapper">
+                            <span class="search-icon-box" id="searchIconBox" aria-hidden="true">
+                                <svg class="search-icon-svg icon-search" id="actionIconSearch" viewBox="0 0 24 24" width="17" height="17" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <svg class="search-icon-svg icon-send d-none" id="actionIconSend" viewBox="0 0 24 24" width="17" height="17" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                            </span>
+                            <input type="text" id="search-tracking"
+                                placeholder="جستجو در گزارش‌ها، کد پیگیری یا دستورات..."
+                                autocomplete="off"
+                                spellcheck="false"
+                                data-tooltip="جستجو در گزارش‌ها یا دستورات سریع (کلید ⌘K یا /)"
+                                aria-label="جستجوی سریع در گزارش‌ها و دستورات"
+                                aria-haspopup="listbox"
+                                aria-expanded="false">
+                            <kbd class="search-shortcut-badge" id="searchKbdBadge" aria-hidden="true">⌘K</kbd>
+                        </div>
+                        <div class="action-search-dropdown" id="actionSearchDropdown" style="display: none;" role="listbox" aria-label="پیشنهادات و دستورات">
+                            <div class="action-search-header">
+                                <span id="actionSearchDropdownTitle">دستورات و پیشنهادات سریع</span>
+                                <span class="action-search-count" id="actionSearchCount"></span>
+                            </div>
+                            <div class="action-search-list" id="actionSearchList" role="group"></div>
+                            <div class="action-search-footer">
+                                <span><kbd>⌘K</kbd> یا <kbd>/</kbd> برای جستجو</span>
+                                <span><kbd>↑</kbd><kbd>↓</kbd> انتخاب</span>
+                                <span><kbd>Enter</kbd> اجرا</span>
+                                <span><kbd>ESC</kbd> انصراف</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="filter-group">
