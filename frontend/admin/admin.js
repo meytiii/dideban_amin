@@ -1349,7 +1349,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: 'گزارش‌های بررسی‌نشده',
                 desc: 'فیلتر موارد جدید و نیازمند بررسی در کارتابل',
                 tag: 'کارتابل',
-                short: '⌘1',
+                short: 'Ctrl+1',
                 iconBoxClass: 'action-icon-amber',
                 iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
                 run: () => {
@@ -1363,7 +1363,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: 'اولویت آنی و فوری',
                 desc: 'فیلتر موارد بسیار مهم با فوریت بالا',
                 tag: 'اولویت',
-                short: '⌘2',
+                short: 'Ctrl+2',
                 iconBoxClass: 'action-icon-rose',
                 iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
                 run: () => {
@@ -1377,7 +1377,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: 'دریافت خروجی اکسل و CSV',
                 desc: 'دانلود پرونده گزارش‌های کارتابل جاری',
                 tag: 'عملیات',
-                short: '⌘E',
+                short: 'Ctrl+E',
                 iconBoxClass: 'action-icon-emerald',
                 iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>',
                 run: () => {
@@ -1389,7 +1389,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: 'آمار و تحلیل داده‌ها',
                 desc: 'مشاهده شاخص‌ها و تحلیل فراوانی گزارش‌ها',
                 tag: 'ناوبری',
-                short: '⌘A',
+                short: 'Ctrl+A',
                 iconBoxClass: 'action-icon-blue',
                 iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>',
                 run: () => {
@@ -1401,7 +1401,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: 'احراز هویت دومرحله‌ای (۲FA)',
                 desc: 'مدیریت و پیکربندی امنیت ورود دو عاملی',
                 tag: 'امنیت',
-                short: '⌘S',
+                short: 'Ctrl+S',
                 iconBoxClass: 'action-icon-cyan',
                 iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>',
                 run: () => {
