@@ -255,7 +255,14 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - Dedicated session timer widget (`.session-timer-box`) in admin navigation tracking countdown.
 - Amber visual state within 2 minutes of expiration, accompanied by an accessible warning modal (`#sessionWarningModal`) providing one-click instant session renewal.
 
-### 16. Assistant Communication & Chat Language
+### 16. Animated Dropdown & Select System (`dropdown-01`)
+- **Interactive Triggers:** Micro-scaling on hover (`scale(1.008)`) and tap (`scale(0.988)` / `scale(0.99)`) with hardware-accelerated `translateZ(0)`. Smooth 180° chevron rotation (`rotate(180deg)`) on active state.
+- **Surface & Container:** Solid high-performance `#162032` surface with `1.5px` border outline (`rgba(255, 255, 255, 0.12)`), `14px` border-radius, and GPU compositor slide-down animation (`dropdownSlideDown`). Zero backdrop blur to maintain high framerates.
+- **Staggered RTL Item Entrance:** Sequential cascade entrance from right (`translateX(16px)` to `0`) via `dropdownItemEnter` with indexed delays (`0.02s` to `0.26s`).
+- **Spring Checkmark Feedback:** Dynamic spring bounce indicator (`checkSpring`) on active selected items.
+- **Coverage:** Applied across Public Portal report category selector, Admin user profile menu, Admin notification flyout, Admin command search listbox, and Jalali date popover.
+
+### 17. Assistant Communication & Chat Language
 - **Assistant Chat Language:** ALWAYS speak, respond, and chat in English with user in all conversations and chats, while preserving Persian for client-facing UI strings and portal content.
 
 ---

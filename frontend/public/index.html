@@ -469,164 +469,231 @@
                             tabindex="-1">
                             <option value="">-- موضوع گزارش را انتخاب کنید --</option>
                             <option value="تخلفات مالی">تخلفات مالی</option>
-                            <option value="مسائل امنیتی">مسائل امنیتی</option>
-                            <option value="تخلفات اداری">تخلفات قانونی و اداری</option>
-                            <option value="تخلفات آموزشی">تخلفات آموزشی</option>
-                            <option value="پرسنلی">مسائل پرسنلی</option>
-                            <option value="دانش آموزی">مسائل دانش آموزی</option>
-                            <option value="مدارس غیردولتی">مدارس و آموزشگاه‌های غیردولتی</option>
-                            <option value="آموزش مجازی">مسائل مربوط به آموزش مجازی</option>
-                            <option value="فضای مجازی">هنجارشکنی و تخلفات در فضای مجازی</option>
-                            <option value="سایر">سایر</option>
-                        </select>
-
-                        <div class="custom-dropdown" id="categoryCustomDropdown">
-                            <button type="button" class="custom-dropdown-trigger" id="categoryDropdownTrigger"
-                                aria-haspopup="listbox" aria-expanded="false">
-                                <div class="trigger-content">
-                                    <span class="trigger-icon" id="categorySelectedIcon">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M4 6h16M4 12h16M4 18h7"></path>
+                                         <div class="custom-dropdown-menu" id="categoryDropdownMenu" role="listbox">
+                                <div class="dropdown-item" data-value="تخلفات مالی" role="option">
+                                    <div class="item-content-side">
+                                        <div class="item-icon-box text-emerald">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                                                <circle cx="12" cy="12" r="2"></circle>
+                                                <path d="M6 12h.01M18 12h.01"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="item-text-group">
+                                            <span class="item-label">تخلفات مالی</span>
+                                            <span class="item-description">رشوه، اختلاس، فاکتورسازی و سوءاستفاده مالی</span>
+                                        </div>
+                                    </div>
+                                    <span class="item-check-indicator" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
                                         </svg>
                                     </span>
-                                    <span class="trigger-label" id="categorySelectedLabel">-- موضوع گزارش را انتخاب کنید
-                                        --</span>
-                                </div>
-                                <span class="trigger-chevron">
-                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m6 9 6 6 6-6"></path>
-                                    </svg>
-                                </span>
-                            </button>
-
-                            <div class="custom-dropdown-menu" id="categoryDropdownMenu" role="listbox">
-                                <div class="dropdown-item" data-value="تخلفات مالی" role="option">
-                                    <div class="item-icon-box text-emerald">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <rect width="20" height="12" x="2" y="6" rx="2"></rect>
-                                            <circle cx="12" cy="12" r="2"></circle>
-                                            <path d="M6 12h.01M18 12h.01"></path>
-                                        </svg>
-                                    </div>
-                                    <span class="item-label">تخلفات مالی</span>
                                 </div>
                                 <div class="dropdown-item" data-value="مسائل امنیتی" role="option">
-                                    <div class="item-icon-box text-rose">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
-                                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                        </svg>
+                                    <div class="item-content-side">
+                                        <div class="item-icon-box text-rose">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                            </svg>
+                                        </div>
+                                        <div class="item-text-group">
+                                            <span class="item-label">مسائل امنیتی</span>
+                                            <span class="item-description">تهدیدات فیزیکی، سایبری و نفوذ غیرمجاز</span>
+                                        </div>
                                     </div>
-                                    <span class="item-label">مسائل امنیتی</span>
+                                    <span class="item-check-indicator" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </span>
                                 </div>
                                 <div class="dropdown-item" data-value="تخلفات اداری" role="option">
-                                    <div class="item-icon-box text-amber">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
-                                            <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
-                                            <path d="M7 21h10M12 3v18M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
-                                        </svg>
+                                    <div class="item-content-side">
+                                        <div class="item-icon-box text-amber">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                                <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                                <path d="M7 21h10M12 3v18M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="item-text-group">
+                                            <span class="item-label">تخلفات قانونی و اداری</span>
+                                            <span class="item-description">نقض قوانین، سوءرفتار سازمانی و تبعیض</span>
+                                        </div>
                                     </div>
-                                    <span class="item-label">تخلفات قانونی و اداری</span>
+                                    <span class="item-check-indicator" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </span>
                                 </div>
                                 <div class="dropdown-item" data-value="تخلفات آموزشی" role="option">
-                                    <div class="item-icon-box text-blue">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path
-                                                d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z">
-                                            </path>
-                                            <path d="M22 10v6M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
-                                        </svg>
+                                    <div class="item-content-side">
+                                        <div class="item-icon-box text-blue">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path
+                                                    d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z">
+                                                </path>
+                                                <path d="M22 10v6M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="item-text-group">
+                                            <span class="item-label">تخلفات آموزشی</span>
+                                            <span class="item-description">تخلف در امتحانات، ارزشیابی و نمرات صوری</span>
+                                        </div>
                                     </div>
-                                    <span class="item-label">تخلفات آموزشی</span>
+                                    <span class="item-check-indicator" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </span>
                                 </div>
                                 <div class="dropdown-item" data-value="پرسنلی" role="option">
-                                    <div class="item-icon-box text-cyan">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                                            <circle cx="9" cy="7" r="4"></circle>
-                                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                        </svg>
+                                    <div class="item-content-side">
+                                        <div class="item-icon-box text-cyan">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                                <circle cx="9" cy="7" r="4"></circle>
+                                                <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="item-text-group">
+                                            <span class="item-label">مسائل پرسنلی</span>
+                                            <span class="item-description">تخلفات شغلی، غیبت غیرموجه و تخطی پرسنل</span>
+                                        </div>
                                     </div>
-                                    <span class="item-label">مسائل پرسنلی</span>
+                                    <span class="item-check-indicator" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </span>
                                 </div>
                                 <div class="dropdown-item" data-value="دانش آموزی" role="option">
-                                    <div class="item-icon-box text-purple">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path
-                                                d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3V4a2 2 0 0 0-2-2h-6a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2Z">
-                                            </path>
-                                            <path d="M9 10v4M15 10v4M9 6V4h6v2"></path>
-                                        </svg>
+                                    <div class="item-content-side">
+                                        <div class="item-icon-box text-purple">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path
+                                                    d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3V4a2 2 0 0 0-2-2h-6a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2Z">
+                                                </path>
+                                                <path d="M9 10v4M15 10v4M9 6V4h6v2"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="item-text-group">
+                                            <span class="item-label">مسائل دانش آموزی</span>
+                                            <span class="item-description">آسیب‌های رفتاری، انضباطی و سلامت دانش‌آموز</span>
+                                        </div>
                                     </div>
-                                    <span class="item-label">مسائل دانش آموزی</span>
+                                    <span class="item-check-indicator" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </span>
                                 </div>
                                 <div class="dropdown-item" data-value="مدارس غیردولتی" role="option">
-                                    <div class="item-icon-box text-indigo">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
-                                            <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
-                                            <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
-                                            <path d="M10 6h4M10 10h4M10 14h4M10 18h4"></path>
-                                        </svg>
+                                    <div class="item-content-side">
+                                        <div class="item-icon-box text-indigo">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
+                                                <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
+                                                <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
+                                                <path d="M10 6h4M10 10h4M10 14h4M10 18h4"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="item-text-group">
+                                            <span class="item-label">مدارس و آموزشگاه‌های غیردولتی</span>
+                                            <span class="item-description">شهریه مازاد، تخلف اداری و فعالیت غیرمجاز</span>
+                                        </div>
                                     </div>
-                                    <span class="item-label">مدارس و آموزشگاه‌های غیردولتی</span>
+                                    <span class="item-check-indicator" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </span>
                                 </div>
                                 <div class="dropdown-item" data-value="آموزش مجازی" role="option">
-                                    <div class="item-icon-box text-teal">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path
-                                                d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16">
-                                            </path>
-                                        </svg>
+                                    <div class="item-content-side">
+                                        <div class="item-icon-box text-teal">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path
+                                                    d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <div class="item-text-group">
+                                            <span class="item-label">مسائل مربوط به آموزش مجازی</span>
+                                            <span class="item-description">بسترهای ناامن، تقلب و اختلال آموزشی</span>
+                                        </div>
                                     </div>
-                                    <span class="item-label">مسائل مربوط به آموزش مجازی</span>
+                                    <span class="item-check-indicator" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </span>
                                 </div>
                                 <div class="dropdown-item" data-value="فضای مجازی" role="option">
-                                    <div class="item-icon-box text-sky">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"></path>
-                                        </svg>
+                                    <div class="item-content-side">
+                                        <div class="item-icon-box text-sky">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="item-text-group">
+                                            <span class="item-label">هنجارشکنی در فضای مجازی</span>
+                                            <span class="item-description">محتوای غیراخلاقی و تخلفات شبکه‌های اجتماعی</span>
+                                        </div>
                                     </div>
-                                    <span class="item-label">هنجارشکنی و تخلفات در فضای مجازی</span>
+                                    <span class="item-check-indicator" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </span>
                                 </div>
                                 <div class="dropdown-item" data-value="سایر" role="option">
-                                    <div class="item-icon-box text-slate">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path
-                                                d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0l8.57-3.91a1 1 0 0 0 0-1.83Z">
-                                            </path>
-                                            <path
-                                                d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65M22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65">
-                                            </path>
-                                        </svg>
+                                    <div class="item-content-side">
+                                        <div class="item-icon-box text-slate">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path
+                                                    d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0l8.57-3.91a1 1 0 0 0 0-1.83Z">
+                                                </path>
+                                                <path
+                                                    d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65M22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <div class="item-text-group">
+                                            <span class="item-label">سایر موارد</span>
+                                            <span class="item-description">سایر تخلفات خارج از عناوین ده‌گانه</span>
+                                        </div>
                                     </div>
-                                    <span class="item-label">سایر موارد</span>
+                                    <span class="item-check-indicator" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </span>
                                 </div>
                             </div>
                         </div>
