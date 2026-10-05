@@ -1226,6 +1226,298 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const ADMIN_FILTER_DESCRIPTIONS = {
+        'filter-type': {
+            'all': 'نمایش کلیه موضوعات و دسته‌بندی‌های اداری',
+            'تخلفات مالی': 'رشوه، اختلاس، فاکتورسازی و سوءاستفاده مالی',
+            'مسائل امنیتی': 'حفاظت اسناد، سرقت، تهدید و مسائل امنیتی',
+            'تخلفات اداری': 'تخلفات آیین‌نامه‌ای، عدم پاسخگویی و اداری',
+            'تخلفات آموزشی': 'بی‌عدالتی نمرات، تخلف آزمون و تقلب',
+            'پرسنلی': 'مسائل پرسنلی، غیبت غیرموجه و رفتار سازمانی',
+            'دانش آموزی': 'سوءرفتار، تنبیه بدنی و شکایات دانش‌آموزی',
+            'مدارس غیردولتی': 'شهریه غیرمجاز و تخلفات مراکز غیردولتی',
+            'آموزش مجازی': 'سامانه‌های آموزشی شاد و بسترهای آنلاین',
+            'فضای مجازی': 'کانال‌ها، گروه‌ها و تخلفات در فضای مجازی',
+            'سایر': 'سایر موضوعات و گزارش‌های متفرقه'
+        },
+        'filter-read-status': {
+            'all': 'نمایش همه وضعیت‌های بررسی کارتابل',
+            'new_message': 'گزارش‌های دارای پیام جدید از سمت کاربر',
+            'regional_response': 'پاسخ کارشناسی ارسالی توسط ناحیه یا منطقه',
+            'unread': 'در نوبت بررسی اولیه (گزارش‌های ثبت‌شده جدید)',
+            'read': 'بررسی‌شده و پرونده فعال در جریان اقدام',
+            'responded': 'پاسخ نهایی ثبت و به کاربر ابلاغ شده'
+        },
+        'filter-priority': {
+            'all': 'نمایش همه اولویت‌های زمانی رسیدگی',
+            'normal': 'فرآیند استاندارد و نوبت عادی بررسی',
+            'urgent': 'رسیدگی سریع و دارای اولویت زمانی',
+            'critical': 'اقدام فوری و بسیار حیاتی حراستی'
+        },
+        'filter-report-type': {
+            'all': 'نمایش گزارش‌های ناشناس و هویت‌دار',
+            'anonymous': 'ثبت‌شده به‌صورت ناشناس و بدون مشخصات',
+            'identified': 'دارای نام و مشخصات فردی گزارش‌دهنده'
+        }
+    };
+
+    const adminCustomSelectControllers = new Map();
+
+    function syncAllAdminCustomSelects() {
+        adminCustomSelectControllers.forEach(ctrl => {
+            if (ctrl && typeof ctrl.sync === 'function') {
+                ctrl.sync();
+            }
+        });
+    }
+
+    function initAdminCustomSelect(selectId, descriptions = {}) {
+        const nativeSelect = document.getElementById(selectId);
+        if (!nativeSelect) return null;
+
+        const parentGroup = nativeSelect.closest('.filter-group') || nativeSelect.parentElement;
+        if (!parentGroup) return null;
+
+        nativeSelect.classList.add('native-select-hidden');
+        nativeSelect.setAttribute('tabindex', '-1');
+        nativeSelect.setAttribute('aria-hidden', 'true');
+
+        const existingCustom = parentGroup.querySelector(`.admin-custom-dropdown[data-target="${selectId}"]`);
+        if (existingCustom) existingCustom.remove();
+
+        const dropdown = document.createElement('div');
+        dropdown.className = 'admin-custom-dropdown';
+        dropdown.setAttribute('data-target', selectId);
+
+        const trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.className = 'custom-dropdown-trigger';
+        trigger.setAttribute('aria-haspopup', 'listbox');
+        trigger.setAttribute('aria-expanded', 'false');
+
+        const triggerContent = document.createElement('div');
+        triggerContent.className = 'trigger-content';
+
+        const triggerLabel = document.createElement('span');
+        triggerLabel.className = 'trigger-label';
+
+        triggerContent.appendChild(triggerLabel);
+
+        const triggerChevron = document.createElement('span');
+        triggerChevron.className = 'trigger-chevron';
+        triggerChevron.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>';
+
+        trigger.appendChild(triggerContent);
+        trigger.appendChild(triggerChevron);
+
+        const menu = document.createElement('div');
+        menu.className = 'custom-dropdown-menu';
+        menu.setAttribute('role', 'listbox');
+
+        const options = Array.from(nativeSelect.options);
+        options.forEach(opt => {
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            item.setAttribute('role', 'option');
+            item.setAttribute('tabindex', '-1');
+            item.setAttribute('data-value', opt.value);
+
+            const contentSide = document.createElement('div');
+            contentSide.className = 'item-content-side';
+
+            const itemLabel = document.createElement('span');
+            itemLabel.className = 'item-label';
+            itemLabel.textContent = opt.textContent;
+
+            const descText = descriptions[opt.value] || '';
+            const itemDesc = document.createElement('span');
+            itemDesc.className = 'item-description';
+            itemDesc.textContent = descText;
+
+            contentSide.appendChild(itemLabel);
+            if (descText) {
+                contentSide.appendChild(itemDesc);
+            }
+
+            const checkIndicator = document.createElement('span');
+            checkIndicator.className = 'item-check-indicator';
+            checkIndicator.setAttribute('aria-hidden', 'true');
+            checkIndicator.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+            item.appendChild(contentSide);
+            item.appendChild(checkIndicator);
+
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (nativeSelect.value !== opt.value) {
+                    nativeSelect.value = opt.value;
+                    nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                syncState();
+                closeMenu();
+                trigger.focus();
+            });
+
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const next = item.nextElementSibling;
+                    if (next && next.classList.contains('dropdown-item')) next.focus();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const prev = item.previousElementSibling;
+                    if (prev && prev.classList.contains('dropdown-item')) {
+                        prev.focus();
+                    } else {
+                        trigger.focus();
+                    }
+                } else if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    item.click();
+                }
+            });
+
+            menu.appendChild(item);
+        });
+
+        dropdown.appendChild(trigger);
+        dropdown.appendChild(menu);
+        parentGroup.appendChild(dropdown);
+
+        function openMenu() {
+            document.querySelectorAll('.admin-custom-dropdown.open').forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('open');
+                    const t = d.querySelector('.custom-dropdown-trigger');
+                    if (t) t.setAttribute('aria-expanded', 'false');
+                    const pg = d.closest('.filter-group');
+                    if (pg) pg.classList.remove('has-open-dropdown');
+                }
+            });
+            const fc = dropdown.closest('.filter-container');
+            if (fc) fc.classList.add('has-open-dropdown');
+            parentGroup.classList.add('has-open-dropdown');
+            dropdown.classList.add('open');
+            trigger.setAttribute('aria-expanded', 'true');
+        }
+
+        function closeMenu() {
+            dropdown.classList.remove('open');
+            trigger.setAttribute('aria-expanded', 'false');
+            parentGroup.classList.remove('has-open-dropdown');
+            const fc = dropdown.closest('.filter-container');
+            if (fc && !fc.querySelector('.admin-custom-dropdown.open')) {
+                fc.classList.remove('has-open-dropdown');
+            }
+        }
+
+        function toggleMenu() {
+            if (dropdown.classList.contains('open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        }
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+        });
+
+        trigger.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (!dropdown.classList.contains('open')) {
+                    openMenu();
+                }
+                const firstSelected = menu.querySelector('.dropdown-item.selected') || menu.querySelector('.dropdown-item');
+                if (firstSelected) firstSelected.focus();
+            }
+        });
+
+        function syncState() {
+            const currentVal = nativeSelect.value;
+            const currentOpt = nativeSelect.selectedOptions[0] || options.find(o => o.value === currentVal) || options[0];
+            if (currentOpt) {
+                triggerLabel.textContent = currentOpt.textContent;
+                trigger.setAttribute('title', currentOpt.textContent);
+            }
+
+            if (currentVal && currentVal !== 'all') {
+                dropdown.classList.add('has-filter');
+            } else {
+                dropdown.classList.remove('has-filter');
+            }
+
+            const items = menu.querySelectorAll('.dropdown-item');
+            items.forEach(it => {
+                if (it.getAttribute('data-value') === currentVal) {
+                    it.classList.add('selected');
+                    it.setAttribute('aria-selected', 'true');
+                } else {
+                    it.classList.remove('selected');
+                    it.setAttribute('aria-selected', 'false');
+                }
+            });
+        }
+
+        syncState();
+
+        nativeSelect.addEventListener('change', syncState);
+        nativeSelect.addEventListener('sync-custom', syncState);
+
+        const controller = {
+            dropdown,
+            trigger,
+            menu,
+            sync: syncState,
+            close: closeMenu
+        };
+
+        adminCustomSelectControllers.set(selectId, controller);
+        return controller;
+    }
+
+    function initAdminCustomFilters() {
+        ['filter-type', 'filter-read-status', 'filter-priority', 'filter-report-type'].forEach(id => {
+            initAdminCustomSelect(id, ADMIN_FILTER_DESCRIPTIONS[id]);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.admin-custom-dropdown')) {
+                document.querySelectorAll('.admin-custom-dropdown.open').forEach(d => {
+                    d.classList.remove('open');
+                    const t = d.querySelector('.custom-dropdown-trigger');
+                    if (t) t.setAttribute('aria-expanded', 'false');
+                    const pg = d.closest('.filter-group');
+                    if (pg) pg.classList.remove('has-open-dropdown');
+                });
+                const fc = document.querySelector('.filter-container.has-open-dropdown');
+                if (fc && !fc.querySelector('.admin-custom-dropdown.open')) {
+                    fc.classList.remove('has-open-dropdown');
+                }
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const openDropdown = document.querySelector('.admin-custom-dropdown.open');
+                if (openDropdown) {
+                    openDropdown.classList.remove('open');
+                    const t = openDropdown.querySelector('.custom-dropdown-trigger');
+                    if (t) {
+                        t.setAttribute('aria-expanded', 'false');
+                        t.focus();
+                    }
+                    const pg = openDropdown.closest('.filter-group');
+                    if (pg) pg.classList.remove('has-open-dropdown');
+                    const fc = openDropdown.closest('.filter-container');
+                    if (fc) fc.classList.remove('has-open-dropdown');
+                }
+            }
+        });
+    }
+
     function updateTableHeadersFromFilters() {
         Object.entries(CATEGORICAL_CONFIG).forEach(([colKey, conf]) => {
             const th = document.getElementById(`th-${colKey}`);
@@ -1264,6 +1556,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
+        syncAllAdminCustomSelects();
     }
 
     function initTableHeadersInteractions() {
@@ -1673,6 +1966,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (filterMonth) filterMonth.addEventListener('change', () => { applyFilters(true); updateTableHeadersFromFilters(); });
     if (filterReadStatus) filterReadStatus.addEventListener('change', () => { applyFilters(true); updateTableHeadersFromFilters(); });
 
+    initAdminCustomFilters();
     initTableHeadersInteractions();
     updateTableHeadersFromFilters();
     initActionSearchBar();
@@ -2315,6 +2609,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (filterReadStatus) filterReadStatus.value = statusFilterValue;
         applyFilters(true);
+        updateTableHeadersFromFilters();
 
         const targetEl = document.querySelector('.filter-container') || listSection;
         if (targetEl) {
