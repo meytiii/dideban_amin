@@ -900,7 +900,7 @@
       "file_type": "code",
       "norm_label": "check2faenforcementnotice()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6053"
+      "source_location": "L6063"
     },
     {
       "id": "frontend_admin_admin_checkadminprofile",
@@ -912,7 +912,7 @@
       "file_type": "code",
       "norm_label": "checkadminprofile()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6018"
+      "source_location": "L6028"
     },
     {
       "id": "frontend_admin_admin_checkmustchangepasswordpolicy",
@@ -924,7 +924,7 @@
       "file_type": "code",
       "norm_label": "checkmustchangepasswordpolicy()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6034"
+      "source_location": "L6044"
     },
     {
       "id": "frontend_admin_admin_closeforwardmodal",
@@ -936,7 +936,7 @@
       "file_type": "code",
       "norm_label": "closeforwardmodal()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7852"
+      "source_location": "L7868"
     },
     {
       "id": "frontend_admin_admin_closehistorymodal",
@@ -948,7 +948,7 @@
       "file_type": "code",
       "norm_label": "closehistorymodal()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8112"
+      "source_location": "L8128"
     },
     {
       "id": "frontend_admin_admin_closeshortcutsmodal",
@@ -960,7 +960,7 @@
       "file_type": "code",
       "norm_label": "closeshortcutsmodal()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3646"
+      "source_location": "L3652"
     },
     {
       "id": "frontend_admin_admin_debounce",
@@ -1152,7 +1152,7 @@
       "file_type": "code",
       "norm_label": "resetnewuserpasswordtoggles()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6456"
+      "source_location": "L6472"
     },
     {
       "id": "frontend_admin_admin_resetpasswordwrappers",
@@ -1164,7 +1164,7 @@
       "file_type": "code",
       "norm_label": "resetpasswordwrappers()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7010"
+      "source_location": "L7026"
     },
     {
       "id": "frontend_admin_admin_resumesessiontimer",
@@ -1188,7 +1188,7 @@
       "file_type": "code",
       "norm_label": "setupsuperuserui()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6085"
+      "source_location": "L6095"
     },
     {
       "id": "frontend_admin_admin_startsessiontimer",
@@ -1212,7 +1212,7 @@
       "file_type": "code",
       "norm_label": "stopbackgroundpolling()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5998"
+      "source_location": "L6008"
     },
     {
       "id": "frontend_admin_admin_syncalladmincustomselects",
@@ -1260,7 +1260,7 @@
       "file_type": "code",
       "norm_label": "validatepasswordcomplexity()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6237"
+      "source_location": "L6253"
     },
     {
       "id": "components_ui_dropdown_01_dropdowncomponent",
@@ -1296,7 +1296,7 @@
       "file_type": "code",
       "norm_label": "closedetailview()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3599"
+      "source_location": "L3600"
     },
     {
       "id": "frontend_admin_admin_connectadminsse",
@@ -1308,7 +1308,7 @@
       "file_type": "code",
       "norm_label": "connectadminsse()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5917"
+      "source_location": "L5927"
     },
     {
       "id": "frontend_admin_admin_deletereportpermanently",
@@ -1320,7 +1320,7 @@
       "file_type": "code",
       "norm_label": "deletereportpermanently()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4397"
+      "source_location": "L4407"
     },
     {
       "id": "frontend_admin_admin_fetchnotifications",
@@ -1332,7 +1332,7 @@
       "file_type": "code",
       "norm_label": "fetchnotifications()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7578"
+      "source_location": "L7594"
     },
     {
       "id": "frontend_admin_admin_fetchreports",
@@ -1392,7 +1392,7 @@
       "file_type": "code",
       "norm_label": "maketextareaautoexpand()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4493"
+      "source_location": "L4503"
     },
     {
       "id": "frontend_admin_admin_markreporthasnewmessage",
@@ -1404,7 +1404,7 @@
       "file_type": "code",
       "norm_label": "markreporthasnewmessage()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5962"
+      "source_location": "L5972"
     },
     {
       "id": "frontend_admin_admin_rendernotificationslist",
@@ -1416,7 +1416,7 @@
       "file_type": "code",
       "norm_label": "rendernotificationslist()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7622"
+      "source_location": "L7638"
     },
     {
       "id": "frontend_admin_admin_renderreportstableskeleton",
@@ -1464,7 +1464,7 @@
       "file_type": "code",
       "norm_label": "schedulereportsrefresh()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5954"
+      "source_location": "L5964"
     },
     {
       "id": "frontend_admin_admin_startbackgroundpolling",
@@ -1476,7 +1476,7 @@
       "file_type": "code",
       "norm_label": "startbackgroundpolling()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5982"
+      "source_location": "L5992"
     },
     {
       "id": "frontend_admin_admin_startfallbackpolling",
@@ -1488,7 +1488,7 @@
       "file_type": "code",
       "norm_label": "startfallbackpolling()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5970"
+      "source_location": "L5980"
     },
     {
       "id": "frontend_admin_admin_switchmaintab",
@@ -1500,7 +1500,7 @@
       "file_type": "code",
       "norm_label": "switchmaintab()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6108"
+      "source_location": "L6124"
     },
     {
       "id": "frontend_admin_admin_togglereadstatus",
@@ -1512,7 +1512,7 @@
       "file_type": "code",
       "norm_label": "togglereadstatus()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4437"
+      "source_location": "L4447"
     },
     {
       "id": "frontend_admin_admin_triggerconcurrentloginalert",
@@ -1524,7 +1524,7 @@
       "file_type": "code",
       "norm_label": "triggerconcurrentloginalert()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7046"
+      "source_location": "L7062"
     },
     {
       "id": "frontend_admin_admin_updatebulktoolbar",
@@ -1548,7 +1548,7 @@
       "file_type": "code",
       "norm_label": "updatedetailnavbuttons()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3615"
+      "source_location": "L3621"
     },
     {
       "id": "frontend_admin_admin_updatekpicards",
@@ -1572,7 +1572,7 @@
       "file_type": "code",
       "norm_label": "viewreport()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3743"
+      "source_location": "L3749"
     },
     {
       "id": "frontend_public_app_addfiles",
@@ -2628,7 +2628,7 @@
       "file_type": "code",
       "norm_label": "fetchforwardingrecipients()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7866"
+      "source_location": "L7882"
     },
     {
       "id": "frontend_admin_admin_openforwardmodal",
@@ -2640,7 +2640,7 @@
       "file_type": "code",
       "norm_label": "openforwardmodal()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8017"
+      "source_location": "L8033"
     },
     {
       "id": "frontend_admin_admin_openresetpwdmodal",
@@ -2652,7 +2652,7 @@
       "file_type": "code",
       "norm_label": "openresetpwdmodal()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6752"
+      "source_location": "L6768"
     },
     {
       "id": "frontend_admin_admin_openshortcutsmodal",
@@ -2664,7 +2664,7 @@
       "file_type": "code",
       "norm_label": "openshortcutsmodal()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3637"
+      "source_location": "L3643"
     },
     {
       "id": "frontend_admin_admin_promotetemporarily",
@@ -2688,7 +2688,7 @@
       "file_type": "code",
       "norm_label": "renderrecipientlist()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7885"
+      "source_location": "L7901"
     },
     {
       "id": "frontend_admin_admin_renderrecipientlistskeleton",
@@ -2700,7 +2700,7 @@
       "file_type": "code",
       "norm_label": "renderrecipientlistskeleton()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7997"
+      "source_location": "L8013"
     },
     {
       "id": "frontend_admin_admin_updateselectedrecipientscounter",
@@ -2712,7 +2712,7 @@
       "file_type": "code",
       "norm_label": "updateselectedrecipientscounter()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7879"
+      "source_location": "L7895"
     },
     {
       "id": "frontend_admin_admin_populateanalyticsdom",
@@ -2724,7 +2724,7 @@
       "file_type": "code",
       "norm_label": "populateanalyticsdom()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5525"
+      "source_location": "L5535"
     },
     {
       "id": "frontend_admin_admin_renderanalyticsdashboard",
@@ -2736,7 +2736,7 @@
       "file_type": "code",
       "norm_label": "renderanalyticsdashboard()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5559"
+      "source_location": "L5569"
     },
     {
       "id": "frontend_admin_admin_rendercategorypiechart",
@@ -2748,7 +2748,7 @@
       "file_type": "code",
       "norm_label": "rendercategorypiechart()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5118"
+      "source_location": "L5128"
     },
     {
       "id": "frontend_admin_admin_rendercategorypiechart_resethoveredcat",
@@ -2760,7 +2760,7 @@
       "file_type": "code",
       "norm_label": "resethoveredcat()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5293"
+      "source_location": "L5303"
     },
     {
       "id": "frontend_admin_admin_rendercategorypiechart_sethoveredcat",
@@ -2772,7 +2772,7 @@
       "file_type": "code",
       "norm_label": "sethoveredcat()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5262"
+      "source_location": "L5272"
     },
     {
       "id": "frontend_admin_admin_renderclassificationpiechart",
@@ -2784,7 +2784,7 @@
       "file_type": "code",
       "norm_label": "renderclassificationpiechart()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4895"
+      "source_location": "L4905"
     },
     {
       "id": "frontend_admin_admin_renderclassificationpiechart_resethoveredstate",
@@ -2796,7 +2796,7 @@
       "file_type": "code",
       "norm_label": "resethoveredstate()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5072"
+      "source_location": "L5082"
     },
     {
       "id": "frontend_admin_admin_renderclassificationpiechart_sethoveredstate",
@@ -2808,7 +2808,7 @@
       "file_type": "code",
       "norm_label": "sethoveredstate()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5041"
+      "source_location": "L5051"
     },
     {
       "id": "frontend_admin_admin_renderclientsideanalytics",
@@ -2820,7 +2820,7 @@
       "file_type": "code",
       "norm_label": "renderclientsideanalytics()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5903"
+      "source_location": "L5913"
     },
     {
       "id": "frontend_admin_admin_rendermonthlychart",
@@ -2832,7 +2832,7 @@
       "file_type": "code",
       "norm_label": "rendermonthlychart()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5601"
+      "source_location": "L5611"
     },
     {
       "id": "frontend_admin_admin_rendermonthlychart_generatespline",
@@ -2844,7 +2844,7 @@
       "file_type": "code",
       "norm_label": "generatespline()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5650"
+      "source_location": "L5660"
     },
     {
       "id": "frontend_admin_admin_renderprioritiessegmentedbar",
@@ -2856,7 +2856,7 @@
       "file_type": "code",
       "norm_label": "renderprioritiessegmentedbar()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5337"
+      "source_location": "L5347"
     },
     {
       "id": "frontend_admin_admin_renderprioritiessegmentedbar_highlight",
@@ -2868,7 +2868,7 @@
       "file_type": "code",
       "norm_label": "highlight()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5494"
+      "source_location": "L5504"
     },
     {
       "id": "frontend_admin_admin_renderprioritiessegmentedbar_unhighlight",
@@ -2880,7 +2880,7 @@
       "file_type": "code",
       "norm_label": "unhighlight()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5502"
+      "source_location": "L5512"
     },
     {
       "id": "components_ui_calendar_calendar",
@@ -3012,7 +3012,7 @@
       "file_type": "code",
       "norm_label": "applyauditfiltersandpagination()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7117"
+      "source_location": "L7133"
     },
     {
       "id": "frontend_admin_admin_deleteuser",
@@ -3024,7 +3024,7 @@
       "file_type": "code",
       "norm_label": "deleteuser()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6377"
+      "source_location": "L6393"
     },
     {
       "id": "frontend_admin_admin_escapehtml",
@@ -3060,7 +3060,7 @@
       "file_type": "code",
       "norm_label": "fetchactivesessions()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7397"
+      "source_location": "L7413"
     },
     {
       "id": "frontend_admin_admin_fetchadminusers",
@@ -3072,7 +3072,7 @@
       "file_type": "code",
       "norm_label": "fetchadminusers()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6209"
+      "source_location": "L6225"
     },
     {
       "id": "frontend_admin_admin_fetchauditlogs",
@@ -3084,7 +3084,7 @@
       "file_type": "code",
       "norm_label": "fetchauditlogs()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7265"
+      "source_location": "L7281"
     },
     {
       "id": "frontend_admin_admin_fetchsystemstatus",
@@ -3096,7 +3096,7 @@
       "file_type": "code",
       "norm_label": "fetchsystemstatus()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7332"
+      "source_location": "L7348"
     },
     {
       "id": "frontend_admin_admin_fetchwithtimeout",
@@ -3132,7 +3132,7 @@
       "file_type": "code",
       "norm_label": "getjalalimonth()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7090"
+      "source_location": "L7106"
     },
     {
       "id": "frontend_admin_admin_handleadminlogout",
@@ -3144,7 +3144,7 @@
       "file_type": "code",
       "norm_label": "handleadminlogout()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4621"
+      "source_location": "L4631"
     },
     {
       "id": "frontend_admin_admin_liftuserlockout",
@@ -3156,7 +3156,7 @@
       "file_type": "code",
       "norm_label": "liftuserlockout()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6353"
+      "source_location": "L6369"
     },
     {
       "id": "frontend_admin_admin_loadadvsubview",
@@ -3168,7 +3168,7 @@
       "file_type": "code",
       "norm_label": "loadadvsubview()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6165"
+      "source_location": "L6181"
     },
     {
       "id": "frontend_admin_admin_openeditusermodal",
@@ -3180,7 +3180,7 @@
       "file_type": "code",
       "norm_label": "openeditusermodal()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6481"
+      "source_location": "L6497"
     },
     {
       "id": "frontend_admin_admin_openforwardhistorymodal",
@@ -3192,7 +3192,7 @@
       "file_type": "code",
       "norm_label": "openforwardhistorymodal()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8148"
+      "source_location": "L8164"
     },
     {
       "id": "frontend_admin_admin_parseuseragent",
@@ -3204,7 +3204,7 @@
       "file_type": "code",
       "norm_label": "parseuseragent()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7549"
+      "source_location": "L7565"
     },
     {
       "id": "frontend_admin_admin_populateauditusersdropdown",
@@ -3216,7 +3216,7 @@
       "file_type": "code",
       "norm_label": "populateauditusersdropdown()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7102"
+      "source_location": "L7118"
     },
     {
       "id": "frontend_admin_admin_renderaudittable",
@@ -3228,7 +3228,7 @@
       "file_type": "code",
       "norm_label": "renderaudittable()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7287"
+      "source_location": "L7303"
     },
     {
       "id": "frontend_admin_admin_renderaudittableskeleton",
@@ -3240,7 +3240,7 @@
       "file_type": "code",
       "norm_label": "renderaudittableskeleton()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7245"
+      "source_location": "L7261"
     },
     {
       "id": "frontend_admin_admin_renderforwardhistoryflowchart",
@@ -3252,7 +3252,7 @@
       "file_type": "code",
       "norm_label": "renderforwardhistoryflowchart()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8184"
+      "source_location": "L8200"
     },
     {
       "id": "frontend_admin_admin_renderforwardhistoryskeleton",
@@ -3264,7 +3264,7 @@
       "file_type": "code",
       "norm_label": "renderforwardhistoryskeleton()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8123"
+      "source_location": "L8139"
     },
     {
       "id": "frontend_admin_admin_rendersessionstable",
@@ -3276,7 +3276,7 @@
       "file_type": "code",
       "norm_label": "rendersessionstable()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7429"
+      "source_location": "L7445"
     },
     {
       "id": "frontend_admin_admin_rendersessionstableskeleton",
@@ -3288,7 +3288,7 @@
       "file_type": "code",
       "norm_label": "rendersessionstableskeleton()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7375"
+      "source_location": "L7391"
     },
     {
       "id": "frontend_admin_admin_renderuserstable",
@@ -3300,7 +3300,7 @@
       "file_type": "code",
       "norm_label": "renderuserstable()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6250"
+      "source_location": "L6266"
     },
     {
       "id": "frontend_admin_admin_renderuserstableskeleton",
@@ -3312,7 +3312,7 @@
       "file_type": "code",
       "norm_label": "renderuserstableskeleton()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6188"
+      "source_location": "L6204"
     },
     {
       "id": "frontend_admin_admin_renewsessioninteractive",
@@ -3336,7 +3336,7 @@
       "file_type": "code",
       "norm_label": "setupclassificationmodal()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4762"
+      "source_location": "L4772"
     },
     {
       "id": "frontend_admin_admin_showtoast",
@@ -3360,7 +3360,7 @@
       "file_type": "code",
       "norm_label": "submitclassification()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4705"
+      "source_location": "L4715"
     },
     {
       "id": "frontend_admin_admin_terminatesession",
@@ -3372,7 +3372,7 @@
       "file_type": "code",
       "norm_label": "terminatesession()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7517"
+      "source_location": "L7533"
     },
     {
       "id": "frontend_admin_admin_updateclassificationui",
@@ -3384,7 +3384,7 @@
       "file_type": "code",
       "norm_label": "updateclassificationui()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4648"
+      "source_location": "L4658"
     },
     {
       "id": "scripts_generate_docx_format_persian_text_with_dates",
@@ -14871,17 +14871,6 @@
       "source_location": "L3125"
     },
     {
-      "id": "admin_handlers_getusershandler",
-      "label": "GetUsersHandler()",
-      "_origin": "ast",
-      "community": 60,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "getusershandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1280"
-    },
-    {
       "id": "admin_handlers_gregoriantojalali",
       "label": "gregorianToJalali()",
       "_origin": "ast",
@@ -15194,6 +15183,39 @@
       "source_location": "L16"
     },
     {
+      "id": "admin_handlers_respondtoreporthandler",
+      "label": "RespondToReportHandler()",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "respondtoreporthandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1208"
+    },
+    {
+      "id": "admin_handlers_submitregionalresponsehandler",
+      "label": "SubmitRegionalResponseHandler()",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "submitregionalresponsehandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L3147"
+    },
+    {
+      "id": "admin_handlers_updateinternalnoteshandler",
+      "label": "UpdateInternalNotesHandler()",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "updateinternalnoteshandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L793"
+    },
+    {
       "id": "captcha_verifycaptcha",
       "label": "VerifyCaptcha()",
       "_origin": "ast",
@@ -15205,15 +15227,15 @@
       "source_location": "L150"
     },
     {
-      "id": "crypto_getlegacyhmackey",
-      "label": "GetLegacyHMACKey()",
+      "id": "crypto_encryptaes",
+      "label": "EncryptAES()",
       "_origin": "ast",
       "community": 63,
       "community_name": "SubmitReportHandler",
       "file_type": "code",
-      "norm_label": "getlegacyhmackey()",
+      "norm_label": "encryptaes()",
       "source_file": "crypto.go",
-      "source_location": "L61"
+      "source_location": "L65"
     },
     {
       "id": "metadata_validatebinarymagicbytes",
@@ -15348,15 +15370,26 @@
       "source_location": "L372"
     },
     {
-      "id": "test_crypto_test_testcaptchaverificationsuite",
-      "label": "TestCaptchaVerificationSuite()",
+      "id": "test_docx_sandbox_test",
+      "label": "docx_sandbox_test.go",
       "_origin": "ast",
       "community": 63,
       "community_name": "SubmitReportHandler",
       "file_type": "code",
-      "norm_label": "testcaptchaverificationsuite()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L268"
+      "norm_label": "docx_sandbox_test.go",
+      "source_file": "test/docx_sandbox_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_docx_sandbox_test_testdocxsandboxmaliciouspayload",
+      "label": "TestDocxSandboxMaliciousPayload()",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testdocxsandboxmaliciouspayload()",
+      "source_file": "test/docx_sandbox_test.go",
+      "source_location": "L16"
     },
     {
       "id": "test_input_limits_test",
@@ -15381,22 +15414,55 @@
       "source_location": "L14"
     },
     {
+      "id": "admin_auth",
+      "label": "admin_auth.go",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "admin_auth.go",
+      "source_file": "admin_auth.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "admin_auth_computeaudithash",
+      "label": "computeAuditHash()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "computeaudithash()",
+      "source_file": "admin_auth.go",
+      "source_location": "L294"
+    },
+    {
       "id": "admin_auth_generatesessiontoken",
       "label": "generateSessionToken()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "generatesessiontoken()",
       "source_file": "admin_auth.go",
       "source_location": "L23"
     },
     {
+      "id": "admin_auth_getcurrentadminhandler",
+      "label": "GetCurrentAdminHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "getcurrentadminhandler()",
+      "source_file": "admin_auth.go",
+      "source_location": "L190"
+    },
+    {
       "id": "admin_auth_getip",
       "label": "getIP()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "getip()",
       "source_file": "admin_auth.go",
@@ -15407,40 +15473,84 @@
       "label": "getLatestAuditHash()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "getlatestaudithash()",
       "source_file": "admin_auth.go",
       "source_location": "L304"
     },
     {
+      "id": "admin_auth_getlatestaudithashtx",
+      "label": "getLatestAuditHashTx()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "getlatestaudithashtx()",
+      "source_file": "admin_auth.go",
+      "source_location": "L313"
+    },
+    {
+      "id": "admin_auth_ipincidrs",
+      "label": "ipInCIDRs()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "ipincidrs()",
+      "source_file": "admin_auth.go",
+      "source_location": "L249"
+    },
+    {
       "id": "admin_auth_logaudit",
       "label": "logAudit()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "logaudit()",
       "source_file": "admin_auth.go",
       "source_location": "L322"
     },
     {
+      "id": "admin_auth_logaudittx",
+      "label": "logAuditTx()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "logaudittx()",
+      "source_file": "admin_auth.go",
+      "source_location": "L343"
+    },
+    {
       "id": "admin_auth_logouthandler",
       "label": "LogoutHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "logouthandler()",
       "source_file": "admin_auth.go",
       "source_location": "L364"
     },
     {
+      "id": "admin_auth_parsetrustedproxies",
+      "label": "parseTrustedProxies()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "parsetrustedproxies()",
+      "source_file": "admin_auth.go",
+      "source_location": "L224"
+    },
+    {
       "id": "admin_handlers_canadminaccessreport",
       "label": "canAdminAccessReport()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "canadminaccessreport()",
       "source_file": "admin_handlers.go",
@@ -15451,18 +15561,40 @@
       "label": "ClassifyReportHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "classifyreporthandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L888"
     },
     {
+      "id": "admin_handlers_deletereporthandler",
+      "label": "DeleteReportHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "deletereporthandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2004"
+    },
+    {
+      "id": "admin_handlers_deleteuserhandler",
+      "label": "DeleteUserHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "deleteuserhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1511"
+    },
+    {
       "id": "admin_handlers_disableuser2fahandler",
       "label": "DisableUser2FAHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "disableuser2fahandler()",
       "source_file": "admin_handlers.go",
@@ -15473,172 +15605,84 @@
       "label": "DownloadAttachmentHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "downloadattachmenthandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L986"
     },
     {
-      "id": "admin_handlers_getactivesessionshandler",
-      "label": "GetActiveSessionsHandler()",
+      "id": "admin_handlers_forwardreporthandler",
+      "label": "ForwardReportHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
-      "norm_label": "getactivesessionshandler()",
+      "norm_label": "forwardreporthandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1805"
-    },
-    {
-      "id": "admin_handlers_getanalyticshandler",
-      "label": "GetAnalyticsHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "getanalyticshandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2160"
-    },
-    {
-      "id": "admin_handlers_getauditlogshandler",
-      "label": "GetAuditLogsHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "getauditlogshandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1714"
-    },
-    {
-      "id": "admin_handlers_getforwardingrecipientshandler",
-      "label": "GetForwardingRecipientsHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "getforwardingrecipientshandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2419"
-    },
-    {
-      "id": "admin_handlers_getnotificationshandler",
-      "label": "GetNotificationsHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "getnotificationshandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2715"
+      "source_location": "L2459"
     },
     {
       "id": "admin_handlers_getreportdetailshandler",
       "label": "GetReportDetailsHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "getreportdetailshandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L478"
     },
     {
-      "id": "admin_handlers_getreportshandler",
-      "label": "GetReportsHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "getreportshandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L215"
-    },
-    {
-      "id": "admin_handlers_getsystemstatushandler",
-      "label": "GetSystemStatusHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "getsystemstatushandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1762"
-    },
-    {
       "id": "admin_handlers_liftuserlockouthandler",
       "label": "LiftUserLockoutHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "liftuserlockouthandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L1634"
     },
     {
-      "id": "admin_handlers_markallnotificationsreadhandler",
-      "label": "MarkAllNotificationsReadHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "markallnotificationsreadhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2844"
-    },
-    {
-      "id": "admin_handlers_marknotificationreadhandler",
-      "label": "MarkNotificationReadHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "marknotificationreadhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2806"
-    },
-    {
       "id": "admin_handlers_removeforwardinghandler",
       "label": "RemoveForwardingHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "removeforwardinghandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L3242"
     },
     {
-      "id": "admin_handlers_respondtoreporthandler",
-      "label": "RespondToReportHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "respondtoreporthandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1208"
-    },
-    {
       "id": "admin_handlers_setreportpriorityhandler",
       "label": "SetReportPriorityHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "setreportpriorityhandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L848"
     },
     {
+      "id": "admin_handlers_terminatesessionhandler",
+      "label": "TerminateSessionHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "terminatesessionhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1818"
+    },
+    {
       "id": "admin_handlers_togglereadstatushandler",
       "label": "ToggleReadStatusHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "togglereadstatushandler()",
       "source_file": "admin_handlers.go",
@@ -15649,39 +15693,204 @@
       "label": "ToggleUserActiveHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "toggleuseractivehandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L1396"
     },
     {
-      "id": "admin_handlers_updateinternalnoteshandler",
-      "label": "UpdateInternalNotesHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "updateinternalnoteshandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L793"
-    },
-    {
       "id": "admin_handlers_updateuserhandler",
       "label": "UpdateUserHandler()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "net/http.Request",
+      "community_name": "getIP",
       "file_type": "code",
       "norm_label": "updateuserhandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L1437"
     },
     {
+      "id": "go_type_database_sql_tx",
+      "label": "database/sql.Tx",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "database/sql.tx",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "go_type_net_ip",
+      "label": "net.IP",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "net.ip",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "go_type_net_ipnet",
+      "label": "net.IPNet",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "net.ipnet",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "mfa_verifymfahandler",
+      "label": "VerifyMFAHandler()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "verifymfahandler()",
+      "source_file": "mfa.go",
+      "source_location": "L216"
+    },
+    {
+      "id": "security_iscookiesecure",
+      "label": "isCookieSecure()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "iscookiesecure()",
+      "source_file": "security.go",
+      "source_location": "L830"
+    },
+    {
+      "id": "admin_handlers_getactivesessionshandler",
+      "label": "GetActiveSessionsHandler()",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "getactivesessionshandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1805"
+    },
+    {
+      "id": "admin_handlers_getanalyticshandler",
+      "label": "GetAnalyticsHandler()",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "getanalyticshandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2160"
+    },
+    {
+      "id": "admin_handlers_getauditlogshandler",
+      "label": "GetAuditLogsHandler()",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "getauditlogshandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1714"
+    },
+    {
+      "id": "admin_handlers_getforwardinghistoryhandler",
+      "label": "GetForwardingHistoryHandler()",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "getforwardinghistoryhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2617"
+    },
+    {
+      "id": "admin_handlers_getforwardingrecipientshandler",
+      "label": "GetForwardingRecipientsHandler()",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "getforwardingrecipientshandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2419"
+    },
+    {
+      "id": "admin_handlers_getnotificationshandler",
+      "label": "GetNotificationsHandler()",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "getnotificationshandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2715"
+    },
+    {
+      "id": "admin_handlers_getreportshandler",
+      "label": "GetReportsHandler()",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "getreportshandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L215"
+    },
+    {
+      "id": "admin_handlers_getsystemstatushandler",
+      "label": "GetSystemStatusHandler()",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "getsystemstatushandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1762"
+    },
+    {
+      "id": "admin_handlers_getusershandler",
+      "label": "GetUsersHandler()",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "getusershandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1280"
+    },
+    {
+      "id": "admin_handlers_markallnotificationsreadhandler",
+      "label": "MarkAllNotificationsReadHandler()",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "markallnotificationsreadhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2844"
+    },
+    {
+      "id": "admin_handlers_marknotificationreadhandler",
+      "label": "MarkNotificationReadHandler()",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "marknotificationreadhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2806"
+    },
+    {
       "id": "events_admineventshandler",
       "label": "AdminEventsHandler()",
       "_origin": "ast",
-      "community": 64,
+      "community": 65,
       "community_name": "net/http.Request",
       "file_type": "code",
       "norm_label": "admineventshandler()",
@@ -15692,7 +15901,7 @@
       "id": "go_type_net_http_request",
       "label": "net/http.Request",
       "_origin": "ast",
-      "community": 64,
+      "community": 65,
       "community_name": "net/http.Request",
       "file_type": "code",
       "norm_label": "net/http.request",
@@ -15703,7 +15912,7 @@
       "id": "go_type_net_http_responsewriter",
       "label": "net/http.ResponseWriter",
       "_origin": "ast",
-      "community": 64,
+      "community": 65,
       "community_name": "net/http.Request",
       "file_type": "code",
       "norm_label": "net/http.responsewriter",
@@ -15714,7 +15923,7 @@
       "id": "main_cspreporthandler",
       "label": "CSPReportHandler()",
       "_origin": "ast",
-      "community": 64,
+      "community": 65,
       "community_name": "net/http.Request",
       "file_type": "code",
       "norm_label": "cspreporthandler()",
@@ -15725,7 +15934,7 @@
       "id": "main_healthcheck",
       "label": "healthCheck()",
       "_origin": "ast",
-      "community": 64,
+      "community": 65,
       "community_name": "net/http.Request",
       "file_type": "code",
       "norm_label": "healthcheck()",
@@ -15736,7 +15945,7 @@
       "id": "mfa_setup2fahandler",
       "label": "Setup2FAHandler()",
       "_origin": "ast",
-      "community": 64,
+      "community": 65,
       "community_name": "net/http.Request",
       "file_type": "code",
       "norm_label": "setup2fahandler()",
@@ -15744,21 +15953,10 @@
       "source_location": "L337"
     },
     {
-      "id": "mfa_verifymfahandler",
-      "label": "VerifyMFAHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "verifymfahandler()",
-      "source_file": "mfa.go",
-      "source_location": "L216"
-    },
-    {
       "id": "profanity_getprofanityruleshandler",
       "label": "GetProfanityRulesHandler()",
       "_origin": "ast",
-      "community": 64,
+      "community": 65,
       "community_name": "net/http.Request",
       "file_type": "code",
       "norm_label": "getprofanityruleshandler()",
@@ -15766,21 +15964,10 @@
       "source_location": "L348"
     },
     {
-      "id": "security_iscookiesecure",
-      "label": "isCookieSecure()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "iscookiesecure()",
-      "source_file": "security.go",
-      "source_location": "L830"
-    },
-    {
       "id": "test_pagination_test",
       "label": "pagination_test.go",
       "_origin": "ast",
-      "community": 64,
+      "community": 65,
       "community_name": "net/http.Request",
       "file_type": "code",
       "norm_label": "pagination_test.go",
@@ -15791,188 +15978,12 @@
       "id": "test_pagination_test_testgetreportspaginationandfiltering",
       "label": "TestGetReportsPaginationAndFiltering()",
       "_origin": "ast",
-      "community": 64,
+      "community": 65,
       "community_name": "net/http.Request",
       "file_type": "code",
       "norm_label": "testgetreportspaginationandfiltering()",
       "source_file": "test/pagination_test.go",
       "source_location": "L12"
-    },
-    {
-      "id": "admin_auth",
-      "label": "admin_auth.go",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "admin_auth.go",
-      "source_file": "admin_auth.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "admin_auth_computeaudithash",
-      "label": "computeAuditHash()",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "computeaudithash()",
-      "source_file": "admin_auth.go",
-      "source_location": "L294"
-    },
-    {
-      "id": "admin_auth_getcurrentadminhandler",
-      "label": "GetCurrentAdminHandler()",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "getcurrentadminhandler()",
-      "source_file": "admin_auth.go",
-      "source_location": "L190"
-    },
-    {
-      "id": "admin_auth_getlatestaudithashtx",
-      "label": "getLatestAuditHashTx()",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "getlatestaudithashtx()",
-      "source_file": "admin_auth.go",
-      "source_location": "L313"
-    },
-    {
-      "id": "admin_auth_ipincidrs",
-      "label": "ipInCIDRs()",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "ipincidrs()",
-      "source_file": "admin_auth.go",
-      "source_location": "L249"
-    },
-    {
-      "id": "admin_auth_logaudittx",
-      "label": "logAuditTx()",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "logaudittx()",
-      "source_file": "admin_auth.go",
-      "source_location": "L343"
-    },
-    {
-      "id": "admin_auth_parsetrustedproxies",
-      "label": "parseTrustedProxies()",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "parsetrustedproxies()",
-      "source_file": "admin_auth.go",
-      "source_location": "L224"
-    },
-    {
-      "id": "admin_handlers_deleteuserhandler",
-      "label": "DeleteUserHandler()",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "deleteuserhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1511"
-    },
-    {
-      "id": "admin_handlers_forwardreporthandler",
-      "label": "ForwardReportHandler()",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "forwardreporthandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2459"
-    },
-    {
-      "id": "admin_handlers_terminatesessionhandler",
-      "label": "TerminateSessionHandler()",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "terminatesessionhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1818"
-    },
-    {
-      "id": "go_type_database_sql_tx",
-      "label": "database/sql.Tx",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "database/sql.tx",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_net_ip",
-      "label": "net.IP",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "net.ip",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_net_ipnet",
-      "label": "net.IPNet",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "logAuditTx",
-      "file_type": "code",
-      "norm_label": "net.ipnet",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "admin_handlers_deletereporthandler",
-      "label": "DeleteReportHandler()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "deletereporthandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2004"
-    },
-    {
-      "id": "admin_handlers_getforwardinghistoryhandler",
-      "label": "GetForwardingHistoryHandler()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "getforwardinghistoryhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2617"
-    },
-    {
-      "id": "admin_handlers_submitregionalresponsehandler",
-      "label": "SubmitRegionalResponseHandler()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "submitregionalresponsehandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L3147"
     },
     {
       "id": "crypto",
@@ -16052,17 +16063,6 @@
       "source_location": "L29"
     },
     {
-      "id": "crypto_encryptaes",
-      "label": "EncryptAES()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "encryptaes()",
-      "source_file": "crypto.go",
-      "source_location": "L65"
-    },
-    {
       "id": "crypto_encryptfilebytes",
       "label": "EncryptFileBytes()",
       "_origin": "ast",
@@ -16094,6 +16094,17 @@
       "norm_label": "encryptwithkey()",
       "source_file": "crypto.go",
       "source_location": "L73"
+    },
+    {
+      "id": "crypto_getlegacyhmackey",
+      "label": "GetLegacyHMACKey()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "getlegacyhmackey()",
+      "source_file": "crypto.go",
+      "source_location": "L61"
     },
     {
       "id": "crypto_initcrypto",
@@ -16162,6 +16173,28 @@
       "source_location": "L11"
     },
     {
+      "id": "test_crypto_test",
+      "label": "crypto_test.go",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "crypto_test.go",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_crypto_test_testcaptchaverificationsuite",
+      "label": "TestCaptchaVerificationSuite()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "testcaptchaverificationsuite()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L268"
+    },
+    {
       "id": "test_crypto_test_testcryptounicodeemojinulbytesandtamper",
       "label": "TestCryptoUnicodeEmojiNulBytesAndTamper()",
       "_origin": "ast",
@@ -16173,6 +16206,17 @@
       "source_location": "L209"
     },
     {
+      "id": "test_crypto_test_testderivekeydeterministic",
+      "label": "TestDeriveKeyDeterministic()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "testderivekeydeterministic()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L252"
+    },
+    {
       "id": "test_crypto_test_testhkdfkeyseparationandencryption",
       "label": "TestHKDFKeySeparationAndEncryption()",
       "_origin": "ast",
@@ -16182,28 +16226,6 @@
       "norm_label": "testhkdfkeyseparationandencryption()",
       "source_file": "test/crypto_test.go",
       "source_location": "L108"
-    },
-    {
-      "id": "test_docx_sandbox_test",
-      "label": "docx_sandbox_test.go",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "docx_sandbox_test.go",
-      "source_file": "test/docx_sandbox_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_docx_sandbox_test_testdocxsandboxmaliciouspayload",
-      "label": "TestDocxSandboxMaliciousPayload()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testdocxsandboxmaliciouspayload()",
-      "source_file": "test/docx_sandbox_test.go",
-      "source_location": "L16"
     },
     {
       "id": "test_migration_v2_test",
@@ -17033,17 +17055,6 @@
       "source_location": "L356"
     },
     {
-      "id": "test_crypto_test",
-      "label": "crypto_test.go",
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "crypto_test.go",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L1"
-    },
-    {
       "id": "test_crypto_test_testargon2iddualformatandrehash",
       "label": "TestArgon2idDualFormatAndRehash()",
       "_origin": "ast",
@@ -17053,17 +17064,6 @@
       "norm_label": "testargon2iddualformatandrehash()",
       "source_file": "test/crypto_test.go",
       "source_location": "L66"
-    },
-    {
-      "id": "test_crypto_test_testderivekeydeterministic",
-      "label": "TestDeriveKeyDeterministic()",
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "testderivekeydeterministic()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L252"
     },
     {
       "id": "test_crypto_test_testvalidatepasswordcomplexity",
@@ -19840,7 +19840,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7146",
+      "source_location": "L7162",
       "weight": 1.0
     },
     {
@@ -19852,7 +19852,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7162",
+      "source_location": "L7178",
       "weight": 1.0
     },
     {
@@ -19936,7 +19936,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6076",
+      "source_location": "L6086",
       "weight": 1.0
     },
     {
@@ -19948,7 +19948,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6077",
+      "source_location": "L6087",
       "weight": 1.0
     },
     {
@@ -19960,7 +19960,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6020",
+      "source_location": "L6030",
       "weight": 1.0
     },
     {
@@ -19972,7 +19972,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6023",
+      "source_location": "L6033",
       "weight": 1.0
     },
     {
@@ -19984,7 +19984,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6024",
+      "source_location": "L6034",
       "weight": 1.0
     },
     {
@@ -19996,7 +19996,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6025",
+      "source_location": "L6035",
       "weight": 1.0
     },
     {
@@ -20008,7 +20008,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3604",
+      "source_location": "L3605",
       "weight": 1.0
     },
     {
@@ -20020,7 +20020,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5922",
+      "source_location": "L5932",
       "weight": 1.0
     },
     {
@@ -20032,7 +20032,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5928",
+      "source_location": "L5938",
       "weight": 1.0
     },
     {
@@ -20044,7 +20044,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5938",
+      "source_location": "L5948",
       "weight": 1.0
     },
     {
@@ -20056,7 +20056,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5949",
+      "source_location": "L5959",
       "weight": 1.0
     },
     {
@@ -20068,7 +20068,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4399",
+      "source_location": "L4409",
       "weight": 1.0
     },
     {
@@ -20080,7 +20080,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4414",
+      "source_location": "L4424",
       "weight": 1.0
     },
     {
@@ -20092,7 +20092,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4431",
+      "source_location": "L4441",
       "weight": 1.0
     },
     {
@@ -20104,7 +20104,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6391",
+      "source_location": "L6407",
       "weight": 1.0
     },
     {
@@ -20116,7 +20116,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6397",
+      "source_location": "L6413",
       "weight": 1.0
     },
     {
@@ -20128,7 +20128,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6398",
+      "source_location": "L6414",
       "weight": 1.0
     },
     {
@@ -20164,7 +20164,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7400",
+      "source_location": "L7416",
       "weight": 1.0
     },
     {
@@ -20176,7 +20176,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7403",
+      "source_location": "L7419",
       "weight": 1.0
     },
     {
@@ -20188,7 +20188,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7411",
+      "source_location": "L7427",
       "weight": 1.0
     },
     {
@@ -20200,7 +20200,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7422",
+      "source_location": "L7438",
       "weight": 1.0
     },
     {
@@ -20212,7 +20212,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7425",
+      "source_location": "L7441",
       "weight": 1.0
     },
     {
@@ -20224,7 +20224,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6212",
+      "source_location": "L6228",
       "weight": 1.0
     },
     {
@@ -20236,7 +20236,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6215",
+      "source_location": "L6231",
       "weight": 1.0
     },
     {
@@ -20248,7 +20248,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6223",
+      "source_location": "L6239",
       "weight": 1.0
     },
     {
@@ -20260,7 +20260,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6233",
+      "source_location": "L6249",
       "weight": 1.0
     },
     {
@@ -20272,7 +20272,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7268",
+      "source_location": "L7284",
       "weight": 1.0
     },
     {
@@ -20284,7 +20284,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7271",
+      "source_location": "L7287",
       "weight": 1.0
     },
     {
@@ -20296,7 +20296,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7279",
+      "source_location": "L7295",
       "weight": 1.0
     },
     {
@@ -20308,7 +20308,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7280",
+      "source_location": "L7296",
       "weight": 1.0
     },
     {
@@ -20320,7 +20320,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7283",
+      "source_location": "L7299",
       "weight": 1.0
     },
     {
@@ -20332,7 +20332,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7868",
+      "source_location": "L7884",
       "weight": 1.0
     },
     {
@@ -20344,7 +20344,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7582",
+      "source_location": "L7598",
       "weight": 1.0
     },
     {
@@ -20356,7 +20356,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7610",
+      "source_location": "L7626",
       "weight": 1.0
     },
     {
@@ -20368,7 +20368,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7615",
+      "source_location": "L7631",
       "weight": 1.0
     },
     {
@@ -20488,7 +20488,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7334",
+      "source_location": "L7350",
       "weight": 1.0
     },
     {
@@ -20500,7 +20500,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7357",
+      "source_location": "L7373",
       "weight": 1.0
     },
     {
@@ -20512,7 +20512,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7364",
+      "source_location": "L7380",
       "weight": 1.0
     },
     {
@@ -20560,7 +20560,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7093",
+      "source_location": "L7109",
       "weight": 1.0
     },
     {
@@ -20620,7 +20620,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4633",
+      "source_location": "L4643",
       "weight": 1.0
     },
     {
@@ -21244,7 +21244,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6363",
+      "source_location": "L6379",
       "weight": 1.0
     },
     {
@@ -21256,7 +21256,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6370",
+      "source_location": "L6386",
       "weight": 1.0
     },
     {
@@ -21268,7 +21268,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6371",
+      "source_location": "L6387",
       "weight": 1.0
     },
     {
@@ -21292,7 +21292,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6176",
+      "source_location": "L6192",
       "weight": 1.0
     },
     {
@@ -21304,7 +21304,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6178",
+      "source_location": "L6194",
       "weight": 1.0
     },
     {
@@ -21316,7 +21316,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6180",
+      "source_location": "L6196",
       "weight": 1.0
     },
     {
@@ -21328,7 +21328,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6182",
+      "source_location": "L6198",
       "weight": 1.0
     },
     {
@@ -21340,7 +21340,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6522",
+      "source_location": "L6538",
       "weight": 1.0
     },
     {
@@ -21352,7 +21352,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6582",
+      "source_location": "L6598",
       "weight": 1.0
     },
     {
@@ -21364,7 +21364,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6595",
+      "source_location": "L6611",
       "weight": 1.0
     },
     {
@@ -21376,7 +21376,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6596",
+      "source_location": "L6612",
       "weight": 1.0
     },
     {
@@ -21388,7 +21388,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6613",
+      "source_location": "L6629",
       "weight": 1.0
     },
     {
@@ -21400,7 +21400,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8154",
+      "source_location": "L8170",
       "weight": 1.0
     },
     {
@@ -21412,7 +21412,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8157",
+      "source_location": "L8173",
       "weight": 1.0
     },
     {
@@ -21424,7 +21424,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8163",
+      "source_location": "L8179",
       "weight": 1.0
     },
     {
@@ -21436,7 +21436,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8171",
+      "source_location": "L8187",
       "weight": 1.0
     },
     {
@@ -21448,7 +21448,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8020",
+      "source_location": "L8036",
       "weight": 1.0
     },
     {
@@ -21460,7 +21460,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8031",
+      "source_location": "L8047",
       "weight": 1.0
     },
     {
@@ -21472,7 +21472,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8036",
+      "source_location": "L8052",
       "weight": 1.0
     },
     {
@@ -21484,7 +21484,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8039",
+      "source_location": "L8055",
       "weight": 1.0
     },
     {
@@ -21496,7 +21496,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8040",
+      "source_location": "L8056",
       "weight": 1.0
     },
     {
@@ -21508,7 +21508,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6764",
+      "source_location": "L6780",
       "weight": 1.0
     },
     {
@@ -21520,7 +21520,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3641",
+      "source_location": "L3647",
       "weight": 1.0
     },
     {
@@ -21544,7 +21544,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5547",
+      "source_location": "L5557",
       "weight": 1.0
     },
     {
@@ -21556,7 +21556,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5552",
+      "source_location": "L5562",
       "weight": 1.0
     },
     {
@@ -21568,7 +21568,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5554",
+      "source_location": "L5564",
       "weight": 1.0
     },
     {
@@ -21580,7 +21580,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5556",
+      "source_location": "L5566",
       "weight": 1.0
     },
     {
@@ -21592,7 +21592,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7109",
+      "source_location": "L7125",
       "weight": 1.0
     },
     {
@@ -21616,7 +21616,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5566",
+      "source_location": "L5576",
       "weight": 1.0
     },
     {
@@ -21628,7 +21628,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5576",
+      "source_location": "L5586",
       "weight": 1.0
     },
     {
@@ -21640,7 +21640,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5580",
+      "source_location": "L5590",
       "weight": 1.0
     },
     {
@@ -21652,7 +21652,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7303",
+      "source_location": "L7319",
       "weight": 1.0
     },
     {
@@ -21664,7 +21664,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7315",
+      "source_location": "L7331",
       "weight": 1.0
     },
     {
@@ -21676,7 +21676,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5207",
+      "source_location": "L5217",
       "weight": 1.0
     },
     {
@@ -21688,7 +21688,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5905",
+      "source_location": "L5915",
       "weight": 1.0
     },
     {
@@ -21736,7 +21736,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8247",
+      "source_location": "L8263",
       "weight": 1.0
     },
     {
@@ -21748,7 +21748,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8263",
+      "source_location": "L8279",
       "weight": 1.0
     },
     {
@@ -21760,24 +21760,12 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8378",
+      "source_location": "L8394",
       "weight": 1.0
     },
     {
       "source": "frontend_admin_admin_renderforwardhistoryflowchart",
       "target": "frontend_admin_admin_adminfetch",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L8410",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_admin_admin_renderforwardhistoryflowchart",
-      "target": "frontend_admin_admin_showtoast",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -21789,6 +21777,18 @@
     },
     {
       "source": "frontend_admin_admin_renderforwardhistoryflowchart",
+      "target": "frontend_admin_admin_showtoast",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L8442",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_admin_admin_renderforwardhistoryflowchart",
       "target": "frontend_admin_admin_viewreport",
       "relation": "calls",
       "_origin": "ast",
@@ -21796,7 +21796,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8431",
+      "source_location": "L8447",
       "weight": 1.0
     },
     {
@@ -21808,7 +21808,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7653",
+      "source_location": "L7669",
       "weight": 1.0
     },
     {
@@ -21820,7 +21820,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7674",
+      "source_location": "L7690",
       "weight": 1.0
     },
     {
@@ -21832,7 +21832,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7675",
+      "source_location": "L7691",
       "weight": 1.0
     },
     {
@@ -21844,7 +21844,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7738",
+      "source_location": "L7754",
       "weight": 1.0
     },
     {
@@ -21856,7 +21856,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7743",
+      "source_location": "L7759",
       "weight": 1.0
     },
     {
@@ -21880,7 +21880,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7898",
+      "source_location": "L7914",
       "weight": 1.0
     },
     {
@@ -21892,7 +21892,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7934",
+      "source_location": "L7950",
       "weight": 1.0
     },
     {
@@ -21904,7 +21904,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7960",
+      "source_location": "L7976",
       "weight": 1.0
     },
     {
@@ -21916,7 +21916,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7449",
+      "source_location": "L7465",
       "weight": 1.0
     },
     {
@@ -21928,7 +21928,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7454",
+      "source_location": "L7470",
       "weight": 1.0
     },
     {
@@ -21940,7 +21940,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7478",
+      "source_location": "L7494",
       "weight": 1.0
     },
     {
@@ -21952,7 +21952,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7512",
+      "source_location": "L7528",
       "weight": 1.0
     },
     {
@@ -22072,7 +22072,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6268",
+      "source_location": "L6284",
       "weight": 1.0
     },
     {
@@ -22084,7 +22084,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6319",
+      "source_location": "L6335",
       "weight": 1.0
     },
     {
@@ -22096,7 +22096,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6343",
+      "source_location": "L6359",
       "weight": 1.0
     },
     {
@@ -22108,7 +22108,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6345",
+      "source_location": "L6361",
       "weight": 1.0
     },
     {
@@ -22120,7 +22120,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6347",
+      "source_location": "L6363",
       "weight": 1.0
     },
     {
@@ -22168,7 +22168,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5957",
+      "source_location": "L5967",
       "weight": 1.0
     },
     {
@@ -22180,7 +22180,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5958",
+      "source_location": "L5968",
       "weight": 1.0
     },
     {
@@ -22192,7 +22192,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4832",
+      "source_location": "L4842",
       "weight": 1.0
     },
     {
@@ -22204,7 +22204,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4844",
+      "source_location": "L4854",
       "weight": 1.0
     },
     {
@@ -22216,7 +22216,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4863",
+      "source_location": "L4873",
       "weight": 1.0
     },
     {
@@ -22228,7 +22228,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4889",
+      "source_location": "L4899",
       "weight": 1.0
     },
     {
@@ -22252,34 +22252,34 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5983",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_admin_admin_startbackgroundpolling",
-      "target": "frontend_admin_admin_fetchreports",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L5987",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_admin_admin_startbackgroundpolling",
-      "target": "frontend_admin_admin_fetchnotifications",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "frontend/admin/admin.js",
       "source_location": "L5993",
       "weight": 1.0
     },
     {
+      "source": "frontend_admin_admin_startbackgroundpolling",
+      "target": "frontend_admin_admin_fetchreports",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L5997",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_admin_admin_startbackgroundpolling",
+      "target": "frontend_admin_admin_fetchnotifications",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L6003",
+      "weight": 1.0
+    },
+    {
       "source": "frontend_admin_admin_startfallbackpolling",
       "target": "frontend_admin_admin_fetchreports",
       "relation": "calls",
@@ -22288,7 +22288,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5974",
+      "source_location": "L5984",
       "weight": 1.0
     },
     {
@@ -22300,7 +22300,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5978",
+      "source_location": "L5988",
       "weight": 1.0
     },
     {
@@ -22324,7 +22324,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4714",
+      "source_location": "L4724",
       "weight": 1.0
     },
     {
@@ -22336,7 +22336,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4725",
+      "source_location": "L4735",
       "weight": 1.0
     },
     {
@@ -22348,7 +22348,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4743",
+      "source_location": "L4753",
       "weight": 1.0
     },
     {
@@ -22360,7 +22360,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6118",
+      "source_location": "L6134",
       "weight": 1.0
     },
     {
@@ -22372,7 +22372,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6121",
+      "source_location": "L6137",
       "weight": 1.0
     },
     {
@@ -22384,7 +22384,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6122",
+      "source_location": "L6138",
       "weight": 1.0
     },
     {
@@ -22396,7 +22396,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6131",
+      "source_location": "L6147",
       "weight": 1.0
     },
     {
@@ -22408,7 +22408,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6134",
+      "source_location": "L6150",
       "weight": 1.0
     },
     {
@@ -22420,7 +22420,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6147",
+      "source_location": "L6163",
       "weight": 1.0
     },
     {
@@ -22432,7 +22432,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7531",
+      "source_location": "L7547",
       "weight": 1.0
     },
     {
@@ -22444,7 +22444,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7538",
+      "source_location": "L7554",
       "weight": 1.0
     },
     {
@@ -22456,7 +22456,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7539",
+      "source_location": "L7555",
       "weight": 1.0
     },
     {
@@ -22468,7 +22468,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4440",
+      "source_location": "L4450",
       "weight": 1.0
     },
     {
@@ -22480,7 +22480,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4447",
+      "source_location": "L4457",
       "weight": 1.0
     },
     {
@@ -22492,7 +22492,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4483",
+      "source_location": "L4493",
       "weight": 1.0
     },
     {
@@ -22504,7 +22504,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4484",
+      "source_location": "L4494",
       "weight": 1.0
     },
     {
@@ -22516,7 +22516,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4486",
+      "source_location": "L4496",
       "weight": 1.0
     },
     {
@@ -22528,7 +22528,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4672",
+      "source_location": "L4682",
       "weight": 1.0
     },
     {
@@ -22552,7 +22552,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3746",
+      "source_location": "L3752",
       "weight": 1.0
     },
     {
@@ -22564,7 +22564,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3760",
+      "source_location": "L3766",
       "weight": 1.0
     },
     {
@@ -22576,7 +22576,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3763",
+      "source_location": "L3769",
       "weight": 1.0
     },
     {
@@ -22588,7 +22588,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3767",
+      "source_location": "L3773",
       "weight": 1.0
     },
     {
@@ -22600,7 +22600,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3768",
+      "source_location": "L3774",
       "weight": 1.0
     },
     {
@@ -22612,7 +22612,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3772",
+      "source_location": "L3778",
       "weight": 1.0
     },
     {
@@ -22624,7 +22624,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3809",
+      "source_location": "L3815",
       "weight": 1.0
     },
     {
@@ -22636,7 +22636,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3810",
+      "source_location": "L3816",
       "weight": 1.0
     },
     {
@@ -22648,7 +22648,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3812",
+      "source_location": "L3818",
       "weight": 1.0
     },
     {
@@ -22660,7 +22660,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3885",
+      "source_location": "L3891",
       "weight": 1.0
     },
     {
@@ -22672,7 +22672,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3915",
+      "source_location": "L3921",
       "weight": 1.0
     },
     {
@@ -22684,7 +22684,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3921",
+      "source_location": "L3927",
       "weight": 1.0
     },
     {
@@ -22696,7 +22696,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3933",
+      "source_location": "L3939",
       "weight": 1.0
     },
     {
@@ -22708,7 +22708,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4293",
+      "source_location": "L4301",
       "weight": 1.0
     },
     {
@@ -22720,7 +22720,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4305",
+      "source_location": "L4315",
       "weight": 1.0
     },
     {
@@ -22732,7 +22732,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4313",
+      "source_location": "L4323",
       "weight": 1.0
     },
     {
@@ -22744,7 +22744,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4324",
+      "source_location": "L4334",
       "weight": 1.0
     },
     {
@@ -22756,7 +22756,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4330",
+      "source_location": "L4340",
       "weight": 1.0
     },
     {
@@ -24868,7 +24868,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5262",
+      "source_location": "L5272",
       "weight": 1.0
     },
     {
@@ -24880,7 +24880,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5041",
+      "source_location": "L5051",
       "weight": 1.0
     },
     {
@@ -24892,7 +24892,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5650",
+      "source_location": "L5660",
       "weight": 1.0
     },
     {
@@ -38932,7 +38932,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3599",
+      "source_location": "L3600",
       "weight": 1.0
     },
     {
@@ -38943,7 +38943,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3615",
+      "source_location": "L3621",
       "weight": 1.0
     },
     {
@@ -38954,7 +38954,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3637",
+      "source_location": "L3643",
       "weight": 1.0
     },
     {
@@ -38965,7 +38965,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3646",
+      "source_location": "L3652",
       "weight": 1.0
     },
     {
@@ -38987,7 +38987,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3743",
+      "source_location": "L3749",
       "weight": 1.0
     },
     {
@@ -39020,7 +39020,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4397",
+      "source_location": "L4407",
       "weight": 1.0
     },
     {
@@ -39031,7 +39031,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4437",
+      "source_location": "L4447",
       "weight": 1.0
     },
     {
@@ -39042,7 +39042,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4493",
+      "source_location": "L4503",
       "weight": 1.0
     },
     {
@@ -39064,7 +39064,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4621",
+      "source_location": "L4631",
       "weight": 1.0
     },
     {
@@ -39086,7 +39086,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4648",
+      "source_location": "L4658",
       "weight": 1.0
     },
     {
@@ -39097,7 +39097,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4705",
+      "source_location": "L4715",
       "weight": 1.0
     },
     {
@@ -39119,7 +39119,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4762",
+      "source_location": "L4772",
       "weight": 1.0
     },
     {
@@ -39130,7 +39130,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L4895",
+      "source_location": "L4905",
       "weight": 1.0
     },
     {
@@ -39152,7 +39152,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5118",
+      "source_location": "L5128",
       "weight": 1.0
     },
     {
@@ -39163,7 +39163,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5337",
+      "source_location": "L5347",
       "weight": 1.0
     },
     {
@@ -39174,7 +39174,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5525",
+      "source_location": "L5535",
       "weight": 1.0
     },
     {
@@ -39185,7 +39185,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5559",
+      "source_location": "L5569",
       "weight": 1.0
     },
     {
@@ -39196,7 +39196,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5601",
+      "source_location": "L5611",
       "weight": 1.0
     },
     {
@@ -39207,7 +39207,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5903",
+      "source_location": "L5913",
       "weight": 1.0
     },
     {
@@ -39218,7 +39218,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5917",
+      "source_location": "L5927",
       "weight": 1.0
     },
     {
@@ -39229,7 +39229,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5954",
+      "source_location": "L5964",
       "weight": 1.0
     },
     {
@@ -39240,7 +39240,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5962",
+      "source_location": "L5972",
       "weight": 1.0
     },
     {
@@ -39251,7 +39251,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5970",
+      "source_location": "L5980",
       "weight": 1.0
     },
     {
@@ -39262,7 +39262,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5982",
+      "source_location": "L5992",
       "weight": 1.0
     },
     {
@@ -39273,7 +39273,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5998",
+      "source_location": "L6008",
       "weight": 1.0
     },
     {
@@ -39284,7 +39284,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6018",
+      "source_location": "L6028",
       "weight": 1.0
     },
     {
@@ -39295,7 +39295,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6034",
+      "source_location": "L6044",
       "weight": 1.0
     },
     {
@@ -39306,7 +39306,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6053",
+      "source_location": "L6063",
       "weight": 1.0
     },
     {
@@ -39317,7 +39317,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6085",
+      "source_location": "L6095",
       "weight": 1.0
     },
     {
@@ -39339,18 +39339,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6108",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_admin_admin",
-      "target": "frontend_admin_admin_loadadvsubview",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L6165",
+      "source_location": "L6124",
       "weight": 1.0
     },
     {
@@ -39366,13 +39355,24 @@
     },
     {
       "source": "frontend_admin_admin",
+      "target": "frontend_admin_admin_loadadvsubview",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L6181",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_admin_admin",
       "target": "frontend_admin_admin_renderuserstableskeleton",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6188",
+      "source_location": "L6204",
       "weight": 1.0
     },
     {
@@ -39383,7 +39383,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6209",
+      "source_location": "L6225",
       "weight": 1.0
     },
     {
@@ -39394,7 +39394,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6237",
+      "source_location": "L6253",
       "weight": 1.0
     },
     {
@@ -39405,7 +39405,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6250",
+      "source_location": "L6266",
       "weight": 1.0
     },
     {
@@ -39427,7 +39427,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6353",
+      "source_location": "L6369",
       "weight": 1.0
     },
     {
@@ -39438,7 +39438,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6377",
+      "source_location": "L6393",
       "weight": 1.0
     },
     {
@@ -39449,7 +39449,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6456",
+      "source_location": "L6472",
       "weight": 1.0
     },
     {
@@ -39460,7 +39460,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6481",
+      "source_location": "L6497",
       "weight": 1.0
     },
     {
@@ -39471,7 +39471,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L6752",
+      "source_location": "L6768",
       "weight": 1.0
     },
     {
@@ -39482,7 +39482,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7010",
+      "source_location": "L7026",
       "weight": 1.0
     },
     {
@@ -39493,7 +39493,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7046",
+      "source_location": "L7062",
       "weight": 1.0
     },
     {
@@ -39504,7 +39504,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7090",
+      "source_location": "L7106",
       "weight": 1.0
     },
     {
@@ -39515,7 +39515,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7102",
+      "source_location": "L7118",
       "weight": 1.0
     },
     {
@@ -39526,7 +39526,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7117",
+      "source_location": "L7133",
       "weight": 1.0
     },
     {
@@ -39537,7 +39537,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7245",
+      "source_location": "L7261",
       "weight": 1.0
     },
     {
@@ -39548,7 +39548,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7265",
+      "source_location": "L7281",
       "weight": 1.0
     },
     {
@@ -39559,7 +39559,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7287",
+      "source_location": "L7303",
       "weight": 1.0
     },
     {
@@ -39570,7 +39570,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7332",
+      "source_location": "L7348",
       "weight": 1.0
     },
     {
@@ -39581,7 +39581,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7375",
+      "source_location": "L7391",
       "weight": 1.0
     },
     {
@@ -39592,7 +39592,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7397",
+      "source_location": "L7413",
       "weight": 1.0
     },
     {
@@ -39603,7 +39603,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7429",
+      "source_location": "L7445",
       "weight": 1.0
     },
     {
@@ -39614,7 +39614,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7517",
+      "source_location": "L7533",
       "weight": 1.0
     },
     {
@@ -39625,7 +39625,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7549",
+      "source_location": "L7565",
       "weight": 1.0
     },
     {
@@ -39636,7 +39636,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7578",
+      "source_location": "L7594",
       "weight": 1.0
     },
     {
@@ -39647,7 +39647,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7622",
+      "source_location": "L7638",
       "weight": 1.0
     },
     {
@@ -39658,7 +39658,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7852",
+      "source_location": "L7868",
       "weight": 1.0
     },
     {
@@ -39669,7 +39669,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7866",
+      "source_location": "L7882",
       "weight": 1.0
     },
     {
@@ -39680,18 +39680,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7879",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_admin_admin",
-      "target": "frontend_admin_admin_renderrecipientlist",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L7885",
+      "source_location": "L7895",
       "weight": 1.0
     },
     {
@@ -39707,13 +39696,24 @@
     },
     {
       "source": "frontend_admin_admin",
+      "target": "frontend_admin_admin_renderrecipientlist",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L7901",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_admin_admin",
       "target": "frontend_admin_admin_renderrecipientlistskeleton",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L7997",
+      "source_location": "L8013",
       "weight": 1.0
     },
     {
@@ -39724,7 +39724,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8017",
+      "source_location": "L8033",
       "weight": 1.0
     },
     {
@@ -39735,7 +39735,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8112",
+      "source_location": "L8128",
       "weight": 1.0
     },
     {
@@ -39746,7 +39746,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8123",
+      "source_location": "L8139",
       "weight": 1.0
     },
     {
@@ -39757,7 +39757,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8148",
+      "source_location": "L8164",
       "weight": 1.0
     },
     {
@@ -39768,7 +39768,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L8184",
+      "source_location": "L8200",
       "weight": 1.0
     },
     {
@@ -44852,7 +44852,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5316",
+      "source_location": "L5326",
       "weight": 1.0
     },
     {
@@ -44864,7 +44864,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5095",
+      "source_location": "L5105",
       "weight": 1.0
     },
     {
@@ -44876,7 +44876,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5511",
+      "source_location": "L5521",
       "weight": 1.0
     },
     {
@@ -44888,7 +44888,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L5512",
+      "source_location": "L5522",
       "weight": 1.0
     },
     {
@@ -48109,5 +48109,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "21927463ac0f5cc4b51e3d50221648546f33f20c"
+  "built_at_commit": "c182d475ff75528ae23ff4d5579e762e593ad30a"
 }

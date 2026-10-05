@@ -3578,7 +3578,8 @@ document.addEventListener('DOMContentLoaded', () => {
             historyBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
             actionsWrap.appendChild(historyBtn);
 
-            if (currentAdmin && currentAdmin.is_superuser) {
+            const isSuper = Boolean(currentAdmin && (currentAdmin.is_superuser === true || currentAdmin.role === 'superuser'));
+            if (isSuper) {
                 const deleteBtn = document.createElement('button');
                 deleteBtn.type = 'button';
                 deleteBtn.className = 'btn-action btn-danger btn-icon-only btn-delete-report';
@@ -3603,6 +3604,11 @@ document.addEventListener('DOMContentLoaded', () => {
         reportsInboxSection?.classList.remove('in-detail-view');
         updateBulkToolbar();
         currentViewingIndex = -1;
+        const deleteReportBtn = document.getElementById('btnDeleteReportSuperuser');
+        if (deleteReportBtn) {
+            deleteReportBtn.classList.add('d-none');
+            deleteReportBtn.style.setProperty('display', 'none', 'important');
+        }
     }
 
     if (backBtn) {
@@ -4287,13 +4293,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const deleteReportBtn = document.getElementById('btnDeleteReportSuperuser');
             if (deleteReportBtn) {
-                if (currentAdmin && currentAdmin.is_superuser) {
+                const isSuper = Boolean(currentAdmin && (currentAdmin.is_superuser === true || currentAdmin.role === 'superuser'));
+                if (isSuper) {
                     deleteReportBtn.classList.remove('d-none');
+                    deleteReportBtn.style.setProperty('display', 'inline-flex', 'important');
                     deleteReportBtn.onclick = () => {
                         deleteReportPermanently(id, data.tracking_code, true);
                     };
                 } else {
                     deleteReportBtn.classList.add('d-none');
+                    deleteReportBtn.style.setProperty('display', 'none', 'important');
+                    deleteReportBtn.onclick = null;
                 }
             }
 
@@ -6096,12 +6106,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (menuRoleEl) menuRoleEl.textContent = role;
         }
 
-        if (currentAdmin && currentAdmin.is_superuser) {
+        const isSuper = Boolean(currentAdmin && (currentAdmin.is_superuser === true || currentAdmin.role === 'superuser'));
+        const deleteReportBtn = document.getElementById('btnDeleteReportSuperuser');
+        if (isSuper) {
             if (tabBtnAdvanced) tabBtnAdvanced.style.display = 'inline-flex';
         } else {
             if (tabBtnAdvanced) tabBtnAdvanced.style.display = 'none';
             if (advancedSection) advancedSection.style.display = 'none';
             if (reportsInboxSection) reportsInboxSection.style.display = 'block';
+            if (deleteReportBtn) {
+                deleteReportBtn.classList.add('d-none');
+                deleteReportBtn.style.setProperty('display', 'none', 'important');
+            }
         }
     }
 

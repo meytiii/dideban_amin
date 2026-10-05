@@ -1398,11 +1398,17 @@ button {
     min-width: 36px !important;
     max-width: 36px !important;
     padding: 0 !important;
-    display: inline-flex !important;
+    display: inline-flex;
     align-items: center !important;
     justify-content: center !important;
     border-radius: var(--radius-sm) !important;
     box-sizing: border-box !important;
+}
+
+.btn-action.btn-icon-action.d-none,
+#btnDeleteReportSuperuser.d-none,
+#btnForwardReportDetail.d-none {
+    display: none !important;
 }
 
 .detail-header-actions #backToListBtn {
