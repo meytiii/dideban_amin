@@ -231,17 +231,17 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 
 	var storedHash, fullName, roleTitle, role, encSecret string
 	var isSuperuser, totpEnabled bool
-	var passwordChangedAt time.Time
+	var passwordChangedAt, dbNow time.Time
 	var mustChangePassword bool
 
 	err = DB.QueryRow(`
 		SELECT password_hash, COALESCE(full_name, ''), role_title, COALESCE(role, 'edare_kol'), is_superuser,
 		       COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false),
-		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false)
+		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), NOW()
 		FROM admin_users
 		WHERE username=$1 AND is_active=true`, payload.Username).Scan(
 		&storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword,
-		&encSecret, &totpEnabled)
+		&encSecret, &totpEnabled, &dbNow)
 	if err != nil {
 		http.Error(w, "کاربر یافت نشد یا حساب غیرفعال است.", http.StatusUnauthorized)
 		return
@@ -319,6 +319,7 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 	logAudit(payload.Username, roleTitle, "LOGIN_MFA_SUCCESS", nil, getIP(r))
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("X-Server-Time", dbNow.Format(time.RFC3339Nano))
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"status":               "login_successful",
@@ -331,6 +332,8 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 		"is_password_expired":  isPasswordExpired,
 		"password_changed_at":  passwordChangedAt.Format(time.RFC3339),
 		"csrf_token":           csrfToken,
+		"server_time":          dbNow.Format(time.RFC3339Nano),
+		"server_time_unix_ms":  dbNow.UnixMilli(),
 	})
 }
 

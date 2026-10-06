@@ -61,28 +61,88 @@ function adminFetch(url, options = {}) {
     if (csrf && opts.method && opts.method.toUpperCase() !== 'GET') {
         opts.headers['X-CSRF-Token'] = csrf;
     }
+    const t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
     return fetchWithTimeout(url, opts, 20000).then(res => {
-        const dateHdr = res.headers && res.headers.get('date');
-        if (dateHdr && typeof window.__syncServerTime === 'function') {
-            window.__syncServerTime(dateHdr);
+        const t1 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+        const rtt = Math.max(0, t1 - t0);
+        const serverHdr = res.headers && (res.headers.get('x-server-time') || res.headers.get('date'));
+        if (serverHdr && typeof window.__syncServerTime === 'function') {
+            window.__syncServerTime(serverHdr, rtt);
         }
         return res;
     });
 }
 
+let serverBaseMs = 0;
+let perfBase = 0;
 let serverTimeOffsetMs = 0;
 let hasServerTimeSync = false;
+let serverTimeZone = 'Asia/Tehran';
 
-window.__syncServerTime = function (serverTimeStr) {
-    if (!serverTimeStr) return;
+window.__syncServerTime = function (serverTimeInput, rttMs = 0, tz) {
+    if (!serverTimeInput) return;
     try {
-        const serverTs = new Date(serverTimeStr).getTime();
-        if (!isNaN(serverTs) && serverTs > 0) {
-            serverTimeOffsetMs = serverTs - Date.now();
+        let serverMs = 0;
+        if (typeof serverTimeInput === 'number') {
+            serverMs = serverTimeInput;
+        } else if (typeof serverTimeInput === 'string') {
+            const parsed = new Date(serverTimeInput).getTime();
+            if (!isNaN(parsed) && parsed > 0) {
+                serverMs = parsed;
+            }
+        }
+        if (serverMs > 0) {
+            const halfRtt = (typeof rttMs === 'number' && !isNaN(rttMs) && rttMs >= 0) ? Math.min(Math.round(rttMs / 2), 5000) : 0;
+            const adjustedServerMs = serverMs + halfRtt;
+            const nowPerf = (typeof performance !== 'undefined' && performance.now) ? performance.now() : 0;
+
+            serverBaseMs = adjustedServerMs;
+            perfBase = nowPerf;
+            serverTimeOffsetMs = adjustedServerMs - Date.now();
             hasServerTimeSync = true;
+            if (tz && typeof tz === 'string') {
+                serverTimeZone = tz;
+            }
+            if (typeof window.__onServerTimeUpdated === 'function') {
+                window.__onServerTimeUpdated();
+            }
         }
     } catch (_) { }
 };
+
+function getServerNow() {
+    if (hasServerTimeSync && serverBaseMs > 0 && typeof performance !== 'undefined' && performance.now) {
+        return new Date(serverBaseMs + (performance.now() - perfBase));
+    }
+    return new Date(Date.now() + serverTimeOffsetMs);
+}
+window.getServerNow = getServerNow;
+
+async function fetchServerTime() {
+    try {
+        const t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+        const res = await fetch('/api/server-time', {
+            method: 'GET',
+            cache: 'no-store',
+            credentials: 'same-origin'
+        });
+        const t1 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+        if (res.ok) {
+            const data = await res.json();
+            if (data && (data.server_time_unix_ms || data.server_time)) {
+                window.__syncServerTime(data.server_time_unix_ms || data.server_time, Math.max(0, t1 - t0), data.timezone);
+            }
+        }
+    } catch (_) { }
+}
+window.fetchServerTime = fetchServerTime;
+fetchServerTime();
+setInterval(fetchServerTime, 60000);
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        fetchServerTime();
+    }
+});
 
 const getScrollBehavior = () => (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
 
@@ -353,19 +413,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let lastDayKey = '';
 
-        function updateDate(now) {
-            const dayKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
-            if (dayKey === lastDayKey) return;
-            lastDayKey = dayKey;
+        const tehranTimeFormatter = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'Asia/Tehran',
+            hour12: false,
+            hourCycle: 'h23',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
 
+        const persianDateFormatter = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+            timeZone: 'Asia/Tehran',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long'
+        });
+
+        function updateDate(now) {
             try {
-                const formatter = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    weekday: 'long'
-                });
-                const parts = formatter.formatToParts(now);
+                const parts = persianDateFormatter.formatToParts(now);
                 let weekday = '';
                 let day = '';
                 let month = '';
@@ -376,6 +443,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (p.type === 'month') month = p.value;
                     if (p.type === 'year') year = p.value;
                 });
+                const dayKey = `${year}-${month}-${day}`;
+                if (dayKey === lastDayKey) return;
+                lastDayKey = dayKey;
+
                 if (serverDateDayEl) serverDateDayEl.textContent = weekday ? `${weekday}،` : '';
                 if (serverDateFullEl) serverDateFullEl.textContent = `${day} ${month} ${year}`;
             } catch (_) {
@@ -384,12 +455,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function tick() {
-            const now = new Date(Date.now() + serverTimeOffsetMs);
+            const now = getServerNow();
             updateDate(now);
 
-            const h = String(now.getHours()).padStart(2, '0');
-            const m = String(now.getMinutes()).padStart(2, '0');
-            const s = String(now.getSeconds()).padStart(2, '0');
+            let h = '00', m = '00', s = '00';
+            try {
+                const parts = tehranTimeFormatter.formatToParts(now);
+                for (let i = 0; i < parts.length; i++) {
+                    const p = parts[i];
+                    if (p.type === 'hour') h = p.value;
+                    else if (p.type === 'minute') m = p.value;
+                    else if (p.type === 'second') s = p.value;
+                }
+            } catch (_) {
+                h = String(now.getHours()).padStart(2, '0');
+                m = String(now.getMinutes()).padStart(2, '0');
+                s = String(now.getSeconds()).padStart(2, '0');
+            }
+
+            if (h.length === 1) h = '0' + h;
+            if (m.length === 1) m = '0' + m;
+            if (s.length === 1) s = '0' + s;
 
             updateDigit(digitH1, toFa(parseInt(h[0], 10)));
             updateDigit(digitH2, toFa(parseInt(h[1], 10)));
@@ -399,7 +485,12 @@ document.addEventListener('DOMContentLoaded', () => {
             updateDigit(digitS2, toFa(parseInt(s[1], 10)));
         }
 
+        window.__onServerTimeUpdated = function () {
+            tick();
+        };
+
         tick();
+        fetchServerTime().then(() => tick());
         setInterval(tick, 1000);
     }
 
@@ -2607,7 +2698,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
         ];
 
-        const todayDate = new Date();
+        const todayDate = getServerNow();
         const computedTodayKey = getJalaliDateKeyFromDate(todayDate);
         const fallbackTodayJ = gregorianToJalali(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate());
         const todayJy = computedTodayKey ? Math.floor(computedTodayKey / 10000) : fallbackTodayJ.jy;
@@ -2974,7 +3065,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentViewJm = todayJ.jm;
                     commitDateRange();
                 } else if (p === 'last7') {
-                    const now = new Date();
+                    const now = getServerNow();
                     const past = new Date(now.getTime() - 6 * 86400000);
                     const pastKey = getJalaliDateKeyFromDate(past) || todayJ.key;
                     const pastJy = Math.floor(pastKey / 10000);
@@ -2996,7 +3087,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentViewJm = todayJ.jm;
                     commitDateRange();
                 } else if (p === 'last30') {
-                    const now = new Date();
+                    const now = getServerNow();
                     const past = new Date(now.getTime() - 29 * 86400000);
                     const pastKey = getJalaliDateKeyFromDate(past) || todayJ.key;
                     const pastJy = Math.floor(pastKey / 10000);
@@ -4324,7 +4415,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchNotifications();
 
             const shamsiDate = formatJalaliDateTime(data.created_at, true);
-            const printCurrentDate = formatJalaliDateTime(new Date().toISOString(), true);
+            const printCurrentDate = formatJalaliDateTime(getServerNow().toISOString(), true);
 
             document.getElementById('detail-tracking').textContent = data.tracking_code;
             document.getElementById('detail-date').textContent = shamsiDate;
@@ -4417,7 +4508,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const readAtTd = document.getElementById('detail-read-at');
             const adminName = data.read_by_name || data.read_by || (currentAdmin ? (currentAdmin.full_name || currentAdmin.username) : '');
-            const readTimestamp = data.read_at || new Date().toISOString();
+            const readTimestamp = data.read_at || getServerNow().toISOString();
             const shamsiReadDate = formatJalaliDateTime(readTimestamp, true);
             const byText = adminName ? ` توسط ${adminName}` : '';
 
@@ -6545,8 +6636,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await adminFetch('/api/admin/me');
             if (res.ok) {
                 currentAdmin = await res.json();
-                if (currentAdmin && currentAdmin.server_time && typeof window.__syncServerTime === 'function') {
-                    window.__syncServerTime(currentAdmin.server_time);
+                if (currentAdmin && (currentAdmin.server_time_unix_ms || currentAdmin.server_time) && typeof window.__syncServerTime === 'function') {
+                    window.__syncServerTime(currentAdmin.server_time_unix_ms || currentAdmin.server_time);
                 }
                 setupSuperuserUI();
                 checkMustChangePasswordPolicy();

@@ -160,11 +160,15 @@ func main() {
 	trackLimiter := NewIPRateLimiter(0.5, 10)
 	captchaLimiter := NewIPRateLimiter(1.0, 20)
 
+	timeLimiter := NewIPRateLimiter(2.0, 30)
+
 	mux := http.NewServeMux()
 
 	const maxJSONBodyBytes = 256 << 10
 
 	mux.HandleFunc("GET /health", healthCheck)
+	mux.HandleFunc("GET /api/server-time", AdminIPWhitelistMiddleware(RateLimitMiddleware(timeLimiter, GetServerTimeHandler)))
+	mux.HandleFunc("GET /api/admin/server-time", AdminIPWhitelistMiddleware(RateLimitMiddleware(timeLimiter, GetServerTimeHandler)))
 	mux.HandleFunc("GET /api/captcha", RateLimitMiddleware(captchaLimiter, GetCaptchaHandler))
 
 	mux.HandleFunc("POST /api/report", RateLimitMiddleware(submitLimiter, SubmitReportHandler))

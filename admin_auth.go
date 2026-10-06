@@ -58,17 +58,17 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	var storedHash, fullName, roleTitle, role, totpSecret string
 	var isSuperuser, totpEnabled bool
-	var passwordChangedAt time.Time
+	var passwordChangedAt, dbNow time.Time
 	var mustChangePassword bool
 	var lastLoginAt sql.NullTime
 	err := DB.QueryRow(`
 		SELECT password_hash, COALESCE(full_name, ''), role_title, COALESCE(role, 'edare_kol'), is_superuser,
 		       COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false),
-		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), last_login_at
+		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), last_login_at, NOW()
 		FROM admin_users
 		WHERE username=$1 AND is_active=true`, creds.Username).Scan(
 		&storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword,
-		&totpSecret, &totpEnabled, &lastLoginAt)
+		&totpSecret, &totpEnabled, &lastLoginAt, &dbNow)
 	if err != nil {
 		log.Printf("-> LOGIN FAILED: Database error or user not found: %v", err)
 		if _, justLocked := Lockouts.RecordFailure(creds.Username); justLocked {
@@ -172,6 +172,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("-> LOGIN SUCCESS: Session cookie issued")
 	logAudit(creds.Username, roleTitle, "LOGIN", nil, getIP(r))
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("X-Server-Time", dbNow.Format(time.RFC3339Nano))
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"status":               "login_successful",
@@ -184,20 +185,28 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		"is_password_expired":  isPasswordExpired,
 		"password_changed_at":  passwordChangedAt.Format(time.RFC3339),
 		"csrf_token":           csrfToken,
+		"server_time":          dbNow.Format(time.RFC3339Nano),
+		"server_time_unix_ms":  dbNow.UnixMilli(),
 	})
 }
 
 func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 	admin := r.Context().Value("admin").(AdminSession)
 
-	var passwordChangedAt time.Time
+	var passwordChangedAt, dbNow time.Time
 	var mustChangePassword bool
 	var dbRole string
 	var totpEnabled bool
-	_ = DB.QueryRow(`
-		SELECT COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false), COALESCE(role, 'edare_kol'), COALESCE(totp_enabled, false)
+	var err error = fmt.Errorf("db unavailable")
+	if DB != nil {
+		err = DB.QueryRow(`
+		SELECT COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false), COALESCE(role, 'edare_kol'), COALESCE(totp_enabled, false), NOW()
 		FROM admin_users
-		WHERE username = $1`, admin.Username).Scan(&passwordChangedAt, &mustChangePassword, &dbRole, &totpEnabled)
+		WHERE username = $1`, admin.Username).Scan(&passwordChangedAt, &mustChangePassword, &dbRole, &totpEnabled, &dbNow)
+	}
+	if err != nil {
+		dbNow = time.Now()
+	}
 
 	if dbRole != "" {
 		admin.Role = dbRole
@@ -208,6 +217,7 @@ func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 	requiresPasswordChange := mustChangePassword || isPasswordExpired
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("X-Server-Time", dbNow.Format(time.RFC3339Nano))
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"username":             admin.Username,
 		"full_name":            admin.FullName,
@@ -218,7 +228,8 @@ func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 		"is_password_expired":  isPasswordExpired,
 		"password_changed_at":  passwordChangedAt.Format(time.RFC3339),
 		"totp_enabled":         totpEnabled,
-		"server_time":          time.Now().Format(time.RFC3339),
+		"server_time":          dbNow.Format(time.RFC3339Nano),
+		"server_time_unix_ms":  dbNow.UnixMilli(),
 	})
 }
 

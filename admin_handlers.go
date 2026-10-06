@@ -28,6 +28,7 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return AdminIPWhitelistMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
 		w.Header().Set("Pragma", "no-cache")
+		w.Header().Set("X-Server-Time", time.Now().Format(time.RFC3339Nano))
 
 		cookie, err := r.Cookie("herasat_admin_session")
 		if err != nil {
@@ -1800,6 +1801,35 @@ func GetSystemStatusHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(resp)
+}
+
+func GetServerTimeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var dbNow time.Time
+	var dbTz string
+	var err error = fmt.Errorf("db unavailable")
+	if DB != nil {
+		err = DB.QueryRow("SELECT NOW(), CURRENT_SETTING('TIMEZONE')").Scan(&dbNow, &dbTz)
+	}
+	if err != nil {
+		dbNow = time.Now()
+		dbTz = "Asia/Tehran"
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+	w.Header().Set("Pragma", "no-cache")
+	w.Header().Set("X-Server-Time", dbNow.Format(time.RFC3339Nano))
+
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"server_time":         dbNow.Format(time.RFC3339Nano),
+		"server_time_unix_ms": dbNow.UnixMilli(),
+		"timezone":            dbTz,
+	})
 }
 
 func GetActiveSessionsHandler(w http.ResponseWriter, r *http.Request) {
