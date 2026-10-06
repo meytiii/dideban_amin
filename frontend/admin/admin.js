@@ -928,8 +928,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     dashboardSection.style.display = 'block';
                 }
                 startSessionTimer();
-
-                connectAdminSSE();
+                startBackgroundPolling();
                 switchMainTab('reports');
                 runWhenIdle(fetchNotifications);
             }
@@ -1001,7 +1000,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     dashboardSection.style.display = 'block';
                 }
                 startSessionTimer();
-                connectAdminSSE();
+                startBackgroundPolling();
                 await checkAdminProfile();
                 switchMainTab('reports');
                 runWhenIdle(fetchNotifications);
@@ -1315,7 +1314,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         dashboardSection.style.display = 'block';
                     }
                     startSessionTimer();
-                    connectAdminSSE();
+                    startBackgroundPolling();
                     await checkAdminProfile();
                     switchMainTab('reports');
                     runWhenIdle(fetchNotifications);
@@ -3645,6 +3644,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastReportsSignature = '';
 
     async function fetchReports(forceRefresh = false, showSkeleton = false) {
+        if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) {
+            return false;
+        }
         if (showSkeleton || !allReports || allReports.length === 0) {
             renderReportsTableSkeleton(8);
         }
@@ -3654,7 +3656,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const reportsUrl = `/api/admin/reports?${queryParams.toString()}`;
             const response = await adminFetch(reportsUrl);
             if (response.status === 401) {
-                location.reload();
+                forceLogoutOnConnectionDrop();
                 return false;
             }
             if (!response.ok) {
@@ -6532,6 +6534,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function connectAdminSSE() {
         if (_sseConnection || typeof EventSource === 'undefined') return;
+        if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
         _sseConnection = new EventSource('/api/admin/events');
 
         _sseConnection.addEventListener('new_report', () => {
@@ -6560,7 +6563,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         _sseConnection.addEventListener('error', () => {
             if (_sseConnection && _sseConnection.readyState === EventSource.CLOSED) {
-                console.warn('[SSE] closed — falling back to polling');
                 _sseConnection = null;
                 startFallbackPolling();
             }
@@ -6584,28 +6586,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startFallbackPolling() {
+        if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
         if (reportPollingInterval) return;
         reportPollingInterval = setInterval(() => {
             if (document.hidden) return;
+            if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
             fetchReports(false, false).catch(() => { });
         }, 15000);
         notifPollingInterval = setInterval(() => {
             if (document.hidden) return;
+            if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
             fetchNotifications().catch(() => { });
         }, 15000);
     }
 
     function startBackgroundPolling() {
+        if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
         connectAdminSSE();
         if (!reportPollingInterval) {
             reportPollingInterval = setInterval(() => {
                 if (document.hidden) return;
+                if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
                 fetchReports(false, false).catch(() => { });
             }, 15000);
         }
         if (!notifPollingInterval) {
             notifPollingInterval = setInterval(() => {
                 if (document.hidden) return;
+                if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
                 fetchNotifications().catch(() => { });
             }, 15000);
         }
@@ -6623,13 +6631,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
+        if (!document.hidden && dashboardSection && dashboardSection.style.display !== 'none' && !dashboardSection.classList.contains('d-none') && currentAdmin) {
             fetchReports(false, false).catch(() => { });
             fetchNotifications().catch(() => { });
         }
     });
-
-    startBackgroundPolling();
 
     async function checkAdminProfile() {
         try {
@@ -8207,11 +8213,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnMarkAllNotifsRead = document.getElementById('btnMarkAllNotifsRead');
 
     async function fetchNotifications() {
-        if (!dashboardSection || dashboardSection.style.display === 'none') return;
+        if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
 
         try {
             const res = await adminFetch('/api/admin/notifications');
-            if (res.status === 401) return;
+            if (res.status === 401) {
+                forceLogoutOnConnectionDrop();
+                return;
+            }
             if (!res.ok) return;
 
             const data = await res.json();
