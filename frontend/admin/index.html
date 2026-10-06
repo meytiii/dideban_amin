@@ -7,7 +7,7 @@
     <title>سامانه دیده‌بان امین - پنل مدیریت حراست همدان</title>
     <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="admin.css?v=86">
+    <link rel="stylesheet" href="admin.css?v=87">
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 
@@ -220,6 +220,36 @@
     <div id="dashboard-section" class="dashboard-container" style="display: none;">
         <header class="dashboard-header">
             <div class="dashboard-brand">
+                <div class="server-datetime-badge" id="serverDateTimeBadge" data-tooltip="زمان و تاریخ رسمی سرور سامانه دیده‌بان امین" aria-label="زمان و تاریخ رسمی سرور">
+                    <div class="server-datetime-item server-date-item">
+                        <svg class="datetime-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <span class="server-date-day" id="serverDateDay"></span>
+                        <span class="server-date-full" id="serverDateFull">...</span>
+                    </div>
+                    <span class="server-datetime-divider" aria-hidden="true"></span>
+                    <div class="server-datetime-item server-time-item">
+                        <span class="datetime-live-dot" aria-hidden="true"></span>
+                        <svg class="datetime-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <div class="sliding-clock" id="serverSlidingClock" dir="ltr" aria-live="off">
+                            <span class="sliding-digit" data-unit="h1"><span class="digit-item">۰</span></span>
+                            <span class="sliding-digit" data-unit="h2"><span class="digit-item">۰</span></span>
+                            <span class="sliding-colon">:</span>
+                            <span class="sliding-digit" data-unit="m1"><span class="digit-item">۰</span></span>
+                            <span class="sliding-digit" data-unit="m2"><span class="digit-item">۰</span></span>
+                            <span class="sliding-colon">:</span>
+                            <span class="sliding-digit" data-unit="s1"><span class="digit-item">۰</span></span>
+                            <span class="sliding-digit" data-unit="s2"><span class="digit-item">۰</span></span>
+                        </div>
+                    </div>
+                </div>
                 <h2 class="persian-heading persian-heading--tatweel" data-tatweel-level="section">کارتابل محرمانه حراست
                 </h2>
                 <span class="sub-brand">سامانه دیده‌بان امین · حفاظت اطلاعات آموزش و پرورش همدان</span>
@@ -2743,7 +2773,7 @@
 
     <script src="confirm.js" defer></script>
     <script src="tatweel.js" defer></script>
-    <script src="admin.js?v=86" defer></script>
+    <script src="admin.js?v=87" defer></script>
 </body>
 
 </html>

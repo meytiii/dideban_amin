@@ -1,7 +1,7 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-05)
 
 ## Corpus Check
-- 205 files · ~225,586 words
+- 205 files · ~225,651 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `21927463`
+- Built from commit: `c182d475`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -79,8 +79,8 @@
 - calendar.tsx
 - Output contract & scope
 - SubmitReportHandler
+- getIP
 - net/http.Request
-- logAuditTx
 - initActionSearchBar
 - crypto.go
 - database/sql.DB
@@ -159,6 +159,8 @@
 10. `SessionManager` - 18 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `VerifyCaptcha()` --calls--> `GetLegacyHMACKey()`  [INFERRED]
+  captcha.go → crypto.go
 - `SubmitReportHandler()` --calls--> `ScanPDFForActiveContent()`  [INFERRED]
   public_handlers.go → metadata.go
 - `TestInputSanitizationAndLimits()` --calls--> `truncateRunes()`  [INFERRED]
@@ -167,8 +169,6 @@
   admin_auth.go → captcha.go
 - `LoginHandler()` --calls--> `GenerateMFAPendingToken()`  [INFERRED]
   admin_auth.go → mfa.go
-- `LoginHandler()` --calls--> `isCookieSecure()`  [INFERRED]
-  admin_auth.go → security.go
 
 ## Import Cycles
 - None detected.
@@ -405,39 +405,39 @@ Nodes (7): populateAnalyticsDOM(), renderAnalyticsDashboard(), renderCategoryPie
 
 ### Community 60 - "admin_handlers.go"
 Cohesion: 0.11
-Nodes (27): ExportReportDocxHandler(), formatJalaliTime(), getRestrictedSubprocessEnv(), GetUsersHandler(), gregorianToJalali(), AdminNotificationItem, AdminNotificationsResponse, AdminUserItem (+19 more)
+Nodes (26): ExportReportDocxHandler(), formatJalaliTime(), getRestrictedSubprocessEnv(), gregorianToJalali(), AdminNotificationItem, AdminNotificationsResponse, AdminUserItem, AnalyticsResponse (+18 more)
 
 ### Community 62 - "Output contract & scope"
 Cohesion: 0.50
 Nodes (3): Output contract, Output contract & scope, Scope and limits
 
 ### Community 63 - "SubmitReportHandler"
-Cohesion: 0.20
-Nodes (15): VerifyCaptcha(), GetLegacyHMACKey(), ValidateBinaryMagicBytes(), generateTrackingCode(), SubmitFollowUpHandler(), SubmitReportHandler(), TrackReportHandler(), validateMagicBytes() (+7 more)
+Cohesion: 0.18
+Nodes (18): RespondToReportHandler(), SubmitRegionalResponseHandler(), UpdateInternalNotesHandler(), VerifyCaptcha(), EncryptAES(), ValidateBinaryMagicBytes(), generateTrackingCode(), SubmitFollowUpHandler() (+10 more)
 
-### Community 64 - "net/http.Request"
-Cohesion: 0.14
-Nodes (37): generateSessionToken(), getIP(), getLatestAuditHash(), logAudit(), LogoutHandler(), canAdminAccessReport(), ClassifyReportHandler(), DisableUser2FAHandler() (+29 more)
+### Community 64 - "getIP"
+Cohesion: 0.13
+Nodes (31): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getIP(), getLatestAuditHash(), getLatestAuditHashTx(), ipInCIDRs(), logAudit() (+23 more)
 
-### Community 65 - "logAuditTx"
-Cohesion: 0.21
-Nodes (12): computeAuditHash(), GetCurrentAdminHandler(), getLatestAuditHashTx(), ipInCIDRs(), logAuditTx(), parseTrustedProxies(), DeleteUserHandler(), ForwardReportHandler() (+4 more)
+### Community 65 - "net/http.Request"
+Cohesion: 0.18
+Nodes (19): GetActiveSessionsHandler(), GetAnalyticsHandler(), GetAuditLogsHandler(), GetForwardingHistoryHandler(), GetForwardingRecipientsHandler(), GetNotificationsHandler(), GetReportsHandler(), GetSystemStatusHandler() (+11 more)
 
 ### Community 66 - "initActionSearchBar"
 Cohesion: 0.46
 Nodes (8): initActionSearchBar(), closeDropdown(), computeAndRender(), executeItem(), normalizeQuery(), openDropdown(), renderItems(), updateSelection()
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.17
-Nodes (21): DeleteReportHandler(), GetForwardingHistoryHandler(), SubmitRegionalResponseHandler(), DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey() (+13 more)
+Cohesion: 0.18
+Nodes (19): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptFileBytes(), EncryptFilePath() (+11 more)
 
 ### Community 68 - "database/sql.DB"
 Cohesion: 0.13
 Nodes (12): NewUsedCaptchaStore(), database/sql.DB, sync.Mutex, sync.Once, time.Duration, time.Ticker, NewAccountLockoutManager(), AccountLockoutManager (+4 more)
 
 ### Community 71 - "LoginHandler"
-Cohesion: 0.21
-Nodes (13): LoginHandler(), ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), VerifyPassword(), VerifyPasswordWithRehash() (+5 more)
+Cohesion: 0.24
+Nodes (12): LoginHandler(), ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), VerifyPassword(), VerifyPasswordWithRehash() (+4 more)
 
 ### Community 74 - "SyslogShipper"
 Cohesion: 0.24

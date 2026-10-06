@@ -55,8 +55,28 @@ function adminFetch(url, options = {}) {
     if (csrf && opts.method && opts.method.toUpperCase() !== 'GET') {
         opts.headers['X-CSRF-Token'] = csrf;
     }
-    return fetchWithTimeout(url, opts, 20000);
+    return fetchWithTimeout(url, opts, 20000).then(res => {
+        const dateHdr = res.headers && res.headers.get('date');
+        if (dateHdr && typeof window.__syncServerTime === 'function') {
+            window.__syncServerTime(dateHdr);
+        }
+        return res;
+    });
 }
+
+let serverTimeOffsetMs = 0;
+let hasServerTimeSync = false;
+
+window.__syncServerTime = function (serverTimeStr) {
+    if (!serverTimeStr) return;
+    try {
+        const serverTs = new Date(serverTimeStr).getTime();
+        if (!isNaN(serverTs) && serverTs > 0) {
+            serverTimeOffsetMs = serverTs - Date.now();
+            hasServerTimeSync = true;
+        }
+    } catch (_) { }
+};
 
 const getScrollBehavior = () => (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
 
@@ -278,6 +298,108 @@ try { runWhenIdle(initAppTooltips); } catch (e) { console.error('Tooltips init f
 document.addEventListener('DOMContentLoaded', () => {
 
     const toPersianNum = (n) => String(n).replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+    function initServerSlidingClock() {
+        const clockContainer = document.getElementById('serverSlidingClock');
+        if (!clockContainer) return;
+
+        const serverDateDayEl = document.getElementById('serverDateDay');
+        const serverDateFullEl = document.getElementById('serverDateFull');
+
+        const digitH1 = clockContainer.querySelector('[data-unit="h1"]');
+        const digitH2 = clockContainer.querySelector('[data-unit="h2"]');
+        const digitM1 = clockContainer.querySelector('[data-unit="m1"]');
+        const digitM2 = clockContainer.querySelector('[data-unit="m2"]');
+        const digitS1 = clockContainer.querySelector('[data-unit="s1"]');
+        const digitS2 = clockContainer.querySelector('[data-unit="s2"]');
+
+        const FA_DIGITS = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        const toFa = (n) => FA_DIGITS[n] || '۰';
+
+        function updateDigit(container, newChar) {
+            if (!container) return;
+            const currentEl = container.querySelector('.digit-item:not(.slide-out)');
+            if (!currentEl) {
+                container.innerHTML = `<span class="digit-item">${newChar}</span>`;
+                return;
+            }
+            if (currentEl.textContent === newChar) return;
+
+            const oldSlides = container.querySelectorAll('.slide-out');
+            oldSlides.forEach(el => el.remove());
+
+            const nextEl = document.createElement('span');
+            nextEl.className = 'digit-item slide-in-prep';
+            nextEl.textContent = newChar;
+            container.appendChild(nextEl);
+
+            void nextEl.offsetWidth;
+
+            nextEl.classList.remove('slide-in-prep');
+            nextEl.classList.add('slide-in-active');
+            currentEl.classList.add('slide-out');
+
+            setTimeout(() => {
+                if (currentEl.parentNode) currentEl.remove();
+                nextEl.classList.remove('slide-in-active');
+            }, 400);
+        }
+
+        let lastDayKey = '';
+
+        function updateDate(now) {
+            const dayKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+            if (dayKey === lastDayKey) return;
+            lastDayKey = dayKey;
+
+            try {
+                const formatter = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    weekday: 'long'
+                });
+                const parts = formatter.formatToParts(now);
+                let weekday = '';
+                let day = '';
+                let month = '';
+                let year = '';
+                parts.forEach(p => {
+                    if (p.type === 'weekday') weekday = p.value;
+                    if (p.type === 'day') day = p.value;
+                    if (p.type === 'month') month = p.value;
+                    if (p.type === 'year') year = p.value;
+                });
+                if (serverDateDayEl) serverDateDayEl.textContent = weekday ? `${weekday}،` : '';
+                if (serverDateFullEl) serverDateFullEl.textContent = `${day} ${month} ${year}`;
+            } catch (_) {
+                if (serverDateFullEl) serverDateFullEl.textContent = now.toLocaleDateString('fa-IR');
+            }
+        }
+
+        function tick() {
+            const now = new Date(Date.now() + serverTimeOffsetMs);
+            updateDate(now);
+
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+
+            updateDigit(digitH1, toFa(parseInt(h[0], 10)));
+            updateDigit(digitH2, toFa(parseInt(h[1], 10)));
+            updateDigit(digitM1, toFa(parseInt(m[0], 10)));
+            updateDigit(digitM2, toFa(parseInt(m[1], 10)));
+            updateDigit(digitS1, toFa(parseInt(s[0], 10)));
+            updateDigit(digitS2, toFa(parseInt(s[1], 10)));
+        }
+
+        tick();
+        setInterval(tick, 1000);
+    }
+
+    try {
+        initServerSlidingClock();
+    } catch (_) { }
 
     const toastContainer = document.getElementById('toast-container');
     function showToast(message, duration = 2500, type = '') {
@@ -6030,6 +6152,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await adminFetch('/api/admin/me');
             if (res.ok) {
                 currentAdmin = await res.json();
+                if (currentAdmin && currentAdmin.server_time && typeof window.__syncServerTime === 'function') {
+                    window.__syncServerTime(currentAdmin.server_time);
+                }
                 setupSuperuserUI();
                 checkMustChangePasswordPolicy();
                 check2FAEnforcementNotice();

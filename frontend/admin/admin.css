@@ -757,6 +757,150 @@ body::before {
     padding-bottom: 18px;
 }
 
+.server-datetime-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 3px 12px;
+    margin-bottom: 3px;
+    background: #131d2e;
+    border: 1px solid rgba(59, 130, 246, 0.22);
+    border-radius: var(--radius-full);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    font-size: 11.5px;
+    color: var(--text-muted);
+    user-select: none;
+    cursor: default;
+    transition: border-color 0.2s ease;
+}
+
+.server-datetime-badge:hover {
+    border-color: rgba(59, 130, 246, 0.42);
+}
+
+.server-datetime-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.server-datetime-divider {
+    display: inline-block;
+    width: 1px;
+    height: 13px;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.datetime-icon {
+    color: #38bdf8;
+    flex-shrink: 0;
+}
+
+.server-date-day {
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.server-date-full {
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.datetime-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #10b981;
+    box-shadow: 0 0 6px #10b981;
+    animation: livePulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        transform: scale(1) translateZ(0);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.75) translateZ(0);
+        opacity: 0.45;
+    }
+}
+
+.sliding-clock {
+    display: inline-flex;
+    align-items: center;
+    direction: ltr;
+    font-family: 'Vazirmatn', var(--font-primary), system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 12.5px;
+    color: #f8fafc;
+    letter-spacing: 0.2px;
+    contain: layout style;
+}
+
+.sliding-colon {
+    display: inline-block;
+    color: #38bdf8;
+    font-weight: 700;
+    margin: 0 1px;
+    user-select: none;
+    animation: colonBlink 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes colonBlink {
+    0%, 100% {
+        opacity: 0.95;
+    }
+    50% {
+        opacity: 0.3;
+    }
+}
+
+.sliding-digit {
+    display: inline-block;
+    position: relative;
+    width: 1.1ch;
+    height: 18px;
+    line-height: 18px;
+    overflow: hidden;
+    vertical-align: middle;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+    contain: layout paint;
+}
+
+.sliding-digit .digit-item {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 18px;
+    transform: translate3d(0, 0, 0);
+    will-change: transform, opacity;
+    transition: transform 0.38s cubic-bezier(0.2, 1.25, 0.4, 1), opacity 0.28s ease;
+}
+
+.sliding-digit .digit-item.slide-out {
+    transform: translate3d(0, -100%, 0);
+    opacity: 0;
+}
+
+.sliding-digit .digit-item.slide-in-prep {
+    transform: translate3d(0, 100%, 0);
+    opacity: 0;
+    transition: none !important;
+}
+
+.sliding-digit .digit-item.slide-in-active {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+}
+
 .dashboard-brand {
     display: flex;
     flex-direction: column;

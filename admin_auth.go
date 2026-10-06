@@ -218,6 +218,7 @@ func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 		"is_password_expired":  isPasswordExpired,
 		"password_changed_at":  passwordChangedAt.Format(time.RFC3339),
 		"totp_enabled":         totpEnabled,
+		"server_time":          time.Now().Format(time.RFC3339),
 	})
 }
 
