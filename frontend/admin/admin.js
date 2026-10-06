@@ -1643,7 +1643,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 read: 'بررسی شده',
                 responded: 'دارای پاسخ',
                 new_message: 'پیام جدید',
-                regional_response: 'پاسخ کارشناسی'
+                regional_response: 'پاسخ حراست'
             }
         }
     };
@@ -1665,7 +1665,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'filter-read-status': {
             'all': 'نمایش همه وضعیت‌های بررسی کارتابل',
             'new_message': 'گزارش‌های دارای پیام جدید از سمت کاربر',
-            'regional_response': 'پاسخ کارشناسی ارسالی توسط ناحیه یا منطقه',
+            'regional_response': 'پاسخ حراست ارسالی توسط ناحیه یا منطقه',
             'unread': 'در نوبت بررسی اولیه (گزارش‌های ثبت‌شده جدید)',
             'read': 'بررسی‌شده و پرونده فعال در جریان اقدام',
             'responded': 'پاسخ نهایی ثبت و به کاربر ابلاغ شده'
@@ -1721,12 +1721,12 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'new_role': {
             'edare_kol': 'دسترسی کامل به پرونده‌های حراست کل استان',
-            'navahi_manategh': 'دسترسی استعلام و ارسال پاسخ کارشناسی منطقه',
+            'navahi_manategh': 'دسترسی استعلام و ارسال پاسخ حراست منطقه',
             'superuser': 'مدیر ارشد با دسترسی کامل به کلیه بخش‌ها و کاربران'
         },
         'edit_role': {
             'edare_kol': 'دسترسی کامل به پرونده‌های حراست کل استان',
-            'navahi_manategh': 'دسترسی استعلام و ارسال پاسخ کارشناسی منطقه',
+            'navahi_manategh': 'دسترسی استعلام و ارسال پاسخ حراست منطقه',
             'superuser': 'مدیر ارشد با دسترسی کامل به کلیه بخش‌ها و کاربران'
         },
         'edit_is_active': {
@@ -3151,7 +3151,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (r.has_new_message) {
                 statusFa = 'پیام جدید';
             } else if (r.has_regional_response) {
-                statusFa = 'پاسخ کارشناسی';
+                statusFa = 'پاسخ حراست';
             } else if (hasResp) {
                 statusFa = 'پاسخ داده شده';
             } else if (r.is_read) {
@@ -4109,8 +4109,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (report.has_regional_response) {
                 const regBadge = document.createElement('span');
                 regBadge.className = 'badge badge-regional-response';
-                regBadge.setAttribute('data-tooltip', 'پاسخ بررسی کارشناسی از سوی ناحیه / منطقه');
-                regBadge.innerHTML = `<span class="badge-dot-beacon beacon-indigo"></span><svg class="badge-icon-regional" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg><span>پاسخ کارشناسی</span>`;
+                regBadge.setAttribute('data-tooltip', 'پاسخ بررسی حراست از سوی ناحیه / منطقه');
+                regBadge.innerHTML = `<span class="badge-dot-beacon beacon-indigo"></span><svg class="badge-icon-regional" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg><span>پاسخ حراست</span>`;
                 badgesWrapper.appendChild(regBadge);
                 hasSpecialBadge = true;
             }
@@ -6928,7 +6928,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let roleBadge = '';
             const userRole = u.role || (u.is_superuser ? 'superuser' : 'edare_kol');
             if (userRole === 'superuser') {
-                roleBadge = '<span class="badge-super">مدیر ارشد سامانه</span>';
+                roleBadge = '<span class="badge-super" style="background:rgba(225, 29, 72, 0.12); color:#fda4af; border:1px solid rgba(244, 63, 94, 0.28); font-size:11px; padding:2px 8px; border-radius:12px; font-weight:600;">مدیر ارشد سامانه</span>';
             } else if (userRole === 'navahi_manategh') {
                 roleBadge = '<span class="badge-navahi" style="background:rgba(14, 165, 233, 0.15); color:#38bdf8; border:1px solid rgba(56, 189, 248, 0.35); font-size:11px; padding:2px 8px; border-radius:12px; font-weight:600;">نواحی و مناطق</span>';
             } else {

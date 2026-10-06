@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1791276551.9897375,
-    "seen": 1791276651.2373946,
-    "ast_hash": "e0ad40f33508b8c66f576a071bcea310",
+    "mtime": 1791277152.7425508,
+    "seen": 1791277278.378895,
+    "ast_hash": "a4851336197991b43c122f260c8a490a",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1791266380.7178094,
-    "seen": 1791266419.2942517,
-    "ast_hash": "1a49b0af5e0f2466f53c44bcc82b926d",
+    "mtime": 1791277106.913523,
+    "seen": 1791277278.3902314,
+    "ast_hash": "71b6cdb789d1d7fa259489566131a268",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {

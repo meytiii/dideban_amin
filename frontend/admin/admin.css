@@ -3093,17 +3093,18 @@ button {
         transparent
     );
 
-    transform: translateX(-150%) skewX(-25deg);
+    transform: translateX(-150%) skewX(-25deg) translateZ(0);
     animation: shimmerSweep 2.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
+    will-change: transform;
 }
 
 @keyframes shimmerSweep {
     0% {
-        transform: translateX(-150%) skewX(-25deg);
+        transform: translateX(-150%) skewX(-25deg) translateZ(0);
     }
     45%, 100% {
-        transform: translateX(250%) skewX(-25deg);
+        transform: translateX(250%) skewX(-25deg) translateZ(0);
     }
 }
 
@@ -3208,7 +3209,7 @@ button {
     content: '';
     position: absolute;
     top: 0;
-    left: -150%;
+    left: 0;
     width: 60%;
     height: 100%;
     background: linear-gradient(
@@ -3218,9 +3219,10 @@ button {
         rgba(165, 180, 252, 0.8),
         transparent
     );
-    transform: skewX(-25deg);
+    transform: translateX(-150%) skewX(-25deg) translateZ(0);
     animation: shimmerSweep 2.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
+    will-change: transform;
 }
 
 .badge-dot-beacon.beacon-indigo {
@@ -4334,10 +4336,10 @@ button {
 }
 
 .badge-super {
-    background: rgba(14, 165, 233, 0.15);
-    color: #38bdf8;
-    border: 1px solid rgba(14, 165, 233, 0.35);
-    padding: 3px 8px;
+    background: rgba(225, 29, 72, 0.12);
+    color: #fda4af;
+    border: 1px solid rgba(244, 63, 94, 0.28);
+    padding: 2px 8px;
     border-radius: var(--radius-full);
     font-size: 11px;
     font-weight: 600;
