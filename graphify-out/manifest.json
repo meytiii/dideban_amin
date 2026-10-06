@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1791191541.300302,
-    "seen": 1791192246.9333322,
-    "ast_hash": "373be30c8e532291335b510b3e366421",
+    "mtime": 1791263511.384059,
+    "seen": 1791263556.060706,
+    "ast_hash": "085faf3bfbd20c9b926a431194883070",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1791191316.2716458,
-    "seen": 1791192246.9443269,
-    "ast_hash": "87f24f73a2f2c40c26604b084f5cdd47",
+    "mtime": 1791263266.7995095,
+    "seen": 1791263556.0716486,
+    "ast_hash": "f2b9f1fbe07ecaa86c92ae822d7be5ff",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
@@ -168,9 +168,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1791182044.357436,
-    "seen": 1791182054.9607952,
-    "ast_hash": "a773d0fe13b6306376a876cdd8a99d53",
+    "mtime": 1791263540.719519,
+    "seen": 1791263556.0715294,
+    "ast_hash": "e6c8cd43243010a499c21a9109ae0440",
     "semantic_hash": ""
   },
   "GEMINI.md": {

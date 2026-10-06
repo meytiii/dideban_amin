@@ -256,13 +256,22 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - Amber visual state within 2 minutes of expiration, accompanied by an accessible warning modal (`#sessionWarningModal`) providing one-click instant session renewal.
 
 ### 16. Animated Dropdown & Select System (`dropdown-01`)
-- **Interactive Triggers:** Micro-scaling on hover (`scale(1.008)`) and tap (`scale(0.988)` / `scale(0.99)`) with hardware-accelerated `translateZ(0)`. Smooth 180° chevron rotation (`rotate(180deg)`) on active state.
-- **Surface & Container:** Solid high-performance `#162032` surface with `1.5px` border outline (`rgba(255, 255, 255, 0.12)`), `14px` border-radius, and GPU compositor slide-down animation (`dropdownSlideDown`). Zero backdrop blur to maintain high framerates.
+- **Interactive Triggers:** Micro-scaling on hover (`scale(1.01)`) and tap (`scale(0.99)`) with hardware-accelerated `translateZ(0)`. Smooth 180° chevron rotation (`rotate(180deg)`) on active state. Calibrated responsive width with minimum 225px allocation on long text filters (subject and read status) to eliminate Persian label truncation.
+- **Surface & Container:** Solid high-performance `#162032` surface with `1.5px` border outline (`rgba(255, 255, 255, 0.12)`), `12px` border-radius, and GPU compositor slide-down animation (`dropdownSlideDown`). Zero backdrop blur to maintain high framerates.
 - **Staggered RTL Item Entrance:** Sequential cascade entrance from right (`translateX(16px)` to `0`) via `dropdownItemEnter` with indexed delays (`0.02s` to `0.26s`).
 - **Spring Checkmark Feedback:** Dynamic spring bounce indicator (`checkSpring`) on active selected items.
-- **Coverage:** Applied across Public Portal report category selector, Admin user profile menu, Admin notification flyout, Admin command search listbox, and Jalali date popover.
+- **Comprehensive Coverage Across Entire Portal:**
+  - Public Portal: Report category selector with descriptive subtext helper notes.
+  - Admin Reports Inbox: Subject (`filter-type`), Read status (`filter-read-status`), Priority (`filter-priority`), and Report type (`filter-report-type`) with two-way sync to table headers and quick filters.
+  - Report Dossier Details: In-line dossier priority dropdown (`detail-priority-select`) with automatic role checking (badge display for regional inspectors, custom interactive select for central admins).
+  - Admin Superuser Account Modals: Role permissions (`new_role`, `edit_role`) and account status toggle (`edit_is_active`).
+  - Audit Trail Log Filters: Action type (`audit-filter-action`), administrative operator (`audit-filter-user` with dynamic real-time option re-population), and Jalali calendar month (`audit-filter-month`).
 
-### 17. Assistant Communication & Chat Language
+### 17. Server Datetime Display (`.server-datetime-badge`)
+- Non-distracting, high-legibility server date and clock badge in admin header with tabular numeral sliding digit transitions.
+- Tooltip-free and pulsing-indicator-free presentation to ensure a calm, distraction-free environment for security operators.
+
+### 18. Assistant Communication & Chat Language
 - **Assistant Chat Language:** ALWAYS speak, respond, and chat in English with user in all conversations and chats, while preserving Persian for client-facing UI strings and portal content.
 
 ---

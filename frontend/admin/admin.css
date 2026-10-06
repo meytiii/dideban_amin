@@ -806,27 +806,6 @@ body::before {
     font-weight: 500;
 }
 
-.datetime-live-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: #10b981;
-    box-shadow: 0 0 6px #10b981;
-    animation: livePulse 2s ease-in-out infinite;
-    flex-shrink: 0;
-}
-
-@keyframes livePulse {
-    0%, 100% {
-        transform: scale(1) translateZ(0);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(0.75) translateZ(0);
-        opacity: 0.45;
-    }
-}
-
 .sliding-clock {
     display: inline-flex;
     align-items: center;
@@ -1764,6 +1743,12 @@ button {
     position: relative;
 }
 
+.filter-group:has(#filter-type),
+.filter-group:has(#filter-read-status) {
+    flex: 1.35;
+    min-width: 225px;
+}
+
 .filter-container:has(.admin-custom-dropdown.open),
 .filter-container.has-open-dropdown {
     z-index: 500;
@@ -1866,8 +1851,8 @@ button {
     right: 0;
     left: auto;
     width: 100%;
-    min-width: 220px;
-    max-width: 340px;
+    min-width: 260px;
+    max-width: 380px;
     background: #162032;
     border: 1.5px solid rgba(255, 255, 255, 0.12);
     border-radius: 12px;
@@ -1880,6 +1865,12 @@ button {
     flex-direction: column;
     scrollbar-width: thin;
     scrollbar-color: rgba(56, 189, 248, 0.4) transparent;
+}
+
+.admin-custom-dropdown[data-target="filter-type"] .custom-dropdown-menu,
+.admin-custom-dropdown[data-target="filter-read-status"] .custom-dropdown-menu {
+    min-width: 285px;
+    max-width: 420px;
 }
 
 .admin-custom-dropdown.open .custom-dropdown-menu {
@@ -2001,6 +1992,97 @@ button {
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
+}
+
+.admin-custom-dropdown.dropdown-detail-priority {
+    min-width: 135px;
+    max-width: 185px;
+}
+
+.admin-custom-dropdown.dropdown-detail-priority .custom-dropdown-trigger {
+    height: 36px;
+    font-size: 12.5px;
+    padding: 0 10px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.admin-custom-dropdown.dropdown-detail-priority .custom-dropdown-menu {
+    min-width: 240px;
+    max-width: 300px;
+}
+
+.adv-audit-filters-grid {
+    position: relative;
+    overflow: visible;
+    z-index: 20;
+}
+
+.adv-audit-filters-grid:has(.admin-custom-dropdown.open),
+.adv-audit-filters-grid.has-open-dropdown {
+    z-index: 500;
+}
+
+.adv-audit-filters-grid .filter-group {
+    position: relative;
+}
+
+.adv-audit-filters-grid .filter-group:has(.admin-custom-dropdown.open),
+.adv-audit-filters-grid .filter-group.has-open-dropdown {
+    z-index: 502;
+}
+
+.adv-audit-filters-grid .admin-custom-dropdown .custom-dropdown-trigger {
+    height: 38px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    font-size: 12.5px;
+}
+
+.adv-audit-filters-grid .admin-custom-dropdown .custom-dropdown-trigger:hover {
+    border-color: rgba(56, 189, 248, 0.45);
+}
+
+.adv-audit-filters-grid .admin-custom-dropdown.open .custom-dropdown-trigger {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.22);
+}
+
+.adv-audit-filters-grid .admin-custom-dropdown .custom-dropdown-menu {
+    min-width: 260px;
+    max-width: 380px;
+}
+
+.admin-modal-box .form-group {
+    position: relative;
+}
+
+.admin-modal-box .form-group:has(.admin-custom-dropdown.open),
+.admin-modal-box .form-group.has-open-dropdown {
+    z-index: 60;
+}
+
+.admin-modal-box .admin-custom-dropdown .custom-dropdown-trigger {
+    height: 40px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+}
+
+.admin-modal-box .admin-custom-dropdown .custom-dropdown-menu {
+    min-width: 100%;
+    max-width: 100%;
+    z-index: 100;
+}
+
+.form-group:has(.admin-custom-dropdown.open),
+.form-group.has-open-dropdown,
+.detail-item:has(.admin-custom-dropdown.open),
+.detail-priority-wrapper:has(.admin-custom-dropdown.open) {
+    position: relative;
+    z-index: 100;
 }
 
 .date-picker-filter-group {
@@ -5043,6 +5125,7 @@ tr.row-priority-normal {
     #advanced-section,
     .admin-thread-reply-box,
     .priority-select-control,
+    .admin-custom-dropdown,
     #detail-internal-notes-input,
     #admin_followup_input,
     #admin_response_input,

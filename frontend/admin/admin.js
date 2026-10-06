@@ -1380,6 +1380,58 @@ document.addEventListener('DOMContentLoaded', () => {
             'all': 'نمایش گزارش‌های ناشناس و هویت‌دار',
             'anonymous': 'ثبت‌شده به‌صورت ناشناس و بدون مشخصات',
             'identified': 'دارای نام و مشخصات فردی گزارش‌دهنده'
+        },
+        'detail-priority-select': {
+            'normal': 'فرآیند استاندارد و نوبت عادی رسیدگی',
+            'urgent': 'رسیدگی سریع با اولویت زمانی بالا',
+            'critical': 'اقدام فوری، اضطراری و بسیار ویژه حراست'
+        },
+        'audit-filter-action': {
+            'all': 'نمایش کلیه اقدامات ثبت‌شده در سامانه',
+            'LOGIN': 'ورود کاربر اداری به پنل کاربری',
+            'LOGOUT': 'خروج رسمی کاربر اداری از سیستم',
+            'VIEW_REPORT_DETAILS': 'مشاهده پرونده و جزییات گزارش',
+            'RESPOND_REPORT': 'ثبت یا ویرایش پاسخ گزارش',
+            'TOGGLE_READ_STATUS': 'تغییر وضعیت خوانده‌شده پرونده',
+            'CREATE_ADMIN_USER': 'تعریف و ثبت کاربر جدید اداری',
+            'TOGGLE_USER_ACTIVE': 'فعال یا مسدودسازی حساب کاربری',
+            'RESET_PASSWORD_USER': 'تغییر رمز عبور توسط مدیر ارشد',
+            'DELETE_ADMIN_USER': 'حذف کامل حساب کاربر اداری',
+            'CHANGE_OWN_PASSWORD': 'تغییر رمز عبور شخصی کاربر',
+            'REVOKE_SESSION': 'ابطال نشست امنیتی دستگاه',
+            'REVOKE_OTHER_SESSIONS': 'ابطال کلیه نشست‌های فعال دیگر'
+        },
+        'audit-filter-user': {
+            'all': 'همه کاربران ثبت‌کننده لاگ در سامانه'
+        },
+        'audit-filter-month': {
+            'all': 'نمایش گزارش‌های کلیه ماه‌های سال',
+            '01': 'فروردین‌ماه',
+            '02': 'اردیبهشت‌ماه',
+            '03': 'خردادماه',
+            '04': 'تیرماه',
+            '05': 'مردادماه',
+            '06': 'شهریورماه',
+            '07': 'مهرماه',
+            '08': 'آبان‌ماه',
+            '09': 'آذرماه',
+            '10': 'دی‌ماه',
+            '11': 'بهمن‌ماه',
+            '12': 'اسفندماه'
+        },
+        'new_role': {
+            'edare_kol': 'دسترسی کامل به پرونده‌های حراست کل استان',
+            'navahi_manategh': 'دسترسی استعلام و ارسال پاسخ کارشناسی منطقه',
+            'superuser': 'مدیر ارشد با دسترسی کامل به کلیه بخش‌ها و کاربران'
+        },
+        'edit_role': {
+            'edare_kol': 'دسترسی کامل به پرونده‌های حراست کل استان',
+            'navahi_manategh': 'دسترسی استعلام و ارسال پاسخ کارشناسی منطقه',
+            'superuser': 'مدیر ارشد با دسترسی کامل به کلیه بخش‌ها و کاربران'
+        },
+        'edit_is_active': {
+            'true': 'حساب کاربری فعال و دارای مجوز ورود به سیستم',
+            'false': 'حساب غیرفعال و مسدود، قطع کامل دسترسی به پنل'
         }
     };
 
@@ -1397,7 +1449,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const nativeSelect = document.getElementById(selectId);
         if (!nativeSelect) return null;
 
-        const parentGroup = nativeSelect.closest('.filter-group') || nativeSelect.parentElement;
+        const parentGroup = nativeSelect.closest('.filter-group') || nativeSelect.closest('.form-group') || nativeSelect.closest('.detail-priority-wrapper') || nativeSelect.parentElement;
         if (!parentGroup) return null;
 
         nativeSelect.classList.add('native-select-hidden');
@@ -1410,6 +1462,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const dropdown = document.createElement('div');
         dropdown.className = 'admin-custom-dropdown';
         dropdown.setAttribute('data-target', selectId);
+        if (selectId === 'detail-priority-select') {
+            dropdown.classList.add('dropdown-detail-priority');
+        } else if (selectId.startsWith('audit-filter-')) {
+            dropdown.classList.add('dropdown-audit-control');
+        } else if (selectId === 'new_role' || selectId === 'edit_role' || selectId === 'edit_is_active') {
+            dropdown.classList.add('dropdown-modal-control');
+        }
 
         const trigger = document.createElement('button');
         trigger.type = 'button';
@@ -1474,6 +1533,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (nativeSelect.value !== opt.value) {
                     nativeSelect.value = opt.value;
                     nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                    if (typeof nativeSelect.onchange === 'function') {
+                        nativeSelect.onchange();
+                    }
                 }
                 syncState();
                 closeMenu();
@@ -1512,11 +1574,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     d.classList.remove('open');
                     const t = d.querySelector('.custom-dropdown-trigger');
                     if (t) t.setAttribute('aria-expanded', 'false');
-                    const pg = d.closest('.filter-group');
+                    const pg = d.closest('.filter-group') || d.closest('.form-group') || d.closest('.detail-priority-wrapper') || d.parentElement;
                     if (pg) pg.classList.remove('has-open-dropdown');
                 }
             });
-            const fc = dropdown.closest('.filter-container');
+            const fc = dropdown.closest('.filter-container') || dropdown.closest('.adv-audit-filters-grid') || dropdown.closest('.admin-modal-box');
             if (fc) fc.classList.add('has-open-dropdown');
             parentGroup.classList.add('has-open-dropdown');
             dropdown.classList.add('open');
@@ -1527,7 +1589,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dropdown.classList.remove('open');
             trigger.setAttribute('aria-expanded', 'false');
             parentGroup.classList.remove('has-open-dropdown');
-            const fc = dropdown.closest('.filter-container');
+            const fc = dropdown.closest('.filter-container') || dropdown.closest('.adv-audit-filters-grid') || dropdown.closest('.admin-modal-box');
             if (fc && !fc.querySelector('.admin-custom-dropdown.open')) {
                 fc.classList.remove('has-open-dropdown');
             }
@@ -1565,7 +1627,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 trigger.setAttribute('title', currentOpt.textContent);
             }
 
-            if (currentVal && currentVal !== 'all') {
+            if (currentVal && currentVal !== 'all' && currentVal !== 'normal' && currentVal !== 'edare_kol' && currentVal !== 'true') {
                 dropdown.classList.add('has-filter');
             } else {
                 dropdown.classList.remove('has-filter');
@@ -1601,8 +1663,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initAdminCustomFilters() {
-        ['filter-type', 'filter-read-status', 'filter-priority', 'filter-report-type'].forEach(id => {
-            initAdminCustomSelect(id, ADMIN_FILTER_DESCRIPTIONS[id]);
+        ['filter-type', 'filter-read-status', 'filter-priority', 'filter-report-type', 'detail-priority-select', 'audit-filter-action', 'audit-filter-user', 'audit-filter-month', 'new_role', 'edit_role', 'edit_is_active'].forEach(id => {
+            if (document.getElementById(id)) {
+                initAdminCustomSelect(id, ADMIN_FILTER_DESCRIPTIONS[id]);
+            }
         });
 
         document.addEventListener('click', (e) => {
@@ -1611,13 +1675,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     d.classList.remove('open');
                     const t = d.querySelector('.custom-dropdown-trigger');
                     if (t) t.setAttribute('aria-expanded', 'false');
-                    const pg = d.closest('.filter-group');
+                    const pg = d.closest('.filter-group') || d.closest('.form-group') || d.closest('.detail-priority-wrapper') || d.parentElement;
                     if (pg) pg.classList.remove('has-open-dropdown');
                 });
-                const fc = document.querySelector('.filter-container.has-open-dropdown');
-                if (fc && !fc.querySelector('.admin-custom-dropdown.open')) {
-                    fc.classList.remove('has-open-dropdown');
-                }
+                document.querySelectorAll('.has-open-dropdown').forEach(el => {
+                    if (!el.querySelector('.admin-custom-dropdown.open')) {
+                        el.classList.remove('has-open-dropdown');
+                    }
+                });
             }
         });
 
@@ -1631,10 +1696,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         t.setAttribute('aria-expanded', 'false');
                         t.focus();
                     }
-                    const pg = openDropdown.closest('.filter-group');
-                    if (pg) pg.classList.remove('has-open-dropdown');
-                    const fc = openDropdown.closest('.filter-container');
-                    if (fc) fc.classList.remove('has-open-dropdown');
+                    document.querySelectorAll('.has-open-dropdown').forEach(el => {
+                        el.classList.remove('has-open-dropdown');
+                    });
                 }
             }
         });
@@ -3970,9 +4034,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 prioritySelect.value = prio;
                 updatePriorityDisplay(prio);
 
+                const customPriorityDropdown = document.querySelector('.admin-custom-dropdown[data-target="detail-priority-select"]');
                 let fixedBadge = document.getElementById('detail-priority-badge');
                 if (isNavahiAdmin) {
                     prioritySelect.style.display = 'none';
+                    if (customPriorityDropdown) customPriorityDropdown.style.display = 'none';
                     if (!fixedBadge) {
                         fixedBadge = document.createElement('span');
                         fixedBadge.id = 'detail-priority-badge';
@@ -3991,7 +4057,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     prioritySelect.onchange = null;
                 } else {
-                    prioritySelect.style.display = '';
+                    prioritySelect.style.display = 'none';
+                    if (customPriorityDropdown) {
+                        customPriorityDropdown.style.display = '';
+                        const ctrl = adminCustomSelectControllers.get('detail-priority-select');
+                        if (ctrl) ctrl.sync();
+                    }
                     if (fixedBadge) {
                         fixedBadge.style.display = 'none';
                     }
@@ -6607,6 +6678,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnOpenCreateUser?.addEventListener('click', () => {
         formCreateUser?.reset();
         resetNewUserPasswordToggles();
+        syncAllAdminCustomSelects();
         const status = document.getElementById('create-user-status');
         if (status) status.style.display = 'none';
         if (modalCreateUser) modalCreateUser.style.display = 'flex';
@@ -6648,6 +6720,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (activeContainer) activeContainer.style.display = 'block';
             if (activeSelect) activeSelect.value = user.is_active ? 'true' : 'false';
         }
+        syncAllAdminCustomSelects();
 
         if (statusEl) statusEl.style.display = 'none';
 
@@ -7253,6 +7326,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (users.includes(currentVal)) {
             auditFilterUser.value = currentVal;
         }
+        if (typeof initAdminCustomSelect === 'function') {
+            initAdminCustomSelect('audit-filter-user', ADMIN_FILTER_DESCRIPTIONS['audit-filter-user']);
+        }
     }
 
     function applyAuditFiltersAndPagination(resetPage = false) {
@@ -7343,6 +7419,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (auditFilterAction) auditFilterAction.value = 'all';
         if (auditFilterUser) auditFilterUser.value = 'all';
         if (auditFilterMonth) auditFilterMonth.value = 'all';
+        syncAllAdminCustomSelects();
         applyAuditFiltersAndPagination(true);
     });
 
