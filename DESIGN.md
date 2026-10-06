@@ -274,6 +274,13 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 ### 18. Assistant Communication & Chat Language
 - **Assistant Chat Language:** ALWAYS speak, respond, and chat in English with user in all conversations and chats, while preserving Persian for client-facing UI strings and portal content.
 
+### 19. Network Connection Monitoring & Immediate Session Revocation
+- **Public & Admin Parity:** Both public and admin interfaces feature real-time connectivity banners fixed at `top: 0` (`.offline-banner`).
+  - Offline Disconnect: `ارتباط با سرور قطع شده است. لطفاً اتصال اینترنت خود را بررسی کنید.` (Crimson red gradient `#dc2626` to `#991b1b` with offline Wi-Fi SVG icon).
+  - Online Restored: `ارتباط با سرور برقرار شد.` (Emerald green gradient `#059669` to `#047857` with Wi-Fi SVG icon, auto-dismissing after 3 seconds).
+- **Mandatory Admin Security Revocation:** Unlike the public reporting form where user draft inputs are preserved, dropping network connection in the administrative intelligence portal immediately revokes the active session cookie (`herasat_admin_session`), wipes session-level security tokens (`herasat_csrf`, `2fa_prompt_shown`), terminates SSE streams and active background polling intervals, closes all open modals, and immediately forces view transition back to `#login-section` with an explanatory security termination notice.
+- **Pre-Submit Connectivity Guard:** Login and MFA verification forms verify connectivity prior to dispatching network credentials, providing instant feedback without hanging timeouts.
+
 ---
 
 ## Hardware Acceleration & Anti-Lag Performance Rules

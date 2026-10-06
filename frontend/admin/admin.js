@@ -10,6 +10,12 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), ms);
     return fetch(url, { ...options, signal: ctrl.signal })
+        .catch(err => {
+            if (url !== '/health' && typeof window.__checkAdminHostConnection === 'function') {
+                window.__checkAdminHostConnection();
+            }
+            throw err;
+        })
         .finally(() => clearTimeout(timer));
 }
 
@@ -460,6 +466,189 @@ document.addEventListener('DOMContentLoaded', () => {
     let reportPollingInterval = null;
     let notifPollingInterval = null;
 
+    let offlineBanner = null;
+    let offlineRestoreTimer = null;
+    let hostRecoveryTimer = null;
+    let isCheckingHost = false;
+    let isHostReachable = true;
+
+    function showOfflineBanner() {
+        isHostReachable = false;
+        if (offlineRestoreTimer) {
+            clearTimeout(offlineRestoreTimer);
+            offlineRestoreTimer = null;
+        }
+        if (offlineBanner) {
+            if (!offlineBanner.classList.contains('online-restored')) return;
+            offlineBanner.className = 'offline-banner';
+        } else {
+            offlineBanner = document.createElement('div');
+            offlineBanner.className = 'offline-banner';
+            document.body.prepend(offlineBanner);
+        }
+        offlineBanner.innerHTML = `
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 2 20 20"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 4.17-2.65"/><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"/><path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"/><path d="M5 13a10 10 0 0 1 5.24-2.78"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+            <span>ارتباط با سرور قطع شده است. لطفاً اتصال اینترنت خود را بررسی کنید.</span>
+        `;
+        forceLogoutOnConnectionDrop();
+        startRecoveryPolling();
+    }
+
+    function hideOfflineBanner() {
+        if (!offlineBanner) return;
+        isHostReachable = true;
+        stopRecoveryPolling();
+        offlineBanner.className = 'offline-banner online-restored';
+        offlineBanner.innerHTML = `
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.86a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/></svg>
+            <span>ارتباط با سرور برقرار شد.</span>
+        `;
+        if (typeof loadAdminCaptcha === 'function') {
+            loadAdminCaptcha();
+        }
+        if (offlineRestoreTimer) clearTimeout(offlineRestoreTimer);
+        offlineRestoreTimer = setTimeout(() => {
+            if (offlineBanner && offlineBanner.classList.contains('online-restored')) {
+                offlineBanner.remove();
+                offlineBanner = null;
+            }
+            offlineRestoreTimer = null;
+        }, 3000);
+    }
+
+    async function pingHost(timeoutMs = 4000) {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+        try {
+            const res = await fetch('/health', {
+                method: 'GET',
+                cache: 'no-store',
+                signal: ctrl.signal
+            });
+            return res.status >= 200 && res.status < 500;
+        } catch {
+            return false;
+        } finally {
+            clearTimeout(timer);
+        }
+    }
+
+    async function checkHostConnection() {
+        if (isCheckingHost) return isHostReachable;
+        if (!navigator.onLine) {
+            showOfflineBanner();
+            return false;
+        }
+        isCheckingHost = true;
+        try {
+            const reachable = await pingHost(4000);
+            if (reachable) {
+                if (offlineBanner && !offlineBanner.classList.contains('online-restored')) {
+                    hideOfflineBanner();
+                }
+            } else {
+                showOfflineBanner();
+            }
+            return reachable;
+        } finally {
+            isCheckingHost = false;
+        }
+    }
+
+    function startRecoveryPolling() {
+        if (hostRecoveryTimer) return;
+        hostRecoveryTimer = setInterval(() => {
+            if (document.visibilityState === 'visible') {
+                checkHostConnection();
+            }
+        }, 5000);
+    }
+
+    function stopRecoveryPolling() {
+        if (hostRecoveryTimer) {
+            clearInterval(hostRecoveryTimer);
+            hostRecoveryTimer = null;
+        }
+    }
+
+    function forceLogoutOnConnectionDrop() {
+        const isDashboardActive = dashboardSection && dashboardSection.style.display !== 'none' && !dashboardSection.classList.contains('d-none');
+        if (isDashboardActive || currentAdmin !== null) {
+            try {
+                fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin', keepalive: true }).catch(() => {});
+            } catch (_) {}
+            document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            sessionStorage.removeItem('herasat_csrf');
+            sessionStorage.removeItem('2fa_prompt_shown');
+            currentAdmin = null;
+            if (_sseConnection) {
+                _sseConnection.close();
+                _sseConnection = null;
+            }
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            if (typeof stopBackgroundPolling === 'function') {
+                stopBackgroundPolling();
+            }
+            if (reportPollingInterval) {
+                clearInterval(reportPollingInterval);
+                reportPollingInterval = null;
+            }
+            if (notifPollingInterval) {
+                clearInterval(notifPollingInterval);
+                notifPollingInterval = null;
+            }
+            document.querySelectorAll('.admin-modal-overlay').forEach(m => m.style.display = 'none');
+            if (typeof cancelMFAStep === 'function') {
+                cancelMFAStep();
+            }
+            if (dashboardSection) {
+                dashboardSection.style.display = 'none';
+                dashboardSection.classList.add('d-none');
+            }
+            if (loginSection) {
+                loginSection.style.display = 'flex';
+                loginSection.classList.remove('d-none');
+            }
+            if (loginMessage) {
+                loginMessage.textContent = 'به دلیل قطع ارتباط با سرور و جهت حفظ امنیت، نشست کاری شما پایان یافت. لطفاً پس از اتصال مجدد، دوباره وارد شوید.';
+                loginMessage.style.display = 'block';
+            }
+            if (typeof loadAdminCaptcha === 'function') {
+                loadAdminCaptcha();
+            }
+        } else {
+            if (typeof cancelMFAStep === 'function') {
+                const mfaStep = document.getElementById('mfaStepContainer');
+                if (mfaStep && mfaStep.style.display !== 'none') {
+                    cancelMFAStep();
+                }
+            }
+        }
+    }
+
+    window.__checkAdminHostConnection = checkHostConnection;
+
+    window.addEventListener('offline', () => {
+        showOfflineBanner();
+    });
+
+    window.addEventListener('online', () => {
+        checkHostConnection();
+    });
+
+    setInterval(() => {
+        if (document.visibilityState === 'visible' && !offlineBanner) {
+            checkHostConnection();
+        }
+    }, 45000);
+
+    if (!navigator.onLine) {
+        showOfflineBanner();
+    }
+
     const countdownEl = document.getElementById('sessionCountdown');
     const timerBoxEl = document.getElementById('sessionTimerBox') || document.querySelector('.session-timer-box');
     const btnRenewSession = document.getElementById('btnRenewSession');
@@ -669,6 +858,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        if (!navigator.onLine || !isHostReachable) {
+            showOfflineBanner();
+            if (loginMessage) {
+                loginMessage.textContent = 'ارتباط با سرور قطع شده است. لطفاً اتصال اینترنت خود را بررسی کنید.';
+                loginMessage.style.display = 'block';
+            }
+            return;
+        }
 
         const loginBtn = document.getElementById('loginBtn');
         const btnText = loginBtn?.querySelector('.btn-text');
@@ -968,6 +1166,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mfaForm) {
         mfaForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            if (!navigator.onLine || !isHostReachable) {
+                showOfflineBanner();
+                const mfaMsg = document.getElementById('mfaMessage');
+                if (mfaMsg) {
+                    mfaMsg.textContent = 'ارتباط با سرور قطع شده است. لطفاً اتصال اینترنت خود را بررسی کنید.';
+                    mfaMsg.className = 'response-box error';
+                    mfaMsg.style.display = 'block';
+                }
+                return;
+            }
+
             const mfaPendingToken = document.getElementById('mfa_pending_token');
             const mfaTotpCode = document.getElementById('mfa_totp_code');
             const mfaMsg = document.getElementById('mfaMessage');

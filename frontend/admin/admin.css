@@ -8177,4 +8177,52 @@ tr.row-priority-normal {
         overflow: visible !important;
         white-space: normal !important;
     }
+    .offline-banner {
+        display: none !important;
+    }
+}
+
+.offline-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999999;
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    border-bottom: 1px solid rgba(254, 202, 202, 0.28);
+    color: #ffffff;
+    padding: 10px 20px;
+    text-align: center;
+    font-family: 'Vazirmatn', var(--font-primary), system-ui, sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    direction: rtl;
+    transform: translateZ(0);
+    will-change: transform;
+    animation: offlineBannerSlideDown 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 20px rgba(220, 38, 38, 0.45);
+    contain: layout style;
+}
+
+.offline-banner.online-restored {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    border-bottom: 1px solid rgba(167, 243, 208, 0.28);
+    box-shadow: 0 4px 20px rgba(5, 150, 105, 0.45);
+}
+
+.offline-banner svg {
+    flex-shrink: 0;
+}
+
+@keyframes offlineBannerSlideDown {
+    from {
+        transform: translateY(-100%) translateZ(0);
+    }
+    to {
+        transform: translateY(0) translateZ(0);
+    }
 }
