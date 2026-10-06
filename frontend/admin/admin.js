@@ -4145,6 +4145,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCloseShortcutsFooter = document.getElementById('btn-close-shortcuts-footer');
 
     function openShortcutsModal() {
+        const userMenu = document.getElementById('userMenuDropdown');
+        const userBtn = document.getElementById('btnUserMenu');
+        if (userMenu) userMenu.style.display = 'none';
+        if (userBtn) userBtn.classList.remove('is-active');
         if (modalShortcuts) {
             const card = modalShortcuts.querySelector('.modal-card, .pro-card') || modalShortcuts;
 

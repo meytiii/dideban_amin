@@ -7,7 +7,7 @@
     <title>سامانه دیده‌بان امین - پنل مدیریت حراست همدان</title>
     <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="admin.css?v=90">
+    <link rel="stylesheet" href="admin.css?v=91">
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 
@@ -380,15 +380,6 @@
                     </div>
                 </div>
 
-                <button type="button" id="btnOpenShortcuts" class="btn-action btn-secondary btn-icon-only"
-                    data-tooltip="راهنمای کلیدهای میانبر (کلید ?)" aria-label="راهنمای کلیدهای میانبر">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                    </svg>
-                </button>
-
                 <div class="user-menu-wrapper" id="userMenuWrapper">
                     <button type="button" id="btnUserMenu" class="btn-action btn-secondary btn-user-menu"
                         aria-haspopup="true" aria-expanded="false" aria-label="منوی حساب کاربری و امنیت">
@@ -436,6 +427,16 @@
                                     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                 </svg>
                                 <span>تغییر کلمه عبور</span>
+                            </button>
+
+                            <button type="button" id="btnOpenShortcuts" class="user-menu-item">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                                <span>راهنمای کلیدهای میانبر</span>
                             </button>
                         </div>
 
@@ -2791,7 +2792,7 @@
 
     <script src="confirm.js" defer></script>
     <script src="tatweel.js" defer></script>
-    <script src="admin.js?v=90" defer></script>
+    <script src="admin.js?v=91" defer></script>
 </body>
 
 </html>
