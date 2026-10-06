@@ -290,6 +290,21 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
   - Expanded State: Fluid width expansion to 460px (or full width on mobile) via cubic-bezier spring physics (`cubic-bezier(0.16, 1, 0.3, 1)`), morphing the trigger into a dismissal toggle (`X`), focusing input, and revealing the interactive command palette dropdown.
   - Auto-Dismiss & Click-Outside: Automatically contracts to 42px on outside click when query is empty, preserving active filter state when query contains search text.
 
+### 21. Unified Scrollbar & Slider Design Specification
+- **Strict Ban on Generic White/Gray Browser Scrollbars:** Default browser scrollbars ("generic white" native scrollbars with bright tracks and arrow buttons) are strictly forbidden across the entire application.
+- **Calibrated Standard Matching the Status Filter (`وضعیت`):**
+  - **CSS Standard Properties:**
+    - `scrollbar-width: thin;`
+    - `scrollbar-color: rgba(56, 189, 248, 0.4) transparent;`
+  - **WebKit / Chromium Rules:**
+    - Width & Height: `6px`
+    - Track: `background: transparent; border-radius: 9999px;`
+    - Thumb: `background: rgba(56, 189, 248, 0.4); border-radius: 9999px; transition: background-color 0.2s ease;`
+    - Thumb Hover: `background: rgba(56, 189, 248, 0.75);`
+    - Buttons (Arrows): `display: none !important; width: 0 !important; height: 0 !important;` (completely removed)
+    - Corner: `background: transparent;`
+- **Portal-Wide Mandate:** All existing and future scrollable containers and sliders—including search bar recommendations, dropdown menus, modal dialogs, audit log tables, chat streams, and history lists—must strictly implement this design and color specification instead of generic native browser scrollbars.
+
 ---
 
 ## Hardware Acceleration & Anti-Lag Performance Rules
@@ -313,6 +328,7 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Do** enforce CSS containment (`contain: layout style`) on modular page views.
 - **Do** wrap decorative elongated Persian headings in `.persian-tatweel-wrapper` with an accompanying `.tatweel-sr` accessible element for screen readers.
 - **Do** use `showConfirmDialog()` from `frontend/confirm.js` for all destructive user confirmations.
+- **Do** apply standardized cyan/slate scrollbar rules (`scrollbar-color: rgba(56, 189, 248, 0.4) transparent;` and 6px WebKit rules) to all scrollable surfaces and sliders.
 
 ### Don't:
 - **Don't** mix multiple icon sets or introduce emoji icons inside critical UI buttons.
@@ -322,6 +338,7 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Don't** use `backdrop-filter: blur(...)` on large content containers or scrollable cards.
 - **Don't** transition expensive `box-shadow` blurs on hover; animate `transform` instead.
 - **Don't** put comments in codes.
+- **Don't** allow generic browser default white/gray scrollbars or arrow buttons anywhere in the interface.
 
 NO DEPENDANCIES FOR THIS PROJECT... EVERYTHING MUST BE LOCAL FOR SECURITY REASONS (BY EVERYTHING I MEAN ASSETS AND NOT PLUGINS).
 PLUGINS OR EXTERNAL LIBRARIES ARE FORBIDDEN.

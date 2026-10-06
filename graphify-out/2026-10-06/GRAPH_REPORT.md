@@ -1,7 +1,7 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-06)
 
 ## Corpus Check
-- 208 files · ~228,873 words
+- 208 files · ~228,882 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `297e5799`
+- Built from commit: `9eb17aff`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

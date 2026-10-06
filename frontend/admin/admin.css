@@ -56,6 +56,40 @@
     padding: 0;
 }
 
+html, body, * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(56, 189, 248, 0.4) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(56, 189, 248, 0.4);
+    border-radius: 9999px;
+    transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(56, 189, 248, 0.75);
+}
+
+::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
 :focus-visible {
     outline: 2px solid #60a5fa;
     outline-offset: 2px;
@@ -1885,6 +1919,32 @@ button {
     scrollbar-color: rgba(56, 189, 248, 0.4) transparent;
 }
 
+.admin-custom-dropdown .custom-dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.admin-custom-dropdown .custom-dropdown-menu::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 9999px;
+}
+
+.admin-custom-dropdown .custom-dropdown-menu::-webkit-scrollbar-thumb {
+    background: rgba(56, 189, 248, 0.4);
+    border-radius: 9999px;
+    transition: background-color 0.2s ease;
+}
+
+.admin-custom-dropdown .custom-dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(56, 189, 248, 0.75);
+}
+
+.admin-custom-dropdown .custom-dropdown-menu::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
 .admin-custom-dropdown[data-target="filter-type"] .custom-dropdown-menu,
 .admin-custom-dropdown[data-target="filter-read-status"] .custom-dropdown-menu {
     min-width: 285px;
@@ -2628,6 +2688,33 @@ button {
     flex-direction: column;
     gap: 3px;
     scrollbar-width: thin;
+    scrollbar-color: rgba(56, 189, 248, 0.4) transparent;
+}
+
+.action-search-list::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.action-search-list::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 9999px;
+}
+
+.action-search-list::-webkit-scrollbar-thumb {
+    background: rgba(56, 189, 248, 0.4);
+    border-radius: 9999px;
+    transition: background-color 0.2s ease;
+}
+
+.action-search-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(56, 189, 248, 0.75);
+}
+
+.action-search-list::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 .action-search-item {
