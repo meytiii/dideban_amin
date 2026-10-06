@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1791264099.5968466,
-    "seen": 1791264207.4515383,
-    "ast_hash": "69c4762a2aa85d44414c19a5e452f6a8",
+    "mtime": 1791265842.953258,
+    "seen": 1791265933.5550513,
+    "ast_hash": "76bda403619ba0fa58a1a34da500e5a9",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1791264143.628521,
-    "seen": 1791264207.4631908,
-    "ast_hash": "387a959e812bd6034f7a66ef73ca1d01",
+    "mtime": 1791265877.4117208,
+    "seen": 1791265933.5664346,
+    "ast_hash": "76218b9324b6fdd178eba297889c2b37",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
@@ -168,9 +168,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1791264197.504406,
-    "seen": 1791264207.4630706,
-    "ast_hash": "9d5765bbf28bdbd290dfe4bbda023b29",
+    "mtime": 1791265897.8245406,
+    "seen": 1791265933.5663102,
+    "ast_hash": "2fb75f050edceb8ce6cefe55f32cc388",
     "semantic_hash": ""
   },
   "GEMINI.md": {
@@ -1299,6 +1299,18 @@
     "mtime": 1791191197.7557597,
     "seen": 1791192246.9329665,
     "ast_hash": "8ead8d0fa0d5bdfa18351903f0ed79bd",
+    "semantic_hash": ""
+  },
+  "components/ui/expandable-search-bar-demo.tsx": {
+    "mtime": 1791265443.7878587,
+    "seen": 1791265933.5541046,
+    "ast_hash": "233c7ca39a9f0b4f4e414f36ef6e9282",
+    "semantic_hash": ""
+  },
+  "components/ui/expandable-search-bar.tsx": {
+    "mtime": 1791265436.7175617,
+    "seen": 1791265933.554108,
+    "ast_hash": "682899d7d742d0f2d69773441c31370a",
     "semantic_hash": ""
   }
 }

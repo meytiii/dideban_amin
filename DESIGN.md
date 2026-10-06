@@ -281,6 +281,15 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Mandatory Admin Security Revocation:** Unlike the public reporting form where user draft inputs are preserved, dropping network connection in the administrative intelligence portal immediately revokes the active session cookie (`herasat_admin_session`), wipes session-level security tokens (`herasat_csrf`, `2fa_prompt_shown`), terminates SSE streams and active background polling intervals, closes all open modals, and immediately forces view transition back to `#login-section` with an explanatory security termination notice.
 - **Pre-Submit Connectivity Guard:** Login and MFA verification forms verify connectivity prior to dispatching network credentials, providing instant feedback without hanging timeouts.
 
+### 20. Split Toolbar Architecture & Centered Expandable Search Bar
+- **Two-Tier Layout Hierarchy:**
+  - **Tier 1 (Top Filter Toolbar):** Houses categorical dropdown filters (`filter-type`, `filter-read-status`, `filter-priority`, `filter-report-type`, `dateRangePickerWrapper`) flowing from right in RTL, alongside the 3 primary action icon buttons (`clearFiltersBtn`, `btnExportCSV`, `refreshReportsBtn`) aligned next to them on the left (`margin-inline-start: auto`).
+  - **Tier 2 (Centered Expandable Search):** Placed centrally below the filters in `.filter-search-row`, eliminating horizontal overcrowding on high and medium DPI viewports.
+- **Expandable Search Interaction & Spring Physics:**
+  - Collapsed State: 42px x 42px circular tactile icon button (`.expandable-search-toggle`) with search SVG glyph, micro-spring scale (`scale(1.05)` on hover), and shortcut hint tooltip (`Ctrl+K`).
+  - Expanded State: Fluid width expansion to 460px (or full width on mobile) via cubic-bezier spring physics (`cubic-bezier(0.16, 1, 0.3, 1)`), morphing the trigger into a dismissal toggle (`X`), focusing input, and revealing the interactive command palette dropdown.
+  - Auto-Dismiss & Click-Outside: Automatically contracts to 42px on outside click when query is empty, preserving active filter state when query contains search text.
+
 ---
 
 ## Hardware Acceleration & Anti-Lag Performance Rules

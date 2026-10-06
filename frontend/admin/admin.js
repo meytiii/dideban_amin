@@ -2026,11 +2026,83 @@ document.addEventListener('DOMContentLoaded', () => {
         const iconSend = document.getElementById('actionIconSend');
         const iconBox = document.getElementById('searchIconBox');
         const kbdBadge = document.getElementById('searchKbdBadge');
+        const toggleBtn = document.getElementById('expandableSearchToggle');
+        const clearBtn = document.getElementById('expandableSearchClear');
+        const iconSearchToggle = toggleBtn ? toggleBtn.querySelector('.icon-search') : null;
+        const iconCloseToggle = toggleBtn ? toggleBtn.querySelector('.icon-close') : null;
 
         if (!wrapper || !input || !dropdown || !list) return;
 
         let activeIndex = -1;
         let currentItems = [];
+
+        function openSearch() {
+            wrapper.classList.add('is-open');
+            if (iconSearchToggle) iconSearchToggle.classList.add('d-none');
+            if (iconCloseToggle) iconCloseToggle.classList.remove('d-none');
+            if (toggleBtn) {
+                toggleBtn.setAttribute('aria-label', 'بستن جستجو');
+                toggleBtn.setAttribute('data-tooltip', 'بستن جستجو (Esc)');
+            }
+            if (input.value.trim().length > 0 && clearBtn) {
+                clearBtn.classList.remove('d-none');
+            }
+            setTimeout(() => {
+                input.focus();
+            }, 60);
+        }
+
+        function closeSearch(clearValue = true) {
+            if (clearValue && input.value) {
+                input.value = '';
+                if (typeof applyFilters === 'function') {
+                    applyFilters(true);
+                }
+            }
+            wrapper.classList.remove('is-open');
+            if (iconSearchToggle) iconSearchToggle.classList.remove('d-none');
+            if (iconCloseToggle) iconCloseToggle.classList.add('d-none');
+            if (toggleBtn) {
+                toggleBtn.setAttribute('aria-label', 'جستجو');
+                toggleBtn.setAttribute('data-tooltip', 'جستجو در گزارش‌ها (Ctrl+K)');
+            }
+            if (clearBtn) clearBtn.classList.add('d-none');
+            if (kbdBadge) kbdBadge.style.opacity = '1';
+            closeDropdown();
+            input.blur();
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (wrapper.classList.contains('is-open')) {
+                    if (input.value.trim().length > 0) {
+                        closeSearch(true);
+                    } else {
+                        closeSearch(false);
+                    }
+                } else {
+                    openSearch();
+                    openDropdown();
+                }
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                input.value = '';
+                clearBtn.classList.add('d-none');
+                if (kbdBadge) kbdBadge.style.opacity = '1';
+                input.focus();
+                computeAndRender();
+                if (typeof applyFilters === 'function') {
+                    applyFilters(true);
+                }
+            });
+        }
 
         const defaultActions = [
             {
@@ -2249,11 +2321,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (iconSend) iconSend.classList.remove('d-none');
                 if (iconBox) iconBox.classList.add('is-active');
                 if (kbdBadge) kbdBadge.style.opacity = '0';
+                if (clearBtn) clearBtn.classList.remove('d-none');
             } else {
                 if (iconSearch) iconSearch.classList.remove('d-none');
                 if (iconSend) iconSend.classList.add('d-none');
                 if (iconBox) iconBox.classList.remove('is-active');
                 if (kbdBadge) kbdBadge.style.opacity = '1';
+                if (clearBtn) clearBtn.classList.add('d-none');
             }
 
             if (!q) {
@@ -2302,10 +2376,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         input.addEventListener('focus', () => {
+            if (!wrapper.classList.contains('is-open')) openSearch();
             openDropdown();
         });
 
         input.addEventListener('click', () => {
+            if (!wrapper.classList.contains('is-open')) openSearch();
             if (dropdown.style.display === 'none') openDropdown();
         });
 
@@ -2340,15 +2416,30 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Escape') {
                 e.preventDefault();
                 closeDropdown();
-                input.blur();
+                if (input.value.trim() !== '') {
+                    input.value = '';
+                    if (typeof applyFilters === 'function') applyFilters(true);
+                }
+                closeSearch(false);
             }
         });
 
         document.addEventListener('click', (e) => {
             if (!wrapper.contains(e.target)) {
                 closeDropdown();
+                if (wrapper.classList.contains('is-open') && input.value.trim() === '') {
+                    closeSearch(false);
+                }
             }
         });
+
+        if (input.value.trim().length > 0) {
+            wrapper.classList.add('is-open');
+            if (iconSearchToggle) iconSearchToggle.classList.add('d-none');
+            if (iconCloseToggle) iconCloseToggle.classList.remove('d-none');
+            if (clearBtn) clearBtn.classList.remove('d-none');
+            if (kbdBadge) kbdBadge.style.opacity = '0';
+        }
     }
 
     if (searchTracking) {
@@ -2390,7 +2481,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (clearFiltersBtn) {
         clearFiltersBtn.addEventListener('click', () => {
-            if (searchTracking) searchTracking.value = '';
+            if (searchTracking) {
+                searchTracking.value = '';
+                const clearBtn = document.getElementById('expandableSearchClear');
+                if (clearBtn) clearBtn.classList.add('d-none');
+                const actionWrap = document.getElementById('actionSearchWrapper');
+                if (actionWrap) {
+                    actionWrap.classList.remove('is-open');
+                    const toggleBtn = document.getElementById('expandableSearchToggle');
+                    const iconS = toggleBtn ? toggleBtn.querySelector('.icon-search') : null;
+                    const iconC = toggleBtn ? toggleBtn.querySelector('.icon-close') : null;
+                    if (iconS) iconS.classList.remove('d-none');
+                    if (iconC) iconC.classList.add('d-none');
+                    if (toggleBtn) {
+                        toggleBtn.setAttribute('aria-label', 'جستجو');
+                        toggleBtn.setAttribute('data-tooltip', 'جستجو در گزارش‌ها (Ctrl+K)');
+                    }
+                }
+            }
             if (filterType) filterType.value = 'all';
             if (filterPriority) filterPriority.value = 'all';
             if (filterReportType) filterReportType.value = 'all';
