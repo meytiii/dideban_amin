@@ -4403,7 +4403,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let _elDetailSkeleton = null;
     let _elDetailActual = null;
 
-    async function viewReport(id) {
+    async function viewReport(id, preserveScroll = false) {
         currentViewingReportId = id;
         currentViewingIndex = filteredReports.findIndex(r => r.id === id);
         updateDetailNavButtons();
@@ -4418,9 +4418,12 @@ document.addEventListener('DOMContentLoaded', () => {
         reportsInboxSection?.classList.remove('popover-active');
         dashboardSection?.classList.remove('popover-active');
         if (detailSection) detailSection.style.display = 'block';
-        if (_elDetailSkeleton) _elDetailSkeleton.classList.remove('d-none');
-        if (_elDetailActual) _elDetailActual.classList.add('d-none');
-        window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        const savedScrollY = window.scrollY;
+        if (!preserveScroll) {
+            if (_elDetailSkeleton) _elDetailSkeleton.classList.remove('d-none');
+            if (_elDetailActual) _elDetailActual.classList.add('d-none');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        }
 
         try {
             const response = await adminFetch(`/api/admin/report?id=${id}`);
@@ -5013,11 +5016,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!data.is_read) {
                 toggleReadStatus(id, false);
             }
+
+            if (preserveScroll) {
+                window.scrollTo({ top: savedScrollY, behavior: 'instant' });
+            }
         } catch (error) {
             console.error('Error opening report modal:', error);
             if (_elDetailSkeleton) _elDetailSkeleton.classList.add('d-none');
             if (_elDetailActual) _elDetailActual.classList.remove('d-none');
-            closeDetailView();
+            if (!preserveScroll) {
+                closeDetailView();
+            }
             showToast('خطا در بارگذاری اطلاعات پرونده', 3500, 'error');
         }
     }
@@ -5063,7 +5072,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusMsg.textContent = data.message || 'گزارش بررسی با موفقیت برای اداره کل ارسال شد.';
                 statusMsg.style.display = 'block';
             }
-            viewReport(currentViewingReportId);
+            viewReport(currentViewingReportId, true);
         } catch (err) {
             showToast(err.message || 'خطای ارتباط با سرور', 4000, 'error');
             if (statusMsg) {
@@ -5281,7 +5290,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         statusMsg.style.display = 'block';
                     }
                     if (responseInput) responseInput.value = '';
-                    await viewReport(currentViewingReportId);
+                    await viewReport(currentViewingReportId, true);
                     fetchReports().catch(() => { });
                 } else {
                     const err = await res.text();
@@ -9140,7 +9149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     openForwardHistoryModal(parseInt(repId, 10), historyModalTrackingCode?.textContent || '');
 
                     if (currentViewingReportId && currentViewingReportId === parseInt(repId, 10)) {
-                        viewReport(currentViewingReportId);
+                        viewReport(currentViewingReportId, true);
                     }
                 } catch (err) {
                     showToast(err.message || 'خطای ارتباط با سرور در حذف ارجاع', 4000, 'error');
