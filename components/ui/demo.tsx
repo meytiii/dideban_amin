@@ -1,72 +1,66 @@
-"use client";
+import {
+  CircleCheck,
+  CircleDashed,
+  CircleX,
+  Clock5,
+  ScanSearch,
+  TriangleAlert,
+} from "lucide-react";
+import React from "react";
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { useId, useState } from "react";
-import { DateRange } from "react-day-picker";
-
-function Component() {
-  const id = useId();
-  const [date, setDate] = useState<DateRange | undefined>();
-
+const StatusDemo = () => {
   return (
-    <div>
-      <div className="space-y-2">
-        <Label htmlFor={id}>Date range picker</Label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              id={id}
-              variant={"outline"}
-              className={cn(
-                "group w-full justify-between bg-background px-3 font-normal outline-offset-0 hover:bg-background focus-visible:border-ring focus-visible:outline-[3px] focus-visible:outline-ring/20",
-                !date && "text-muted-foreground",
-              )}
-            >
-              <span className={cn("truncate", !date && "text-muted-foreground")}>
-                {date?.from ? (
-                  date.to ? (
-                    <>
-                      {format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}
-                    </>
-                  ) : (
-                    format(date.from, "LLL dd, y")
-                  )
-                ) : (
-                  "Pick a date range"
-                )}
-              </span>
-              <CalendarIcon
-                size={16}
-                strokeWidth={2}
-                className="shrink-0 text-muted-foreground/80 transition-colors group-hover:text-foreground"
-                aria-hidden="true"
-              />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-2" align="start">
-            <Calendar mode="range" selected={date} onSelect={setDate} />
-          </PopoverContent>
-        </Popover>
+    <div className="flex flex-col items-center justify-center gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
+        <div className="w-40 h-[35px] flex items-center justify-center bg-orange-50 rounded-xl ">
+          <h1 className="flex items-center  text-[#EAA65D] font-semibold">
+            <TriangleAlert className="w-4 h-4 mr-2" strokeWidth={3} />
+            Pending
+          </h1>
+        </div>
+        <div className="w-40 h-[35px] flex items-center justify-center bg-rose-50 rounded-xl ">
+          <h1 className="flex items-center  text-[#D57463] font-semibold">
+            <CircleX className="w-4 h-4 mr-2" strokeWidth={3} />
+            Failed
+          </h1>
+        </div>
       </div>
-      <p className="mt-2 text-xs text-muted-foreground" role="region" aria-live="polite">
-        Built with{" "}
-        <a
-          className="underline hover:text-foreground"
-          href="https://daypicker.dev/"
-          target="_blank"
-          rel="noopener nofollow"
-        >
-          React DayPicker
-        </a>
-      </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
+        <div className="w-40 h-[35px] flex items-center justify-center bg-emerald-50 rounded-xl ">
+          <h1 className="flex items-center  text-[#57BC6C] font-semibold">
+            <CircleCheck className="w-4 h-4 mr-2" strokeWidth={3} />
+            Success
+          </h1>
+        </div>
+        <div className="w-40 h-[35px] flex items-center justify-center bg-sky-100 rounded-xl ">
+          <h1 className="flex items-center  text-[#008AF5] font-semibold">
+            <CircleDashed className="w-4 h-4 mr-2" strokeWidth={3} />
+            In progress
+          </h1>
+        </div>{" "}
+        <div className="w-40 h-[35px] flex items-center justify-center bg-yellow-50 rounded-xl ">
+          <h1 className="flex items-center  text-[#F0B13D] font-semibold">
+            <ScanSearch className="w-4 h-4 mr-2" strokeWidth={3} />
+            In review
+          </h1>
+        </div>{" "}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="w-40 h-[35px] flex items-center justify-center bg-zinc-100 rounded-xl ">
+          <h1 className="flex items-center  text-[#777777] font-semibold">
+            <Clock5 className="w-4 h-4 mr-2" strokeWidth={3} />
+            Expired
+          </h1>
+        </div>
+        <div className="w-40 h-[35px] flex items-center justify-center bg-violet-50 rounded-xl ">
+          <h1 className="flex items-center  text-[#6C3CF0] font-semibold">
+            <Clock5 className="w-4 h-4 mr-2" strokeWidth={3} />
+            Submited
+          </h1>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
-export { Component };
+export default StatusDemo;

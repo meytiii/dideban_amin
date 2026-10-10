@@ -2412,13 +2412,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     );
                     if (hasResponse) {
                         badge.className = 'badge-status responded';
-                        badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"></polyline></svg><span>پاسخ داده شده</span>`;
+                        badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg><span>پاسخ داده شده</span>`;
                     } else if (data.is_read) {
                         badge.className = 'badge-status read';
-                        badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg><span>بررسی شده</span>`;
+                        badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><circle cx="12" cy="12" r="3"></circle><path d="m16 16-1.9-1.9"></path></svg><span>بررسی شده</span>`;
                     } else {
                         badge.className = 'badge-status unread';
-                        badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>در نوبت بررسی</span>`;
+                        badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span>در نوبت بررسی</span>`;
                     }
                     statusEl.appendChild(badge);
                 }
@@ -2447,4 +2447,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    document.addEventListener('pointerdown', (e) => {
+        const btn = e.target.closest('.btn-send-animated');
+        if (!btn || btn.disabled) return;
+        if (e.pointerType === 'touch') {
+            btn.classList.add('is-animating');
+            if (btn._touchAnimTimeout) clearTimeout(btn._touchAnimTimeout);
+            btn._touchAnimTimeout = setTimeout(() => {
+                btn.classList.remove('is-animating');
+                btn._touchAnimTimeout = null;
+            }, 1000);
+        }
+    }, { passive: true });
 });

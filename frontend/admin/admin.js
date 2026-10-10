@@ -3943,6 +3943,24 @@ document.addEventListener('DOMContentLoaded', () => {
         renderPaginationControls(currentPage, totalPages);
     }
 
+    function createReportStatusBadge(hasResp, isRead, isForwarded) {
+        const statusBadge = document.createElement('span');
+        if (hasResp) {
+            statusBadge.className = 'badge badge-responded';
+            statusBadge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg><span>پاسخ داده شده</span>`;
+        } else if (isForwarded) {
+            statusBadge.className = 'badge badge-in-progress';
+            statusBadge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.1 2.18a9.93 9.93 0 0 1 3.8 0"></path><path d="M17.6 3.71a9.95 9.95 0 0 1 2.69 2.7"></path><path d="M21.82 10.1a9.93 9.93 0 0 1 0 3.8"></path><path d="M20.29 17.6a9.95 9.95 0 0 1-2.7 2.69"></path><path d="M13.9 21.82a9.93 9.93 0 0 1-3.8 0"></path><path d="M6.4 20.29a9.95 9.95 0 0 1-2.69-2.7"></path><path d="M2.18 13.9a9.93 9.93 0 0 1 0-3.8"></path><path d="M3.71 6.4a9.95 9.95 0 0 1 2.7-2.69"></path></svg><span>ارجاع به منطقه</span>`;
+        } else if (isRead) {
+            statusBadge.className = 'badge badge-read';
+            statusBadge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><circle cx="12" cy="12" r="3"></circle><path d="m16 16-1.9-1.9"></path></svg><span>بررسی شده</span>`;
+        } else {
+            statusBadge.className = 'badge badge-unread';
+            statusBadge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span>در نوبت بررسی</span>`;
+        }
+        return statusBadge;
+    }
+
     function renderTable(reports) {
         reportsBody.innerHTML = '';
 
@@ -4116,18 +4134,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (!hasSpecialBadge) {
-                const statusBadge = document.createElement('span');
-                if (report.has_response || (report.admin_response && report.admin_response.trim() !== '')) {
-                    statusBadge.className = 'badge badge-responded';
-                    statusBadge.textContent = 'پاسخ داده شده';
-                } else if (report.is_read) {
-                    statusBadge.className = 'badge badge-read';
-                    statusBadge.textContent = 'بررسی شده';
-                } else {
-                    statusBadge.className = 'badge badge-unread';
-                    statusBadge.textContent = 'در نوبت بررسی';
-                }
-                badgesWrapper.appendChild(statusBadge);
+                const hasResp = Boolean(report.has_response || (report.admin_response && report.admin_response.trim() !== ''));
+                const isFwd = Boolean(report.is_forwarded);
+                badgesWrapper.appendChild(createReportStatusBadge(hasResp, report.is_read, isFwd));
             }
             statusCell.appendChild(badgesWrapper);
             tr.appendChild(statusCell);
@@ -4405,9 +4414,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (cellEl) {
                     const hasResp = (repInAll && (repInAll.has_response || (repInAll.admin_response && repInAll.admin_response.trim() !== ''))) ||
                         (data.admin_response && data.admin_response.trim() !== '');
-                    const statusText = hasResp ? 'پاسخ داده شده' : 'بررسی شده';
-                    const statusClass = hasResp ? 'badge-responded' : 'badge-read';
-                    cellEl.innerHTML = `<div class="status-badges-wrap"><span class="badge ${statusClass}">${statusText}</span></div>`;
+                    cellEl.innerHTML = '';
+                    const wrap = document.createElement('div');
+                    wrap.className = 'status-badges-wrap';
+                    wrap.appendChild(createReportStatusBadge(hasResp, true, Boolean(repInAll && repInAll.is_forwarded)));
+                    cellEl.appendChild(wrap);
                 }
                 const toggleBtn = rowEl.querySelector('.btn-toggle-read');
                 if (toggleBtn) toggleBtn.remove();
@@ -5098,9 +5109,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     const cellEl = rowEl.querySelector('.status-cell');
                     if (cellEl) {
                         const hasResp = repInAll && (repInAll.has_response || (repInAll.admin_response && repInAll.admin_response.trim() !== ''));
-                        const statusText = hasResp ? 'پاسخ داده شده' : 'بررسی شده';
-                        const statusClass = hasResp ? 'badge-responded' : 'badge-read';
-                        cellEl.innerHTML = `<div class="status-badges-wrap"><span class="badge ${statusClass}">${statusText}</span></div>`;
+                        cellEl.innerHTML = '';
+                        const wrap = document.createElement('div');
+                        wrap.className = 'status-badges-wrap';
+                        wrap.appendChild(createReportStatusBadge(hasResp, true, Boolean(repInAll && repInAll.is_forwarded)));
+                        cellEl.appendChild(wrap);
                     }
                     const toggleBtn = rowEl.querySelector('.btn-toggle-read');
                     if (toggleBtn) toggleBtn.remove();
@@ -9112,4 +9125,17 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.beam, .corner-glow, .kpi-pulse-dot, .badge-dot-beacon, .pulsing-halo').forEach(el => animObserver.observe(el));
         }
     });
+
+    document.addEventListener('pointerdown', (e) => {
+        const btn = e.target.closest('.btn-send-animated');
+        if (!btn || btn.disabled) return;
+        if (e.pointerType === 'touch') {
+            btn.classList.add('is-animating');
+            if (btn._touchAnimTimeout) clearTimeout(btn._touchAnimTimeout);
+            btn._touchAnimTimeout = setTimeout(() => {
+                btn.classList.remove('is-animating');
+                btn._touchAnimTimeout = null;
+            }, 1000);
+        }
+    }, { passive: true });
 });

@@ -312,10 +312,11 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
   - Active / Pressed Surface: `#1d4ed8` with tactile compression (`scale(0.96)`).
   - Outlines & Glow: `1px solid rgba(59, 130, 246, 0.4)` with ambient elevation `0 4px 14px rgba(37, 99, 235, 0.35)`. Hover glow intensifies to `0 6px 20px rgba(59, 130, 246, 0.5)`.
 - **RTL Kinematics & Aerodynamic Physics:**
-  - **RTL Orientation:** The paper airplane SVG is mirrored horizontally and rotated (`scaleX(-1) rotate(-45deg)`), ensuring the aircraft nose points forward towards the left (`←`) in accordance with Persian reading direction.
-  - **Hover Micro-Flight (`sendFly`):** The `.send-icon-wrapper` triggers an infinite alternate hover flight oscillation (`@keyframes sendFly 0.6s ease-in-out infinite alternate`) bobbing between `+0.12em` and `-0.12em` on the GPU compositor layer (`translateZ(0)`).
-  - **Aerodynamic Launch:** Upon hover, the airplane launches forward toward the button center (`translateX(1.3em) scale(1.15)`), while the label text (`.btn-text`) smoothly slides leftward and fades out (`translateX(-5em)`, `opacity: 0`), creating a sleek launch effect.
-  - **Disabled & Asynchronous Safety:** When disabled or dispatching (`:disabled`), flight animations and text sliding cease immediately, maintaining stable layout while the asynchronous loading spinner (`.btn-spinner`) activates.
+  - **Horizontal RTL Arrow:** The paper airplane SVG is oriented strictly horizontal pointing forward to the left (`←`) towards Persian button text via `transform: rotate(-129deg) translateZ(0)` (no flipping or vertical skew).
+  - **Full Text Legibility on Hover:** Button label text (`.btn-text`) remains 100% visible (`opacity: 1`) on hover and animation, shifting subtly forward (`transform: translateX(-3px)`).
+  - **Mobile Touch Animation Discipline:** On mobile/touch devices without cursor hover, tapping the button activates `.is-animating`, holding the flight animation state for exactly 1.0 second (1000ms) before smoothly reverting via `transition: transform 0.35s ease, opacity 0.35s ease`. On PC, hovering persistently sustains the animation.
+  - **Flight Micro-Oscillation (`sendFly`):** The `.send-icon-wrapper` oscillates subtly between `+0.12em` and `-0.12em` on the GPU compositor layer, advancing forward into flight (`translateX(-4px) scale(1.1)`).
+  - **Disabled & Asynchronous Safety:** When disabled or dispatching (`:disabled`), flight animations cease immediately and the asynchronous loading spinner (`.btn-spinner`) activates cleanly.
 
 ### 23. Persian 404 Error Screen System (`oversized-404-numeral`)
 - **Visual Macrostructure & Typography Hierarchy:**
@@ -329,6 +330,18 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
   - Registered as a reusable React component in `components/ui/oversized-404-numeral.tsx` and `components/ui/oversized-404-numeral-demo.tsx`.
   - Implemented as production-grade standalone native HTML error views in `frontend/public/404.html` and `frontend/admin/404.html`.
   - Intercepted and served automatically by Go's `Custom404FileServer` across all unmatched routes and static file misses with proper HTTP 404 status.
+
+### 24. Report List Status Badge System (`status-badge`)
+- **Portal-Wide Standardization:** All report status indicators across administrative inboxes, dossier details, and public report tracking are standardized against the `status-badge` token design with `rounded-xl` (`12px`) geometry, `min-height: 32px`, `padding: 5px 12px`, and 14px Lucide SVGs (stroke-width: 2.2).
+- **Status Color Palette & Lucide Icons:**
+  - **Pending / جدید (در نوبت بررسی):** Warm Amber `#EAA65D` (`bg-orange-50` / `rgba(234, 166, 93, 0.14)`, border `rgba(234, 166, 93, 0.35)`), Lucide `TriangleAlert`.
+  - **In Review / در حال بررسی (بررسی شده):** Golden Yellow `#F0B13D` (`bg-yellow-50` / `rgba(240, 177, 61, 0.14)`, border `rgba(240, 177, 61, 0.35)`), Lucide `ScanSearch`.
+  - **Success / پاسخ داده شده (پاسخ حراست):** Emerald `#57BC6C` (`bg-emerald-50` / `rgba(87, 188, 108, 0.14)`, border `rgba(87, 188, 108, 0.35)`), Lucide `CircleCheck`.
+  - **In Progress / ارجاع به منطقه (ارجاع شده):** Electric Sky Blue `#008AF5` (`bg-sky-100` / `rgba(0, 138, 245, 0.14)`, border `rgba(0, 138, 245, 0.35)`), Lucide `CircleDashed`.
+  - **Failed / رد شده (بی‌محتوا):** Soft Rose `#D57463` (`bg-rose-50` / `rgba(213, 116, 99, 0.14)`, border `rgba(213, 116, 99, 0.35)`), Lucide `CircleX`.
+  - **Expired / بایگانی (منقضی شده):** Slate Zinc `#777777` (`bg-zinc-100` / `rgba(119, 119, 119, 0.14)`, border `rgba(119, 119, 119, 0.35)`), Lucide `Clock5`.
+  - **Submitted / ثبت اولیه:** Vibrant Violet `#6C3CF0` (`bg-violet-50` / `rgba(108, 60, 240, 0.14)`, border `rgba(108, 60, 240, 0.35)`), Lucide `Clock5`.
+- **Component Parity:** Available in React structure at `components/ui/status-badge.tsx` and `components/ui/demo.tsx`, and fully deployed in native production CSS/JS in `frontend/admin/` and `frontend/public/`.
 
 ---
 
