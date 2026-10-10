@@ -132,9 +132,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1791007184.490066,
-    "seen": 1791007213.6711314,
-    "ast_hash": "79fb5de63f0fc89549d4cb6101920d50",
+    "mtime": 1791620555.5401776,
+    "seen": 1791620610.3994775,
+    "ast_hash": "e2ea8a5414f95f5807ed984d9e7364f9",
     "semantic_hash": ""
   },
   ".impeccable/design.json": {
@@ -168,15 +168,15 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1791612304.104789,
-    "seen": 1791612410.4960952,
-    "ast_hash": "9f529d8f5be2de769b81cb501cc3845d",
+    "mtime": 1791620587.9808035,
+    "seen": 1791620610.3994796,
+    "ast_hash": "93d0fcf0cf24fa2af4182ead510e8466",
     "semantic_hash": ""
   },
   "GEMINI.md": {
-    "mtime": 1791007173.1728978,
-    "seen": 1791007213.671134,
-    "ast_hash": "44c88141120169831de792f28704bda6",
+    "mtime": 1791620567.9748862,
+    "seen": 1791620610.3994806,
+    "ast_hash": "3f8a841677490570d64fd0907ff5c0ed",
     "semantic_hash": ""
   },
   "components/ui/button-with-icon.tsx": {
@@ -1347,12 +1347,6 @@
     "mtime": 1791610555.612763,
     "seen": 1791612410.4962301,
     "ast_hash": "d7540893ceae492eb1b990ac1b54016e",
-    "semantic_hash": ""
-  },
-  "btn-idle.png": {
-    "mtime": 1791611399.5437794,
-    "seen": 1791612410.4962986,
-    "ast_hash": "042d9e1e27e68f8d6ad05563aadb6d91",
     "semantic_hash": ""
   }
 }

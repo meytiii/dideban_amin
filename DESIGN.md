@@ -367,6 +367,9 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Do** wrap decorative elongated Persian headings in `.persian-tatweel-wrapper` with an accompanying `.tatweel-sr` accessible element for screen readers.
 - **Do** use `showConfirmDialog()` from `frontend/confirm.js` for all destructive user confirmations.
 - **Do** apply standardized cyan/slate scrollbar rules (`scrollbar-color: rgba(56, 189, 248, 0.4) transparent;` and 6px WebKit rules) to all scrollable surfaces and sliders.
+- **Do** apply `/humanizer` to all visible frontend copy, labels, and text so phrasing is authentic, dignified, and natural without AI-generated patterns.
+- **Do** apply dedicated design skills (`/impeccable`, `/hallmark`, `/taste`, `/ui-ux-pro-max`, `/ux-ui-agent-skills`, `/high-end-visual-design`) to maintain high-craft, anti-slop interfaces.
+- **Do** interview user via `/grill-me` when requirements are ambiguous or general before designing.
 
 ### Don't:
 - **Don't** mix multiple icon sets or introduce emoji icons inside critical UI buttons.
@@ -375,6 +378,8 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Don't** bypass validation checks or profanity screening before submission.
 - **Don't** use `backdrop-filter: blur(...)` on large content containers or scrollable cards.
 - **Don't** transition expensive `box-shadow` blurs on hover; animate `transform` instead.
+- **Don't** use generic AI templates or common boilerplate designs—ensure unique interface aesthetics.
+- **Don't** assume user intent or design decisions without explicit interview alignment.
 - **Don't** put comments in codes.
 - **Don't** allow generic browser default white/gray scrollbars or arrow buttons anywhere in the interface.
 
@@ -382,5 +387,5 @@ NO DEPENDANCIES FOR THIS PROJECT... EVERYTHING MUST BE LOCAL FOR SECURITY REASON
 PLUGINS OR EXTERNAL LIBRARIES ARE FORBIDDEN.
 
 ## Mandatory Task Completion Rule: Commit Summary & Description
-- Whenever a task is done, ALWAYS write a commit summary (≤50 characters, Conventional Commits format) and a clear, descriptive commit description fit for the task done so the user can commit to the GitHub repository.
-- GitHub Repository: https://github.com/meytiii/dideban_amin
+- Whenever a task is done, ALWAYS write a commit summary (≤50 characters, Conventional Commits format) and a clear, descriptive commit description fit for the task done.
+- Automatically commit changes to the main branch of the repository: https://github.com/meytiii/dideban_amin.
