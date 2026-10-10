@@ -3769,14 +3769,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         filteredReports.sort((a, b) => {
-            const prioA = (a.has_new_message ? 4 : 0) + (a.has_regional_response ? 2 : 0);
-            const prioB = (b.has_new_message ? 4 : 0) + (b.has_regional_response ? 2 : 0);
-            if (prioA !== prioB) {
-                return prioB - prioA;
+            const timeA = a._timestamp || 0;
+            const timeB = b._timestamp || 0;
+            if (timeA !== timeB) {
+                return currentSortDateDirection === 'asc' ? (timeA - timeB) : (timeB - timeA);
             }
-            const timeA = a._timestamp || a._updateTimestamp || 0;
-            const timeB = b._timestamp || b._updateTimestamp || 0;
-            return currentSortDateDirection === 'asc' ? (timeA - timeB) : (timeB - timeA);
+            return currentSortDateDirection === 'asc' ? ((a.id || 0) - (b.id || 0)) : ((b.id || 0) - (a.id || 0));
         });
 
         renderCurrentPage();

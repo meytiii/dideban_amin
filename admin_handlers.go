@@ -343,7 +343,7 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 			INNER JOIN report_forwardings rf ON r.id = rf.report_id
 			LEFT JOIN admin_report_views arv ON r.id = arv.report_id AND arv.admin_username = $1
 			WHERE ` + whereSql + `
-			ORDER BY r.updated_at DESC, r.created_at DESC
+			ORDER BY r.created_at DESC, r.id DESC
 			LIMIT $` + strconv.Itoa(limitIdx) + ` OFFSET $` + strconv.Itoa(offsetIdx)
 	} else {
 		selectQuery = `
@@ -375,7 +375,7 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 			FROM reports r
 			LEFT JOIN admin_report_views arv ON r.id = arv.report_id AND arv.admin_username = $1
 			WHERE ` + whereSql + `
-			ORDER BY r.updated_at DESC, r.created_at DESC
+			ORDER BY r.created_at DESC, r.id DESC
 			LIMIT $` + strconv.Itoa(limitIdx) + ` OFFSET $` + strconv.Itoa(offsetIdx)
 	}
 

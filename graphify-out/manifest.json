@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "admin_handlers.go": {
-    "mtime": 1791609881.5481932,
-    "seen": 1791610389.273537,
-    "ast_hash": "a1ae1dafad842f3462fd435ae6220174",
+    "mtime": 1791621139.4140892,
+    "seen": 1791621193.9824681,
+    "ast_hash": "65d07c80dbb5ebcd342588a0f8cfa92c",
     "semantic_hash": ""
   },
   "captcha.go": {
@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1791611990.4352617,
-    "seen": 1791612410.4836004,
-    "ast_hash": "03e5829bb8ee29af0d868c197a3bef1e",
+    "mtime": 1791621128.9551032,
+    "seen": 1791621193.9847398,
+    "ast_hash": "ce201e780ac57ff7fef6b50a3096b487",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
