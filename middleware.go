@@ -138,3 +138,62 @@ func StaticCacheMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+func Custom404FileServer(dir string, fallback404Path string) http.Handler {
+	fs := http.Dir(dir)
+	fileServer := http.FileServer(fs)
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		cleanPath := strings.TrimPrefix(r.URL.Path, "/")
+		if cleanPath == "404" || cleanPath == "404.html" {
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			w.WriteHeader(http.StatusNotFound)
+			if content, err := os.ReadFile(fallback404Path); err == nil {
+				_, _ = w.Write(content)
+				return
+			}
+		}
+
+		f, err := fs.Open(cleanPath)
+		if err != nil {
+			if strings.Contains(r.Header.Get("Accept"), "text/html") || !strings.Contains(cleanPath, ".") {
+				w.Header().Set("Content-Type", "text/html; charset=utf-8")
+				w.WriteHeader(http.StatusNotFound)
+				if content, err := os.ReadFile(fallback404Path); err == nil {
+					_, _ = w.Write(content)
+					return
+				}
+			}
+			http.NotFound(w, r)
+			return
+		}
+		defer f.Close()
+
+		stat, err := f.Stat()
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+
+		if stat.IsDir() {
+			indexPath := strings.TrimSuffix(cleanPath, "/") + "/index.html"
+			if cleanPath == "" {
+				indexPath = "index.html"
+			}
+			if idx, err := fs.Open(indexPath); err != nil {
+				w.Header().Set("Content-Type", "text/html; charset=utf-8")
+				w.WriteHeader(http.StatusNotFound)
+				if content, err := os.ReadFile(fallback404Path); err == nil {
+					_, _ = w.Write(content)
+					return
+				}
+				http.NotFound(w, r)
+				return
+			} else {
+				_ = idx.Close()
+			}
+		}
+
+		fileServer.ServeHTTP(w, r)
+	})
+}
+

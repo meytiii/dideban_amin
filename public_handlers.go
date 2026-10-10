@@ -370,10 +370,11 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type ReportMessageItem struct {
-	ID         int64  `json:"id"`
-	SenderType string `json:"sender_type"`
-	Message    string `json:"message"`
-	CreatedAt  string `json:"created_at"`
+	ID            int64  `json:"id"`
+	SenderType    string `json:"sender_type"`
+	Message       string `json:"message"`
+	AdminUsername string `json:"admin_username,omitempty"`
+	CreatedAt     string `json:"created_at"`
 }
 
 type PublicReportStatus struct {
@@ -441,10 +442,10 @@ func TrackReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msgRows, err := DB.Query(`
-		SELECT id, sender_type, message_text, created_at
+		SELECT id, sender_type, message_text, COALESCE(admin_username, ''), created_at
 		FROM report_messages
 		WHERE report_id = $1
-		ORDER BY created_at ASC`, reportID)
+		ORDER BY created_at ASC, id ASC`, reportID)
 	status.Messages = []ReportMessageItem{}
 	if err == nil {
 		defer msgRows.Close()
@@ -452,7 +453,7 @@ func TrackReportHandler(w http.ResponseWriter, r *http.Request) {
 			var m ReportMessageItem
 			var encMsg string
 			var msgCreatedAt time.Time
-			if err := msgRows.Scan(&m.ID, &m.SenderType, &encMsg, &msgCreatedAt); err == nil {
+			if err := msgRows.Scan(&m.ID, &m.SenderType, &encMsg, &m.AdminUsername, &msgCreatedAt); err == nil {
 				decMsg, err := DecryptAES(encMsg)
 				if err == nil {
 					m.Message = decMsg

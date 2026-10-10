@@ -2050,26 +2050,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const allItems = [];
 
-        if (reportData && reportData.admin_response && reportData.admin_response.trim() !== '') {
+        if (reportData && Array.isArray(reportData.messages) && reportData.messages.length > 0) {
+            let hasAdminInMessages = false;
+            reportData.messages.forEach(msg => {
+                const isRep = msg.sender_type === 'reporter';
+                if (!isRep) hasAdminInMessages = true;
+                allItems.push({
+                    sender_type: msg.sender_type,
+                    is_official_response: !isRep,
+                    sender_title: isRep ? 'پیام تکمیلی شما' : 'پاسخ اداره حراست',
+                    message: msg.message,
+                    created_at: msg.created_at
+                });
+            });
+            if (!hasAdminInMessages && reportData.admin_response && reportData.admin_response.trim() !== '') {
+                allItems.push({
+                    sender_type: 'admin',
+                    is_official_response: true,
+                    sender_title: 'پاسخ و نتیجه بررسی اداره حراست',
+                    message: reportData.admin_response.trim(),
+                    created_at: reportData.responded_at || reportData.created_at
+                });
+            }
+        } else if (reportData && reportData.admin_response && reportData.admin_response.trim() !== '') {
             allItems.push({
                 sender_type: 'admin',
                 is_official_response: true,
                 sender_title: 'پاسخ و نتیجه بررسی اداره حراست',
                 message: reportData.admin_response.trim(),
                 created_at: reportData.responded_at || reportData.created_at
-            });
-        }
-
-        if (reportData && Array.isArray(reportData.messages)) {
-            reportData.messages.forEach(msg => {
-                const isRep = msg.sender_type === 'reporter';
-                allItems.push({
-                    sender_type: msg.sender_type,
-                    is_official_response: false,
-                    sender_title: isRep ? 'پیام تکمیلی شما' : 'پاسخ اداره حراست',
-                    message: msg.message,
-                    created_at: msg.created_at
-                });
             });
         }
 

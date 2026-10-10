@@ -699,10 +699,10 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	rep.HasAttachment = len(rep.Attachments) > 0 || evidenceID.Valid
 
 	msgRows, err := DB.Query(`
-		SELECT id, sender_type, message_text, created_at
+		SELECT id, sender_type, message_text, COALESCE(admin_username, ''), created_at
 		FROM report_messages
 		WHERE report_id = $1
-		ORDER BY created_at ASC`, reportID)
+		ORDER BY created_at ASC, id ASC`, reportID)
 	rep.Messages = []ReportMessageItem{}
 	if err == nil {
 		defer msgRows.Close()
@@ -710,7 +710,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			var m ReportMessageItem
 			var encMsg string
 			var msgCreatedAt time.Time
-			if err := msgRows.Scan(&m.ID, &m.SenderType, &encMsg, &msgCreatedAt); err == nil {
+			if err := msgRows.Scan(&m.ID, &m.SenderType, &encMsg, &m.AdminUsername, &msgCreatedAt); err == nil {
 				decMsg, err := DecryptAES(encMsg)
 				if err == nil {
 					m.Message = decMsg
@@ -1247,13 +1247,23 @@ func RespondToReportHandler(w http.ResponseWriter, r *http.Request) {
 
 	_, err = DB.Exec(`
 		UPDATE reports
-		SET admin_response = $1, responded_at = NOW(), responded_by = $2, is_read = true, read_at = COALESCE(read_at, NOW()), updated_at = NOW()
+		SET admin_response = $1, responded_at = NOW(), responded_by = $2, is_read = true, read_at = COALESCE(read_at, NOW()), updated_at = NOW(), has_new_message = false
 		WHERE id = $3`,
 		encResponse, admin.Username, req.ReportID)
 	if err != nil {
 		http.Error(w, "Database error", http.StatusInternalServerError)
 		return
 	}
+
+	_, err = DB.Exec(`
+		INSERT INTO report_messages (report_id, sender_type, message_text, admin_username, created_at)
+		VALUES ($1, 'admin', $2, $3, NOW())`,
+		req.ReportID, encResponse, admin.Username)
+	if err != nil {
+		log.Printf("Failed to insert message into report_messages: %v", err)
+	}
+
+	GlobalSSEBroker.BroadcastNewMessage(req.ReportID)
 
 	logAudit(admin.Username, admin.Title, "RESPOND_REPORT", &req.ReportID, getIP(r))
 

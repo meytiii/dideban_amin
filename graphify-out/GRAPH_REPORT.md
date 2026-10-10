@@ -1,16 +1,16 @@
-# Graph Report - Setad_Khabari_HMD  (2026-10-06)
+# Graph Report - Setad_Khabari_HMD  (2026-10-10)
 
 ## Corpus Check
-- 209 files · ~229,829 words
+- 209 files · ~230,366 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1653 nodes · 2608 edges · 140 communities (92 shown, 48 thin omitted)
+- 1654 nodes · 2609 edges · 142 communities (95 shown, 47 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 277 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `aaee4603`
+- Built from commit: `4e68dde7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -68,11 +68,11 @@
 - action-search-bar.tsx
 - Hallmark Design Directives
 - applyFilters
-- TestClassificationValidationAndMath
+- SessionManager
 - public/tatweel.js
 - no_comments.md
 - otp-input.tsx
-- contextWithAdmin
+- security.go
 - TestCookieSecureCachedResolution
 - populateAnalyticsDOM
 - sliding-number.tsx
@@ -83,17 +83,17 @@
 - admin_handlers.go
 - initActionSearchBar
 - crypto.go
-- security.go
+- database/sql.DB
 - input.tsx
 - herasat.local/backend
-- getIP
+- admin_auth.go
 - label.tsx
 - workflows/hallmark.md
 - SyslogShipper
 - ft5-statement.md
 - toggle.tsx
 - adminFetch
-- TestDBCredentialsRequiredAtStartup
+- captcha.go
 - ft6-letter-close.md
 - rules/graphify.md
 - workflows/graphify.md
@@ -104,7 +104,7 @@
 - workflows/caveman.md
 - ContainsVulgarLanguage
 - n8-terminal-command.md
-- TestGetIPHardening
+- getTestDB
 - be-ui-file-upload.tsx
 - sign-in-card-2.tsx
 - Project Guidelines (HMD IT Herasat Portal)
@@ -137,7 +137,7 @@
 - admin.js
 - h6-photographic-fold.md
 - h8-mockup-split-browser-framed.md
-- TestGetServerTimeHandler
+- h7-demo-video-clipped-by-viewport-edge.md
 - f4-step-sequence.md
 - commit_message.md
 - n11-mega-menu.md
@@ -145,6 +145,8 @@
 - n4-hidden-behind-k.md
 - n6-newspaper-masthead.md
 - s2-hanging.md
+- t1-pull-quote-with-marginalia.md
+- t3-single-huge-quote.md
 - s1-left-margin-numbered.md
 
 ## God Nodes (most connected - your core abstractions)
@@ -152,7 +154,7 @@
 2. `logAudit()` - 26 edges
 3. `adminFetch()` - 26 edges
 4. `viewReport()` - 24 edges
-5. `Components` - 22 edges
+5. `Components` - 23 edges
 6. `fetchReports()` - 20 edges
 7. `Major (looks AI-generated)` - 20 edges
 8. `SubmitReportHandler()` - 19 edges
@@ -160,8 +162,6 @@
 10. `main()` - 18 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `VerifyCaptcha()` --calls--> `GetLegacyHMACKey()`  [INFERRED]
-  captcha.go → crypto.go
 - `SubmitReportHandler()` --calls--> `ScanPDFForActiveContent()`  [INFERRED]
   public_handlers.go → metadata.go
 - `TestInputSanitizationAndLimits()` --calls--> `truncateRunes()`  [INFERRED]
@@ -170,19 +170,21 @@
   admin_auth.go → captcha.go
 - `LoginHandler()` --calls--> `HashPassword()`  [INFERRED]
   admin_auth.go → crypto.go
+- `LoginHandler()` --calls--> `VerifyPasswordWithRehash()`  [INFERRED]
+  admin_auth.go → crypto.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (140 total, 48 thin omitted)
+## Communities (142 total, 47 thin omitted)
 
 ### Community 0 - "Components"
-Cohesion: 0.05
-Nodes (43): 10. Persian Jalali Date-Range Popover (`.date-range-popover`), 11. Intelligence Data Table & Bulk Selection Action Bar (`#reportsTable`, `#bulkActionsToolbar`), 12. Official Classified Dossier & Word Document Export (`#report-detail-section`), 13. Accessible Confirmation Dialog System (`frontend/confirm.js`), 14. Native Lightweight Tooltip System (`data-tooltip`), 15. Active Session Countdown & Warning Modal, 16. Animated Dropdown & Select System (`dropdown-01`), 17. Server Datetime Display (`.server-datetime-badge`) (+35 more)
+Cohesion: 0.04
+Nodes (44): 10. Persian Jalali Date-Range Popover (`.date-range-popover`), 11. Intelligence Data Table & Bulk Selection Action Bar (`#reportsTable`, `#bulkActionsToolbar`), 12. Official Classified Dossier & Word Document Export (`#report-detail-section`), 13. Accessible Confirmation Dialog System (`frontend/confirm.js`), 14. Native Lightweight Tooltip System (`data-tooltip`), 15. Active Session Countdown & Warning Modal, 16. Animated Dropdown & Select System (`dropdown-01`), 17. Server Datetime Display (`.server-datetime-badge`) (+36 more)
 
 ### Community 1 - "component-cookbook.md"
 Cohesion: 0.03
-Nodes (31): C1 · Outlined chip, C3 · Typographic link, C4 · Sticky bottom bar, F2 · Sticky-scroll stack, F3 · Tabular spec sheet, F6 · Product card grid, Ft1 · Mast-headed, Ft2 · Inline-rule single line (+23 more)
+Nodes (29): C1 · Outlined chip, C3 · Typographic link, C4 · Sticky bottom bar, F2 · Sticky-scroll stack, F3 · Tabular spec sheet, F6 · Product card grid, Ft1 · Mast-headed, Ft2 · Inline-rule single line (+21 more)
 
 ### Community 2 - "Running Tests"
 Cohesion: 0.40
@@ -193,8 +195,8 @@ Cohesion: 0.05
 Nodes (44): Abstract backgrounds, App mockups / device frames, Assets — sourcing canon for icons, logos, illustrations, photography, video, Avoid, Avoid, Avoid, Avoid, Avoid (+36 more)
 
 ### Community 4 - "mfa.go"
-Cohesion: 0.24
-Nodes (14): GetHMACKey(), GenerateBase32Secret(), GenerateMFAPendingToken(), GenerateTOTPCode(), normalizeTOTPCode(), Setup2FAHandler(), ValidateMFAPendingToken(), VerifyTOTPCode() (+6 more)
+Cohesion: 0.18
+Nodes (19): GetHMACKey(), VerifyPassword(), VerifyPasswordWithRehash(), Disable2FAHandler(), Enable2FAHandler(), GenerateBase32Secret(), GenerateMFAPendingToken(), GenerateTOTPCode() (+11 more)
 
 ### Community 5 - "macrostructures.md"
 Cohesion: 0.05
@@ -219,10 +221,6 @@ Nodes (29): § A · The one follow-up question, B.1 · Anchor accent first, B.2 
 ### Community 10 - "Design flow (default)"
 Cohesion: 0.07
 Nodes (28): 0. Pre-flight scan, 1. Design-context gate, 2.5. Check project memory, 2.6. Theme route — studied-DNA, catalog, or custom, 2. Pick a macrostructure FIRST, 3. Load the visual ruleset, 4. Decide on hero enrichment, 5. Preview (+20 more)
-
-### Community 11 - "SKILL.md"
-Cohesion: 0.21
-Nodes (3): H7 · Demo Video — Clipped-by-viewport-edge, Preview-block worked examples, `hallmark audit`
 
 ### Community 12 - "Recipes"
 Cohesion: 0.07
@@ -384,6 +382,10 @@ Nodes (5): Action, ActionSearchBar(), allActions, SearchResult, useDebounce()
 Cohesion: 0.20
 Nodes (18): applyFilters(), getJalaliDateKeyFromDate(), getJalaliDayEndMs(), getJalaliDayStartMs(), getJalaliMonthDays(), gregorianToJalali(), indexReportForSearch(), initShamsiDateRangePicker() (+10 more)
 
+### Community 53 - "SessionManager"
+Cohesion: 0.31
+Nodes (4): hashToken(), AdminSession, cachedSession, SessionManager
+
 ### Community 54 - "public/tatweel.js"
 Cohesion: 0.38
 Nodes (9): applyWrapperToNode(), canConnect(), enhanceElement(), enhanceText(), enhanceWord(), getViewportIntensity(), init(), recheckOverflow() (+1 more)
@@ -391,6 +393,10 @@ Nodes (9): applyWrapperToNode(), canConnect(), enhanceElement(), enhanceText(), 
 ### Community 56 - "otp-input.tsx"
 Cohesion: 0.17
 Nodes (12): ALLOW, CROSSFADE, EASE, OtpCellProps, OtpInput(), OtpInputHandle, OtpInputProps, OtpMode (+4 more)
+
+### Community 57 - "security.go"
+Cohesion: 0.14
+Nodes (13): sync.Mutex, time.Ticker, time.Time, NewIPRateLimiter(), RateLimitMiddleware(), truncateRunes(), ActiveSessionItem, cachedAccountFailure (+5 more)
 
 ### Community 58 - "TestCookieSecureCachedResolution"
 Cohesion: 0.50
@@ -409,24 +415,24 @@ Cohesion: 0.47
 Nodes (6): fetchServerTime(), getServerNow(), initServerSlidingClock(), tick(), updateDate(), updateDigit()
 
 ### Community 65 - "admin_handlers.go"
-Cohesion: 0.10
-Nodes (27): ExportReportDocxHandler(), formatJalaliTime(), getRestrictedSubprocessEnv(), gregorianToJalali(), AdminNotificationItem, AdminNotificationsResponse, AdminUserItem, AnalyticsResponse (+19 more)
+Cohesion: 0.11
+Nodes (27): ExportReportDocxHandler(), formatJalaliTime(), GetNotificationsHandler(), getRestrictedSubprocessEnv(), gregorianToJalali(), AdminNotificationItem, AdminNotificationsResponse, AdminUserItem (+19 more)
 
 ### Community 66 - "initActionSearchBar"
 Cohesion: 0.24
 Nodes (12): initActionSearchBar(), closeDropdown(), closeSearch(), computeAndRender(), executeItem(), normalizeQuery(), openDropdown(), renderItems() (+4 more)
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.16
-Nodes (21): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptFileBytes(), EncryptFilePath() (+13 more)
-
-### Community 68 - "security.go"
-Cohesion: 0.06
-Nodes (40): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), NewUsedCaptchaStore(), renderObfuscatedChars(), database/sql.DB (+32 more)
-
-### Community 71 - "getIP"
 Cohesion: 0.14
-Nodes (29): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getIP(), getLatestAuditHash(), ipInCIDRs(), logAudit(), LoginHandler() (+21 more)
+Nodes (24): DeleteReportHandler(), GetForwardingHistoryHandler(), GetReportsHandler(), SubmitRegionalResponseHandler(), DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload() (+16 more)
+
+### Community 68 - "database/sql.DB"
+Cohesion: 0.15
+Nodes (9): NewUsedCaptchaStore(), database/sql.DB, sync.Once, time.Duration, NewAccountLockoutManager(), AccountLockoutManager, UsedCaptchaStore, TestAccountLockoutConcurrentFailures() (+1 more)
+
+### Community 71 - "admin_auth.go"
+Cohesion: 0.21
+Nodes (12): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getLatestAuditHash(), ipInCIDRs(), LoginHandler(), LogoutHandler(), parseTrustedProxies() (+4 more)
 
 ### Community 74 - "SyslogShipper"
 Cohesion: 0.24
@@ -436,13 +442,17 @@ Nodes (9): net.Conn, sync.WaitGroup, SyslogMessage, SyslogSeverity, SyslogShippe
 Cohesion: 0.13
 Nodes (33): adminFetch(), applyAuditFiltersAndPagination(), deleteUser(), escapeHTML(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchAuditLogs() (+25 more)
 
+### Community 78 - "captcha.go"
+Cohesion: 0.23
+Nodes (12): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), inspectZipArchive(), CaptchaPayload (+4 more)
+
 ### Community 82 - "metadata.go"
 Cohesion: 0.29
 Nodes (9): SanitizeAttachment(), SanitizeJPEG(), SanitizePNG(), ScanPDFForActiveContent(), createTestJPEGWithEXIF(), createTestPNG(), TestMetadataSanitizationJPEG(), TestMetadataSanitizationPNG() (+1 more)
 
 ### Community 83 - "SubmitReportHandler"
-Cohesion: 0.16
-Nodes (20): RespondToReportHandler(), SubmitRegionalResponseHandler(), UpdateInternalNotesHandler(), VerifyCaptcha(), EncryptAES(), ValidateBinaryMagicBytes(), generateTrackingCode(), inspectZipArchive() (+12 more)
+Cohesion: 0.20
+Nodes (15): VerifyCaptcha(), GetLegacyHMACKey(), ValidateBinaryMagicBytes(), generateTrackingCode(), SubmitFollowUpHandler(), SubmitReportHandler(), TrackReportHandler(), validateMagicBytes() (+7 more)
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -451,6 +461,10 @@ Nodes (7): format_persian_text_with_dates(), main(), populate_docx(), replace_in
 ### Community 87 - "ContainsVulgarLanguage"
 Cohesion: 0.25
 Nodes (12): normalizeForSearch(), cleanRune(), collapseRepeatedRunes(), containsBoundedPhrase(), ContainsVulgarLanguage(), hasVulgarPrefix(), isDiacriticOrInvisible(), isSymbolOrPunct() (+4 more)
+
+### Community 89 - "getTestDB"
+Cohesion: 0.20
+Nodes (9): NewSessionManager(), TestAuditFailClosed(), TestCaptchaPersistenceTryRedeem(), TestGetReportsPaginationAndFiltering(), getTestDB(), TestSessionManagementAndRateLimiter(), TestSessionPersistenceAcrossReinstantiation(), TestSessionRevokeAllUserSessions() (+1 more)
 
 ### Community 90 - "be-ui-file-upload.tsx"
 Cohesion: 0.09
@@ -473,20 +487,20 @@ Cohesion: 0.24
 Nodes (6): Button, ButtonProps, buttonVariants, ButtonWithIconProps, DropdownMenuProps, DropdownOption
 
 ### Community 105 - "net/http.Request"
-Cohesion: 0.13
-Nodes (31): getLatestAuditHashTx(), logAuditTx(), ChangeMyPasswordHandler(), CreateUserHandler(), DeleteReportHandler(), DeleteUserHandler(), ForwardReportHandler(), GetActiveSessionsHandler() (+23 more)
+Cohesion: 0.14
+Nodes (41): getIP(), getLatestAuditHashTx(), logAudit(), logAuditTx(), canAdminAccessReport(), ChangeMyPasswordHandler(), ClassifyReportHandler(), CreateUserHandler() (+33 more)
 
 ### Community 106 - "initAppTooltips"
 Cohesion: 0.52
 Nodes (7): initAppTooltips(), convertTitles(), getOrCreateTooltip(), hide(), isMobileOrTouch(), positionTooltip(), show()
 
 ### Community 108 - "testing.T"
-Cohesion: 0.16
-Nodes (19): testing.T, TestAuditFailClosed(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization(), TestForwardingRequestValidation(), TestNavahiManateghClassificationForbidden(), TestNavahiManateghNotificationScoping(), TestNavahiManateghRestrictions() (+11 more)
+Cohesion: 0.11
+Nodes (23): testing.T, TestClassificationValidationAndMath(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization(), TestForwardingRequestValidation(), TestNavahiManateghClassificationForbidden(), TestNavahiManateghNotificationScoping() (+15 more)
 
 ### Community 116 - "main"
-Cohesion: 0.09
-Nodes (23): AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed(), enforceImmutableAuditLogs(), InitDB(), runMigrations(), compress/gzip.Writer (+15 more)
+Cohesion: 0.10
+Nodes (22): AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed(), enforceImmutableAuditLogs(), InitDB(), runMigrations(), compress/gzip.Writer (+14 more)
 
 ### Community 118 - "admin/confirm.js"
 Cohesion: 0.60
@@ -509,9 +523,9 @@ Cohesion: 0.09
 Nodes (29): calculatePagination(), cancelMFAStep(), check2FAEnforcementNotice(), checkAdminProfile(), checkHostConnection(), checkMustChangePasswordPolicy(), closeDetailView(), getScrollBehavior() (+21 more)
 
 ## Knowledge Gaps
-- **716 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+711 more)
+- **717 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+712 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **48 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **47 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -527,6 +541,6 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 21 inferred relationships involving `logAudit()` (e.g. with `ShipSyslogAudit()` and `CreateUserHandler()`) actually correct?**
   _`logAudit()` has 21 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `AdminUserItem`, `AuditLogItem`, `RecipientUserItem` to the rest of the system?**
-  _716 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _717 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Components` be split into smaller, more focused modules?**
-  _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.044444444444444446 - nodes in this community are weakly interconnected._

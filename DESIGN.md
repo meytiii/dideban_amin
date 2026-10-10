@@ -305,6 +305,18 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
     - Corner: `background: transparent;`
 - **Portal-Wide Mandate:** All existing and future scrollable containers and sliders—including search bar recommendations, dropdown menus, modal dialogs, audit log tables, chat streams, and history lists—must strictly implement this design and color specification instead of generic native browser scrollbars.
 
+### 22. Unified Animated Send Button System (`.btn-send-animated`)
+- **Portal-Wide Mandate:** All present and future send and message-dispatch buttons across both the public reporting portal and the administrative intelligence portal—including admin responses (`#submitResponseBtn`), reporter follow-up messages (`#btnSubmitFollowup`), and regional intelligence reports (`#btnSubmitRegionalResponse`)—must strictly implement this unified animated paper airplane style and blue design token palette.
+- **Color Palette & Visual Tokens:**
+  - Gradient: Linear gradient from cobalt blue `--accent-blue` (`#3b82f6`) to deep royal blue (`#2563eb`).
+  - Active / Pressed Surface: `#1d4ed8` with tactile compression (`scale(0.96)`).
+  - Outlines & Glow: `1px solid rgba(59, 130, 246, 0.4)` with ambient elevation `0 4px 14px rgba(37, 99, 235, 0.35)`. Hover glow intensifies to `0 6px 20px rgba(59, 130, 246, 0.5)`.
+- **RTL Kinematics & Aerodynamic Physics:**
+  - **RTL Orientation:** The paper airplane SVG is mirrored horizontally and rotated (`scaleX(-1) rotate(-45deg)`), ensuring the aircraft nose points forward towards the left (`←`) in accordance with Persian reading direction.
+  - **Hover Micro-Flight (`sendFly`):** The `.send-icon-wrapper` triggers an infinite alternate hover flight oscillation (`@keyframes sendFly 0.6s ease-in-out infinite alternate`) bobbing between `+0.12em` and `-0.12em` on the GPU compositor layer (`translateZ(0)`).
+  - **Aerodynamic Launch:** Upon hover, the airplane launches forward toward the button center (`translateX(1.3em) scale(1.15)`), while the label text (`.btn-text`) smoothly slides leftward and fades out (`translateX(-5em)`, `opacity: 0`), creating a sleek launch effect.
+  - **Disabled & Asynchronous Safety:** When disabled or dispatching (`:disabled`), flight animations and text sliding cease immediately, maintaining stable layout while the asynchronous loading spinner (`.btn-spinner`) activates.
+
 ---
 
 ## Hardware Acceleration & Anti-Lag Performance Rules

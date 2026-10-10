@@ -384,6 +384,16 @@ func runMigrations() {
 			EXECUTE FUNCTION touch_reports_updated_at();
 		END IF;
 	END $$;
+
+	ALTER TABLE report_messages ADD COLUMN IF NOT EXISTS admin_username VARCHAR(64) DEFAULT NULL;
+
+	INSERT INTO report_messages (report_id, sender_type, message_text, admin_username, created_at)
+	SELECT id, 'admin', admin_response, COALESCE(NULLIF(responded_by, ''), 'admin'), COALESCE(responded_at, created_at)
+	FROM reports
+	WHERE admin_response IS NOT NULL AND admin_response != ''
+	  AND NOT EXISTS (
+	      SELECT 1 FROM report_messages rm WHERE rm.report_id = reports.id AND rm.sender_type = 'admin'
+	  );
 	`
 	if _, err := DB.Exec(migrationSQL); err != nil {
 		log.Printf("Warning: Schema migration notice: %v", err)

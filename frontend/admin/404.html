@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>۴۰۴ - صفحه مورد نظر پیدا نشد | کارتابل حراست</title>
+    <link rel="preload" href="/admin/fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/admin/fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="icon" type="image/png" href="/admin/favicon.png">
+    <style>
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('/admin/fonts/Vazirmatn-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('/admin/fonts/Vazirmatn-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            min-height: 100dvh;
+            background-color: #0b1120;
+            color: #f8fafc;
+            font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 38%, rgba(37, 99, 235, 0.16) 0%, rgba(15, 23, 42, 0) 70%),
+                        radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.08) 0%, rgba(11, 17, 32, 0) 50%);
+            pointer-events: none;
+            z-index: 0;
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        .error-layout {
+            position: relative;
+            z-index: 1;
+            min-height: 100dvh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 20px;
+        }
+
+        .error-card {
+            width: 100%;
+            max-width: 540px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .error-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transform: translateZ(0);
+        }
+
+        .error-badge svg {
+            color: #38bdf8;
+            flex-shrink: 0;
+        }
+
+        .error-numeral {
+            font-size: clamp(7.5rem, 24vw, 11rem);
+            line-height: 0.92;
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            font-variant-numeric: tabular-nums;
+            user-select: none;
+            background: linear-gradient(180deg, #ffffff 25%, #cbd5e1 65%, #64748b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 40px rgba(59, 130, 246, 0.25));
+            transform: translateZ(0);
+            margin-bottom: 4px;
+        }
+
+        .error-heading {
+            font-size: clamp(1.45rem, 4.2vw, 1.95rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #f8fafc;
+            margin-top: 2px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .error-desc {
+            margin-top: 14px;
+            max-width: 430px;
+            font-size: 0.95rem;
+            color: #94a3b8;
+            line-height: 1.75;
+            text-wrap: pretty;
+        }
+
+        .error-actions {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-action-base {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 11px 24px;
+            border-radius: 12px;
+            font-size: 14.5px;
+            font-weight: 600;
+            font-family: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+            transform: translateZ(0);
+            min-height: 44px;
+            white-space: nowrap;
+        }
+
+        .btn-action-base:active {
+            transform: scale(0.97) translateZ(0);
+        }
+
+        .btn-action-base:focus-visible {
+            outline: 2px solid #60a5fa;
+            outline-offset: 2px;
+        }
+
+        .btn-home {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: #ffffff;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-home:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px) translateZ(0);
+        }
+
+        .btn-back {
+            background: #1e293b;
+            color: #f1f5f9;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-back:hover {
+            background: #27354a;
+            border-color: rgba(255, 255, 255, 0.22);
+            transform: translateY(-2px) translateZ(0);
+        }
+
+        .btn-action-base svg {
+            flex-shrink: 0;
+            width: 17px;
+            height: 17px;
+        }
+
+        @media (max-width: 480px) {
+            .error-actions {
+                flex-direction: column;
+                width: 100%;
+                max-width: 320px;
+            }
+            .btn-action-base {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="error-layout" role="main">
+        <div class="error-card">
+            <div class="error-badge">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>کارتابل تخصصی حراست | ستاد خبری</span>
+            </div>
+
+            <span class="error-numeral" aria-hidden="true">404</span>
+
+            <h1 class="error-heading">صفحه مورد نظر شما پیدا نشد.</h1>
+
+            <p class="error-desc">
+                صفحه‌ای که دنبالش هستید وجود ندارد یا ممکن است منتقل شده باشد. لطفاً به صفحه اصلی بازگردید.
+            </p>
+
+            <div class="error-actions">
+                <a href="/admin/" id="btnGoHome" class="btn-action-base btn-home">
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    <span>صفحه اصلی</span>
+                </a>
+                <button type="button" id="btnGoBack" class="btn-action-base btn-back">
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14"/>
+                        <path d="m12 5 7 7-7 7"/>
+                    </svg>
+                    <span>بازگشت به صفحه قبلی</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        (function() {
+            const btnGoBack = document.getElementById('btnGoBack');
+            if (btnGoBack) {
+                btnGoBack.addEventListener('click', function() {
+                    if (window.history.length > 1) {
+                        window.history.back();
+                    } else {
+                        window.location.href = '/admin/';
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -8446,3 +8446,93 @@ tr.row-priority-normal {
         transform: translateY(0) translateZ(0);
     }
 }
+
+.btn-send-animated {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(147, 197, 253, 0.35) !important;
+    border-radius: var(--radius-md, 10px) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    font-family: inherit !important;
+    cursor: pointer !important;
+    overflow: hidden !important;
+    position: relative !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+    transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease !important;
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.btn-send-animated:hover:not(:disabled) {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5) !important;
+}
+
+.btn-send-animated:active:not(:disabled) {
+    transform: scale(0.96) translateZ(0) !important;
+}
+
+.btn-send-animated .send-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateZ(0);
+}
+
+.btn-send-animated .send-icon-svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    transform: scaleX(-1) rotate(-45deg) translateZ(0);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: center;
+}
+
+.btn-send-animated:hover:not(:disabled) .send-icon-wrapper {
+    animation: sendFly 0.6s ease-in-out infinite alternate;
+}
+
+.btn-send-animated:hover:not(:disabled) .send-icon-svg {
+    transform: scaleX(-1) rotate(-45deg) translateX(1.3em) scale(1.15) translateZ(0);
+}
+
+.btn-send-animated .btn-text {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+    transform: translateZ(0);
+}
+
+.btn-send-animated:hover:not(:disabled) .btn-text {
+    transform: translateX(-5em) translateZ(0);
+    opacity: 0;
+}
+
+.btn-send-animated:disabled:hover .send-icon-wrapper {
+    animation: none;
+}
+
+.btn-send-animated:disabled:hover .btn-text {
+    transform: none;
+    opacity: 1;
+}
+
+.btn-send-animated:disabled:hover .send-icon-svg {
+    transform: scaleX(-1) rotate(-45deg);
+}
+
+@keyframes sendFly {
+    from {
+        transform: translateY(0.12em) translateZ(0);
+    }
+    to {
+        transform: translateY(-0.12em) translateZ(0);
+    }
+}
+

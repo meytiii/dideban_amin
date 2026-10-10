@@ -4543,7 +4543,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const allItems = [];
 
-                if (data.admin_response && data.admin_response.trim() !== '') {
+                if (Array.isArray(data.messages) && data.messages.length > 0) {
+                    let hasAdminInMessages = false;
+                    data.messages.forEach(msg => {
+                        const isReporter = msg.sender_type === 'reporter';
+                        if (!isReporter) hasAdminInMessages = true;
+                        const adminName = msg.admin_username ? ` (${escapeHTML(msg.admin_username)})` : '';
+                        allItems.push({
+                            sender_type: msg.sender_type,
+                            is_official_response: !isReporter,
+                            sender_title: isReporter ? 'گزارش‌دهنده' : ('پاسخ اداره کل حراست' + adminName),
+                            message: msg.message,
+                            created_at: msg.created_at
+                        });
+                    });
+                    if (!hasAdminInMessages && data.admin_response && data.admin_response.trim() !== '') {
+                        const respondedByTitle = data.responded_by ? ` (ثبت توسط ${escapeHTML(data.responded_by)})` : '';
+                        allItems.push({
+                            sender_type: 'admin',
+                            is_official_response: true,
+                            sender_title: 'پاسخ و نتیجه بررسی اداره حراست' + respondedByTitle,
+                            message: data.admin_response.trim(),
+                            created_at: data.responded_at || data.created_at
+                        });
+                    }
+                } else if (data.admin_response && data.admin_response.trim() !== '') {
                     const respondedByTitle = data.responded_by ? ` (ثبت توسط ${escapeHTML(data.responded_by)})` : '';
                     allItems.push({
                         sender_type: 'admin',
@@ -4551,19 +4575,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         sender_title: 'پاسخ و نتیجه بررسی اداره حراست' + respondedByTitle,
                         message: data.admin_response.trim(),
                         created_at: data.responded_at || data.created_at
-                    });
-                }
-
-                if (Array.isArray(data.messages)) {
-                    data.messages.forEach(msg => {
-                        const isReporter = msg.sender_type === 'reporter';
-                        allItems.push({
-                            sender_type: msg.sender_type,
-                            is_official_response: false,
-                            sender_title: isReporter ? 'گزارش‌دهنده' : `پاسخ اداره کل حراست (${escapeHTML(msg.admin_username || 'کارشناس')})`,
-                            message: msg.message,
-                            created_at: msg.created_at
-                        });
                     });
                 }
 
@@ -4770,7 +4781,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.admin_response && data.admin_response.trim() !== '') {
                 responseTextEl.textContent = data.admin_response;
-                responseInput.value = data.admin_response;
+                if (responseInput) responseInput.value = '';
 
                 let respDateStr = '';
                 if (data.responded_at) {
@@ -4783,7 +4794,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 existingBox.style.display = 'none';
                 responseTextEl.textContent = '';
-                responseInput.value = '';
+                if (responseInput) responseInput.value = '';
                 if (printNoRespEl) printNoRespEl.style.display = 'block';
             }
 
@@ -4809,15 +4820,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } else {
                 if (detailRespContainer) detailRespContainer.style.display = '';
-                if (responseHeading) responseHeading.textContent = '۲. ثبت یا ویرایش پاسخ رسمی به گزارش‌دهنده:';
+                if (responseHeading) responseHeading.textContent = '۲. ارسال پاسخ رسمی به گزارش‌دهنده:';
                 if (adminRespForm) adminRespForm.style.display = '';
                 if (adminCannedWrapper) adminCannedWrapper.style.display = '';
                 if (regionalCannedWrapper) regionalCannedWrapper.style.display = 'none';
                 if (responseInput) {
                     responseInput.readOnly = false;
-                    if (!data.admin_response) {
-                        responseInput.placeholder = 'متن پاسخ یا نتیجه بررسی حراست را جهت مشاهده گزارش‌دهنده وارد نمایید...';
-                    }
+                    responseInput.placeholder = 'متن پاسخ یا نتیجه بررسی حراست را جهت ارسال به گزارش‌دهنده وارد نمایید...';
                 }
                 if (submitRespBtn) {
                     submitRespBtn.disabled = false;
@@ -5188,7 +5197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const btnSpinner = submitBtn?.querySelector('.btn-spinner');
 
             if (submitBtn) submitBtn.disabled = true;
-            if (btnText) btnText.textContent = 'در حال ثبت پاسخ...';
+            if (btnText) btnText.textContent = 'در حال ارسال پاسخ...';
             if (btnSpinner) btnSpinner.classList.remove('d-none');
 
             try {
@@ -5205,19 +5214,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (res.ok) {
                     resetSessionTimer();
-                    showToast('پاسخ با موفقیت ذخیره و رمزنگاری شد');
+                    showToast('پاسخ با موفقیت ارسال و رمزنگاری شد');
                     if (statusMsg) {
                         statusMsg.className = 'response-box badge-read';
-                        statusMsg.textContent = 'پاسخ با موفقیت ذخیره و رمزنگاری شد.';
+                        statusMsg.textContent = 'پاسخ با موفقیت ارسال و رمزنگاری شد.';
                         statusMsg.style.display = 'block';
                     }
+                    if (responseInput) responseInput.value = '';
                     await viewReport(currentViewingReportId);
                     fetchReports().catch(() => { });
                 } else {
                     const err = await res.text();
                     if (statusMsg) {
                         statusMsg.className = 'response-box badge-unread';
-                        statusMsg.textContent = `خطا در ثبت پاسخ: ${err}`;
+                        statusMsg.textContent = `خطا در ارسال پاسخ: ${err}`;
                         statusMsg.style.display = 'block';
                     }
                 }
@@ -5229,7 +5239,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } finally {
                 if (submitBtn) submitBtn.disabled = false;
-                if (btnText) btnText.textContent = 'ثبت / ویرایش پاسخ';
+                if (btnText) btnText.textContent = 'ارسال پاسخ';
                 if (btnSpinner) btnSpinner.classList.add('d-none');
             }
         });
