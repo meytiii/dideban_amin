@@ -4040,6 +4040,33 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             reportsBody.addEventListener('click', (e) => {
+                const copyBtn = e.target.closest('button[data-copy-tracking]');
+                if (copyBtn) {
+                    e.stopPropagation();
+                    const code = copyBtn.getAttribute('data-copy-tracking');
+                    if (code) {
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(code);
+                        } else {
+                            const temp = document.createElement('textarea');
+                            temp.value = code;
+                            document.body.appendChild(temp);
+                            temp.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(temp);
+                        }
+                        const origSvg = copyBtn.innerHTML;
+                        copyBtn.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#10b981" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>';
+                        copyBtn.classList.add('copied');
+                        showToast('کد پیگیری کپی شد', 2000, 'info');
+                        setTimeout(() => {
+                            copyBtn.innerHTML = origSvg;
+                            copyBtn.classList.remove('copied');
+                        }, 1500);
+                    }
+                    return;
+                }
+
                 const btn = e.target.closest('button.btn-action');
                 if (!btn) return;
                 e.stopPropagation();
@@ -4100,7 +4127,25 @@ document.addEventListener('DOMContentLoaded', () => {
             codeTd.style.fontWeight = 'bold';
             codeTd.style.direction = 'ltr';
             codeTd.style.textAlign = 'right';
-            codeTd.innerHTML = highlightSearchTerm(report.tracking_code, searchTerm, searchRegex);
+
+            const trackingWrapper = document.createElement('div');
+            trackingWrapper.className = 'table-tracking-wrapper';
+
+            const codeSpan = document.createElement('span');
+            codeSpan.className = 'table-tracking-code';
+            codeSpan.innerHTML = highlightSearchTerm(report.tracking_code, searchTerm, searchRegex);
+
+            const copyBtn = document.createElement('button');
+            copyBtn.type = 'button';
+            copyBtn.className = 'btn-table-copy';
+            copyBtn.setAttribute('data-copy-tracking', report.tracking_code || '');
+            copyBtn.setAttribute('data-tooltip', 'کپی کد پیگیری');
+            copyBtn.setAttribute('aria-label', 'کپی کد پیگیری');
+            copyBtn.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+
+            trackingWrapper.appendChild(codeSpan);
+            trackingWrapper.appendChild(copyBtn);
+            codeTd.appendChild(trackingWrapper);
             tr.appendChild(codeTd);
 
             const priorityTd = document.createElement('td');
