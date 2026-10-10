@@ -223,8 +223,8 @@ func main() {
 	mux.HandleFunc("POST /api/admin/notifications/mark-read", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(MarkNotificationReadHandler)))))
 	mux.HandleFunc("POST /api/admin/notifications/mark-all-read", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, MarkAllNotificationsReadHandler))))
 
-	mux.Handle("/", StaticCacheMiddleware(GzipMiddleware(http.FileServer(http.Dir("./frontend/public")))))
-	mux.Handle("/admin/", AdminIPWhitelistMiddleware(http.StripPrefix("/admin/", StaticCacheMiddleware(GzipMiddleware(http.FileServer(http.Dir("./frontend/admin"))))).ServeHTTP))
+	mux.Handle("/", StaticCacheMiddleware(GzipMiddleware(Custom404FileServer("./frontend/public", "./frontend/public/404.html"))))
+	mux.Handle("/admin/", AdminIPWhitelistMiddleware(http.StripPrefix("/admin/", StaticCacheMiddleware(GzipMiddleware(Custom404FileServer("./frontend/admin", "./frontend/admin/404.html")))).ServeHTTP))
 
 	bindAddr := os.Getenv("HERASAT_BIND_ADDR")
 	if bindAddr == "" {

@@ -317,6 +317,19 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
   - **Aerodynamic Launch:** Upon hover, the airplane launches forward toward the button center (`translateX(1.3em) scale(1.15)`), while the label text (`.btn-text`) smoothly slides leftward and fades out (`translateX(-5em)`, `opacity: 0`), creating a sleek launch effect.
   - **Disabled & Asynchronous Safety:** When disabled or dispatching (`:disabled`), flight animations and text sliding cease immediately, maintaining stable layout while the asynchronous loading spinner (`.btn-spinner`) activates.
 
+### 23. Persian 404 Error Screen System (`oversized-404-numeral`)
+- **Visual Macrostructure & Typography Hierarchy:**
+  - **Oversized Numeral (`404`):** Dramatic focal anchor (`clamp(7.5rem, 24vw, 11rem)`) with `font-weight: 900`, tabular numbers, metallic gradient overlay (`linear-gradient(180deg, #ffffff 25%, #cbd5e1 65%, #64748b 100%)`), and multi-tier drop shadows (`drop-shadow(0 12px 28px rgba(0, 0, 0, 0.7))` and cobalt glow `0 0 40px rgba(59, 130, 246, 0.25)`).
+  - **Headline (`صفحه مورد نظر شما پیدا نشد.`):** High-contrast title (`#f8fafc`) with tight tracking and responsive scale (`clamp(1.45rem, 4.2vw, 1.95rem)`).
+  - **Body Narration (`صفحه‌ای که دنبالش هستید وجود ندارد یا ممکن است منتقل شده باشد. لطفاً به صفحه اصلی بازگردید.`):** High-readability slate paragraph (`#94a3b8`) constrained to `430px` max-width with `line-height: 1.75` and `text-wrap: pretty`.
+- **RTL Navigation & Dual Action Archetype:**
+  - **Primary Action (`صفحه اصلی`):** Cobalt blue gradient (`#3b82f6` -> `#2563eb`), ambient elevation `0 4px 14px rgba(37, 99, 235, 0.35)`, with Lucide Home icon placed inline-start. Dynamically routes to `/` for public portal or `/admin/` for authenticated admin sessions.
+  - **Secondary Action (`بازگشت به صفحه قبلی`):** Calibrated dark slate surface (`#1e293b`), subtle 1px border (`rgba(255, 255, 255, 0.12)`), with Lucide ArrowRight pointing rightward (`→`) to strictly preserve RTL directional logic. Safely triggers `window.history.back()` with automatic fallback to home when browser history is shallow.
+- **Production Integration Parity:**
+  - Registered as a reusable React component in `components/ui/oversized-404-numeral.tsx` and `components/ui/oversized-404-numeral-demo.tsx`.
+  - Implemented as production-grade standalone native HTML error views in `frontend/public/404.html` and `frontend/admin/404.html`.
+  - Intercepted and served automatically by Go's `Custom404FileServer` across all unmatched routes and static file misses with proper HTTP 404 status.
+
 ---
 
 ## Hardware Acceleration & Anti-Lag Performance Rules
