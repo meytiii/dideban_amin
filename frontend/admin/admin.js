@@ -4864,10 +4864,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else {
                             regionalList.innerHTML = `
                                 <div class="regional-responses-empty">
-                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" style="margin-bottom: 6px; opacity: 0.6;">
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 6px; opacity: 0.65;">
                                         <circle cx="12" cy="12" r="10"></circle>
-                                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
                                     </svg>
                                     <div>هنوز پاسخی از سوی کارشناسان نواحی و مناطق برای این پرونده ثبت نگردیده است.</div>
                                 </div>
@@ -6905,7 +6904,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                 </button>
                 <button type="button" class="btn-action btn-secondary btn-icon-only" data-action="reset-pwd" data-id="${u.id}" data-user="${escapeHTML(u.username)}" data-tooltip="تغییر رمز عبور" aria-label="تغییر رمز عبور">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-1.5 1.5L14 9a5 5 0 1 0 3 3l3.5-3.5"></path><path d="M15.5 6.5l2 2"></path></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="m21 2-9.6 9.6"></path><path d="m15.5 7.5 2.5 2.5"></path><path d="m18 5 2 2"></path></svg>
                 </button>
                 <button type="button" class="btn-action ${u.is_locked ? 'btn-warning is-locked-pulse' : 'btn-secondary'} btn-icon-only btn-lift-ban" data-action="lift-ban" data-id="${u.id}" data-user="${escapeHTML(u.username)}" data-tooltip="${u.is_locked ? `رفع قفل موقت ورود (${escapeHTML(u.lockout_remaining || '۱۵ دقیقه')})` : 'رفع محدودیت و بازنشانی خطاهای ورود'}" aria-label="رفع قفل موقت ورود">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
@@ -6919,7 +6918,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let pwdBadges = '';
             if (u.must_change_password) {
-                pwdBadges += `<span class="badge-pwd-forced" data-tooltip="الزام به تغییر رمز در ورود بعدی"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-left:3px;"><path d="M21 2l-2 2m-1.5 1.5L14 9a5 5 0 1 0 3 3l3.5-3.5"></path><path d="M15.5 6.5l2 2"></path></svg>الزام تغییر رمز</span> `;
+                pwdBadges += `<span class="badge-pwd-forced" data-tooltip="الزام به تغییر رمز در ورود بعدی"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-left:3px;"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="m21 2-9.6 9.6"></path><path d="m15.5 7.5 2.5 2.5"></path><path d="m18 5 2 2"></path></svg>الزام تغییر رمز</span> `;
             }
             if (u.is_password_expired) {
                 pwdBadges += `<span class="badge-pwd-expired" data-tooltip="اعتبار ۳۰ روزه منقضی شده است"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-left:3px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>منقضی شده</span> `;
