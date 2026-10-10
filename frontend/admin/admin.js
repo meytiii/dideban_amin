@@ -54,20 +54,58 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
     }, 10000);
 })();
 
+function getCsrfToken() {
+    const match = document.cookie.match(/(?:^|;\s*)herasat_csrf=([^;]+)/);
+    if (match && match[1]) {
+        const val = decodeURIComponent(match[1]);
+        sessionStorage.setItem('herasat_csrf', val);
+        return val;
+    }
+    return sessionStorage.getItem('herasat_csrf') || '';
+}
+
 function adminFetch(url, options = {}) {
     const opts = { credentials: 'same-origin', ...options };
     opts.headers = { ...(opts.headers || {}) };
-    const csrf = sessionStorage.getItem('herasat_csrf');
+    const csrf = getCsrfToken();
     if (csrf && opts.method && opts.method.toUpperCase() !== 'GET') {
         opts.headers['X-CSRF-Token'] = csrf;
     }
     const t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-    return fetchWithTimeout(url, opts, 20000).then(res => {
+    return fetchWithTimeout(url, opts, 20000).then(async res => {
         const t1 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         const rtt = Math.max(0, t1 - t0);
         const serverHdr = res.headers && (res.headers.get('x-server-time') || res.headers.get('date'));
         if (serverHdr && typeof window.__syncServerTime === 'function') {
             window.__syncServerTime(serverHdr, rtt);
+        }
+        const newCsrf = res.headers && res.headers.get('x-csrf-token');
+        if (newCsrf) {
+            sessionStorage.setItem('herasat_csrf', newCsrf);
+        }
+        if (res.status === 401) {
+            if (typeof forceLogoutOnConnectionDrop === 'function') {
+                forceLogoutOnConnectionDrop();
+            }
+        }
+        if (res.status === 403 && opts.method && opts.method.toUpperCase() !== 'GET' && !opts._retried) {
+            const clone = res.clone();
+            const text = await clone.text().catch(() => '');
+            if (text.includes('CSRF')) {
+                try {
+                    const meRes = await fetchWithTimeout('/api/admin/me', { credentials: 'same-origin' }, 10000);
+                    if (meRes.ok) {
+                        const meData = await meRes.json();
+                        const refreshedCsrf = meData.csrf_token || getCsrfToken();
+                        if (refreshedCsrf) {
+                            sessionStorage.setItem('herasat_csrf', refreshedCsrf);
+                            opts._retried = true;
+                            opts.headers['X-CSRF-Token'] = refreshedCsrf;
+                            return fetchWithTimeout(url, opts, 20000);
+                        }
+                    }
+                } catch (_) {}
+            }
         }
         return res;
     });
@@ -841,6 +879,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (remainingSeconds <= 0) {
             clearInterval(timerInterval);
+            timerInterval = null;
             showConfirmDialog({
                 title: 'پایان نشست کاری',
                 description: 'نشست کاری شما به دلیل عدم فعالیت به پایان رسید. لطفاً مجدداً وارد شوید.',
@@ -849,12 +888,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 variant: 'warning',
                 iconType: 'shield-alert'
             }).then(() => {
-                sessionStorage.removeItem('2fa_prompt_shown');
-                document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-                location.reload();
+                forceLogoutOnConnectionDrop();
             });
         }
     }
+
+    let lastUserActivityReset = Date.now();
+    function onUserInteraction() {
+        const now = Date.now();
+        if (now - lastUserActivityReset > 25000) {
+            lastUserActivityReset = now;
+            if (dashboardSection && dashboardSection.style.display !== 'none' && !dashboardSection.classList.contains('d-none') && currentAdmin) {
+                resetSessionTimer();
+            }
+        }
+    }
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
+        window.addEventListener(evt, onUserInteraction, { passive: true });
+    });
 
     function resumeSessionTimer() {
         clearInterval(timerInterval);
@@ -3687,7 +3738,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const firstReport = fetchedReports[0];
             const newSignature = `${fetchedReports.length}_${currentUnread}_${firstReport ? firstReport.id : 0}_${firstReport ? (firstReport.updated_at || firstReport.created_at) : ''}`;
             if (!forceRefresh && allReports.length > 0 && newSignature === lastReportsSignature) {
-                resetSessionTimer();
                 return true;
             }
             lastReportsSignature = newSignature;
@@ -3697,7 +3747,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 indexReportForSearch(allReports[i]);
             }
 
-            resetSessionTimer();
             updateKPICards();
             applyFilters();
             updateTableHeadersFromFilters();
@@ -6662,6 +6711,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await adminFetch('/api/admin/me');
             if (res.ok) {
                 currentAdmin = await res.json();
+                if (currentAdmin && currentAdmin.csrf_token) {
+                    sessionStorage.setItem('herasat_csrf', currentAdmin.csrf_token);
+                }
                 if (currentAdmin && (currentAdmin.server_time_unix_ms || currentAdmin.server_time) && typeof window.__syncServerTime === 'function') {
                     window.__syncServerTime(currentAdmin.server_time_unix_ms || currentAdmin.server_time);
                 }

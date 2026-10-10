@@ -4,7 +4,9 @@ import (
 	"archive/zip"
 	"bytes"
 	"context"
+	"crypto/rand"
 	"database/sql"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -64,6 +66,26 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			Secure:   isCookieSecure(),
 			SameSite: http.SameSiteLaxMode,
 		})
+
+		var currentCSRF string
+		if csrfCookie, err := r.Cookie("herasat_csrf"); err == nil && csrfCookie.Value != "" {
+			currentCSRF = csrfCookie.Value
+		} else {
+			csrfBytes := make([]byte, 32)
+			rand.Read(csrfBytes)
+			currentCSRF = base64.RawURLEncoding.EncodeToString(csrfBytes)
+		}
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     "herasat_csrf",
+			Value:    currentCSRF,
+			Path:     "/",
+			Expires:  session.Expiry,
+			HttpOnly: false,
+			Secure:   isCookieSecure(),
+			SameSite: http.SameSiteStrictMode,
+		})
+		w.Header().Set("X-CSRF-Token", currentCSRF)
 
 		ctx := context.WithValue(r.Context(), "admin", session)
 		next.ServeHTTP(w, r.WithContext(ctx))

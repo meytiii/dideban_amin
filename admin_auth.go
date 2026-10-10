@@ -216,8 +216,16 @@ func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 	isPasswordExpired := time.Since(passwordChangedAt) > 30*24*time.Hour
 	requiresPasswordChange := mustChangePassword || isPasswordExpired
 
+	csrfToken := ""
+	if csrfCookie, err := r.Cookie("herasat_csrf"); err == nil && csrfCookie.Value != "" {
+		csrfToken = csrfCookie.Value
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("X-Server-Time", dbNow.Format(time.RFC3339Nano))
+	if csrfToken != "" {
+		w.Header().Set("X-CSRF-Token", csrfToken)
+	}
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"username":             admin.Username,
 		"full_name":            admin.FullName,
@@ -230,6 +238,7 @@ func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 		"totp_enabled":         totpEnabled,
 		"server_time":          dbNow.Format(time.RFC3339Nano),
 		"server_time_unix_ms":  dbNow.UnixMilli(),
+		"csrf_token":           csrfToken,
 	})
 }
 
