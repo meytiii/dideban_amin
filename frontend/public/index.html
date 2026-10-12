@@ -8,12 +8,35 @@
     <title>سامانه دیده‌بان امین - ستاد خبری حراست آموزش و پرورش استان همدان</title>
     <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="style.css?v=80">
+    <link rel="stylesheet" href="style.css?v=79">
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 
 <body>
 
+    <div id="appPreloader" class="luxury-preloader" aria-label="در حال بارگذاری سامانه دیده‌بان امین" role="status">
+        <div class="preloader-backdrop-glow"></div>
+        <div class="preloader-content">
+            <div class="morph-loader-container">
+                <div class="morph-loader">
+                    <div class="morph-item morph-0"></div>
+                    <div class="morph-item morph-1"></div>
+                    <div class="morph-item morph-2"></div>
+                    <div class="morph-item morph-3"></div>
+                </div>
+            </div>
+            <div class="preloader-info">
+                <div class="preloader-title-row">
+                    <span class="preloader-pulse-dot"></span>
+                    <span class="preloader-title">در حال بارگذاری سامانه دیده‌بان امین</span>
+                </div>
+                <div class="preloader-progress-track">
+                    <div class="preloader-progress-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="preloader.js"></script>
 
     <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="false"></div>
 
@@ -28,14 +51,15 @@
     </div>
 
     <div class="container">
-        <header class="header portal-masthead">
-            <div class="masthead-crest">
+        <header class="header">
+            <div class="admin-logo-crest public-header-crest">
                 <picture>
                     <source srcset="logo.webp" type="image/webp">
-                    <img src="logo.webp" alt="لوگوی اداره کل آموزش و پرورش" class="masthead-crest-img" width="88" height="88" decoding="async">
+                    <img src="logo.webp" alt="لوگوی اداره کل آموزش و پرورش" class="admin-crest-img" width="102" height="102"
+                        decoding="async">
                 </picture>
             </div>
-            <h1 class="portal-title">دیده‌بان امین</h1>
+            <h1 class="persian-heading persian-heading--tatweel" data-tatweel-level="hero">دیده‌بان امین</h1>
             <div class="header-subtitle-row is-home-view" id="headerSubtitleRow">
                 <div class="header-action-slot header-action-home" id="headerHomeSlot"></div>
                 <div class="header-subtitle-group">
@@ -93,63 +117,36 @@
     </div>
 
         <main id="landingSection" class="landing-section">
-            <div class="landing-hero-bar">
-                <p class="landing-lead-text">
-                    سامانه دیده‌بان امین، پل ارتباطی مستقیم و امن شما با اداره حراست آموزش و پرورش استان همدان است. پیام‌ها کاملاً محرمانه، بدون واسطه و بدون نیاز به ثبت اطلاعات هویتی بررسی می‌شوند.
-                </p>
-                <div class="hero-actions-cluster">
-                    <button type="button" id="btnLandingStartReport" class="btn-primary-action">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 20h9"></path>
-                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                        </svg>
-                        <span>ثبت گزارش جدید</span>
-                        <svg class="action-arrow-rtl" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="19" y1="12" x2="5" y2="12"></line>
-                            <polyline points="12 19 5 12 12 5"></polyline>
-                        </svg>
-                    </button>
-                    <button type="button" id="btnLandingTrackReport" class="btn-secondary-action">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.3-4.3"></path>
-                        </svg>
-                        <span>پیگیری وضعیت گزارش</span>
-                    </button>
-                    <button type="button" id="btnLandingOpenFaq" class="btn-secondary-action btn-faq-action">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                            <path d="M12 17h.01" />
-                        </svg>
-                        <span>راهنما و سوالات متداول</span>
-                    </button>
-                </div>
-                <div class="trust-guarantee-bar">
-                    <div class="guarantee-item">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                        </svg>
-                        <span>۱۰۰٪ امن، محرمانه و بدون ردگیری</span>
-                    </div>
-                    <div class="guarantee-divider"></div>
-                    <div class="guarantee-item">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        <span>عدم نیاز به درج نام یا شماره تماس</span>
-                    </div>
-                    <div class="guarantee-divider"></div>
-                    <div class="guarantee-item">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <polyline points="12 6 12 12 16 14" />
-                        </svg>
-                        <span>رسیدگی مستقیم کارشناسان حراست</span>
+            <div class="landing-hero-card">
+                <div class="landing-intro-box">
+                    <p class="landing-lead-text">
+                        سامانه دیده‌بان امین، پل ارتباطی مستقیم و امن شما با اداره حراست آموزش و پرورش استان همدان است. پیام‌ها کاملاً محرمانه، بدون واسطه و بدون نیاز به اطلاعات هویتی بررسی می‌شوند.
+                    </p>
+                    <div class="landing-trust-strip">
+                        <div class="trust-badge">
+                            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                            <span>۱۰۰٪ محرمانه و امن</span>
+                        </div>
+                        <div class="trust-badge">
+                            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                            <span>رسیدگی مستقیم حراست</span>
+                        </div>
+                        <div class="trust-badge">
+                            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                            <span>ارتباط مستقیم و بی‌واسطه</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
                 <div class="scope-tabs-nav" role="tablist" aria-label="دسته‌بندی موضوعات">
                     <button type="button" id="tabScopeHerasat" class="scope-tab active" role="tab" aria-selected="true" aria-controls="scopeCardHerasat">
@@ -347,7 +344,7 @@
                         برای ثبت گزارش یا اخبار مرتبط با حیطه کاری حراست، دکمه زیر را انتخاب کنید:
                     </p>
                     <div class="landing-cta-actions">
-                        <button type="button" id="btnLandingStartReportBottom" class="btn-landing-primary">
+                        <button type="button" id="btnLandingStartReport" class="btn-landing-primary">
                             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
                                 stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 20h9"></path>
@@ -355,7 +352,7 @@
                             </svg>
                             <span>ثبت گزارش</span>
                         </button>
-                        <button type="button" id="btnLandingOpenFaqBottom" class="btn-landing-secondary btn-landing-faq">
+                        <button type="button" id="btnLandingOpenFaq" class="btn-landing-secondary btn-landing-faq">
                             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10" />
@@ -364,7 +361,7 @@
                             </svg>
                             <span>راهنما و سوالات متداول</span>
                         </button>
-                        <button type="button" id="btnLandingTrackReportBottom" class="btn-landing-secondary">
+                        <button type="button" id="btnLandingTrackReport" class="btn-landing-secondary">
                             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8" />
@@ -378,28 +375,29 @@
                             <button type="button" id="stickyBtnStartReport" class="btn-sticky-primary">
                                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
                                     stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 20h9"></path>
-                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                            </svg>
-                            <span>ثبت گزارش</span>
-                        </button>
-                        <button type="button" id="stickyBtnTrackReport" class="btn-sticky-secondary">
-                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8" />
-                                <path d="m21 21-4.3-4.3" />
-                            </svg>
-                            <span>پیگیری گزارش</span>
-                        </button>
-                        <button type="button" id="stickyBtnFaq" class="btn-sticky-faq"
-                            data-tooltip="راهنما و سوالات متداول" aria-label="راهنما و سوالات متداول">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                                <path d="M12 17h.01" />
-                            </svg>
-                        </button>
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                </svg>
+                                <span>ثبت گزارش</span>
+                            </button>
+                            <button type="button" id="stickyBtnTrackReport" class="btn-sticky-secondary">
+                                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="m21 21-4.3-4.3" />
+                                </svg>
+                                <span>پیگیری گزارش</span>
+                            </button>
+                            <button type="button" id="stickyBtnFaq" class="btn-sticky-faq"
+                                data-tooltip="راهنما و سوالات متداول" aria-label="راهنما و سوالات متداول">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                    <path d="M12 17h.01" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1202,13 +1200,13 @@
                         راه‌های ارتباطی
                     </span>
                     <p class="footer-text">
-                        <strong>تلفنخانه:</strong> <a href="tel:08138264041" class="footer-phone-link" aria-label="تماس با تلفنخانه ۰۸۱-۳۸۲۶۴۰۴۱-۶"><bdi dir="ltr" class="ltr">۰۸۱-۳۸۲۶۴۰۴۱-۶</bdi></a>
+                        <strong>تلفنخانه:</strong> <a href="tel:08138264041" class="footer-phone-link" aria-label="تماس با تلفنخانه ۰۸۱-۳۸۲۶۴۰۴۱-۶"><span class="ltr">۰۸۱-۳۸۲۶۴۰۴۱-۶</span></a>
                     </p>
                     <p class="footer-text">
-                        <strong>داخلی حراست:</strong> <a href="tel:08138264041,1186" class="footer-phone-link highlight-ext" aria-label="تماس با داخلی حراست ۱۱۸۶"><bdi dir="ltr" class="ltr">۱۱۸۶</bdi></a>
+                        <strong>داخلی حراست:</strong> <a href="tel:08138264041,1186" class="footer-phone-link highlight-ext" aria-label="تماس با داخلی حراست ۱۱۸۶"><span class="ltr">۱۱۸۶</span></a>
                     </p>
                     <p class="footer-text">
-                        <strong>کد پستی:</strong> <bdi dir="ltr" class="ltr">۶۵۱۵۷۳۸۴۴۸</bdi>
+                        <strong>کد پستی:</strong> <span class="ltr">۶۵۱۵۷۳۸۴۴۸</span>
                     </p>
                 </div>
             </div>
@@ -1589,7 +1587,8 @@
     </section>
 
     <script src="confirm.js" defer></script>
-    <script src="app.js?v=80" defer></script>
+    <script src="tatweel.js" defer></script>
+    <script src="app.js?v=79" defer></script>
 </body>
 
 </html>
