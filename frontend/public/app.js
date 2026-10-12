@@ -1792,6 +1792,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const btnLandingStartReportBottom = document.getElementById('btnLandingStartReportBottom');
+    if (btnLandingStartReportBottom) {
+        btnLandingStartReportBottom.addEventListener('click', () => {
+            switchView('submit');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        });
+    }
+
     const btnLandingTrackReport = document.getElementById('btnLandingTrackReport');
     if (btnLandingTrackReport) {
         btnLandingTrackReport.addEventListener('click', () => {
@@ -1800,9 +1808,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const btnLandingTrackReportBottom = document.getElementById('btnLandingTrackReportBottom');
+    if (btnLandingTrackReportBottom) {
+        btnLandingTrackReportBottom.addEventListener('click', () => {
+            switchView('track');
+            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        });
+    }
+
     const btnLandingOpenFaq = document.getElementById('btnLandingOpenFaq');
     if (btnLandingOpenFaq) {
         btnLandingOpenFaq.addEventListener('click', openGuidelinesDrawer);
+    }
+
+    const btnLandingOpenFaqBottom = document.getElementById('btnLandingOpenFaqBottom');
+    if (btnLandingOpenFaqBottom) {
+        btnLandingOpenFaqBottom.addEventListener('click', openGuidelinesDrawer);
     }
 
     const stickyBtnStartReport = document.getElementById('stickyBtnStartReport');
