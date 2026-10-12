@@ -120,6 +120,8 @@ The color palette centers on a dark-mode institutional system designed for high 
 ### Named Rules
 **The Single Accent Rule.** The primary blue accent (`#3b82f6`) is preserved exclusively for interactive forward actions and focal identifiers. Background surfaces never shift hues arbitrarily.
 
+**The Anti-Neon Discipline (Strictly Prohibited Neon Glows).** Neon glows, radioactive high-chroma borders, text-shadow halos, and luminous box-shadow rings are strictly forbidden across the entire UI. Saturated neon borders and bright luminescent badges degrade institutional dignity and look unprofessional. All cards, containers, and jurisdiction badges must utilize matte, calibrated, deep-slate surfaces (`#0f172a`, `#162032`, `rgba(6, 78, 59, 0.25)`) with subtle 1px boundary outlines (`rgba(255, 255, 255, 0.08)` or subtle `rgba(16, 185, 129, 0.2)`). Visual hierarchy must rely on typographic scale, crisp iconography, and restrained governmental tones rather than fluorescent halos.
+
 ---
 
 ## Typography

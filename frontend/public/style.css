@@ -5204,6 +5204,15 @@ button:disabled {
     box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
 }
 
+.landing-lead-text {
+    color: #e2e8f0;
+    font-size: 14.5px;
+    line-height: 1.85;
+    font-weight: 500;
+    margin: 0 0 16px 0;
+    text-align: justify;
+}
+
 .landing-trust-bar {
     display: flex;
     align-items: center;
@@ -5271,13 +5280,13 @@ button:disabled {
 }
 
 .scope-card--herasat {
-    border: 1px solid rgba(16, 185, 129, 0.55);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .scope-card--herasat:hover {
     transform: translateY(-2px) translateZ(0);
-    border-color: #10b981;
+    border-color: rgba(16, 185, 129, 0.38);
 }
 
 .scope-card--external {
@@ -5308,9 +5317,9 @@ button:disabled {
 }
 
 .scope-icon-wrap--herasat {
-    background: rgba(16, 185, 129, 0.12);
-    color: #10b981;
-    border: 1px solid rgba(16, 185, 129, 0.35);
+    background: rgba(6, 78, 59, 0.25);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.22);
 }
 
 .scope-icon-wrap--external {
@@ -5330,9 +5339,9 @@ button:disabled {
 }
 
 .scope-pill--herasat {
-    background: rgba(16, 185, 129, 0.15);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.35);
+    background: rgba(6, 78, 59, 0.3);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.25);
 }
 
 .scope-pill--external {
@@ -5715,6 +5724,12 @@ button:disabled {
 @media (max-width: 480px) {
     .landing-hero-card {
         padding: 16px 10px;
+    }
+
+    .landing-lead-text {
+        font-size: 13.5px;
+        line-height: 1.8;
+        margin-bottom: 12px;
     }
 
     .landing-trust-bar {

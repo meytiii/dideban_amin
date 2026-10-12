@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1791792321.1328547,
-    "seen": 1791792409.3009093,
-    "ast_hash": "a30b84a2c8a3ecf8b4e25d69d03ded1f",
+    "mtime": 1791792631.2668052,
+    "seen": 1791792754.9540188,
+    "ast_hash": "54ab610d6eebef53f24a727f0954f1d9",
     "semantic_hash": ""
   },
   "frontend/admin/favicon.png": {
@@ -168,9 +168,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1791620587.9808035,
-    "seen": 1791620610.3994796,
-    "ast_hash": "93d0fcf0cf24fa2af4182ead510e8466",
+    "mtime": 1791792708.3198135,
+    "seen": 1791792754.953714,
+    "ast_hash": "9606e9fc763f84c74f3df3b5970368d6",
     "semantic_hash": ""
   },
   "GEMINI.md": {
