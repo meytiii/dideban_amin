@@ -36,9 +36,9 @@
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
-    "mtime": 1791789304.267956,
-    "seen": 1791790580.4625268,
-    "ast_hash": "6a3015caca528b7530aa2aac03877274",
+    "mtime": 1791791055.0516336,
+    "seen": 1791792409.290001,
+    "ast_hash": "cc4a1aafec1034baa0605aa96ce6b003",
     "semantic_hash": ""
   },
   "go.mod": {
@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1791789668.4887295,
-    "seen": 1791790580.4735138,
-    "ast_hash": "6360c5e5d25854d24fa0413b97af3ba8",
+    "mtime": 1791792321.1328547,
+    "seen": 1791792409.3009093,
+    "ast_hash": "a30b84a2c8a3ecf8b4e25d69d03ded1f",
     "semantic_hash": ""
   },
   "frontend/admin/favicon.png": {

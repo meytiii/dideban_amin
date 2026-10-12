@@ -1,7 +1,7 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-12)
 
 ## Corpus Check
-- 212 files · ~234,118 words
+- 212 files · ~233,957 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5e39f927`
+- Built from commit: `e7710bd2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -432,8 +432,8 @@ Cohesion: 0.21
 Nodes (18): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES(), EncryptFileBytes() (+10 more)
 
 ### Community 71 - "openForwardModal"
-Cohesion: 0.50
-Nodes (5): fetchForwardingRecipients(), openForwardModal(), renderRecipientList(), renderRecipientListSkeleton(), updateSelectedRecipientsCounter()
+Cohesion: 0.29
+Nodes (8): fetchForwardingRecipients(), openForwardModal(), openResetPwdModal(), openShortcutsModal(), promoteTemporarily(), renderRecipientList(), renderRecipientListSkeleton(), updateSelectedRecipientsCounter()
 
 ### Community 74 - "SyslogShipper"
 Cohesion: 0.24
@@ -444,8 +444,8 @@ Cohesion: 0.50
 Nodes (3): InitCookieSecurity(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag()
 
 ### Community 77 - "adminFetch"
-Cohesion: 0.15
-Nodes (25): adminFetch(), deleteUser(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), getCsrfToken(), handleAdminLogout() (+17 more)
+Cohesion: 0.17
+Nodes (22): adminFetch(), deleteUser(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), getCsrfToken(), handleAdminLogout() (+14 more)
 
 ### Community 82 - "metadata.go"
 Cohesion: 0.29

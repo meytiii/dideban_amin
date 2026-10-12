@@ -1658,7 +1658,7 @@
       "file_type": "code",
       "norm_label": "closeguidelinesdrawer()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1992"
+      "source_location": "L2013"
     },
     {
       "id": "frontend_public_app_dismisspreloader",
@@ -1910,7 +1910,7 @@
       "file_type": "code",
       "norm_label": "onunifiedscroll()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1916"
+      "source_location": "L1937"
     },
     {
       "id": "frontend_public_app_openguidelinesdrawer",
@@ -1922,7 +1922,7 @@
       "file_type": "code",
       "norm_label": "openguidelinesdrawer()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1975"
+      "source_location": "L1996"
     },
     {
       "id": "frontend_public_app_parsetimestamp",
@@ -1994,7 +1994,7 @@
       "file_type": "code",
       "norm_label": "renderconversationthread()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2043"
+      "source_location": "L2064"
     },
     {
       "id": "frontend_public_app_renderfilequeue",
@@ -2102,7 +2102,7 @@
       "file_type": "code",
       "norm_label": "showtrackerror()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2304"
+      "source_location": "L2325"
     },
     {
       "id": "frontend_public_app_startrecoverypolling",
@@ -2150,7 +2150,7 @@
       "file_type": "code",
       "norm_label": "syncnavactionsposition()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1834"
+      "source_location": "L1855"
     },
     {
       "id": "frontend_public_app_updatelandingstickybar",
@@ -2162,7 +2162,7 @@
       "file_type": "code",
       "norm_label": "updatelandingstickybar()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1890"
+      "source_location": "L1911"
     },
     {
       "id": "frontend_public_app_updatesteptracker",
@@ -2186,7 +2186,7 @@
       "file_type": "code",
       "norm_label": "updatetopnavstickybar()",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1860"
+      "source_location": "L1881"
     },
     {
       "id": "frontend_public_app_validatecurrentstep",
@@ -3401,42 +3401,6 @@
       "source_location": "L8783"
     },
     {
-      "id": "frontend_admin_admin_openresetpwdmodal",
-      "label": "openResetPwdModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "openForwardModal",
-      "file_type": "code",
-      "norm_label": "openresetpwdmodal()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L7511"
-    },
-    {
-      "id": "frontend_admin_admin_openshortcutsmodal",
-      "label": "openShortcutsModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "openForwardModal",
-      "file_type": "code",
-      "norm_label": "openshortcutsmodal()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L4341"
-    },
-    {
-      "id": "frontend_admin_admin_promotetemporarily",
-      "label": "promoteTemporarily()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "openForwardModal",
-      "file_type": "code",
-      "norm_label": "promotetemporarily()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L187"
-    },
-    {
       "id": "frontend_admin_admin_renderrecipientlist",
       "label": "renderRecipientList()",
       "_callable": true,
@@ -3605,6 +3569,30 @@
       "source_location": "L7239"
     },
     {
+      "id": "frontend_admin_admin_openresetpwdmodal",
+      "label": "openResetPwdModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 77,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "openresetpwdmodal()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L7511"
+    },
+    {
+      "id": "frontend_admin_admin_openshortcutsmodal",
+      "label": "openShortcutsModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 77,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "openshortcutsmodal()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L4341"
+    },
+    {
       "id": "frontend_admin_admin_parseuseragent",
       "label": "parseUserAgent()",
       "_callable": true,
@@ -3615,6 +3603,18 @@
       "norm_label": "parseuseragent()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L8312"
+    },
+    {
+      "id": "frontend_admin_admin_promotetemporarily",
+      "label": "promoteTemporarily()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 77,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "promotetemporarily()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L187"
     },
     {
       "id": "frontend_admin_admin_rendersessionstable",
@@ -24114,7 +24114,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1921",
+      "source_location": "L1942",
       "weight": 1.0
     },
     {
@@ -24126,7 +24126,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L1924",
+      "source_location": "L1945",
       "weight": 1.0
     },
     {
@@ -24174,7 +24174,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2110",
+      "source_location": "L2131",
       "weight": 1.0
     },
     {
@@ -24282,7 +24282,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2313",
+      "source_location": "L2334",
       "weight": 1.0
     },
     {
@@ -24294,7 +24294,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/app.js",
-      "source_location": "L2316",
+      "source_location": "L2337",
       "weight": 1.0
     },
     {
@@ -41677,7 +41677,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1834",
+      "source_location": "L1855",
       "weight": 1.0
     },
     {
@@ -41688,7 +41688,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1860",
+      "source_location": "L1881",
       "weight": 1.0
     },
     {
@@ -41699,7 +41699,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1890",
+      "source_location": "L1911",
       "weight": 1.0
     },
     {
@@ -41710,7 +41710,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1916",
+      "source_location": "L1937",
       "weight": 1.0
     },
     {
@@ -41721,7 +41721,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1975",
+      "source_location": "L1996",
       "weight": 1.0
     },
     {
@@ -41732,7 +41732,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L1992",
+      "source_location": "L2013",
       "weight": 1.0
     },
     {
@@ -41743,7 +41743,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L2043",
+      "source_location": "L2064",
       "weight": 1.0
     },
     {
@@ -41754,7 +41754,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/app.js",
-      "source_location": "L2304",
+      "source_location": "L2325",
       "weight": 1.0
     },
     {
@@ -49715,5 +49715,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "3cd028e83ae3fd985342f72ea515591769b0380d"
+  "built_at_commit": "5e39f927ae551f6af70cab9b6b3b3b4a63c4ded4"
 }
