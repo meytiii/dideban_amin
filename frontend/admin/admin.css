@@ -4537,7 +4537,8 @@ button {
     transform: scale(1.1) translateZ(0);
 }
 
-.input-error {
+.input-error,
+.password-wrapper.input-error input {
     border-color: #f43f5e !important;
     box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.3) !important;
 }

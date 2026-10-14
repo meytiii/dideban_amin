@@ -1818,6 +1818,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function triggerPasswordError(pwdInput) {
+        if (!pwdInput) return;
+        const wrapper = pwdInput.closest('.password-wrapper') || pwdInput;
+        pwdInput.classList.add('input-error');
+        wrapper.classList.add('input-error', 'input-error-shake');
+        setTimeout(() => wrapper.classList.remove('input-error-shake'), 450);
+        pwdInput.focus();
+        if (typeof pwdInput.select === 'function') pwdInput.select();
+    }
+
+    ['enable_2fa_pwd', 'disable_2fa_pwd'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => {
+                el.classList.remove('input-error');
+                el.closest('.password-wrapper')?.classList.remove('input-error');
+                const statusEl = el.closest('form')?.querySelector('.response-box');
+                if (statusEl) statusEl.style.display = 'none';
+            });
+        }
+    });
+
     if (formEnable2FA) {
         formEnable2FA.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1827,6 +1849,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const pwdInput = document.getElementById('enable_2fa_pwd');
             const pwd = pwdInput ? pwdInput.value : '';
             const statusEl = document.getElementById('enable-2fa-status');
+
+            if (!pwd || !pwd.trim()) {
+                triggerPasswordError(pwdInput);
+                if (statusEl) {
+                    statusEl.textContent = 'لطفاً کلمه عبور جاری حساب کاربری را وارد نمایید.';
+                    statusEl.className = 'response-box error';
+                    statusEl.style.display = 'block';
+                }
+                return;
+            }
+
+            if (!code || code.length < 6) {
+                if (enable2faOtpController) enable2faOtpController.showError();
+                if (statusEl) {
+                    statusEl.textContent = 'لطفاً کد ۶ رقمی نرم‌افزار را به طور کامل وارد نمایید.';
+                    statusEl.className = 'response-box error';
+                    statusEl.style.display = 'block';
+                }
+                return;
+            }
+
             try {
                 const res = await adminFetch('/api/admin/2fa/enable', {
                     method: 'POST',
@@ -1840,21 +1883,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     reset2FAModalViews();
                     await refresh2FAStatus();
                 } else {
-                    if (enable2faOtpController) enable2faOtpController.showError();
                     const err = (await res.text()).trim();
+                    const isPwdErr = err.includes('کلمه عبور') || err.includes('رمز عبور') || (res.status === 401 && !err.includes('منقضی') && !err.includes('Unauthorized'));
+                    if (isPwdErr) {
+                        triggerPasswordError(pwdInput);
+                    } else {
+                        if (enable2faOtpController) enable2faOtpController.showError();
+                    }
                     if (statusEl) {
-                        if (err === 'Unauthorized' || res.status === 401 && !err.includes('کلمه عبور')) {
+                        if (err === 'Unauthorized' || (res.status === 401 && !isPwdErr)) {
                             statusEl.textContent = 'نشست کاری شما منقضی شده است. در حال انتقال به صفحه ورود...';
                             setTimeout(() => location.reload(), 1500);
                         } else {
-                            statusEl.textContent = err || 'کد امنیتی تأیید نشد.';
+                            statusEl.textContent = err || (isPwdErr ? 'کلمه عبور جاری اشتباه است.' : 'کد امنیتی تأیید نشد.');
                         }
                         statusEl.className = 'response-box error';
                         statusEl.style.display = 'block';
                     }
                 }
             } catch (_) {
-                if (enable2faOtpController) enable2faOtpController.showError();
                 if (statusEl) {
                     statusEl.textContent = 'خطای ارتباط با سرور.';
                     statusEl.className = 'response-box error';
@@ -1884,9 +1931,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formDisable2FA) {
         formDisable2FA.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const pwd = document.getElementById('disable_2fa_pwd').value;
+            const pwdInput = document.getElementById('disable_2fa_pwd');
+            const pwd = pwdInput ? pwdInput.value : '';
             const code = document.getElementById('disable_2fa_code').value.trim();
             const statusEl = document.getElementById('disable-2fa-status');
+
+            if (!pwd || !pwd.trim()) {
+                triggerPasswordError(pwdInput);
+                if (statusEl) {
+                    statusEl.textContent = 'لطفاً کلمه عبور جاری را وارد نمایید.';
+                    statusEl.className = 'response-box error';
+                    statusEl.style.display = 'block';
+                }
+                return;
+            }
+
+            if (!code || code.length < 6) {
+                if (disable2faOtpController) disable2faOtpController.showError();
+                if (statusEl) {
+                    statusEl.textContent = 'لطفاً کد ۶ رقمی نرم‌افزار را به طور کامل وارد نمایید.';
+                    statusEl.className = 'response-box error';
+                    statusEl.style.display = 'block';
+                }
+                return;
+            }
+
             try {
                 const res = await adminFetch('/api/admin/2fa/disable', {
                     method: 'POST',
@@ -1900,21 +1969,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     reset2FAModalViews();
                     await refresh2FAStatus();
                 } else {
-                    if (disable2faOtpController) disable2faOtpController.showError();
                     const err = (await res.text()).trim();
+                    const isPwdErr = err.includes('کلمه عبور') || err.includes('رمز عبور') || (res.status === 401 && !err.includes('منقضی') && !err.includes('Unauthorized'));
+                    if (isPwdErr) {
+                        triggerPasswordError(pwdInput);
+                    } else {
+                        if (disable2faOtpController) disable2faOtpController.showError();
+                    }
                     if (statusEl) {
-                        if (err === 'Unauthorized' || res.status === 401 && !err.includes('رمز عبور') && !err.includes('کلمه عبور')) {
+                        if (err === 'Unauthorized' || (res.status === 401 && !isPwdErr)) {
                             statusEl.textContent = 'نشست کاری شما منقضی شده است. در حال انتقال به صفحه ورود...';
                             setTimeout(() => location.reload(), 1500);
                         } else {
-                            statusEl.textContent = err || 'اطلاعات وارد شده صحیح نمی‌باشد.';
+                            statusEl.textContent = err || (isPwdErr ? 'کلمه عبور جاری اشتباه است.' : 'اطلاعات وارد شده صحیح نمی‌باشد.');
                         }
                         statusEl.className = 'response-box error';
                         statusEl.style.display = 'block';
                     }
                 }
             } catch (_) {
-                if (disable2faOtpController) disable2faOtpController.showError();
                 if (statusEl) {
                     statusEl.textContent = 'خطای ارتباط با سرور.';
                     statusEl.className = 'response-box error';
