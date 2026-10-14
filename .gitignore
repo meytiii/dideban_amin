@@ -36,3 +36,5 @@ start_env.txt
 assets/*
 analytics/*
 .playwright-mcp/
+homepage_dataurl.txt
+convert.py

@@ -84,15 +84,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1791956418.2954998,
-    "seen": 1791956437.9778259,
-    "ast_hash": "1b20810447b9fd97135ccf69f46000ec",
+    "mtime": 1791957001.8959298,
+    "seen": 1791959622.2315445,
+    "ast_hash": "7114a526d61c5ad769a46938e052c952",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1791792631.2668052,
-    "seen": 1791792754.9540188,
-    "ast_hash": "54ab610d6eebef53f24a727f0954f1d9",
+    "mtime": 1791958246.77582,
+    "seen": 1791959622.2316103,
+    "ast_hash": "856f4efb368934bb1f80fd1aa9b76e8e",
     "semantic_hash": ""
   },
   "frontend/admin/favicon.png": {
@@ -1365,6 +1365,12 @@
     "mtime": 1791956391.146366,
     "seen": 1791956437.978336,
     "ast_hash": "6f8097feed4a8fbbeccd32197459573b",
+    "semantic_hash": ""
+  },
+  "frontend/public/homepage.webp": {
+    "mtime": 1791958779.1894329,
+    "seen": 1791959622.2323022,
+    "ast_hash": "bf9c69fb739ebc860d1478ddcb41662e",
     "semantic_hash": ""
   }
 }
