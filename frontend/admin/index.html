@@ -2827,8 +2827,8 @@
     </div>
 
     <div id="modal-forward-report" class="admin-modal-overlay" style="display: none;">
-        <div class="admin-modal-box forward-modal-box" style="max-width: 540px;">
-            <div class="admin-modal-header">
+        <div class="admin-modal-box forward-modal-box" style="max-width: 560px; width: 95%; max-height: 90vh; display: flex; flex-direction: column;">
+            <div class="admin-modal-header" style="flex-shrink: 0;">
                 <div>
                     <h3 style="display: flex; align-items: center; gap: 8px;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -2848,10 +2848,10 @@
                 <button type="button" class="btn-close-modal" id="btn-close-forward-modal"
                     aria-label="بستن">&times;</button>
             </div>
-            <form id="form-forward-report" novalidate>
+            <form id="form-forward-report" novalidate style="display: flex; flex-direction: column; overflow: hidden; flex: 1;">
                 <input type="hidden" id="forward_report_id">
 
-                <div class="forward-search-bar" style="margin-bottom: 12px;">
+                <div class="forward-search-bar" style="margin-bottom: 12px; flex-shrink: 0;">
                     <div style="position: relative;">
                         <input type="text" id="forward-search-input" placeholder="جستجوی نام کارشناس یا ناحیه/منطقه..."
                             style="width: 100%; height: 38px; background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 0 34px 0 12px; color: var(--text-main); font-family: inherit; font-size: 13px;">
@@ -2865,7 +2865,7 @@
                 </div>
 
                 <div class="forward-actions-bar"
-                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12px; color: var(--text-muted);">
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12px; color: var(--text-muted); flex-shrink: 0;">
                     <div style="display: flex; gap: 10px;">
                         <button type="button" id="btn-select-all-recipients" class="btn-link-action"
                             style="background:none; border:none; color:var(--color-primary); cursor:pointer; font-family:inherit; font-size:12px; padding:0;">انتخاب
@@ -2882,7 +2882,7 @@
                 </div>
 
                 <div id="forward-recipients-container" class="forward-recipients-list"
-                    style="max-height: 260px; overflow-y: auto; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 8px; background: rgba(15, 23, 42, 0.35); margin-bottom: 14px;">
+                    style="max-height: min(450px, 48vh); overflow-y: auto; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 8px; background: rgba(15, 23, 42, 0.35); margin-bottom: 14px; flex: 1;">
                     <div id="forward-recipients-loading"
                         style="text-align: center; padding: 25px; color: var(--text-muted); font-size: 13px;">
                         در حال بارگذاری لیست کارشناسان نواحی و مناطق...
@@ -2891,7 +2891,7 @@
 
                 <div id="forward-status-msg" class="response-box" style="display: none; margin-bottom: 12px;"></div>
 
-                <div class="admin-modal-footer">
+                <div class="admin-modal-footer" style="flex-shrink: 0; margin-top: auto;">
                     <button type="button" class="btn-action btn-secondary" id="btn-cancel-forward">انصراف</button>
                     <button type="submit" class="btn-action btn-submit" id="btn-submit-forward">
                         <span class="btn-text">تایید و ارجاع خبر</span>

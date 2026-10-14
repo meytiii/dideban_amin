@@ -7714,9 +7714,24 @@ tr.row-priority-normal {
     display: block;
 }
 
+.forward-modal-box {
+    max-width: 560px !important;
+    width: 95% !important;
+    max-height: 90vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
 .forward-recipients-list {
+    max-height: min(450px, 48vh);
     scrollbar-width: thin;
     scrollbar-color: rgba(56, 189, 248, 0.45) rgba(15, 23, 42, 0.6);
+}
+
+@media (max-height: 700px) {
+    .forward-recipients-list {
+        max-height: 40vh !important;
+    }
 }
 
 .forward-recipient-item:hover {
