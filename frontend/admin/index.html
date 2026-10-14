@@ -1499,22 +1499,53 @@
                             <option value="all">همه کاربران اداری</option>
                         </select>
                     </div>
-                    <div class="filter-group">
-                        <select id="audit-filter-month">
-                            <option value="all">همه ماه‌های سال</option>
-                            <option value="01">فروردین</option>
-                            <option value="02">اردیبهشت</option>
-                            <option value="03">خرداد</option>
-                            <option value="04">تیر</option>
-                            <option value="05">مرداد</option>
-                            <option value="06">شهریور</option>
-                            <option value="07">مهر</option>
-                            <option value="08">آبان</option>
-                            <option value="09">آذر</option>
-                            <option value="10">دی</option>
-                            <option value="11">بهمن</option>
-                            <option value="12">اسفند</option>
-                        </select>
+                    <div class="filter-group date-picker-filter-group" id="auditDateRangePickerWrapper">
+                        <button type="button" id="auditDateRangeTrigger" class="date-range-trigger" aria-haspopup="dialog" aria-expanded="false" data-tooltip="فیلتر بر اساس بازه تاریخ">
+                            <svg class="date-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                                <line x1="16" x2="16" y1="2" y2="6"/>
+                                <line x1="8" x2="8" y1="2" y2="6"/>
+                                <line x1="3" x2="21" y1="10" y2="10"/>
+                            </svg>
+                            <span id="auditDateRangeText" class="date-range-text">انتخاب بازه زمانی</span>
+                            <span id="auditDateRangeClear" class="date-range-clear" title="حذف فیلتر تاریخ" style="display: none;">&times;</span>
+                        </button>
+                        <div id="auditDateRangePopover" class="date-range-popover" style="display: none;" role="dialog" aria-modal="true">
+                            <div class="date-picker-presets">
+                                <button type="button" class="preset-chip" data-preset="today">امروز</button>
+                                <button type="button" class="preset-chip" data-preset="last7">۷ روز اخیر</button>
+                                <button type="button" class="preset-chip" data-preset="last30">۳۰ روز اخیر</button>
+                                <button type="button" class="preset-chip" data-preset="thisMonth">ماه جاری</button>
+                                <button type="button" class="preset-chip active" data-preset="all">همه</button>
+                            </div>
+                            <div class="date-picker-calendar-header">
+                                <button type="button" id="auditCalPrevMonth" class="cal-nav-btn" aria-label="ماه قبل" title="ماه قبل">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </button>
+                                <div id="auditCalMonthTitle" class="cal-month-title"></div>
+                                <button type="button" id="auditCalNextMonth" class="cal-nav-btn" aria-label="ماه بعد" title="ماه بعد">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="15 18 9 12 15 6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="cal-weekdays">
+                                <span>ش</span>
+                                <span>ی</span>
+                                <span>د</span>
+                                <span>س</span>
+                                <span>چ</span>
+                                <span>پ</span>
+                                <span>ج</span>
+                            </div>
+                            <div id="auditCalDaysGrid" class="cal-days-grid"></div>
+                            <div class="cal-footer-actions">
+                                <button type="button" id="auditCalResetBtn" class="cal-action-btn cal-reset-btn">پاک کردن</button>
+                                <button type="button" id="auditCalConfirmBtn" class="cal-action-btn cal-confirm-btn">بستن</button>
+                            </div>
+                        </div>
                     </div>
                     <div style="display: flex; gap: 8px; align-items: center;">
                         <button type="button" id="btn-refresh-audit" class="btn-action btn-secondary btn-icon-only"

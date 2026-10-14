@@ -1994,21 +1994,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'audit-filter-user': {
             'all': 'همه کاربران ثبت‌کننده لاگ در سامانه'
         },
-        'audit-filter-month': {
-            'all': 'نمایش گزارش‌های کلیه ماه‌های سال',
-            '01': 'فروردین‌ماه',
-            '02': 'اردیبهشت‌ماه',
-            '03': 'خردادماه',
-            '04': 'تیرماه',
-            '05': 'مردادماه',
-            '06': 'شهریورماه',
-            '07': 'مهرماه',
-            '08': 'آبان‌ماه',
-            '09': 'آذرماه',
-            '10': 'دی‌ماه',
-            '11': 'بهمن‌ماه',
-            '12': 'اسفندماه'
-        },
         'new_role': {
             'edare_kol': 'دسترسی کامل به پرونده‌های حراست کل استان',
             'navahi_manategh': 'دسترسی استعلام و ارسال پاسخ حراست منطقه',
@@ -2253,7 +2238,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initAdminCustomFilters() {
-        ['filter-type', 'filter-read-status', 'filter-priority', 'filter-report-type', 'detail-priority-select', 'audit-filter-action', 'audit-filter-user', 'audit-filter-month', 'new_role', 'edit_role', 'edit_is_active'].forEach(id => {
+        ['filter-type', 'filter-read-status', 'filter-priority', 'filter-report-type', 'detail-priority-select', 'audit-filter-action', 'audit-filter-user', 'new_role', 'edit_role', 'edit_is_active'].forEach(id => {
             if (document.getElementById(id)) {
                 initAdminCustomSelect(id, ADMIN_FILTER_DESCRIPTIONS[id]);
             }
@@ -2965,22 +2950,22 @@ document.addEventListener('DOMContentLoaded', () => {
         return new Date(g.gy, g.gm - 1, g.gd, 23, 59, 59, 999).getTime();
     }
 
-    function initShamsiDateRangePicker() {
-        const trigger = document.getElementById('dateRangeTrigger');
-        const popover = document.getElementById('dateRangePopover');
-        const wrapper = document.getElementById('dateRangePickerWrapper');
-        const filterContainer = document.getElementById('reportsFilterContainer') || (trigger ? trigger.closest('.filter-container') : null);
-        const textSpan = document.getElementById('dateRangeText');
-        const clearBtn = document.getElementById('dateRangeClear');
-        const prevBtn = document.getElementById('calPrevMonth');
-        const nextBtn = document.getElementById('calNextMonth');
-        const titleEl = document.getElementById('calMonthTitle');
-        const gridEl = document.getElementById('calDaysGrid');
-        const resetBtn = document.getElementById('calResetBtn');
-        const confirmBtn = document.getElementById('calConfirmBtn');
-        const presetChips = document.querySelectorAll('.preset-chip');
+    function createShamsiDateRangePicker(options) {
+        const trigger = document.getElementById(options.triggerId);
+        const popover = document.getElementById(options.popoverId);
+        const wrapper = document.getElementById(options.wrapperId);
+        const filterContainer = options.filterContainerId ? document.getElementById(options.filterContainerId) : (trigger ? trigger.closest('.filter-container') : null);
+        const textSpan = document.getElementById(options.textSpanId);
+        const clearBtn = document.getElementById(options.clearBtnId);
+        const prevBtn = document.getElementById(options.prevBtnId);
+        const nextBtn = document.getElementById(options.nextBtnId);
+        const titleEl = document.getElementById(options.titleElId);
+        const gridEl = document.getElementById(options.gridElId);
+        const resetBtn = document.getElementById(options.resetBtnId);
+        const confirmBtn = document.getElementById(options.confirmBtnId);
+        const presetChips = wrapper ? wrapper.querySelectorAll('.preset-chip') : [];
 
-        if (!trigger || !popover || !gridEl) return;
+        if (!trigger || !popover || !gridEl) return null;
 
         const JALALI_MONTH_NAMES = [
             'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
@@ -3094,9 +3079,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         tempEnd = null;
                         pickingState = true;
                         hoveredDay = null;
-                        textSpan.textContent = toPersianDigits(tempStart.jy) + '/' + padZero(tempStart.jm) + '/' + padZero(tempStart.jd) + ' تا ...';
-                        textSpan.classList.add('has-range');
-                        clearBtn.style.display = 'inline-flex';
+                        if (textSpan) {
+                            textSpan.textContent = toPersianDigits(tempStart.jy) + '/' + padZero(tempStart.jm) + '/' + padZero(tempStart.jd) + ' تا ...';
+                            textSpan.classList.add('has-range');
+                        }
+                        if (clearBtn) clearBtn.style.display = 'inline-flex';
                         renderCalendar();
                     } else {
                         const secondDay = {
@@ -3199,7 +3186,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const sKey = Math.min(tempStart.key, tempEnd.key);
             const eKey = Math.max(tempStart.key, tempEnd.key);
-            activeShamsiDateRange = {
+            const rangeObj = {
                 startKey: sKey,
                 endKey: eKey,
                 startJ: tempStart,
@@ -3208,24 +3195,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const sStr = toPersianDigits(tempStart.jy) + '/' + padZero(tempStart.jm) + '/' + padZero(tempStart.jd);
             const eStr = toPersianDigits(tempEnd.jy) + '/' + padZero(tempEnd.jm) + '/' + padZero(tempEnd.jd);
-            textSpan.textContent = sStr + ' تا ' + eStr;
-            textSpan.classList.add('has-range');
-            clearBtn.style.display = 'inline-flex';
+            if (textSpan) {
+                textSpan.textContent = sStr + ' تا ' + eStr;
+                textSpan.classList.add('has-range');
+            }
+            if (clearBtn) clearBtn.style.display = 'inline-flex';
 
             presetChips.forEach(c => c.classList.remove('active'));
             renderCalendar();
-            applyFilters(true);
+            if (typeof options.onCommit === 'function') {
+                options.onCommit(rangeObj);
+            }
         }
 
         function resetRange() {
-            activeShamsiDateRange = null;
             tempStart = null;
             tempEnd = null;
             pickingState = false;
             hoveredDay = null;
-            textSpan.textContent = 'انتخاب بازه زمانی';
-            textSpan.classList.remove('has-range');
-            clearBtn.style.display = 'none';
+            if (textSpan) {
+                textSpan.textContent = 'انتخاب بازه زمانی';
+                textSpan.classList.remove('has-range');
+            }
+            if (clearBtn) clearBtn.style.display = 'none';
 
             presetChips.forEach(c => {
                 c.classList.toggle('active', c.getAttribute('data-preset') === 'all');
@@ -3234,10 +3226,10 @@ document.addEventListener('DOMContentLoaded', () => {
             currentViewJy = todayJ.jy;
             currentViewJm = todayJ.jm;
             renderCalendar();
-            applyFilters(true);
+            if (typeof options.onReset === 'function') {
+                options.onReset();
+            }
         }
-
-        window.resetShamsiDateRangePicker = resetRange;
 
         function closePopover() {
             popover.style.display = 'none';
@@ -3291,46 +3283,56 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        clearBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            resetRange();
-        });
+        if (clearBtn) {
+            clearBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                resetRange();
+            });
+        }
 
-        prevBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (currentViewJm === 1) {
-                currentViewJm = 12;
-                currentViewJy--;
-            } else {
-                currentViewJm--;
-            }
-            renderCalendar();
-        });
+        if (prevBtn) {
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentViewJm === 1) {
+                    currentViewJm = 12;
+                    currentViewJy--;
+                } else {
+                    currentViewJm--;
+                }
+                renderCalendar();
+            });
+        }
 
-        nextBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (currentViewJm === 12) {
-                currentViewJm = 1;
-                currentViewJy++;
-            } else {
-                currentViewJm++;
-            }
-            renderCalendar();
-        });
+        if (nextBtn) {
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentViewJm === 12) {
+                    currentViewJm = 1;
+                    currentViewJy++;
+                } else {
+                    currentViewJm++;
+                }
+                renderCalendar();
+            });
+        }
 
-        resetBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            resetRange();
-        });
+        if (resetBtn) {
+            resetBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                resetRange();
+            });
+        }
 
-        confirmBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            closePopover();
-        });
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closePopover();
+            });
+        }
 
         document.addEventListener('click', (e) => {
             if (popover.style.display !== 'flex') return;
-            if (e.target && e.target.closest && (e.target.closest('#dateRangePopover') || e.target.closest('#dateRangeTrigger'))) {
+            if (e.target && e.target.closest && (e.target.closest(`#${options.popoverId}`) || e.target.closest(`#${options.triggerId}`))) {
                 return;
             }
             closePopover();
@@ -3423,9 +3425,68 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         renderCalendar();
+
+        return {
+            resetRange,
+            closePopover,
+            openPopover
+        };
     }
 
-    initShamsiDateRangePicker();
+    const reportsDatePicker = createShamsiDateRangePicker({
+        triggerId: 'dateRangeTrigger',
+        popoverId: 'dateRangePopover',
+        wrapperId: 'dateRangePickerWrapper',
+        filterContainerId: 'reportsFilterContainer',
+        textSpanId: 'dateRangeText',
+        clearBtnId: 'dateRangeClear',
+        prevBtnId: 'calPrevMonth',
+        nextBtnId: 'calNextMonth',
+        titleElId: 'calMonthTitle',
+        gridElId: 'calDaysGrid',
+        resetBtnId: 'calResetBtn',
+        confirmBtnId: 'calConfirmBtn',
+        onCommit: (range) => {
+            activeShamsiDateRange = range;
+            applyFilters(true);
+        },
+        onReset: () => {
+            activeShamsiDateRange = null;
+            applyFilters(true);
+        }
+    });
+
+    if (reportsDatePicker) {
+        window.resetShamsiDateRangePicker = reportsDatePicker.resetRange;
+    }
+
+    let auditActiveShamsiDateRange = null;
+
+    const auditDatePicker = createShamsiDateRangePicker({
+        triggerId: 'auditDateRangeTrigger',
+        popoverId: 'auditDateRangePopover',
+        wrapperId: 'auditDateRangePickerWrapper',
+        textSpanId: 'auditDateRangeText',
+        clearBtnId: 'auditDateRangeClear',
+        prevBtnId: 'auditCalPrevMonth',
+        nextBtnId: 'auditCalNextMonth',
+        titleElId: 'auditCalMonthTitle',
+        gridElId: 'auditCalDaysGrid',
+        resetBtnId: 'auditCalResetBtn',
+        confirmBtnId: 'auditCalConfirmBtn',
+        onCommit: (range) => {
+            auditActiveShamsiDateRange = range;
+            applyAuditFiltersAndPagination(true);
+        },
+        onReset: () => {
+            auditActiveShamsiDateRange = null;
+            applyAuditFiltersAndPagination(true);
+        }
+    });
+
+    if (auditDatePicker) {
+        window.resetAuditShamsiDateRangePicker = auditDatePicker.resetRange;
+    }
 
     function exportReportsToCSV() {
         if (!filteredReports || filteredReports.length === 0) {
@@ -8098,21 +8159,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const auditFilterSearch = document.getElementById('audit-filter-search');
     const auditFilterAction = document.getElementById('audit-filter-action');
     const auditFilterUser = document.getElementById('audit-filter-user');
-    const auditFilterMonth = document.getElementById('audit-filter-month');
     const auditClearFiltersBtn = document.getElementById('audit-clear-filters');
     const btnRefreshAudit = document.getElementById('btn-refresh-audit');
-
-    function getJalaliMonth(isoStr) {
-        if (!isoStr) return '';
-        try {
-            const d = parseTimestamp(isoStr);
-            if (!d) return '';
-            const m = cachedJalaliMonthFormatter.format(d);
-            return m ? m.padStart(2, '0') : '';
-        } catch (e) {
-            return '';
-        }
-    }
 
     function populateAuditUsersDropdown(logs) {
         if (!auditFilterUser) return;
@@ -8138,7 +8186,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchQuery = auditFilterSearch?.value.trim().toLowerCase() || '';
         const actionQuery = auditFilterAction?.value || 'all';
         const userQuery = auditFilterUser?.value || 'all';
-        const monthQuery = auditFilterMonth?.value || 'all';
 
         filteredAuditLogs = allAuditLogs.filter(l => {
 
@@ -8160,9 +8207,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (l.admin_username !== userQuery) return false;
             }
 
-            if (monthQuery !== 'all') {
-                const logMonth = getJalaliMonth(l.created_at);
-                if (logMonth !== monthQuery) return false;
+            if (auditActiveShamsiDateRange && auditActiveShamsiDateRange.startKey && auditActiveShamsiDateRange.endKey) {
+                const lKey = l._jalaliDateKey || (l.created_at ? getJalaliDateKeyFromDate(parseTimestamp(l.created_at)) : 0);
+                if (lKey < auditActiveShamsiDateRange.startKey || lKey > auditActiveShamsiDateRange.endKey) return false;
+            } else if (auditActiveShamsiDateRange && auditActiveShamsiDateRange.startKey) {
+                const lKey = l._jalaliDateKey || (l.created_at ? getJalaliDateKeyFromDate(parseTimestamp(l.created_at)) : 0);
+                if (lKey < auditActiveShamsiDateRange.startKey) return false;
             }
 
             return true;
@@ -8213,13 +8263,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 300));
     auditFilterAction?.addEventListener('change', () => applyAuditFiltersAndPagination(true));
     auditFilterUser?.addEventListener('change', () => applyAuditFiltersAndPagination(true));
-    auditFilterMonth?.addEventListener('change', () => applyAuditFiltersAndPagination(true));
 
     auditClearFiltersBtn?.addEventListener('click', () => {
         if (auditFilterSearch) auditFilterSearch.value = '';
         if (auditFilterAction) auditFilterAction.value = 'all';
         if (auditFilterUser) auditFilterUser.value = 'all';
-        if (auditFilterMonth) auditFilterMonth.value = 'all';
+        if (typeof window.resetAuditShamsiDateRangePicker === 'function') {
+            window.resetAuditShamsiDateRangePicker();
+        } else {
+            auditActiveShamsiDateRange = null;
+        }
         syncAllAdminCustomSelects();
         applyAuditFiltersAndPagination(true);
     });

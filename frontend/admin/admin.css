@@ -2322,6 +2322,8 @@ button {
 }
 
 .adv-audit-filters-grid:has(.admin-custom-dropdown.open),
+.adv-audit-filters-grid:has(.date-picker-filter-group.popover-open),
+.adv-audit-filters-grid:has(.date-range-trigger.active),
 .adv-audit-filters-grid.has-open-dropdown {
     z-index: 500;
 }
@@ -4937,13 +4939,32 @@ button {
 
 .adv-audit-filters-grid {
     display: grid;
-    grid-template-columns: minmax(220px, 1.4fr) minmax(180px, 1fr) minmax(140px, 0.9fr) minmax(130px, 0.8fr) auto;
+    grid-template-columns: minmax(200px, 1.3fr) minmax(170px, 1fr) minmax(140px, 0.9fr) minmax(190px, 1.2fr) auto;
     gap: 10px;
     align-items: center;
     background: rgba(15, 23, 42, 0.4);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     padding: 12px 14px;
+}
+
+.adv-audit-filters-grid .date-range-trigger {
+    height: 38px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    font-size: 12.5px;
+    padding: 0 10px;
+}
+
+.adv-audit-filters-grid .date-range-trigger:hover {
+    border-color: rgba(56, 189, 248, 0.45);
+    background: #1e293b;
+}
+
+.adv-audit-filters-grid .date-range-trigger.active {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.22);
 }
 
 .adv-audit-filters-grid select,
