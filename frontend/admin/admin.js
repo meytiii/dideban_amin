@@ -1314,10 +1314,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let mfaCountdownInterval = null;
     let mfaOtpController = null;
 
-    function initMfaOtpInput() {
-        const container = document.getElementById('mfaOtpContainer');
-        const hiddenInput = document.getElementById('mfa_totp_code');
-        const mfaFormEl = document.getElementById('mfaForm');
+    function createOtpController(container, hiddenInput, formEl, autoSubmit = true) {
         if (!container || !hiddenInput) return null;
 
         const cells = Array.from(container.querySelectorAll('.otp-cell'));
@@ -1374,8 +1371,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (idx < cells.length - 1) {
                         cells[idx + 1].focus();
                         cells[idx + 1].select();
-                    } else if (val.length === 6 && mfaFormEl) {
-                        mfaFormEl.requestSubmit ? mfaFormEl.requestSubmit() : mfaFormEl.dispatchEvent(new Event('submit', { cancelable: true }));
+                    } else if (val.length === 6 && autoSubmit && formEl) {
+                        formEl.requestSubmit ? formEl.requestSubmit() : formEl.dispatchEvent(new Event('submit', { cancelable: true }));
                     }
                     return;
                 }
@@ -1392,8 +1389,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     cells[cells.length - 1].focus();
                     cells[cells.length - 1].select();
-                    if (val.length === 6 && mfaFormEl) {
-                        mfaFormEl.requestSubmit ? mfaFormEl.requestSubmit() : mfaFormEl.dispatchEvent(new Event('submit', { cancelable: true }));
+                    if (val.length === 6 && autoSubmit && formEl) {
+                        formEl.requestSubmit ? formEl.requestSubmit() : formEl.dispatchEvent(new Event('submit', { cancelable: true }));
                     }
                 }
             });
@@ -1436,6 +1433,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.preventDefault();
                     cells[cells.length - 1].focus();
                     cells[cells.length - 1].select();
+                } else if (e.key === 'Enter') {
+                    if (formEl) {
+                        e.preventDefault();
+                        formEl.requestSubmit ? formEl.requestSubmit() : formEl.dispatchEvent(new Event('submit', { cancelable: true }));
+                    }
                 }
             });
 
@@ -1459,8 +1461,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     cells[cells.length - 1].focus();
                     cells[cells.length - 1].select();
-                    if (val.length === 6 && mfaFormEl) {
-                        mfaFormEl.requestSubmit ? mfaFormEl.requestSubmit() : mfaFormEl.dispatchEvent(new Event('submit', { cancelable: true }));
+                    if (val.length === 6 && autoSubmit && formEl) {
+                        formEl.requestSubmit ? formEl.requestSubmit() : formEl.dispatchEvent(new Event('submit', { cancelable: true }));
                     }
                 }
             });
@@ -1485,6 +1487,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         };
+    }
+
+    function initMfaOtpInput() {
+        return createOtpController(
+            document.getElementById('mfaOtpContainer'),
+            document.getElementById('mfa_totp_code'),
+            document.getElementById('mfaForm'),
+            true
+        );
     }
 
     function showMFAStep(token) {
@@ -1644,9 +1655,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCancelDisable2FA = document.getElementById('btn-cancel-disable-2fa');
 
     let currentAdmin2FAEnabled = false;
+    let enable2faOtpController = null;
+    let disable2faOtpController = null;
+
+    function init2FAModalOtpControllers() {
+        if (!enable2faOtpController) {
+            enable2faOtpController = createOtpController(
+                document.getElementById('enable2faOtpContainer'),
+                document.getElementById('enable_2fa_code'),
+                formEnable2FA,
+                false
+            );
+        }
+        if (!disable2faOtpController) {
+            disable2faOtpController = createOtpController(
+                document.getElementById('disable2faOtpContainer'),
+                document.getElementById('disable_2fa_code'),
+                formDisable2FA,
+                false
+            );
+        }
+    }
 
     if (btnOpen2FAModal) {
         btnOpen2FAModal.addEventListener('click', async () => {
+            init2FAModalOtpControllers();
             if (modal2FA) modal2FA.style.display = 'flex';
             reset2FAModalViews();
             await refresh2FAStatus();
@@ -1669,6 +1702,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dpwd) dpwd.value = '';
         const dcode = document.getElementById('disable_2fa_code');
         if (dcode) dcode.value = '';
+        if (enable2faOtpController) enable2faOtpController.clear();
+        if (disable2faOtpController) disable2faOtpController.clear();
         if (typeof resetPasswordWrappers === 'function') resetPasswordWrappers(modal2FA);
     }
 
@@ -1720,8 +1755,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         secretDisplay.textContent = spaced;
                     }
                     if (hiddenSecret) hiddenSecret.value = data.secret;
+                    init2FAModalOtpControllers();
+                    if (enable2faOtpController) enable2faOtpController.clear();
                     if (setupSection2FA) setupSection2FA.style.display = 'block';
                     if (initialActions2FA) initialActions2FA.style.display = 'none';
+                    setTimeout(() => {
+                        const pwdInput = document.getElementById('enable_2fa_pwd');
+                        if (pwdInput && !pwdInput.value) {
+                            pwdInput.focus();
+                        } else if (enable2faOtpController) {
+                            enable2faOtpController.focus();
+                        }
+                    }, 120);
                 } else {
                     showToast('خطا در ایجاد کلید احراز هویت دومرحله‌ای', 3000, 'error');
                 }
@@ -1789,11 +1834,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ password: pwd, secret, totp_code: code })
                 });
                 if (res.ok) {
+                    if (enable2faOtpController) enable2faOtpController.showSuccess();
                     if (currentAdmin) currentAdmin.totp_enabled = true;
                     showToast('احراز هویت دومرحله‌ای با موفقیت فعال شد', 4000, 'success');
                     reset2FAModalViews();
                     await refresh2FAStatus();
                 } else {
+                    if (enable2faOtpController) enable2faOtpController.showError();
                     const err = (await res.text()).trim();
                     if (statusEl) {
                         if (err === 'Unauthorized' || res.status === 401 && !err.includes('کلمه عبور')) {
@@ -1807,6 +1854,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             } catch (_) {
+                if (enable2faOtpController) enable2faOtpController.showError();
                 if (statusEl) {
                     statusEl.textContent = 'خطای ارتباط با سرور.';
                     statusEl.className = 'response-box error';
@@ -1818,8 +1866,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnStartDisable2FA) {
         btnStartDisable2FA.addEventListener('click', () => {
+            init2FAModalOtpControllers();
+            if (disable2faOtpController) disable2faOtpController.clear();
             if (disableSection2FA) disableSection2FA.style.display = 'block';
             if (initialActions2FA) initialActions2FA.style.display = 'none';
+            setTimeout(() => {
+                const pwdInput = document.getElementById('disable_2fa_pwd');
+                if (pwdInput && !pwdInput.value) {
+                    pwdInput.focus();
+                } else if (disable2faOtpController) {
+                    disable2faOtpController.focus();
+                }
+            }, 120);
         });
     }
 
@@ -1836,11 +1894,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ password: pwd, totp_code: code })
                 });
                 if (res.ok) {
+                    if (disable2faOtpController) disable2faOtpController.showSuccess();
                     if (currentAdmin) currentAdmin.totp_enabled = false;
                     showToast('احراز هویت دومرحله‌ای غیرفعال شد', 4000, 'info');
                     reset2FAModalViews();
                     await refresh2FAStatus();
                 } else {
+                    if (disable2faOtpController) disable2faOtpController.showError();
                     const err = (await res.text()).trim();
                     if (statusEl) {
                         if (err === 'Unauthorized' || res.status === 401 && !err.includes('رمز عبور') && !err.includes('کلمه عبور')) {
@@ -1854,6 +1914,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             } catch (_) {
+                if (disable2faOtpController) disable2faOtpController.showError();
                 if (statusEl) {
                     statusEl.textContent = 'خطای ارتباط با سرور.';
                     statusEl.className = 'response-box error';

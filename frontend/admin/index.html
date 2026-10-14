@@ -2503,11 +2503,21 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="enable_2fa_code">کد ۶ رقمی تأیید نرم‌افزار:</label>
-                        <input type="text" id="enable_2fa_code" maxlength="6" pattern="[0-9]{6}" inputmode="numeric"
-                            placeholder="123456" class="ltr"
-                            style="text-align: center; font-size: 18px; font-weight: 700; letter-spacing: 4px;"
-                            required>
+                        <label for="setup-otp-cell-0" style="text-align: center; display: block; margin-bottom: 12px; font-weight: 600; color: var(--text-main); font-size: 13.5px;">کد ۶ رقمی تأیید نرم‌افزار:</label>
+                        <div class="otp-input-container" id="enable2faOtpContainer" dir="ltr" role="group" aria-label="کد ۶ رقمی تأیید نرم‌افزار">
+                            <div class="otp-group">
+                                <input type="text" class="otp-cell" id="setup-otp-cell-0" data-index="0" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="رقم ۱">
+                                <input type="text" class="otp-cell" id="setup-otp-cell-1" data-index="1" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۲">
+                                <input type="text" class="otp-cell" id="setup-otp-cell-2" data-index="2" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۳">
+                            </div>
+                            <div class="otp-divider" aria-hidden="true"></div>
+                            <div class="otp-group">
+                                <input type="text" class="otp-cell" id="setup-otp-cell-3" data-index="3" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۴">
+                                <input type="text" class="otp-cell" id="setup-otp-cell-4" data-index="4" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۵">
+                                <input type="text" class="otp-cell" id="setup-otp-cell-5" data-index="5" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۶">
+                            </div>
+                        </div>
+                        <input type="hidden" id="enable_2fa_code" name="totp_code" required maxlength="6">
                     </div>
                     <div id="enable-2fa-status" class="response-box" style="display: none; margin-bottom: 12px;"></div>
                     <div class="admin-modal-footer">
@@ -2549,11 +2559,21 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="disable_2fa_code">کد ۶ رقمی نرم‌افزار:</label>
-                        <input type="text" id="disable_2fa_code" maxlength="6" pattern="[0-9]{6}" inputmode="numeric"
-                            placeholder="123456" class="ltr"
-                            style="text-align: center; font-size: 18px; font-weight: 700; letter-spacing: 4px;"
-                            required>
+                        <label for="disable-otp-cell-0" style="text-align: center; display: block; margin-bottom: 12px; font-weight: 600; color: var(--text-main); font-size: 13.5px;">کد ۶ رقمی نرم‌افزار:</label>
+                        <div class="otp-input-container" id="disable2faOtpContainer" dir="ltr" role="group" aria-label="کد ۶ رقمی نرم‌افزار">
+                            <div class="otp-group">
+                                <input type="text" class="otp-cell" id="disable-otp-cell-0" data-index="0" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="رقم ۱">
+                                <input type="text" class="otp-cell" id="disable-otp-cell-1" data-index="1" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۲">
+                                <input type="text" class="otp-cell" id="disable-otp-cell-2" data-index="2" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۳">
+                            </div>
+                            <div class="otp-divider" aria-hidden="true"></div>
+                            <div class="otp-group">
+                                <input type="text" class="otp-cell" id="disable-otp-cell-3" data-index="3" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۴">
+                                <input type="text" class="otp-cell" id="disable-otp-cell-4" data-index="4" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۵">
+                                <input type="text" class="otp-cell" id="disable-otp-cell-5" data-index="5" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="رقم ۶">
+                            </div>
+                        </div>
+                        <input type="hidden" id="disable_2fa_code" name="totp_code" required maxlength="6">
                     </div>
                     <div id="disable-2fa-status" class="response-box" style="display: none; margin-bottom: 12px;"></div>
                     <div class="admin-modal-footer">
