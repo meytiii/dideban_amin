@@ -6184,17 +6184,20 @@ tr.row-priority-normal {
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 7px 12px;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: var(--radius-sm, 6px);
     transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-notif-bell:hover {
-    transform: scale(1.02);
+    transform: translateY(-1px) translateZ(0);
 }
 
 .btn-notif-bell:active {
-    transform: scale(0.98);
+    transform: scale(0.96) translateZ(0);
 }
 
 .notif-badge-pill {
