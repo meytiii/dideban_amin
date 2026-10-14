@@ -38,29 +38,16 @@
     <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="false"></div>
 
     <div id="login-section" class="admin-login-wrapper">
-        <div class="admin-login-card-3d-wrapper" id="loginCard3D">
-            <div class="admin-login-card">
-
-                <div class="card-beam-container" aria-hidden="true">
-                    <div class="beam beam-top"></div>
-                    <div class="beam beam-right"></div>
-                    <div class="beam beam-bottom"></div>
-                    <div class="beam beam-left"></div>
-                    <div class="corner-glow corner-tl"></div>
-                    <div class="corner-glow corner-tr"></div>
-                    <div class="corner-glow corner-br"></div>
-                    <div class="corner-glow corner-bl"></div>
-                </div>
-
-                <div class="admin-login-inner">
-                    <div class="admin-login-header">
-                        <div class="admin-logo-crest">
-                            <img src="logo.webp" alt="لوگوی اداره حراست" class="admin-crest-img" width="172" height="172"
-                                decoding="async">
-                            <div class="crest-glow"></div>
+        <div class="admin-split-card" id="loginCard3D">
+            <div class="admin-form-col">
+                <div class="admin-form-inner">
+                    <div class="admin-login-header-v2">
+                        <div class="admin-logo-crest-v2">
+                            <img src="logo.webp" alt="لوگوی اداره حراست" class="admin-crest-img-v2" width="64" height="64" decoding="async">
+                            <div class="crest-glow-v2"></div>
                         </div>
-                        <h1 class="persian-heading persian-heading--tatweel" data-tatweel-level="hero">ورود به پنل مدیریتی دیده‌بان امین</h1>
-                        <p>اداره حراست آموزش و پرورش استان همدان</p>
+                        <h1 class="admin-login-title-v2">پنل مدیریتی دیده بان امین</h1>
+                        <h2 class="admin-login-subtitle-v2">جهت ورود به سامانه اطلاعات کاربری خود را وارد کنید.</h2>
                     </div>
 
                     <form id="loginForm" novalidate>
@@ -212,6 +199,46 @@
                         </form>
                         <div id="mfaMessage" class="response-box" style="display: none; margin-top: 14px;"></div>
                     </div>
+                </div>
+            </div>
+
+            <div class="admin-slider-col" id="loginSliderCol" aria-label="تصاویر سامانه">
+                <div class="admin-slider-track" id="adminSliderTrack">
+                    <div class="admin-slider-slide active" data-slide-index="0">
+                        <img src="slides/slide1.jpg" alt="مرکز عملیات امنیت و پایش هوشمند" class="admin-slider-img" loading="eager" decoding="async">
+                        <div class="admin-slider-scrim">
+                            <div class="admin-slider-caption">
+                                <span class="admin-slider-tag">سامانه یکپارچه نظارت و بازرسی</span>
+                                <h3 class="admin-slider-heading">پایش هوشمند و امنیت داده‌های اداری</h3>
+                                <p class="admin-slider-desc">حفاظت پیشرفته از حریم اطلاعات و ارتقای انضباط سازمانی</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="admin-slider-slide" data-slide-index="1">
+                        <img src="slides/slide2.jpg" alt="هسته امنیتی و رمزنگاری داده‌ها" class="admin-slider-img" loading="lazy" decoding="async">
+                        <div class="admin-slider-scrim">
+                            <div class="admin-slider-caption">
+                                <span class="admin-slider-tag">رمزنگاری سرتاسری AES-GCM</span>
+                                <h3 class="admin-slider-heading">دیده‌بان امین، شفاف و امانتدار</h3>
+                                <p class="admin-slider-desc">تضمین عدم افشای هویت گزارش‌دهندگان و حفظ محرمانگی کامل</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="admin-slider-slide" data-slide-index="2">
+                        <img src="slides/slide3.jpg" alt="مرکز مدیریت و ارجاع پرونده‌ها" class="admin-slider-img" loading="lazy" decoding="async">
+                        <div class="admin-slider-scrim">
+                            <div class="admin-slider-caption">
+                                <span class="admin-slider-tag">تسریع در پیگیری و پاسخگویی</span>
+                                <h3 class="admin-slider-heading">پاسخگویی سریع، مستند و یکپارچه</h3>
+                                <p class="admin-slider-desc">ارتباط مستقیم ستاد خبری با نواحی و مناطق تحت پوشش</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-slider-indicators" id="adminSliderIndicators" role="tablist" aria-label="کنترل اسلایدها">
+                    <button type="button" class="admin-slider-dot active" data-target-slide="0" aria-label="مشاهده اسلاید ۱"></button>
+                    <button type="button" class="admin-slider-dot" data-target-slide="1" aria-label="مشاهده اسلاید ۲"></button>
+                    <button type="button" class="admin-slider-dot" data-target-slide="2" aria-label="مشاهده اسلاید ۳"></button>
                 </div>
             </div>
         </div>

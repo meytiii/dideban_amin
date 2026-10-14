@@ -966,6 +966,67 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function initLoginSlider() {
+        const sliderCol = document.getElementById('loginSliderCol');
+        if (!sliderCol) return;
+        const slides = sliderCol.querySelectorAll('.admin-slider-slide');
+        const dots = sliderCol.querySelectorAll('.admin-slider-dot');
+        if (!slides.length) return;
+
+        let currentIndex = 0;
+        let slideTimer = null;
+
+        function goToSlide(index) {
+            if (index < 0 || index >= slides.length) return;
+            slides[currentIndex]?.classList.remove('active');
+            dots[currentIndex]?.classList.remove('active');
+            currentIndex = index;
+            slides[currentIndex]?.classList.add('active');
+            dots[currentIndex]?.classList.add('active');
+        }
+
+        function nextSlide() {
+            const nextIdx = (currentIndex + 1) % slides.length;
+            goToSlide(nextIdx);
+        }
+
+        function startTimer() {
+            stopTimer();
+            slideTimer = setInterval(() => {
+                if (document.hidden) return;
+                if (!loginSection || loginSection.style.display === 'none' || loginSection.classList.contains('d-none')) {
+                    stopTimer();
+                    return;
+                }
+                nextSlide();
+            }, 4500);
+        }
+
+        function stopTimer() {
+            if (slideTimer) {
+                clearInterval(slideTimer);
+                slideTimer = null;
+            }
+        }
+
+        dots.forEach((dot, idx) => {
+            dot.addEventListener('click', () => {
+                goToSlide(idx);
+                startTimer();
+            });
+        });
+
+        sliderCol.addEventListener('mouseenter', stopTimer, { passive: true });
+        sliderCol.addEventListener('mouseleave', () => {
+            if (loginSection && loginSection.style.display !== 'none' && !loginSection.classList.contains('d-none')) {
+                startTimer();
+            }
+        }, { passive: true });
+
+        startTimer();
+    }
+    initLoginSlider();
+
     (async () => {
         try {
             const hasSession = await checkAdminProfile();

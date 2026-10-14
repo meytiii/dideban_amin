@@ -1,7 +1,7 @@
-# Graph Report - Setad_Khabari_HMD  (2026-10-12)
+# Graph Report - Setad_Khabari_HMD  (2026-10-14)
 
 ## Corpus Check
-- 212 files · ~234,079 words
+- 212 files · ~234,167 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f940ae71`
+- Built from commit: `751b1bb3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -41,7 +41,7 @@
 - Critical (ships as slop)
 - Typography
 - seed_50_reports.go
-- initAdminCustomSelect
+- escapeHTML
 - NewClamAVScanner
 - Microinteraction tells
 - Archetype index — load ONLY the picks you need
@@ -117,7 +117,7 @@
 - accordion-2.tsx
 - ft3-index-style-category-list.md
 - button.tsx
-- logAudit
+- getIP
 - initAppTooltips
 - morph-loading.tsx
 - testing.T
@@ -167,8 +167,8 @@
   admin_auth.go → captcha.go
 - `LoginHandler()` --calls--> `HashPassword()`  [INFERRED]
   admin_auth.go → crypto.go
-- `LoginHandler()` --calls--> `VerifyPasswordWithRehash()`  [INFERRED]
-  admin_auth.go → crypto.go
+- `LoginHandler()` --calls--> `GenerateMFAPendingToken()`  [INFERRED]
+  admin_auth.go → mfa.go
 
 ## Import Cycles
 - None detected.
@@ -279,9 +279,9 @@ Nodes (17): Banned defaults, Bans, Body text rules, Free body faces, Free displa
 Cohesion: 0.70
 Nodes (4): deriveKey(), encryptWithKey(), genTrackingCode(), main()
 
-### Community 26 - "initAdminCustomSelect"
-Cohesion: 0.47
-Nodes (5): initAdminCustomFilters(), initAdminCustomSelect(), closeMenu(), openMenu(), toggleMenu()
+### Community 26 - "escapeHTML"
+Cohesion: 0.15
+Nodes (18): applyAuditFiltersAndPagination(), escapeHTML(), exportReportsToCSV(), fetchAuditLogs(), formatJalaliDateTime(), getJalaliMonth(), initAdminCustomFilters(), initAdminCustomSelect() (+10 more)
 
 ### Community 27 - "NewClamAVScanner"
 Cohesion: 0.24
@@ -384,8 +384,8 @@ Cohesion: 0.26
 Nodes (14): getJalaliDayEndMs(), getJalaliDayStartMs(), getJalaliMonthDays(), gregorianToJalali(), initShamsiDateRangePicker(), closePopover(), commitDateRange(), openPopover() (+6 more)
 
 ### Community 53 - "net/http.Request"
-Cohesion: 0.13
-Nodes (35): GetCurrentAdminHandler(), getIP(), canAdminAccessReport(), ClassifyReportHandler(), DeleteUserHandler(), DisableUser2FAHandler(), DownloadAttachmentHandler(), ForwardReportHandler() (+27 more)
+Cohesion: 0.14
+Nodes (27): getLatestAuditHashTx(), logAuditTx(), DeleteReportHandler(), DeleteUserHandler(), ForwardReportHandler(), GetActiveSessionsHandler(), GetAnalyticsHandler(), GetAuditLogsHandler() (+19 more)
 
 ### Community 54 - "public/tatweel.js"
 Cohesion: 0.38
@@ -400,8 +400,8 @@ Cohesion: 0.07
 Nodes (32): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), NewUsedCaptchaStore(), renderObfuscatedChars(), database/sql.DB (+24 more)
 
 ### Community 58 - "ChangeMyPasswordHandler"
-Cohesion: 0.60
-Nodes (5): ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity()
+Cohesion: 0.27
+Nodes (9): ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), TestArgon2idDualFormatAndRehash(), TestCaptchaVerificationSuite(), TestDeriveKeyDeterministic() (+1 more)
 
 ### Community 59 - "populateAnalyticsDOM"
 Cohesion: 0.15
@@ -428,8 +428,8 @@ Cohesion: 0.17
 Nodes (18): applyFilters(), getJalaliDateKeyFromDate(), getScrollBehavior(), handleKPICardFilter(), indexReportForSearch(), initActionSearchBar(), closeDropdown(), closeSearch() (+10 more)
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.14
-Nodes (26): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES(), EncryptFileBytes() (+18 more)
+Cohesion: 0.21
+Nodes (18): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES(), EncryptFileBytes() (+10 more)
 
 ### Community 71 - "openForwardModal"
 Cohesion: 0.29
@@ -444,16 +444,16 @@ Cohesion: 0.50
 Nodes (3): InitCookieSecurity(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag()
 
 ### Community 77 - "adminFetch"
-Cohesion: 0.12
-Nodes (35): adminFetch(), applyAuditFiltersAndPagination(), deleteUser(), escapeHTML(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchAuditLogs() (+27 more)
+Cohesion: 0.17
+Nodes (22): adminFetch(), deleteUser(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout(), getCsrfToken(), handleAdminLogout() (+14 more)
 
 ### Community 82 - "metadata.go"
 Cohesion: 0.29
 Nodes (9): SanitizeAttachment(), SanitizeJPEG(), SanitizePNG(), ScanPDFForActiveContent(), createTestJPEGWithEXIF(), createTestPNG(), TestMetadataSanitizationJPEG(), TestMetadataSanitizationPNG() (+1 more)
 
 ### Community 83 - "SubmitReportHandler"
-Cohesion: 0.18
-Nodes (17): RespondToReportHandler(), SubmitRegionalResponseHandler(), UpdateInternalNotesHandler(), VerifyCaptcha(), GetLegacyHMACKey(), ValidateBinaryMagicBytes(), generateTrackingCode(), SubmitFollowUpHandler() (+9 more)
+Cohesion: 0.20
+Nodes (16): RespondToReportHandler(), UpdateInternalNotesHandler(), VerifyCaptcha(), GetLegacyHMACKey(), ValidateBinaryMagicBytes(), generateTrackingCode(), SubmitFollowUpHandler(), SubmitReportHandler() (+8 more)
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -483,9 +483,9 @@ Nodes (3): Button(), ButtonArrowProps, buttonVariants
 Cohesion: 0.24
 Nodes (6): Button, ButtonProps, buttonVariants, ButtonWithIconProps, DropdownMenuProps, DropdownOption
 
-### Community 105 - "logAudit"
-Cohesion: 0.20
-Nodes (17): computeAuditHash(), generateSessionToken(), getLatestAuditHash(), getLatestAuditHashTx(), ipInCIDRs(), logAudit(), logAuditTx(), LoginHandler() (+9 more)
+### Community 105 - "getIP"
+Cohesion: 0.13
+Nodes (30): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getIP(), getLatestAuditHash(), ipInCIDRs(), logAudit(), LoginHandler() (+22 more)
 
 ### Community 106 - "initAppTooltips"
 Cohesion: 0.52
