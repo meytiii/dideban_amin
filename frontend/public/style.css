@@ -1217,13 +1217,21 @@ textarea:focus {
 }
 
 .dropdown-item.selected {
-    background: rgba(56, 189, 248, 0.16);
-    border-right: 3px solid #38bdf8;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.dropdown-item.selected:hover {
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .dropdown-item.selected .item-label {
-    color: #38bdf8;
-    font-weight: 700;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.dropdown-item.selected .item-description {
+    color: #cbd5e1;
 }
 
 .item-check-indicator {
