@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1791958246.77582,
-    "seen": 1791959622.2316103,
-    "ast_hash": "856f4efb368934bb1f80fd1aa9b76e8e",
+    "mtime": 1791961595.1002746,
+    "seen": 1791961743.516911,
+    "ast_hash": "4a0c91b53c4e9dfc6cc9ad9daf163d5c",
     "semantic_hash": ""
   },
   "frontend/admin/favicon.png": {
@@ -1371,6 +1371,24 @@
     "mtime": 1791958779.1894329,
     "seen": 1791959622.2323022,
     "ast_hash": "bf9c69fb739ebc860d1478ddcb41662e",
+    "semantic_hash": ""
+  },
+  "components/ui/badge-2-demo.tsx": {
+    "mtime": 1791961555.340283,
+    "seen": 1791961743.5034776,
+    "ast_hash": "30308a1b54e34ca92a557847a4781d37",
+    "semantic_hash": ""
+  },
+  "components/ui/badge-2.tsx": {
+    "mtime": 1791961525.6701353,
+    "seen": 1791961743.5034792,
+    "ast_hash": "64b3a87587a2ce6ef5ff4611a7430f8e",
+    "semantic_hash": ""
+  },
+  "Documentation_Audit.md": {
+    "mtime": 1791960884.0510123,
+    "seen": 1791961743.5166004,
+    "ast_hash": "f78f833bbe7f0df7c4142f339599b1bb",
     "semantic_hash": ""
   }
 }
