@@ -4670,6 +4670,8 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteReportBtn.classList.add('d-none');
             deleteReportBtn.style.setProperty('display', 'none', 'important');
         }
+        const copyPhoneBtnEl = document.getElementById('copyDetailPhoneBtn');
+        if (copyPhoneBtnEl) copyPhoneBtnEl.style.display = 'none';
     }
 
     if (backBtn) {
@@ -4990,7 +4992,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('detail-category').textContent = data.category;
             document.getElementById('detail-type').textContent = data.report_type === 'anonymous' ? 'ناشناس' : 'با هویت';
             document.getElementById('detail-name').textContent = data.reporter_name || 'ثبت نشده';
-            document.getElementById('detail-phone').textContent = data.reporter_phone || 'ثبت نشده';
+            const phoneVal = (data.reporter_phone || '').trim();
+            const hasPhone = Boolean(phoneVal && phoneVal !== 'ثبت نشده');
+            document.getElementById('detail-phone').textContent = hasPhone ? phoneVal : 'ثبت نشده';
+            const copyPhoneBtnEl = document.getElementById('copyDetailPhoneBtn');
+            if (copyPhoneBtnEl) {
+                copyPhoneBtnEl.style.display = hasPhone ? 'inline-flex' : 'none';
+            }
             const detailDescEl = document.getElementById('detail-desc');
             if (detailDescEl) {
                 const activeSearch = searchTracking ? searchTracking.value.trim() : '';

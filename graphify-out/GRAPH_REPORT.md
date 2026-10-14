@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-14)
 
 ## Corpus Check
-- 215 files · ~258,770 words
+- 215 files · ~258,813 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1713 nodes · 2703 edges · 148 communities (103 shown, 45 thin omitted)
+- 1713 nodes · 2703 edges · 147 communities (103 shown, 44 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 279 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `522d590e`
+- Built from commit: `6c7b7513`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -104,7 +104,6 @@
 - workflows/caveman.md
 - ContainsVulgarLanguage
 - viewReport
-- contextWithAdmin
 - be-ui-file-upload.tsx
 - sign-in-card-2.tsx
 - Project Guidelines (HMD IT Herasat Portal)
@@ -178,7 +177,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (148 total, 45 thin omitted)
+## Communities (147 total, 44 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.04
@@ -509,8 +508,8 @@ Cohesion: 0.11
 Nodes (23): testing.T, InitCookieSecurity(), TestClassificationValidationAndMath(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization() (+15 more)
 
 ### Community 115 - "time.Time"
-Cohesion: 0.25
-Nodes (9): sync.Mutex, time.Ticker, time.Time, NewIPRateLimiter(), RateLimitMiddleware(), cachedAccountFailure, IPRateLimiter, TOTPReplayStore (+1 more)
+Cohesion: 0.16
+Nodes (10): sync.Mutex, time.Ticker, time.Time, NewIPRateLimiter(), RateLimitMiddleware(), cachedAccountFailure, IPRateLimiter, TOTPReplayStore (+2 more)
 
 ### Community 116 - "main"
 Cohesion: 0.11
@@ -543,7 +542,7 @@ Nodes (5): initLoginSlider(), goToSlide(), nextSlide(), startTimer(), stopTimer(
 ## Knowledge Gaps
 - **734 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+729 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **45 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **44 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
