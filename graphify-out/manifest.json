@@ -132,9 +132,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1791620555.5401776,
-    "seen": 1791620610.3994775,
-    "ast_hash": "e2ea8a5414f95f5807ed984d9e7364f9",
+    "mtime": 1791972515.152707,
+    "seen": 1791972672.1257117,
+    "ast_hash": "6ef58702da99309cb05fa23ab5067eb8",
     "semantic_hash": ""
   },
   ".impeccable/design.json": {
@@ -168,15 +168,15 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1791792708.3198135,
-    "seen": 1791792754.953714,
-    "ast_hash": "9606e9fc763f84c74f3df3b5970368d6",
+    "mtime": 1791972641.1950445,
+    "seen": 1791972672.1257133,
+    "ast_hash": "68925c14d89f90dd716291f388196747",
     "semantic_hash": ""
   },
   "GEMINI.md": {
-    "mtime": 1791620567.9748862,
-    "seen": 1791620610.3994806,
-    "ast_hash": "3f8a841677490570d64fd0907ff5c0ed",
+    "mtime": 1791972533.335278,
+    "seen": 1791972672.1257756,
+    "ast_hash": "d59654c42c2d019a06d04d290699e876",
     "semantic_hash": ""
   },
   "components/ui/button-with-icon.tsx": {

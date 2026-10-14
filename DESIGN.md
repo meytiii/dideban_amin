@@ -262,6 +262,9 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Surface & Container:** Solid high-performance `#162032` surface with `1.5px` border outline (`rgba(255, 255, 255, 0.12)`), `12px` border-radius, and GPU compositor slide-down animation (`dropdownSlideDown`). Zero backdrop blur to maintain high framerates.
 - **Staggered RTL Item Entrance:** Sequential cascade entrance from right (`translateX(16px)` to `0`) via `dropdownItemEnter` with indexed delays (`0.02s` to `0.26s`).
 - **Spring Checkmark Feedback:** Dynamic spring bounce indicator (`checkSpring`) on active selected items.
+- **Selection Overlay Standard (Anti-Slop Rule):**
+  - **Banned:** Vertical colored border stripes on the right edge of selected items (e.g. `border-right: 3px solid #38bdf8`), which create generic AI-slop aesthetics and trigger micro-layout reflows.
+  - **Mandatory Selection Styling:** Selected items utilize an elevated translucent dark-tech background overlay (`rgba(255, 255, 255, 0.08)` or subtle accent tint `rgba(59, 130, 246, 0.12)`), an optional subtle inset highlight (`box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06)`), and an animated checkmark indicator (`checkSpring`) at the inline end. Hover states remain smooth and consistent without layout shifts.
 - **Comprehensive Coverage Across Entire Portal:**
   - Public Portal: Report category selector with descriptive subtext helper notes.
   - Admin Reports Inbox: Subject (`filter-type`), Read status (`filter-read-status`), Priority (`filter-priority`), and Report type (`filter-report-type`) with two-way sync to table headers and quick filters.
@@ -335,15 +338,90 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 
 ### 24. Report List Status Badge System (`status-badge`)
 - **Portal-Wide Standardization:** All report status indicators across administrative inboxes, dossier details, and public report tracking are standardized against the `status-badge` token design with `rounded-xl` (`12px`) geometry, `min-height: 32px`, `padding: 5px 12px`, and 14px Lucide SVGs (stroke-width: 2.2).
+- **Single Source of Truth & Public-Admin Parity:** Strict color and icon lock across the public tracking interface and the administrative intelligence cartable. Zero visual discrepancies permitted between public and admin views.
 - **Status Color Palette & Lucide Icons:**
-  - **Pending / جدید (در نوبت بررسی):** Warm Amber `#EAA65D` (`bg-orange-50` / `rgba(234, 166, 93, 0.14)`, border `rgba(234, 166, 93, 0.35)`), Lucide `TriangleAlert`.
-  - **In Review / در حال بررسی (بررسی شده):** Golden Yellow `#F0B13D` (`bg-yellow-50` / `rgba(240, 177, 61, 0.14)`, border `rgba(240, 177, 61, 0.35)`), Lucide `ScanSearch`.
-  - **Success / پاسخ داده شده (پاسخ حراست):** Emerald `#57BC6C` (`bg-emerald-50` / `rgba(87, 188, 108, 0.14)`, border `rgba(87, 188, 108, 0.35)`), Lucide `CircleCheck`.
+  - **Pending / جدید (در نوبت بررسی):** Warm Amber `#EAA65D` (`bg-orange-50` / `rgba(234, 166, 93, 0.14)`, border `rgba(234, 166, 93, 0.35)`), Lucide `TriangleAlert` or `Clock5`.
+  - **Reviewed / بررسی شده (خوانده شده):** Intelligence Cyan `#06b6d4` / `#2de4da` (text `#00bcd4`, `bg-cyan-50` / `rgba(6, 182, 212, 0.14)`, border `rgba(6, 182, 212, 0.35)`), Lucide `ScanSearch`.
+  - **Success / پاسخ داده شده (پاسخ حراست):** Emerald `#57BC6C` / `#10b981` (`bg-emerald-50` / `rgba(87, 188, 108, 0.14)`, border `rgba(87, 188, 108, 0.35)`), Lucide `CircleCheck`.
   - **In Progress / ارجاع به منطقه (ارجاع شده):** Electric Sky Blue `#008AF5` (`bg-sky-100` / `rgba(0, 138, 245, 0.14)`, border `rgba(0, 138, 245, 0.35)`), Lucide `CircleDashed`.
-  - **Failed / رد شده (بی‌محتوا):** Soft Rose `#D57463` (`bg-rose-50` / `rgba(213, 116, 99, 0.14)`, border `rgba(213, 116, 99, 0.35)`), Lucide `CircleX`.
+  - **Failed / رد شده (بی‌محتوا):** Soft Rose `#D57463` / `#f43f5e` (`bg-rose-50` / `rgba(213, 116, 99, 0.14)`, border `rgba(213, 116, 99, 0.35)`), Lucide `CircleX`.
   - **Expired / بایگانی (منقضی شده):** Slate Zinc `#777777` (`bg-zinc-100` / `rgba(119, 119, 119, 0.14)`, border `rgba(119, 119, 119, 0.35)`), Lucide `Clock5`.
   - **Submitted / ثبت اولیه:** Vibrant Violet `#6C3CF0` (`bg-violet-50` / `rgba(108, 60, 240, 0.14)`, border `rgba(108, 60, 240, 0.35)`), Lucide `Clock5`.
 - **Component Parity:** Available in React structure at `components/ui/status-badge.tsx` and `components/ui/demo.tsx`, and fully deployed in native production CSS/JS in `frontend/admin/` and `frontend/public/`.
+
+### 25. Persian Form Validation & Shaking Input Feedback Engine (`.input-error`, `.input-error-shake`)
+- **Zero Browser Default Popups:** Native browser validation tooltips are suppressed via `novalidate` or manual override.
+- **Dynamic Field Label Extraction:** Field names are extracted dynamically from the nearest `<label>` or `placeholder`, stripping asterisks (`*`) and colons (`:`), generating natural, humanized Persian validation messages: `لطفاً فیلد «{نام فیلد}» را تکمیل نمایید.`
+- **Visual Feedback & Shake Keyframes:**
+  - Failed inputs immediately receive class `.input-error` (border: `1.5px solid #f43f5e`, background: `rgba(244, 63, 94, 0.05)`).
+  - Triggers `.input-error-shake` keyframe animation:
+    ```css
+    @keyframes inputErrorShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    ```
+  - Duration: `0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97)`.
+- **Dynamic Error Clearing:** Error state (`.input-error`) clears automatically as soon as the user alters the input value (`input` or `change` event).
+- **Persian Toast Dispatch:** Accompanied by non-blocking Persian toast notifications (`showToast(msg, 'error')`).
+
+### 26. Bespoke Modal & In-Page Alert System (`IconAlert`)
+- **Container Structure (`.icon-alert`):** Replaces generic alerts with an elevated dark-tech card featuring `rounded-xl` (`12px`) geometry, subtle 1px border matching intent tone, and translucent tinted background (`rgba(..., 0.12)`).
+- **Embedded Lucide SVG Badge (`.icon-alert-badge`):** Dedicated pill/circular icon housing containing a 20px Lucide SVG with standard 2.0 stroke-width.
+- **Semantic Intent Variants:**
+  - **Danger (`.icon-alert-danger`):** Rose `#f43f5e`, border `rgba(244, 63, 94, 0.28)`, Lucide `CircleAlert`.
+  - **Success (`.icon-alert-success`):** Emerald `#10b981`, border `rgba(16, 185, 129, 0.28)`, Lucide `CircleCheck`.
+  - **Warning (`.icon-alert-warning`):** Amber `#f59e0b`, border `rgba(245, 158, 11, 0.28)`, Lucide `TriangleAlert`.
+  - **Info (`.icon-alert-info`):** Cobalt `#3b82f6`, border `rgba(59, 130, 246, 0.28)`, Lucide `Info`.
+- **Typography & Dismissal:** High-contrast bold title (`.icon-alert-title`) on top, clean descriptive body (`.icon-alert-desc`, `#94a3b8`) below. Integrated close button (`.icon-alert-close`) with smooth fade-out.
+
+### 27. Universal Password Visibility Toggle Architecture (`.password-wrapper`, `.btn-toggle-pw`)
+- **Wrapper Hierarchy:** All password inputs across public and admin interfaces are enclosed in `<div class="password-wrapper">` with relative positioning.
+- **Toggle Button (`.btn-toggle-pw`):** Positioned absolute inside the input's inline padding (`left: 10px` in RTL) with zero focus ring interference (`tabindex="-1"`).
+- **Dual Lucide SVGs:** Contains two 18x18px SVG glyphs: Eye (`.eye-icon-show`) and EyeOff (`.eye-icon-hide.d-none`).
+- **Global Event Delegation:** Managed through document-level delegation (`$(document).on('click', '.btn-toggle-pw', ...)`).
+- **Modal Lifecycle Reset:** Hiding, resetting, or closing any dialog modal automatically reverts inputs to `type="password"`, resets visibility to `.eye-icon-show`, and hides `.eye-icon-hide`.
+- **Universal Parity:** Deployed across Login forms, Password Change modals, Superuser Management modals, and 2FA Activation modals.
+
+### 28. 6-Cell OTP Square Input Architecture (`.otp-input-container`, `.otp-cell`)
+- **Layout Architecture:** Centered flex row with LTR orientation, split into two 3-cell groups by a central divider (`.otp-divider`).
+- **Individual Cell Specifications (`.otp-cell`):**
+  - Dimensions: 48px x 48px (desktop), 42px x 42px (mobile).
+  - Shape & Surface: `border-radius: 10px`, `background: rgba(15, 23, 42, 0.6)`, border: `1.5px solid rgba(255, 255, 255, 0.12)`.
+  - Typography: Monospace tabular numerals, `font-size: 22px`, `font-weight: 700`, text centered.
+  - Focus Ring: `border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);`.
+- **Feedback States:**
+  - Error: `.is-error` triggers red border (`#f43f5e`) and horizontal shake animation (`.input-error-shake`).
+  - Success: `.is-success` emits an emerald glow pulse (`#10b981`).
+- **Controller Kinematics (`createOtpController`):**
+  - Single digit auto-advances to the next cell.
+  - Backspace clears current digit or shifts focus to previous cell.
+  - Arrow keys (Left/Right) navigate between cells.
+  - Clipboard paste intercepts 6-digit codes, distributes digits sequentially across all 6 cells, focuses the 6th cell, and dispatches change/submit events.
+- **Portal-Wide Parity:** Unified across Login 2FA verification and Profile/Settings 2FA first-time setup modal.
+
+### 29. Modal Viewport Ergonomics & Responsive Heights
+- **High-Density Selection Lists (e.g. Expert Referral Selection):**
+  - Scrollable container scaled to `max-height: min(450px, 48vh)`, displaying ~7–8 items cleanly without premature micro-scrolling.
+  - Dialog container constrained to `max-height: 90vh` with safe auto-overflow.
+  - Small-Screen Safeguard: `@media (max-height: 700px)` adjusts container max-height to `320px` to guarantee modal dialogs remain comfortably inside viewport bounds on low-resolution displays.
+
+### 30. Contextual Action Buttons & Data Integrity
+- **Conditional Visibility Standard:** Interactive action buttons attached to contextual values (such as clipboard copy buttons next to reporter phone numbers `#detailPhoneCopyBtn`) must NEVER be visible if the data is absent.
+- **Empty States:** When a reporter submits anonymously or leaves a field blank, action buttons are strictly hidden (`display: none`), displaying only a neutral placeholder badge (`بدون شماره تماس`).
+- **Active States:** Only when valid actionable data exists is the button displayed (`display: inline-flex`) with tactile clipboard feedback (`کپی شد!`).
+
+### 31. Precision Error Routing & Shake Scoping
+- **Scoped Asynchronous Error Handling:** In multi-input authentication or activation flows (such as 2FA activation requiring both account password and an OTP code):
+  - Server errors must route exclusively to the failing input.
+  - An invalid password response triggers `.input-error` and `.input-error-shake` on the password input only. The 6-cell OTP square is preserved and does NOT shake or clear.
+
+### 32. Topbar & Header Utility Buttons (Icon-Only Pattern)
+- **Compact Header Utilities (e.g. `#btnNotifBell`):**
+  - Standardized as 36x36px (or 40x40px) square/rounded buttons with centered Lucide SVG glyphs.
+  - Text labels are omitted to prevent visual clutter and maintain calm tactical density.
+  - Anchored notification count badges positioned at the corner. Accessible tooltip provided via `data-tooltip`.
 
 ---
 
@@ -370,6 +448,14 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Do** use `showConfirmDialog()` from `frontend/confirm.js` for all destructive user confirmations.
 - **Do** apply standardized cyan/slate scrollbar rules (`scrollbar-color: rgba(56, 189, 248, 0.4) transparent;` and 6px WebKit rules) to all scrollable surfaces and sliders.
 - **Do** apply `/humanizer` to all visible frontend copy, labels, and text so phrasing is authentic, dignified, and natural without AI-generated patterns.
+- **Do** extract Persian field labels dynamically and apply `.input-error-shake` for empty required inputs.
+- **Do** use the bespoke `IconAlert` component for all feedback notifications and modal alerts.
+- **Do** use translucent overlay styling for selected dropdown items instead of vertical right-border stripes.
+- **Do** maintain unified 6-cell OTP square styling and keyboard navigation for all two-factor codes.
+- **Do** wrap all password inputs with `.password-wrapper` and `.btn-toggle-pw`.
+- **Do** scope shake animations strictly to the failing input on async server errors.
+- **Do** hide action buttons (such as copy buttons) when underlying data is empty or anonymous.
+- **Do** enforce identical status badge colors across public tracking and admin cartable (specifically cyan `#06b6d4` for "بررسی شده").
 - **Do** apply dedicated design skills (`/impeccable`, `/hallmark`, `/taste`, `/ui-ux-pro-max`, `/ux-ui-agent-skills`, `/high-end-visual-design`) to maintain high-craft, anti-slop interfaces.
 - **Do** interview user via `/grill-me` when requirements are ambiguous or general before designing.
 
@@ -381,6 +467,12 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Don't** use `backdrop-filter: blur(...)` on large content containers or scrollable cards.
 - **Don't** transition expensive `box-shadow` blurs on hover; animate `transform` instead.
 - **Don't** use generic AI templates or common boilerplate designs—ensure unique interface aesthetics.
+- **Don't** use ugly vertical border strips (`border-right: 3px solid ...`) on selected dropdown items.
+- **Don't** allow browser default English validation bubbles to appear.
+- **Don't** display generic or unstyled alert banners.
+- **Don't** shake or reset unrelated inputs when a specific field fails validation.
+- **Don't** show dead or non-functional copy buttons next to missing/empty data fields.
+- **Don't** allow color mismatches between public report tracking badges and admin cartable badges.
 - **Don't** assume user intent or design decisions without explicit interview alignment.
 - **Don't** put comments in codes.
 - **Don't** allow generic browser default white/gray scrollbars or arrow buttons anywhere in the interface.
