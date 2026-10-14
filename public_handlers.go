@@ -374,6 +374,7 @@ type ReportMessageItem struct {
 	SenderType    string `json:"sender_type"`
 	Message       string `json:"message"`
 	AdminUsername string `json:"admin_username,omitempty"`
+	AdminFullName string `json:"admin_full_name,omitempty"`
 	CreatedAt     string `json:"created_at"`
 }
 

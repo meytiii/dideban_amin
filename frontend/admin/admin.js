@@ -4448,7 +4448,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let _elDetailSkeleton = null;
     let _elDetailActual = null;
 
-    async function viewReport(id, preserveScroll = false) {
+    async function viewReport(id, preserveScroll = false, scrollToNewMessage = false) {
         currentViewingReportId = id;
         currentViewingIndex = filteredReports.findIndex(r => r.id === id);
         updateDetailNavButtons();
@@ -4654,11 +4654,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     data.messages.forEach(msg => {
                         const isReporter = msg.sender_type === 'reporter';
                         if (!isReporter) hasAdminInMessages = true;
-                        const adminName = msg.admin_username ? ` (${escapeHTML(msg.admin_username)})` : '';
+                        const adminDisplayName = msg.admin_full_name || msg.admin_username || '';
+                        const adminName = adminDisplayName ? ` (${escapeHTML(adminDisplayName)})` : '';
                         allItems.push({
                             sender_type: msg.sender_type,
                             is_official_response: !isReporter,
-                            sender_title: isReporter ? 'گزارش‌دهنده' : ('پاسخ اداره کل حراست' + adminName),
+                            sender_title: isReporter ? 'گزارش‌دهنده' : ('پاسخ اداره حراست' + adminName),
                             message: msg.message,
                             created_at: msg.created_at
                         });
@@ -5062,7 +5063,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleReadStatus(id, false);
             }
 
-            if (preserveScroll) {
+            if (scrollToNewMessage) {
+                const msgList = document.getElementById('detail-messages-list');
+                const lastBubble = msgList ? msgList.querySelector('.nexus-bubble-row:last-child') : null;
+                if (lastBubble) {
+                    if (msgList) msgList.scrollTop = msgList.scrollHeight;
+                    requestAnimationFrame(() => {
+                        lastBubble.scrollIntoView({ behavior: getScrollBehavior(), block: 'start' });
+                        const bubbleCard = lastBubble.querySelector('.nexus-bubble-card');
+                        if (bubbleCard) {
+                            bubbleCard.classList.add('nexus-bubble-highlight');
+                            setTimeout(() => bubbleCard.classList.remove('nexus-bubble-highlight'), 2200);
+                        }
+                    });
+                } else if (preserveScroll) {
+                    window.scrollTo({ top: savedScrollY, behavior: 'instant' });
+                }
+            } else if (preserveScroll) {
                 window.scrollTo({ top: savedScrollY, behavior: 'instant' });
             }
         } catch (error) {
@@ -5335,7 +5352,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         statusMsg.style.display = 'block';
                     }
                     if (responseInput) responseInput.value = '';
-                    await viewReport(currentViewingReportId, true);
+                    await viewReport(currentViewingReportId, true, true);
                     fetchReports().catch(() => { });
                 } else {
                     const err = await res.text();

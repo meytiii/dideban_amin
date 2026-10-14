@@ -721,10 +721,11 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	rep.HasAttachment = len(rep.Attachments) > 0 || evidenceID.Valid
 
 	msgRows, err := DB.Query(`
-		SELECT id, sender_type, message_text, COALESCE(admin_username, ''), created_at
-		FROM report_messages
-		WHERE report_id = $1
-		ORDER BY created_at ASC, id ASC`, reportID)
+		SELECT rm.id, rm.sender_type, rm.message_text, COALESCE(rm.admin_username, ''), rm.created_at, COALESCE(NULLIF(au.full_name, ''), rm.admin_username, '')
+		FROM report_messages rm
+		LEFT JOIN admin_users au ON rm.admin_username = au.username
+		WHERE rm.report_id = $1
+		ORDER BY rm.created_at ASC, rm.id ASC`, reportID)
 	rep.Messages = []ReportMessageItem{}
 	if err == nil {
 		defer msgRows.Close()
@@ -732,7 +733,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			var m ReportMessageItem
 			var encMsg string
 			var msgCreatedAt time.Time
-			if err := msgRows.Scan(&m.ID, &m.SenderType, &encMsg, &m.AdminUsername, &msgCreatedAt); err == nil {
+			if err := msgRows.Scan(&m.ID, &m.SenderType, &encMsg, &m.AdminUsername, &msgCreatedAt, &m.AdminFullName); err == nil {
 				decMsg, err := DecryptAES(encMsg)
 				if err == nil {
 					m.Message = decMsg
