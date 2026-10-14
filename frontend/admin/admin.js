@@ -3466,6 +3466,7 @@ document.addEventListener('DOMContentLoaded', () => {
         triggerId: 'auditDateRangeTrigger',
         popoverId: 'auditDateRangePopover',
         wrapperId: 'auditDateRangePickerWrapper',
+        filterContainerId: 'auditFilterContainer',
         textSpanId: 'auditDateRangeText',
         clearBtnId: 'auditDateRangeClear',
         prevBtnId: 'auditCalPrevMonth',
@@ -8256,7 +8257,442 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnLast) btnLast.disabled = (auditCurrentPage === totalPages || totalPages <= 1);
     }
 
-    btnRefreshAudit?.addEventListener('click', () => fetchAuditLogs());
+    function initAuditActionSearchBar() {
+        const wrapper = document.getElementById('auditActionSearchWrapper');
+        const input = document.getElementById('audit-filter-search');
+        const dropdown = document.getElementById('auditActionSearchDropdown');
+        const list = document.getElementById('auditActionSearchList');
+        const titleEl = document.getElementById('auditActionSearchDropdownTitle');
+        const countEl = document.getElementById('auditActionSearchCount');
+        const iconSearch = document.getElementById('auditActionIconSearch');
+        const iconSend = document.getElementById('auditActionIconSend');
+        const iconBox = document.getElementById('auditSearchIconBox');
+        const kbdBadge = document.getElementById('auditSearchKbdBadge');
+        const toggleBtn = document.getElementById('auditExpandableSearchToggle');
+        const clearBtn = document.getElementById('auditExpandableSearchClear');
+        const iconSearchToggle = toggleBtn ? toggleBtn.querySelector('.icon-search') : null;
+        const iconCloseToggle = toggleBtn ? toggleBtn.querySelector('.icon-close') : null;
+
+        if (!wrapper || !input || !dropdown || !list) return;
+
+        let activeIndex = -1;
+        let currentItems = [];
+
+        function openSearch() {
+            wrapper.classList.add('is-open');
+            if (iconSearchToggle) iconSearchToggle.classList.add('d-none');
+            if (iconCloseToggle) iconCloseToggle.classList.remove('d-none');
+            if (toggleBtn) {
+                toggleBtn.setAttribute('aria-label', 'بستن جستجو');
+                toggleBtn.setAttribute('data-tooltip', 'بستن جستجو (Esc)');
+            }
+            if (input.value.trim().length > 0 && clearBtn) {
+                clearBtn.classList.remove('d-none');
+            }
+            setTimeout(() => {
+                input.focus();
+            }, 60);
+        }
+
+        function closeSearch(clearValue = true) {
+            if (clearValue && input.value) {
+                input.value = '';
+                if (typeof applyAuditFiltersAndPagination === 'function') {
+                    applyAuditFiltersAndPagination(true);
+                }
+            }
+            wrapper.classList.remove('is-open');
+            if (iconSearchToggle) iconSearchToggle.classList.remove('d-none');
+            if (iconCloseToggle) iconCloseToggle.classList.add('d-none');
+            if (toggleBtn) {
+                toggleBtn.setAttribute('aria-label', 'جستجو در لاگ‌ها');
+                toggleBtn.setAttribute('data-tooltip', 'جستجو در لاگ‌های امنیتی');
+            }
+            if (clearBtn) clearBtn.classList.add('d-none');
+            if (kbdBadge) kbdBadge.style.opacity = '1';
+            closeDropdown();
+            input.blur();
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (wrapper.classList.contains('is-open')) {
+                    if (input.value.trim().length > 0) {
+                        closeSearch(true);
+                    } else {
+                        closeSearch(false);
+                    }
+                } else {
+                    openSearch();
+                    openDropdown();
+                }
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                input.value = '';
+                clearBtn.classList.add('d-none');
+                if (kbdBadge) kbdBadge.style.opacity = '1';
+                input.focus();
+                computeAndRender();
+                if (typeof applyAuditFiltersAndPagination === 'function') {
+                    applyAuditFiltersAndPagination(true);
+                }
+            });
+        }
+
+        const defaultActions = [
+            {
+                id: 'act-audit-login',
+                title: 'ورود کاربران اداری (LOGIN)',
+                desc: 'فیلتر سریع رویدادهای ورود به سامانه نظارتی',
+                tag: 'احراز هویت',
+                iconBoxClass: 'action-icon-blue',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>',
+                run: () => {
+                    if (auditFilterAction) auditFilterAction.value = 'LOGIN';
+                    syncAllAdminCustomSelects();
+                    applyAuditFiltersAndPagination(true);
+                }
+            },
+            {
+                id: 'act-audit-logout',
+                title: 'خروج کاربران اداری (LOGOUT)',
+                desc: 'فیلتر رویدادهای خروج رسمی از حساب کاربری',
+                tag: 'نشست',
+                iconBoxClass: 'action-icon-slate',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>',
+                run: () => {
+                    if (auditFilterAction) auditFilterAction.value = 'LOGOUT';
+                    syncAllAdminCustomSelects();
+                    applyAuditFiltersAndPagination(true);
+                }
+            },
+            {
+                id: 'act-audit-reports',
+                title: 'بررسی و پاسخ پرونده‌ها',
+                desc: 'فیلتر مشاهده پرونده و ثبت پاسخ‌های نظارتی',
+                tag: 'پرونده‌ها',
+                iconBoxClass: 'action-icon-amber',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>',
+                run: () => {
+                    if (auditFilterAction) auditFilterAction.value = 'RESPOND_REPORT';
+                    syncAllAdminCustomSelects();
+                    applyAuditFiltersAndPagination(true);
+                }
+            },
+            {
+                id: 'act-audit-users',
+                title: 'مدیریت و دسترسی کاربران',
+                desc: 'فیلتر ایجاد، حذف، تغییر رمز و فعال‌سازی حساب',
+                tag: 'کاربران',
+                iconBoxClass: 'action-icon-purple',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+                run: () => {
+                    if (auditFilterAction) auditFilterAction.value = 'CREATE_ADMIN_USER';
+                    syncAllAdminCustomSelects();
+                    applyAuditFiltersAndPagination(true);
+                }
+            },
+            {
+                id: 'act-audit-revokes',
+                title: 'ابطال نشست‌های امنیتی',
+                desc: 'فیلتر لغو نشست‌های دستگاه و نشست‌های فعال دیگر',
+                tag: 'امنیت',
+                iconBoxClass: 'action-icon-rose',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
+                run: () => {
+                    if (auditFilterAction) auditFilterAction.value = 'REVOKE_SESSION';
+                    syncAllAdminCustomSelects();
+                    applyAuditFiltersAndPagination(true);
+                }
+            },
+            {
+                id: 'act-audit-clear',
+                title: 'بازنشانی فیلترها و لاگ‌ها',
+                desc: 'حذف تمامی فیلترها و نمایش کامل لاگ‌های امنیتی',
+                tag: 'بازنشانی',
+                iconBoxClass: 'action-icon-blue',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>',
+                run: () => {
+                    if (auditClearFiltersBtn) auditClearFiltersBtn.click();
+                }
+            }
+        ];
+
+        function normalizeQuery(str) {
+            if (!str) return '';
+            const fa2en = { '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9' };
+            const ar2en = { '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9' };
+            return String(str).replace(/[۰-۹]/g, c => fa2en[c]).replace(/[٠-٩]/g, c => ar2en[c]).toLowerCase().trim();
+        }
+
+        function renderItems(items, title) {
+            currentItems = items;
+            activeIndex = -1;
+            list.innerHTML = '';
+            if (titleEl) titleEl.textContent = title;
+            if (countEl) countEl.textContent = toPersianDigits(items.length);
+
+            if (items.length === 0) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'action-search-empty';
+                emptyDiv.innerHTML = '<svg class="action-empty-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg><span>رویدادی منطبق با جستجو یافت نشد</span>';
+                list.appendChild(emptyDiv);
+                return;
+            }
+
+            items.forEach((item, idx) => {
+                const row = document.createElement('div');
+                row.className = 'action-search-item';
+                row.setAttribute('role', 'option');
+                row.setAttribute('id', `audit-action-item-${idx}`);
+                row.dataset.index = String(idx);
+
+                const mainCol = document.createElement('div');
+                mainCol.className = 'action-search-item-main';
+
+                const iconBox = document.createElement('span');
+                iconBox.className = `action-item-icon-box ${item.iconBoxClass || 'action-icon-blue'}`;
+                iconBox.innerHTML = item.iconSvg || '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
+
+                const texts = document.createElement('div');
+                texts.className = 'action-item-texts';
+
+                const title = document.createElement('span');
+                title.className = 'action-item-title';
+                title.textContent = item.title;
+
+                const desc = document.createElement('span');
+                desc.className = 'action-item-desc';
+                desc.textContent = item.desc;
+
+                texts.appendChild(title);
+                texts.appendChild(desc);
+                mainCol.appendChild(iconBox);
+                mainCol.appendChild(texts);
+
+                const meta = document.createElement('div');
+                meta.className = 'action-item-meta';
+
+                if (item.short) {
+                    const kbd = document.createElement('kbd');
+                    kbd.className = 'action-kbd-shortcut';
+                    kbd.textContent = item.short;
+                    meta.appendChild(kbd);
+                }
+
+                if (item.tag) {
+                    const tag = document.createElement('span');
+                    tag.className = 'action-end-tag';
+                    tag.textContent = item.tag;
+                    meta.appendChild(tag);
+                }
+
+                row.appendChild(mainCol);
+                row.appendChild(meta);
+
+                row.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    executeItem(item);
+                });
+
+                list.appendChild(row);
+            });
+        }
+
+        function updateSelection() {
+            const rows = list.querySelectorAll('.action-search-item');
+            rows.forEach((r, idx) => {
+                if (idx === activeIndex) {
+                    r.classList.add('is-selected');
+                    r.scrollIntoView({ block: 'nearest' });
+                    input.setAttribute('aria-activedescendant', r.id);
+                } else {
+                    r.classList.remove('is-selected');
+                }
+            });
+            if (activeIndex === -1) {
+                input.removeAttribute('aria-activedescendant');
+            }
+        }
+
+        function executeItem(item) {
+            closeDropdown();
+            if (typeof item.run === 'function') {
+                item.run();
+            }
+        }
+
+        function openDropdown() {
+            dropdown.style.display = 'block';
+            input.setAttribute('aria-expanded', 'true');
+            computeAndRender();
+        }
+
+        function closeDropdown() {
+            dropdown.style.display = 'none';
+            input.setAttribute('aria-expanded', 'false');
+            activeIndex = -1;
+            updateSelection();
+        }
+
+        function computeAndRender() {
+            const rawVal = input.value || '';
+            const q = normalizeQuery(rawVal);
+
+            if (rawVal.trim().length > 0) {
+                if (iconSearch) iconSearch.classList.add('d-none');
+                if (iconSend) iconSend.classList.remove('d-none');
+                if (iconBox) iconBox.classList.add('is-active');
+                if (kbdBadge) kbdBadge.style.opacity = '0';
+                if (clearBtn) clearBtn.classList.remove('d-none');
+            } else {
+                if (iconSearch) iconSearch.classList.remove('d-none');
+                if (iconSend) iconSend.classList.add('d-none');
+                if (iconBox) iconBox.classList.remove('is-active');
+                if (kbdBadge) kbdBadge.style.opacity = '1';
+                if (clearBtn) clearBtn.classList.add('d-none');
+            }
+
+            if (!q) {
+                renderItems(defaultActions, 'پیشنهادات و فیلترهای سریع لاگ');
+                return;
+            }
+
+            const matchedActions = defaultActions.filter(act => {
+                const normTitle = normalizeQuery(act.title);
+                const normDesc = normalizeQuery(act.desc);
+                return normTitle.includes(q) || normDesc.includes(q);
+            });
+
+            const matchedLogs = [];
+            if (Array.isArray(allAuditLogs)) {
+                for (let i = 0; i < allAuditLogs.length; i++) {
+                    const l = allAuditLogs[i];
+                    if (!l) continue;
+                    const ip = normalizeQuery(l.ip_address || '');
+                    const u = normalizeQuery(l.admin_username || '');
+                    const title = normalizeQuery(l.admin_title || '');
+                    const act = normalizeQuery(l.action || '');
+                    const tid = l.target_report_id ? String(l.target_report_id) : '';
+                    const track = normalizeQuery(l.target_tracking_code || '');
+
+                    if (ip.includes(q) || u.includes(q) || title.includes(q) || act.includes(q) || tid.includes(q) || track.includes(q)) {
+                        const actName = (ADMIN_FILTER_DESCRIPTIONS['audit-filter-action'] && ADMIN_FILTER_DESCRIPTIONS['audit-filter-action'][l.action]) ? ADMIN_FILTER_DESCRIPTIONS['audit-filter-action'][l.action] : l.action;
+                        const iconColor = l.action === 'LOGIN' ? 'action-icon-blue' : (l.action.includes('REVOKE') || l.action.includes('DELETE') ? 'action-icon-rose' : 'action-icon-amber');
+                        matchedLogs.push({
+                            id: `log-${l.id || i}`,
+                            title: `${l.admin_username || 'سیستم'} · ${actName}`,
+                            desc: `IP: ${l.ip_address || '-'} ${l.target_tracking_code ? `· رهگیری: ${toPersianDigits(l.target_tracking_code)}` : (l.target_report_id ? `· پرونده #${toPersianDigits(l.target_report_id)}` : '')}`,
+                            tag: l.admin_title || 'رویداد',
+                            short: 'انتخاب',
+                            iconBoxClass: iconColor,
+                            iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
+                            run: () => {
+                                input.value = l.target_tracking_code || l.ip_address || l.admin_username || '';
+                                if (clearBtn) clearBtn.classList.remove('d-none');
+                                applyAuditFiltersAndPagination(true);
+                            }
+                        });
+                        if (matchedLogs.length >= 6) break;
+                    }
+                }
+            }
+
+            const combined = [...matchedActions, ...matchedLogs];
+            renderItems(combined, `یافته‌ها در لاگ‌ها برای «${rawVal.trim()}»`);
+        }
+
+        input.addEventListener('focus', () => {
+            if (!wrapper.classList.contains('is-open')) openSearch();
+            openDropdown();
+        });
+
+        input.addEventListener('click', () => {
+            if (!wrapper.classList.contains('is-open')) openSearch();
+            if (dropdown.style.display === 'none') openDropdown();
+        });
+
+        input.addEventListener('input', () => {
+            computeAndRender();
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (dropdown.style.display !== 'none' && currentItems.length > 0) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex + 1) % currentItems.length;
+                    updateSelection();
+                    return;
+                }
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex - 1 + currentItems.length) % currentItems.length;
+                    updateSelection();
+                    return;
+                }
+                if (e.key === 'Enter') {
+                    if (activeIndex >= 0 && activeIndex < currentItems.length) {
+                        e.preventDefault();
+                        executeItem(currentItems[activeIndex]);
+                        return;
+                    }
+                    closeDropdown();
+                    return;
+                }
+            }
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                closeDropdown();
+                if (input.value.trim() !== '') {
+                    input.value = '';
+                    if (typeof applyAuditFiltersAndPagination === 'function') applyAuditFiltersAndPagination(true);
+                }
+                closeSearch(false);
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
+                closeDropdown();
+                if (wrapper.classList.contains('is-open') && input.value.trim() === '') {
+                    closeSearch(false);
+                }
+            }
+        });
+
+        if (input.value.trim().length > 0) {
+            wrapper.classList.add('is-open');
+            if (iconSearchToggle) iconSearchToggle.classList.add('d-none');
+            if (iconCloseToggle) iconCloseToggle.classList.remove('d-none');
+            if (clearBtn) clearBtn.classList.remove('d-none');
+            if (kbdBadge) kbdBadge.style.opacity = '0';
+        }
+
+        window.closeAuditSearch = closeSearch;
+    }
+
+    initAuditActionSearchBar();
+
+    btnRefreshAudit?.addEventListener('click', async () => {
+        const icon = btnRefreshAudit.querySelector('.refresh-icon');
+        btnRefreshAudit.disabled = true;
+        if (icon) icon.classList.add('spinning');
+        try {
+            await fetchAuditLogs();
+        } finally {
+            setTimeout(() => {
+                if (icon) icon.classList.remove('spinning');
+                btnRefreshAudit.disabled = false;
+            }, 300);
+        }
+    });
 
     auditFilterSearch?.addEventListener('input', debounce(() => {
         requestAnimationFrame(() => applyAuditFiltersAndPagination(true));
@@ -8265,7 +8701,11 @@ document.addEventListener('DOMContentLoaded', () => {
     auditFilterUser?.addEventListener('change', () => applyAuditFiltersAndPagination(true));
 
     auditClearFiltersBtn?.addEventListener('click', () => {
-        if (auditFilterSearch) auditFilterSearch.value = '';
+        if (typeof window.closeAuditSearch === 'function') {
+            window.closeAuditSearch(true);
+        } else {
+            if (auditFilterSearch) auditFilterSearch.value = '';
+        }
         if (auditFilterAction) auditFilterAction.value = 'all';
         if (auditFilterUser) auditFilterUser.value = 'all';
         if (typeof window.resetAuditShamsiDateRangePicker === 'function') {
