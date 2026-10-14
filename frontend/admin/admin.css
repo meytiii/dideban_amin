@@ -221,7 +221,7 @@ body::before {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 44px 44px 38px;
+    padding: 34px 44px 28px;
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.98) 0%, rgba(15, 23, 42, 0.99) 100%);
     box-sizing: border-box;
     z-index: 2;
@@ -235,21 +235,21 @@ body::before {
 
 .admin-login-header-v2 {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 .admin-logo-crest-v2 {
     position: relative;
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 14px;
-    border-radius: 18px;
+    width: 112px;
+    height: 112px;
+    margin: 0 auto 16px;
+    border-radius: 26px;
     border: 1.5px solid rgba(59, 130, 246, 0.45);
     background: rgba(15, 23, 42, 0.85);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.28), inset 0 0 10px rgba(59, 130, 246, 0.18);
+    box-shadow: 0 0 28px rgba(59, 130, 246, 0.35), inset 0 0 14px rgba(59, 130, 246, 0.22);
     transition: transform 0.25s ease;
 }
 
@@ -258,8 +258,8 @@ body::before {
 }
 
 .admin-crest-img-v2 {
-    width: 46px;
-    height: 46px;
+    width: 92px;
+    height: 92px;
     object-fit: contain;
     filter: brightness(0) invert(1);
     user-select: none;
