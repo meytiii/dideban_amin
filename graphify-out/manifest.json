@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1791954422.585839,
-    "seen": 1791954720.5112958,
-    "ast_hash": "1a405cabef75429b8a7a313c154bd463",
+    "mtime": 1791956418.2954998,
+    "seen": 1791956437.9778259,
+    "ast_hash": "1b20810447b9fd97135ccf69f46000ec",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
@@ -1349,22 +1349,22 @@
     "ast_hash": "d7540893ceae492eb1b990ac1b54016e",
     "semantic_hash": ""
   },
-  "frontend/admin/slides/slide1.jpg": {
-    "mtime": 1791954225.3370693,
-    "seen": 1791954720.5118055,
-    "ast_hash": "c3c21cebd3cb3eec6b5938aca9a723e7",
+  "frontend/admin/slides/slide1.webp": {
+    "mtime": 1791956390.8790026,
+    "seen": 1791956437.9783337,
+    "ast_hash": "9f08b18b7b95a18e056db07b1496c88c",
     "semantic_hash": ""
   },
-  "frontend/admin/slides/slide2.jpg": {
-    "mtime": 1791954246.4965093,
-    "seen": 1791954720.511807,
-    "ast_hash": "034bf23fc10ebb0e5b0544dde7542795",
+  "frontend/admin/slides/slide2.webp": {
+    "mtime": 1791956391.00628,
+    "seen": 1791956437.978335,
+    "ast_hash": "63f734609aa6e5835de04d5e2c8f45a0",
     "semantic_hash": ""
   },
-  "frontend/admin/slides/slide3.jpg": {
-    "mtime": 1791954262.25686,
-    "seen": 1791954720.511808,
-    "ast_hash": "bbe3f1ee6c8a1200fa6b23f4008ad4d5",
+  "frontend/admin/slides/slide3.webp": {
+    "mtime": 1791956391.146366,
+    "seen": 1791956437.978336,
+    "ast_hash": "6f8097feed4a8fbbeccd32197459573b",
     "semantic_hash": ""
   }
 }
