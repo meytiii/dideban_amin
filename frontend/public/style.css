@@ -2415,9 +2415,9 @@ button:disabled {
 
 .badge-status.read,
 .badge-status.in-review {
-    background: rgba(240, 177, 61, 0.14);
-    color: #F0B13D;
-    border: 1px solid rgba(240, 177, 61, 0.35);
+    background: rgba(45, 228, 218, 0.12);
+    color: #2de4da;
+    border: 1px solid rgba(45, 228, 218, 0.32);
 }
 
 .badge-status.unread,
@@ -2454,7 +2454,8 @@ button:disabled {
 .badge-status.new-message {
     background: rgba(14, 165, 233, 0.22);
     color: #38bdf8;
-    border: 1px solid rgba(14, 165, 233, 0.35);
+    border: 1px solid rgba(56, 189, 248, 0.65);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.35), inset 0 0 6px rgba(56, 189, 248, 0.18);
 }
 
 .portal-footer {
