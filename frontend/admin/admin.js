@@ -1669,6 +1669,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dpwd) dpwd.value = '';
         const dcode = document.getElementById('disable_2fa_code');
         if (dcode) dcode.value = '';
+        if (typeof resetPasswordWrappers === 'function') resetPasswordWrappers(modal2FA);
     }
 
     async function refresh2FAStatus() {
