@@ -1217,7 +1217,7 @@
                                 style="margin-top: 6px; font-size: 13.5px;"></div>
                         </div>
 
-                        <form id="regionalResponseForm" style="margin-top: 10px;">
+                        <form id="regionalResponseForm" style="margin-top: 10px;" novalidate>
                             <div class="canned-responses-wrapper regional-canned-wrapper" id="regional-canned-wrapper"
                                 style="margin-bottom: 12px; margin-top: 0;">
                                 <span class="canned-title">قالب‌های آماده گزارش کارشناسی به اداره کل:</span>
@@ -1290,7 +1290,7 @@
                         </div>
                     </div>
 
-                    <form id="adminResponseForm" style="margin-top: 15px;">
+                    <form id="adminResponseForm" style="margin-top: 15px;" novalidate>
                         <div class="form-group" style="margin-bottom: 12px;">
                             <textarea id="admin_response_input" rows="4"
                                 placeholder="متن پاسخ یا نتیجه بررسی حراست را برای گزارش‌دهنده بنویسید..."
@@ -1961,7 +1961,7 @@
                 <button type="button" class="btn-close-modal" id="btn-close-create-user-modal"
                     aria-label="بستن">&times;</button>
             </div>
-            <form id="form-create-user">
+            <form id="form-create-user" novalidate>
                 <div class="form-group">
                     <label for="new_full_name">نام و نام خانوادگی:</label>
                     <input type="text" id="new_full_name" required placeholder="مثال: علی حسینی" autocomplete="off">
@@ -2066,7 +2066,7 @@
                 <button type="button" class="btn-close-modal" id="btn-close-reset-pwd-modal"
                     aria-label="بستن">&times;</button>
             </div>
-            <form id="form-reset-password">
+            <form id="form-reset-password" novalidate>
                 <input type="hidden" id="reset_pwd_user_id">
                 <p style="margin-bottom: 14px; font-size: 13.5px; color: var(--text-muted);">
                     تغییر رمز عبور برای حساب: <strong id="reset_pwd_username_label" class="text-cyan">...</strong>
@@ -2127,7 +2127,7 @@
                 <button type="button" class="btn-close-modal" id="btn-close-edit-user-modal"
                     aria-label="بستن">&times;</button>
             </div>
-            <form id="form-edit-user">
+            <form id="form-edit-user" novalidate>
                 <input type="hidden" id="edit_user_id">
                 <div id="edit-lockout-banner"
                     style="display: none; margin-bottom: 14px; padding: 10px 14px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: var(--radius-md); align-items: center; justify-content: space-between; gap: 10px;">
@@ -2250,7 +2250,7 @@
                 <button type="button" class="btn-close-modal" id="btn-close-change-my-pwd-modal"
                     aria-label="بستن">&times;</button>
             </div>
-            <form id="form-change-my-password">
+            <form id="form-change-my-password" novalidate>
                 <p style="margin-bottom: 15px; font-size: 13px; color: var(--text-muted);">
                     برای حفظ امنیت حساب کاربری و گردش دوره‌ای رمزها، لطفاً کلمه عبور جدید را وارد کنید.
                 </p>
@@ -2402,7 +2402,7 @@
                     </button>
                 </div>
 
-                <form id="form-enable-2fa">
+                <form id="form-enable-2fa" novalidate>
                     <input type="hidden" id="enable_2fa_secret">
                     <div class="form-group">
                         <label for="enable_2fa_pwd">کلمه عبور جاری حساب کاربری:</label>
@@ -2430,7 +2430,7 @@
                 <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
                     برای غیرفعال‌سازی ورود دومرحله‌ای، کلمه عبور جاری و کد موقت نرم‌افزار را وارد کنید:
                 </p>
-                <form id="form-disable-2fa">
+                <form id="form-disable-2fa" novalidate>
                     <div class="form-group">
                         <label for="disable_2fa_pwd">کلمه عبور جاری:</label>
                         <input type="password" id="disable_2fa_pwd" required autocomplete="current-password">
@@ -2477,7 +2477,7 @@
                     <span>تغییر الزامی کلمه عبور</span>
                 </h3>
             </div>
-            <form id="form-force-change-password">
+            <form id="form-force-change-password" novalidate>
                 <div
                     style="background: rgba(245, 158, 11, 0.08); border: 1px dashed rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 18px; font-size: 13px; color: #fde68a; line-height: 1.7; display: flex; align-items: flex-start; gap: 10px;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"
@@ -2635,7 +2635,7 @@
                 <button type="button" class="btn-close-modal" id="btn-close-change-classification-modal"
                     aria-label="بستن پنجره">&times;</button>
             </div>
-            <form id="form-change-classification">
+            <form id="form-change-classification" novalidate>
                 <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;">
                     می‌توانید وضعیت ارزش اطلاعاتی و کیفیت این پرونده را ویرایش کنید:
                 </p>
@@ -2715,7 +2715,7 @@
                 <button type="button" class="btn-close-modal" id="btn-close-forward-modal"
                     aria-label="بستن">&times;</button>
             </div>
-            <form id="form-forward-report">
+            <form id="form-forward-report" novalidate>
                 <input type="hidden" id="forward_report_id">
 
                 <div class="forward-search-bar" style="margin-bottom: 12px;">

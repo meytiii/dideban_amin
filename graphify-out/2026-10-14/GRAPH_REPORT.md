@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-14)
 
 ## Corpus Check
-- 212 files · ~311,863 words
+- 215 files · ~255,178 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1675 nodes · 2642 edges · 143 communities (99 shown, 44 thin omitted)
-- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 279 edges (avg confidence: 0.85)
+- 1697 nodes · 2663 edges · 145 communities (100 shown, 45 thin omitted)
+- Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 279 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6798ad3b`
+- Built from commit: `51e0a468`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -72,14 +72,14 @@
 - public/tatweel.js
 - no_comments.md
 - otp-input.tsx
+- Comprehensive Documentation Audit & System Verification Report
 - security.go
-- database/sql.DB
 - populateAnalyticsDOM
 - sliding-number.tsx
 - calendar.tsx
 - Output contract & scope
 - initServerSlidingClock
-- captcha.go
+- TestCaptchaReplayPrevention
 - admin_handlers.go
 - applyFilters
 - crypto.go
@@ -89,8 +89,8 @@
 - openForwardModal
 - label.tsx
 - workflows/hallmark.md
-- SyslogShipper
-- SessionManager
+- badge-2.tsx
+- TestCookieSecureCachedResolution
 - toggle.tsx
 - adminFetch
 - t1-pull-quote-with-marginalia.md
@@ -146,6 +146,7 @@
 - s2-hanging.md
 - s5-bottom-anchored.md
 - initLoginSlider
+- TestClassificationValidationAndMath
 
 ## God Nodes (most connected - your core abstractions)
 1. `getIP()` - 35 edges
@@ -174,7 +175,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (143 total, 44 thin omitted)
+## Communities (145 total, 45 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.04
@@ -396,13 +397,13 @@ Nodes (9): applyWrapperToNode(), canConnect(), enhanceElement(), enhanceText(), 
 Cohesion: 0.17
 Nodes (12): ALLOW, CROSSFADE, EASE, OtpCellProps, OtpInput(), OtpInputHandle, OtpInputProps, OtpMode (+4 more)
 
-### Community 57 - "security.go"
-Cohesion: 0.14
-Nodes (13): sync.Mutex, time.Ticker, time.Time, NewIPRateLimiter(), RateLimitMiddleware(), truncateRunes(), ActiveSessionItem, cachedAccountFailure (+5 more)
+### Community 57 - "Comprehensive Documentation Audit & System Verification Report"
+Cohesion: 0.18
+Nodes (10): 1. Executive Summary & Verification Verdict, 2. Repository Subsystems & Files Systematically Inspected, 3. Test Suite & Empirical Verification Procedures, 4. Major Chapters Completed in Documentation Deliverables, 5. Important Findings, Known Limitations & Unverified Assumptions, 6. Exact Output Paths of All Deliverables, Comprehensive Documentation Audit & System Verification Report, Known Architectural Limitations: (+2 more)
 
-### Community 58 - "database/sql.DB"
-Cohesion: 0.15
-Nodes (9): NewUsedCaptchaStore(), database/sql.DB, sync.Once, time.Duration, NewAccountLockoutManager(), AccountLockoutManager, UsedCaptchaStore, TestAccountLockoutConcurrentFailures() (+1 more)
+### Community 58 - "security.go"
+Cohesion: 0.05
+Nodes (43): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), NewUsedCaptchaStore(), renderObfuscatedChars(), database/sql.DB (+35 more)
 
 ### Community 59 - "populateAnalyticsDOM"
 Cohesion: 0.15
@@ -416,9 +417,9 @@ Nodes (3): Output contract, Output contract & scope, Scope and limits
 Cohesion: 0.47
 Nodes (6): fetchServerTime(), getServerNow(), initServerSlidingClock(), tick(), updateDate(), updateDigit()
 
-### Community 64 - "captcha.go"
-Cohesion: 0.23
-Nodes (12): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), inspectZipArchive(), CaptchaPayload (+4 more)
+### Community 64 - "TestCaptchaReplayPrevention"
+Cohesion: 0.40
+Nodes (4): inspectZipArchive(), TestCaptchaReplayPrevention(), TestInspectZipArchive(), TestIPRateLimiterBoundedCapacity()
 
 ### Community 65 - "admin_handlers.go"
 Cohesion: 0.11
@@ -436,13 +437,13 @@ Nodes (26): DownloadAttachmentHandler(), DecryptAES(), DecryptFileBytes(), Decry
 Cohesion: 0.29
 Nodes (8): fetchForwardingRecipients(), openForwardModal(), openResetPwdModal(), openShortcutsModal(), promoteTemporarily(), renderRecipientList(), renderRecipientListSkeleton(), updateSelectedRecipientsCounter()
 
-### Community 74 - "SyslogShipper"
-Cohesion: 0.24
-Nodes (9): net.Conn, sync.WaitGroup, SyslogMessage, SyslogSeverity, SyslogShipper, InitSyslogShipper(), MapActionToSyslogSeverity(), sanitizeSyslogParam() (+1 more)
+### Community 74 - "badge-2.tsx"
+Cohesion: 0.28
+Nodes (7): Badge(), BadgeButton(), BadgeButtonProps, badgeButtonVariants, BadgeDotProps, BadgeProps, badgeVariants
 
-### Community 75 - "SessionManager"
-Cohesion: 0.31
-Nodes (4): hashToken(), AdminSession, cachedSession, SessionManager
+### Community 75 - "TestCookieSecureCachedResolution"
+Cohesion: 0.50
+Nodes (3): InitCookieSecurity(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag()
 
 ### Community 77 - "adminFetch"
 Cohesion: 0.17
@@ -493,8 +494,8 @@ Cohesion: 0.52
 Nodes (7): initAppTooltips(), convertTitles(), getOrCreateTooltip(), hide(), isMobileOrTouch(), positionTooltip(), show()
 
 ### Community 108 - "testing.T"
-Cohesion: 0.11
-Nodes (23): testing.T, InitCookieSecurity(), TestClassificationValidationAndMath(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization() (+15 more)
+Cohesion: 0.14
+Nodes (19): testing.T, TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization(), TestForwardingRequestValidation(), TestNavahiManateghClassificationForbidden(), TestNavahiManateghNotificationScoping(), TestNavahiManateghRestrictions() (+11 more)
 
 ### Community 116 - "main"
 Cohesion: 0.11
@@ -525,23 +526,23 @@ Cohesion: 0.70
 Nodes (5): initLoginSlider(), goToSlide(), nextSlide(), startTimer(), stopTimer()
 
 ## Knowledge Gaps
-- **723 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+718 more)
+- **734 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+729 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **44 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **45 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Anti-patterns — the named tells` connect `Minor (small taste issues)` to `Major (looks AI-generated)`, `SKILL.md`, `Microinteraction tells`, `Critical (ships as slop)`?**
   _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Why does `Microinteractions` connect `Recipes` to `SKILL.md`?**
-  _High betweenness centrality (0.017) - this node is a cross-community bridge._
-- **Why does `Interaction and states` connect `Interaction and states` to `SKILL.md`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+- **Why does `Custom craft — how to hand-build hero artwork` connect `Custom craft — how to hand-build hero artwork` to `SKILL.md`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **Why does `Custom theme — protocol` connect `Custom theme — protocol` to `SKILL.md`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Are the 29 inferred relationships involving `getIP()` (e.g. with `ChangeMyPasswordHandler()` and `ClassifyReportHandler()`) actually correct?**
   _`getIP()` has 29 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `AdminUserItem`, `AuditLogItem`, `RecipientUserItem` to the rest of the system?**
-  _723 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _734 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Components` be split into smaller, more focused modules?**
   _Cohesion score 0.0425531914893617 - nodes in this community are weakly interconnected._
 - **Should `component-cookbook.md` be split into smaller, more focused modules?**

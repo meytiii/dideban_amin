@@ -537,23 +537,201 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (_) { }
 
     const toastContainer = document.getElementById('toast-container');
-    function showToast(message, duration = 2500, type = '') {
-        if (!toastContainer) return;
-        if (typeof duration === 'string') {
-            type = duration;
-            duration = 2500;
-        }
-        const toast = document.createElement('div');
-        toast.className = 'toast' + (type ? ` toast-${type}` : '');
+    const TOAST_ICONS = {
+        success: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>',
+        error: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+        destructive: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+        warning: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+        info: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
+        default: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
+    };
 
-        toast.textContent = message;
-        const fadeDelay = Math.max(duration - 300, 200) / 1000;
-        toast.style.animation = `toastIn 0.25s ease, toastOut 0.25s ease ${fadeDelay}s forwards`;
+    const TOAST_TITLES = {
+        success: 'عملیات موفق',
+        error: 'خطا در سامانه',
+        destructive: 'خطا در سامانه',
+        warning: 'توجه و هشدار',
+        info: 'اطلاعیه سامانه',
+        default: 'پیام سیستم'
+    };
+
+    function showToast(param1, param2 = 2800, param3 = '') {
+        if (!toastContainer) return;
+        let title = '';
+        let description = '';
+        let type = 'info';
+        let duration = 2800;
+
+        if (typeof param1 === 'object' && param1 !== null) {
+            title = param1.title || '';
+            description = param1.description || param1.message || '';
+            type = param1.type || param1.variant || 'info';
+            duration = typeof param1.duration === 'number' ? param1.duration : 2800;
+        } else {
+            description = String(param1 || '');
+            if (typeof param2 === 'string') {
+                type = param2 || 'info';
+                duration = typeof param3 === 'number' ? param3 : 2800;
+            } else if (typeof param2 === 'number') {
+                duration = param2;
+                type = typeof param3 === 'string' && param3 ? param3 : 'info';
+            }
+        }
+
+        if (type === 'error') type = 'destructive';
+        if (!type) type = 'info';
+        if (!title) {
+            title = TOAST_TITLES[type] || TOAST_TITLES.default;
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+
+        const iconSvg = TOAST_ICONS[type] || TOAST_ICONS.info;
+
+        toast.innerHTML = `
+            <span class="toast-icon" aria-hidden="true">${iconSvg}</span>
+            <div class="toast-content">
+                <h5 class="toast-title"></h5>
+                <div class="toast-description"></div>
+            </div>
+            <button type="button" class="toast-close" aria-label="بستن">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+        `;
+        toast.querySelector('.toast-title').textContent = title;
+        toast.querySelector('.toast-description').textContent = description;
+        toast.querySelector('.toast-close').addEventListener('click', () => dismissToast(toast));
         toastContainer.appendChild(toast);
-        setTimeout(() => {
-            if (toast.parentNode) toast.parentNode.removeChild(toast);
-        }, duration);
+        if (duration > 0) {
+            setTimeout(() => dismissToast(toast), duration);
+        }
+        return toast;
     }
+
+    function dismissToast(toast) {
+        if (!toast || !toast.parentNode) return;
+        toast.classList.add('toast-exit');
+        setTimeout(() => {
+            if (toast && toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 260);
+    }
+
+    window.showToast = showToast;
+    window.showIconAlert = showToast;
+
+    document.addEventListener('invalid', function (e) {
+        e.preventDefault();
+    }, true);
+
+    function getElementPersianLabel(element, formEl) {
+        if (!element) return 'فیلد';
+        if (element.id) {
+            const label = (formEl || document).querySelector(`label[for="${element.id}"]`);
+            if (label) {
+                const text = label.textContent.replace('*', '').replace('(اختیاری)', '').replace(':', '').trim();
+                if (text) return text;
+            }
+        }
+        const parentLabel = element.closest('label');
+        if (parentLabel) {
+            const text = parentLabel.textContent.replace('*', '').replace('(اختیاری)', '').replace(':', '').trim();
+            if (text) return text;
+        }
+        const ariaLabel = element.getAttribute('aria-label');
+        if (ariaLabel && ariaLabel.trim()) return ariaLabel.trim();
+        const placeholder = element.getAttribute('placeholder');
+        if (placeholder && placeholder.trim()) {
+            return placeholder.replace('مثال:', '').replace('...', '').trim();
+        }
+        return 'مورد نظر';
+    }
+
+    function highlightAndFocusInvalidField(field, message, formEl) {
+        if (!field) return;
+        const target = field.closest('.password-wrapper') || field.closest('.form-group') || field;
+        target.classList.add('input-error', 'input-error-shake');
+        setTimeout(() => target.classList.remove('input-error-shake'), 450);
+        field.focus();
+        if (typeof field.scrollIntoView === 'function') {
+            field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        const clearHandler = function () {
+            target.classList.remove('input-error');
+            field.removeEventListener('input', clearHandler);
+            field.removeEventListener('change', clearHandler);
+        };
+        field.addEventListener('input', clearHandler);
+        field.addEventListener('change', clearHandler);
+        showToast({
+            title: 'تکمیل فیلدهای الزامی',
+            description: message,
+            type: 'destructive'
+        });
+    }
+
+    document.addEventListener('submit', function (e) {
+        const formEl = e.target;
+        if (!formEl || typeof formEl.querySelectorAll !== 'function') return;
+
+        const inputs = Array.from(formEl.querySelectorAll('input, select, textarea'));
+        for (const input of inputs) {
+            if (input.disabled || input.type === 'hidden' || input.type === 'button' || input.type === 'submit') continue;
+
+            let isInvalid = false;
+            let errorMsg = '';
+
+            if (input.hasAttribute('required')) {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    if (!input.checked) {
+                        const name = input.name;
+                        const groupChecked = name ? formEl.querySelector(`input[name="${name}"]:checked`) : null;
+                        if (!groupChecked) {
+                            isInvalid = true;
+                            errorMsg = `لطفاً گزینه الزامی «${getElementPersianLabel(input, formEl)}» را انتخاب فرمایید.`;
+                        }
+                    }
+                } else if (!input.value || !input.value.trim()) {
+                    isInvalid = true;
+                    errorMsg = `لطفاً فیلد «${getElementPersianLabel(input, formEl)}» را تکمیل فرمایید.`;
+                }
+            }
+
+            if (!isInvalid && input.value && input.minLength > 0 && input.value.trim().length < input.minLength) {
+                isInvalid = true;
+                const minVal = typeof toPersianNum === 'function' ? toPersianNum(input.minLength) : input.minLength;
+                errorMsg = `حداقل ${minVal} کاراکتر برای فیلد «${getElementPersianLabel(input, formEl)}» الزامی است.`;
+            }
+
+            if (!isInvalid && input.value && input.pattern) {
+                try {
+                    const regex = new RegExp(`^(?:${input.pattern})$`);
+                    if (!regex.test(input.value.trim())) {
+                        isInvalid = true;
+                        errorMsg = `فرمت وارد شده برای فیلد «${getElementPersianLabel(input, formEl)}» معتبر نمی‌باشد.`;
+                    }
+                } catch (_) { }
+            }
+
+            if (isInvalid) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                highlightAndFocusInvalidField(input, errorMsg, formEl);
+                return;
+            }
+        }
+    }, true);
+
+    document.querySelectorAll('input, select, textarea').forEach(element => {
+        const clearHandler = function () {
+            const target = element.closest('.password-wrapper') || element.closest('.form-group') || element;
+            target.classList.remove('input-error');
+        };
+        element.addEventListener('input', clearHandler);
+        element.addEventListener('change', clearHandler);
+    });
 
     const showConfirmDialog = window.showConfirmDialog || function () { return Promise.resolve(true); };
 

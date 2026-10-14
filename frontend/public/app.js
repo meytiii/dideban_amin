@@ -360,37 +360,88 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const toastContainer = document.getElementById('toast-container');
     const TOAST_ICONS = {
-        success: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>',
-        error: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>',
-        warning: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-        info: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
+        success: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>',
+        error: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+        destructive: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+        warning: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+        info: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
+        default: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
     };
 
-    function showToast(message, type = 'info', duration = 4000) {
+    const TOAST_TITLES = {
+        success: 'عملیات موفق',
+        error: 'خطا در پردازش',
+        destructive: 'خطا در پردازش',
+        warning: 'توجه و هشدار',
+        info: 'اطلاعیه سامانه',
+        default: 'پیام سیستم'
+    };
+
+    function showToast(param1, param2 = 'info', param3 = 4000) {
         if (!toastContainer) return;
+        let title = '';
+        let description = '';
+        let type = 'info';
+        let duration = 4000;
+
+        if (typeof param1 === 'object' && param1 !== null) {
+            title = param1.title || '';
+            description = param1.description || param1.message || '';
+            type = param1.type || param1.variant || 'info';
+            duration = typeof param1.duration === 'number' ? param1.duration : 4000;
+        } else {
+            description = String(param1 || '');
+            if (typeof param2 === 'number') {
+                duration = param2;
+                type = typeof param3 === 'string' && param3 ? param3 : 'info';
+            } else {
+                type = typeof param2 === 'string' && param2 ? param2 : 'info';
+                duration = typeof param3 === 'number' ? param3 : 4000;
+            }
+        }
+
+        if (type === 'error') type = 'destructive';
+        if (!title) {
+            title = TOAST_TITLES[type] || TOAST_TITLES.default;
+        }
+
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+
+        const iconSvg = TOAST_ICONS[type] || TOAST_ICONS.info;
 
         toast.innerHTML = `
-            <span class="toast-icon">${TOAST_ICONS[type] || TOAST_ICONS.info}</span>
-            <span class="toast-body"></span>
-            <button class="toast-close" aria-label="بستن">
+            <span class="toast-icon" aria-hidden="true">${iconSvg}</span>
+            <div class="toast-content">
+                <h5 class="toast-title"></h5>
+                <div class="toast-description"></div>
+            </div>
+            <button type="button" class="toast-close" aria-label="بستن">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
         `;
-        toast.querySelector('.toast-body').textContent = message;
+        toast.querySelector('.toast-title').textContent = title;
+        toast.querySelector('.toast-description').textContent = description;
         toast.querySelector('.toast-close').addEventListener('click', () => dismissToast(toast));
         toastContainer.appendChild(toast);
         if (duration > 0) {
             setTimeout(() => dismissToast(toast), duration);
         }
+        return toast;
     }
 
     function dismissToast(toast) {
         if (!toast || !toast.parentNode) return;
         toast.classList.add('toast-exit');
-        setTimeout(() => toast.remove(), 300);
+        setTimeout(() => {
+            if (toast && toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 260);
     }
+
+    window.showToast = showToast;
+    window.showIconAlert = showToast;
 
     let offlineBanner = null;
     let offlineRestoreTimer = null;
@@ -1196,15 +1247,63 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const requiredElements = form.querySelectorAll('[required]');
-    requiredElements.forEach(element => {
-        element.addEventListener('invalid', function () {
-            if (this.validity.valueMissing) {
-                this.setCustomValidity('تکمیل این فیلد الزامی است.');
+    document.addEventListener('invalid', function (e) {
+        e.preventDefault();
+    }, true);
+
+    function getElementPersianLabel(element, formEl) {
+        if (!element) return 'فیلد';
+        if (element.id) {
+            const label = (formEl || document).querySelector(`label[for="${element.id}"]`);
+            if (label) {
+                const text = label.textContent.replace('*', '').replace('(اختیاری)', '').replace(':', '').trim();
+                if (text) return text;
             }
+        }
+        const parentLabel = element.closest('label');
+        if (parentLabel) {
+            const text = parentLabel.textContent.replace('*', '').replace('(اختیاری)', '').replace(':', '').trim();
+            if (text) return text;
+        }
+        const ariaLabel = element.getAttribute('aria-label');
+        if (ariaLabel && ariaLabel.trim()) return ariaLabel.trim();
+        const placeholder = element.getAttribute('placeholder');
+        if (placeholder && placeholder.trim()) {
+            return placeholder.replace('مثال:', '').replace('...', '').trim();
+        }
+        return 'مورد نظر';
+    }
+
+    function highlightAndFocusInvalidField(field, message) {
+        if (!field) return;
+        const target = field.closest('.custom-dropdown') || field.closest('.password-wrapper') || field;
+        target.classList.add('input-error', 'input-error-shake');
+        setTimeout(() => target.classList.remove('input-error-shake'), 450);
+        field.focus();
+        if (typeof field.scrollIntoView === 'function') {
+            field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        const clearHandler = function () {
+            target.classList.remove('input-error');
+            field.removeEventListener('input', clearHandler);
+            field.removeEventListener('change', clearHandler);
+        };
+        field.addEventListener('input', clearHandler);
+        field.addEventListener('change', clearHandler);
+        showToast({
+            title: 'تکمیل فیلدهای الزامی',
+            description: message,
+            type: 'destructive'
         });
-        element.addEventListener('input', function () { this.setCustomValidity(''); });
-        element.addEventListener('change', function () { this.setCustomValidity(''); });
+    }
+
+    document.querySelectorAll('input, select, textarea').forEach(element => {
+        const clearHandler = function () {
+            const target = element.closest('.custom-dropdown') || element.closest('.password-wrapper') || element;
+            target.classList.remove('input-error');
+        };
+        element.addEventListener('input', clearHandler);
+        element.addEventListener('change', clearHandler);
     });
 
     async function loadCaptcha(imgId, tokenInputId, answerInputId) {

@@ -30,15 +30,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1791954588.374532,
-    "seen": 1791954720.4995356,
-    "ast_hash": "7b2267fbda1372a13ea3c352f7132607",
+    "mtime": 1791967786.0547338,
+    "seen": 1791967901.572067,
+    "ast_hash": "137f5fa8979371f6f263ffe3bbf926c7",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
-    "mtime": 1791791055.0516336,
-    "seen": 1791792409.290001,
-    "ast_hash": "cc4a1aafec1034baa0605aa96ce6b003",
+    "mtime": 1791967716.337922,
+    "seen": 1791967901.5722582,
+    "ast_hash": "079d120751f155ef534238ab10e8d4a4",
     "semantic_hash": ""
   },
   "go.mod": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1791957001.8959298,
-    "seen": 1791959622.2315445,
-    "ast_hash": "7114a526d61c5ad769a46938e052c952",
+    "mtime": 1791967631.0964057,
+    "seen": 1791967901.5831819,
+    "ast_hash": "b513638ee6d37b01d2881a58d3c10dbe",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
