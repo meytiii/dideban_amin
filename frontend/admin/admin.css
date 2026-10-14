@@ -3275,9 +3275,9 @@ button {
 
 .badge-read,
 .badge-in-review {
-    background: rgba(240, 177, 61, 0.14);
-    color: #F0B13D;
-    border: 1px solid rgba(240, 177, 61, 0.35);
+    background: rgba(45, 228, 218, 0.12);
+    color: #2de4da;
+    border: 1px solid rgba(45, 228, 218, 0.32);
 }
 
 .badge-responded,
