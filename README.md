@@ -15,7 +15,7 @@ Ensure Docker Desktop is open and running, then execute:
 ```bash
 docker compose up -d
 ```
-This automatically boots PostgreSQL on port `5433` and executes:
+This automatically boots PostgreSQL on port `5432` and executes:
 - `docker/init/01_schema.sql`: Full 12-table schema, WORM audit triggers, indexes.
 - `docker/init/02_seed.sql`: Seeds default superuser (`admin_it`).
 
