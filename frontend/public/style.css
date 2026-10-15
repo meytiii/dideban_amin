@@ -5314,7 +5314,7 @@ button:disabled {
     width: 100%;
     height: auto;
     object-fit: cover;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 1376 / 528;
     user-select: none;
     pointer-events: none;
 }
