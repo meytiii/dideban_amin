@@ -82,7 +82,28 @@ func CSPReportHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+func loadDotEnv() {
+	if envBytes, err := os.ReadFile(".env"); err == nil {
+		lines := strings.Split(string(envBytes), "\n")
+		for _, line := range lines {
+			line = strings.TrimSpace(line)
+			if line == "" || strings.HasPrefix(line, "#") {
+				continue
+			}
+			parts := strings.SplitN(line, "=", 2)
+			if len(parts) == 2 {
+				k := strings.TrimSpace(parts[0])
+				v := strings.Trim(strings.TrimSpace(parts[1]), "\"'")
+				if os.Getenv(k) == "" {
+					_ = os.Setenv(k, v)
+				}
+			}
+		}
+	}
+}
+
 func main() {
+	loadDotEnv()
 	InitSyslogShipper()
 	defer GlobalSyslogShipper.Close()
 	defer GlobalSSEBroker.Close()
