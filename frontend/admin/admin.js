@@ -3742,6 +3742,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
             renderPaginationControls(currentPage, totalPages);
         }
+        if (typeof filteredAuditLogs !== 'undefined' && filteredAuditLogs && filteredAuditLogs.length > 0) {
+            const auditControls = document.getElementById('audit-pagination-controls');
+            if (auditControls) {
+                const totalPages = Math.ceil(filteredAuditLogs.length / auditPageSize) || 1;
+                auditControls.innerHTML = buildPaginationHTML(auditCurrentPage, totalPages);
+            }
+        }
+        if (typeof filteredAdminUsers !== 'undefined' && filteredAdminUsers && filteredAdminUsers.length > adminUsersPageSize) {
+            const usersControls = document.getElementById('users-pagination-controls');
+            if (usersControls) {
+                const totalPages = Math.ceil(filteredAdminUsers.length / adminUsersPageSize) || 1;
+                usersControls.innerHTML = buildPaginationHTML(adminUsersCurrentPage, totalPages);
+            }
+        }
     }, 200));
 
     function parseTimestamp(isoStr) {
@@ -4265,49 +4279,104 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCurrentPage();
     }
 
-    function calculatePagination({ currentPage, totalPages, paginationItemsToDisplay = 7 }) {
-        if (totalPages <= paginationItemsToDisplay) {
-            return {
-                pages: Array.from({ length: totalPages }, (_, i) => i + 1),
-                showLeftEllipsis: false,
-                showRightEllipsis: false
-            };
+    function getVisiblePaginationPages(currentPage, totalPages, isMobile) {
+        const delta = isMobile ? 1 : 2;
+        if (totalPages <= 7) {
+            return Array.from({ length: totalPages }, (_, i) => i + 1);
+        }
+        const rangeWithDots = [];
+        rangeWithDots.push(1);
+
+        let startPage = Math.max(2, currentPage - delta);
+        let endPage = Math.min(totalPages - 1, currentPage + delta);
+
+        if (currentPage === 1) {
+            endPage = Math.min(totalPages - 1, 1 + (delta * 2));
+        } else if (currentPage === totalPages) {
+            startPage = Math.max(2, totalPages - (delta * 2));
+        } else {
+            startPage = Math.max(2, Math.min(startPage, currentPage));
+            endPage = Math.min(totalPages - 1, Math.max(endPage, currentPage));
         }
 
-        const showLeftEllipsis = currentPage - 1 > paginationItemsToDisplay / 2;
-        const showRightEllipsis = totalPages - currentPage + 1 > paginationItemsToDisplay / 2;
-
-        const halfDisplay = Math.floor(paginationItemsToDisplay / 2);
-        const initialRange = {
-            start: currentPage - halfDisplay,
-            end: currentPage + halfDisplay,
-        };
-
-        const adjustedRange = {
-            start: Math.max(1, initialRange.start),
-            end: Math.min(totalPages, initialRange.end),
-        };
-
-        if (adjustedRange.start === 1) {
-            adjustedRange.end = paginationItemsToDisplay;
-        }
-        if (adjustedRange.end === totalPages) {
-            adjustedRange.start = totalPages - paginationItemsToDisplay + 1;
+        if (startPage > 2) {
+            rangeWithDots.push('...');
         }
 
-        if (showLeftEllipsis) adjustedRange.start++;
-        if (showRightEllipsis) adjustedRange.end--;
+        for (let i = startPage; i <= endPage; i++) {
+            if (i !== 1 && i !== totalPages) {
+                rangeWithDots.push(i);
+            }
+        }
 
-        const pages = Array.from(
-            { length: adjustedRange.end - adjustedRange.start + 1 },
-            (_, i) => adjustedRange.start + i
-        );
+        if (endPage < totalPages - 1) {
+            rangeWithDots.push('...');
+        }
 
-        return {
-            pages,
-            showLeftEllipsis,
-            showRightEllipsis,
-        };
+        if (totalPages > 1) {
+            rangeWithDots.push(totalPages);
+        }
+        return rangeWithDots;
+    }
+
+    function buildPaginationHTML(currPage, totalPgs) {
+        if (totalPgs <= 1) return '';
+        const isMobile = window.innerWidth < 640;
+        const visiblePages = getVisiblePaginationPages(currPage, totalPgs, isMobile);
+
+        let html = '';
+
+        const prevDisabled = currPage <= 1;
+        html += `
+            <li class="pagination-item">
+                <button type="button" class="pagination-btn pagination-nav-btn pagination-prev" data-action="prev" ${prevDisabled ? 'disabled aria-disabled="true"' : ''} title="صفحه قبل" aria-label="صفحه قبل">
+                    <svg viewBox="0 0 24 24" class="pagination-icon" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6"/>
+                    </svg>
+                    <span>قبلی</span>
+                </button>
+            </li>
+        `;
+
+        for (let i = 0; i < visiblePages.length; i++) {
+            const item = visiblePages[i];
+            if (item === '...') {
+                html += `
+                    <li class="pagination-item">
+                        <span class="pagination-ellipsis" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" class="pagination-ellipsis-icon" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/>
+                            </svg>
+                            <span class="sr-only">صفحات بیشتر</span>
+                        </span>
+                    </li>
+                `;
+            } else {
+                const pageNum = item;
+                const isActive = pageNum === currPage;
+                html += `
+                    <li class="pagination-item">
+                        <button type="button" class="pagination-btn pagination-link ${isActive ? 'is-active' : ''}" data-page="${pageNum}" ${isActive ? 'aria-current="page"' : ''} aria-label="صفحه ${toPersianNum(pageNum)}">
+                            ${toPersianNum(pageNum)}
+                        </button>
+                    </li>
+                `;
+            }
+        }
+
+        const nextDisabled = currPage >= totalPgs;
+        html += `
+            <li class="pagination-item">
+                <button type="button" class="pagination-btn pagination-nav-btn pagination-next" data-action="next" ${nextDisabled ? 'disabled aria-disabled="true"' : ''} title="صفحه بعد" aria-label="صفحه بعد">
+                    <span>بعدی</span>
+                    <svg viewBox="0 0 24 24" class="pagination-icon" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                </button>
+            </li>
+        `;
+
+        return html;
     }
 
     function renderPaginationControls(currPage, totalPgs) {
@@ -4319,86 +4388,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const isMobile = window.innerWidth < 640;
-        const paginationItemsToDisplay = isMobile ? 5 : 7;
-        const { pages, showLeftEllipsis, showRightEllipsis } = calculatePagination({
-            currentPage: currPage,
-            totalPages: totalPgs,
-            paginationItemsToDisplay
-        });
-
-        let html = '';
-
-        const prevDisabled = currPage <= 1;
-        html += `
-            <li class="pagination-item">
-                <button type="button" class="pagination-btn pagination-prev" data-action="prev" ${prevDisabled ? 'disabled aria-disabled="true"' : ''} title="صفحه قبل (جدیدتر)" aria-label="صفحه قبل">
-                    <svg viewBox="0 0 24 24" class="pagination-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m9 18 6-6-6-6"/>
-                    </svg>
-                </button>
-            </li>
-        `;
-
-        if (showLeftEllipsis) {
-            html += `
-                <li class="pagination-item">
-                    <button type="button" class="pagination-btn pagination-link" data-page="1" aria-label="صفحه ۱">
-                        ${toPersianNum(1)}
-                    </button>
-                </li>
-                <li class="pagination-item">
-                    <span class="pagination-ellipsis" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" class="pagination-ellipsis-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
-                        </svg>
-                        <span class="sr-only">صفحات بیشتر</span>
-                    </span>
-                </li>
-            `;
-        }
-
-        for (const p of pages) {
-            const isActive = p === currPage;
-            html += `
-                <li class="pagination-item">
-                    <button type="button" class="pagination-btn pagination-link ${isActive ? 'is-active' : ''}" data-page="${p}" ${isActive ? 'aria-current="page"' : ''} aria-label="صفحه ${toPersianNum(p)}">
-                        ${toPersianNum(p)}
-                    </button>
-                </li>
-            `;
-        }
-
-        if (showRightEllipsis) {
-            html += `
-                <li class="pagination-item">
-                    <span class="pagination-ellipsis" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" class="pagination-ellipsis-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
-                        </svg>
-                        <span class="sr-only">صفحات بیشتر</span>
-                    </span>
-                </li>
-                <li class="pagination-item">
-                    <button type="button" class="pagination-btn pagination-link" data-page="${totalPgs}" aria-label="صفحه ${toPersianNum(totalPgs)}">
-                        ${toPersianNum(totalPgs)}
-                    </button>
-                </li>
-            `;
-        }
-
-        const nextDisabled = currPage >= totalPgs;
-        html += `
-            <li class="pagination-item">
-                <button type="button" class="pagination-btn pagination-next" data-action="next" ${nextDisabled ? 'disabled aria-disabled="true"' : ''} title="صفحه بعد (قدیمی‌تر)" aria-label="صفحه بعد">
-                    <svg viewBox="0 0 24 24" class="pagination-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m15 18-6-6 6-6"/>
-                    </svg>
-                </button>
-            </li>
-        `;
-
-        controls.innerHTML = html;
+        controls.innerHTML = buildPaginationHTML(currPage, totalPgs);
     }
 
     function renderCurrentPage() {
@@ -4420,7 +4410,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const startFa = toPersianNum(totalItems === 0 ? 0 : startIndex + 1);
             const endFa = toPersianNum(endIndex);
             const totalFa = toPersianNum(totalItems);
-            infoEl.textContent = `گزارش ${startFa} تا ${endFa} از ${totalFa}`;
+            infoEl.textContent = `نمایش گزارش ${startFa} تا ${endFa} از ${totalFa}`;
         }
 
         renderPaginationControls(currentPage, totalPages);
@@ -7402,10 +7392,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let allAdminUsers = [];
+    let filteredAdminUsers = [];
     let adminUserActiveFilterPreset = 'all';
+    let adminUsersCurrentPage = 1;
+    const adminUsersPageSize = 25;
 
-    function applyAdminUsersFilter() {
+    function applyAdminUsersFilter(resetPage = true) {
         if (!Array.isArray(allAdminUsers)) return;
+        if (resetPage) adminUsersCurrentPage = 1;
         const searchInput = document.getElementById('user-filter-search');
         const q = searchInput ? (function(str) {
             if (!str) return '';
@@ -7448,7 +7442,45 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        renderUsersTable(filtered);
+        filteredAdminUsers = filtered;
+        renderAdminUsersPage();
+    }
+
+    function renderAdminUsersPage() {
+        const totalItems = filteredAdminUsers.length;
+        const totalPages = Math.ceil(totalItems / adminUsersPageSize) || 1;
+
+        if (adminUsersCurrentPage < 1) adminUsersCurrentPage = 1;
+        if (adminUsersCurrentPage > totalPages) adminUsersCurrentPage = totalPages;
+
+        const usersBox = document.getElementById('users-pagination-box');
+        const usersInfo = document.getElementById('users-pagination-info');
+        const usersControls = document.getElementById('users-pagination-controls');
+
+        if (totalItems <= adminUsersPageSize) {
+            if (usersBox) usersBox.style.display = 'none';
+            renderUsersTable(filteredAdminUsers);
+            return;
+        }
+
+        if (usersBox) usersBox.style.display = 'flex';
+
+        const startIdx = (adminUsersCurrentPage - 1) * adminUsersPageSize;
+        const endIdx = Math.min(startIdx + adminUsersPageSize, totalItems);
+        const pageItems = filteredAdminUsers.slice(startIdx, endIdx);
+
+        renderUsersTable(pageItems);
+
+        if (usersInfo) {
+            const startFa = toPersianNum(startIdx + 1);
+            const endFa = toPersianNum(endIdx);
+            const totalFa = toPersianNum(totalItems);
+            usersInfo.textContent = `نمایش کاربر ${startFa} تا ${endFa} از ${totalFa}`;
+        }
+
+        if (usersControls) {
+            usersControls.innerHTML = buildPaginationHTML(adminUsersCurrentPage, totalPages);
+        }
     }
 
     function renderUsersTableSkeleton(count = 5) {
@@ -8422,30 +8454,20 @@ document.addEventListener('DOMContentLoaded', () => {
         renderAuditTable(pageItems);
 
         const paginationInfo = document.getElementById('audit-pagination-info');
-        const pageBadge = document.getElementById('audit-current-page-badge');
-        const btnFirst = document.getElementById('btn-audit-first');
-        const btnPrev = document.getElementById('btn-audit-prev');
-        const btnNext = document.getElementById('btn-audit-next');
-        const btnLast = document.getElementById('btn-audit-last');
-
         if (paginationInfo) {
             if (totalItems === 0) {
                 paginationInfo.textContent = 'لاگ ۰ از ۰';
             } else {
                 const fromNum = startIdx + 1;
                 const toNum = Math.min(endIdx, totalItems);
-                paginationInfo.textContent = `نمایش ${toPersianNum(fromNum)} تا ${toPersianNum(toNum)} از ${toPersianNum(totalItems)} لاگ`;
+                paginationInfo.textContent = `نمایش لاگ ${toPersianNum(fromNum)} تا ${toPersianNum(toNum)} از ${toPersianNum(totalItems)}`;
             }
         }
 
-        if (pageBadge) {
-            pageBadge.textContent = `${toPersianNum(auditCurrentPage)} / ${toPersianNum(totalPages)}`;
+        const auditControls = document.getElementById('audit-pagination-controls');
+        if (auditControls) {
+            auditControls.innerHTML = buildPaginationHTML(auditCurrentPage, totalPages);
         }
-
-        if (btnFirst) btnFirst.disabled = (auditCurrentPage === 1 || totalPages <= 1);
-        if (btnPrev) btnPrev.disabled = (auditCurrentPage === 1 || totalPages <= 1);
-        if (btnNext) btnNext.disabled = (auditCurrentPage === totalPages || totalPages <= 1);
-        if (btnLast) btnLast.disabled = (auditCurrentPage === totalPages || totalPages <= 1);
     }
 
     function initAuditActionSearchBar() {
@@ -9364,14 +9386,69 @@ document.addEventListener('DOMContentLoaded', () => {
         applyAuditFiltersAndPagination(true);
     });
 
-    document.getElementById('btn-audit-first')?.addEventListener('click', () => { auditCurrentPage = 1; applyAuditFiltersAndPagination(false); });
-    document.getElementById('btn-audit-prev')?.addEventListener('click', () => { if (auditCurrentPage > 1) { auditCurrentPage--; applyAuditFiltersAndPagination(false); } });
-    document.getElementById('btn-audit-next')?.addEventListener('click', () => { auditCurrentPage++; applyAuditFiltersAndPagination(false); });
-    document.getElementById('btn-audit-last')?.addEventListener('click', () => {
-        const totalPages = Math.ceil(filteredAuditLogs.length / auditPageSize) || 1;
-        auditCurrentPage = totalPages;
-        applyAuditFiltersAndPagination(false);
-    });
+    const auditPaginationControls = document.getElementById('audit-pagination-controls');
+    if (auditPaginationControls && !auditPaginationControls._delegated) {
+        auditPaginationControls._delegated = true;
+        auditPaginationControls.addEventListener('click', (e) => {
+            const btn = e.target.closest('.pagination-btn');
+            if (!btn || btn.disabled || btn.getAttribute('aria-disabled') === 'true') return;
+
+            const action = btn.getAttribute('data-action');
+            const pageStr = btn.getAttribute('data-page');
+            const totalItems = filteredAuditLogs.length;
+            const totalPages = Math.ceil(totalItems / auditPageSize) || 1;
+
+            if (action === 'prev') {
+                if (auditCurrentPage > 1) {
+                    auditCurrentPage--;
+                    applyAuditFiltersAndPagination(false);
+                }
+            } else if (action === 'next') {
+                if (auditCurrentPage < totalPages) {
+                    auditCurrentPage++;
+                    applyAuditFiltersAndPagination(false);
+                }
+            } else if (pageStr) {
+                const targetPage = parseInt(pageStr, 10);
+                if (!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages && targetPage !== auditCurrentPage) {
+                    auditCurrentPage = targetPage;
+                    applyAuditFiltersAndPagination(false);
+                }
+            }
+        });
+    }
+
+    const usersPaginationControls = document.getElementById('users-pagination-controls');
+    if (usersPaginationControls && !usersPaginationControls._delegated) {
+        usersPaginationControls._delegated = true;
+        usersPaginationControls.addEventListener('click', (e) => {
+            const btn = e.target.closest('.pagination-btn');
+            if (!btn || btn.disabled || btn.getAttribute('aria-disabled') === 'true') return;
+
+            const action = btn.getAttribute('data-action');
+            const pageStr = btn.getAttribute('data-page');
+            const totalItems = filteredAdminUsers.length;
+            const totalPages = Math.ceil(totalItems / adminUsersPageSize) || 1;
+
+            if (action === 'prev') {
+                if (adminUsersCurrentPage > 1) {
+                    adminUsersCurrentPage--;
+                    renderAdminUsersPage();
+                }
+            } else if (action === 'next') {
+                if (adminUsersCurrentPage < totalPages) {
+                    adminUsersCurrentPage++;
+                    renderAdminUsersPage();
+                }
+            } else if (pageStr) {
+                const targetPage = parseInt(pageStr, 10);
+                if (!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages && targetPage !== adminUsersCurrentPage) {
+                    adminUsersCurrentPage = targetPage;
+                    renderAdminUsersPage();
+                }
+            }
+        });
+    }
 
     const auditTbody = document.getElementById('adv-audit-tbody');
     if (auditTbody && !auditTbody._delegated) {

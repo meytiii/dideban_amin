@@ -7,7 +7,7 @@
     <title>سامانه دیده‌بان امین - پنل مدیریت حراست همدان</title>
     <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="admin.css?v=100">
+    <link rel="stylesheet" href="admin.css?v=101">
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 
@@ -1518,6 +1518,14 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="pagination-container" id="users-pagination-box" aria-label="ناوبری صفحات کاربران اداری" style="margin-top: 18px; display: none;">
+                    <div class="pagination-info" id="users-pagination-info">کاربر ۰ از ۰</div>
+                    <nav class="pagination-nav" aria-label="صفحات کاربران اداری">
+                        <ul class="pagination-list" id="users-pagination-controls" dir="rtl">
+                        </ul>
+                    </nav>
+                </div>
             </div>
 
             <div id="adv-view-audit" class="adv-subview" style="display: none;">
@@ -1691,40 +1699,12 @@
                     </table>
                 </div>
 
-                <div class="pagination-container" id="audit-pagination-box" style="margin-top: 15px;">
+                <div class="pagination-container" id="audit-pagination-box" aria-label="ناوبری صفحات لاگ‌های امنیتی" style="margin-top: 18px;">
                     <div class="pagination-info" id="audit-pagination-info">لاگ ۰ از ۰</div>
-
-                    <div class="pagination-controls" dir="ltr">
-                        <button id="btn-audit-last" class="btn-page" data-tooltip="قدیمی‌ترین لاگ‌ها"
-                            aria-label="قدیمی‌ترین لاگ‌ها">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <path d="M13 17l-5-5 5-5M6 17l-5-5 5-5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                        <button id="btn-audit-next" class="btn-page" data-tooltip="صفحه بعد" aria-label="صفحه بعد">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                        <span id="audit-current-page-badge"
-                            style="padding: 4px 10px; font-size: 13px; font-weight: 600; color: var(--color-primary); background: rgba(59,130,246,0.1); border-radius: var(--radius-sm);">۱</span>
-                        <button id="btn-audit-prev" class="btn-page" data-tooltip="صفحه قبل" aria-label="صفحه قبل">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                        <button id="btn-audit-first" class="btn-page" data-tooltip="جدیدترین لاگ‌ها"
-                            aria-label="جدیدترین لاگ‌ها">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <path d="M11 17l5-5-5-5M18 17l5-5-5-5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                    </div>
+                    <nav class="pagination-nav" aria-label="صفحات لاگ‌های امنیتی">
+                        <ul class="pagination-list" id="audit-pagination-controls" dir="rtl">
+                        </ul>
+                    </nav>
                 </div>
             </div>
 
@@ -3024,7 +3004,7 @@
 
     <script src="confirm.js" defer></script>
     <script src="tatweel.js" defer></script>
-    <script src="admin.js?v=94" defer></script>
+    <script src="admin.js?v=96" defer></script>
 </body>
 
 </html>

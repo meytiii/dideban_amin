@@ -1,66 +1,104 @@
-import {
-  CircleCheck,
-  CircleDashed,
-  CircleX,
-  Clock5,
-  ScanSearch,
-  TriangleAlert,
-} from "lucide-react";
-import React from "react";
+import { Pagination, PaginationPrevious, PaginationItem, PaginationNext, PaginationEllipsis } from "@/components/ui/pagination";
+import React, { useState, useEffect } from "react";
 
-const StatusDemo = () => {
-  return (
-    <div className="flex flex-col items-center justify-center gap-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-        <div className="w-40 h-[35px] flex items-center justify-center bg-orange-50 rounded-xl ">
-          <h1 className="flex items-center  text-[#EAA65D] font-semibold">
-            <TriangleAlert className="w-4 h-4 mr-2" strokeWidth={3} />
-            Pending
-          </h1>
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    if (media.matches !== matches) {
+      setMatches(media.matches);
+    }
+    const listener = () => setMatches(media.matches);
+    media.addListener(listener);
+    return () => media.removeListener(listener);
+  }, [matches, query]);
+
+  return matches;
+}
+
+export default function DemoOne() { 
+  const [currentPage, setCurrentPage] = React.useState(5);
+
+  const totalPages = 20;
+  const isMobile = useMediaQuery("(max-width: 640px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");     
+  
+  const getVisiblePages = () => {
+
+    const delta = isMobile ? 1 : isTablet ? 1 : 2;
+    const rangeWithDots = [];
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    rangeWithDots.push(1);
+    
+    let startPage = Math.max(2, currentPage - delta);
+    let endPage = Math.min(totalPages - 1, currentPage + delta);
+
+    if (currentPage === 1) {
+      endPage = Math.min(totalPages - 1, 1 + (delta * 2));
+    } else if (currentPage === totalPages) {
+      startPage = Math.max(2, totalPages - (delta * 2));
+    } else {
+      startPage = Math.max(2, Math.min(startPage, currentPage));
+      endPage = Math.min(totalPages - 1, Math.max(endPage, currentPage));
+    }
+
+    if (startPage > 2) {
+      rangeWithDots.push("...");
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      if (i !== 1 && i !== totalPages) {
+        rangeWithDots.push(i);
+      }
+    }
+
+    if (endPage < totalPages - 1) {
+      rangeWithDots.push("...");
+    }
+
+    if (totalPages > 1) {
+      rangeWithDots.push(totalPages);
+    }
+    return rangeWithDots;
+  };
+
+  return(
+    <>
+      <div className="w-full overflow-x-auto">
+          <Pagination className="flex-wrap min-w-fit">
+            <PaginationPrevious
+              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
+              size={isMobile ? "sm" : "default"}
+            >
+              {isMobile ? "Prev" : "Previous"}
+            </PaginationPrevious>
+            {getVisiblePages().map((page, index) =>
+              page === "..." ? (
+                <PaginationEllipsis key={`ellipsis-${index}`} />
+              ) : (
+                <PaginationItem
+                  key={page}
+                  isActive={page === currentPage}
+                  onClick={() => setCurrentPage(page as number)}
+                  size={isMobile ? "sm" : "default"}
+                >
+                  {page}
+                </PaginationItem>
+              ),
+            )}
+            <PaginationNext
+              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+              disabled={currentPage === totalPages}
+              size={isMobile ? "sm" : "default"}
+            >
+              {isMobile ? "Next" : "Next"}
+            </PaginationNext>
+          </Pagination>
         </div>
-        <div className="w-40 h-[35px] flex items-center justify-center bg-rose-50 rounded-xl ">
-          <h1 className="flex items-center  text-[#D57463] font-semibold">
-            <CircleX className="w-4 h-4 mr-2" strokeWidth={3} />
-            Failed
-          </h1>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
-        <div className="w-40 h-[35px] flex items-center justify-center bg-emerald-50 rounded-xl ">
-          <h1 className="flex items-center  text-[#57BC6C] font-semibold">
-            <CircleCheck className="w-4 h-4 mr-2" strokeWidth={3} />
-            Success
-          </h1>
-        </div>
-        <div className="w-40 h-[35px] flex items-center justify-center bg-sky-100 rounded-xl ">
-          <h1 className="flex items-center  text-[#008AF5] font-semibold">
-            <CircleDashed className="w-4 h-4 mr-2" strokeWidth={3} />
-            In progress
-          </h1>
-        </div>{" "}
-        <div className="w-40 h-[35px] flex items-center justify-center bg-yellow-50 rounded-xl ">
-          <h1 className="flex items-center  text-[#F0B13D] font-semibold">
-            <ScanSearch className="w-4 h-4 mr-2" strokeWidth={3} />
-            In review
-          </h1>
-        </div>{" "}
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="w-40 h-[35px] flex items-center justify-center bg-zinc-100 rounded-xl ">
-          <h1 className="flex items-center  text-[#777777] font-semibold">
-            <Clock5 className="w-4 h-4 mr-2" strokeWidth={3} />
-            Expired
-          </h1>
-        </div>
-        <div className="w-40 h-[35px] flex items-center justify-center bg-violet-50 rounded-xl ">
-          <h1 className="flex items-center  text-[#6C3CF0] font-semibold">
-            <Clock5 className="w-4 h-4 mr-2" strokeWidth={3} />
-            Submited
-          </h1>
-        </div>
-      </div>
-    </div>
+    </>
   );
-};
-
-export default StatusDemo;
+}

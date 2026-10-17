@@ -3672,6 +3672,19 @@ button {
     display: block;
 }
 
+.pagination-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 12px;
+}
+
+.pagination-nav-btn span {
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
 .sr-only {
     position: absolute;
     width: 1px;
@@ -3734,6 +3747,14 @@ button {
         gap: 4px;
         flex-wrap: wrap;
         justify-content: center;
+    }
+
+    .pagination-nav-btn span {
+        display: none;
+    }
+
+    .pagination-nav-btn {
+        padding: 0 8px;
     }
 
     .pagination-btn {
