@@ -4705,6 +4705,20 @@ button {
     align-items: center;
     flex-wrap: wrap;
     gap: 15px;
+    position: relative;
+}
+
+.adv-toolbar:has(.expandable-search-wrapper.is-open) {
+    z-index: 500;
+}
+
+.adv-toolbar-search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    min-width: 44px;
+    position: relative;
 }
 
 .adv-stats-pills {
