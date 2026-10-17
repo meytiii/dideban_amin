@@ -1262,12 +1262,9 @@ body::before {
     white-space: nowrap;
 }
 
-.dashboard-actions .btn-icon-only,
-.dashboard-actions .btn-notif-bell,
-.btn-notif-bell {
-    width: 36px !important;
-    min-width: 36px !important;
-    height: 36px !important;
+.dashboard-actions .btn-icon-only {
+    width: 35px !important;
+    min-width: 35px !important;
     padding: 0 !important;
     justify-content: center !important;
 }
@@ -6189,16 +6186,16 @@ tr.row-priority-normal {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px !important;
-    height: 36px !important;
+    width: 36px;
+    height: 36px;
     padding: 0 !important;
     border-radius: var(--radius-sm, 6px);
     transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-notif-bell svg {
-    width: 28px;
-    height: 28px;
+    width: 21px;
+    height: 21px;
     display: block;
     flex-shrink: 0;
 }
