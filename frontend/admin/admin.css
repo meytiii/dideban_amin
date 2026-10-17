@@ -240,16 +240,16 @@ body::before {
 
 .admin-logo-crest-v2 {
     position: relative;
-    width: 144px;
-    height: 144px;
+    width: 168px;
+    height: 168px;
     margin: 0 auto 16px;
-    border-radius: 32px;
+    border-radius: 36px;
     border: 1.5px solid rgba(59, 130, 246, 0.45);
     background: rgba(15, 23, 42, 0.85);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 32px rgba(59, 130, 246, 0.38), inset 0 0 16px rgba(59, 130, 246, 0.22);
+    box-shadow: 0 0 36px rgba(59, 130, 246, 0.4), inset 0 0 18px rgba(59, 130, 246, 0.22);
     transition: transform 0.25s ease;
 }
 
@@ -258,8 +258,8 @@ body::before {
 }
 
 .admin-crest-img-v2 {
-    width: 126px;
-    height: 126px;
+    width: 150px;
+    height: 150px;
     object-fit: contain;
     filter: brightness(0) invert(1);
     user-select: none;
@@ -428,13 +428,13 @@ body::before {
         padding: 28px 18px;
     }
     .admin-logo-crest-v2 {
-        width: 120px;
-        height: 120px;
-        border-radius: 26px;
+        width: 132px;
+        height: 132px;
+        border-radius: 28px;
     }
     .admin-crest-img-v2 {
-        width: 104px;
-        height: 104px;
+        width: 116px;
+        height: 116px;
     }
     .admin-login-title-v2 {
         font-size: 18px;
