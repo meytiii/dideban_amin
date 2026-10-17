@@ -223,7 +223,7 @@ func main() {
 			INSERT INTO admin_notifications (
 				notif_type, title, message, target_report_id, target_tracking_code, is_read, created_at
 			) VALUES (
-				'new_report', 'گزارش جدید ثبت شد', $1, $2, $3, FALSE, $4
+				'new_report', 'گزارش محرمانه جدید در کارتابل', $1, $2, $3, FALSE, $4
 			)
 		`, "موضوع: "+cat+" | شماره پرونده: "+trackingCode, reportID, trackingCode, createdAt)
 
