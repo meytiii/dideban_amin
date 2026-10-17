@@ -1737,6 +1737,76 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const PERSIAN_KEY_TO_EN = {
+        'ض': 'Q', 'ص': 'W', 'ث': 'E', 'ق': 'R', 'ف': 'T', 'غ': 'Y', 'ع': 'U', 'ه': 'I', 'خ': 'O', 'ح': 'P',
+        'ش': 'A', 'س': 'S', 'ی': 'D', 'ي': 'D', 'ب': 'F', 'ل': 'G', 'ا': 'H', 'آ': 'H', 'ت': 'J', 'ن': 'K', 'م': 'L',
+        'ظ': 'Z', 'ط': 'X', 'ز': 'C', 'ژ': 'C', 'ر': 'V', 'ذ': 'B', 'د': 'N', 'پ': 'M',
+        'ک': 'K', 'ك': 'K', 'گ': 'G', 'و': 'V', 'ة': 'J', 'ؤ': 'W', 'إ': 'H', 'أ': 'G', 'ء': 'X', 'ئ': 'M', 'ۀ': 'I',
+        '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9',
+        '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'
+    };
+
+    function isTouchOrMobileDevice() {
+        return window.matchMedia('(pointer: coarse)').matches ||
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    let isMobileKeyboardAlertOpen = false;
+
+    async function showMobileKeyboardAlert() {
+        if (isMobileKeyboardAlertOpen) return;
+        isMobileKeyboardAlertOpen = true;
+        const targetInput = document.getElementById('track_code_input');
+        if (targetInput) targetInput.blur();
+        if (typeof window.showConfirmDialog === 'function') {
+            await window.showConfirmDialog({
+                title: 'صفحه‌کلید انگلیسی الزامی است',
+                description: 'کد پیگیری پرونده تنها شامل حروف و اعداد انگلیسی می‌باشد. لطفاً برای ثبت کد، زبان صفحه‌کلید گوشی خود را به انگلیسی (EN) تغییر دهید.',
+                confirmText: 'متوجه شدم',
+                singleButton: true,
+                variant: 'warning',
+                iconType: 'keyboard'
+            });
+        } else {
+            alert('کد پیگیری تنها شامل حروف و اعداد انگلیسی می‌باشد. لطفاً زبان صفحه‌کلید گوشی خود را به انگلیسی تغییر دهید.');
+        }
+        isMobileKeyboardAlertOpen = false;
+        setTimeout(() => {
+            targetInput?.focus();
+        }, 120);
+    }
+
+    function transliterateTrackingInputDesktop(inputEl) {
+        if (!inputEl) return;
+        const val = inputEl.value;
+        const start = inputEl.selectionStart;
+        const end = inputEl.selectionEnd;
+        let mapped = '';
+        let hasTrans = false;
+
+        for (let i = 0; i < val.length; i++) {
+            const ch = val[i];
+            if (PERSIAN_KEY_TO_EN[ch]) {
+                mapped += PERSIAN_KEY_TO_EN[ch];
+                hasTrans = true;
+            } else if (/[a-zA-Z0-9\-_]/.test(ch)) {
+                const upper = ch.toUpperCase();
+                mapped += upper;
+                if (ch !== upper) hasTrans = true;
+            } else {
+                hasTrans = true;
+            }
+        }
+
+        if (hasTrans || val !== mapped) {
+            inputEl.value = mapped;
+            if (typeof start === 'number' && typeof end === 'number') {
+                const newPos = Math.min(start, mapped.length);
+                inputEl.setSelectionRange(newPos, newPos);
+            }
+        }
+    }
+
     const pasteTrackingBtn = document.getElementById('pasteTrackingBtn');
     const pasteBtnText = document.getElementById('pasteBtnText');
     const trackCodeInput = document.getElementById('track_code_input');
@@ -1747,8 +1817,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (navigator.clipboard && navigator.clipboard.readText) {
                     const clipText = await navigator.clipboard.readText();
                     if (clipText && clipText.trim()) {
-                        const cleaned = clipText.trim().toUpperCase();
-                        trackCodeInput.value = cleaned;
+                        let text = clipText.trim();
+                        if (isTouchOrMobileDevice()) {
+                            if (/[^\x00-\x7F]/.test(text)) {
+                                text = text.replace(/[^\x00-\x7F]/g, '');
+                                showMobileKeyboardAlert();
+                            }
+                        } else {
+                            let mapped = '';
+                            for (let i = 0; i < text.length; i++) {
+                                const ch = text[i];
+                                if (PERSIAN_KEY_TO_EN[ch]) mapped += PERSIAN_KEY_TO_EN[ch];
+                                else if (/[a-zA-Z0-9\-_]/.test(ch)) mapped += ch.toUpperCase();
+                            }
+                            text = mapped;
+                        }
+
+                        trackCodeInput.value = text.toUpperCase();
                         trackCodeInput.dispatchEvent(new Event('input', { bubbles: true }));
                         trackCodeInput.focus();
 
@@ -2415,9 +2500,59 @@ document.addEventListener('DOMContentLoaded', () => {
         trackErrorBox.scrollIntoView({ behavior: getScrollBehavior(), block: 'nearest' });
     }
 
+    trackInput?.addEventListener('beforeinput', (e) => {
+        if (isTouchOrMobileDevice()) {
+            if (e.data && /[^\x00-\x7F]/.test(e.data)) {
+                e.preventDefault();
+                showMobileKeyboardAlert();
+            }
+            return;
+        }
+
+        if (e.data) {
+            let hasTrans = false;
+            let mapped = '';
+            for (let i = 0; i < e.data.length; i++) {
+                const ch = e.data[i];
+                if (PERSIAN_KEY_TO_EN[ch]) {
+                    mapped += PERSIAN_KEY_TO_EN[ch];
+                    hasTrans = true;
+                } else if (/[a-zA-Z0-9\-_]/.test(ch)) {
+                    const upper = ch.toUpperCase();
+                    mapped += upper;
+                    if (ch !== upper) hasTrans = true;
+                } else {
+                    hasTrans = true;
+                }
+            }
+            if (hasTrans) {
+                e.preventDefault();
+                if (mapped) {
+                    const start = trackInput.selectionStart;
+                    const end = trackInput.selectionEnd;
+                    const cur = trackInput.value;
+                    const next = cur.slice(0, start) + mapped + cur.slice(end);
+                    trackInput.value = next;
+                    const nextPos = start + mapped.length;
+                    trackInput.setSelectionRange(nextPos, nextPos);
+                    trackInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }
+        }
+    });
+
     trackInput?.addEventListener('input', () => {
         if (trackErrorBox && trackErrorBox.style.display !== 'none') {
             trackErrorBox.style.display = 'none';
+        }
+
+        if (isTouchOrMobileDevice()) {
+            if (/[^\x00-\x7F]/.test(trackInput.value)) {
+                trackInput.value = trackInput.value.replace(/[^\x00-\x7F]/g, '');
+                showMobileKeyboardAlert();
+            }
+        } else {
+            transliterateTrackingInputDesktop(trackInput);
         }
     });
 

@@ -14,7 +14,8 @@
         'shield-alert': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
         'shield-question': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M12 8a2 2 0 0 1 2 2c0 1.2-1.5 1.8-1.5 2.5"></path><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
         'user-x': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg>',
-        'check-circle': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+        'check-circle': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>',
+        'keyboard': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M6 12h.001M10 12h.001M14 12h.001M18 12h.001M7 16h10"></path></svg>'
     };
 
     let cachedOverlay = null;
@@ -73,6 +74,7 @@
             title: overlay.querySelector('#proConfirmTitle'),
             desc: overlay.querySelector('#proConfirmDesc'),
             customContent: overlay.querySelector('#proConfirmCustomContent'),
+            footer: overlay.querySelector('.pro-confirm-footer'),
             cancelBtn: overlay.querySelector('#proConfirmCancelBtn'),
             okBtn: overlay.querySelector('#proConfirmOkBtn')
         };
@@ -133,6 +135,7 @@
         htmlContent = '',
         confirmText = 'بله، تأیید',
         cancelText = 'خیر، انصراف',
+        singleButton = false,
         variant = 'warning',
         iconType = 'shield-question'
     } = {}) {
@@ -166,7 +169,15 @@
                 els.customContent.style.display = 'none';
             }
 
-            els.cancelBtn.textContent = cancelText;
+            if (singleButton || !cancelText) {
+                els.cancelBtn.style.display = 'none';
+                if (els.footer) els.footer.classList.add('single-btn');
+            } else {
+                els.cancelBtn.style.display = '';
+                els.cancelBtn.textContent = cancelText;
+                if (els.footer) els.footer.classList.remove('single-btn');
+            }
+
             els.okBtn.textContent = confirmText;
             els.okBtn.className = `pro-confirm-btn pro-confirm-btn-confirm btn-var-${variant}`;
 

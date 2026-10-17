@@ -8792,6 +8792,15 @@ tr.row-priority-normal {
     background: rgba(24, 24, 27, 0.5);
 }
 
+.pro-confirm-footer.single-btn {
+    grid-template-columns: 1fr;
+}
+
+.pro-confirm-footer.single-btn .pro-confirm-btn-confirm {
+    width: 100%;
+    border-radius: 0 0 16px 16px;
+}
+
 .pro-confirm-btn {
     height: 50px;
     border: none;
