@@ -3631,13 +3631,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const headers = ['کد پیگیری', 'اولویت', 'موضوع', 'نوع گزارش', 'تاریخ ثبت', 'وضعیت بررسی', 'دارای پاسخ'];
+        const isNavahi = Boolean(currentAdmin && currentAdmin.role === 'navahi_manategh');
         const rows = filteredReports.map(r => {
             const prioFa = r.priority === 'critical' ? 'آنی' : (r.priority === 'urgent' ? 'فوری' : 'عادی');
             let statusFa = 'در نوبت بررسی';
-            const hasResp = Boolean(r.has_response || (r.admin_response && r.admin_response.trim() !== ''));
+            const hasResp = isNavahi
+                ? Boolean(r.has_response)
+                : Boolean(r.has_response || (r.admin_response && r.admin_response.trim() !== ''));
             if (r.has_new_message) {
                 statusFa = 'پیام جدید';
-            } else if (r.has_regional_response) {
+            } else if (!isNavahi && r.has_regional_response) {
                 statusFa = 'پاسخ حراست';
             } else if (hasResp) {
                 statusFa = 'پاسخ داده شده';
@@ -3881,16 +3884,19 @@ document.addEventListener('DOMContentLoaded', () => {
         let unread = 0;
         let responded = 0;
         let read = 0;
+        const isNavahi = Boolean(currentAdmin && currentAdmin.role === 'navahi_manategh');
 
         for (let i = 0; i < total; i++) {
             const r = allReports[i];
-            const hasResp = Boolean(r.has_response || (r.admin_response && r.admin_response.trim() !== ''));
+            const hasResp = isNavahi
+                ? Boolean(r.has_response)
+                : Boolean(r.has_response || (r.admin_response && r.admin_response.trim() !== ''));
             if (!r.is_read) {
                 unread++;
             }
             if (hasResp) {
                 responded++;
-            } else if (r.is_read && !r.has_new_message && !(r.has_response || (r.admin_response && r.admin_response.trim() !== ''))) {
+            } else if (r.is_read && !r.has_new_message && (isNavahi || !r.has_regional_response)) {
                 read++;
             }
         }
@@ -4257,10 +4263,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             let matchRead = true;
-            const hasResp = Boolean(report.has_response === true || (report.admin_response && report.admin_response.trim() !== ''));
+            const isNavahi = Boolean(currentAdmin && currentAdmin.role === 'navahi_manategh');
+            const hasResp = isNavahi
+                ? Boolean(report.has_response)
+                : Boolean(report.has_response === true || (report.admin_response && report.admin_response.trim() !== ''));
             if (readMode === 'new_message') matchRead = report.has_new_message === true;
-            else if (readMode === 'regional_response') matchRead = Boolean(report.has_regional_response || report.has_any_regional_response);
-            else if (readMode === 'read') matchRead = report.is_read === true && !hasResp && !report.has_new_message && !report.has_regional_response;
+            else if (readMode === 'regional_response') matchRead = isNavahi ? false : Boolean(report.has_regional_response || report.has_any_regional_response);
+            else if (readMode === 'read') matchRead = report.is_read === true && !hasResp && !report.has_new_message && (isNavahi ? true : !report.has_regional_response);
             else if (readMode === 'unread') matchRead = !report.is_read;
             else if (readMode === 'responded') matchRead = hasResp;
 
@@ -4642,7 +4651,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 hasSpecialBadge = true;
             }
 
-            if (report.has_regional_response) {
+            const isNavahi = Boolean(currentAdmin && currentAdmin.role === 'navahi_manategh');
+
+            if (!isNavahi && report.has_regional_response) {
                 const regBadge = document.createElement('span');
                 regBadge.className = 'badge badge-regional-response';
                 regBadge.setAttribute('data-tooltip', 'پاسخ بررسی حراست از سوی ناحیه / منطقه');
@@ -4652,7 +4663,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (!hasSpecialBadge) {
-                const hasResp = Boolean(report.has_response || (report.admin_response && report.admin_response.trim() !== ''));
+                const hasResp = isNavahi
+                    ? Boolean(report.has_response)
+                    : Boolean(report.has_response || (report.admin_response && report.admin_response.trim() !== ''));
                 const isFwd = Boolean(report.is_forwarded);
                 badgesWrapper.appendChild(createReportStatusBadge(hasResp, report.is_read, isFwd));
             }
@@ -4910,11 +4923,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             resetSessionTimer();
 
+            const isNavahi = Boolean(currentAdmin && currentAdmin.role === 'navahi_manategh');
+            const hasRegionalResp = isNavahi && Boolean(data.my_regional_response && data.my_regional_response.response_text && data.my_regional_response.response_text.trim() !== '');
+
             const repInAll = allReports.find(r => r.id === id);
             if (repInAll) {
                 repInAll.is_read = true;
                 repInAll.has_new_message = false;
                 repInAll.has_regional_response = false;
+                if (hasRegionalResp) {
+                    repInAll.has_response = true;
+                }
                 if (!repInAll.read_by_name) {
                     repInAll.read_by_name = data.read_by_name || data.read_by || (currentAdmin ? (currentAdmin.full_name || currentAdmin.username) : '');
                 }
@@ -4924,6 +4943,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 repInFiltered.is_read = true;
                 repInFiltered.has_new_message = false;
                 repInFiltered.has_regional_response = false;
+                if (hasRegionalResp) {
+                    repInFiltered.has_response = true;
+                }
                 if (!repInFiltered.read_by_name) {
                     repInFiltered.read_by_name = data.read_by_name || data.read_by || (currentAdmin ? (currentAdmin.full_name || currentAdmin.username) : '');
                 }
@@ -4935,8 +4957,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 rowEl.classList.remove('row-regional-response');
                 const cellEl = rowEl.querySelector('.status-cell');
                 if (cellEl) {
-                    const hasResp = (repInAll && (repInAll.has_response || (repInAll.admin_response && repInAll.admin_response.trim() !== ''))) ||
-                        (data.admin_response && data.admin_response.trim() !== '');
+                    const hasResp = isNavahi
+                        ? Boolean((repInAll && repInAll.has_response) || hasRegionalResp || data.has_response)
+                        : Boolean((repInAll && (repInAll.has_response || (repInAll.admin_response && repInAll.admin_response.trim() !== ''))) || (data.admin_response && data.admin_response.trim() !== ''));
                     cellEl.innerHTML = '';
                     const wrap = document.createElement('div');
                     wrap.className = 'status-badges-wrap';
@@ -5568,6 +5591,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusMsg.textContent = data.message || 'گزارش بررسی با موفقیت برای اداره کل ارسال شد.';
                 statusMsg.style.display = 'block';
             }
+            const repInAll = allReports.find(r => r.id === currentViewingReportId);
+            if (repInAll) {
+                repInAll.has_response = true;
+            }
+            const repInFiltered = filteredReports.find(r => r.id === currentViewingReportId);
+            if (repInFiltered) {
+                repInFiltered.has_response = true;
+            }
+            updateKPICards();
             viewReport(currentViewingReportId, true);
         } catch (err) {
             showToast(err.message || 'خطای ارتباط با سرور', 4000, 'error');
@@ -5660,7 +5692,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     rowEl.classList.remove('row-regional-response');
                     const cellEl = rowEl.querySelector('.status-cell');
                     if (cellEl) {
-                        const hasResp = repInAll && (repInAll.has_response || (repInAll.admin_response && repInAll.admin_response.trim() !== ''));
+                        const isNavahi = Boolean(currentAdmin && currentAdmin.role === 'navahi_manategh');
+                        const hasResp = isNavahi
+                            ? Boolean(repInAll && repInAll.has_response)
+                            : Boolean(repInAll && (repInAll.has_response || (repInAll.admin_response && repInAll.admin_response.trim() !== '')));
                         cellEl.innerHTML = '';
                         const wrap = document.createElement('div');
                         wrap.className = 'status-badges-wrap';
@@ -7309,6 +7344,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (deleteReportBtn) {
                 deleteReportBtn.classList.add('d-none');
                 deleteReportBtn.style.setProperty('display', 'none', 'important');
+            }
+        }
+
+        if (currentAdmin && currentAdmin.role === 'navahi_manategh') {
+            const regOpt = filterReadStatus ? filterReadStatus.querySelector('option[value="regional_response"]') : null;
+            if (regOpt) regOpt.remove();
+            if (typeof TABLE_COLUMN_FILTERS !== 'undefined' && TABLE_COLUMN_FILTERS.status) {
+                TABLE_COLUMN_FILTERS.status.cycle = ['all', 'unread', 'read', 'responded', 'new_message'];
+                if (TABLE_COLUMN_FILTERS.status.labels) {
+                    delete TABLE_COLUMN_FILTERS.status.labels.regional_response;
+                }
+            }
+            if (typeof adminCustomSelectControllers !== 'undefined') {
+                const ctrl = adminCustomSelectControllers.get('filter-read-status');
+                if (ctrl) ctrl.sync();
             }
         }
     }

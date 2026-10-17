@@ -299,17 +299,30 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 
 	readStatus := strings.TrimSpace(r.URL.Query().Get("read_status"))
 	if readStatus != "" && readStatus != "all" {
-		switch readStatus {
-		case "unread":
-			whereClauses = append(whereClauses, "arv.id IS NULL")
-		case "read":
-			whereClauses = append(whereClauses, "arv.id IS NOT NULL AND (r.admin_response IS NULL OR r.admin_response = '') AND NOT EXISTS (SELECT 1 FROM report_messages rm WHERE rm.report_id = r.id AND rm.sender_type = 'reporter' AND rm.id > COALESCE(arv.last_viewed_message_id, 0)) AND NOT EXISTS (SELECT 1 FROM report_forwardings rf2 WHERE rf2.report_id = r.id AND rf2.response_text IS NOT NULL AND rf2.response_text != '')")
-		case "responded":
-			whereClauses = append(whereClauses, "r.admin_response IS NOT NULL AND r.admin_response != ''")
-		case "new_message":
-			whereClauses = append(whereClauses, "EXISTS (SELECT 1 FROM report_messages rm WHERE rm.report_id = r.id AND rm.sender_type = 'reporter' AND rm.id > COALESCE(arv.last_viewed_message_id, 0))")
-		case "regional_response":
-			whereClauses = append(whereClauses, "EXISTS (SELECT 1 FROM report_forwardings rf2 WHERE rf2.report_id = r.id AND rf2.response_text IS NOT NULL AND rf2.response_text != '')")
+		if admin.Role == "navahi_manategh" {
+			switch readStatus {
+			case "unread":
+				whereClauses = append(whereClauses, "arv.id IS NULL")
+			case "read":
+				whereClauses = append(whereClauses, "arv.id IS NOT NULL AND (rf.response_text IS NULL OR rf.response_text = '') AND NOT EXISTS (SELECT 1 FROM report_messages rm WHERE rm.report_id = r.id AND rm.sender_type = 'reporter' AND rm.id > COALESCE(arv.last_viewed_message_id, 0))")
+			case "responded":
+				whereClauses = append(whereClauses, "rf.response_text IS NOT NULL AND rf.response_text != ''")
+			case "new_message":
+				whereClauses = append(whereClauses, "EXISTS (SELECT 1 FROM report_messages rm WHERE rm.report_id = r.id AND rm.sender_type = 'reporter' AND rm.id > COALESCE(arv.last_viewed_message_id, 0))")
+			}
+		} else {
+			switch readStatus {
+			case "unread":
+				whereClauses = append(whereClauses, "arv.id IS NULL")
+			case "read":
+				whereClauses = append(whereClauses, "arv.id IS NOT NULL AND (r.admin_response IS NULL OR r.admin_response = '') AND NOT EXISTS (SELECT 1 FROM report_messages rm WHERE rm.report_id = r.id AND rm.sender_type = 'reporter' AND rm.id > COALESCE(arv.last_viewed_message_id, 0)) AND NOT EXISTS (SELECT 1 FROM report_forwardings rf2 WHERE rf2.report_id = r.id AND rf2.response_text IS NOT NULL AND rf2.response_text != '')")
+			case "responded":
+				whereClauses = append(whereClauses, "r.admin_response IS NOT NULL AND r.admin_response != ''")
+			case "new_message":
+				whereClauses = append(whereClauses, "EXISTS (SELECT 1 FROM report_messages rm WHERE rm.report_id = r.id AND rm.sender_type = 'reporter' AND rm.id > COALESCE(arv.last_viewed_message_id, 0))")
+			case "regional_response":
+				whereClauses = append(whereClauses, "EXISTS (SELECT 1 FROM report_forwardings rf2 WHERE rf2.report_id = r.id AND rf2.response_text IS NOT NULL AND rf2.response_text != '')")
+			}
 		}
 	}
 
@@ -349,7 +362,7 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 		selectQuery = `
 			SELECT r.id, r.tracking_code, r.category, r.report_type, COALESCE(r.priority, 'normal'),
 			       (arv.id IS NOT NULL) AS is_read,
-			       (r.admin_response IS NOT NULL AND r.admin_response != '') AS has_response, r.created_at,
+			       (rf.response_text IS NOT NULL AND rf.response_text != '') AS has_response, r.created_at,
 			       EXISTS(
 			           SELECT 1 FROM report_messages rm
 			           WHERE rm.report_id = r.id AND rm.sender_type = 'reporter'
@@ -489,6 +502,7 @@ type ReportDetail struct {
 	Messages           []ReportMessageItem    `json:"messages"`
 	RegionalResponses  []RegionalResponseItem `json:"regional_responses,omitempty"`
 	MyRegionalResponse *RegionalResponseItem  `json:"my_regional_response,omitempty"`
+	HasResponse        bool                   `json:"has_response"`
 }
 
 type ReportAttachmentItem struct {
@@ -808,6 +822,12 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			rep.MyRegionalResponse = &myRR
 		}
+	}
+
+	if admin.Role == "navahi_manategh" {
+		rep.HasResponse = (rep.MyRegionalResponse != nil && strings.TrimSpace(rep.MyRegionalResponse.ResponseText) != "")
+	} else {
+		rep.HasResponse = (strings.TrimSpace(rep.AdminResponse) != "")
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -2298,10 +2318,10 @@ func GetAnalyticsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		_ = DB.QueryRow(`
-			SELECT COALESCE(AVG(EXTRACT(EPOCH FROM (r.responded_at - r.created_at)) / 3600.0), 0)
+			SELECT COALESCE(AVG(EXTRACT(EPOCH FROM (rf.responded_at - rf.forwarded_at)) / 3600.0), 0)
 			FROM reports r
 			INNER JOIN report_forwardings rf ON r.id = rf.report_id
-			WHERE rf.recipient_username = $1 AND r.responded_at IS NOT NULL
+			WHERE rf.recipient_username = $1 AND rf.responded_at IS NOT NULL
 		`, admin.Username).Scan(&resp.AvgResponseHours)
 
 		_ = DB.QueryRow(`
@@ -2315,14 +2335,15 @@ func GetAnalyticsHandler(w http.ResponseWriter, r *http.Request) {
 			SELECT COUNT(DISTINCT r.id)
 			FROM reports r
 			INNER JOIN report_forwardings rf ON r.id = rf.report_id
-			WHERE rf.recipient_username = $1 AND r.responded_at IS NOT NULL
+			WHERE rf.recipient_username = $1 AND rf.response_text IS NOT NULL AND rf.response_text != ''
 		`, admin.Username).Scan(&resp.TotalResponded)
 
 		_ = DB.QueryRow(`
 			SELECT COUNT(DISTINCT r.id)
 			FROM reports r
 			INNER JOIN report_forwardings rf ON r.id = rf.report_id
-			WHERE rf.recipient_username = $1 AND r.is_read = false
+			LEFT JOIN admin_report_views arv ON r.id = arv.report_id AND arv.admin_username = $1
+			WHERE rf.recipient_username = $1 AND arv.id IS NULL
 		`, admin.Username).Scan(&resp.TotalUnread)
 
 		var totalHelpful, totalUseless int64

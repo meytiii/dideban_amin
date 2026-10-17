@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-17)
 
 ## Corpus Check
-- 218 files · ~261,496 words
+- 218 files · ~261,834 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1782 nodes · 2803 edges · 146 communities (107 shown, 39 thin omitted)
+- 1782 nodes · 2803 edges · 145 communities (106 shown, 39 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 279 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1b0140b4`
+- Built from commit: `6b88795f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -78,19 +78,18 @@
 - sliding-number.tsx
 - calendar.tsx
 - Output contract & scope
-- openForwardModal
+- ChangeMyPasswordHandler
 - SyslogShipper
 - Design System: سامانه دیده‌بان امین - ستاد خبری و دریافت گزارش‌های مردمی حراست همدان
 - initServerSlidingClock
 - crypto.go
-- getIP
 - input.tsx
 - herasat.local/backend
-- logAuditTx
+- getIP
 - label.tsx
 - workflows/hallmark.md
 - badge-2.tsx
-- applyFilters
+- escapeHTML
 - toggle.tsx
 - adminFetch
 - metadata.go
@@ -177,7 +176,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (146 total, 39 thin omitted)
+## Communities (145 total, 39 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -236,8 +235,8 @@ Cohesion: 0.08
 Nodes (26): After the file is written, Emitting a `design.md` from `study`, Image-mode template, Junk-or-blocked detection, Limits and disclaimers, Refusal — when not to study, Remote URL safety, Source mode — image or URL (+18 more)
 
 ### Community 14 - "admin_handlers.go"
-Cohesion: 0.10
-Nodes (27): ExportReportDocxHandler(), formatJalaliTime(), getRestrictedSubprocessEnv(), gregorianToJalali(), AdminNotificationItem, AdminNotificationsResponse, AdminUserItem, AnalyticsResponse (+19 more)
+Cohesion: 0.11
+Nodes (26): ExportReportDocxHandler(), formatJalaliTime(), getRestrictedSubprocessEnv(), gregorianToJalali(), AdminNotificationItem, AdminNotificationsResponse, AdminUserItem, AnalyticsResponse (+18 more)
 
 ### Community 15 - "Hero enrichment — when, what, and how much"
 Cohesion: 0.09
@@ -415,9 +414,9 @@ Nodes (7): populateAnalyticsDOM(), renderAnalyticsDashboard(), renderCategoryPie
 Cohesion: 0.50
 Nodes (3): Output contract, Output contract & scope, Scope and limits
 
-### Community 63 - "openForwardModal"
-Cohesion: 0.25
-Nodes (9): fetchForwardingRecipients(), normalizePersianForSearch(), openForwardModal(), openResetPwdModal(), openShortcutsModal(), promoteTemporarily(), renderRecipientList(), renderRecipientListSkeleton() (+1 more)
+### Community 63 - "ChangeMyPasswordHandler"
+Cohesion: 0.47
+Nodes (6): ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity(), TestValidatePasswordComplexity()
 
 ### Community 64 - "SyslogShipper"
 Cohesion: 0.24
@@ -432,28 +431,24 @@ Cohesion: 0.47
 Nodes (6): fetchServerTime(), getServerNow(), initServerSlidingClock(), tick(), updateDate(), updateDigit()
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.13
-Nodes (28): ChangeMyPasswordHandler(), CreateUserHandler(), DeleteReportHandler(), ResetUserPasswordHandler(), DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload() (+20 more)
-
-### Community 68 - "getIP"
-Cohesion: 0.31
-Nodes (16): getIP(), logAudit(), canAdminAccessReport(), DisableUser2FAHandler(), DownloadAttachmentHandler(), GetReportDetailsHandler(), RespondToReportHandler(), SetReportPriorityHandler() (+8 more)
-
-### Community 71 - "logAuditTx"
 Cohesion: 0.15
-Nodes (20): computeAuditHash(), generateSessionToken(), getLatestAuditHash(), getLatestAuditHashTx(), ipInCIDRs(), logAuditTx(), LoginHandler(), LogoutHandler() (+12 more)
+Nodes (24): DownloadAttachmentHandler(), DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES() (+16 more)
+
+### Community 71 - "getIP"
+Cohesion: 0.16
+Nodes (25): computeAuditHash(), generateSessionToken(), getIP(), getLatestAuditHash(), ipInCIDRs(), logAudit(), LoginHandler(), LogoutHandler() (+17 more)
 
 ### Community 74 - "badge-2.tsx"
 Cohesion: 0.28
 Nodes (7): Badge(), BadgeButton(), BadgeButtonProps, badgeButtonVariants, BadgeDotProps, BadgeProps, badgeVariants
 
-### Community 75 - "applyFilters"
-Cohesion: 0.15
-Nodes (17): applyAuditFiltersAndPagination(), applyFilters(), buildPaginationHTML(), closeDetailView(), getJalaliDateKeyFromDate(), getScrollBehavior(), getVisiblePaginationPages(), handleKPICardFilter() (+9 more)
+### Community 75 - "escapeHTML"
+Cohesion: 0.13
+Nodes (21): applyAuditFiltersAndPagination(), applyFilters(), escapeHTML(), fetchAuditLogs(), fetchForwardingRecipients(), getJalaliDateKeyFromDate(), getScrollBehavior(), handleKPICardFilter() (+13 more)
 
 ### Community 77 - "adminFetch"
-Cohesion: 0.12
-Nodes (31): adminFetch(), applyAdminUsersFilter(), deleteUser(), dismissToast(), escapeHTML(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers() (+23 more)
+Cohesion: 0.11
+Nodes (30): adminFetch(), applyAdminUsersFilter(), deleteUser(), dismissToast(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus() (+22 more)
 
 ### Community 78 - "metadata.go"
 Cohesion: 0.26
@@ -468,8 +463,8 @@ Cohesion: 0.31
 Nodes (11): connectAdminSSE(), fetchNotifications(), fetchReports(), markReportHasNewMessage(), renderNotificationsList(), renderReportsTableSkeleton(), scheduleReportsRefresh(), startBackgroundPolling() (+3 more)
 
 ### Community 83 - "SubmitReportHandler"
-Cohesion: 0.18
-Nodes (14): VerifyCaptcha(), GetLegacyHMACKey(), generateTrackingCode(), inspectZipArchive(), SubmitReportHandler(), TrackReportHandler(), validateMagicBytes(), isValidTrackingCode() (+6 more)
+Cohesion: 0.17
+Nodes (18): RespondToReportHandler(), SubmitRegionalResponseHandler(), UpdateInternalNotesHandler(), VerifyCaptcha(), GetLegacyHMACKey(), generateTrackingCode(), inspectZipArchive(), SubmitFollowUpHandler() (+10 more)
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -480,8 +475,8 @@ Cohesion: 0.25
 Nodes (12): normalizeForSearch(), cleanRune(), collapseRepeatedRunes(), containsBoundedPhrase(), ContainsVulgarLanguage(), hasVulgarPrefix(), isDiacriticOrInvisible(), isSymbolOrPunct() (+4 more)
 
 ### Community 88 - "viewReport"
-Cohesion: 0.25
-Nodes (15): createReportStatusBadge(), deleteReportPermanently(), formatJalaliDateTime(), getMatchSnippet(), highlightSearchTerm(), makePersianRegex(), makeTextareaAutoExpand(), openForwardHistoryModal() (+7 more)
+Cohesion: 0.20
+Nodes (18): closeDetailView(), createReportStatusBadge(), deleteReportPermanently(), formatJalaliDateTime(), getMatchSnippet(), highlightSearchTerm(), makePersianRegex(), makeTextareaAutoExpand() (+10 more)
 
 ### Community 89 - "Typography"
 Cohesion: 0.50
@@ -524,8 +519,8 @@ Cohesion: 0.22
 Nodes (8): 1. Prerequisites, 2. Start PostgreSQL via Docker Compose, 3. Start the Backend Application, 4. Access the Services, 5. Stopping the Database, Default Administrative Credentials:, Didebane Amin (دیده‌بان امین), Running Locally with Docker (No Local PostgreSQL Installation Required)
 
 ### Community 114 - "net/http.Request"
-Cohesion: 0.16
-Nodes (24): GetCurrentAdminHandler(), DeleteUserHandler(), ForwardReportHandler(), GetActiveSessionsHandler(), GetAnalyticsHandler(), GetAuditLogsHandler(), GetForwardingHistoryHandler(), GetForwardingRecipientsHandler() (+16 more)
+Cohesion: 0.14
+Nodes (30): GetCurrentAdminHandler(), getLatestAuditHashTx(), logAuditTx(), canAdminAccessReport(), ClassifyReportHandler(), DeleteReportHandler(), DeleteUserHandler(), ForwardReportHandler() (+22 more)
 
 ### Community 115 - "captcha.go"
 Cohesion: 0.38
@@ -552,8 +547,8 @@ Cohesion: 0.38
 Nodes (6): createOtpController(), clearAll(), showError(), syncValue(), init2FAModalOtpControllers(), toAsciiDigits()
 
 ### Community 125 - "admin.js"
-Cohesion: 0.10
-Nodes (25): cancelMFAStep(), check2FAEnforcementNotice(), checkAdminProfile(), checkHostConnection(), checkMustChangePasswordPolicy(), forceLogoutOnConnectionDrop(), handleTimerTick(), hideOfflineBanner() (+17 more)
+Cohesion: 0.09
+Nodes (28): buildPaginationHTML(), cancelMFAStep(), check2FAEnforcementNotice(), checkAdminProfile(), checkHostConnection(), checkMustChangePasswordPolicy(), forceLogoutOnConnectionDrop(), getVisiblePaginationPages() (+20 more)
 
 ### Community 138 - "initLoginSlider"
 Cohesion: 0.70
