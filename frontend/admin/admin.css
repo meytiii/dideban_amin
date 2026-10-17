@@ -1271,7 +1271,8 @@ body::before {
 
 .user-menu-wrapper {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
 }
 
 .btn-user-menu {
@@ -6178,16 +6179,18 @@ tr.row-priority-normal {
 
 .notif-wrapper {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
 }
 
+.dashboard-actions .btn-notif-bell,
 .btn-notif-bell {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 35px;
+    height: 35px;
     padding: 0 !important;
     border-radius: var(--radius-sm, 6px);
     transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
