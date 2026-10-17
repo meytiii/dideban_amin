@@ -7402,6 +7402,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let allAdminUsers = [];
+    let adminUserActiveFilterPreset = 'all';
+
+    function applyAdminUsersFilter() {
+        if (!Array.isArray(allAdminUsers)) return;
+        const searchInput = document.getElementById('user-filter-search');
+        const q = searchInput ? (function(str) {
+            if (!str) return '';
+            const fa2en = { '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9' };
+            const ar2en = { '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9' };
+            return String(str).replace(/[۰-۹]/g, c => fa2en[c]).replace(/[٠-٩]/g, c => ar2en[c]).toLowerCase().trim();
+        })(searchInput.value || '') : '';
+
+        let filtered = allAdminUsers;
+
+        if (adminUserActiveFilterPreset === 'edare_kol') {
+            filtered = filtered.filter(u => (u.role === 'edare_kol') || (!u.role && !u.is_superuser));
+        } else if (adminUserActiveFilterPreset === 'navahi_manategh') {
+            filtered = filtered.filter(u => u.role === 'navahi_manategh');
+        } else if (adminUserActiveFilterPreset === 'superuser') {
+            filtered = filtered.filter(u => u.is_superuser || u.role === 'superuser');
+        } else if (adminUserActiveFilterPreset === 'inactive') {
+            filtered = filtered.filter(u => !u.is_active);
+        } else if (adminUserActiveFilterPreset === 'expired_password') {
+            filtered = filtered.filter(u => u.is_password_expired);
+        } else if (adminUserActiveFilterPreset === 'totp_enabled') {
+            filtered = filtered.filter(u => u.totp_enabled);
+        } else if (adminUserActiveFilterPreset === 'locked') {
+            filtered = filtered.filter(u => u.is_locked);
+        }
+
+        if (q) {
+            filtered = filtered.filter(u => {
+                const norm = function(str) {
+                    if (!str) return '';
+                    const fa2en = { '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9' };
+                    const ar2en = { '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9' };
+                    return String(str).replace(/[۰-۹]/g, c => fa2en[c]).replace(/[٠-٩]/g, c => ar2en[c]).toLowerCase().trim();
+                };
+                const name = norm(u.full_name || '');
+                const uname = norm(u.username || '');
+                const title = norm(u.role_title || '');
+                const id = String(u.id || '');
+                return name.includes(q) || uname.includes(q) || title.includes(q) || id.includes(q);
+            });
+        }
+
+        renderUsersTable(filtered);
+    }
 
     function renderUsersTableSkeleton(count = 5) {
         const tbody = document.getElementById('adv-users-tbody');
@@ -7438,7 +7486,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) throw new Error('خطا در دریافت کاربران');
 
             allAdminUsers = await res.json();
-            renderUsersTable(allAdminUsers);
+            applyAdminUsersFilter();
 
             const totalEl = document.getElementById('adv-users-total');
             const activeEl = document.getElementById('adv-users-active');
@@ -7813,7 +7861,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     update2FAState(false);
                     showToast(data.message || 'احراز هویت دومرحله‌ای با موفقیت غیرفعال شد.', 3500, 'success');
-                    renderUsersTable(allAdminUsers);
+                    applyAdminUsersFilter();
 
                     if (currentAdmin && currentAdmin.id === user.id) {
                         currentAdmin2FAEnabled = false;
@@ -8822,6 +8870,462 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initAuditActionSearchBar();
+
+    function initUserActionSearchBar() {
+        const wrapper = document.getElementById('userActionSearchWrapper');
+        const input = document.getElementById('user-filter-search');
+        const dropdown = document.getElementById('userActionSearchDropdown');
+        const list = document.getElementById('userActionSearchList');
+        const titleEl = document.getElementById('userActionSearchDropdownTitle');
+        const countEl = document.getElementById('userActionSearchCount');
+        const iconSearch = document.getElementById('userActionIconSearch');
+        const iconSend = document.getElementById('userActionIconSend');
+        const iconBox = document.getElementById('userSearchIconBox');
+        const kbdBadge = document.getElementById('userSearchKbdBadge');
+        const toggleBtn = document.getElementById('userExpandableSearchToggle');
+        const clearBtn = document.getElementById('userExpandableSearchClear');
+        const iconSearchToggle = toggleBtn ? toggleBtn.querySelector('.icon-search') : null;
+        const iconCloseToggle = toggleBtn ? toggleBtn.querySelector('.icon-close') : null;
+
+        if (!wrapper || !input || !dropdown || !list) return;
+
+        let activeIndex = -1;
+        let currentItems = [];
+
+        function openSearch() {
+            wrapper.classList.add('is-open');
+            if (iconSearchToggle) iconSearchToggle.classList.add('d-none');
+            if (iconCloseToggle) iconCloseToggle.classList.remove('d-none');
+            if (toggleBtn) {
+                toggleBtn.setAttribute('aria-label', 'بستن جستجو');
+                toggleBtn.setAttribute('data-tooltip', 'بستن جستجو (Esc)');
+            }
+            if (input.value.trim().length > 0 && clearBtn) {
+                clearBtn.classList.remove('d-none');
+            }
+            setTimeout(() => {
+                input.focus();
+            }, 60);
+        }
+
+        function closeSearch(clearValue = true) {
+            if (clearValue && input.value) {
+                input.value = '';
+                adminUserActiveFilterPreset = 'all';
+                applyAdminUsersFilter();
+            }
+            wrapper.classList.remove('is-open');
+            if (iconSearchToggle) iconSearchToggle.classList.remove('d-none');
+            if (iconCloseToggle) iconCloseToggle.classList.add('d-none');
+            if (toggleBtn) {
+                toggleBtn.setAttribute('aria-label', 'جستجو در کاربران اداری');
+                toggleBtn.setAttribute('data-tooltip', 'جستجو در کاربران اداری');
+            }
+            if (clearBtn) clearBtn.classList.add('d-none');
+            if (kbdBadge) kbdBadge.style.opacity = '1';
+            closeDropdown();
+            input.blur();
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (wrapper.classList.contains('is-open')) {
+                    if (input.value.trim().length > 0 || adminUserActiveFilterPreset !== 'all') {
+                        closeSearch(true);
+                    } else {
+                        closeSearch(false);
+                    }
+                } else {
+                    openSearch();
+                    openDropdown();
+                }
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                input.value = '';
+                adminUserActiveFilterPreset = 'all';
+                clearBtn.classList.add('d-none');
+                if (kbdBadge) kbdBadge.style.opacity = '1';
+                input.focus();
+                computeAndRender();
+                applyAdminUsersFilter();
+            });
+        }
+
+        const defaultActions = [
+            {
+                id: 'act-user-edare-kol',
+                title: 'ادمین‌های اداره کل',
+                desc: 'فیلتر مدیران و کارشناسان شاغل در اداره کل آموزش و پرورش',
+                tag: 'اداره کل',
+                iconBoxClass: 'action-icon-indigo',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+                run: () => {
+                    adminUserActiveFilterPreset = 'edare_kol';
+                    input.value = '';
+                    if (clearBtn) clearBtn.classList.add('d-none');
+                    applyAdminUsersFilter();
+                }
+            },
+            {
+                id: 'act-user-navahi',
+                title: 'ادمین‌های نواحی و مناطق',
+                desc: 'فیلتر کارشناسان و بازرسان مستقر در شهرستان‌ها و نواحی استان',
+                tag: 'نواحی و مناطق',
+                iconBoxClass: 'action-icon-cyan',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>',
+                run: () => {
+                    adminUserActiveFilterPreset = 'navahi_manategh';
+                    input.value = '';
+                    if (clearBtn) clearBtn.classList.add('d-none');
+                    applyAdminUsersFilter();
+                }
+            },
+            {
+                id: 'act-user-super',
+                title: 'ادمین‌های ارشد سامانه',
+                desc: 'فیلتر مدیران با دسترسی کامل و اختیارات سیستمی',
+                tag: 'مدیر ارشد',
+                iconBoxClass: 'action-icon-rose',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><circle cx="12" cy="11" r="3"></circle></svg>',
+                run: () => {
+                    adminUserActiveFilterPreset = 'superuser';
+                    input.value = '';
+                    if (clearBtn) clearBtn.classList.add('d-none');
+                    applyAdminUsersFilter();
+                }
+            },
+            {
+                id: 'act-user-inactive',
+                title: 'کاربران غیرفعال و مسدود',
+                desc: 'فیلتر حساب‌های مسدود شده یا غیرفعال سازمانی',
+                tag: 'غیرفعال',
+                iconBoxClass: 'action-icon-slate',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg>',
+                run: () => {
+                    adminUserActiveFilterPreset = 'inactive';
+                    input.value = '';
+                    if (clearBtn) clearBtn.classList.add('d-none');
+                    applyAdminUsersFilter();
+                }
+            },
+            {
+                id: 'act-user-expired-pwd',
+                title: 'رمزهای عبور منقضی شده',
+                desc: 'فیلتر حساب‌هایی که مهلت اعتبار ۳۰ روزه رمز آن‌ها به پایان رسیده',
+                tag: 'منقضی شده',
+                iconBoxClass: 'action-icon-amber',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>',
+                run: () => {
+                    adminUserActiveFilterPreset = 'expired_password';
+                    input.value = '';
+                    if (clearBtn) clearBtn.classList.add('d-none');
+                    applyAdminUsersFilter();
+                }
+            },
+            {
+                id: 'act-user-2fa',
+                title: 'کاربران دارای ۲FA فعال',
+                desc: 'فیلتر کاربرانی که احراز هویت دو مرحله‌ای TOTP را فعال دارند',
+                tag: '۲FA فعال',
+                iconBoxClass: 'action-icon-emerald',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>',
+                run: () => {
+                    adminUserActiveFilterPreset = 'totp_enabled';
+                    input.value = '';
+                    if (clearBtn) clearBtn.classList.add('d-none');
+                    applyAdminUsersFilter();
+                }
+            },
+            {
+                id: 'act-user-locked',
+                title: 'حساب‌های دارای قفل موقت ورود',
+                desc: 'فیلتر کاربرانی که به دلیل تلاش‌های ناموفق حساب آن‌ها موقتاً قفل است',
+                tag: 'قفل موقت',
+                iconBoxClass: 'action-icon-rose',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>',
+                run: () => {
+                    adminUserActiveFilterPreset = 'locked';
+                    input.value = '';
+                    if (clearBtn) clearBtn.classList.add('d-none');
+                    applyAdminUsersFilter();
+                }
+            },
+            {
+                id: 'act-user-all',
+                title: 'همه کاربران اداری (بازنشانی)',
+                desc: 'نمایش تمامی مدیران، کارشناسان و کاربران اداری',
+                tag: 'بازنشانی',
+                iconBoxClass: 'action-icon-blue',
+                iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>',
+                run: () => {
+                    adminUserActiveFilterPreset = 'all';
+                    input.value = '';
+                    if (clearBtn) clearBtn.classList.add('d-none');
+                    applyAdminUsersFilter();
+                }
+            }
+        ];
+
+        function normalizeQuery(str) {
+            if (!str) return '';
+            const fa2en = { '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9' };
+            const ar2en = { '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9' };
+            return String(str).replace(/[۰-۹]/g, c => fa2en[c]).replace(/[٠-٩]/g, c => ar2en[c]).toLowerCase().trim();
+        }
+
+        function renderItems(items, title) {
+            currentItems = items;
+            activeIndex = -1;
+            list.innerHTML = '';
+            if (titleEl) titleEl.textContent = title;
+            if (countEl) countEl.textContent = toPersianDigits(items.length);
+
+            if (items.length === 0) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'action-search-empty';
+                emptyDiv.innerHTML = '<svg class="action-empty-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg><span>کاربری منطبق با جستجو یافت نشد</span>';
+                list.appendChild(emptyDiv);
+                return;
+            }
+
+            items.forEach((item, idx) => {
+                const row = document.createElement('div');
+                row.className = 'action-search-item';
+                row.setAttribute('role', 'option');
+                row.setAttribute('id', `user-action-item-${idx}`);
+                row.dataset.index = String(idx);
+
+                const mainCol = document.createElement('div');
+                mainCol.className = 'action-search-item-main';
+
+                const iconBox = document.createElement('span');
+                iconBox.className = `action-item-icon-box ${item.iconBoxClass || 'action-icon-blue'}`;
+                iconBox.innerHTML = item.iconSvg || '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
+
+                const texts = document.createElement('div');
+                texts.className = 'action-item-texts';
+
+                const title = document.createElement('span');
+                title.className = 'action-item-title';
+                title.textContent = item.title;
+
+                const desc = document.createElement('span');
+                desc.className = 'action-item-desc';
+                desc.textContent = item.desc;
+
+                texts.appendChild(title);
+                texts.appendChild(desc);
+                mainCol.appendChild(iconBox);
+                mainCol.appendChild(texts);
+
+                const meta = document.createElement('div');
+                meta.className = 'action-item-meta';
+
+                if (item.short) {
+                    const kbd = document.createElement('kbd');
+                    kbd.className = 'action-kbd-shortcut';
+                    kbd.textContent = item.short;
+                    meta.appendChild(kbd);
+                }
+
+                if (item.tag) {
+                    const tag = document.createElement('span');
+                    tag.className = 'action-end-tag';
+                    tag.textContent = item.tag;
+                    meta.appendChild(tag);
+                }
+
+                row.appendChild(mainCol);
+                row.appendChild(meta);
+
+                row.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    executeItem(item);
+                });
+
+                list.appendChild(row);
+            });
+        }
+
+        function updateSelection() {
+            const rows = list.querySelectorAll('.action-search-item');
+            rows.forEach((r, idx) => {
+                if (idx === activeIndex) {
+                    r.classList.add('is-selected');
+                    r.scrollIntoView({ block: 'nearest' });
+                    input.setAttribute('aria-activedescendant', r.id);
+                } else {
+                    r.classList.remove('is-selected');
+                }
+            });
+            if (activeIndex === -1) {
+                input.removeAttribute('aria-activedescendant');
+            }
+        }
+
+        function executeItem(item) {
+            closeDropdown();
+            if (typeof item.run === 'function') {
+                item.run();
+            }
+        }
+
+        function openDropdown() {
+            dropdown.style.display = 'block';
+            input.setAttribute('aria-expanded', 'true');
+            computeAndRender();
+        }
+
+        function closeDropdown() {
+            dropdown.style.display = 'none';
+            input.setAttribute('aria-expanded', 'false');
+            activeIndex = -1;
+            updateSelection();
+        }
+
+        function computeAndRender() {
+            const rawVal = input.value || '';
+            const q = normalizeQuery(rawVal);
+
+            if (rawVal.trim().length > 0) {
+                if (iconSearch) iconSearch.classList.add('d-none');
+                if (iconSend) iconSend.classList.remove('d-none');
+                if (iconBox) iconBox.classList.add('is-active');
+                if (kbdBadge) kbdBadge.style.opacity = '0';
+                if (clearBtn) clearBtn.classList.remove('d-none');
+            } else {
+                if (iconSearch) iconSearch.classList.remove('d-none');
+                if (iconSend) iconSend.classList.add('d-none');
+                if (iconBox) iconBox.classList.remove('is-active');
+                if (kbdBadge) kbdBadge.style.opacity = '1';
+                if (clearBtn) clearBtn.classList.add('d-none');
+            }
+
+            if (!q) {
+                renderItems(defaultActions, 'فیلترها و پیشنهادات کاربران اداری');
+                return;
+            }
+
+            const matchedActions = defaultActions.filter(act => {
+                const normTitle = normalizeQuery(act.title);
+                const normDesc = normalizeQuery(act.desc);
+                return normTitle.includes(q) || normDesc.includes(q);
+            });
+
+            const matchedUsers = [];
+            if (Array.isArray(allAdminUsers)) {
+                for (let i = 0; i < allAdminUsers.length; i++) {
+                    const u = allAdminUsers[i];
+                    if (!u) continue;
+                    const name = normalizeQuery(u.full_name || '');
+                    const uname = normalizeQuery(u.username || '');
+                    const title = normalizeQuery(u.role_title || '');
+                    const id = String(u.id || '');
+
+                    if (name.includes(q) || uname.includes(q) || title.includes(q) || id.includes(q)) {
+                        matchedUsers.push({
+                            id: `user-match-${u.id || i}`,
+                            title: `${u.full_name || u.username} (${u.username})`,
+                            desc: `سمت: ${u.role_title || '-'} · شناسه: #${toPersianDigits(u.id)}`,
+                            tag: u.is_superuser ? 'مدیر ارشد' : (u.role === 'navahi_manategh' ? 'نواحی' : 'اداره کل'),
+                            short: 'انتخاب',
+                            iconBoxClass: u.is_superuser ? 'action-icon-rose' : 'action-icon-blue',
+                            iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>',
+                            run: () => {
+                                input.value = u.username;
+                                adminUserActiveFilterPreset = 'all';
+                                if (clearBtn) clearBtn.classList.remove('d-none');
+                                applyAdminUsersFilter();
+                            }
+                        });
+                        if (matchedUsers.length >= 8) break;
+                    }
+                }
+            }
+
+            const combined = [...matchedActions, ...matchedUsers];
+            renderItems(combined, `یافته‌ها در کاربران برای «${rawVal.trim()}»`);
+        }
+
+        input.addEventListener('focus', () => {
+            if (!wrapper.classList.contains('is-open')) openSearch();
+            openDropdown();
+        });
+
+        input.addEventListener('click', () => {
+            if (!wrapper.classList.contains('is-open')) openSearch();
+            if (dropdown.style.display === 'none') openDropdown();
+        });
+
+        input.addEventListener('input', () => {
+            applyAdminUsersFilter();
+            computeAndRender();
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (dropdown.style.display !== 'none' && currentItems.length > 0) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex + 1) % currentItems.length;
+                    updateSelection();
+                    return;
+                }
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex - 1 + currentItems.length) % currentItems.length;
+                    updateSelection();
+                    return;
+                }
+                if (e.key === 'Enter') {
+                    if (activeIndex >= 0 && activeIndex < currentItems.length) {
+                        e.preventDefault();
+                        executeItem(currentItems[activeIndex]);
+                        return;
+                    }
+                    closeDropdown();
+                    return;
+                }
+            }
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                closeDropdown();
+                if (input.value.trim() !== '' || adminUserActiveFilterPreset !== 'all') {
+                    input.value = '';
+                    adminUserActiveFilterPreset = 'all';
+                    applyAdminUsersFilter();
+                }
+                closeSearch(false);
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
+                closeDropdown();
+                if (wrapper.classList.contains('is-open') && input.value.trim() === '' && adminUserActiveFilterPreset === 'all') {
+                    closeSearch(false);
+                }
+            }
+        });
+
+        if (input.value.trim().length > 0) {
+            wrapper.classList.add('is-open');
+            if (iconSearchToggle) iconSearchToggle.classList.add('d-none');
+            if (iconCloseToggle) iconCloseToggle.classList.remove('d-none');
+            if (clearBtn) clearBtn.classList.remove('d-none');
+            if (kbdBadge) kbdBadge.style.opacity = '0';
+        }
+
+        window.closeUserSearch = closeSearch;
+    }
+
+    initUserActionSearchBar();
 
     btnRefreshAudit?.addEventListener('click', async () => {
         const icon = btnRefreshAudit.querySelector('.refresh-icon');

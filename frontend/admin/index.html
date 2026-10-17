@@ -7,7 +7,7 @@
     <title>سامانه دیده‌بان امین - پنل مدیریت حراست همدان</title>
     <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="admin.css?v=97">
+    <link rel="stylesheet" href="admin.css?v=98">
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 
@@ -1440,6 +1440,63 @@
                         </svg>
                         <span>افزودن کاربر اداری جدید</span>
                     </button>
+                </div>
+
+                <div class="filter-search-row" id="userFilterSearchRow" style="margin-top: 12px; margin-bottom: 6px;">
+                    <div class="action-search-wrapper expandable-search-wrapper" id="userActionSearchWrapper">
+                        <button type="button" id="userExpandableSearchToggle" class="expandable-search-toggle" aria-label="جستجو در کاربران اداری" data-tooltip="جستجو در کاربران اداری">
+                            <svg class="search-toggle-icon icon-search" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <svg class="search-toggle-icon icon-close d-none" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                        <div class="search-input-wrapper expandable-search-body">
+                            <span class="search-icon-box" id="userSearchIconBox" aria-hidden="true">
+                                <svg class="search-icon-svg icon-search" id="userActionIconSearch" viewBox="0 0 24 24" width="17" height="17" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <svg class="search-icon-svg icon-send d-none" id="userActionIconSend" viewBox="0 0 24 24" width="17" height="17" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                            </span>
+                            <input type="text" id="user-filter-search"
+                                placeholder="جستجو در کاربران بر اساس نام، نام کاربری یا سمت..."
+                                autocomplete="off"
+                                spellcheck="false"
+                                data-tooltip="جستجو بر اساس نام، نام کاربری، شناسه یا سمت سازمانی"
+                                aria-label="جستجوی سریع در کاربران اداری"
+                                aria-haspopup="listbox"
+                                aria-expanded="false">
+                            <button type="button" id="userExpandableSearchClear" class="expandable-search-clear d-none" aria-label="پاک کردن متن جستجو" title="پاک کردن متن">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                            <kbd class="search-shortcut-badge" id="userSearchKbdBadge" aria-hidden="true">جستجو</kbd>
+                        </div>
+                        <div class="action-search-dropdown" id="userActionSearchDropdown" style="display: none;" role="listbox" aria-label="پیشنهادات و فیلترهای کاربران">
+                            <div class="action-search-header">
+                                <span id="userActionSearchDropdownTitle">فیلترها و پیشنهادات کاربران اداری</span>
+                                <span class="action-search-count" id="userActionSearchCount"></span>
+                            </div>
+                            <div class="action-search-list" id="userActionSearchList" role="group"></div>
+                            <div class="action-search-footer">
+                                <span>جستجوی زنده در نام، نام کاربری و سمت سازمانی</span>
+                                <span><kbd>↑</kbd><kbd>↓</kbd> انتخاب</span>
+                                <span><kbd>Enter</kbd> اعمال</span>
+                                <span><kbd>ESC</kbd> انصراف</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="table-responsive" style="margin-top: 15px;">
@@ -2967,7 +3024,7 @@
 
     <script src="confirm.js" defer></script>
     <script src="tatweel.js" defer></script>
-    <script src="admin.js?v=92" defer></script>
+    <script src="admin.js?v=93" defer></script>
 </body>
 
 </html>

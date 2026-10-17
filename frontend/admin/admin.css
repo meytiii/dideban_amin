@@ -2003,7 +2003,8 @@ button {
 .filter-container.popover-open,
 .filter-container:has(.date-range-trigger.active),
 .filter-container:has(.expandable-search-wrapper.is-open),
-.filter-container.has-open-dropdown {
+.filter-container.has-open-dropdown,
+.filter-search-row:has(.expandable-search-wrapper.is-open) {
     z-index: 500;
 }
 
