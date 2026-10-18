@@ -5608,6 +5608,89 @@ button:disabled {
     padding-top: 24px;
 }
 
+.landing-process-guide {
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    margin: 0 auto 20px auto;
+    max-width: 840px;
+    text-align: right;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.landing-process-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin: 0 0 14px 0;
+}
+
+.landing-process-title svg {
+    flex-shrink: 0;
+    color: #38bdf8;
+}
+
+.landing-process-steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 0 14px 0;
+    padding: 0;
+}
+
+.landing-process-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #cbd5e1;
+}
+
+.step-num-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.step-desc {
+    flex: 1;
+}
+
+.landing-tracking-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: rgba(234, 166, 93, 0.1);
+    border: 1px solid rgba(234, 166, 93, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: #fcd34d;
+}
+
+.tip-icon {
+    color: #eaa65d;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
 .landing-cta-prompt {
     color: #cbd5e1;
     font-size: 14.5px;
