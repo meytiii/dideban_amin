@@ -126,9 +126,11 @@ body::before {
     position: fixed;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(rgba(9, 13, 22, 0.82), rgba(15, 23, 42, 0.92)), url('bg.webp') no-repeat center center;
+    background: linear-gradient(rgba(9, 13, 22, 0.58), rgba(15, 23, 42, 0.72)), url('bg.webp') no-repeat center center;
     background-size: cover;
     pointer-events: none;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .dashboard-container {

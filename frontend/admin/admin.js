@@ -5205,8 +5205,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (printNotesText) printNotesText.textContent = internalNotesVal || 'فاقد یادداشت محرمانه داخلی.';
             if (notesStatus) notesStatus.style.display = 'none';
 
-            const isNavahi = currentAdmin && currentAdmin.role === 'navahi_manategh';
-
             if (saveNotesBtn) {
                 if (isNavahi) {
                     if (notesInput) {

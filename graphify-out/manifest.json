@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1792228049.122744,
-    "seen": 1792228090.4923315,
-    "ast_hash": "480418bd24a3cc2c792a9962e691a98d",
+    "mtime": 1792228565.1380033,
+    "seen": 1792300165.6068966,
+    "ast_hash": "e8adeb6397ea4860b378f6c014870be8",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
