@@ -84,15 +84,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1792306794.0932927,
-    "seen": 1792307023.9413764,
-    "ast_hash": "20079ba01d0a989e84069c1826703819",
+    "mtime": 1792314920.9989638,
+    "seen": 1792314927.6531057,
+    "ast_hash": "da4cd883026bdacf815541bd2cd3020e",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1792313959.7044876,
-    "seen": 1792314105.7777743,
-    "ast_hash": "384195247657e5db858c51971875e483",
+    "mtime": 1792314253.1581874,
+    "seen": 1792314348.7443936,
+    "ast_hash": "46d7031ebd30cd014071d21c792269bf",
     "semantic_hash": ""
   },
   "frontend/admin/favicon.png": {
@@ -1434,15 +1434,45 @@
     "semantic_hash": ""
   },
   "frontend/admin/svg/bell.svg": {
-    "mtime": 1792314072.288,
-    "seen": 1792314105.7784052,
-    "ast_hash": "350dda506ce4c705be1c84af18f23810",
+    "mtime": 1792314827.309149,
+    "seen": 1792314927.6537988,
+    "ast_hash": "ebe977b1cb6b4585d8c64435dadbee5f",
     "semantic_hash": ""
   },
   "frontend/public/svg/doc.svg": {
-    "mtime": 1792313723.8172023,
-    "seen": 1792314105.7787476,
-    "ast_hash": "8b8b5cdd8c24dd58a2f4637469ef499e",
+    "mtime": 1792314232.3063288,
+    "seen": 1792314348.745367,
+    "ast_hash": "fad540f11bac13274f8bdf5a5b86a841",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/cross.svg": {
+    "mtime": 1792314860.7097533,
+    "seen": 1792314927.6538007,
+    "ast_hash": "cf77ff2440c2aeb419db8d457efb6b86",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/docs.svg": {
+    "mtime": 1792314844.036335,
+    "seen": 1792314927.653802,
+    "ast_hash": "4a49827923f719f8f404f06319deeab7",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/view.svg": {
+    "mtime": 1792314293.828923,
+    "seen": 1792314348.7450397,
+    "ast_hash": "772d8562663b9d4a98608756b2f8efa3",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/forward.svg": {
+    "mtime": 1792314372.3171823,
+    "seen": 1792314927.6538036,
+    "ast_hash": "57c1f260df4485a59f9f5f1a2f5525aa",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/history.svg": {
+    "mtime": 1792314562.9732578,
+    "seen": 1792314927.6538045,
+    "ast_hash": "962476860cc6171b59ad51eeca6238b0",
     "semantic_hash": ""
   }
 }
