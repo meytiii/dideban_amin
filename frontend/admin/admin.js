@@ -5467,38 +5467,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'admin-attachments-wrapper';
 
+                const grid = document.createElement('div');
+                grid.className = 'admin-file-cards-grid';
+
                 if (data.attachments.length > 1) {
-                    const bulkRow = document.createElement('div');
-                    bulkRow.style.display = 'flex';
-                    bulkRow.style.justifyContent = 'flex-start';
-                    const bulkBtn = document.createElement('button');
-                    bulkBtn.type = 'button';
-                    bulkBtn.className = 'btn-attachment-bulk';
-                    bulkBtn.setAttribute('data-tooltip', 'دانلود یکجای تمامی مدارک پیوست به صورت فایل فشرده ZIP');
-                    bulkBtn.innerHTML = `
-                        <span class="attachment-icon-box">
+                    const totalBytes = data.attachments.reduce((sum, f) => sum + (f.file_size || 0), 0);
+                    const totalSizeText = totalBytes > 0 ? ` • مجموع: ${formatAdminFileSize(totalBytes)}` : '';
+                    const card = document.createElement('a');
+                    card.className = 'admin-file-card-item';
+                    card.href = `/api/admin/download?id=${id}`;
+                    card.setAttribute('data-tooltip', 'دانلود یکجای تمامی مدارک پیوست به صورت فایل فشرده ZIP');
+                    card.innerHTML = `
+                        ${renderAdminFileCard('attachments.zip', 'application/zip', 'card-lg')}
+                        <div class="admin-file-card-info">
+                            <p class="admin-file-card-name" dir="auto">دانلود پیوست‌های گزارش (فایل فشرده)</p>
+                            <p class="admin-file-card-meta">${toPersianNum(data.attachments.length)} فایل ضمیمه${totalSizeText}</p>
+                        </div>
+                        <div class="admin-file-card-download-btn" aria-hidden="true">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                 <polyline points="7 10 12 15 17 10"></polyline>
                                 <line x1="12" y1="15" x2="12" y2="3"></line>
                             </svg>
-                        </span>
-                        <span class="attachment-text-group">
-                            <span class="attachment-primary-title">دانلود یکجای تمامی پیوست‌ها</span>
-                            <span class="attachment-sub-meta">${toPersianNum(data.attachments.length)} فایل ضمیمه • قالب فشرده ZIP</span>
-                        </span>
+                        </div>
                     `;
-                    bulkBtn.onclick = () => {
-                        window.location.href = `/api/admin/download?id=${id}`;
-                    };
-                    bulkRow.appendChild(bulkBtn);
-                    wrapper.appendChild(bulkRow);
-                }
-
-                const grid = document.createElement('div');
-                grid.className = 'admin-file-cards-grid';
-
-                data.attachments.forEach(att => {
+                    grid.appendChild(card);
+                } else {
+                    const att = data.attachments[0];
                     const nameText = att.file_name || 'فایل ضمیمه';
                     const szText = att.file_size ? formatAdminFileSize(att.file_size) : '';
                     const extText = nameText.includes('.') ? nameText.split('.').pop().toUpperCase() : 'FILE';
@@ -5523,7 +5518,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     `;
                     grid.appendChild(card);
-                });
+                }
 
                 wrapper.appendChild(grid);
                 attachmentTd.appendChild(wrapper);
@@ -5533,12 +5528,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const card = document.createElement('a');
                 card.className = 'admin-file-card-item';
                 card.href = `/api/admin/download?id=${id}`;
-                card.setAttribute('data-tooltip', 'دانلود فایل ضمیمه گزارش');
+                card.setAttribute('data-tooltip', 'دانلود فایل ضمیمه گزارش (فایل فشرده)');
                 card.innerHTML = `
                     ${renderAdminFileCard('attachment.zip', 'application/zip', 'card-lg')}
                     <div class="admin-file-card-info">
-                        <p class="admin-file-card-name" dir="auto">فایل ضمیمه گزارش</p>
-                        <p class="admin-file-card-meta">پیوست گزارش</p>
+                        <p class="admin-file-card-name" dir="auto">دانلود فایل ضمیمه گزارش (فایل فشرده)</p>
+                        <p class="admin-file-card-meta">پیوست گزارش • ZIP</p>
                     </div>
                     <div class="admin-file-card-download-btn" aria-hidden="true">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
