@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1792315552.2776272,
-    "seen": 1792315903.4074042,
-    "ast_hash": "056a3e3fb6998cf87073e1f379960e6c",
+    "mtime": 1792316429.2463288,
+    "seen": 1792316492.845426,
+    "ast_hash": "97c0006b7e90a14975c2388a8f5229a1",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1792315615.8443086,
-    "seen": 1792315903.418817,
-    "ast_hash": "377a6d967a57a51202635f104fbf66a5",
+    "mtime": 1792316190.055491,
+    "seen": 1792316492.8562605,
+    "ast_hash": "6a817361c32ae823ca1523b6c0551ca7",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
@@ -270,21 +270,21 @@
     "semantic_hash": ""
   },
   "frontend/admin/confirm.js": {
-    "mtime": 1792218494.1592817,
-    "seen": 1792218639.8102374,
-    "ast_hash": "c6ecfebc4a3327a10d85cda0f162ac67",
+    "mtime": 1792316210.1521893,
+    "seen": 1792316492.8454282,
+    "ast_hash": "bd951f53dd054c8322f829b730322a88",
     "semantic_hash": ""
   },
   "frontend/confirm.js": {
-    "mtime": 1792218494.1592817,
-    "seen": 1792218639.8103032,
-    "ast_hash": "c6ecfebc4a3327a10d85cda0f162ac67",
+    "mtime": 1792316224.98078,
+    "seen": 1792316492.8454938,
+    "ast_hash": "bd951f53dd054c8322f829b730322a88",
     "semantic_hash": ""
   },
   "frontend/public/confirm.js": {
-    "mtime": 1792218487.7564516,
-    "seen": 1792218639.8103054,
-    "ast_hash": "c6ecfebc4a3327a10d85cda0f162ac67",
+    "mtime": 1792316236.5949664,
+    "seen": 1792316492.8455594,
+    "ast_hash": "bd951f53dd054c8322f829b730322a88",
     "semantic_hash": ""
   },
   "middleware.go": {
@@ -1476,9 +1476,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/svg/trash.svg": {
-    "mtime": 1792314920.5573626,
-    "seen": 1792315119.0188715,
-    "ast_hash": "8111ce10d8dcc07aea907ab78b7b25c0",
+    "mtime": 1792316121.5011284,
+    "seen": 1792316492.857567,
+    "ast_hash": "9be2a02d1875ff9ce84b5000bf6564a5",
     "semantic_hash": ""
   },
   "frontend/admin/svg/avatar.svg": {

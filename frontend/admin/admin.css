@@ -7994,11 +7994,15 @@ tr.row-priority-normal {
     gap: 0;
     border-radius: var(--radius-sm, 6px);
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .btn-action.btn-icon-only svg {
+    width: 24px;
+    height: 24px;
     margin: 0;
     display: block;
+    flex-shrink: 0;
 }
 
 .forward-modal-box {
