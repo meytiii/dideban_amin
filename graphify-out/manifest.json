@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1792313382.856849,
-    "seen": 1792313428.5145118,
-    "ast_hash": "55065a1721fb5dd4f6a4bf1ab1d768c4",
+    "mtime": 1792313959.7044876,
+    "seen": 1792314105.7777743,
+    "ast_hash": "384195247657e5db858c51971875e483",
     "semantic_hash": ""
   },
   "frontend/admin/favicon.png": {
@@ -1431,6 +1431,18 @@
     "mtime": 1792308144.268322,
     "seen": 1792309366.5171876,
     "ast_hash": "18e798e8e9c9d1efc727c329d4fdc1c3",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/bell.svg": {
+    "mtime": 1792314072.288,
+    "seen": 1792314105.7784052,
+    "ast_hash": "350dda506ce4c705be1c84af18f23810",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/doc.svg": {
+    "mtime": 1792313723.8172023,
+    "seen": 1792314105.7787476,
+    "ast_hash": "8b8b5cdd8c24dd58a2f4637469ef499e",
     "semantic_hash": ""
   }
 }

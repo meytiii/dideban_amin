@@ -2016,15 +2016,6 @@ button:disabled {
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.22), 0 8px 24px -4px rgba(37, 99, 235, 0.35);
 }
 
-.tracking-input-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #60a5fa;
-    opacity: 0.85;
-    flex-shrink: 0;
-}
-
 .tracking-code-field {
     flex: 1;
     min-width: 0;
@@ -2142,6 +2133,10 @@ button:disabled {
     .btn-paste-stylish {
         width: 100%;
         padding: 10px;
+    }
+    .tracking-input-box.floating-group:not(:focus-within):not(.is-floating):has(input:placeholder-shown) .floating-label {
+        top: 27px;
+        right: 14px;
     }
 }
 
@@ -6189,13 +6184,13 @@ button:disabled {
 }
 
 .tracking-input-box.floating-group .floating-label {
-    right: 48px;
+    right: 14px;
 }
 
 .tracking-input-box.floating-group:focus-within .floating-label,
 .tracking-input-box.floating-group.is-floating .floating-label,
 .tracking-input-box.floating-group:has(input:not(:placeholder-shown)) .floating-label {
-    right: 18px;
+    right: 14px;
     top: 0;
 }
 
