@@ -9316,3 +9316,286 @@ tr.row-priority-normal {
     background: #162032;
 }
 
+.file-card-preview {
+    position: relative;
+    width: 44px;
+    height: 56px;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.file-card-preview.card-lg {
+    width: 48px;
+    height: 62px;
+}
+
+.file-card-sheet {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 6px 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.file-card-banner {
+    position: absolute;
+    bottom: 4px;
+    left: -4px;
+    z-index: 3;
+    padding: 1.5px 5px;
+    font-size: 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+    line-height: 1.2;
+}
+
+.file-banner-pdf { background: #ef4444; color: #ffffff; }
+.file-banner-png { background: #0d9488; color: #ffffff; }
+.file-banner-jpg, .file-banner-jpeg { background: #15803d; color: #ffffff; }
+.file-banner-img { background: #059669; color: #ffffff; }
+.file-banner-zip { background: #8b5cf6; color: #ffffff; }
+.file-banner-rar { background: #9333ea; color: #ffffff; }
+.file-banner-doc { background: #2563eb; color: #ffffff; }
+.file-banner-xls, .file-banner-xlsx { background: #10b981; color: #ffffff; }
+.file-banner-txt { background: #64748b; color: #ffffff; }
+.file-banner-video { background: #d97706; color: #ffffff; }
+
+.file-ph-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+}
+
+.file-ph-line-row {
+    display: flex;
+    gap: 3px;
+    width: 100%;
+}
+
+.file-ph-bar {
+    height: 2px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.32);
+}
+
+.file-ph-bar.muted {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.file-ph-bar.w-50 { width: 50%; }
+.file-ph-bar.w-33 { width: 33.33%; }
+.file-ph-bar.w-40 { width: 40%; }
+.file-ph-bar.w-70 { width: 70%; }
+
+.file-ph-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+}
+
+.file-ph-grid-row {
+    display: flex;
+    gap: 2px;
+    width: 100%;
+}
+
+.file-ph-grid-cell {
+    height: 6px;
+    flex: 1;
+    border-radius: 1.5px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.file-ph-grid-cell.head {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.file-ph-zipper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5px;
+    height: 100%;
+    justify-content: center;
+}
+
+.file-ph-zip-tooth-row {
+    display: flex;
+    width: 14px;
+    height: 2.5px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.file-ph-zip-tooth {
+    width: 50%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.32);
+}
+
+.file-ph-zip-gap {
+    width: 50%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.file-ph-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    width: 100%;
+}
+
+.file-ph-img-frame {
+    width: 100%;
+    height: 22px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-ph-img-sun {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: rgba(250, 204, 21, 0.6);
+}
+
+.file-ph-video {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    width: 100%;
+}
+
+.file-ph-video-frame {
+    width: 100%;
+    height: 22px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-ph-play-tri {
+    width: 0;
+    height: 0;
+    border-top: 3.5px solid transparent;
+    border-bottom: 3.5px solid transparent;
+    border-left: 6px solid rgba(74, 222, 128, 0.8);
+    margin-left: 2px;
+}
+
+.admin-attachments-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 6px;
+}
+
+.admin-file-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+    width: 100%;
+}
+
+.admin-file-card-item,
+a.admin-file-card-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(22, 32, 50, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    text-decoration: none !important;
+    color: inherit !important;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.admin-file-card-item:hover,
+a.admin-file-card-item:hover {
+    transform: translateY(-2px) translateZ(0);
+    background: rgba(30, 41, 59, 0.95);
+    border-color: rgba(59, 130, 246, 0.45);
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+.admin-file-card-info {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+}
+
+.admin-file-card-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-main, #f1f5f9) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    direction: ltr;
+    text-align: right;
+    margin: 0;
+}
+
+.admin-file-card-meta {
+    font-size: 11px;
+    color: var(--text-muted, #94a3b8) !important;
+    direction: ltr;
+    text-align: right;
+    margin: 0;
+    font-weight: 500;
+}
+
+.admin-file-card-download-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(59, 130, 246, 0.12);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    flex-shrink: 0;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-file-card-item:hover .admin-file-card-download-btn {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+

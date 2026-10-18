@@ -992,18 +992,102 @@ document.addEventListener('DOMContentLoaded', () => {
     const MAX_FILE_SIZE = 20 * 1024 * 1024;
     const ALLOWED_EXTENSIONS = ['.pdf', '.jpg', '.jpeg', '.png', '.zip', '.rar'];
 
-    function getBeFileIconSvg(fileName, mimeType = '') {
-        const ext = fileName.includes('.') ? fileName.split('.').pop().toLowerCase() : '';
-        if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext) || mimeType.startsWith('image/')) {
-            return `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>`;
+    function renderFileCardHtml(fileName, mimeType = '', sizeClass = '') {
+        const ext = fileName && fileName.includes('.') ? fileName.split('.').pop().toLowerCase() : '';
+        let format = 'doc';
+        let bannerText = ext ? ext.toUpperCase() : 'DOC';
+
+        if (ext === 'pdf' || (mimeType && mimeType.includes('pdf'))) {
+            format = 'pdf';
+            bannerText = 'PDF';
+        } else if (ext === 'png' || mimeType === 'image/png') {
+            format = 'png';
+            bannerText = 'PNG';
+        } else if (['jpg', 'jpeg'].includes(ext) || mimeType === 'image/jpeg') {
+            format = 'jpg';
+            bannerText = 'JPG';
+        } else if (['webp', 'gif', 'bmp', 'svg'].includes(ext) || (mimeType && mimeType.startsWith('image/'))) {
+            format = 'img';
+            bannerText = ext ? ext.toUpperCase() : 'IMG';
+        } else if (['zip', '7z'].includes(ext) || (mimeType && mimeType.includes('zip'))) {
+            format = 'zip';
+            bannerText = 'ZIP';
+        } else if (ext === 'rar' || (mimeType && mimeType.includes('rar'))) {
+            format = 'rar';
+            bannerText = 'RAR';
+        } else if (['xls', 'xlsx'].includes(ext) || (mimeType && (mimeType.includes('spreadsheet') || mimeType.includes('excel')))) {
+            format = 'xls';
+            bannerText = ext === 'xlsx' ? 'XLSX' : 'XLS';
+        } else if (['doc', 'docx'].includes(ext) || (mimeType && mimeType.includes('word'))) {
+            format = 'doc';
+            bannerText = ext === 'docx' ? 'DOCX' : 'DOC';
+        } else if (ext === 'txt' || (mimeType && mimeType.startsWith('text/'))) {
+            format = 'txt';
+            bannerText = 'TXT';
+        } else if (['mp4', 'mkv', 'avi', 'mov', 'webm'].includes(ext) || (mimeType && mimeType.startsWith('video/'))) {
+            format = 'video';
+            bannerText = 'VIDEO';
         }
-        if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext) || mimeType.includes('zip') || mimeType.includes('compressed')) {
-            return `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12v-2"/><path d="M10 18v-2"/><path d="M10 6V4"/><path d="M14 2v20"/><path d="M15.5 22H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h11.5"/><path d="M14 6h2"/><path d="M14 10h2"/><path d="M14 14h2"/><path d="M14 18h2"/><path d="M4 10h2"/><path d="M4 14h2"/><path d="M4 18h2"/><path d="M4 6h2"/></svg>`;
+
+        let placeholder = '';
+        if (format === 'xls') {
+            placeholder = `
+                <div class="file-ph-grid">
+                    <div class="file-ph-grid-row"><div class="file-ph-grid-cell head"></div><div class="file-ph-grid-cell head"></div><div class="file-ph-grid-cell head"></div></div>
+                    <div class="file-ph-grid-row"><div class="file-ph-grid-cell"></div><div class="file-ph-grid-cell"></div><div class="file-ph-grid-cell"></div></div>
+                    <div class="file-ph-grid-row"><div class="file-ph-grid-cell"></div><div class="file-ph-grid-cell"></div><div class="file-ph-grid-cell"></div></div>
+                    <div class="file-ph-grid-row"><div class="file-ph-grid-cell"></div><div class="file-ph-grid-cell"></div></div>
+                </div>
+            `;
+        } else if (format === 'zip' || format === 'rar') {
+            placeholder = `
+                <div class="file-ph-zipper">
+                    <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-tooth"></span><span class="file-ph-zip-gap"></span></div>
+                    <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-gap"></span><span class="file-ph-zip-tooth"></span></div>
+                    <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-tooth"></span><span class="file-ph-zip-gap"></span></div>
+                    <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-gap"></span><span class="file-ph-zip-tooth"></span></div>
+                    <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-tooth"></span><span class="file-ph-zip-gap"></span></div>
+                    <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-gap"></span><span class="file-ph-zip-tooth"></span></div>
+                    <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-tooth"></span><span class="file-ph-zip-gap"></span></div>
+                    <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-gap"></span><span class="file-ph-zip-tooth"></span></div>
+                </div>
+            `;
+        } else if (format === 'png' || format === 'jpg' || format === 'img') {
+            placeholder = `
+                <div class="file-ph-image">
+                    <div class="file-ph-img-frame"><div class="file-ph-img-sun"></div></div>
+                    <div class="file-ph-bar muted w-40"></div>
+                    <div class="file-ph-bar muted w-70"></div>
+                </div>
+            `;
+        } else if (format === 'video') {
+            placeholder = `
+                <div class="file-ph-video">
+                    <div class="file-ph-video-frame"><div class="file-ph-play-tri"></div></div>
+                    <div class="file-ph-bar muted w-40"></div>
+                    <div class="file-ph-bar muted w-70"></div>
+                </div>
+            `;
+        } else {
+            placeholder = `
+                <div class="file-ph-lines">
+                    <div class="file-ph-line-row"><div class="file-ph-bar w-50"></div></div>
+                    <div class="file-ph-line-row"><div class="file-ph-bar muted w-33"></div><div class="file-ph-bar muted w-33"></div></div>
+                    <div class="file-ph-line-row"><div class="file-ph-bar w-50"></div><div class="file-ph-bar muted w-33"></div></div>
+                    <div class="file-ph-line-row"><div class="file-ph-bar muted w-33"></div><div class="file-ph-bar muted w-33"></div></div>
+                    <div class="file-ph-line-row"><div class="file-ph-bar muted w-33"></div><div class="file-ph-bar muted w-50"></div></div>
+                </div>
+            `;
         }
-        if (ext === 'pdf' || mimeType.includes('pdf')) {
-            return `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>`;
-        }
-        return `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>`;
+
+        return `
+            <div class="file-card-preview ${sizeClass}" data-format="${format}" aria-hidden="true">
+                <span class="file-card-banner file-banner-${format}">${bannerText}</span>
+                <div class="file-card-sheet">
+                    ${placeholder}
+                </div>
+            </div>
+        `;
     }
 
     const beFileQueue = document.getElementById('be-file-queue');
@@ -1061,7 +1145,7 @@ document.addEventListener('DOMContentLoaded', () => {
             row.innerHTML = `
                 <div class="be-file-main">
                     <div class="be-file-leading-icon">
-                        ${getBeFileIconSvg(file.name, file.type)}
+                        ${renderFileCardHtml(file.name, file.type)}
                     </div>
                     <div class="be-file-meta-group">
                         <p class="be-file-name" title="${escapeHtml(file.name)}" dir="auto">${escapeHtml(file.name)}</p>

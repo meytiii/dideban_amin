@@ -5365,11 +5365,116 @@ document.addEventListener('DOMContentLoaded', () => {
                 return `${toPersianNum(formatted)} ${sizes[i]}`;
             };
 
+            function renderAdminFileCard(fileName, mimeType = '', sizeClass = '') {
+                const ext = fileName && fileName.includes('.') ? fileName.split('.').pop().toLowerCase() : '';
+                let format = 'doc';
+                let bannerText = ext ? ext.toUpperCase() : 'DOC';
+
+                if (ext === 'pdf' || (mimeType && mimeType.includes('pdf'))) {
+                    format = 'pdf';
+                    bannerText = 'PDF';
+                } else if (ext === 'png' || mimeType === 'image/png') {
+                    format = 'png';
+                    bannerText = 'PNG';
+                } else if (['jpg', 'jpeg'].includes(ext) || mimeType === 'image/jpeg') {
+                    format = 'jpg';
+                    bannerText = 'JPG';
+                } else if (['webp', 'gif', 'bmp', 'svg'].includes(ext) || (mimeType && mimeType.startsWith('image/'))) {
+                    format = 'img';
+                    bannerText = ext ? ext.toUpperCase() : 'IMG';
+                } else if (['zip', '7z'].includes(ext) || (mimeType && mimeType.includes('zip'))) {
+                    format = 'zip';
+                    bannerText = 'ZIP';
+                } else if (ext === 'rar' || (mimeType && mimeType.includes('rar'))) {
+                    format = 'rar';
+                    bannerText = 'RAR';
+                } else if (['xls', 'xlsx'].includes(ext) || (mimeType && (mimeType.includes('spreadsheet') || mimeType.includes('excel')))) {
+                    format = 'xls';
+                    bannerText = ext === 'xlsx' ? 'XLSX' : 'XLS';
+                } else if (['doc', 'docx'].includes(ext) || (mimeType && mimeType.includes('word'))) {
+                    format = 'doc';
+                    bannerText = ext === 'docx' ? 'DOCX' : 'DOC';
+                } else if (ext === 'txt' || (mimeType && mimeType.startsWith('text/'))) {
+                    format = 'txt';
+                    bannerText = 'TXT';
+                } else if (['mp4', 'mkv', 'avi', 'mov', 'webm'].includes(ext) || (mimeType && mimeType.startsWith('video/'))) {
+                    format = 'video';
+                    bannerText = 'VIDEO';
+                }
+
+                let placeholder = '';
+                if (format === 'xls') {
+                    placeholder = `
+                        <div class="file-ph-grid">
+                            <div class="file-ph-grid-row"><div class="file-ph-grid-cell head"></div><div class="file-ph-grid-cell head"></div><div class="file-ph-grid-cell head"></div></div>
+                            <div class="file-ph-grid-row"><div class="file-ph-grid-cell"></div><div class="file-ph-grid-cell"></div><div class="file-ph-grid-cell"></div></div>
+                            <div class="file-ph-grid-row"><div class="file-ph-grid-cell"></div><div class="file-ph-grid-cell"></div><div class="file-ph-grid-cell"></div></div>
+                            <div class="file-ph-grid-row"><div class="file-ph-grid-cell"></div><div class="file-ph-grid-cell"></div></div>
+                        </div>
+                    `;
+                } else if (format === 'zip' || format === 'rar') {
+                    placeholder = `
+                        <div class="file-ph-zipper">
+                            <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-tooth"></span><span class="file-ph-zip-gap"></span></div>
+                            <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-gap"></span><span class="file-ph-zip-tooth"></span></div>
+                            <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-tooth"></span><span class="file-ph-zip-gap"></span></div>
+                            <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-gap"></span><span class="file-ph-zip-tooth"></span></div>
+                            <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-tooth"></span><span class="file-ph-zip-gap"></span></div>
+                            <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-gap"></span><span class="file-ph-zip-tooth"></span></div>
+                            <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-tooth"></span><span class="file-ph-zip-gap"></span></div>
+                            <div class="file-ph-zip-tooth-row"><span class="file-ph-zip-gap"></span><span class="file-ph-zip-tooth"></span></div>
+                        </div>
+                    `;
+                } else if (format === 'png' || format === 'jpg' || format === 'img') {
+                    placeholder = `
+                        <div class="file-ph-image">
+                            <div class="file-ph-img-frame"><div class="file-ph-img-sun"></div></div>
+                            <div class="file-ph-bar muted w-40"></div>
+                            <div class="file-ph-bar muted w-70"></div>
+                        </div>
+                    `;
+                } else if (format === 'video') {
+                    placeholder = `
+                        <div class="file-ph-video">
+                            <div class="file-ph-video-frame"><div class="file-ph-play-tri"></div></div>
+                            <div class="file-ph-bar muted w-40"></div>
+                            <div class="file-ph-bar muted w-70"></div>
+                        </div>
+                    `;
+                } else {
+                    placeholder = `
+                        <div class="file-ph-lines">
+                            <div class="file-ph-line-row"><div class="file-ph-bar w-50"></div></div>
+                            <div class="file-ph-line-row"><div class="file-ph-bar muted w-33"></div><div class="file-ph-bar muted w-33"></div></div>
+                            <div class="file-ph-line-row"><div class="file-ph-bar w-50"></div><div class="file-ph-bar muted w-33"></div></div>
+                            <div class="file-ph-line-row"><div class="file-ph-bar muted w-33"></div><div class="file-ph-bar muted w-33"></div></div>
+                            <div class="file-ph-line-row"><div class="file-ph-bar muted w-33"></div><div class="file-ph-bar muted w-50"></div></div>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="file-card-preview ${sizeClass}" data-format="${format}" aria-hidden="true">
+                        <span class="file-card-banner file-banner-${format}">${bannerText}</span>
+                        <div class="file-card-sheet">
+                            ${placeholder}
+                        </div>
+                    </div>
+                `;
+            }
+
             if (data.attachments && data.attachments.length > 0) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'admin-attachments-wrapper';
+
                 if (data.attachments.length > 1) {
+                    const bulkRow = document.createElement('div');
+                    bulkRow.style.display = 'flex';
+                    bulkRow.style.justifyContent = 'flex-start';
                     const bulkBtn = document.createElement('button');
+                    bulkBtn.type = 'button';
                     bulkBtn.className = 'btn-attachment-bulk';
-                    bulkBtn.setAttribute('data-tooltip', 'دانلود یکجای تمامی مدارک پیوست به صورت فایل فشرده');
+                    bulkBtn.setAttribute('data-tooltip', 'دانلود یکجای تمامی مدارک پیوست به صورت فایل فشرده ZIP');
                     bulkBtn.innerHTML = `
                         <span class="attachment-icon-box">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -5379,60 +5484,72 @@ document.addEventListener('DOMContentLoaded', () => {
                             </svg>
                         </span>
                         <span class="attachment-text-group">
-                            <span class="attachment-primary-title">دانلود پیوست‌های گزارش</span>
+                            <span class="attachment-primary-title">دانلود یکجای تمامی پیوست‌ها</span>
                             <span class="attachment-sub-meta">${toPersianNum(data.attachments.length)} فایل ضمیمه • قالب فشرده ZIP</span>
                         </span>
                     `;
                     bulkBtn.onclick = () => {
                         window.location.href = `/api/admin/download?id=${id}`;
                     };
-                    attachmentTd.appendChild(bulkBtn);
-                } else {
-                    const att = data.attachments[0];
-                    const downloadBtn = document.createElement('button');
-                    downloadBtn.className = 'btn-attachment-bulk';
-                    const szText = att.file_size ? ` (${formatAdminFileSize(att.file_size)})` : '';
-                    const nameText = att.file_name || 'فایل ضمیمه';
-                    downloadBtn.setAttribute('data-tooltip', `دانلود مستقیم: ${nameText}`);
+                    bulkRow.appendChild(bulkBtn);
+                    wrapper.appendChild(bulkRow);
+                }
 
-                    downloadBtn.innerHTML = `
-                        <span class="attachment-icon-box">
+                const grid = document.createElement('div');
+                grid.className = 'admin-file-cards-grid';
+
+                data.attachments.forEach(att => {
+                    const nameText = att.file_name || 'فایل ضمیمه';
+                    const szText = att.file_size ? formatAdminFileSize(att.file_size) : '';
+                    const extText = nameText.includes('.') ? nameText.split('.').pop().toUpperCase() : 'FILE';
+                    const metaStr = szText ? `${szText} • ${extText}` : extText;
+
+                    const card = document.createElement('a');
+                    card.className = 'admin-file-card-item';
+                    card.href = `/api/admin/download?id=${id}&file_id=${att.id}`;
+                    card.setAttribute('data-tooltip', `دانلود مستقیم: ${nameText}`);
+                    card.innerHTML = `
+                        ${renderAdminFileCard(nameText, att.mime_type, 'card-lg')}
+                        <div class="admin-file-card-info">
+                            <p class="admin-file-card-name" title="${escapeHTML(nameText)}" dir="auto">${escapeHTML(nameText)}</p>
+                            <p class="admin-file-card-meta">${metaStr}</p>
+                        </div>
+                        <div class="admin-file-card-download-btn" aria-hidden="true">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                 <polyline points="7 10 12 15 17 10"></polyline>
                                 <line x1="12" y1="15" x2="12" y2="3"></line>
                             </svg>
-                        </span>
-                        <span class="attachment-text-group">
-                            <span class="attachment-primary-title">دانلود فایل پیوست</span>
-                            <span class="attachment-sub-meta">${escapeHTML(nameText)}${szText}</span>
-                        </span>
+                        </div>
                     `;
-                    downloadBtn.onclick = () => {
-                        window.location.href = `/api/admin/download?id=${id}&file_id=${att.id}`;
-                    };
-                    attachmentTd.appendChild(downloadBtn);
-                }
+                    grid.appendChild(card);
+                });
+
+                wrapper.appendChild(grid);
+                attachmentTd.appendChild(wrapper);
             } else if (data.has_attachment) {
-                const downloadBtn = document.createElement('button');
-                downloadBtn.className = 'btn-attachment-bulk';
-                downloadBtn.innerHTML = `
-                    <span class="attachment-icon-box">
+                const grid = document.createElement('div');
+                grid.className = 'admin-file-cards-grid';
+                const card = document.createElement('a');
+                card.className = 'admin-file-card-item';
+                card.href = `/api/admin/download?id=${id}`;
+                card.setAttribute('data-tooltip', 'دانلود فایل ضمیمه گزارش');
+                card.innerHTML = `
+                    ${renderAdminFileCard('attachment.zip', 'application/zip', 'card-lg')}
+                    <div class="admin-file-card-info">
+                        <p class="admin-file-card-name" dir="auto">فایل ضمیمه گزارش</p>
+                        <p class="admin-file-card-meta">پیوست گزارش</p>
+                    </div>
+                    <div class="admin-file-card-download-btn" aria-hidden="true">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="7 10 12 15 17 10"></polyline>
                             <line x1="12" y1="15" x2="12" y2="3"></line>
                         </svg>
-                    </span>
-                    <span class="attachment-text-group">
-                        <span class="attachment-primary-title">دانلود فایل پیوست</span>
-                        <span class="attachment-sub-meta">فایل ضمیمه گزارش</span>
-                    </span>
+                    </div>
                 `;
-                downloadBtn.onclick = () => {
-                    window.location.href = `/api/admin/download?id=${id}`;
-                };
-                attachmentTd.appendChild(downloadBtn);
+                grid.appendChild(card);
+                attachmentTd.appendChild(grid);
             } else {
                 attachmentTd.textContent = 'ندارد';
             }
