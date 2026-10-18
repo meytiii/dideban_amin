@@ -1339,16 +1339,12 @@ body::before {
 }
 
 .user-menu-avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: rgba(56, 189, 248, 0.15);
-    color: #38bdf8;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    border: 1px solid rgba(56, 189, 248, 0.3);
 }
 
 .user-menu-info {
