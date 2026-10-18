@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1792312730.7997448,
-    "seen": 1792312897.9445999,
-    "ast_hash": "7383d7e5607206946c68fd6620b1d674",
+    "mtime": 1792315552.2776272,
+    "seen": 1792315903.4074042,
+    "ast_hash": "056a3e3fb6998cf87073e1f379960e6c",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1792314961.6794991,
-    "seen": 1792315119.0178447,
-    "ast_hash": "96d3c7504347d35ad854a4c818b6b250",
+    "mtime": 1792315615.8443086,
+    "seen": 1792315903.418817,
+    "ast_hash": "377a6d967a57a51202635f104fbf66a5",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
@@ -1458,27 +1458,69 @@
     "semantic_hash": ""
   },
   "frontend/admin/svg/view.svg": {
-    "mtime": 1792314293.828923,
-    "seen": 1792314348.7450397,
-    "ast_hash": "772d8562663b9d4a98608756b2f8efa3",
+    "mtime": 1792315445.840122,
+    "seen": 1792315516.7507493,
+    "ast_hash": "dd45551951ca2185936d81b74ebd165a",
     "semantic_hash": ""
   },
   "frontend/admin/svg/forward.svg": {
-    "mtime": 1792314372.3171823,
-    "seen": 1792314927.6538036,
-    "ast_hash": "57c1f260df4485a59f9f5f1a2f5525aa",
+    "mtime": 1792315463.0598748,
+    "seen": 1792315516.7506864,
+    "ast_hash": "a778c1b6c25723a5c69e2255045c263a",
     "semantic_hash": ""
   },
   "frontend/admin/svg/history.svg": {
-    "mtime": 1792314562.9732578,
-    "seen": 1792314927.6538045,
-    "ast_hash": "962476860cc6171b59ad51eeca6238b0",
+    "mtime": 1792315481.9246087,
+    "seen": 1792315516.7506871,
+    "ast_hash": "ae29d7c9b8aaac4de2efb79e77050427",
     "semantic_hash": ""
   },
   "frontend/admin/svg/trash.svg": {
     "mtime": 1792314920.5573626,
     "seen": 1792315119.0188715,
     "ast_hash": "8111ce10d8dcc07aea907ab78b7b25c0",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/avatar.svg": {
+    "mtime": 1792315188.6437693,
+    "seen": 1792315516.7504914,
+    "ast_hash": "6148090a1705d9db80bdb3cef5757868",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/cyber_security.svg": {
+    "mtime": 1792315493.1615942,
+    "seen": 1792315516.750622,
+    "ast_hash": "0dce24ba64ebab066eb93a680696dae5",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/arrow_left.svg": {
+    "mtime": 1792315767.2372785,
+    "seen": 1792315903.419502,
+    "ast_hash": "15a87d8cf68a9c08a520a890515af8b6",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/arrow_right.svg": {
+    "mtime": 1792315767.7868774,
+    "seen": 1792315903.4195035,
+    "ast_hash": "10c4e69aafc8e33a56f7aba3bc67d3f9",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/back.svg": {
+    "mtime": 1792315613.1785738,
+    "seen": 1792315903.4195726,
+    "ast_hash": "d95823d8b5b825e1de1a738f9e3fa5f9",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/arrow_left.svg": {
+    "mtime": 1792315767.2372785,
+    "seen": 1792315903.4203873,
+    "ast_hash": "15a87d8cf68a9c08a520a890515af8b6",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/arrow_right.svg": {
+    "mtime": 1792315767.7868774,
+    "seen": 1792315903.420389,
+    "ast_hash": "10c4e69aafc8e33a56f7aba3bc67d3f9",
     "semantic_hash": ""
   }
 }
