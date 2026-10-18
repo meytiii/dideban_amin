@@ -1246,9 +1246,12 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" style="margin-bottom: 10px;">
+                            <div class="form-group floating-group textarea-floating-group" style="margin-bottom: 10px;">
+                                <label for="regional_response_input" class="floating-label">
+                                    <span>شرح تحقیقات و نظر کارشناسی برای اداره کل</span>
+                                </label>
                                 <textarea id="regional_response_input" rows="4"
-                                    placeholder="شرح تحقیقات، مدارک بررسی‌شده و نظر کارشناسی خود را برای اداره کل بنویسید..."
+                                    placeholder=" "
                                     maxlength="8000" required></textarea>
                             </div>
                             <div style="display: flex; justify-content: flex-end; gap: 10px;">
@@ -1297,9 +1300,12 @@
                     </div>
 
                     <form id="adminResponseForm" style="margin-top: 15px;" novalidate>
-                        <div class="form-group" style="margin-bottom: 12px;">
+                        <div class="form-group floating-group textarea-floating-group" style="margin-bottom: 12px;">
+                            <label for="admin_response_input" class="floating-label">
+                                <span>متن پاسخ یا نتیجه بررسی حراست برای گزارش‌دهنده</span>
+                            </label>
                             <textarea id="admin_response_input" rows="4"
-                                placeholder="متن پاسخ یا نتیجه بررسی حراست را برای گزارش‌دهنده بنویسید..."
+                                placeholder=" "
                                 maxlength="3000" required></textarea>
                         </div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px;">
@@ -1340,9 +1346,14 @@
                             کاملاً محرمانه - غیرقابل مشاهده برای گزارش‌دهنده
                         </span>
                     </div>
-                    <textarea id="detail-internal-notes-input" rows="3"
-                        placeholder="ثبت اقدامات داخلی، شماره نامه‌های اداری، ارجاعات و یادداشت‌های محرمانه کارشناس..."
-                        maxlength="4000"></textarea>
+                    <div class="form-group floating-group textarea-floating-group" style="margin-top: 10px;">
+                        <label for="detail-internal-notes-input" class="floating-label">
+                            <span>ثبت اقدامات، شماره نامه‌های اداری و یادداشت‌های محرمانه</span>
+                        </label>
+                        <textarea id="detail-internal-notes-input" rows="3"
+                            placeholder=" "
+                            maxlength="4000"></textarea>
+                    </div>
                     <div id="print-internal-notes-text" class="print-only-block print-box-content"></div>
                     <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
                         <button type="button" id="btnSaveInternalNotes" class="btn-action btn-secondary"
@@ -2820,10 +2831,12 @@
                     <span id="force-pwd-reason-text">اعتبار ۳۰ روزه رمز عبور به پایان رسیده یا تغییر آن توسط مدیر سامانه الزامی شده است. لطفاً پیش از ورود به کارتابل، رمز عبور جدیدی تعیین کنید.</span>
                 </div>
                 <div class="form-group">
-                    <label for="force_current_password">کلمه عبور فعلی:</label>
-                    <div class="password-wrapper">
+                    <div class="password-wrapper floating-group">
+                        <label for="force_current_password" class="floating-label">
+                            <span>کلمه عبور فعلی</span>
+                        </label>
                         <input type="password" id="force_current_password" required
-                            placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
+                            placeholder=" " autocomplete="current-password">
                         <button type="button" class="btn-toggle-pw" data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                             <svg class="eye-icon-show" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2843,9 +2856,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="force_new_password">کلمه عبور جدید (حداقل ۱۲ کاراکتر):</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="force_new_password" required placeholder="کلمه عبور جدید امن"
+                    <div class="password-wrapper floating-group">
+                        <label for="force_new_password" class="floating-label">
+                            <span>کلمه عبور جدید (حداقل ۱۲ کاراکتر)</span>
+                        </label>
+                        <input type="password" id="force_new_password" required placeholder=" "
                             autocomplete="new-password">
                         <button type="button" class="btn-toggle-pw" data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                             <svg class="eye-icon-show" viewBox="0 0 24 24" width="18" height="18" fill="none"
@@ -2912,9 +2927,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="force_confirm_password">تکرار کلمه عبور جدید:</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="force_confirm_password" required placeholder="تکرار کلمه عبور جدید"
+                    <div class="password-wrapper floating-group">
+                        <label for="force_confirm_password" class="floating-label">
+                            <span>تکرار کلمه عبور جدید</span>
+                        </label>
+                        <input type="password" id="force_confirm_password" required placeholder=" "
                             autocomplete="new-password">
                         <button type="button" class="btn-toggle-pw" data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                             <svg class="eye-icon-show" viewBox="0 0 24 24" width="18" height="18" fill="none"

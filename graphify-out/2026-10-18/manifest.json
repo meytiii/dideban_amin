@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1792305855.7924926,
-    "seen": 1792305898.4770186,
-    "ast_hash": "7437948f9c9ede867d40c4e4fb0b6a03",
+    "mtime": 1792306640.249156,
+    "seen": 1792306728.4796312,
+    "ast_hash": "3155443906051daf9e6d64ecd44658cb",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
@@ -84,15 +84,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1792305677.228361,
-    "seen": 1792305898.4914136,
-    "ast_hash": "cfb522f1d1812f78baa118700b4901b1",
+    "mtime": 1792306716.6096568,
+    "seen": 1792306728.4925056,
+    "ast_hash": "9b7f6baec5095e722be8b2ce79b587db",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1792218546.4983723,
-    "seen": 1792218639.8214364,
-    "ast_hash": "151e6ebd1ff89737c2162f212b7c1582",
+    "mtime": 1792306546.3982582,
+    "seen": 1792306728.4925728,
+    "ast_hash": "04b800d22f67d38594f160d2e8b3afe6",
     "semantic_hash": ""
   },
   "frontend/admin/favicon.png": {
@@ -1230,9 +1230,9 @@
     "semantic_hash": ""
   },
   "components/ui/input.tsx": {
-    "mtime": 1791003847.350151,
-    "seen": 1791004259.8322625,
-    "ast_hash": "d09c4bcf55a6e245aef1f2fc1c554622",
+    "mtime": 1792306191.959235,
+    "seen": 1792306728.4780276,
+    "ast_hash": "ecb405b96c6e8ee28251f196ad1ad3dc",
     "semantic_hash": ""
   },
   "components/ui/label.tsx": {
@@ -1413,6 +1413,12 @@
     "mtime": 1792305533.0316787,
     "seen": 1792305898.476395,
     "ast_hash": "6e7c54d5af5dfce6e4b554d07de51782",
+    "semantic_hash": ""
+  },
+  "components/ui/input-demo.tsx": {
+    "mtime": 1792306198.9111333,
+    "seen": 1792306728.4780214,
+    "ast_hash": "3b02f3ecc7dc462f56b60358ac90a5ad",
     "semantic_hash": ""
   }
 }

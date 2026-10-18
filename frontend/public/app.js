@@ -2694,4 +2694,48 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1000);
         }
     }, { passive: true });
+
+    document.addEventListener('input', (e) => {
+        if (e.target && (e.target.matches('.floating-group input') || e.target.matches('.floating-group textarea'))) {
+            const group = e.target.closest('.floating-group');
+            if (group) {
+                if (e.target.value && e.target.value.trim().length > 0) {
+                    group.classList.add('is-floating');
+                } else if (document.activeElement !== e.target) {
+                    group.classList.remove('is-floating');
+                }
+            }
+        }
+    });
+
+    document.addEventListener('focusin', (e) => {
+        if (e.target && (e.target.matches('.floating-group input') || e.target.matches('.floating-group textarea'))) {
+            const group = e.target.closest('.floating-group');
+            if (group) group.classList.add('is-floating');
+        }
+    });
+
+    document.addEventListener('focusout', (e) => {
+        if (e.target && (e.target.matches('.floating-group input') || e.target.matches('.floating-group textarea'))) {
+            const group = e.target.closest('.floating-group');
+            if (group && (!e.target.value || e.target.value.trim().length === 0)) {
+                group.classList.remove('is-floating');
+            }
+        }
+    });
+
+    function syncAllFloatingLabels() {
+        document.querySelectorAll('.floating-group input, .floating-group textarea').forEach(el => {
+            const group = el.closest('.floating-group');
+            if (!group) return;
+            if ((el.value && el.value.trim().length > 0) || document.activeElement === el) {
+                group.classList.add('is-floating');
+            } else {
+                group.classList.remove('is-floating');
+            }
+        });
+    }
+
+    syncAllFloatingLabels();
+    setTimeout(syncAllFloatingLabels, 300);
 });
