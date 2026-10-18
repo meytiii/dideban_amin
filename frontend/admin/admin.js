@@ -7829,7 +7829,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let lockoutBadge = '';
             if (u.is_locked) {
-                lockoutBadge = `<span class="badge-lockout" data-tooltip="قفل موقت ورود به دلیل تلاش‌های ناموفق (باقی‌مانده: ${escapeHTML(u.lockout_remaining || '۱۵ دقیقه')})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-left:3px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>قفل موقت ورود (${escapeHTML(u.lockout_remaining || '')})</span>`;
+                lockoutBadge = `<span class="badge-2 badge-2-warning" data-tooltip="قفل موقت ورود به دلیل تلاش‌های ناموفق (باقی‌مانده: ${escapeHTML(u.lockout_remaining || '۱۵ دقیقه')})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg><span>قفل موقت (${escapeHTML(u.lockout_remaining || '')})</span></span>`;
             }
 
             const isSuper = u.is_superuser;
@@ -7852,33 +7852,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let pwdBadges = '';
             if (u.must_change_password) {
-                pwdBadges += `<span class="badge-pwd-forced" data-tooltip="الزام به تغییر رمز در ورود بعدی"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-left:3px;"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="m21 2-9.6 9.6"></path><path d="m15.5 7.5 2.5 2.5"></path><path d="m18 5 2 2"></path></svg>الزام تغییر رمز</span> `;
+                pwdBadges += `<span class="badge-2 badge-2-warning" data-tooltip="الزام به تغییر رمز در ورود بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="m21 2-9.6 9.6"></path><path d="m15.5 7.5 2.5 2.5"></path><path d="m18 5 2 2"></path></svg><span>الزام تغییر رمز</span></span>`;
             }
             if (u.is_password_expired) {
-                pwdBadges += `<span class="badge-pwd-expired" data-tooltip="اعتبار ۳۰ روزه منقضی شده است"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-left:3px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>منقضی شده</span> `;
+                pwdBadges += `<span class="badge-2 badge-2-destructive" data-tooltip="اعتبار ۳۰ روزه منقضی شده است"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>منقضی شده</span></span>`;
             }
 
             let roleBadge = '';
             const userRole = u.role || (u.is_superuser ? 'superuser' : 'edare_kol');
             if (userRole === 'superuser') {
-                roleBadge = '<span class="badge-super" style="background:rgba(225, 29, 72, 0.12); color:#fda4af; border:1px solid rgba(244, 63, 94, 0.28); font-size:11px; padding:2px 8px; border-radius:12px; font-weight:600;">مدیر ارشد سامانه</span>';
+                roleBadge = '<span class="badge-2 badge-2-superuser"><span class="badge-2-dot" aria-hidden="true"></span><span>مدیر ارشد سامانه</span></span>';
             } else if (userRole === 'navahi_manategh') {
-                roleBadge = '<span class="badge-navahi" style="background:rgba(14, 165, 233, 0.15); color:#38bdf8; border:1px solid rgba(56, 189, 248, 0.35); font-size:11px; padding:2px 8px; border-radius:12px; font-weight:600;">نواحی و مناطق</span>';
+                roleBadge = '<span class="badge-2 badge-2-primary"><span class="badge-2-dot" aria-hidden="true"></span><span>نواحی و مناطق</span></span>';
             } else {
-                roleBadge = '<span class="badge-edare-kol" style="background:rgba(99, 102, 241, 0.15); color:#a5b4fc; border:1px solid rgba(165, 180, 252, 0.35); font-size:11px; padding:2px 8px; border-radius:12px; font-weight:600;">اداره کل</span>';
+                roleBadge = '<span class="badge-2 badge-2-info"><span class="badge-2-dot" aria-hidden="true"></span><span>اداره کل</span></span>';
             }
 
             tr.innerHTML = `
                 <td><strong>#${toPersianNum(u.id)}</strong></td>
                 <td><strong style="color:var(--text-main); font-weight:600;">${escapeHTML(u.full_name || '-')}</strong></td>
-                <td><span class="ltr" style="font-family:Tahoma,sans-serif; color:var(--text-muted);">${escapeHTML(u.username)}</span> ${isSelf ? '<span class="badge badge-read" style="margin-right:6px;">حساب شما</span>' : ''}</td>
+                <td><span class="ltr" style="font-family:Tahoma,sans-serif; color:var(--text-muted);">${escapeHTML(u.username)}</span> ${isSelf ? '<span class="badge-2 badge-2-sm badge-2-primary" style="margin-right:6px;"><span class="badge-2-dot" aria-hidden="true"></span><span>حساب شما</span></span>' : ''}</td>
                 <td>${escapeHTML(u.role_title)}</td>
                 <td>${roleBadge}</td>
                 <td>
-                    ${lockoutBadge ? `<div style="margin-bottom:4px;">${lockoutBadge}</div>` : ''}
-                    ${u.is_active ? '<span class="badge-active">فعال</span>' : '<span class="badge-inactive">مسدود / غیرفعال</span>'}
-                    ${u.totp_enabled ? '<span class="badge-active" style="display:inline-flex; align-items:center; gap:3px; margin-top:4px;" data-tooltip="احراز هویت دومرحله‌ای فعال است"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>۲FA فعال</span>' : ''}
-                    ${pwdBadges ? `<div style="margin-top:4px;">${pwdBadges}</div>` : ''}
+                    <div style="display:flex; flex-direction:column; gap:5px; align-items:flex-start;">
+                        ${lockoutBadge}
+                        ${u.is_active ? '<span class="badge-2 badge-2-success"><span class="badge-2-dot" aria-hidden="true"></span><span>فعال</span></span>' : '<span class="badge-2 badge-2-destructive"><span class="badge-2-dot" aria-hidden="true"></span><span>مسدود / غیرفعال</span></span>'}
+                        ${u.totp_enabled ? '<span class="badge-2 badge-2-success" data-tooltip="احراز هویت دومرحله‌ای فعال است"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg><span>۲FA فعال</span></span>' : ''}
+                        ${pwdBadges}
+                    </div>
                 </td>
                 <td class="ltr" style="text-align:right;">${formatJalaliDateTime(u.created_at, false)}</td>
                 <td>

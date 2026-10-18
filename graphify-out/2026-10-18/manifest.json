@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1792309544.0161698,
-    "seen": 1792309666.7770061,
-    "ast_hash": "e72fcaa651d263feac112103744a9183",
+    "mtime": 1792311479.6300802,
+    "seen": 1792311715.261673,
+    "ast_hash": "f692eaacb0ff3546b65a9ef953cd2956",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
@@ -132,9 +132,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1791972515.152707,
-    "seen": 1791972672.1257117,
-    "ast_hash": "6ef58702da99309cb05fa23ab5067eb8",
+    "mtime": 1792311539.6490335,
+    "seen": 1792311715.2730029,
+    "ast_hash": "6f931d801c5952d65a6c1e76789c6f93",
     "semantic_hash": ""
   },
   ".impeccable/design.json": {
@@ -168,15 +168,15 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1791972641.1950445,
-    "seen": 1791972672.1257133,
-    "ast_hash": "68925c14d89f90dd716291f388196747",
+    "mtime": 1792311523.4215217,
+    "seen": 1792311715.273004,
+    "ast_hash": "69ad87dcb950d041a707c27c7c80cce7",
     "semantic_hash": ""
   },
   "GEMINI.md": {
-    "mtime": 1791972533.335278,
-    "seen": 1791972672.1257756,
-    "ast_hash": "d59654c42c2d019a06d04d290699e876",
+    "mtime": 1792311547.7110028,
+    "seen": 1792311715.2730675,
+    "ast_hash": "760b74c2964ea0f51da40eee4755218c",
     "semantic_hash": ""
   },
   "components/ui/button-with-icon.tsx": {

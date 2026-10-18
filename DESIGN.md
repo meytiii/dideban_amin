@@ -434,6 +434,19 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
   - **Active Floating State (Focused, Filled, or Autofilled):** Triggered by `:focus-within`, `:has(input:not(:placeholder-shown))`, `:has(textarea:not(:placeholder-shown))`, or `:-webkit-autofill`. The label smoothly transitions up to `top: 0; transform: translateY(-50%); font-size: 11px; font-weight: 600; color: var(--color-primary-light, #38bdf8);` via `cubic-bezier(0.16, 1, 0.3, 1)`.
   - **Surface Badge Cutout:** The inner `span` element has a solid background matching its container surface (`#162032` for dossier/detail cards, `#1e293b` for modal dialogs, `#0f172a` for login wrappers) with `padding: 2px 6px; border-radius: 4px;` so it cleanly overlays the input border without border-line clipping.
 
+### 34. Modern Refined Badge Architecture (`badge-2`, `.badge-2`)
+- **Portal-Wide Standardization:** All role permissions and account status indicators across administrative user management tables follow the `badge-2` token specification defined in `components/ui/badge-2.tsx`.
+- **Geometry & Tokens:**
+  - Geometry: `rounded-md` (`6px` border-radius), `height: 24px`, `padding: 0 8px`, `gap: 6px`, `font-size: 11.5px`, `font-weight: 500`.
+  - Indicator Dot (`.badge-2-dot` / `BadgeDot`): 6px diameter, `rounded-full`, `currentColor` with `opacity: 0.85`.
+- **Variant Mapping & Palettes:**
+  - `superuser` (Vivid Amber-Orange `#F59827`): `مدیر ارشد سامانه` with 6px status dot.
+  - `destructive` (Rose / Crimson): `مسدود / غیرفعال`, `منقضی شده` (with clock SVG).
+  - `info` (Indigo / Violet): `اداره کل`.
+  - `primary` (Sky Blue / Cyan): `نواحی و مناطق`, `حساب شما`.
+  - `success` (Emerald): `فعال`, `۲FA فعال` (with shield-check SVG).
+  - `warning` (Amber): `قفل موقت` (with lock SVG), `الزام تغییر رمز` (with key SVG).
+
 ---
 
 ## Hardware Acceleration & Anti-Lag Performance Rules
@@ -468,6 +481,7 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Do** hide action buttons (such as copy buttons) when underlying data is empty or anonymous.
 - **Do** enforce identical status badge colors across public tracking and admin cartable (specifically cyan `#06b6d4` for "بررسی شده").
 - **Do** always construct input text fields and textareas with animated floating labels (`.floating-group`, `.floating-label`, `placeholder=" "`).
+- **Do** apply `.badge-2` design tokens (6px rounded rectangle, `BadgeDot`, soft outline) to administrative user role and status indicators.
 - **Do** apply dedicated design skills (`/impeccable`, `/hallmark`, `/taste`, `/ui-ux-pro-max`, `/ux-ui-agent-skills`, `/high-end-visual-design`) to maintain high-craft, anti-slop interfaces.
 - **Do** interview user via `/grill-me` when requirements are ambiguous or general before designing.
 

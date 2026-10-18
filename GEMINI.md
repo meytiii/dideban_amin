@@ -90,6 +90,9 @@
 - Mandatory Pattern: All text inputs and textareas across public and admin interfaces must be wrapped in `.floating-group` with `.floating-label`.
 - Zero Collision Mandate: Text fields using floating labels must strictly set `placeholder=" "` (single space) and NEVER define or dynamically inject inline placeholder strings. The animated label itself acts as the placeholder in resting state, floating up on focus or value presence.
 
+### 12. Modern Refined Badge Architecture (`badge-2`, `.badge-2`)
+- Mandatory Pattern: Role access and account status badges across user management tables must use the `.badge-2` specification: 6px rounded rectangle (`rounded-md`), soft translucent background, 1px boundary border (`appearance: outline`), and 6px status indicator dot (`.badge-2-dot`).
+
 ## UI Performance & Hardware Acceleration Discipline (Anti-Lag Rules)
 - FORBIDDEN: Never use `backdrop-filter: blur(...)` on large surfaces, hero cards, or scrollable containers. Blurring large viewports drops framerates to 15-20fps on low-end hardware and mobile devices. Use calibrated solid/semi-translucent surfaces (`#162032`, `#1e293b`) with subtle 1px border outlines.
 - ALWAYS isolate fixed backgrounds (`body::before`) to their own GPU compositor layer using `transform: translateZ(0); will-change: transform;` to eliminate scroll repaints.
