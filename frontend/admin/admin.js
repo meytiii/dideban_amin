@@ -5314,13 +5314,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (isNavahi) {
                     if (notesInput) {
                         notesInput.readOnly = true;
-                        notesInput.placeholder = 'فاقد یادداشت محرمانه ثبت‌شده توسط اداره کل.';
+                        notesInput.placeholder = ' ';
                     }
                     saveNotesBtn.style.display = 'none';
                 } else {
                     if (notesInput) {
                         notesInput.readOnly = false;
-                        notesInput.placeholder = 'ثبت اقدامات داخلی، شماره نامه‌های اداری، ارجاعات و یادداشت‌های محرمانه کارشناس...';
+                        notesInput.placeholder = ' ';
                     }
                     saveNotesBtn.style.display = '';
                     saveNotesBtn.disabled = false;
@@ -5605,7 +5605,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (regionalCannedWrapper) regionalCannedWrapper.style.display = 'none';
                 if (responseInput) {
                     responseInput.readOnly = false;
-                    responseInput.placeholder = 'متن پاسخ یا نتیجه بررسی حراست را جهت ارسال به گزارش‌دهنده وارد نمایید...';
+                    responseInput.placeholder = ' ';
                 }
                 if (submitRespBtn) {
                     submitRespBtn.disabled = false;

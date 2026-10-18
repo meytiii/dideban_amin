@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-18)
 
 ## Corpus Check
-- 223 files · ~265,518 words
+- 223 files · ~265,535 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1816 nodes · 2839 edges · 155 communities (115 shown, 40 thin omitted)
+- 1816 nodes · 2839 edges · 154 communities (115 shown, 39 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 279 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `388506e6`
+- Built from commit: `bd962e30`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -41,7 +41,7 @@
 - Critical (ships as slop)
 - Typography
 - seed_50_reports.go
-- initAdminCustomSelect
+- fetchReports
 - NewClamAVScanner
 - Microinteraction tells
 - Archetype index — load ONLY the picks you need
@@ -92,7 +92,7 @@
 - badge-2.tsx
 - applyFilters
 - toggle.tsx
-- adminFetch
+- escapeHTML
 - metadata.go
 - Colors
 - rules/graphify.md
@@ -103,7 +103,7 @@
 - rules/caveman.md
 - workflows/caveman.md
 - ContainsVulgarLanguage
-- viewReport
+- adminFetch
 - Typography
 - be-ui-file-upload.tsx
 - sign-in-card-2.tsx
@@ -147,13 +147,12 @@
 - h9-custom-illustration-centerpiece.md
 - file-card-collections-demo.tsx
 - initLoginSlider
-- n1-wordmark-2-links.md
+- forceLogoutOnConnectionDrop
 - c2-inline-form-as-cta.md
 - c4-sticky-bottom-bar.md
 - f3-tabular-spec-sheet.md
 - f4-step-sequence.md
-- ft7-newsletter-first.md
-- h3-quote-led.md
+- s1-left-margin-numbered.md
 - n13-inline-cmdk-pill.md
 - s2-hanging.md
 
@@ -184,7 +183,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (155 total, 40 thin omitted)
+## Communities (154 total, 39 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -192,7 +191,7 @@ Nodes (33): 10. Persian Jalali Date-Range Popover (`.date-range-popover`), 11. I
 
 ### Community 1 - "component-cookbook.md"
 Cohesion: 0.03
-Nodes (36): C1 · Outlined chip, C3 · Typographic link, F1 · Bento grid, F2 · Sticky-scroll stack, F6 · Product card grid, Ft1 · Mast-headed, Ft2 · Inline-rule single line, Ft3 · Index-style category list (+28 more)
+Nodes (37): C1 · Outlined chip, C3 · Typographic link, F1 · Bento grid, F2 · Sticky-scroll stack, F6 · Product card grid, Ft1 · Mast-headed, Ft2 · Inline-rule single line, Ft3 · Index-style category list (+29 more)
 
 ### Community 2 - "Running Tests"
 Cohesion: 0.40
@@ -290,9 +289,9 @@ Nodes (17): Banned defaults, Bans, Body text rules, Free body faces, Free displa
 Cohesion: 0.70
 Nodes (4): deriveKey(), encryptWithKey(), genTrackingCode(), main()
 
-### Community 26 - "initAdminCustomSelect"
-Cohesion: 0.47
-Nodes (5): initAdminCustomFilters(), initAdminCustomSelect(), closeMenu(), openMenu(), toggleMenu()
+### Community 26 - "fetchReports"
+Cohesion: 0.27
+Nodes (12): connectAdminSSE(), fetchNotifications(), fetchReports(), markReportHasNewMessage(), renderNotificationsList(), renderReportsTableSkeleton(), renewSessionInteractive(), scheduleReportsRefresh() (+4 more)
 
 ### Community 27 - "NewClamAVScanner"
 Cohesion: 0.24
@@ -374,13 +373,9 @@ Nodes (7): Export formats, Format 1 — `tokens.css`, Format 2 — Tailwind v4 `
 Cohesion: 0.29
 Nodes (7): Bans, Colour, Contrast, Dark mode recipe, Palette construction, Principles, Use of the accent
 
-### Community 47 - "SessionManager"
-Cohesion: 0.31
-Nodes (4): hashToken(), AdminSession, cachedSession, SessionManager
-
 ### Community 48 - "Floating nav on scroll — the cross-fade morph"
-Cohesion: 0.33
-Nodes (6): Anti-patterns Hallmark refuses, Floating nav on scroll — the cross-fade morph, The four laws — non-negotiable, The property morph (10 properties, one curve), The scroll handler, The structure
+Cohesion: 0.22
+Nodes (7): N10 · Floating-on-scroll morph, Anti-patterns Hallmark refuses, Floating nav on scroll — the cross-fade morph, The four laws — non-negotiable, The property morph (10 properties, one curve), The scroll handler, The structure
 
 ### Community 49 - "SSEBroker"
 Cohesion: 0.19
@@ -455,12 +450,12 @@ Cohesion: 0.28
 Nodes (7): Badge(), BadgeButton(), BadgeButtonProps, badgeButtonVariants, BadgeDotProps, BadgeProps, badgeVariants
 
 ### Community 75 - "applyFilters"
-Cohesion: 0.15
-Nodes (18): applyAuditFiltersAndPagination(), applyFilters(), buildPaginationHTML(), getJalaliDateKeyFromDate(), getMatchSnippet(), getScrollBehavior(), getVisiblePaginationPages(), handleKPICardFilter() (+10 more)
+Cohesion: 0.23
+Nodes (12): applyAuditFiltersAndPagination(), applyFilters(), buildPaginationHTML(), closeDetailView(), getJalaliDateKeyFromDate(), getVisiblePaginationPages(), indexReportForSearch(), normalizePersianForSearch() (+4 more)
 
-### Community 77 - "adminFetch"
-Cohesion: 0.15
-Nodes (21): adminFetch(), deleteUser(), escapeHTML(), fetchActiveSessions(), fetchAdminUsers(), fetchAuditLogs(), fetchWithTimeout(), getCsrfToken() (+13 more)
+### Community 77 - "escapeHTML"
+Cohesion: 0.17
+Nodes (15): escapeHTML(), fetchActiveSessions(), fetchAuditLogs(), initAdminCustomFilters(), initAdminCustomSelect(), closeMenu(), openMenu(), toggleMenu() (+7 more)
 
 ### Community 78 - "metadata.go"
 Cohesion: 0.29
@@ -471,8 +466,8 @@ Cohesion: 0.40
 Nodes (5): Colors, Named Rules, Neutral, Primary, Status & Accents
 
 ### Community 82 - "openEditUserModal"
-Cohesion: 0.19
-Nodes (14): applyAdminUsersFilter(), fetchForwardingRecipients(), liftUserLockout(), openEditUserModal(), openForwardModal(), openResetPwdModal(), openShortcutsModal(), promoteTemporarily() (+6 more)
+Cohesion: 0.29
+Nodes (10): applyAdminUsersFilter(), deleteUser(), fetchAdminUsers(), liftUserLockout(), loadAdvSubView(), openEditUserModal(), renderAdminUsersPage(), renderUsersTable() (+2 more)
 
 ### Community 83 - "SubmitReportHandler"
 Cohesion: 0.18
@@ -486,9 +481,9 @@ Nodes (7): format_persian_text_with_dates(), main(), populate_docx(), replace_in
 Cohesion: 0.25
 Nodes (12): normalizeForSearch(), cleanRune(), collapseRepeatedRunes(), containsBoundedPhrase(), ContainsVulgarLanguage(), hasVulgarPrefix(), isDiacriticOrInvisible(), isSymbolOrPunct() (+4 more)
 
-### Community 88 - "viewReport"
-Cohesion: 0.13
-Nodes (31): closeDetailView(), connectAdminSSE(), createReportStatusBadge(), deleteReportPermanently(), dismissToast(), exportReportsToCSV(), fetchNotifications(), fetchReports() (+23 more)
+### Community 88 - "adminFetch"
+Cohesion: 0.14
+Nodes (27): adminFetch(), createReportStatusBadge(), deleteReportPermanently(), dismissToast(), exportReportsToCSV(), fetchSystemStatus(), fetchWithTimeout(), formatJalaliDateTime() (+19 more)
 
 ### Community 89 - "Typography"
 Cohesion: 0.50
@@ -515,8 +510,8 @@ Cohesion: 0.24
 Nodes (6): Button, ButtonProps, buttonVariants, ButtonWithIconProps, DropdownMenuProps, DropdownOption
 
 ### Community 105 - "security.go"
-Cohesion: 0.24
-Nodes (10): sync.Mutex, time.Ticker, time.Time, RateLimitMiddleware(), truncateRunes(), ActiveSessionItem, cachedAccountFailure, IPRateLimiter (+2 more)
+Cohesion: 0.23
+Nodes (12): sync.Mutex, time.Ticker, time.Time, RateLimitMiddleware(), truncateRunes(), ActiveSessionItem, AdminSession, cachedAccountFailure (+4 more)
 
 ### Community 106 - "initAppTooltips"
 Cohesion: 0.52
@@ -563,12 +558,12 @@ Cohesion: 0.28
 Nodes (9): getLatestAuditHashTx(), logAuditTx(), canAdminAccessReport(), ClassifyReportHandler(), DeleteUserHandler(), ForwardReportHandler(), RemoveForwardingHandler(), TerminateSessionHandler() (+1 more)
 
 ### Community 123 - "createOtpController"
-Cohesion: 0.38
-Nodes (6): createOtpController(), clearAll(), showError(), syncValue(), init2FAModalOtpControllers(), toAsciiDigits()
+Cohesion: 0.28
+Nodes (8): createOtpController(), clearAll(), showError(), syncValue(), init2FAModalOtpControllers(), initMfaOtpInput(), showMFAStep(), toAsciiDigits()
 
 ### Community 125 - "admin.js"
-Cohesion: 0.09
-Nodes (29): cancelMFAStep(), check2FAEnforcementNotice(), checkAdminProfile(), checkHostConnection(), checkMustChangePasswordPolicy(), evaluatePasswordStrength(), forceLogoutOnConnectionDrop(), handleTimerTick() (+21 more)
+Cohesion: 0.08
+Nodes (30): check2FAEnforcementNotice(), checkAdminProfile(), checkMustChangePasswordPolicy(), evaluatePasswordStrength(), fetchForwardingRecipients(), getScrollBehavior(), handleKPICardFilter(), handleTimerTick() (+22 more)
 
 ### Community 126 - "file-card-collections.tsx"
 Cohesion: 0.33
@@ -590,10 +585,14 @@ Nodes (4): inspectZipArchive(), TestCaptchaReplayPrevention(), TestInspectZipArc
 Cohesion: 0.70
 Nodes (5): initLoginSlider(), goToSlide(), nextSlide(), startTimer(), stopTimer()
 
+### Community 144 - "forceLogoutOnConnectionDrop"
+Cohesion: 0.27
+Nodes (10): cancelMFAStep(), checkHostConnection(), forceLogoutOnConnectionDrop(), hideOfflineBanner(), loadAdminCaptcha(), pingHost(), showOfflineBanner(), startRecoveryPolling() (+2 more)
+
 ## Knowledge Gaps
 - **785 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+780 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **40 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **39 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -611,4 +610,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Components` be split into smaller, more focused modules?**
   _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._
 - **Should `component-cookbook.md` be split into smaller, more focused modules?**
-  _Cohesion score 0.02666666666666667 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.025974025974025976 - nodes in this community are weakly interconnected._

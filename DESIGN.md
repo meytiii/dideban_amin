@@ -423,6 +423,17 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
   - Text labels are omitted to prevent visual clutter and maintain calm tactical density.
   - Anchored notification count badges positioned at the corner. Accessible tooltip provided via `data-tooltip`.
 
+### 33. Animated Floating Label Input Architecture (`.floating-group`, `.floating-label`)
+- **Portal-Wide Mandatory Standard:** All input text fields and textareas across both the public reporting portal and the administrative intelligence cartable must ALWAYS be built with animated floating labels (`.floating-group`, `.floating-label`). Never use plain static labels or raw un-animated inputs.
+- **Zero Text Collision Guarantee (Placeholder Rule):**
+  - Text fields and textareas using animated floating labels must NEVER display static or dynamically injected inline placeholder text (e.g. `placeholder="..."` or `el.placeholder = '...'`).
+  - The `placeholder` attribute must always be strictly a single space (`placeholder=" "`) so that CSS `:placeholder-shown` and `:not(:placeholder-shown)` trigger correctly.
+  - Injecting inline placeholder strings while a floating label is present causes visual collision and text overlap; this is strictly forbidden.
+- **Animation Kinematics & States:**
+  - **Resting State (Empty & Unfocused):** The label sits centered in the field (`top: 50%` for inputs, `top: 22px` for textareas) with muted color (`var(--text-muted)`), acting as an elegant in-field label.
+  - **Active Floating State (Focused, Filled, or Autofilled):** Triggered by `:focus-within`, `:has(input:not(:placeholder-shown))`, `:has(textarea:not(:placeholder-shown))`, or `:-webkit-autofill`. The label smoothly transitions up to `top: 0; transform: translateY(-50%); font-size: 11px; font-weight: 600; color: var(--color-primary-light, #38bdf8);` via `cubic-bezier(0.16, 1, 0.3, 1)`.
+  - **Surface Badge Cutout:** The inner `span` element has a solid background matching its container surface (`#162032` for dossier/detail cards, `#1e293b` for modal dialogs, `#0f172a` for login wrappers) with `padding: 2px 6px; border-radius: 4px;` so it cleanly overlays the input border without border-line clipping.
+
 ---
 
 ## Hardware Acceleration & Anti-Lag Performance Rules
@@ -456,6 +467,7 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Do** scope shake animations strictly to the failing input on async server errors.
 - **Do** hide action buttons (such as copy buttons) when underlying data is empty or anonymous.
 - **Do** enforce identical status badge colors across public tracking and admin cartable (specifically cyan `#06b6d4` for "بررسی شده").
+- **Do** always construct input text fields and textareas with animated floating labels (`.floating-group`, `.floating-label`, `placeholder=" "`).
 - **Do** apply dedicated design skills (`/impeccable`, `/hallmark`, `/taste`, `/ui-ux-pro-max`, `/ux-ui-agent-skills`, `/high-end-visual-design`) to maintain high-craft, anti-slop interfaces.
 - **Do** interview user via `/grill-me` when requirements are ambiguous or general before designing.
 
@@ -473,6 +485,7 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
 - **Don't** shake or reset unrelated inputs when a specific field fails validation.
 - **Don't** show dead or non-functional copy buttons next to missing/empty data fields.
 - **Don't** allow color mismatches between public report tracking badges and admin cartable badges.
+- **Don't** provide inline placeholder text in floating-label inputs or textareas, which causes visual collision with the animated label.
 - **Don't** assume user intent or design decisions without explicit interview alignment.
 - **Don't** put comments in codes.
 - **Don't** allow generic browser default white/gray scrollbars or arrow buttons anywhere in the interface.
