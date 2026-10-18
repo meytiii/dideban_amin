@@ -439,16 +439,19 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="reporter_name">نام و نام خانوادگی <span
-                                class="label-optional">(اختیاری)</span></label>
+                    <div class="form-group floating-group">
+                        <label for="reporter_name" class="floating-label">
+                            <span>نام و نام خانوادگی <span class="label-optional">(اختیاری)</span></span>
+                        </label>
                         <input type="text" id="reporter_name" name="reporter_name" maxlength="100"
-                            placeholder="مثال: علی حسینی" autocomplete="name">
+                            placeholder=" " autocomplete="name">
                     </div>
-                    <div class="form-group">
-                        <label for="reporter_phone">شماره تماس <span class="label-optional">(اختیاری)</span></label>
+                    <div class="form-group floating-group">
+                        <label for="reporter_phone" class="floating-label">
+                            <span>شماره تماس <span class="label-optional">(اختیاری)</span></span>
+                        </label>
                         <input type="tel" id="reporter_phone" name="reporter_phone" maxlength="15"
-                            placeholder="۰۹۱۲۳۴۵۶۷۸۹" dir="ltr" style="text-align: right;" autocomplete="tel">
+                            placeholder=" " dir="ltr" style="text-align: right;" autocomplete="tel">
                     </div>
 
                     <div class="form-actions">
@@ -730,14 +733,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="label-with-counter">
-                            <label for="description">شرح کامل گزارش <span class="label-required">*</span></label>
-                            <div class="char-counter" id="char-counter"><span id="current-char-count">۰</span> / ۵۰۰۰
-                                کاراکتر</div>
-                        </div>
+                    <div class="form-group floating-group textarea-floating-group">
+                        <div class="char-counter" id="char-counter"><span id="current-char-count">۰</span> / ۵۰۰۰ کاراکتر</div>
+                        <label for="description" class="floating-label">
+                            <span>شرح کامل گزارش <span class="label-required">*</span></span>
+                        </label>
                         <textarea id="description" name="description" rows="6" required maxlength="5000"
-                            placeholder="جزئیات و شرح دقیق گزارش خود را اینجا بنویسید..."></textarea>
+                            placeholder=" "></textarea>
                     </div>
 
                     <div class="form-actions">
@@ -802,7 +804,6 @@
                     </div>
 
                     <div class="form-group captcha-wrapper">
-                        <label for="submit_captcha_answer">کد امنیتی <span class="label-required">*</span></label>
                         <div class="captcha-row">
                             <div class="captcha-box">
                                 <img id="submit-captcha-img" src="" alt="کد امنیتی" class="captcha-img" width="130"
@@ -821,8 +822,13 @@
                                 </button>
                             </div>
                             <input type="hidden" id="submit_captcha_id" name="captcha_id">
-                            <input type="text" id="submit_captcha_answer" name="captcha_answer" class="captcha-input"
-                                placeholder="پاسخ معادله را وارد کنید" required autocomplete="off" dir="ltr">
+                            <div class="floating-group captcha-floating-group" style="flex: 1;">
+                                <label for="submit_captcha_answer" class="floating-label">
+                                    <span>کد امنیتی <span class="label-required">*</span></span>
+                                </label>
+                                <input type="text" id="submit_captcha_answer" name="captcha_answer" class="captcha-input"
+                                    placeholder=" " required autocomplete="off" dir="ltr">
+                            </div>
                         </div>
                     </div>
 
@@ -908,20 +914,18 @@
             <form id="trackForm" style="margin-bottom: 25px;" novalidate>
                 <div class="form-group tracking-code-input-group">
                     <div class="tracking-input-header">
-                        <label for="track_code_input" class="tracking-input-label">
+                        <div style="display: flex; align-items: center; gap: 8px;">
                             <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="label-icon">
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="label-icon text-cyan">
                                 <circle cx="7.5" cy="15.5" r="5.5"></circle>
                                 <path d="m21 2-9.6 9.6"></path>
                                 <path d="m15.5 7.5 3 3M17.5 5.5l2 2"></path>
                             </svg>
-                            <span>کد پیگیری ۱۶ رقمی گزارش</span>
-                            <span class="label-required">*</span>
-                        </label>
-                        <span class="tracking-hint-badge">حروف و اعداد انگلیسی</span>
+                            <span class="tracking-hint-badge">حروف و اعداد انگلیسی</span>
+                        </div>
                     </div>
 
-                    <div class="tracking-input-box">
+                    <div class="tracking-input-box floating-group">
                         <div class="tracking-input-icon">
                             <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -929,8 +933,11 @@
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                             </svg>
                         </div>
+                        <label for="track_code_input" class="floating-label">
+                            <span>کد پیگیری ۱۶ رقمی گزارش <span class="label-required">*</span></span>
+                        </label>
                         <input type="text" id="track_code_input" name="tracking_code"
-                            placeholder="مثال: A7B2K9X4M3P8Q1W5" maxlength="32" required dir="ltr" autocomplete="off"
+                            placeholder=" " maxlength="32" required dir="ltr" autocomplete="off"
                             spellcheck="false" lang="en" inputmode="email" autocapitalize="characters" class="tracking-code-field">
                         <button type="button" id="pasteTrackingBtn" class="btn-paste-stylish"
                             data-tooltip="جای‌گذاری هوشمند از حافظه موقت" aria-label="جای‌گذاری کد پیگیری">
@@ -949,7 +956,6 @@
                 </div>
 
                 <div class="form-group captcha-wrapper">
-                    <label for="track_captcha_answer">کد امنیتی <span class="label-required">*</span></label>
                     <div class="captcha-row">
                         <div class="captcha-box">
                             <img id="track-captcha-img" src="" alt="کد امنیتی" class="captcha-img" width="130"
@@ -967,8 +973,13 @@
                             </button>
                         </div>
                         <input type="hidden" id="track_captcha_id" name="captcha_id">
-                        <input type="text" id="track_captcha_answer" name="captcha_answer" class="captcha-input"
-                            placeholder="پاسخ معادله را وارد کنید" required autocomplete="off" dir="ltr">
+                        <div class="floating-group captcha-floating-group" style="flex: 1;">
+                            <label for="track_captcha_answer" class="floating-label">
+                                <span>کد امنیتی <span class="label-required">*</span></span>
+                            </label>
+                            <input type="text" id="track_captcha_answer" name="captcha_answer" class="captcha-input"
+                                placeholder=" " required autocomplete="off" dir="ltr">
+                        </div>
                     </div>
                 </div>
 
@@ -1082,10 +1093,13 @@
                 </div>
 
                 <div id="track-followup-box" class="followup-reply-card">
-                    <h3>ارسال پیام یا توضیحات تکمیلی برای کارشناس حراست:</h3>
                     <p class="followup-hint">اگر مدرک یا توضیح جدیدی درباره این گزارش دارید، در کادر زیر بنویسید. برای تسریع در رسیدگی، از ارسال پیام‌های تکراری خودداری کنید.</p>
-                    <textarea id="followup-message-input" rows="3" placeholder="توضیحات تکمیلی خود را بنویسید..."
-                        maxlength="4000"></textarea>
+                    <div class="form-group floating-group textarea-floating-group" style="margin-top: 10px; margin-bottom: 14px;">
+                        <label for="followup-message-input" class="floating-label">
+                            <span>ارسال پیام یا توضیحات تکمیلی برای کارشناس حراست</span>
+                        </label>
+                        <textarea id="followup-message-input" rows="3" placeholder=" " maxlength="4000"></textarea>
+                    </div>
 
                     <div class="followup-captcha-row">
                         <div class="captcha-box captcha-box-compact">
@@ -1104,8 +1118,13 @@
                             </button>
                         </div>
                         <input type="hidden" id="followup_captcha_id">
-                        <input type="text" id="followup_captcha_answer" placeholder="پاسخ کد"
-                            class="captcha-input-compact" dir="ltr">
+                        <div class="floating-group captcha-floating-group" style="flex: 1;">
+                            <label for="followup_captcha_answer" class="floating-label">
+                                <span>کد امنیتی</span>
+                            </label>
+                            <input type="text" id="followup_captcha_answer" placeholder=" "
+                                class="captcha-input-compact" dir="ltr">
+                        </div>
                         <button type="button" id="btnSubmitFollowup" class="btn-primary btn-compact btn-send-animated">
                             <div class="send-icon-wrapper">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" class="send-icon-svg">

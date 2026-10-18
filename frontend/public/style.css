@@ -6026,3 +6026,92 @@ button:disabled {
     }
 }
 
+.floating-group {
+    position: relative;
+    width: 100%;
+    margin-bottom: 22px;
+}
+
+.floating-group.captcha-floating-group {
+    margin-bottom: 0;
+}
+
+.floating-label {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    padding: 0 4px;
+    pointer-events: none;
+    cursor: text;
+    z-index: 4;
+    transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), font-size 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.floating-label span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #162032;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.floating-group.textarea-floating-group .floating-label,
+.floating-group:has(textarea) .floating-label {
+    top: 24px;
+    transform: translateY(-50%);
+}
+
+.floating-group:focus-within .floating-label,
+.floating-group.is-floating .floating-label,
+.floating-group:has(input:not(:placeholder-shown)) .floating-label,
+.floating-group:has(textarea:not(:placeholder-shown)) .floating-label,
+.floating-group:has(input:-webkit-autofill) .floating-label {
+    top: 0;
+    transform: translateY(-50%);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-primary-light, #38bdf8);
+}
+
+.floating-group:not(:focus-within).is-floating .floating-label,
+.floating-group:not(:focus-within):has(input:not(:placeholder-shown)) .floating-label,
+.floating-group:not(:focus-within):has(textarea:not(:placeholder-shown)) .floating-label {
+    color: var(--text-main, #f1f5f9);
+}
+
+.floating-group input,
+.floating-group textarea {
+    position: relative;
+    z-index: 1;
+}
+
+.floating-group .char-counter {
+    position: absolute;
+    left: 14px;
+    top: 0;
+    transform: translateY(-50%);
+    z-index: 4;
+    background: #162032;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.tracking-input-box.floating-group .floating-label {
+    right: 48px;
+}
+
+.tracking-input-box.floating-group:focus-within .floating-label,
+.tracking-input-box.floating-group.is-floating .floating-label,
+.tracking-input-box.floating-group:has(input:not(:placeholder-shown)) .floating-label {
+    right: 18px;
+    top: 0;
+}
+

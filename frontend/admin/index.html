@@ -52,8 +52,7 @@
 
                     <form id="loginForm" novalidate>
                         <div class="login-form-group">
-                            <label for="username">نام کاربری</label>
-                            <div class="login-input-wrapper">
+                            <div class="login-input-wrapper floating-group">
                                 <span class="login-input-icon">
                                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -61,14 +60,16 @@
                                         <circle cx="12" cy="7" r="4"></circle>
                                     </svg>
                                 </span>
+                                <label for="username" class="floating-label">
+                                    <span>نام کاربری اداری</span>
+                                </label>
                                 <input type="text" id="username" name="username" required autocomplete="off"
-                                    placeholder="نام کاربری اداری">
+                                    placeholder=" ">
                             </div>
                         </div>
 
                         <div class="login-form-group">
-                            <label for="password">رمز عبور</label>
-                            <div class="login-input-wrapper">
+                            <div class="login-input-wrapper floating-group">
                                 <span class="login-input-icon">
                                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -76,8 +77,11 @@
                                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                     </svg>
                                 </span>
+                                <label for="password" class="floating-label">
+                                    <span>رمز عبور</span>
+                                </label>
                                 <input type="password" id="password" name="password" required
-                                    autocomplete="current-password" placeholder="رمز عبور">
+                                    autocomplete="current-password" placeholder=" ">
                                 <button type="button" id="togglePasswordBtn" class="btn-toggle-pw"
                                     data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                                     <svg id="eye-icon-show" viewBox="0 0 24 24" width="18" height="18" fill="none"
@@ -100,7 +104,6 @@
                         </div>
 
                         <div class="login-form-group captcha-wrapper">
-                            <label for="admin_captcha_answer">کد امنیتی</label>
                             <div class="admin-captcha-row">
                                 <div class="admin-captcha-box">
                                     <img id="admin-captcha-img" src="" alt="کد امنیتی" class="admin-captcha-img"
@@ -119,9 +122,14 @@
                                     </button>
                                 </div>
                                 <input type="hidden" id="admin_captcha_id" name="captcha_id">
-                                <input type="text" id="admin_captcha_answer" name="captcha_answer"
-                                    placeholder="پاسخ معادله" required autocomplete="off" dir="ltr"
-                                    class="admin-captcha-input">
+                                <div class="floating-group captcha-floating-group" style="flex: 1;">
+                                    <label for="admin_captcha_answer" class="floating-label">
+                                        <span>کد امنیتی</span>
+                                    </label>
+                                    <input type="text" id="admin_captcha_answer" name="captcha_answer"
+                                        placeholder=" " required autocomplete="off" dir="ltr"
+                                        class="admin-captcha-input">
+                                </div>
                             </div>
                         </div>
 
@@ -2074,19 +2082,24 @@
                     aria-label="بستن">&times;</button>
             </div>
             <form id="form-create-user" novalidate>
-                <div class="form-group">
-                    <label for="new_full_name">نام و نام خانوادگی:</label>
-                    <input type="text" id="new_full_name" required placeholder="مثال: علی حسینی" autocomplete="off">
+                <div class="form-group floating-group">
+                    <label for="new_full_name" class="floating-label">
+                        <span>نام و نام خانوادگی</span>
+                    </label>
+                    <input type="text" id="new_full_name" required placeholder=" " autocomplete="off">
+                </div>
+                <div class="form-group floating-group">
+                    <label for="new_username" class="floating-label">
+                        <span>نام کاربری اداری</span>
+                    </label>
+                    <input type="text" id="new_username" required placeholder=" " autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <label for="new_username">نام کاربری اداری:</label>
-                    <input type="text" id="new_username" required placeholder="مثال: admin_pezhohesh"
-                        autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label for="new_password">رمز عبور (حداقل ۱۲ کاراکتر):</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="new_password" required placeholder="رمز عبور با الزامات امنیتی"
+                    <div class="password-wrapper floating-group">
+                        <label for="new_password" class="floating-label">
+                            <span>رمز عبور (حداقل ۱۲ کاراکتر)</span>
+                        </label>
+                        <input type="password" id="new_password" required placeholder=" "
                             autocomplete="new-password">
                         <button type="button" id="toggleNewPasswordBtn" class="btn-toggle-pw"
                             data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
@@ -2154,9 +2167,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="new_password_confirm">تکرار رمز عبور:</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="new_password_confirm" required placeholder="تکرار مجدد رمز عبور"
+                    <div class="password-wrapper floating-group">
+                        <label for="new_password_confirm" class="floating-label">
+                            <span>تکرار رمز عبور</span>
+                        </label>
+                        <input type="password" id="new_password_confirm" required placeholder=" "
                             autocomplete="new-password">
                         <button type="button" id="toggleNewPasswordConfirmBtn" class="btn-toggle-pw"
                             data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
@@ -2186,9 +2201,11 @@
                         <option value="superuser">مدیر ارشد سامانه</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="new_role_title">سمت یا عنوان سازمانی:</label>
-                    <input type="text" id="new_role_title" required placeholder="مثال: کارشناس جمع آوری و تجزیه و تحلیل"
+                <div class="form-group floating-group">
+                    <label for="new_role_title" class="floating-label">
+                        <span>سمت یا عنوان سازمانی</span>
+                    </label>
+                    <input type="text" id="new_role_title" required placeholder=" "
                         autocomplete="off">
                 </div>
                 <div class="form-group" style="margin-top: 10px;">
@@ -2226,9 +2243,11 @@
                     تغییر رمز عبور برای حساب: <strong id="reset_pwd_username_label" class="text-cyan">...</strong>
                 </p>
                 <div class="form-group">
-                    <label for="reset_new_password">رمز عبور جدید (حداقل ۱۲ کاراکتر):</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="reset_new_password" required placeholder="رمز عبور جدید امن"
+                    <div class="password-wrapper floating-group">
+                        <label for="reset_new_password" class="floating-label">
+                            <span>رمز عبور جدید (حداقل ۱۲ کاراکتر)</span>
+                        </label>
+                        <input type="password" id="reset_new_password" required placeholder=" "
                             autocomplete="new-password">
                         <button type="button" class="btn-toggle-pw" data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                             <svg class="eye-icon-show" viewBox="0 0 24 24" width="18" height="18" fill="none"
@@ -2345,17 +2364,23 @@
                         </svg>
                     </button>
                 </div>
-                <div class="form-group">
-                    <label for="edit_username">نام کاربری:</label>
-                    <input type="text" id="edit_username" disabled style="opacity: 0.7; cursor: not-allowed;">
+                <div class="form-group floating-group is-floating">
+                    <label for="edit_username" class="floating-label">
+                        <span>نام کاربری (غیرقابل ویرایش)</span>
+                    </label>
+                    <input type="text" id="edit_username" disabled placeholder=" " style="opacity: 0.7; cursor: not-allowed;">
                 </div>
-                <div class="form-group">
-                    <label for="edit_full_name">نام و نام خانوادگی:</label>
-                    <input type="text" id="edit_full_name" required placeholder="نام و نام خانوادگی" autocomplete="off">
+                <div class="form-group floating-group">
+                    <label for="edit_full_name" class="floating-label">
+                        <span>نام و نام خانوادگی</span>
+                    </label>
+                    <input type="text" id="edit_full_name" required placeholder=" " autocomplete="off">
                 </div>
-                <div class="form-group">
-                    <label for="edit_role_title">سمت یا عنوان سازمانی:</label>
-                    <input type="text" id="edit_role_title" required placeholder="سمت سازمانی" autocomplete="off">
+                <div class="form-group floating-group">
+                    <label for="edit_role_title" class="floating-label">
+                        <span>سمت یا عنوان سازمانی</span>
+                    </label>
+                    <input type="text" id="edit_role_title" required placeholder=" " autocomplete="off">
                 </div>
                 <div class="form-group" id="edit_role_container">
                     <label for="edit_role">سطح دسترسی و نقش کاربری:</label>
@@ -2451,10 +2476,12 @@
                     برای حفظ امنیت حساب کاربری و گردش دوره‌ای رمزها، لطفاً کلمه عبور جدید را وارد کنید.
                 </p>
                 <div class="form-group">
-                    <label for="my_current_password">کلمه عبور فعلی:</label>
-                    <div class="password-wrapper">
+                    <div class="password-wrapper floating-group">
+                        <label for="my_current_password" class="floating-label">
+                            <span>کلمه عبور فعلی</span>
+                        </label>
                         <input type="password" id="my_current_password" required
-                            placeholder="کلمه عبور فعلی خود را وارد کنید" autocomplete="current-password">
+                            placeholder=" " autocomplete="current-password">
                         <button type="button" class="btn-toggle-pw" data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                             <svg class="eye-icon-show" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2474,9 +2501,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="my_new_password">کلمه عبور جدید (حداقل ۱۲ کاراکتر):</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="my_new_password" required placeholder="کلمه عبور جدید امن"
+                    <div class="password-wrapper floating-group">
+                        <label for="my_new_password" class="floating-label">
+                            <span>کلمه عبور جدید (حداقل ۱۲ کاراکتر)</span>
+                        </label>
+                        <input type="password" id="my_new_password" required placeholder=" "
                             autocomplete="new-password">
                         <button type="button" class="btn-toggle-pw" data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                             <svg class="eye-icon-show" viewBox="0 0 24 24" width="18" height="18" fill="none"
@@ -2543,9 +2572,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="my_confirm_password">تکرار کلمه عبور جدید:</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="my_confirm_password" required placeholder="تکرار کلمه عبور جدید"
+                    <div class="password-wrapper floating-group">
+                        <label for="my_confirm_password" class="floating-label">
+                            <span>تکرار کلمه عبور جدید</span>
+                        </label>
+                        <input type="password" id="my_confirm_password" required placeholder=" "
                             autocomplete="new-password">
                         <button type="button" class="btn-toggle-pw" data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                             <svg class="eye-icon-show" viewBox="0 0 24 24" width="18" height="18" fill="none"
@@ -2643,10 +2674,12 @@
                 <form id="form-enable-2fa" novalidate>
                     <input type="hidden" id="enable_2fa_secret">
                     <div class="form-group">
-                        <label for="enable_2fa_pwd">کلمه عبور جاری حساب کاربری:</label>
-                        <div class="password-wrapper">
+                        <div class="password-wrapper floating-group">
+                            <label for="enable_2fa_pwd" class="floating-label">
+                                <span>کلمه عبور جاری حساب کاربری</span>
+                            </label>
                             <input type="password" id="enable_2fa_pwd" required autocomplete="current-password"
-                                placeholder="کلمه عبور جاری خود را وارد کنید">
+                                placeholder=" ">
                             <button type="button" class="btn-toggle-pw" data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                                 <svg class="eye-icon-show" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2699,10 +2732,12 @@
                 </p>
                 <form id="form-disable-2fa" novalidate>
                     <div class="form-group">
-                        <label for="disable_2fa_pwd">کلمه عبور جاری:</label>
-                        <div class="password-wrapper">
+                        <div class="password-wrapper floating-group">
+                            <label for="disable_2fa_pwd" class="floating-label">
+                                <span>کلمه عبور جاری</span>
+                            </label>
                             <input type="password" id="disable_2fa_pwd" required autocomplete="current-password"
-                                placeholder="کلمه عبور جاری خود را وارد کنید">
+                                placeholder=" ">
                             <button type="button" class="btn-toggle-pw" data-tooltip="نمایش/عدم نمایش رمز عبور" tabindex="-1" aria-label="نمایش رمز عبور">
                                 <svg class="eye-icon-show" viewBox="0 0 24 24" width="18" height="18" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
