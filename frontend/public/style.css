@@ -1954,6 +1954,14 @@ button:disabled {
     margin-bottom: 25px;
 }
 
+.tracking-guide-text {
+    font-size: 13.5px;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin: 0 0 14px 0;
+    text-align: justify;
+}
+
 .tracking-input-header {
     display: flex;
     justify-content: space-between;
