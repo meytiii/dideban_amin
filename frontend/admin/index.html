@@ -2106,9 +2106,51 @@
                             </svg>
                         </button>
                     </div>
-                    <div class="pwd-requirements-hint">
-                        <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
-                        (!@#$%^&*)
+                    <div class="pwd-strength-widget" data-target="new_password">
+                        <div class="pwd-meter-bars" role="meter" aria-label="میزان استحکام کلمه عبور" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0">
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                        </div>
+                        <div class="pwd-meter-info">
+                            <span class="pwd-meter-label">تعیین نشده</span>
+                            <span class="pwd-meter-warning d-none">الگوی تکراری یا قابل حدس</span>
+                        </div>
+                        <ul class="pwd-rules-list">
+                            <li class="pwd-rule-item" data-rule="length">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل ۱۲ کاراکتر</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="case">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حروف بزرگ و کوچک انگلیسی (A-Z و a-z)</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="digit">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل یک عدد (0-9)</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="symbol">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل یک نماد ویژه (!@#$%^&*...)</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="form-group">
@@ -2205,9 +2247,51 @@
                             </svg>
                         </button>
                     </div>
-                    <div class="pwd-requirements-hint">
-                        <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
-                        (!@#$%^&*)
+                    <div class="pwd-strength-widget" data-target="reset_new_password">
+                        <div class="pwd-meter-bars" role="meter" aria-label="میزان استحکام کلمه عبور" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0">
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                        </div>
+                        <div class="pwd-meter-info">
+                            <span class="pwd-meter-label">تعیین نشده</span>
+                            <span class="pwd-meter-warning d-none">الگوی تکراری یا قابل حدس</span>
+                        </div>
+                        <ul class="pwd-rules-list">
+                            <li class="pwd-rule-item" data-rule="length">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل ۱۲ کاراکتر</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="case">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حروف بزرگ و کوچک انگلیسی (A-Z و a-z)</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="digit">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل یک عدد (0-9)</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="symbol">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل یک نماد ویژه (!@#$%^&*...)</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="form-group" style="margin-top: 10px;">
@@ -2411,9 +2495,51 @@
                             </svg>
                         </button>
                     </div>
-                    <div class="pwd-requirements-hint">
-                        <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
-                        (!@#$%^&*)
+                    <div class="pwd-strength-widget" data-target="my_new_password">
+                        <div class="pwd-meter-bars" role="meter" aria-label="میزان استحکام کلمه عبور" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0">
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                        </div>
+                        <div class="pwd-meter-info">
+                            <span class="pwd-meter-label">تعیین نشده</span>
+                            <span class="pwd-meter-warning d-none">الگوی تکراری یا قابل حدس</span>
+                        </div>
+                        <ul class="pwd-rules-list">
+                            <li class="pwd-rule-item" data-rule="length">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل ۱۲ کاراکتر</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="case">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حروف بزرگ و کوچک انگلیسی (A-Z و a-z)</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="digit">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل یک عدد (0-9)</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="symbol">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل یک نماد ویژه (!@#$%^&*...)</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="form-group">
@@ -2703,9 +2829,51 @@
                             </svg>
                         </button>
                     </div>
-                    <div class="pwd-requirements-hint">
-                        <span>الزامات:</span> حداقل ۱۲ کاراکتر • حداقل یک حرف بزرگ انگلیسی (A-Z) • حداقل یک نماد خاص
-                        (!@#$%^&*)
+                    <div class="pwd-strength-widget" data-target="force_new_password">
+                        <div class="pwd-meter-bars" role="meter" aria-label="میزان استحکام کلمه عبور" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0">
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                            <div class="pwd-meter-bar"><span class="pwd-meter-fill"></span></div>
+                        </div>
+                        <div class="pwd-meter-info">
+                            <span class="pwd-meter-label">تعیین نشده</span>
+                            <span class="pwd-meter-warning d-none">الگوی تکراری یا قابل حدس</span>
+                        </div>
+                        <ul class="pwd-rules-list">
+                            <li class="pwd-rule-item" data-rule="length">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل ۱۲ کاراکتر</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="case">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حروف بزرگ و کوچک انگلیسی (A-Z و a-z)</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="digit">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل یک عدد (0-9)</span>
+                            </li>
+                            <li class="pwd-rule-item" data-rule="symbol">
+                                <span class="pwd-rule-check">
+                                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2 6.2 4.7 8.9 10 3.3"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="pwd-rule-text">حداقل یک نماد ویژه (!@#$%^&*...)</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="form-group">

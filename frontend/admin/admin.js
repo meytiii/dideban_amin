@@ -2957,6 +2957,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTableHeadersInteractions();
     updateTableHeadersFromFilters();
     initActionSearchBar();
+    initPasswordStrengthIndicators();
 
     const refreshReportsBtn = document.getElementById('refreshReportsBtn');
     if (refreshReportsBtn) {
@@ -7812,6 +7813,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnOpenCreateUser?.addEventListener('click', () => {
         formCreateUser?.reset();
         resetNewUserPasswordToggles();
+        resetPasswordStrengthWidgets(modalCreateUser);
         syncAllAdminCustomSelects();
         const status = document.getElementById('create-user-status');
         if (status) status.style.display = 'none';
@@ -7821,6 +7823,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeCreateUserModal = () => {
         if (modalCreateUser) modalCreateUser.style.display = 'none';
         resetNewUserPasswordToggles();
+        resetPasswordStrengthWidgets(modalCreateUser);
     };
     btnCloseCreateUser?.addEventListener('click', closeCreateUserModal);
     btnCancelCreateUser?.addEventListener('click', closeCreateUserModal);
@@ -8355,6 +8358,110 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    const PWD_COMMON_PATTERNS = /^(?:password|passw0rd|qwerty|letmein|welcome|admin|iloveyou|monkey|dragon|abc123|111111|123123|123456)/i;
+    const PWD_RUN_PATTERNS = /(.)\1{3,}/;
+    const PWD_RUN_UP_PATTERNS = /(?:0123|1234|2345|3456|4567|5678|6789|abcd|bcde|cdef|defg|qwer|wert|erty|asdf)/i;
+    const PWD_SYMBOL_PATTERN = /[!-/:-@[-`{-~]/;
+    const PWD_STRENGTH_LABELS = ['تعیین نشده', 'بسیار ضعیف', 'ضعیف', 'خوب', 'بسیار قوی و امن'];
+
+    function evaluatePasswordStrength(val) {
+        if (!val || val.length === 0) {
+            return {
+                score: 0,
+                tone: 'none',
+                label: PWD_STRENGTH_LABELS[0],
+                guessable: false,
+                rules: { length: false, case: false, digit: false, symbol: false }
+            };
+        }
+
+        const rules = {
+            length: val.length >= 12,
+            case: /[a-z]/.test(val) && /[A-Z]/.test(val),
+            digit: /\d/.test(val),
+            symbol: PWD_SYMBOL_PATTERN.test(val)
+        };
+
+        const passed = (rules.length ? 1 : 0) + (rules.case ? 1 : 0) + (rules.digit ? 1 : 0) + (rules.symbol ? 1 : 0);
+        const guessable = PWD_COMMON_PATTERNS.test(val) || PWD_RUN_PATTERNS.test(val) || PWD_RUN_UP_PATTERNS.test(val);
+
+        let score = guessable ? 1 : Math.min(4, Math.max(1, passed));
+        let tone = 'none';
+        if (score === 1) tone = 'danger';
+        else if (score === 2) tone = 'caution';
+        else if (score === 3) tone = 'good';
+        else if (score === 4) tone = 'safe';
+
+        return {
+            score,
+            tone,
+            label: PWD_STRENGTH_LABELS[score],
+            guessable,
+            rules
+        };
+    }
+
+    function updatePasswordStrengthWidget(widgetEl, val) {
+        if (!widgetEl) return;
+        const res = evaluatePasswordStrength(val);
+
+        widgetEl.classList.remove('tone-none', 'tone-danger', 'tone-caution', 'tone-good', 'tone-safe');
+        widgetEl.classList.add(`tone-${res.tone}`);
+
+        const bars = widgetEl.querySelectorAll('.pwd-meter-fill');
+        bars.forEach((bar, idx) => {
+            bar.style.transform = idx < res.score ? 'scaleX(1)' : 'scaleX(0)';
+        });
+
+        const meterContainer = widgetEl.querySelector('.pwd-meter-bars');
+        if (meterContainer) {
+            meterContainer.setAttribute('aria-valuenow', String(res.score));
+            meterContainer.setAttribute('aria-valuetext', res.label);
+        }
+
+        const labelEl = widgetEl.querySelector('.pwd-meter-label');
+        if (labelEl) {
+            labelEl.textContent = val.length === 0 ? 'الزامات امنیتی کلمه عبور' : res.label;
+        }
+
+        const warningEl = widgetEl.querySelector('.pwd-meter-warning');
+        if (warningEl) {
+            warningEl.classList.toggle('d-none', !res.guessable);
+        }
+
+        const ruleItems = widgetEl.querySelectorAll('.pwd-rule-item');
+        ruleItems.forEach(item => {
+            const ruleName = item.getAttribute('data-rule');
+            const isMet = Boolean(res.rules[ruleName]);
+            item.classList.toggle('met', isMet);
+        });
+    }
+
+    function initPasswordStrengthIndicators() {
+        const widgets = document.querySelectorAll('.pwd-strength-widget');
+        widgets.forEach(widget => {
+            const targetId = widget.getAttribute('data-target');
+            if (!targetId) return;
+            const input = document.getElementById(targetId);
+            if (!input) return;
+
+            input.addEventListener('input', () => {
+                updatePasswordStrengthWidget(widget, input.value);
+            });
+
+            updatePasswordStrengthWidget(widget, input.value || '');
+        });
+    }
+
+    function resetPasswordStrengthWidgets(container) {
+        const scope = container || document;
+        scope.querySelectorAll('.pwd-strength-widget').forEach(widget => {
+            const targetId = widget.getAttribute('data-target');
+            const input = targetId ? document.getElementById(targetId) : null;
+            updatePasswordStrengthWidget(widget, input ? input.value : '');
+        });
+    }
+
     function resetPasswordWrappers(container) {
         if (!container) return;
         container.querySelectorAll('.password-wrapper').forEach(wrapper => {
@@ -8365,6 +8472,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (eyeShow) eyeShow.classList.remove('d-none');
             if (eyeHide) eyeHide.classList.add('d-none');
         });
+        resetPasswordStrengthWidgets(container);
     }
 
     document.addEventListener('click', (e) => {

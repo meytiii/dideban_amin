@@ -6189,6 +6189,159 @@ tr.row-priority-normal {
     font-weight: 600;
 }
 
+.pwd-strength-widget {
+    margin-top: 10px;
+    width: 100%;
+    contain: layout style;
+}
+
+.pwd-meter-bars {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    width: 100%;
+}
+
+.pwd-meter-bar {
+    position: relative;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.pwd-meter-fill {
+    position: absolute;
+    inset: 0;
+    transform-origin: right center;
+    transform: scaleX(0);
+    border-radius: 3px;
+    will-change: transform;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease;
+}
+
+.pwd-strength-widget.tone-none .pwd-meter-fill {
+    background: transparent;
+}
+
+.pwd-strength-widget.tone-danger .pwd-meter-fill {
+    background: #f43f5e;
+}
+
+.pwd-strength-widget.tone-caution .pwd-meter-fill {
+    background: #f59e0b;
+}
+
+.pwd-strength-widget.tone-good .pwd-meter-fill {
+    background: #38bdf8;
+}
+
+.pwd-strength-widget.tone-safe .pwd-meter-fill {
+    background: #10b981;
+}
+
+.pwd-meter-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 7px;
+    min-height: 20px;
+    font-size: 12px;
+}
+
+.pwd-meter-label {
+    font-weight: 500;
+    color: #94a3b8;
+    transition: color 0.2s ease;
+}
+
+.pwd-strength-widget.tone-danger .pwd-meter-label {
+    color: #fb7185;
+}
+
+.pwd-strength-widget.tone-caution .pwd-meter-label {
+    color: #fbbf24;
+}
+
+.pwd-strength-widget.tone-good .pwd-meter-label {
+    color: #38bdf8;
+}
+
+.pwd-strength-widget.tone-safe .pwd-meter-label {
+    color: #34d399;
+}
+
+.pwd-meter-warning {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 6px;
+    padding: 1px 7px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pwd-rules-list {
+    list-style: none;
+    margin: 10px 0 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+}
+
+.pwd-rule-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #64748b;
+    transition: color 0.2s ease;
+}
+
+.pwd-rule-item.met {
+    color: #e2e8f0;
+}
+
+.pwd-rule-check {
+    width: 15px;
+    height: 15px;
+    border-radius: 4px;
+    border: 1.5px solid rgba(255, 255, 255, 0.16);
+    background: rgba(15, 23, 42, 0.6);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pwd-rule-item.met .pwd-rule-check {
+    background: #10b981;
+    border-color: #10b981;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.pwd-rule-check svg {
+    transform: scale(0.6);
+    opacity: 0;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease;
+}
+
+.pwd-rule-item.met .pwd-rule-check svg {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.pwd-rule-text {
+    line-height: 1.4;
+}
+
 .badge-pwd-forced {
     display: inline-flex;
     align-items: center;
