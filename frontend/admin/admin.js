@@ -7870,7 +7870,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             tr.innerHTML = `
                 <td><strong>#${toPersianNum(u.id)}</strong></td>
-                <td><strong style="color:var(--text-main); font-weight:600;">${escapeHTML(u.full_name || '-')}</strong></td>
+                <td><div style="display:inline-flex; align-items:center; gap:8px;"><svg viewBox="0 0 32 32" width="20" height="20" fill="none" style="flex-shrink:0; color:#38bdf8;" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="rgba(56, 189, 248, 0.14)" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></circle><circle cx="16" cy="14.695" r="4.565" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.8"></circle><path d="M16 31a14.928 14.928 0 0 0 9.4-3.323 9.773 9.773 0 0 0-18.808 0A14.928 14.928 0 0 0 16 31Z" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.8"></path></svg><strong style="color:var(--text-main); font-weight:600;">${escapeHTML(u.full_name || '-')}</strong></div></td>
                 <td><span class="ltr" style="font-family:Tahoma,sans-serif; color:var(--text-muted);">${escapeHTML(u.username)}</span> ${isSelf ? '<span class="badge-2 badge-2-sm badge-2-primary" style="margin-right:6px;"><span class="badge-2-dot" aria-hidden="true"></span><span>حساب شما</span></span>' : ''}</td>
                 <td>${escapeHTML(u.role_title)}</td>
                 <td>${roleBadge}</td>
@@ -9532,7 +9532,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             tag: u.is_superuser ? 'مدیر ارشد' : (u.role === 'navahi_manategh' ? 'نواحی' : 'اداره کل'),
                             short: 'انتخاب',
                             iconBoxClass: u.is_superuser ? 'action-icon-rose' : 'action-icon-blue',
-                            iconSvg: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>',
+                            iconSvg: '<svg viewBox="0 0 32 32" width="16" height="16" fill="none" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="rgba(56, 189, 248, 0.14)" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></circle><circle cx="16" cy="14.695" r="4.565" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.8"></circle><path d="M16 31a14.928 14.928 0 0 0 9.4-3.323 9.773 9.773 0 0 0-18.808 0A14.928 14.928 0 0 0 16 31Z" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.8"></path></svg>',
                             run: () => {
                                 input.value = u.username;
                                 adminUserActiveFilterPreset = 'all';
@@ -10766,9 +10766,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <div class="flow-node-body">
                             <div class="flow-node-icon-box source-icon">
-                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
+                                <svg viewBox="0 0 32 32" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="16" cy="16" r="15" fill="rgba(56, 189, 248, 0.14)" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></circle>
+                                    <circle cx="16" cy="14.695" r="4.565" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.8"></circle>
+                                    <path d="M16 31a14.928 14.928 0 0 0 9.4-3.323 9.773 9.773 0 0 0-18.808 0A14.928 14.928 0 0 0 16 31Z" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.8"></path>
                                 </svg>
                             </div>
                             <div class="flow-node-details">

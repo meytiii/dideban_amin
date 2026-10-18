@@ -4239,7 +4239,7 @@
       "file_type": "code",
       "norm_label": "syncallfloatinglabels()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L11021"
+      "source_location": "L11022"
     },
     {
       "id": "frontend_admin_admin_terminatesession",
@@ -25144,7 +25144,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L10775",
+      "source_location": "L10776",
       "weight": 1.0
     },
     {
@@ -25156,7 +25156,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L10890",
+      "source_location": "L10891",
       "weight": 1.0
     },
     {
@@ -25168,7 +25168,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L10922",
+      "source_location": "L10923",
       "weight": 1.0
     },
     {
@@ -25180,7 +25180,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L10938",
+      "source_location": "L10939",
       "weight": 1.0
     },
     {
@@ -25192,7 +25192,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L10943",
+      "source_location": "L10944",
       "weight": 1.0
     },
     {
@@ -43536,7 +43536,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L11021",
+      "source_location": "L11022",
       "weight": 1.0
     },
     {
@@ -53918,5 +53918,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "7b4bdd823366f178bc7692c9e26b02626c47631d"
+  "built_at_commit": "4dbe62c07d0bc58da0782838e86c5a11f84aec6d"
 }
