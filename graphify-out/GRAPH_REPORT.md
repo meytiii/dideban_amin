@@ -1,16 +1,16 @@
-# Graph Report - Setad_Khabari_HMD  (2026-10-18)
+# Graph Report - Setad_Khabari_HMD  (2026-10-19)
 
 ## Corpus Check
-- 223 files · ~269,981 words
+- 223 files · ~271,149 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1822 nodes · 2845 edges · 149 communities (106 shown, 43 thin omitted)
+- 1822 nodes · 2845 edges · 148 communities (106 shown, 42 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 279 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4dbe62c0`
+- Built from commit: `6f7c76ff`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -138,18 +138,17 @@
 - admin.js
 - file-card-collections.tsx
 - f5-annotated-screenshot.md
-- n4-hidden-behind-k.md
+- c2-inline-form-as-cta.md
 - n11-mega-menu.md
 - commit_message.md
-- n6-newspaper-masthead.md
-- n8-terminal-command.md
-- n2-floating-chip.md
-- h9-custom-illustration-centerpiece.md
+- n1b-saas-three-section.md
+- n5-floating-pill.md
+- n7-brutal-slab.md
+- n9-edge-aligned-minimal.md
 - file-card-collections-demo.tsx
 - initLoginSlider
 - f4-step-sequence.md
 - s1-left-margin-numbered.md
-- s2-hanging.md
 
 ## God Nodes (most connected - your core abstractions)
 1. `getIP()` - 35 edges
@@ -178,7 +177,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (149 total, 43 thin omitted)
+## Communities (148 total, 42 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -186,7 +185,7 @@ Nodes (35): 10. Persian Jalali Date-Range Popover (`.date-range-popover`), 11. I
 
 ### Community 1 - "component-cookbook.md"
 Cohesion: 0.03
-Nodes (31): C1 · Outlined chip, C2 · Inline form-as-CTA, C3 · Typographic link, C4 · Sticky bottom bar, F2 · Sticky-scroll stack, F3 · Tabular spec sheet, F6 · Product card grid, Ft1 · Mast-headed (+23 more)
+Nodes (31): C1 · Outlined chip, C3 · Typographic link, C4 · Sticky bottom bar, F2 · Sticky-scroll stack, F3 · Tabular spec sheet, F6 · Product card grid, Ft1 · Mast-headed, Ft2 · Inline-rule single line (+23 more)
 
 ### Community 2 - "Running Tests"
 Cohesion: 0.40
@@ -225,8 +224,8 @@ Cohesion: 0.07
 Nodes (28): 0. Pre-flight scan, 1. Design-context gate, 2.5. Check project memory, 2.6. Theme route — studied-DNA, catalog, or custom, 2. Pick a macrostructure FIRST, 3. Load the visual ruleset, 4. Decide on hero enrichment, 5. Preview (+20 more)
 
 ### Community 11 - "SKILL.md"
-Cohesion: 0.21
-Nodes (3): H7 · Demo Video — Clipped-by-viewport-edge, Preview-block worked examples, `hallmark audit`
+Cohesion: 0.19
+Nodes (4): H7 · Demo Video — Clipped-by-viewport-edge, H9 · Custom Illustration Centerpiece, Preview-block worked examples, `hallmark audit`
 
 ### Community 12 - "Recipes"
 Cohesion: 0.07
@@ -551,7 +550,7 @@ Nodes (5): initLoginSlider(), goToSlide(), nextSlide(), startTimer(), stopTimer(
 ## Knowledge Gaps
 - **791 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+786 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **43 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **42 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

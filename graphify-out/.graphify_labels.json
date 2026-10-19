@@ -127,15 +127,15 @@
   "125": "admin.js",
   "126": "file-card-collections.tsx",
   "127": "f5-annotated-screenshot.md",
-  "128": "n4-hidden-behind-k.md",
+  "128": "c2-inline-form-as-cta.md",
   "129": "n11-mega-menu.md",
   "130": "dropdown-01.tsx",
   "131": "commit_message.md",
   "132": "dropdown-01-demo.tsx",
-  "133": "n6-newspaper-masthead.md",
-  "134": "n8-terminal-command.md",
-  "135": "n2-floating-chip.md",
-  "136": "h9-custom-illustration-centerpiece.md",
+  "133": "n1b-saas-three-section.md",
+  "134": "n5-floating-pill.md",
+  "135": "n7-brutal-slab.md",
+  "136": "n9-edge-aligned-minimal.md",
   "137": "file-card-collections-demo.tsx",
   "138": "initLoginSlider",
   "139": "oversized-404-numeral.tsx",
@@ -146,6 +146,5 @@
   "146": "password-strength-demo.tsx",
   "148": "input-demo.tsx",
   "150": "f4-step-sequence.md",
-  "151": "s1-left-margin-numbered.md",
-  "154": "s2-hanging.md"
+  "151": "s1-left-margin-numbered.md"
 }

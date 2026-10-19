@@ -1127,6 +1127,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (adminCaptchaRefresh) {
         adminCaptchaRefresh.addEventListener('click', loadAdminCaptcha);
     }
+
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-refresh, .btn-captcha-refresh');
+        if (btn) {
+            btn.classList.remove('is-spinning');
+            void btn.offsetWidth;
+            btn.classList.add('is-spinning');
+            btn.addEventListener('animationend', () => {
+                btn.classList.remove('is-spinning');
+            }, { once: true });
+        }
+    });
     loadAdminCaptcha();
 
     const togglePasswordBtn = document.getElementById('togglePasswordBtn');

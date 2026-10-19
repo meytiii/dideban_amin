@@ -1424,6 +1424,18 @@ document.addEventListener('DOMContentLoaded', () => {
         loadCaptcha('track-captcha-img', 'track_captcha_id', 'track_captcha_answer');
     });
 
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-refresh');
+        if (btn) {
+            btn.classList.remove('is-spinning');
+            void btn.offsetWidth;
+            btn.classList.add('is-spinning');
+            btn.addEventListener('animationend', () => {
+                btn.classList.remove('is-spinning');
+            }, { once: true });
+        }
+    });
+
     function setBtnLoading(btn, isLoading, defaultText) {
         if (!btn) return;
         const btnText = btn.querySelector('.btn-text');
