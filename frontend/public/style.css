@@ -1820,14 +1820,31 @@ button:disabled {
     justify-content: center;
     cursor: pointer;
     box-shadow: none !important;
-
-    transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .btn-refresh:hover {
     background: rgba(59, 130, 246, 0.2) !important;
     color: #60a5fa;
-    transform: rotate(60deg);
+}
+
+.btn-refresh svg {
+    display: block;
+    transform-origin: center;
+    will-change: transform;
+}
+
+.btn-refresh.is-spinning svg {
+    animation: spin-once 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes spin-once {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-360deg);
+    }
 }
 
 .success-screen-container {
