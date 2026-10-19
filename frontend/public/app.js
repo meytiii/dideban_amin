@@ -2043,10 +2043,34 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
     }
 
+    function navigateToHome() {
+        switchView('home');
+        window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+    }
+
     if (btnBackToHome) {
-        btnBackToHome.addEventListener('click', () => {
-            switchView('home');
-            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        btnBackToHome.addEventListener('click', navigateToHome);
+    }
+
+    const headerCrest = document.getElementById('headerCrest');
+    if (headerCrest) {
+        headerCrest.addEventListener('click', navigateToHome);
+        headerCrest.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigateToHome();
+            }
+        });
+    }
+
+    const headerBrandTitle = document.getElementById('headerBrandTitle');
+    if (headerBrandTitle) {
+        headerBrandTitle.addEventListener('click', navigateToHome);
+        headerBrandTitle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigateToHome();
+            }
         });
     }
 
