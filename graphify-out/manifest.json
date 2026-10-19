@@ -1612,5 +1612,11 @@
     "seen": 1792390284.535004,
     "ast_hash": "b5960d27ac8fe472201b681c82d63fef",
     "semantic_hash": ""
+  },
+  "frontend/public/success.webp": {
+    "mtime": 1792391494.0530884,
+    "seen": 1792391551.2570708,
+    "ast_hash": "81fa6d5b6c329f73698295cee18b70b3",
+    "semantic_hash": ""
   }
 }

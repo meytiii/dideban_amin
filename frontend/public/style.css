@@ -381,6 +381,7 @@ body::before {
     background: #070e1c;
     display: block;
     border-radius: 0;
+    flex-shrink: 0;
 }
 
 .faq-banner-img {
