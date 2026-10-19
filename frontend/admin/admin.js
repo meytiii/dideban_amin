@@ -3759,6 +3759,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusFa = 'پیام جدید';
             } else if (!isNavahi && r.has_regional_response) {
                 statusFa = 'پاسخ حراست';
+            } else if (!r.is_read) {
+                statusFa = 'در نوبت بررسی';
             } else if (hasResp) {
                 statusFa = 'پاسخ داده شده';
             } else if (r.is_read) {
@@ -4544,18 +4546,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createReportStatusBadge(hasResp, isRead, isForwarded) {
         const statusBadge = document.createElement('span');
-        if (hasResp) {
+        if (!isRead) {
+            statusBadge.className = 'badge badge-unread';
+            statusBadge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.06152 12C5.55362 8.05369 8.92001 5 12.9996 5C17.4179 5 20.9996 8.58172 20.9996 13C20.9996 17.4183 17.4179 21 12.9996 21H8M13 13V9M11 3H15M3 15H8M5 18H10"/></svg><span>در نوبت بررسی</span>`;
+        } else if (hasResp) {
             statusBadge.className = 'badge badge-responded';
             statusBadge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg><span>پاسخ داده شده</span>`;
         } else if (isForwarded) {
             statusBadge.className = 'badge badge-in-progress';
             statusBadge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.1 2.18a9.93 9.93 0 0 1 3.8 0"></path><path d="M17.6 3.71a9.95 9.95 0 0 1 2.69 2.7"></path><path d="M21.82 10.1a9.93 9.93 0 0 1 0 3.8"></path><path d="M20.29 17.6a9.95 9.95 0 0 1-2.7 2.69"></path><path d="M13.9 21.82a9.93 9.93 0 0 1-3.8 0"></path><path d="M6.4 20.29a9.95 9.95 0 0 1-2.69-2.7"></path><path d="M2.18 13.9a9.93 9.93 0 0 1 0-3.8"></path><path d="M3.71 6.4a9.95 9.95 0 0 1 2.7-2.69"></path></svg><span>ارجاع به منطقه</span>`;
-        } else if (isRead) {
+        } else {
             statusBadge.className = 'badge badge-read';
             statusBadge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><circle cx="12" cy="12" r="3"></circle><path d="m16 16-1.9-1.9"></path></svg><span>بررسی شده</span>`;
-        } else {
-            statusBadge.className = 'badge badge-unread';
-            statusBadge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.06152 12C5.55362 8.05369 8.92001 5 12.9996 5C17.4179 5 20.9996 8.58172 20.9996 13C20.9996 17.4183 17.4179 21 12.9996 21H8M13 13V9M11 3H15M3 15H8M5 18H10"/></svg><span>در نوبت بررسی</span>`;
         }
         return statusBadge;
     }

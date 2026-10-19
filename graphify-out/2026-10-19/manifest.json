@@ -36,9 +36,9 @@
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
-    "mtime": 1792390099.5440764,
-    "seen": 1792390284.519176,
-    "ast_hash": "731dc2925fbc044ab74b21f55e7ca7c8",
+    "mtime": 1792392006.4986668,
+    "seen": 1792392072.1127374,
+    "ast_hash": "a661534158c3373fb278f6c2d5ba9672",
     "semantic_hash": ""
   },
   "go.mod": {
@@ -84,15 +84,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1792389273.2671165,
-    "seen": 1792389337.9684813,
-    "ast_hash": "8fe497fece90e64c5b5ee9ac68bbc1f6",
+    "mtime": 1792392251.178026,
+    "seen": 1792392347.9187758,
+    "ast_hash": "67fd2c64101c155669f7957dfd179605",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1792391064.5094454,
-    "seen": 1792391131.9391747,
-    "ast_hash": "f7c886d0c9c9bef2a23ad30d3305a3e4",
+    "mtime": 1792393536.6065383,
+    "seen": 1792393556.8319721,
+    "ast_hash": "39823b24c96ce8a6a22e4465edeb8c22",
     "semantic_hash": ""
   },
   "frontend/admin/favicon.png": {
@@ -1617,6 +1617,18 @@
     "mtime": 1792391494.0530884,
     "seen": 1792391551.2570708,
     "ast_hash": "81fa6d5b6c329f73698295cee18b70b3",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/chart.svg": {
+    "mtime": 1792392230.035972,
+    "seen": 1792392347.9197867,
+    "ast_hash": "5b013caef62309c721e42ea51f5cc626",
+    "semantic_hash": ""
+  },
+  "frontend/public/tracking.webp": {
+    "mtime": 1792392312.8066318,
+    "seen": 1792392347.9214578,
+    "ast_hash": "771d29cb28ecb5b3cebb7f806a42f46b",
     "semantic_hash": ""
   }
 }
