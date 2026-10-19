@@ -3469,6 +3469,12 @@ button:disabled {
         gap: 10px !important;
     }
 
+    .followup-captcha-row .captcha-box-compact {
+        width: fit-content !important;
+        max-width: 165px !important;
+        align-self: flex-start !important;
+    }
+
     .captcha-input-compact {
         max-width: 100% !important;
     }
@@ -3924,18 +3930,24 @@ button:disabled {
 
 .captcha-box-compact {
     height: 44px;
-    padding: 4px;
-    display: flex;
+    width: fit-content;
+    max-width: 165px;
+    padding: 4px 6px;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
     background: #020617;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 8px;
+    flex-shrink: 0;
 }
 
 .captcha-box-compact img {
     height: 34px;
+    width: 108px;
+    flex: none;
     border-radius: 4px;
+    object-fit: contain;
 }
 
 .captcha-input-compact {
