@@ -1571,25 +1571,44 @@ body::before {
 .text-emerald { color: #34d399 !important; }
 .text-cyan { color: #22d3ee !important; }
 
-.kpi-pulse-dot {
+.kpi-pulse-dots {
     position: absolute;
     top: 14px;
     left: 14px;
-    width: 8px;
-    height: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.kpi-pulse-dot-item {
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background-color: #fbbf24;
-    color: #fbbf24;
     display: inline-block;
-    animation: loading-ui-pulse-dot 1.2s ease-in-out infinite;
+    animation: kpi-dots-pulse 1s ease-in-out infinite;
     will-change: transform, opacity;
 }
 
-@keyframes loading-ui-pulse-dot {
+.kpi-pulse-dot-item:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.kpi-pulse-dot-item:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.kpi-pulse-dot-item:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes kpi-dots-pulse {
     0%,
     100% {
         transform: scale(1);
-        opacity: 0.8;
+        opacity: 0.5;
     }
     50% {
         transform: scale(1.5);

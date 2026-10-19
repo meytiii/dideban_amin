@@ -10985,7 +10985,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.target.style.animationPlayState = e.isIntersecting ? 'running' : 'paused';
                 });
             });
-            document.querySelectorAll('.beam, .corner-glow, .kpi-pulse-dot, .badge-dot-beacon, .pulsing-halo').forEach(el => animObserver.observe(el));
+            document.querySelectorAll('.beam, .corner-glow, .kpi-pulse-dot, .kpi-pulse-dot-item, .badge-dot-beacon, .pulsing-halo').forEach(el => animObserver.observe(el));
         }
     });
 
