@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-19)
 
 ## Corpus Check
-- 223 files · ~271,149 words
+- 223 files · ~271,164 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1822 nodes · 2845 edges · 148 communities (106 shown, 42 thin omitted)
+- 1822 nodes · 2845 edges · 148 communities (105 shown, 43 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 279 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6f7c76ff`
+- Built from commit: `47715da7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -73,7 +73,7 @@
 - no_comments.md
 - otp-input.tsx
 - Comprehensive Documentation Audit & System Verification Report
-- openForwardModal
+- f5-annotated-screenshot.md
 - populateAnalyticsDOM
 - sliding-number.tsx
 - calendar.tsx
@@ -137,18 +137,18 @@
 - createOtpController
 - admin.js
 - file-card-collections.tsx
-- f5-annotated-screenshot.md
-- c2-inline-form-as-cta.md
 - n11-mega-menu.md
+- c2-inline-form-as-cta.md
+- s1-left-margin-numbered.md
 - commit_message.md
-- n1b-saas-three-section.md
-- n5-floating-pill.md
-- n7-brutal-slab.md
-- n9-edge-aligned-minimal.md
+- s2-hanging.md
+- h9-custom-illustration-centerpiece.md
 - file-card-collections-demo.tsx
 - initLoginSlider
+- n2-floating-chip.md
+- n6-newspaper-masthead.md
+- n8-terminal-command.md
 - f4-step-sequence.md
-- s1-left-margin-numbered.md
 
 ## God Nodes (most connected - your core abstractions)
 1. `getIP()` - 35 edges
@@ -177,7 +177,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (148 total, 42 thin omitted)
+## Communities (148 total, 43 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -224,8 +224,8 @@ Cohesion: 0.07
 Nodes (28): 0. Pre-flight scan, 1. Design-context gate, 2.5. Check project memory, 2.6. Theme route — studied-DNA, catalog, or custom, 2. Pick a macrostructure FIRST, 3. Load the visual ruleset, 4. Decide on hero enrichment, 5. Preview (+20 more)
 
 ### Community 11 - "SKILL.md"
-Cohesion: 0.19
-Nodes (4): H7 · Demo Video — Clipped-by-viewport-edge, H9 · Custom Illustration Centerpiece, Preview-block worked examples, `hallmark audit`
+Cohesion: 0.21
+Nodes (3): H7 · Demo Video — Clipped-by-viewport-edge, Preview-block worked examples, `hallmark audit`
 
 ### Community 12 - "Recipes"
 Cohesion: 0.07
@@ -403,10 +403,6 @@ Nodes (12): ALLOW, CROSSFADE, EASE, OtpCellProps, OtpInput(), OtpInputHandle, Ot
 Cohesion: 0.18
 Nodes (10): 1. Executive Summary & Verification Verdict, 2. Repository Subsystems & Files Systematically Inspected, 3. Test Suite & Empirical Verification Procedures, 4. Major Chapters Completed in Documentation Deliverables, 5. Important Findings, Known Limitations & Unverified Assumptions, 6. Exact Output Paths of All Deliverables, Comprehensive Documentation Audit & System Verification Report, Known Architectural Limitations: (+2 more)
 
-### Community 58 - "openForwardModal"
-Cohesion: 0.40
-Nodes (6): fetchForwardingRecipients(), normalizePersianForSearch(), openForwardModal(), renderRecipientList(), renderRecipientListSkeleton(), updateSelectedRecipientsCounter()
-
 ### Community 59 - "populateAnalyticsDOM"
 Cohesion: 0.15
 Nodes (7): populateAnalyticsDOM(), renderAnalyticsDashboard(), renderCategoryPieChart(), renderClassificationPieChart(), renderClientSideAnalytics(), renderMonthlyChart(), renderPrioritiesSegmentedBar()
@@ -440,12 +436,12 @@ Cohesion: 0.28
 Nodes (7): Badge(), BadgeButton(), BadgeButtonProps, badgeButtonVariants, BadgeDotProps, BadgeProps, badgeVariants
 
 ### Community 75 - "applyFilters"
-Cohesion: 0.15
-Nodes (17): applyAuditFiltersAndPagination(), applyFilters(), buildPaginationHTML(), exportReportsToCSV(), formatJalaliDateTime(), getJalaliDateKeyFromDate(), getScrollBehavior(), getVisiblePaginationPages() (+9 more)
+Cohesion: 0.12
+Nodes (21): applyAuditFiltersAndPagination(), applyFilters(), buildPaginationHTML(), fetchForwardingRecipients(), getJalaliDateKeyFromDate(), getScrollBehavior(), getVisiblePaginationPages(), handleKPICardFilter() (+13 more)
 
 ### Community 77 - "adminFetch"
 Cohesion: 0.11
-Nodes (30): adminFetch(), applyAdminUsersFilter(), deleteUser(), dismissToast(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus(), fetchWithTimeout() (+22 more)
+Nodes (32): adminFetch(), applyAdminUsersFilter(), deleteUser(), dismissToast(), exportReportsToCSV(), fetchActiveSessions(), fetchAdminUsers(), fetchSystemStatus() (+24 more)
 
 ### Community 78 - "metadata.go"
 Cohesion: 0.29
@@ -550,7 +546,7 @@ Nodes (5): initLoginSlider(), goToSlide(), nextSlide(), startTimer(), stopTimer(
 ## Knowledge Gaps
 - **791 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+786 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **42 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **43 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

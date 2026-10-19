@@ -3270,78 +3270,6 @@
       "source_location": "L69"
     },
     {
-      "id": "frontend_admin_admin_fetchforwardingrecipients",
-      "label": "fetchForwardingRecipients()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "openForwardModal",
-      "file_type": "code",
-      "norm_label": "fetchforwardingrecipients()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L10390"
-    },
-    {
-      "id": "frontend_admin_admin_normalizepersianforsearch",
-      "label": "normalizePersianForSearch()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "openForwardModal",
-      "file_type": "code",
-      "norm_label": "normalizepersianforsearch()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L4041"
-    },
-    {
-      "id": "frontend_admin_admin_openforwardmodal",
-      "label": "openForwardModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "openForwardModal",
-      "file_type": "code",
-      "norm_label": "openforwardmodal()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L10541"
-    },
-    {
-      "id": "frontend_admin_admin_renderrecipientlist",
-      "label": "renderRecipientList()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "openForwardModal",
-      "file_type": "code",
-      "norm_label": "renderrecipientlist()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L10409"
-    },
-    {
-      "id": "frontend_admin_admin_renderrecipientlistskeleton",
-      "label": "renderRecipientListSkeleton()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "openForwardModal",
-      "file_type": "code",
-      "norm_label": "renderrecipientlistskeleton()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L10521"
-    },
-    {
-      "id": "frontend_admin_admin_updateselectedrecipientscounter",
-      "label": "updateSelectedRecipientsCounter()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "openForwardModal",
-      "file_type": "code",
-      "norm_label": "updateselectedrecipientscounter()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L10403"
-    },
-    {
       "id": "frontend_admin_admin_populateanalyticsdom",
       "label": "populateAnalyticsDOM()",
       "_callable": true,
@@ -3738,28 +3666,16 @@
       "source_location": "L4448"
     },
     {
-      "id": "frontend_admin_admin_exportreportstocsv",
-      "label": "exportReportsToCSV()",
+      "id": "frontend_admin_admin_fetchforwardingrecipients",
+      "label": "fetchForwardingRecipients()",
       "_callable": true,
       "_origin": "ast",
       "community": 75,
       "community_name": "applyFilters",
       "file_type": "code",
-      "norm_label": "exportreportstocsv()",
+      "norm_label": "fetchforwardingrecipients()",
       "source_file": "frontend/admin/admin.js",
-      "source_location": "L3744"
-    },
-    {
-      "id": "frontend_admin_admin_formatjalalidatetime",
-      "label": "formatJalaliDateTime()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 75,
-      "community_name": "applyFilters",
-      "file_type": "code",
-      "norm_label": "formatjalalidatetime()",
-      "source_file": "frontend/admin/admin.js",
-      "source_location": "L3938"
+      "source_location": "L10390"
     },
     {
       "id": "frontend_admin_admin_getjalalidatekeyfromdate",
@@ -3834,6 +3750,30 @@
       "source_location": "L2470"
     },
     {
+      "id": "frontend_admin_admin_normalizepersianforsearch",
+      "label": "normalizePersianForSearch()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 75,
+      "community_name": "applyFilters",
+      "file_type": "code",
+      "norm_label": "normalizepersianforsearch()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L4041"
+    },
+    {
+      "id": "frontend_admin_admin_openforwardmodal",
+      "label": "openForwardModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 75,
+      "community_name": "applyFilters",
+      "file_type": "code",
+      "norm_label": "openforwardmodal()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L10541"
+    },
+    {
       "id": "frontend_admin_admin_parsetimestamp",
       "label": "parseTimestamp()",
       "_callable": true,
@@ -3882,6 +3822,30 @@
       "source_location": "L4508"
     },
     {
+      "id": "frontend_admin_admin_renderrecipientlist",
+      "label": "renderRecipientList()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 75,
+      "community_name": "applyFilters",
+      "file_type": "code",
+      "norm_label": "renderrecipientlist()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L10409"
+    },
+    {
+      "id": "frontend_admin_admin_renderrecipientlistskeleton",
+      "label": "renderRecipientListSkeleton()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 75,
+      "community_name": "applyFilters",
+      "file_type": "code",
+      "norm_label": "renderrecipientlistskeleton()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L10521"
+    },
+    {
       "id": "frontend_admin_admin_syncalladmincustomselects",
       "label": "syncAllAdminCustomSelects()",
       "_callable": true,
@@ -3892,6 +3856,18 @@
       "norm_label": "syncalladmincustomselects()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L2162"
+    },
+    {
+      "id": "frontend_admin_admin_updateselectedrecipientscounter",
+      "label": "updateSelectedRecipientsCounter()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 75,
+      "community_name": "applyFilters",
+      "file_type": "code",
+      "norm_label": "updateselectedrecipientscounter()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L10403"
     },
     {
       "id": "frontend_admin_admin_updatetableheadersfromfilters",
@@ -3954,6 +3930,18 @@
       "source_location": "L614"
     },
     {
+      "id": "frontend_admin_admin_exportreportstocsv",
+      "label": "exportReportsToCSV()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 77,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "exportreportstocsv()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L3744"
+    },
+    {
       "id": "frontend_admin_admin_fetchactivesessions",
       "label": "fetchActiveSessions()",
       "_callable": true,
@@ -4000,6 +3988,18 @@
       "norm_label": "fetchwithtimeout()",
       "source_file": "frontend/admin/admin.js",
       "source_location": "L9"
+    },
+    {
+      "id": "frontend_admin_admin_formatjalalidatetime",
+      "label": "formatJalaliDateTime()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 77,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "formatjalalidatetime()",
+      "source_file": "frontend/admin/admin.js",
+      "source_location": "L3938"
     },
     {
       "id": "frontend_admin_admin_getcsrftoken",
@@ -5778,27 +5778,27 @@
       "source_location": "L2"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n2_floating_chip",
-      "label": "n2-floating-chip.md",
+      "id": "agents_skills_hallmark_references_components_n1b_saas_three_section",
+      "label": "n1b-saas-three-section.md",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "n2-floating-chip.md",
-      "source_file": ".agents/skills/hallmark/references/components/n2-floating-chip.md",
+      "norm_label": "n1b-saas-three-section.md",
+      "source_file": ".agents/skills/hallmark/references/components/n1b-saas-three-section.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n2_floating_chip_n2_floating_chip",
-      "label": "N2 \u00b7 Floating chip",
+      "id": "agents_skills_hallmark_references_components_n1b_saas_three_section_n1b_canonical_saas_three_section",
+      "label": "N1b \u00b7 Canonical SaaS three-section",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "n2 \u00b7 floating chip",
-      "source_file": ".agents/skills/hallmark/references/components/n2-floating-chip.md",
+      "norm_label": "n1b \u00b7 canonical saas three-section",
+      "source_file": ".agents/skills/hallmark/references/components/n1b-saas-three-section.md",
       "source_location": "L1"
     },
     {
@@ -5850,75 +5850,75 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n6_newspaper_masthead",
-      "label": "n6-newspaper-masthead.md",
+      "id": "agents_skills_hallmark_references_components_n5_floating_pill",
+      "label": "n5-floating-pill.md",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "n6-newspaper-masthead.md",
-      "source_file": ".agents/skills/hallmark/references/components/n6-newspaper-masthead.md",
+      "norm_label": "n5-floating-pill.md",
+      "source_file": ".agents/skills/hallmark/references/components/n5-floating-pill.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n6_newspaper_masthead_n6_newspaper_masthead",
-      "label": "N6 \u00b7 Newspaper masthead",
+      "id": "agents_skills_hallmark_references_components_n5_floating_pill_n5_floating_pill",
+      "label": "N5 \u00b7 Floating pill",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "n6 \u00b7 newspaper masthead",
-      "source_file": ".agents/skills/hallmark/references/components/n6-newspaper-masthead.md",
+      "norm_label": "n5 \u00b7 floating pill",
+      "source_file": ".agents/skills/hallmark/references/components/n5-floating-pill.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n8_terminal_command",
-      "label": "n8-terminal-command.md",
+      "id": "agents_skills_hallmark_references_components_n7_brutal_slab",
+      "label": "n7-brutal-slab.md",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "n8-terminal-command.md",
-      "source_file": ".agents/skills/hallmark/references/components/n8-terminal-command.md",
+      "norm_label": "n7-brutal-slab.md",
+      "source_file": ".agents/skills/hallmark/references/components/n7-brutal-slab.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n8_terminal_command_n8_terminal_command",
-      "label": "N8 \u00b7 Terminal command",
+      "id": "agents_skills_hallmark_references_components_n7_brutal_slab_n7_brutal_slab",
+      "label": "N7 \u00b7 Brutal slab",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "n8 \u00b7 terminal command",
-      "source_file": ".agents/skills/hallmark/references/components/n8-terminal-command.md",
+      "norm_label": "n7 \u00b7 brutal slab",
+      "source_file": ".agents/skills/hallmark/references/components/n7-brutal-slab.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_s2_hanging",
-      "label": "s2-hanging.md",
+      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal",
+      "label": "n9-edge-aligned-minimal.md",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "s2-hanging.md",
-      "source_file": ".agents/skills/hallmark/references/components/s2-hanging.md",
+      "norm_label": "n9-edge-aligned-minimal.md",
+      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_s2_hanging_s2_hanging",
-      "label": "S2 \u00b7 Hanging",
+      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal_n9_edge_aligned_minimal",
+      "label": "N9 \u00b7 Edge-aligned minimal",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "s2 \u00b7 hanging",
-      "source_file": ".agents/skills/hallmark/references/components/s2-hanging.md",
+      "norm_label": "n9 \u00b7 edge-aligned minimal",
+      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
       "source_location": "L1"
     },
     {
@@ -7232,30 +7232,6 @@
       "node_kind": "heading",
       "norm_label": "h7 \u00b7 demo video \u2014 clipped-by-viewport-edge",
       "source_file": ".agents/skills/hallmark/references/components/h7-demo-video-clipped-by-viewport-edge.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_h9_custom_illustration_centerpiece",
-      "label": "h9-custom-illustration-centerpiece.md",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "SKILL.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "h9-custom-illustration-centerpiece.md",
-      "source_file": ".agents/skills/hallmark/references/components/h9-custom-illustration-centerpiece.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_h9_custom_illustration_centerpiece_h9_custom_illustration_centerpiece",
-      "label": "H9 \u00b7 Custom Illustration Centerpiece",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "SKILL.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "h9 \u00b7 custom illustration centerpiece",
-      "source_file": ".agents/skills/hallmark/references/components/h9-custom-illustration-centerpiece.md",
       "source_location": "L1"
     },
     {
@@ -8680,27 +8656,27 @@
       "source_location": "L52"
     },
     {
-      "id": "agents_skills_hallmark_references_components_f5_annotated_screenshot",
-      "label": "f5-annotated-screenshot.md",
+      "id": "agents_skills_hallmark_references_components_n11_mega_menu",
+      "label": "n11-mega-menu.md",
       "_origin": "ast",
       "community": 127,
-      "community_name": "f5-annotated-screenshot.md",
+      "community_name": "n11-mega-menu.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "f5-annotated-screenshot.md",
-      "source_file": ".agents/skills/hallmark/references/components/f5-annotated-screenshot.md",
+      "norm_label": "n11-mega-menu.md",
+      "source_file": ".agents/skills/hallmark/references/components/n11-mega-menu.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_f5_annotated_screenshot_f5_annotated_screenshot",
-      "label": "F5 \u00b7 Annotated screenshot",
+      "id": "agents_skills_hallmark_references_components_n11_mega_menu_n11_mega_menu_panel",
+      "label": "N11 \u00b7 Mega-menu panel",
       "_origin": "ast",
       "community": 127,
-      "community_name": "f5-annotated-screenshot.md",
+      "community_name": "n11-mega-menu.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "f5 \u00b7 annotated screenshot",
-      "source_file": ".agents/skills/hallmark/references/components/f5-annotated-screenshot.md",
+      "norm_label": "n11 \u00b7 mega-menu panel",
+      "source_file": ".agents/skills/hallmark/references/components/n11-mega-menu.md",
       "source_location": "L1"
     },
     {
@@ -8728,28 +8704,28 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n11_mega_menu",
-      "label": "n11-mega-menu.md",
+      "id": "agents_skills_hallmark_references_components_s1_left_margin_numbered",
+      "label": "s1-left-margin-numbered.md",
       "_origin": "ast",
       "community": 129,
-      "community_name": "n11-mega-menu.md",
+      "community_name": "s1-left-margin-numbered.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "n11-mega-menu.md",
-      "source_file": ".agents/skills/hallmark/references/components/n11-mega-menu.md",
+      "norm_label": "s1-left-margin-numbered.md",
+      "source_file": ".agents/skills/hallmark/references/components/s1-left-margin-numbered.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n11_mega_menu_n11_mega_menu_panel",
-      "label": "N11 \u00b7 Mega-menu panel",
+      "id": "agents_skills_hallmark_references_components_s1_left_margin_numbered_s1_left_margin_numbered",
+      "label": "S1 \u00b7 Left-margin numbered",
       "_origin": "ast",
       "community": 129,
-      "community_name": "n11-mega-menu.md",
+      "community_name": "s1-left-margin-numbered.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "n11 \u00b7 mega-menu panel",
-      "source_file": ".agents/skills/hallmark/references/components/n11-mega-menu.md",
-      "source_location": "L1"
+      "norm_label": "s1 \u00b7 left-margin numbered",
+      "source_file": ".agents/skills/hallmark/references/components/s1-left-margin-numbered.md",
+      "source_location": "L2"
     },
     {
       "id": "agents_skills_hallmark_references_study_after_the_file_is_written",
@@ -9110,99 +9086,51 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n1b_saas_three_section",
-      "label": "n1b-saas-three-section.md",
+      "id": "agents_skills_hallmark_references_components_s2_hanging",
+      "label": "s2-hanging.md",
       "_origin": "ast",
       "community": 133,
-      "community_name": "n1b-saas-three-section.md",
+      "community_name": "s2-hanging.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "n1b-saas-three-section.md",
-      "source_file": ".agents/skills/hallmark/references/components/n1b-saas-three-section.md",
+      "norm_label": "s2-hanging.md",
+      "source_file": ".agents/skills/hallmark/references/components/s2-hanging.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n1b_saas_three_section_n1b_canonical_saas_three_section",
-      "label": "N1b \u00b7 Canonical SaaS three-section",
+      "id": "agents_skills_hallmark_references_components_s2_hanging_s2_hanging",
+      "label": "S2 \u00b7 Hanging",
       "_origin": "ast",
       "community": 133,
-      "community_name": "n1b-saas-three-section.md",
+      "community_name": "s2-hanging.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "n1b \u00b7 canonical saas three-section",
-      "source_file": ".agents/skills/hallmark/references/components/n1b-saas-three-section.md",
+      "norm_label": "s2 \u00b7 hanging",
+      "source_file": ".agents/skills/hallmark/references/components/s2-hanging.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n5_floating_pill",
-      "label": "n5-floating-pill.md",
-      "_origin": "ast",
-      "community": 134,
-      "community_name": "n5-floating-pill.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "n5-floating-pill.md",
-      "source_file": ".agents/skills/hallmark/references/components/n5-floating-pill.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_n5_floating_pill_n5_floating_pill",
-      "label": "N5 \u00b7 Floating pill",
-      "_origin": "ast",
-      "community": 134,
-      "community_name": "n5-floating-pill.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "n5 \u00b7 floating pill",
-      "source_file": ".agents/skills/hallmark/references/components/n5-floating-pill.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_n7_brutal_slab",
-      "label": "n7-brutal-slab.md",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "n7-brutal-slab.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "n7-brutal-slab.md",
-      "source_file": ".agents/skills/hallmark/references/components/n7-brutal-slab.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_n7_brutal_slab_n7_brutal_slab",
-      "label": "N7 \u00b7 Brutal slab",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "n7-brutal-slab.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "n7 \u00b7 brutal slab",
-      "source_file": ".agents/skills/hallmark/references/components/n7-brutal-slab.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal",
-      "label": "n9-edge-aligned-minimal.md",
+      "id": "agents_skills_hallmark_references_components_h9_custom_illustration_centerpiece",
+      "label": "h9-custom-illustration-centerpiece.md",
       "_origin": "ast",
       "community": 136,
-      "community_name": "n9-edge-aligned-minimal.md",
+      "community_name": "h9-custom-illustration-centerpiece.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "n9-edge-aligned-minimal.md",
-      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
+      "norm_label": "h9-custom-illustration-centerpiece.md",
+      "source_file": ".agents/skills/hallmark/references/components/h9-custom-illustration-centerpiece.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n9_edge_aligned_minimal_n9_edge_aligned_minimal",
-      "label": "N9 \u00b7 Edge-aligned minimal",
+      "id": "agents_skills_hallmark_references_components_h9_custom_illustration_centerpiece_h9_custom_illustration_centerpiece",
+      "label": "H9 \u00b7 Custom Illustration Centerpiece",
       "_origin": "ast",
       "community": 136,
-      "community_name": "n9-edge-aligned-minimal.md",
+      "community_name": "h9-custom-illustration-centerpiece.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "n9 \u00b7 edge-aligned minimal",
-      "source_file": ".agents/skills/hallmark/references/components/n9-edge-aligned-minimal.md",
+      "norm_label": "h9 \u00b7 custom illustration centerpiece",
+      "source_file": ".agents/skills/hallmark/references/components/h9-custom-illustration-centerpiece.md",
       "source_location": "L1"
     },
     {
@@ -10504,6 +10432,30 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_hallmark_references_components_n2_floating_chip",
+      "label": "n2-floating-chip.md",
+      "_origin": "ast",
+      "community": 144,
+      "community_name": "n2-floating-chip.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "n2-floating-chip.md",
+      "source_file": ".agents/skills/hallmark/references/components/n2-floating-chip.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_n2_floating_chip_n2_floating_chip",
+      "label": "N2 \u00b7 Floating chip",
+      "_origin": "ast",
+      "community": 144,
+      "community_name": "n2-floating-chip.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "n2 \u00b7 floating chip",
+      "source_file": ".agents/skills/hallmark/references/components/n2-floating-chip.md",
+      "source_location": "L1"
+    },
+    {
       "id": "components_ui_password_strength_demo",
       "label": "password-strength-demo.tsx",
       "_origin": "ast",
@@ -10515,6 +10467,30 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_hallmark_references_components_n6_newspaper_masthead",
+      "label": "n6-newspaper-masthead.md",
+      "_origin": "ast",
+      "community": 147,
+      "community_name": "n6-newspaper-masthead.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "n6-newspaper-masthead.md",
+      "source_file": ".agents/skills/hallmark/references/components/n6-newspaper-masthead.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_n6_newspaper_masthead_n6_newspaper_masthead",
+      "label": "N6 \u00b7 Newspaper masthead",
+      "_origin": "ast",
+      "community": 147,
+      "community_name": "n6-newspaper-masthead.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "n6 \u00b7 newspaper masthead",
+      "source_file": ".agents/skills/hallmark/references/components/n6-newspaper-masthead.md",
+      "source_location": "L1"
+    },
+    {
       "id": "components_ui_input_demo",
       "label": "input-demo.tsx",
       "_origin": "ast",
@@ -10523,6 +10499,30 @@
       "file_type": "code",
       "norm_label": "input-demo.tsx",
       "source_file": "components/ui/input-demo.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_n8_terminal_command",
+      "label": "n8-terminal-command.md",
+      "_origin": "ast",
+      "community": 149,
+      "community_name": "n8-terminal-command.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "n8-terminal-command.md",
+      "source_file": ".agents/skills/hallmark/references/components/n8-terminal-command.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_n8_terminal_command_n8_terminal_command",
+      "label": "N8 \u00b7 Terminal command",
+      "_origin": "ast",
+      "community": 149,
+      "community_name": "n8-terminal-command.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "n8 \u00b7 terminal command",
+      "source_file": ".agents/skills/hallmark/references/components/n8-terminal-command.md",
       "source_location": "L1"
     },
     {
@@ -10824,30 +10824,6 @@
       "norm_label": "f4 \u00b7 step sequence",
       "source_file": ".agents/skills/hallmark/references/components/f4-step-sequence.md",
       "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_s1_left_margin_numbered",
-      "label": "s1-left-margin-numbered.md",
-      "_origin": "ast",
-      "community": 151,
-      "community_name": "s1-left-margin-numbered.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "s1-left-margin-numbered.md",
-      "source_file": ".agents/skills/hallmark/references/components/s1-left-margin-numbered.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_s1_left_margin_numbered_s1_left_margin_numbered",
-      "label": "S1 \u00b7 Left-margin numbered",
-      "_origin": "ast",
-      "community": 151,
-      "community_name": "s1-left-margin-numbered.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "s1 \u00b7 left-margin numbered",
-      "source_file": ".agents/skills/hallmark/references/components/s1-left-margin-numbered.md",
-      "source_location": "L2"
     },
     {
       "id": "agents_skills_hallmark_references_themes_carnival",
@@ -17411,6 +17387,30 @@
       "norm_label": "verified implementation strengths:",
       "source_file": "Documentation_Audit.md",
       "source_location": "L125"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_f5_annotated_screenshot",
+      "label": "f5-annotated-screenshot.md",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "f5-annotated-screenshot.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "f5-annotated-screenshot.md",
+      "source_file": ".agents/skills/hallmark/references/components/f5-annotated-screenshot.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_f5_annotated_screenshot_f5_annotated_screenshot",
+      "label": "F5 \u00b7 Annotated screenshot",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "f5-annotated-screenshot.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "f5 \u00b7 annotated screenshot",
+      "source_file": ".agents/skills/hallmark/references/components/f5-annotated-screenshot.md",
+      "source_location": "L1"
     },
     {
       "id": "agents_skills_hallmark_references_themes_lumen",
@@ -53918,5 +53918,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6f7c76ff29cb53a059ae44146f3a7020130b754e"
+  "built_at_commit": "47715da795e2312306734aeca6909452b85135b3"
 }

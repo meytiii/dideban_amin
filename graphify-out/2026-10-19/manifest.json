@@ -30,15 +30,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1792318852.4276254,
-    "seen": 1792319118.1246397,
-    "ast_hash": "f066bdf3d0bb5aa7a034a2282489cfae",
+    "mtime": 1792387896.6002893,
+    "seen": 1792387913.4394143,
+    "ast_hash": "465521665c9747d370353f702488a5ed",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
-    "mtime": 1792318931.10709,
-    "seen": 1792319118.1248891,
-    "ast_hash": "2d2cea4bf71e31eef4db3538e87dd8a8",
+    "mtime": 1792387883.679449,
+    "seen": 1792387913.439606,
+    "ast_hash": "1266370039a332ad25d3e54fe54dea95",
     "semantic_hash": ""
   },
   "go.mod": {
@@ -84,15 +84,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1792318779.7536204,
-    "seen": 1792319118.1364498,
-    "ast_hash": "31c18177664447dac21c19571bb917d5",
+    "mtime": 1792388782.0043309,
+    "seen": 1792388836.6759145,
+    "ast_hash": "9bf31610c4a9aafa1c18e370c8236161",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1792387414.8269732,
-    "seen": 1792387822.703427,
-    "ast_hash": "5348948ab4102f95f3e65be7464e8fa7",
+    "mtime": 1792388710.7306604,
+    "seen": 1792388836.6759784,
+    "ast_hash": "aacede663dc2c67ca3ff83b643ecd3df",
     "semantic_hash": ""
   },
   "frontend/admin/favicon.png": {
@@ -1581,6 +1581,18 @@
     "mtime": 1792386723.909789,
     "seen": 1792386842.8693867,
     "ast_hash": "41546f9f372d3cb1512d5ed40eb5a53d",
+    "semantic_hash": ""
+  },
+  "components/ui/pulse-dot-demo.tsx": {
+    "mtime": 1792388770.3583913,
+    "seen": 1792388836.6641698,
+    "ast_hash": "197dd55d33fb8acca76fea146abf9c03",
+    "semantic_hash": ""
+  },
+  "components/ui/pulse-dot.tsx": {
+    "mtime": 1792388744.9683032,
+    "seen": 1792388836.664172,
+    "ast_hash": "5be5ea4a965fe8f213451df5c9be88af",
     "semantic_hash": ""
   }
 }
