@@ -1582,5 +1582,17 @@
     "seen": 1792386842.8693867,
     "ast_hash": "41546f9f372d3cb1512d5ed40eb5a53d",
     "semantic_hash": ""
+  },
+  "components/ui/pulse-dot-demo.tsx": {
+    "mtime": 1792389039.8888319,
+    "seen": 1792389063.2906513,
+    "ast_hash": "197dd55d33fb8acca76fea146abf9c03",
+    "semantic_hash": ""
+  },
+  "components/ui/pulse-dot.tsx": {
+    "mtime": 1792389032.0231118,
+    "seen": 1792389063.290653,
+    "ast_hash": "5be5ea4a965fe8f213451df5c9be88af",
+    "semantic_hash": ""
   }
 }
