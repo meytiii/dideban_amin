@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-19)
 
 ## Corpus Check
-- 227 files · ~271,394 words
+- 227 files · ~271,905 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1830 nodes · 2849 edges · 156 communities (114 shown, 42 thin omitted)
+- 1830 nodes · 2849 edges · 155 communities (113 shown, 42 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 279 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6779815f`
+- Built from commit: `2ddf610c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -137,7 +137,6 @@
 - createOtpController
 - admin.js
 - file-card-collections.tsx
-- LoginHandler
 - TestCookieSecureCachedResolution
 - f5-annotated-screenshot.md
 - commit_message.md
@@ -167,21 +166,21 @@
 10. `fetchReports()` - 19 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `VerifyCaptcha()` --calls--> `GetLegacyHMACKey()`  [INFERRED]
-  captcha.go → crypto.go
 - `SubmitReportHandler()` --calls--> `ScanPDFForActiveContent()`  [INFERRED]
   public_handlers.go → metadata.go
 - `TestInputSanitizationAndLimits()` --calls--> `truncateRunes()`  [INFERRED]
   test/input_limits_test.go → security.go
-- `LoginHandler()` --calls--> `VerifyCaptcha()`  [INFERRED]
-  admin_auth.go → captcha.go
+- `LoginHandler()` --calls--> `HashPassword()`  [INFERRED]
+  admin_auth.go → crypto.go
+- `LoginHandler()` --calls--> `VerifyPasswordWithRehash()`  [INFERRED]
+  admin_auth.go → crypto.go
 - `LoginHandler()` --calls--> `GenerateMFAPendingToken()`  [INFERRED]
   admin_auth.go → mfa.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (156 total, 42 thin omitted)
+## Communities (155 total, 42 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -240,8 +239,8 @@ Cohesion: 0.08
 Nodes (26): After the file is written, Emitting a `design.md` from `study`, Image-mode template, Junk-or-blocked detection, Limits and disclaimers, Refusal — when not to study, Remote URL safety, Source mode — image or URL (+18 more)
 
 ### Community 14 - "admin_handlers.go"
-Cohesion: 0.10
-Nodes (27): ExportReportDocxHandler(), formatJalaliTime(), getRestrictedSubprocessEnv(), gregorianToJalali(), AdminNotificationItem, AdminNotificationsResponse, AdminUserItem, AnalyticsResponse (+19 more)
+Cohesion: 0.11
+Nodes (26): ExportReportDocxHandler(), formatJalaliTime(), getRestrictedSubprocessEnv(), gregorianToJalali(), AdminNotificationItem, AdminNotificationsResponse, AdminUserItem, AnalyticsResponse (+18 more)
 
 ### Community 15 - "Hero enrichment — when, what, and how much"
 Cohesion: 0.09
@@ -432,8 +431,8 @@ Cohesion: 0.47
 Nodes (6): fetchServerTime(), getServerNow(), initServerSlidingClock(), tick(), updateDate(), updateDigit()
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.17
-Nodes (20): GetForwardingHistoryHandler(), DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptFileBytes() (+12 more)
+Cohesion: 0.11
+Nodes (31): ChangeMyPasswordHandler(), CreateUserHandler(), GetForwardingHistoryHandler(), ResetUserPasswordHandler(), DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload() (+23 more)
 
 ### Community 68 - "password-strength.tsx"
 Cohesion: 0.15
@@ -461,7 +460,7 @@ Nodes (5): Colors, Named Rules, Neutral, Primary, Status & Accents
 
 ### Community 83 - "SubmitReportHandler"
 Cohesion: 0.18
-Nodes (19): RespondToReportHandler(), SubmitRegionalResponseHandler(), UpdateInternalNotesHandler(), VerifyCaptcha(), EncryptAES(), ValidateBinaryMagicBytes(), generateTrackingCode(), inspectZipArchive() (+11 more)
+Nodes (18): RespondToReportHandler(), SubmitRegionalResponseHandler(), UpdateInternalNotesHandler(), EncryptAES(), ValidateBinaryMagicBytes(), generateTrackingCode(), inspectZipArchive(), SubmitFollowUpHandler() (+10 more)
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -500,8 +499,8 @@ Cohesion: 0.24
 Nodes (6): Button, ButtonProps, buttonVariants, ButtonWithIconProps, DropdownMenuProps, DropdownOption
 
 ### Community 105 - "getIP"
-Cohesion: 0.18
-Nodes (20): computeAuditHash(), GetCurrentAdminHandler(), getIP(), getLatestAuditHash(), ipInCIDRs(), logAudit(), parseTrustedProxies(), canAdminAccessReport() (+12 more)
+Cohesion: 0.14
+Nodes (27): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getIP(), getLatestAuditHash(), ipInCIDRs(), logAudit(), LoginHandler() (+19 more)
 
 ### Community 106 - "initAppTooltips"
 Cohesion: 0.52
@@ -550,10 +549,6 @@ Nodes (30): check2FAEnforcementNotice(), checkAdminProfile(), checkMustChangePas
 ### Community 126 - "file-card-collections.tsx"
 Cohesion: 0.33
 Nodes (3): colorBannerMap, FileCardProps, FormatFileProps
-
-### Community 127 - "LoginHandler"
-Cohesion: 0.17
-Nodes (16): generateSessionToken(), LoginHandler(), LogoutHandler(), ChangeMyPasswordHandler(), CreateUserHandler(), ResetUserPasswordHandler(), HashPassword(), ValidatePasswordComplexity() (+8 more)
 
 ### Community 128 - "TestCookieSecureCachedResolution"
 Cohesion: 0.50

@@ -1235,30 +1235,28 @@
         aria-labelledby="faqDrawerTitle">
         <div class="drawer-panel faq-themed-drawer">
             <div class="drawer-grid-bg" aria-hidden="true"></div>
-            <div class="drawer-header">
-                <div class="drawer-title-box">
-                    <div class="faq-badge-icon">
-                        <svg viewBox="0 0 512 512" width="28" height="28" fill="none" aria-hidden="true">
-                            <circle cx="256" cy="256" r="236" fill="rgba(56, 189, 248, 0.12)" stroke="currentColor" stroke-width="20"/>
-                            <path d="M256,48.762C141.729,48.762,48.762,141.729,48.762,256S141.729,463.238,256,463.238S463.238,370.271,463.238,256 S370.271,48.762,256,48.762z M256,438.857c-100.827,0-182.857-82.03-182.857-182.857S155.173,73.143,256,73.143 S438.857,155.173,438.857,256S356.827,438.857,256,438.857z" fill="currentColor" opacity="0.35"/>
-                            <path d="M279.162,112.152h-46.324c-25.879,0-47.543,20.445-47.543,46.324v22.552c0,6.733,5.458,12.19,12.19,12.19 c6.733,0,12.19-5.458,12.19-12.19v-22.552c0-12.436,10.726-21.943,23.162-21.943h46.324c12.435,0,21.943,9.507,21.943,21.943v37.79 c0,12.436-10.117,22.552-22.552,22.552c-25.879,0-46.933,21.054-46.933,46.933v34.743c0,6.733,5.458,12.19,12.19,12.19 c6.733,0,12.19-5.458,12.19-12.19v-34.743c0-12.436,10.117-22.552,22.552-22.552c25.879,0,46.933-21.054,46.933-46.933v-37.79 C325.486,132.597,305.041,112.152,279.162,112.152z" fill="currentColor"/>
-                            <circle cx="245.029" cy="373.638" r="22" fill="currentColor"/>
+            <div class="drawer-header faq-banner-header">
+                <div class="faq-topbar">
+                    <span class="faq-topbar-tag">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <path d="m9 12 2 2 4-4"></path>
                         </svg>
-                    </div>
-                    <div>
-                        <h3 id="faqDrawerTitle" class="persian-heading persian-heading--tatweel"
-                            data-tatweel-level="card">راهنمای ثبت گزارش و سوالات متداول</h3>
-                        <p class="drawer-subtitle">پاسخ به سوالات پرتکرار پیرامون امنیت، پیگیری و مستندات</p>
-                    </div>
+                        <span>مرکز راهنمایی و امنیت</span>
+                    </span>
+                    <button type="button" id="closeDrawerBtn" class="btn-close-drawer" aria-label="بستن راهنما" data-tooltip="بستن راهنما">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M18 6 6 18"></path>
+                            <path d="m6 6 12 12"></path>
+                        </svg>
+                    </button>
                 </div>
-
-                <button type="button" id="closeDrawerBtn" class="btn-close-drawer" aria-label="بستن راهنما">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
-                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M18 6 6 18"></path>
-                        <path d="m6 6 12 12"></path>
-                    </svg>
-                </button>
+                <div class="faq-banner-card">
+                    <img src="FAQ.webp" alt="راهنما و سوالات متداول" class="faq-banner-img" width="1346" height="282" decoding="async">
+                </div>
+                <h3 id="faqDrawerTitle" class="sr-only">راهنما و سوالات متداول</h3>
+                <p class="drawer-subtitle faq-banner-subtitle">پاسخ به سوالات پرتکرار پیرامون امنیت، پیگیری و مستندات</p>
             </div>
 
             <div class="drawer-body">

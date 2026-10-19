@@ -2252,7 +2252,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const guidelinesDrawer = document.getElementById('guidelinesDrawer');
     let drawerCloseTimeout = null;
 
-    function openGuidelinesDrawer() {
+    if (window.history && window.history.state && window.history.state.faqDrawerOpen) {
+        window.history.replaceState(null, '');
+    }
+
+    function openGuidelinesDrawer(options) {
+        const fromHistory = options === true;
         if (drawerCloseTimeout) {
             clearTimeout(drawerCloseTimeout);
             drawerCloseTimeout = null;
@@ -2266,10 +2271,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (panel) {
                 panel.scrollTop = 0;
             }
+            if (!fromHistory) {
+                try {
+                    window.history.pushState({ faqDrawerOpen: true }, '');
+                } catch (e) {}
+            }
         }
     }
 
-    function closeGuidelinesDrawer() {
+    function closeGuidelinesDrawer(options) {
+        const fromHistory = options === true;
         if (guidelinesDrawer && !guidelinesDrawer.classList.contains('d-none') && !guidelinesDrawer.classList.contains('is-closing')) {
             guidelinesDrawer.classList.add('is-closing');
             document.body.style.overflow = '';
@@ -2279,6 +2290,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 guidelinesDrawer.classList.remove('is-closing');
                 drawerCloseTimeout = null;
             }, 200);
+            if (!fromHistory && window.history && window.history.state && window.history.state.faqDrawerOpen) {
+                window.history.back();
+            }
         }
     }
 
@@ -2295,6 +2309,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    window.addEventListener('popstate', () => {
+        if (guidelinesDrawer && !guidelinesDrawer.classList.contains('d-none')) {
+            closeGuidelinesDrawer(true);
+        }
+    });
 
     const faqItems = document.querySelectorAll('.faq-accordion-item');
     faqItems.forEach((item) => {
