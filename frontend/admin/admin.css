@@ -741,11 +741,6 @@ body::before {
     caret-color: #38bdf8 !important;
 }
 
-.login-input-wrapper:focus-within {
-    border-color: #38bdf8;
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), 0 0 20px rgba(56, 189, 248, 0.15);
-}
-
 .admin-captcha-row,
 .admin-captcha-group {
     display: flex;

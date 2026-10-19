@@ -30,15 +30,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1792317286.1372352,
-    "seen": 1792317356.8507514,
-    "ast_hash": "1b59362af54683b3c5be7a98e4492b2d",
+    "mtime": 1792318852.4276254,
+    "seen": 1792319118.1246397,
+    "ast_hash": "f066bdf3d0bb5aa7a034a2282489cfae",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
-    "mtime": 1792308330.058933,
-    "seen": 1792309366.5186806,
-    "ast_hash": "1cb3af0ceebf4b1e54ca4d4858a39bf5",
+    "mtime": 1792318931.10709,
+    "seen": 1792319118.1248891,
+    "ast_hash": "2d2cea4bf71e31eef4db3538e87dd8a8",
     "semantic_hash": ""
   },
   "go.mod": {
@@ -84,15 +84,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1792317339.51345,
-    "seen": 1792317356.8642101,
-    "ast_hash": "ea2e50a4dcf8f097c4f9bbbda1fce6a6",
+    "mtime": 1792318779.7536204,
+    "seen": 1792319118.1364498,
+    "ast_hash": "31c18177664447dac21c19571bb917d5",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1792317320.7757282,
-    "seen": 1792317356.8642786,
-    "ast_hash": "aa01fa1a4a28ca685136328ba94f4edd",
+    "mtime": 1792318914.765746,
+    "seen": 1792319118.1365154,
+    "ast_hash": "a20d0bed481cf744ef56c953f98b9015",
     "semantic_hash": ""
   },
   "frontend/admin/favicon.png": {
@@ -1488,9 +1488,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/svg/cyber_security.svg": {
-    "mtime": 1792315493.1615942,
-    "seen": 1792315516.750622,
-    "ast_hash": "0dce24ba64ebab066eb93a680696dae5",
+    "mtime": 1792317869.6148653,
+    "seen": 1792318031.9566653,
+    "ast_hash": "055b0d039aa44eb771a9f275b1f89bce",
     "semantic_hash": ""
   },
   "frontend/admin/svg/arrow_left.svg": {
@@ -1524,21 +1524,63 @@
     "semantic_hash": ""
   },
   "frontend/admin/svg/seen.svg": {
-    "mtime": 1792316690.785992,
-    "seen": 1792316840.2401319,
-    "ast_hash": "9a049d99189483164b495b2288fb65af",
+    "mtime": 1792318702.0092072,
+    "seen": 1792318773.2079272,
+    "ast_hash": "d07f68095296ff319f21f99fa5a695a1",
     "semantic_hash": ""
   },
   "frontend/admin/svg/doc_stack.svg": {
-    "mtime": 1792316976.2891295,
-    "seen": 1792317028.197571,
-    "ast_hash": "b4662925ba3326529c47d2bf3c0f4d89",
+    "mtime": 1792318676.3574467,
+    "seen": 1792318773.2077374,
+    "ast_hash": "21a131e6e2fa22988fdb901e663fbd94",
     "semantic_hash": ""
   },
   "frontend/admin/svg/waiting.svg": {
-    "mtime": 1792317012.457898,
-    "seen": 1792317028.197957,
-    "ast_hash": "5c5c1a4f363eb457b9fea33468249d36",
+    "mtime": 1792318685.1735733,
+    "seen": 1792318773.2080557,
+    "ast_hash": "faab015ec4bb5a7c437d11a67597d3f4",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/edit.svg": {
+    "mtime": 1792318734.0442429,
+    "seen": 1792318773.2078009,
+    "ast_hash": "5bd7578edff1f1e5a2edc0c78de334c7",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/unlock.svg": {
+    "mtime": 1792318744.531632,
+    "seen": 1792318773.2079918,
+    "ast_hash": "8f7a50d5e941685beb20e6f460f206dd",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/faq.svg": {
+    "mtime": 1792318715.4722092,
+    "seen": 1792318773.2085497,
+    "ast_hash": "54780fdd1dfdc574ee76a32e6a4f5fc8",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/confidential_doc.svg": {
+    "mtime": 1792385841.1747596,
+    "seen": 1792386333.6074896,
+    "ast_hash": "d6e90247833c2a12ae4ed5413885d829",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/home.svg": {
+    "mtime": 1792386034.6398869,
+    "seen": 1792386333.6076186,
+    "ast_hash": "897667f4c33ea0f3fba73dde92e97827",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/info.svg": {
+    "mtime": 1792385906.8713334,
+    "seen": 1792386333.60762,
+    "ast_hash": "6a08a83b68ed9110e4b8ed7db8374150",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/sand-clock.svg": {
+    "mtime": 1792385758.78113,
+    "seen": 1792386333.6076217,
+    "ast_hash": "ad5a15df6df89b2b94e9c2410a2ae189",
     "semantic_hash": ""
   }
 }
