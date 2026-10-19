@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1792318914.765746,
-    "seen": 1792319118.1365154,
-    "ast_hash": "a20d0bed481cf744ef56c953f98b9015",
+    "mtime": 1792386762.534079,
+    "seen": 1792386842.8670242,
+    "ast_hash": "0d9dd11eee7ccaa4fc6ff9e3b9a67bb3",
     "semantic_hash": ""
   },
   "frontend/admin/favicon.png": {
@@ -1578,9 +1578,9 @@
     "semantic_hash": ""
   },
   "frontend/public/svg/sand-clock.svg": {
-    "mtime": 1792385758.78113,
-    "seen": 1792386333.6076217,
-    "ast_hash": "ad5a15df6df89b2b94e9c2410a2ae189",
+    "mtime": 1792386723.909789,
+    "seen": 1792386842.8693867,
+    "ast_hash": "41546f9f372d3cb1512d5ed40eb5a53d",
     "semantic_hash": ""
   }
 }
