@@ -6724,6 +6724,17 @@
       "source_location": "L329"
     },
     {
+      "id": "admin_auth_ipincidrs",
+      "label": "ipInCIDRs()",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "logAudit",
+      "file_type": "code",
+      "norm_label": "ipincidrs()",
+      "source_file": "admin_auth.go",
+      "source_location": "L274"
+    },
+    {
       "id": "admin_auth_logaudit",
       "label": "logAudit()",
       "_origin": "ast",
@@ -6755,6 +6766,17 @@
       "norm_label": "logouthandler()",
       "source_file": "admin_auth.go",
       "source_location": "L395"
+    },
+    {
+      "id": "admin_auth_parsetrustedproxies",
+      "label": "parseTrustedProxies()",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "logAudit",
+      "file_type": "code",
+      "norm_label": "parsetrustedproxies()",
+      "source_file": "admin_auth.go",
+      "source_location": "L249"
     },
     {
       "id": "admin_handlers_disableuser2fahandler",
@@ -6799,6 +6821,28 @@
       "norm_label": "updateuserhandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L1491"
+    },
+    {
+      "id": "go_type_net_ip",
+      "label": "net.IP",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "logAudit",
+      "file_type": "code",
+      "norm_label": "net.ip",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "go_type_net_ipnet",
+      "label": "net.IPNet",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "logAudit",
+      "file_type": "code",
+      "norm_label": "net.ipnet",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "security_iscookiesecure",
@@ -12334,17 +12378,6 @@
       "source_location": "L338"
     },
     {
-      "id": "admin_auth_ipincidrs",
-      "label": "ipInCIDRs()",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "getIP",
-      "file_type": "code",
-      "norm_label": "ipincidrs()",
-      "source_file": "admin_auth.go",
-      "source_location": "L274"
-    },
-    {
       "id": "admin_auth_logaudittx",
       "label": "logAuditTx()",
       "_origin": "ast",
@@ -12354,17 +12387,6 @@
       "norm_label": "logaudittx()",
       "source_file": "admin_auth.go",
       "source_location": "L371"
-    },
-    {
-      "id": "admin_auth_parsetrustedproxies",
-      "label": "parseTrustedProxies()",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "getIP",
-      "file_type": "code",
-      "norm_label": "parsetrustedproxies()",
-      "source_file": "admin_auth.go",
-      "source_location": "L249"
     },
     {
       "id": "admin_handlers_changemypasswordhandler",
@@ -12488,6 +12510,28 @@
       "source_location": "L325"
     },
     {
+      "id": "crypto_verifypassword",
+      "label": "VerifyPassword()",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "verifypassword()",
+      "source_file": "crypto.go",
+      "source_location": "L320"
+    },
+    {
+      "id": "crypto_verifypasswordwithrehash",
+      "label": "VerifyPasswordWithRehash()",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "verifypasswordwithrehash()",
+      "source_file": "crypto.go",
+      "source_location": "L260"
+    },
+    {
       "id": "go_type_database_sql_tx",
       "label": "database/sql.Tx",
       "_origin": "ast",
@@ -12499,26 +12543,37 @@
       "source_location": ""
     },
     {
-      "id": "go_type_net_ip",
-      "label": "net.IP",
+      "id": "mfa_disable2fahandler",
+      "label": "Disable2FAHandler()",
       "_origin": "ast",
       "community": 26,
       "community_name": "getIP",
       "file_type": "code",
-      "norm_label": "net.ip",
-      "source_file": "",
-      "source_location": ""
+      "norm_label": "disable2fahandler()",
+      "source_file": "mfa.go",
+      "source_location": "L430"
     },
     {
-      "id": "go_type_net_ipnet",
-      "label": "net.IPNet",
+      "id": "mfa_enable2fahandler",
+      "label": "Enable2FAHandler()",
       "_origin": "ast",
       "community": 26,
       "community_name": "getIP",
       "file_type": "code",
-      "norm_label": "net.ipnet",
-      "source_file": "",
-      "source_location": ""
+      "norm_label": "enable2fahandler()",
+      "source_file": "mfa.go",
+      "source_location": "L369"
+    },
+    {
+      "id": "test_crypto_test_testargon2iddualformatandrehash",
+      "label": "TestArgon2idDualFormatAndRehash()",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "testargon2iddualformatandrehash()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L66"
     },
     {
       "id": "clamav",
@@ -14822,28 +14877,6 @@
       "source_location": "L57"
     },
     {
-      "id": "crypto_verifypassword",
-      "label": "VerifyPassword()",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "verifypassword()",
-      "source_file": "crypto.go",
-      "source_location": "L320"
-    },
-    {
-      "id": "crypto_verifypasswordwithrehash",
-      "label": "VerifyPasswordWithRehash()",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "verifypasswordwithrehash()",
-      "source_file": "crypto.go",
-      "source_location": "L260"
-    },
-    {
       "id": "mfa",
       "label": "mfa.go",
       "_origin": "ast",
@@ -14853,28 +14886,6 @@
       "norm_label": "mfa.go",
       "source_file": "mfa.go",
       "source_location": "L1"
-    },
-    {
-      "id": "mfa_disable2fahandler",
-      "label": "Disable2FAHandler()",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "disable2fahandler()",
-      "source_file": "mfa.go",
-      "source_location": "L430"
-    },
-    {
-      "id": "mfa_enable2fahandler",
-      "label": "Enable2FAHandler()",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "enable2fahandler()",
-      "source_file": "mfa.go",
-      "source_location": "L369"
     },
     {
       "id": "mfa_generatebase32secret",
@@ -14985,17 +14996,6 @@
       "norm_label": "mfapendingpayload",
       "source_file": "mfa.go",
       "source_location": "L28"
-    },
-    {
-      "id": "test_crypto_test_testargon2iddualformatandrehash",
-      "label": "TestArgon2idDualFormatAndRehash()",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "testargon2iddualformatandrehash()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L66"
     },
     {
       "id": "test_mfa_test",
@@ -20028,7 +20028,7 @@
       "file_type": "code",
       "norm_label": "generatemathcaptchasvg()",
       "source_file": "captcha.go",
-      "source_location": "L292"
+      "source_location": "L293"
     },
     {
       "id": "captcha_generatenoiseelements",
@@ -20050,7 +20050,7 @@
       "file_type": "code",
       "norm_label": "getcaptchahandler()",
       "source_file": "captcha.go",
-      "source_location": "L326"
+      "source_location": "L336"
     },
     {
       "id": "captcha_renderobfuscatedchars",
@@ -21888,7 +21888,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L293",
+      "source_location": "L294",
       "weight": 1.0
     },
     {
@@ -21900,7 +21900,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L311",
+      "source_location": "L312",
       "weight": 1.0
     },
     {
@@ -21912,7 +21912,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L312",
+      "source_location": "L313",
       "weight": 1.0
     },
     {
@@ -21924,7 +21924,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L313",
+      "source_location": "L314",
       "weight": 1.0
     },
     {
@@ -21948,7 +21948,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L327",
+      "source_location": "L337",
       "weight": 1.0
     },
     {
@@ -30372,7 +30372,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "captcha.go",
-      "source_location": "L326",
+      "source_location": "L336",
       "weight": 1.0
     },
     {
@@ -30384,7 +30384,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "captcha.go",
-      "source_location": "L326",
+      "source_location": "L336",
       "weight": 1.0
     },
     {
@@ -40848,7 +40848,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L292",
+      "source_location": "L293",
       "weight": 1.0
     },
     {
@@ -40859,7 +40859,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L326",
+      "source_location": "L336",
       "weight": 1.0
     },
     {
@@ -54101,5 +54101,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "0ece029fc4c731c857efb6ed6dfc9b998f2de7dc"
+  "built_at_commit": "e17107e233c159f95efb82943ede96b283d272ab"
 }
