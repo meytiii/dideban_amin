@@ -5632,6 +5632,9 @@ button:disabled {
     color: #cbd5e1;
     line-height: 1.7;
     margin-bottom: 16px;
+    text-align: justify;
+    text-align-last: right;
+    text-justify: inter-word;
 }
 
 .external-redirect-banner {
@@ -5691,6 +5694,9 @@ button:disabled {
     font-size: 11.5px;
     color: #94a3b8;
     line-height: 1.5;
+    text-align: justify;
+    text-align-last: right;
+    text-justify: inter-word;
 }
 
 .redirect-banner-arrow {
@@ -5720,6 +5726,14 @@ button:disabled {
     font-size: 13px;
     line-height: 1.8;
     color: #e2e8f0;
+}
+
+.scope-list li > span:last-child {
+    flex: 1;
+    min-width: 0;
+    text-align: justify;
+    text-align-last: right;
+    text-justify: inter-word;
 }
 
 .scope-list strong {
