@@ -741,6 +741,22 @@ body::before {
     caret-color: #38bdf8 !important;
 }
 
+.captcha-hint-text {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-bottom: 8px;
+    user-select: none;
+}
+
+.captcha-hint-text svg {
+    color: #38bdf8;
+    flex-shrink: 0;
+}
+
 .admin-captcha-row,
 .admin-captcha-group {
     display: flex;
