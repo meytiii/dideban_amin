@@ -550,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
         success: 'عملیات موفق',
         error: 'خطا در سامانه',
         destructive: 'خطا در سامانه',
-        warning: 'توجه و هشدار',
+        warning: 'هشدار',
         info: 'اطلاعیه سامانه',
         default: 'پیام سیستم'
     };

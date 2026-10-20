@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
         success: 'عملیات موفق',
         error: 'خطا در پردازش',
         destructive: 'خطا در پردازش',
-        warning: 'توجه و هشدار',
+        warning: 'هشدار',
         info: 'اطلاعیه سامانه',
         default: 'پیام سیستم'
     };
