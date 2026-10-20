@@ -5471,6 +5471,10 @@ button:disabled {
     flex-shrink: 0;
 }
 
+.trust-bar-item:first-child svg {
+    transform: translateY(-2px) translateZ(0);
+}
+
 .trust-bar-divider {
     width: 1px;
     height: 18px;

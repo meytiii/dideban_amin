@@ -2255,9 +2255,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (nativeSelect.value !== opt.value) {
                     nativeSelect.value = opt.value;
                     nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
-                    if (typeof nativeSelect.onchange === 'function') {
-                        nativeSelect.onchange();
-                    }
                 }
                 syncState();
                 closeMenu();
