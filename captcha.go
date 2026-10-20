@@ -230,12 +230,29 @@ func generateNoiseElements() string {
 	return noise.String()
 }
 
+var glyphPaths = map[rune]string{
+	'0': "M 3,3 C 3,1 9,1 9,3 L 9,13 C 9,15 3,15 3,13 Z",
+	'1': "M 4,4 L 7,2 L 7,15 M 4,15 L 10,15",
+	'2': "M 3,5 C 3,2 9,2 9,5 C 9,9 3,11 3,15 L 10,15",
+	'3': "M 3,3 L 9,3 L 6,7 C 9,7 9,14 5,14 C 3,14 3,12 3,12",
+	'4': "M 8,15 L 8,2 L 2,10 L 10,10",
+	'5': "M 9,2 L 3,2 L 3,7 C 5,6 9,6 9,10 C 9,14 3,14 3,12",
+	'6': "M 8,2 C 4,3 3,7 3,10 C 3,14 9,14 9,10 C 9,7 3,8 3,10",
+	'7': "M 2,2 L 9,2 L 5,15",
+	'8': "M 6,2 C 9,2 9,7 6,7 C 3,7 3,2 6,2 M 6,7 C 9,7 9,14 6,14 C 3,14 3,7 6,7",
+	'9': "M 4,14 C 8,13 9,9 9,6 C 9,2 3,2 3,6 C 3,9 9,8 9,6",
+	'+': "M 2,8 L 10,8 M 6,4 L 6,12",
+	'-': "M 2,8 L 10,8",
+	'=': "M 2,6 L 10,6 M 2,10 L 10,10",
+	'?': "M 3,4 C 3,1 9,1 9,5 C 9,8 6,8 6,11 M 6,14.5 L 6,15",
+}
+
 func renderObfuscatedChars(expr string) string {
 	var sb strings.Builder
 	charColors := []string{"#38bdf8", "#60a5fa", "#93c5fd", "#e0f2fe", "#7dd3fc"}
 
 	currentX := cryptoRandInt(14, 20)
-	step := 17
+	step := 16
 
 	for _, ch := range expr {
 		if ch == ' ' {
@@ -243,14 +260,20 @@ func renderObfuscatedChars(expr string) string {
 			continue
 		}
 
-		rot := cryptoRandInt(-20, 20)
-		yJitter := cryptoRandInt(34, 42)
-		fontSize := cryptoRandInt(22, 27)
+		pathData, exists := glyphPaths[ch]
+		if !exists {
+			currentX += step
+			continue
+		}
+
+		rot := cryptoRandInt(-15, 15)
+		yJitter := cryptoRandInt(18, 24)
+		scale := float64(cryptoRandInt(125, 150)) / 100.0
 		color := charColors[cryptoRandInt(0, len(charColors)-1)]
 
 		sb.WriteString(fmt.Sprintf(
-			`<text x="%d" y="%d" font-family="'Courier New', Courier, monospace, sans-serif" font-size="%d" font-weight="900" fill="%s" transform="rotate(%d %d %d)">%c</text>`,
-			currentX, yJitter, fontSize, color, rot, currentX, yJitter, ch,
+			`<g transform="translate(%d,%d) rotate(%d 6 8) scale(%.2f)"><path d="%s" stroke="%s" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g>`,
+			currentX, yJitter, rot, scale, pathData, color,
 		))
 
 		currentX += step + cryptoRandInt(-2, 3)
@@ -260,8 +283,8 @@ func renderObfuscatedChars(expr string) string {
 }
 
 func GenerateMathCaptchaSVG() (string, string) {
-	num1 := cryptoRandInt(12, 49)
-	num2 := cryptoRandInt(1, 9)
+	num1 := cryptoRandInt(25, 89)
+	num2 := cryptoRandInt(11, 45)
 	isAddition := cryptoRandInt(0, 1) == 1
 
 	var text string

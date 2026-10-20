@@ -14,11 +14,15 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 )
 
-var auditFailures uint64
+var (
+	auditFailures uint64
+	auditMu       sync.Mutex
+)
 
 func generateSessionToken() string {
 	b := make([]byte, 32)
@@ -341,6 +345,9 @@ func getLatestAuditHashTx(tx *sql.Tx) string {
 }
 
 func logAudit(username, title, action string, targetID *int64, ip string) error {
+	auditMu.Lock()
+	defer auditMu.Unlock()
+
 	ShipSyslogAudit(username, action, targetID, ip)
 	if DB == nil {
 		atomic.AddUint64(&auditFailures, 1)
@@ -362,6 +369,9 @@ func logAudit(username, title, action string, targetID *int64, ip string) error 
 }
 
 func logAuditTx(tx *sql.Tx, username, title, action string, targetID *int64, ip string) error {
+	auditMu.Lock()
+	defer auditMu.Unlock()
+
 	ShipSyslogAudit(username, action, targetID, ip)
 	if tx == nil {
 		atomic.AddUint64(&auditFailures, 1)

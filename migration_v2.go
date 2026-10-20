@@ -157,7 +157,7 @@ func reencryptLegacyData(db *sql.DB) error {
 	log.Printf("[MIGRATION-V2] Migrated %d reports to v2 encryption.", reportsMigrated)
 
 	messagesMigrated := 0
-	msgRows, err := db.Query(`SELECT id, message FROM report_messages`)
+	msgRows, err := db.Query(`SELECT id, message_text FROM report_messages`)
 	if err == nil {
 		defer msgRows.Close()
 		type msgItem struct {
@@ -184,7 +184,7 @@ func reencryptLegacyData(db *sql.DB) error {
 			if err != nil {
 				return fmt.Errorf("failed to re-encrypt message %d: %w", m.id, err)
 			}
-			_, err = db.Exec(`UPDATE report_messages SET message = $1 WHERE id = $2`, enc, m.id)
+			_, err = db.Exec(`UPDATE report_messages SET message_text = $1 WHERE id = $2`, enc, m.id)
 			if err != nil {
 				return fmt.Errorf("failed to update message %d: %w", m.id, err)
 			}

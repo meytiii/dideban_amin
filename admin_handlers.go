@@ -1918,7 +1918,18 @@ func TerminateSessionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenHash := hashToken(req.Token)
+	tokenHash := req.Token
+	if len(req.Token) != 64 {
+		tokenHash = hashToken(req.Token)
+	} else {
+		for _, c := range req.Token {
+			if !((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')) {
+				tokenHash = hashToken(req.Token)
+				break
+			}
+		}
+	}
+
 	var targetUsername string
 	err := DB.QueryRow("SELECT username FROM admin_sessions WHERE token_hash = $1", tokenHash).Scan(&targetUsername)
 	if err == sql.ErrNoRows {
@@ -1967,6 +1978,12 @@ func TerminateSessionHandler(w http.ResponseWriter, r *http.Request) {
 	Sessions.mu.Lock()
 	delete(Sessions.cache, tokenHash)
 	delete(Sessions.sessions, req.Token)
+	for t := range Sessions.sessions {
+		if hashToken(t) == tokenHash {
+			delete(Sessions.sessions, t)
+			Sessions.kickedTokens[t] = "TERMINATED_BY_SUPERUSER"
+		}
+	}
 	Sessions.kickedTokens[req.Token] = "TERMINATED_BY_SUPERUSER"
 	Sessions.mu.Unlock()
 

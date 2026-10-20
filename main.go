@@ -221,7 +221,7 @@ func main() {
 	mux.HandleFunc("POST /api/admin/report/regional-response", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(SubmitRegionalResponseHandler)))))
 	mux.HandleFunc("POST /api/admin/report/remove-forward", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(RemoveForwardingHandler)))))
 
-	mux.HandleFunc("GET /api/profanity-rules", GetProfanityRulesHandler)
+	mux.HandleFunc("GET /api/profanity-rules", SuperuserAuthMiddleware(GetProfanityRulesHandler))
 
 	mux.HandleFunc("POST /api/admin/change-my-password", AdminAuthMiddleware(CSRFMiddleware(RateLimitMiddleware(loginLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(ChangeMyPasswordHandler))))))
 

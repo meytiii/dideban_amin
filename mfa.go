@@ -229,6 +229,13 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if isLocked, remaining := Lockouts.IsLocked(payload.Username); isLocked {
+		logAudit(payload.Username, "UNKNOWN", "LOCKED_MFA_ATTEMPT", nil, getIP(r))
+		minutes := int(remaining.Minutes()) + 1
+		http.Error(w, fmt.Sprintf("حساب کاربری شما به دلیل تلاش‌های ناموفق متعدد به مدت %d دقیقه موقتاً مسدود شده است.", minutes), http.StatusTooManyRequests)
+		return
+	}
+
 	var storedHash, fullName, roleTitle, role, encSecret string
 	var isSuperuser, totpEnabled bool
 	var passwordChangedAt, dbNow time.Time
@@ -263,6 +270,9 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 		if err == ErrTOTPReplayed {
 			http.Error(w, "این کد امنیتی قبلاً استفاده شده است. لطفاً منتظر تولید کد بعدی بمانید.", http.StatusConflict)
 			return
+		}
+		if _, justLocked := Lockouts.RecordFailure(payload.Username); justLocked {
+			logAudit(payload.Username, roleTitle, "ACCOUNT_LOCKED", nil, getIP(r))
 		}
 		logAudit(payload.Username, roleTitle, "FAILED_MFA_VERIFICATION", nil, getIP(r))
 		http.Error(w, "کد ۶ رقمی امنیتی وارد شده اشتباه است یا منقضی شده است.", http.StatusUnauthorized)

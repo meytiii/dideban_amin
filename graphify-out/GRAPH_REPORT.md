@@ -1,7 +1,7 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-20)
 
 ## Corpus Check
-- 227 files · ~272,690 words
+- 227 files · ~273,016 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1e8c3c04`
+- Built from commit: `8a66da46`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -143,7 +143,7 @@
 - commit_message.md
 - ft4-dense-typographic.md
 - createShamsiDateRangePicker
-- UsedCaptchaStore
+- database/sql.DB
 - h3-quote-led.md
 - file-card-collections-demo.tsx
 - initLoginSlider
@@ -205,8 +205,8 @@ Cohesion: 0.05
 Nodes (44): Abstract backgrounds, App mockups / device frames, Assets — sourcing canon for icons, logos, illustrations, photography, video, Avoid, Avoid, Avoid, Avoid, Avoid (+36 more)
 
 ### Community 4 - "mfa.go"
-Cohesion: 0.18
-Nodes (20): GetHMACKey(), VerifyPassword(), VerifyPasswordWithRehash(), Disable2FAHandler(), Enable2FAHandler(), GenerateBase32Secret(), GenerateMFAPendingToken(), GenerateTOTPCode() (+12 more)
+Cohesion: 0.24
+Nodes (15): GetHMACKey(), GenerateBase32Secret(), GenerateMFAPendingToken(), GenerateTOTPCode(), normalizeTOTPCode(), Setup2FAHandler(), ValidateMFAPendingToken(), VerifyMFAHandler() (+7 more)
 
 ### Community 5 - "macrostructures.md"
 Cohesion: 0.05
@@ -290,7 +290,7 @@ Nodes (4): deriveKey(), encryptWithKey(), genTrackingCode(), main()
 
 ### Community 26 - "getIP"
 Cohesion: 0.18
-Nodes (19): getIP(), getLatestAuditHashTx(), ipInCIDRs(), logAuditTx(), parseTrustedProxies(), ChangeMyPasswordHandler(), ClassifyReportHandler(), CreateUserHandler() (+11 more)
+Nodes (20): getIP(), getLatestAuditHashTx(), logAuditTx(), ChangeMyPasswordHandler(), ClassifyReportHandler(), CreateUserHandler(), DeleteReportHandler(), DeleteUserHandler() (+12 more)
 
 ### Community 27 - "NewClamAVScanner"
 Cohesion: 0.24
@@ -421,12 +421,12 @@ Cohesion: 0.50
 Nodes (3): Output contract, Output contract & scope, Scope and limits
 
 ### Community 63 - "security.go"
-Cohesion: 0.18
-Nodes (14): sync.Mutex, time.Ticker, time.Time, isValidTrackingCode(), NewIPRateLimiter(), RateLimitMiddleware(), sanitizePhone(), truncateRunes() (+6 more)
+Cohesion: 0.16
+Nodes (15): sync.Mutex, time.Ticker, time.Time, isValidTrackingCode(), NewIPRateLimiter(), RateLimitMiddleware(), sanitizePhone(), truncateRunes() (+7 more)
 
 ### Community 64 - "SessionManager"
-Cohesion: 0.17
-Nodes (9): database/sql.DB, time.Duration, hashToken(), NewAccountLockoutManager(), AccountLockoutManager, ActiveSessionItem, AdminSession, cachedSession (+1 more)
+Cohesion: 0.31
+Nodes (4): hashToken(), AdminSession, cachedSession, SessionManager
 
 ### Community 65 - "Design System: سامانه دیده‌بان امین - ستاد خبری و دریافت گزارش‌های مردمی حراست همدان"
 Cohesion: 0.15
@@ -509,8 +509,8 @@ Cohesion: 0.24
 Nodes (6): Button, ButtonProps, buttonVariants, ButtonWithIconProps, DropdownMenuProps, DropdownOption
 
 ### Community 105 - "logAudit"
-Cohesion: 0.23
-Nodes (12): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getLatestAuditHash(), logAudit(), LoginHandler(), LogoutHandler(), DisableUser2FAHandler() (+4 more)
+Cohesion: 0.17
+Nodes (16): computeAuditHash(), generateSessionToken(), GetCurrentAdminHandler(), getLatestAuditHash(), ipInCIDRs(), logAudit(), LoginHandler(), LogoutHandler() (+8 more)
 
 ### Community 106 - "initAppTooltips"
 Cohesion: 0.52
@@ -568,9 +568,9 @@ Nodes (3): colorBannerMap, FileCardProps, FormatFileProps
 Cohesion: 0.27
 Nodes (13): createShamsiDateRangePicker(), closePopover(), commitDateRange(), openPopover(), renderCalendar(), renderCalendarHighlights(), resetRange(), getJalaliDayEndMs() (+5 more)
 
-### Community 135 - "UsedCaptchaStore"
-Cohesion: 0.24
-Nodes (5): NewUsedCaptchaStore(), sync.Once, UsedCaptchaStore, TestCaptchaPersistenceTryRedeem(), TestSecurityStoresInitOrder()
+### Community 135 - "database/sql.DB"
+Cohesion: 0.15
+Nodes (9): NewUsedCaptchaStore(), database/sql.DB, sync.Once, time.Duration, NewAccountLockoutManager(), AccountLockoutManager, UsedCaptchaStore, TestCaptchaPersistenceTryRedeem() (+1 more)
 
 ### Community 138 - "initLoginSlider"
 Cohesion: 0.70

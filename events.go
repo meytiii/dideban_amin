@@ -140,6 +140,9 @@ func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
+	rc := http.NewResponseController(w)
+	_ = rc.SetWriteDeadline(time.Time{})
+
 	flusher.Flush()
 
 	heartbeatTicker := time.NewTicker(15 * time.Second)
@@ -151,6 +154,7 @@ func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 			return
 
 		case <-heartbeatTicker.C:
+			_ = rc.SetWriteDeadline(time.Time{})
 			_, err := w.Write([]byte("event: heartbeat\ndata: {}\n\n"))
 			if err != nil {
 				return
@@ -161,6 +165,7 @@ func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 			if !ok {
 				return
 			}
+			_ = rc.SetWriteDeadline(time.Time{})
 			_, err := w.Write(msg)
 			if err != nil {
 				return

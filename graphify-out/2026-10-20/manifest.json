@@ -30,15 +30,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/admin.js": {
-    "mtime": 1792393635.2464466,
-    "seen": 1792393687.922449,
-    "ast_hash": "d1ca5ea603c6ce59b81f73f24fbc6a7c",
+    "mtime": 1792473401.8725388,
+    "seen": 1792473437.2340894,
+    "ast_hash": "8ffd48f969b4f6333598acbd6a585fce",
     "semantic_hash": ""
   },
   "frontend/public/app.js": {
-    "mtime": 1792392006.4986668,
-    "seen": 1792392072.1127374,
-    "ast_hash": "a661534158c3373fb278f6c2d5ba9672",
+    "mtime": 1792473414.0201242,
+    "seen": 1792473437.2342796,
+    "ast_hash": "646e538085ab4051e5b4826e2a1a34e1",
     "semantic_hash": ""
   },
   "go.mod": {
