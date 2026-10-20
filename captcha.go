@@ -206,25 +206,24 @@ func generateNoiseElements() string {
 	var noise strings.Builder
 	colors := []string{"#38bdf8", "#818cf8", "#f43f5e", "#10b981", "#fbbf24", "#64748b"}
 
-	for i := 0; i < 45; i++ {
+	for i := 0; i < 15; i++ {
 		cx := cryptoRandInt(5, 175)
 		cy := cryptoRandInt(5, 55)
 		r := cryptoRandInt(1, 2)
 		color := colors[cryptoRandInt(0, len(colors)-1)]
-		noise.WriteString(fmt.Sprintf(`<circle cx="%d" cy="%d" r="%d" fill="%s" opacity="0.45"/>`, cx, cy, r, color))
+		noise.WriteString(fmt.Sprintf(`<circle cx="%d" cy="%d" r="%d" fill="%s" opacity="0.25"/>`, cx, cy, r, color))
 	}
 
-	for i := 0; i < 6; i++ {
+	for i := 0; i < 2; i++ {
 		x1 := cryptoRandInt(5, 30)
-		y1 := cryptoRandInt(5, 55)
-		cx := cryptoRandInt(50, 130)
-		cy := cryptoRandInt(0, 60)
+		y1 := cryptoRandInt(10, 50)
+		cx := cryptoRandInt(60, 120)
+		cy := cryptoRandInt(5, 55)
 		x2 := cryptoRandInt(150, 175)
-		y2 := cryptoRandInt(5, 55)
-		strokeWidth := cryptoRandInt(1, 2)
+		y2 := cryptoRandInt(10, 50)
 		color := colors[cryptoRandInt(0, len(colors)-1)]
-		noise.WriteString(fmt.Sprintf(`<path d="M%d,%d Q%d,%d %d,%d" stroke="%s" stroke-width="%d" fill="none" opacity="0.65"/>`,
-			x1, y1, cx, cy, x2, y2, color, strokeWidth))
+		noise.WriteString(fmt.Sprintf(`<path d="M%d,%d Q%d,%d %d,%d" stroke="%s" stroke-width="1" fill="none" opacity="0.25"/>`,
+			x1, y1, cx, cy, x2, y2, color))
 	}
 
 	return noise.String()
@@ -251,12 +250,22 @@ func renderObfuscatedChars(expr string) string {
 	var sb strings.Builder
 	charColors := []string{"#38bdf8", "#60a5fa", "#93c5fd", "#e0f2fe", "#7dd3fc"}
 
-	currentX := cryptoRandInt(14, 20)
 	step := 16
+	spaceWidth := 8
+	totalWidth := 0
+	for _, ch := range expr {
+		if ch == ' ' {
+			totalWidth += spaceWidth
+		} else {
+			totalWidth += step
+		}
+	}
+
+	currentX := (180 - totalWidth) / 2
 
 	for _, ch := range expr {
 		if ch == ' ' {
-			currentX += 8
+			currentX += spaceWidth
 			continue
 		}
 
@@ -266,25 +275,23 @@ func renderObfuscatedChars(expr string) string {
 			continue
 		}
 
-		rot := cryptoRandInt(-15, 15)
-		yJitter := cryptoRandInt(18, 24)
-		scale := float64(cryptoRandInt(125, 150)) / 100.0
+		rot := cryptoRandInt(-3, 3)
 		color := charColors[cryptoRandInt(0, len(charColors)-1)]
 
 		sb.WriteString(fmt.Sprintf(
-			`<g transform="translate(%d,%d) rotate(%d 6 8) scale(%.2f)"><path d="%s" stroke="%s" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g>`,
-			currentX, yJitter, rot, scale, pathData, color,
+			`<g transform="translate(%d,19) rotate(%d 6 8) scale(1.4)"><path d="%s" stroke="%s" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g>`,
+			currentX, rot, pathData, color,
 		))
 
-		currentX += step + cryptoRandInt(-2, 3)
+		currentX += step
 	}
 
 	return sb.String()
 }
 
 func GenerateMathCaptchaSVG() (string, string) {
-	num1 := cryptoRandInt(25, 89)
-	num2 := cryptoRandInt(11, 45)
+	num1 := cryptoRandInt(5, 19)
+	num2 := cryptoRandInt(1, 9)
 	isAddition := cryptoRandInt(0, 1) == 1
 
 	var text string
@@ -305,25 +312,12 @@ func GenerateMathCaptchaSVG() (string, string) {
 	noise := generateNoiseElements()
 	renderedChars := renderObfuscatedChars(text)
 
-	baseFreqX := fmt.Sprintf("0.0%d", cryptoRandInt(3, 7))
-	baseFreqY := fmt.Sprintf("0.0%d", cryptoRandInt(4, 8))
-	scale := cryptoRandInt(3, 5)
-	seed := cryptoRandInt(1, 999)
-
 	svg := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="180" height="60" viewBox="0 0 180 60">
-  <defs>
-    <filter id="distortionFilter" x="-10%%" y="-10%%" width="120%%" height="120%%">
-      <feTurbulence type="turbulence" baseFrequency="%s %s" numOctaves="2" seed="%d" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="%d" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-  </defs>
   <rect width="100%%" height="100%%" fill="#0b1329" rx="8" stroke="#1e293b" stroke-width="1.5"/>
-  <g filter="url(#distortionFilter)">
-    %s
-    %s
-  </g>
-</svg>`, baseFreqX, baseFreqY, seed, scale, noise, renderedChars)
+  %s
+  %s
+</svg>`, noise, renderedChars)
 
 	base64URI := "data:image/svg+xml;base64," + base64.StdEncoding.EncodeToString([]byte(svg))
 	return token, base64URI

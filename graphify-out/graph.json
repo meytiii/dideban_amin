@@ -6724,17 +6724,6 @@
       "source_location": "L329"
     },
     {
-      "id": "admin_auth_ipincidrs",
-      "label": "ipInCIDRs()",
-      "_origin": "ast",
-      "community": 105,
-      "community_name": "logAudit",
-      "file_type": "code",
-      "norm_label": "ipincidrs()",
-      "source_file": "admin_auth.go",
-      "source_location": "L274"
-    },
-    {
       "id": "admin_auth_logaudit",
       "label": "logAudit()",
       "_origin": "ast",
@@ -6766,17 +6755,6 @@
       "norm_label": "logouthandler()",
       "source_file": "admin_auth.go",
       "source_location": "L395"
-    },
-    {
-      "id": "admin_auth_parsetrustedproxies",
-      "label": "parseTrustedProxies()",
-      "_origin": "ast",
-      "community": 105,
-      "community_name": "logAudit",
-      "file_type": "code",
-      "norm_label": "parsetrustedproxies()",
-      "source_file": "admin_auth.go",
-      "source_location": "L249"
     },
     {
       "id": "admin_handlers_disableuser2fahandler",
@@ -6821,28 +6799,6 @@
       "norm_label": "updateuserhandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L1491"
-    },
-    {
-      "id": "go_type_net_ip",
-      "label": "net.IP",
-      "_origin": "ast",
-      "community": 105,
-      "community_name": "logAudit",
-      "file_type": "code",
-      "norm_label": "net.ip",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_net_ipnet",
-      "label": "net.IPNet",
-      "_origin": "ast",
-      "community": 105,
-      "community_name": "logAudit",
-      "file_type": "code",
-      "norm_label": "net.ipnet",
-      "source_file": "",
-      "source_location": ""
     },
     {
       "id": "security_iscookiesecure",
@@ -9226,139 +9182,29 @@
       "label": "NewUsedCaptchaStore()",
       "_origin": "ast",
       "community": 135,
-      "community_name": "database/sql.DB",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
       "norm_label": "newusedcaptchastore()",
       "source_file": "captcha.go",
       "source_location": "L36"
     },
     {
-      "id": "go_type_database_sql_db",
-      "label": "database/sql.DB",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "database/sql.DB",
-      "file_type": "code",
-      "norm_label": "database/sql.db",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "go_type_sync_once",
       "label": "sync.Once",
       "_origin": "ast",
       "community": 135,
-      "community_name": "database/sql.DB",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
       "norm_label": "sync.once",
       "source_file": "",
       "source_location": ""
     },
     {
-      "id": "go_type_time_duration",
-      "label": "time.Duration",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "database/sql.DB",
-      "file_type": "code",
-      "norm_label": "time.duration",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "security_newaccountlockoutmanager",
-      "label": "NewAccountLockoutManager()",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "database/sql.DB",
-      "file_type": "code",
-      "norm_label": "newaccountlockoutmanager()",
-      "source_file": "security.go",
-      "source_location": "L656"
-    },
-    {
-      "id": "setad_khabari_hmd_accountlockoutmanager",
-      "label": "AccountLockoutManager",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "database/sql.DB",
-      "file_type": "code",
-      "norm_label": "accountlockoutmanager",
-      "source_file": "security.go",
-      "source_location": "L649"
-    },
-    {
-      "id": "setad_khabari_hmd_accountlockoutmanager_init",
-      "label": ".init()",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "database/sql.DB",
-      "file_type": "code",
-      "norm_label": ".init()",
-      "source_file": "security.go",
-      "source_location": "L665"
-    },
-    {
-      "id": "setad_khabari_hmd_accountlockoutmanager_islocked",
-      "label": ".IsLocked()",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "database/sql.DB",
-      "file_type": "code",
-      "norm_label": ".islocked()",
-      "source_file": "security.go",
-      "source_location": "L687"
-    },
-    {
-      "id": "setad_khabari_hmd_accountlockoutmanager_recordfailure",
-      "label": ".RecordFailure()",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "database/sql.DB",
-      "file_type": "code",
-      "norm_label": ".recordfailure()",
-      "source_file": "security.go",
-      "source_location": "L752"
-    },
-    {
-      "id": "setad_khabari_hmd_accountlockoutmanager_reset",
-      "label": ".Reset()",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "database/sql.DB",
-      "file_type": "code",
-      "norm_label": ".reset()",
-      "source_file": "security.go",
-      "source_location": "L809"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager_getdb",
-      "label": ".getDB()",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "database/sql.DB",
-      "file_type": "code",
-      "norm_label": ".getdb()",
-      "source_file": "security.go",
-      "source_location": "L79"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager_init",
-      "label": ".init()",
-      "_origin": "ast",
-      "community": 135,
-      "community_name": "database/sql.DB",
-      "file_type": "code",
-      "norm_label": ".init()",
-      "source_file": "security.go",
-      "source_location": "L73"
-    },
-    {
       "id": "setad_khabari_hmd_usedcaptchastore",
       "label": "UsedCaptchaStore",
       "_origin": "ast",
       "community": 135,
-      "community_name": "database/sql.DB",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
       "norm_label": "usedcaptchastore",
       "source_file": "captcha.go",
@@ -9369,7 +9215,7 @@
       "label": ".getDB()",
       "_origin": "ast",
       "community": 135,
-      "community_name": "database/sql.DB",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
       "norm_label": ".getdb()",
       "source_file": "captcha.go",
@@ -9380,7 +9226,7 @@
       "label": ".init()",
       "_origin": "ast",
       "community": 135,
-      "community_name": "database/sql.DB",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
       "norm_label": ".init()",
       "source_file": "captcha.go",
@@ -9391,7 +9237,7 @@
       "label": ".StartReaper()",
       "_origin": "ast",
       "community": 135,
-      "community_name": "database/sql.DB",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
       "norm_label": ".startreaper()",
       "source_file": "captcha.go",
@@ -9402,7 +9248,7 @@
       "label": ".TryRedeem()",
       "_origin": "ast",
       "community": 135,
-      "community_name": "database/sql.DB",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
       "norm_label": ".tryredeem()",
       "source_file": "captcha.go",
@@ -9413,7 +9259,7 @@
       "label": "captcha_persistence_test.go",
       "_origin": "ast",
       "community": 135,
-      "community_name": "database/sql.DB",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
       "norm_label": "captcha_persistence_test.go",
       "source_file": "test/captcha_persistence_test.go",
@@ -9424,7 +9270,7 @@
       "label": "TestCaptchaPersistenceTryRedeem()",
       "_origin": "ast",
       "community": 135,
-      "community_name": "database/sql.DB",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
       "norm_label": "testcaptchapersistencetryredeem()",
       "source_file": "test/captcha_persistence_test.go",
@@ -9435,7 +9281,7 @@
       "label": "security_init_order_test.go",
       "_origin": "ast",
       "community": 135,
-      "community_name": "database/sql.DB",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
       "norm_label": "security_init_order_test.go",
       "source_file": "test/security_init_order_test.go",
@@ -9446,7 +9292,7 @@
       "label": "TestSecurityStoresInitOrder()",
       "_origin": "ast",
       "community": 135,
-      "community_name": "database/sql.DB",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
       "norm_label": "testsecuritystoresinitorder()",
       "source_file": "test/security_init_order_test.go",
@@ -12488,6 +12334,17 @@
       "source_location": "L338"
     },
     {
+      "id": "admin_auth_ipincidrs",
+      "label": "ipInCIDRs()",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "ipincidrs()",
+      "source_file": "admin_auth.go",
+      "source_location": "L274"
+    },
+    {
       "id": "admin_auth_logaudittx",
       "label": "logAuditTx()",
       "_origin": "ast",
@@ -12497,6 +12354,17 @@
       "norm_label": "logaudittx()",
       "source_file": "admin_auth.go",
       "source_location": "L371"
+    },
+    {
+      "id": "admin_auth_parsetrustedproxies",
+      "label": "parseTrustedProxies()",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "getIP",
+      "file_type": "code",
+      "norm_label": "parsetrustedproxies()",
+      "source_file": "admin_auth.go",
+      "source_location": "L249"
     },
     {
       "id": "admin_handlers_changemypasswordhandler",
@@ -12620,28 +12488,6 @@
       "source_location": "L325"
     },
     {
-      "id": "crypto_verifypassword",
-      "label": "VerifyPassword()",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "getIP",
-      "file_type": "code",
-      "norm_label": "verifypassword()",
-      "source_file": "crypto.go",
-      "source_location": "L320"
-    },
-    {
-      "id": "crypto_verifypasswordwithrehash",
-      "label": "VerifyPasswordWithRehash()",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "getIP",
-      "file_type": "code",
-      "norm_label": "verifypasswordwithrehash()",
-      "source_file": "crypto.go",
-      "source_location": "L260"
-    },
-    {
       "id": "go_type_database_sql_tx",
       "label": "database/sql.Tx",
       "_origin": "ast",
@@ -12653,37 +12499,26 @@
       "source_location": ""
     },
     {
-      "id": "mfa_disable2fahandler",
-      "label": "Disable2FAHandler()",
+      "id": "go_type_net_ip",
+      "label": "net.IP",
       "_origin": "ast",
       "community": 26,
       "community_name": "getIP",
       "file_type": "code",
-      "norm_label": "disable2fahandler()",
-      "source_file": "mfa.go",
-      "source_location": "L430"
+      "norm_label": "net.ip",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "mfa_enable2fahandler",
-      "label": "Enable2FAHandler()",
+      "id": "go_type_net_ipnet",
+      "label": "net.IPNet",
       "_origin": "ast",
       "community": 26,
       "community_name": "getIP",
       "file_type": "code",
-      "norm_label": "enable2fahandler()",
-      "source_file": "mfa.go",
-      "source_location": "L369"
-    },
-    {
-      "id": "test_crypto_test_testargon2iddualformatandrehash",
-      "label": "TestArgon2idDualFormatAndRehash()",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "getIP",
-      "file_type": "code",
-      "norm_label": "testargon2iddualformatandrehash()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L66"
+      "norm_label": "net.ipnet",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "clamav",
@@ -14987,6 +14822,28 @@
       "source_location": "L57"
     },
     {
+      "id": "crypto_verifypassword",
+      "label": "VerifyPassword()",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "mfa.go",
+      "file_type": "code",
+      "norm_label": "verifypassword()",
+      "source_file": "crypto.go",
+      "source_location": "L320"
+    },
+    {
+      "id": "crypto_verifypasswordwithrehash",
+      "label": "VerifyPasswordWithRehash()",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "mfa.go",
+      "file_type": "code",
+      "norm_label": "verifypasswordwithrehash()",
+      "source_file": "crypto.go",
+      "source_location": "L260"
+    },
+    {
       "id": "mfa",
       "label": "mfa.go",
       "_origin": "ast",
@@ -14996,6 +14853,28 @@
       "norm_label": "mfa.go",
       "source_file": "mfa.go",
       "source_location": "L1"
+    },
+    {
+      "id": "mfa_disable2fahandler",
+      "label": "Disable2FAHandler()",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "mfa.go",
+      "file_type": "code",
+      "norm_label": "disable2fahandler()",
+      "source_file": "mfa.go",
+      "source_location": "L430"
+    },
+    {
+      "id": "mfa_enable2fahandler",
+      "label": "Enable2FAHandler()",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "mfa.go",
+      "file_type": "code",
+      "norm_label": "enable2fahandler()",
+      "source_file": "mfa.go",
+      "source_location": "L369"
     },
     {
       "id": "mfa_generatebase32secret",
@@ -15106,6 +14985,17 @@
       "norm_label": "mfapendingpayload",
       "source_file": "mfa.go",
       "source_location": "L28"
+    },
+    {
+      "id": "test_crypto_test_testargon2iddualformatandrehash",
+      "label": "TestArgon2idDualFormatAndRehash()",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "mfa.go",
+      "file_type": "code",
+      "norm_label": "testargon2iddualformatandrehash()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L66"
     },
     {
       "id": "test_mfa_test",
@@ -18065,17 +17955,6 @@
       "source_location": "L839"
     },
     {
-      "id": "setad_khabari_hmd_activesessionitem",
-      "label": "ActiveSessionItem",
-      "_origin": "ast",
-      "community": 63,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "activesessionitem",
-      "source_file": "security.go",
-      "source_location": "L28"
-    },
-    {
       "id": "setad_khabari_hmd_cachedaccountfailure",
       "label": "cachedAccountFailure",
       "_origin": "ast",
@@ -18175,6 +18054,28 @@
       "source_location": "L39"
     },
     {
+      "id": "go_type_database_sql_db",
+      "label": "database/sql.DB",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": "database/sql.db",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "go_type_time_duration",
+      "label": "time.Duration",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": "time.duration",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "security_hashtoken",
       "label": "hashToken()",
       "_origin": "ast",
@@ -18186,6 +18087,28 @@
       "source_location": "L57"
     },
     {
+      "id": "security_newaccountlockoutmanager",
+      "label": "NewAccountLockoutManager()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": "newaccountlockoutmanager()",
+      "source_file": "security.go",
+      "source_location": "L656"
+    },
+    {
+      "id": "setad_khabari_hmd_accountlockoutmanager",
+      "label": "AccountLockoutManager",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": "accountlockoutmanager",
+      "source_file": "security.go",
+      "source_location": "L649"
+    },
+    {
       "id": "setad_khabari_hmd_accountlockoutmanager_getdb",
       "label": ".getDB()",
       "_origin": "ast",
@@ -18195,6 +18118,61 @@
       "norm_label": ".getdb()",
       "source_file": "security.go",
       "source_location": "L673"
+    },
+    {
+      "id": "setad_khabari_hmd_accountlockoutmanager_init",
+      "label": ".init()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".init()",
+      "source_file": "security.go",
+      "source_location": "L665"
+    },
+    {
+      "id": "setad_khabari_hmd_accountlockoutmanager_islocked",
+      "label": ".IsLocked()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".islocked()",
+      "source_file": "security.go",
+      "source_location": "L687"
+    },
+    {
+      "id": "setad_khabari_hmd_accountlockoutmanager_recordfailure",
+      "label": ".RecordFailure()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".recordfailure()",
+      "source_file": "security.go",
+      "source_location": "L752"
+    },
+    {
+      "id": "setad_khabari_hmd_accountlockoutmanager_reset",
+      "label": ".Reset()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".reset()",
+      "source_file": "security.go",
+      "source_location": "L809"
+    },
+    {
+      "id": "setad_khabari_hmd_activesessionitem",
+      "label": "ActiveSessionItem",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": "activesessionitem",
+      "source_file": "security.go",
+      "source_location": "L28"
     },
     {
       "id": "setad_khabari_hmd_adminsession",
@@ -18274,6 +18252,17 @@
       "source_location": "L325"
     },
     {
+      "id": "setad_khabari_hmd_sessionmanager_getdb",
+      "label": ".getDB()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".getdb()",
+      "source_file": "security.go",
+      "source_location": "L79"
+    },
+    {
       "id": "setad_khabari_hmd_sessionmanager_getkickedreason",
       "label": ".GetKickedReason()",
       "_origin": "ast",
@@ -18283,6 +18272,17 @@
       "norm_label": ".getkickedreason()",
       "source_file": "security.go",
       "source_location": "L215"
+    },
+    {
+      "id": "setad_khabari_hmd_sessionmanager_init",
+      "label": ".init()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".init()",
+      "source_file": "security.go",
+      "source_location": "L73"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_revokeallusersessions",
@@ -20028,7 +20028,7 @@
       "file_type": "code",
       "norm_label": "generatemathcaptchasvg()",
       "source_file": "captcha.go",
-      "source_location": "L285"
+      "source_location": "L292"
     },
     {
       "id": "captcha_generatenoiseelements",
@@ -20050,7 +20050,7 @@
       "file_type": "code",
       "norm_label": "getcaptchahandler()",
       "source_file": "captcha.go",
-      "source_location": "L332"
+      "source_location": "L326"
     },
     {
       "id": "captcha_renderobfuscatedchars",
@@ -20061,7 +20061,7 @@
       "file_type": "code",
       "norm_label": "renderobfuscatedchars()",
       "source_file": "captcha.go",
-      "source_location": "L250"
+      "source_location": "L249"
     },
     {
       "id": "crypto_initcrypto",
@@ -21888,7 +21888,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L286",
+      "source_location": "L293",
       "weight": 1.0
     },
     {
@@ -21900,7 +21900,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L304",
+      "source_location": "L311",
       "weight": 1.0
     },
     {
@@ -21912,7 +21912,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L305",
+      "source_location": "L312",
       "weight": 1.0
     },
     {
@@ -21924,7 +21924,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L306",
+      "source_location": "L313",
       "weight": 1.0
     },
     {
@@ -21948,7 +21948,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L333",
+      "source_location": "L327",
       "weight": 1.0
     },
     {
@@ -21960,7 +21960,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L254",
+      "source_location": "L278",
       "weight": 1.0
     },
     {
@@ -30372,7 +30372,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "captcha.go",
-      "source_location": "L332",
+      "source_location": "L326",
       "weight": 1.0
     },
     {
@@ -30384,7 +30384,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "captcha.go",
-      "source_location": "L332",
+      "source_location": "L326",
       "weight": 1.0
     },
     {
@@ -40826,18 +40826,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L250",
-      "weight": 1.0
-    },
-    {
-      "source": "captcha",
-      "target": "captcha_generatemathcaptchasvg",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "captcha.go",
-      "source_location": "L285",
+      "source_location": "L249",
       "weight": 1.0
     },
     {
@@ -40853,13 +40842,24 @@
     },
     {
       "source": "captcha",
+      "target": "captcha_generatemathcaptchasvg",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "captcha.go",
+      "source_location": "L292",
+      "weight": 1.0
+    },
+    {
+      "source": "captcha",
       "target": "captcha_getcaptchahandler",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L332",
+      "source_location": "L326",
       "weight": 1.0
     },
     {
@@ -54101,5 +54101,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8a66da46ca274c0a865ff1fbf5e137d5fdcd13d9"
+  "built_at_commit": "0ece029fc4c731c857efb6ed6dfc9b998f2de7dc"
 }
