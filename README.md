@@ -31,7 +31,7 @@ go run .
 
 #### Default Administrative Credentials:
 - **Username**: `admin_it`
-- **Password**: `Herasat@2026Secure`
+- **Password**: `@2026Secure`
 - **Role**: `superuser`
 
 ### 5. Stopping the Database
