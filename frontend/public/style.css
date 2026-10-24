@@ -1098,10 +1098,13 @@ textarea:focus {
     border: 1.5px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--radius-md, 12px);
     box-shadow: 0 20px 42px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
-    padding: 6px;
+    padding: 6px 6px 12px 6px;
     z-index: 100;
-    max-height: 320px;
+    max-height: min(600px, 80vh);
     overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-bottom: 12px;
     display: flex;
     flex-direction: column;
     opacity: 0;
@@ -1189,6 +1192,7 @@ textarea:focus {
 
 .dropdown-item:last-child {
     border-bottom: none;
+    margin-bottom: 2px;
 }
 
 .custom-dropdown.open .dropdown-item {
@@ -1701,6 +1705,30 @@ textarea:focus {
 
     .be-file-meta {
         font-size: 10.5px;
+    }
+
+    .custom-dropdown-menu {
+        max-height: min(490px, 72vh);
+        padding: 6px 6px 12px 6px;
+        scroll-padding-bottom: 14px;
+    }
+
+    .dropdown-item {
+        padding: 8px 10px;
+        gap: 10px;
+    }
+
+    .dropdown-item .item-label {
+        font-size: 13px;
+    }
+
+    .dropdown-item .item-description {
+        font-size: 10.5px;
+    }
+
+    .dropdown-item .item-icon-box {
+        width: 26px;
+        height: 26px;
     }
 }
 
