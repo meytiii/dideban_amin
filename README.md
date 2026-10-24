@@ -1,7 +1,5 @@
 # Didebane Amin (دیده‌بان امین)
 
-Whistleblower and citizen report submission portal for the Security Department (Herasat), General Directorate of Education, Hamadan Province.
-
 Stack: Go + Native HTML/CSS/JS + PostgreSQL.
 
 ## Running Locally with Docker (No Local PostgreSQL Installation Required)
