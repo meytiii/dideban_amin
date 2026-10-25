@@ -6878,17 +6878,6 @@
       "source_location": ""
     },
     {
-      "id": "public_handlers_inspectziparchive",
-      "label": "inspectZipArchive()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "inspectziparchive()",
-      "source_file": "public_handlers.go",
-      "source_location": "L35"
-    },
-    {
       "id": "security_initcookiesecurity",
       "label": "InitCookieSecurity()",
       "_origin": "ast",
@@ -6920,6 +6909,61 @@
       "norm_label": "testclassificationvalidationandmath()",
       "source_file": "test/classification_test.go",
       "source_location": "L8"
+    },
+    {
+      "id": "test_contextwithadmin",
+      "label": "contextWithAdmin",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "contextwithadmin",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L246"
+    },
+    {
+      "id": "test_contextwithadmin_deadline",
+      "label": ".Deadline()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": ".deadline()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L251"
+    },
+    {
+      "id": "test_contextwithadmin_done",
+      "label": ".Done()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": ".done()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L252"
+    },
+    {
+      "id": "test_contextwithadmin_err",
+      "label": ".Err()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": ".err()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L253"
+    },
+    {
+      "id": "test_contextwithadmin_value",
+      "label": ".Value()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": ".value()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L254"
     },
     {
       "id": "test_cookie_secure_test",
@@ -7118,39 +7162,6 @@
       "norm_label": "testgetiphardening()",
       "source_file": "test/get_ip_test.go",
       "source_location": "L9"
-    },
-    {
-      "id": "test_security_hardening_test",
-      "label": "security_hardening_test.go",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "security_hardening_test.go",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_security_hardening_test_testinspectziparchive",
-      "label": "TestInspectZipArchive()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testinspectziparchive()",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L57"
-    },
-    {
-      "id": "test_security_hardening_test_testipratelimiterboundedcapacity",
-      "label": "TestIPRateLimiterBoundedCapacity()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testipratelimiterboundedcapacity()",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L39"
     },
     {
       "id": "test_server_time_test",
@@ -7554,7 +7565,7 @@
       "node_kind": "heading",
       "norm_label": "1. prerequisites",
       "source_file": "README.md",
-      "source_location": "L9"
+      "source_location": "L7"
     },
     {
       "id": "readme_2_start_postgresql_via_docker_compose",
@@ -7566,7 +7577,7 @@
       "node_kind": "heading",
       "norm_label": "2. start postgresql via docker compose",
       "source_file": "README.md",
-      "source_location": "L13"
+      "source_location": "L11"
     },
     {
       "id": "readme_3_start_the_backend_application",
@@ -7578,7 +7589,7 @@
       "node_kind": "heading",
       "norm_label": "3. start the backend application",
       "source_file": "README.md",
-      "source_location": "L22"
+      "source_location": "L20"
     },
     {
       "id": "readme_4_access_the_services",
@@ -7590,7 +7601,7 @@
       "node_kind": "heading",
       "norm_label": "4. access the services",
       "source_file": "README.md",
-      "source_location": "L28"
+      "source_location": "L26"
     },
     {
       "id": "readme_5_stopping_the_database",
@@ -7602,7 +7613,7 @@
       "node_kind": "heading",
       "norm_label": "5. stopping the database",
       "source_file": "README.md",
-      "source_location": "L37"
+      "source_location": "L35"
     },
     {
       "id": "readme_default_administrative_credentials",
@@ -7614,7 +7625,7 @@
       "node_kind": "heading",
       "norm_label": "default administrative credentials:",
       "source_file": "README.md",
-      "source_location": "L32"
+      "source_location": "L30"
     },
     {
       "id": "readme_didebane_amin_\u062f\u06cc\u062f\u0647_\u0628\u0627\u0646_\u0627\u0645\u06cc\u0646",
@@ -7638,7 +7649,7 @@
       "node_kind": "heading",
       "norm_label": "running locally with docker (no local postgresql installation required)",
       "source_file": "README.md",
-      "source_location": "L7"
+      "source_location": "L5"
     },
     {
       "id": "frontend_public_preloader",
@@ -7707,6 +7718,28 @@
       "norm_label": "testauditfailclosed()",
       "source_file": "test/audit_fail_test.go",
       "source_location": "L12"
+    },
+    {
+      "id": "test_docx_sandbox_test",
+      "label": "docx_sandbox_test.go",
+      "_origin": "ast",
+      "community": 114,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "docx_sandbox_test.go",
+      "source_file": "test/docx_sandbox_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_docx_sandbox_test_testdocxsandboxmaliciouspayload",
+      "label": "TestDocxSandboxMaliciousPayload()",
+      "_origin": "ast",
+      "community": 114,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "testdocxsandboxmaliciouspayload()",
+      "source_file": "test/docx_sandbox_test.go",
+      "source_location": "L16"
     },
     {
       "id": "test_lockout_persistence_test",
@@ -9189,59 +9222,125 @@
       "source_location": "L1"
     },
     {
-      "id": "test_contextwithadmin",
-      "label": "contextWithAdmin",
+      "id": "captcha_newusedcaptchastore",
+      "label": "NewUsedCaptchaStore()",
       "_origin": "ast",
       "community": 135,
-      "community_name": "contextWithAdmin",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
-      "norm_label": "contextwithadmin",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L246"
+      "norm_label": "newusedcaptchastore()",
+      "source_file": "captcha.go",
+      "source_location": "L36"
     },
     {
-      "id": "test_contextwithadmin_deadline",
-      "label": ".Deadline()",
+      "id": "go_type_sync_once",
+      "label": "sync.Once",
       "_origin": "ast",
       "community": 135,
-      "community_name": "contextWithAdmin",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
-      "norm_label": ".deadline()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L251"
+      "norm_label": "sync.once",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "test_contextwithadmin_done",
-      "label": ".Done()",
+      "id": "setad_khabari_hmd_usedcaptchastore",
+      "label": "UsedCaptchaStore",
       "_origin": "ast",
       "community": 135,
-      "community_name": "contextWithAdmin",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
-      "norm_label": ".done()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L252"
+      "norm_label": "usedcaptchastore",
+      "source_file": "captcha.go",
+      "source_location": "L29"
     },
     {
-      "id": "test_contextwithadmin_err",
-      "label": ".Err()",
+      "id": "setad_khabari_hmd_usedcaptchastore_getdb",
+      "label": ".getDB()",
       "_origin": "ast",
       "community": 135,
-      "community_name": "contextWithAdmin",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
-      "norm_label": ".err()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L253"
+      "norm_label": ".getdb()",
+      "source_file": "captcha.go",
+      "source_location": "L53"
     },
     {
-      "id": "test_contextwithadmin_value",
-      "label": ".Value()",
+      "id": "setad_khabari_hmd_usedcaptchastore_init",
+      "label": ".init()",
       "_origin": "ast",
       "community": 135,
-      "community_name": "contextWithAdmin",
+      "community_name": "UsedCaptchaStore",
       "file_type": "code",
-      "norm_label": ".value()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L254"
+      "norm_label": ".init()",
+      "source_file": "captcha.go",
+      "source_location": "L45"
+    },
+    {
+      "id": "setad_khabari_hmd_usedcaptchastore_startreaper",
+      "label": ".StartReaper()",
+      "_origin": "ast",
+      "community": 135,
+      "community_name": "UsedCaptchaStore",
+      "file_type": "code",
+      "norm_label": ".startreaper()",
+      "source_file": "captcha.go",
+      "source_location": "L113"
+    },
+    {
+      "id": "setad_khabari_hmd_usedcaptchastore_tryredeem",
+      "label": ".TryRedeem()",
+      "_origin": "ast",
+      "community": 135,
+      "community_name": "UsedCaptchaStore",
+      "file_type": "code",
+      "norm_label": ".tryredeem()",
+      "source_file": "captcha.go",
+      "source_location": "L67"
+    },
+    {
+      "id": "test_captcha_persistence_test",
+      "label": "captcha_persistence_test.go",
+      "_origin": "ast",
+      "community": 135,
+      "community_name": "UsedCaptchaStore",
+      "file_type": "code",
+      "norm_label": "captcha_persistence_test.go",
+      "source_file": "test/captcha_persistence_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_captcha_persistence_test_testcaptchapersistencetryredeem",
+      "label": "TestCaptchaPersistenceTryRedeem()",
+      "_origin": "ast",
+      "community": 135,
+      "community_name": "UsedCaptchaStore",
+      "file_type": "code",
+      "norm_label": "testcaptchapersistencetryredeem()",
+      "source_file": "test/captcha_persistence_test.go",
+      "source_location": "L8"
+    },
+    {
+      "id": "test_security_init_order_test",
+      "label": "security_init_order_test.go",
+      "_origin": "ast",
+      "community": 135,
+      "community_name": "UsedCaptchaStore",
+      "file_type": "code",
+      "norm_label": "security_init_order_test.go",
+      "source_file": "test/security_init_order_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_security_init_order_test_testsecuritystoresinitorder",
+      "label": "TestSecurityStoresInitOrder()",
+      "_origin": "ast",
+      "community": 135,
+      "community_name": "UsedCaptchaStore",
+      "file_type": "code",
+      "norm_label": "testsecuritystoresinitorder()",
+      "source_file": "test/security_init_order_test.go",
+      "source_location": "L8"
     },
     {
       "id": "agents_skills_hallmark_references_components_h3_quote_led",
@@ -17944,6 +18043,17 @@
       "source_location": "L14"
     },
     {
+      "id": "test_security_hardening_test_testipratelimiterboundedcapacity",
+      "label": "TestIPRateLimiterBoundedCapacity()",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "testipratelimiterboundedcapacity()",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L39"
+    },
+    {
       "id": "go_type_database_sql_db",
       "label": "database/sql.DB",
       "_origin": "ast",
@@ -17951,17 +18061,6 @@
       "community_name": "SessionManager",
       "file_type": "code",
       "norm_label": "database/sql.db",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_sync_once",
-      "label": "sync.Once",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "SessionManager",
-      "file_type": "code",
-      "norm_label": "sync.once",
       "source_file": "",
       "source_location": ""
     },
@@ -18241,61 +18340,6 @@
       "source_location": "L410"
     },
     {
-      "id": "setad_khabari_hmd_usedcaptchastore",
-      "label": "UsedCaptchaStore",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "SessionManager",
-      "file_type": "code",
-      "norm_label": "usedcaptchastore",
-      "source_file": "captcha.go",
-      "source_location": "L29"
-    },
-    {
-      "id": "setad_khabari_hmd_usedcaptchastore_getdb",
-      "label": ".getDB()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "SessionManager",
-      "file_type": "code",
-      "norm_label": ".getdb()",
-      "source_file": "captcha.go",
-      "source_location": "L53"
-    },
-    {
-      "id": "setad_khabari_hmd_usedcaptchastore_init",
-      "label": ".init()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "SessionManager",
-      "file_type": "code",
-      "norm_label": ".init()",
-      "source_file": "captcha.go",
-      "source_location": "L45"
-    },
-    {
-      "id": "setad_khabari_hmd_usedcaptchastore_startreaper",
-      "label": ".StartReaper()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "SessionManager",
-      "file_type": "code",
-      "norm_label": ".startreaper()",
-      "source_file": "captcha.go",
-      "source_location": "L113"
-    },
-    {
-      "id": "setad_khabari_hmd_usedcaptchastore_tryredeem",
-      "label": ".TryRedeem()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "SessionManager",
-      "file_type": "code",
-      "norm_label": ".tryredeem()",
-      "source_file": "captcha.go",
-      "source_location": "L67"
-    },
-    {
       "id": "design",
       "label": "DESIGN.md",
       "_origin": "ast",
@@ -18456,17 +18500,6 @@
       "source_location": "L180"
     },
     {
-      "id": "captcha_generatecaptchatoken",
-      "label": "GenerateCaptchaToken()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "generatecaptchatoken()",
-      "source_file": "captcha.go",
-      "source_location": "L134"
-    },
-    {
       "id": "crypto",
       "label": "crypto.go",
       "_origin": "ast",
@@ -18599,17 +18632,6 @@
       "source_location": "L61"
     },
     {
-      "id": "crypto_initcrypto",
-      "label": "InitCrypto()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "initcrypto()",
-      "source_file": "crypto.go",
-      "source_location": "L42"
-    },
-    {
       "id": "crypto_runcryptographicselftests",
       "label": "RunCryptographicSelfTests()",
       "_origin": "ast",
@@ -18665,28 +18687,6 @@
       "source_location": "L11"
     },
     {
-      "id": "test_crypto_test",
-      "label": "crypto_test.go",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "crypto_test.go",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_crypto_test_testcaptchaverificationsuite",
-      "label": "TestCaptchaVerificationSuite()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testcaptchaverificationsuite()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L268"
-    },
-    {
       "id": "test_crypto_test_testcryptounicodeemojinulbytesandtamper",
       "label": "TestCryptoUnicodeEmojiNulBytesAndTamper()",
       "_origin": "ast",
@@ -18698,17 +18698,6 @@
       "source_location": "L209"
     },
     {
-      "id": "test_crypto_test_testderivekeydeterministic",
-      "label": "TestDeriveKeyDeterministic()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testderivekeydeterministic()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L252"
-    },
-    {
       "id": "test_crypto_test_testhkdfkeyseparationandencryption",
       "label": "TestHKDFKeySeparationAndEncryption()",
       "_origin": "ast",
@@ -18718,39 +18707,6 @@
       "norm_label": "testhkdfkeyseparationandencryption()",
       "source_file": "test/crypto_test.go",
       "source_location": "L108"
-    },
-    {
-      "id": "test_crypto_test_testvalidatepasswordcomplexity",
-      "label": "TestValidatePasswordComplexity()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testvalidatepasswordcomplexity()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L18"
-    },
-    {
-      "id": "test_docx_sandbox_test",
-      "label": "docx_sandbox_test.go",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "docx_sandbox_test.go",
-      "source_file": "test/docx_sandbox_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_docx_sandbox_test_testdocxsandboxmaliciouspayload",
-      "label": "TestDocxSandboxMaliciousPayload()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testdocxsandboxmaliciouspayload()",
-      "source_file": "test/docx_sandbox_test.go",
-      "source_location": "L16"
     },
     {
       "id": "test_migration_v2_test",
@@ -18773,17 +18729,6 @@
       "norm_label": "testreencryptlegacydata()",
       "source_file": "test/migration_v2_test.go",
       "source_location": "L17"
-    },
-    {
-      "id": "test_security_hardening_test_testcaptchareplayprevention",
-      "label": "TestCaptchaReplayPrevention()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testcaptchareplayprevention()",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L11"
     },
     {
       "id": "components_ui_password_strength",
@@ -20046,7 +19991,7 @@
       "label": "captcha.go",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
       "norm_label": "captcha.go",
       "source_file": "captcha.go",
@@ -20057,18 +20002,29 @@
       "label": "cryptoRandInt()",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
       "norm_label": "cryptorandint()",
       "source_file": "captcha.go",
       "source_location": "L197"
     },
     {
+      "id": "captcha_generatecaptchatoken",
+      "label": "GenerateCaptchaToken()",
+      "_origin": "ast",
+      "community": 82,
+      "community_name": "InitCrypto",
+      "file_type": "code",
+      "norm_label": "generatecaptchatoken()",
+      "source_file": "captcha.go",
+      "source_location": "L134"
+    },
+    {
       "id": "captcha_generatemathcaptchasvg",
       "label": "GenerateMathCaptchaSVG()",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
       "norm_label": "generatemathcaptchasvg()",
       "source_file": "captcha.go",
@@ -20079,7 +20035,7 @@
       "label": "generateNoiseElements()",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
       "norm_label": "generatenoiseelements()",
       "source_file": "captcha.go",
@@ -20090,40 +20046,51 @@
       "label": "GetCaptchaHandler()",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
       "norm_label": "getcaptchahandler()",
       "source_file": "captcha.go",
       "source_location": "L336"
     },
     {
-      "id": "captcha_newusedcaptchastore",
-      "label": "NewUsedCaptchaStore()",
-      "_origin": "ast",
-      "community": 82,
-      "community_name": "captcha.go",
-      "file_type": "code",
-      "norm_label": "newusedcaptchastore()",
-      "source_file": "captcha.go",
-      "source_location": "L36"
-    },
-    {
       "id": "captcha_renderobfuscatedchars",
       "label": "renderObfuscatedChars()",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
       "norm_label": "renderobfuscatedchars()",
       "source_file": "captcha.go",
       "source_location": "L249"
     },
     {
+      "id": "crypto_initcrypto",
+      "label": "InitCrypto()",
+      "_origin": "ast",
+      "community": 82,
+      "community_name": "InitCrypto",
+      "file_type": "code",
+      "norm_label": "initcrypto()",
+      "source_file": "crypto.go",
+      "source_location": "L42"
+    },
+    {
+      "id": "public_handlers_inspectziparchive",
+      "label": "inspectZipArchive()",
+      "_origin": "ast",
+      "community": 82,
+      "community_name": "InitCrypto",
+      "file_type": "code",
+      "norm_label": "inspectziparchive()",
+      "source_file": "public_handlers.go",
+      "source_location": "L35"
+    },
+    {
       "id": "setad_khabari_hmd_captchapayload",
       "label": "CaptchaPayload",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
       "norm_label": "captchapayload",
       "source_file": "captcha.go",
@@ -20134,66 +20101,99 @@
       "label": "CaptchaResponse",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
       "norm_label": "captcharesponse",
       "source_file": "captcha.go",
       "source_location": "L24"
     },
     {
-      "id": "test_captcha_persistence_test",
-      "label": "captcha_persistence_test.go",
+      "id": "test_crypto_test",
+      "label": "crypto_test.go",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
-      "norm_label": "captcha_persistence_test.go",
-      "source_file": "test/captcha_persistence_test.go",
+      "norm_label": "crypto_test.go",
+      "source_file": "test/crypto_test.go",
       "source_location": "L1"
     },
     {
-      "id": "test_captcha_persistence_test_testcaptchapersistencetryredeem",
-      "label": "TestCaptchaPersistenceTryRedeem()",
+      "id": "test_crypto_test_testcaptchaverificationsuite",
+      "label": "TestCaptchaVerificationSuite()",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
-      "norm_label": "testcaptchapersistencetryredeem()",
-      "source_file": "test/captcha_persistence_test.go",
-      "source_location": "L8"
+      "norm_label": "testcaptchaverificationsuite()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L268"
+    },
+    {
+      "id": "test_crypto_test_testderivekeydeterministic",
+      "label": "TestDeriveKeyDeterministic()",
+      "_origin": "ast",
+      "community": 82,
+      "community_name": "InitCrypto",
+      "file_type": "code",
+      "norm_label": "testderivekeydeterministic()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L252"
     },
     {
       "id": "test_crypto_test_testgeneratemathcaptchasvgandhandler",
       "label": "TestGenerateMathCaptchaSVGAndHandler()",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
       "norm_label": "testgeneratemathcaptchasvgandhandler()",
       "source_file": "test/crypto_test.go",
       "source_location": "L306"
     },
     {
-      "id": "test_security_init_order_test",
-      "label": "security_init_order_test.go",
+      "id": "test_crypto_test_testvalidatepasswordcomplexity",
+      "label": "TestValidatePasswordComplexity()",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
-      "norm_label": "security_init_order_test.go",
-      "source_file": "test/security_init_order_test.go",
+      "norm_label": "testvalidatepasswordcomplexity()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L18"
+    },
+    {
+      "id": "test_security_hardening_test",
+      "label": "security_hardening_test.go",
+      "_origin": "ast",
+      "community": 82,
+      "community_name": "InitCrypto",
+      "file_type": "code",
+      "norm_label": "security_hardening_test.go",
+      "source_file": "test/security_hardening_test.go",
       "source_location": "L1"
     },
     {
-      "id": "test_security_init_order_test_testsecuritystoresinitorder",
-      "label": "TestSecurityStoresInitOrder()",
+      "id": "test_security_hardening_test_testcaptchareplayprevention",
+      "label": "TestCaptchaReplayPrevention()",
       "_origin": "ast",
       "community": 82,
-      "community_name": "captcha.go",
+      "community_name": "InitCrypto",
       "file_type": "code",
-      "norm_label": "testsecuritystoresinitorder()",
-      "source_file": "test/security_init_order_test.go",
-      "source_location": "L8"
+      "norm_label": "testcaptchareplayprevention()",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L11"
+    },
+    {
+      "id": "test_security_hardening_test_testinspectziparchive",
+      "label": "TestInspectZipArchive()",
+      "_origin": "ast",
+      "community": 82,
+      "community_name": "InitCrypto",
+      "file_type": "code",
+      "norm_label": "testinspectziparchive()",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L57"
     },
     {
       "id": "admin_handlers_submitregionalresponsehandler",
@@ -47184,7 +47184,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L32",
+      "source_location": "L30",
       "weight": 1.0
     },
     {
@@ -47195,7 +47195,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L7",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -47206,7 +47206,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L13",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -47217,7 +47217,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L22",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -47228,7 +47228,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L28",
+      "source_location": "L26",
       "weight": 1.0
     },
     {
@@ -47239,7 +47239,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L37",
+      "source_location": "L35",
       "weight": 1.0
     },
     {
@@ -47250,7 +47250,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L9",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -54101,5 +54101,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8ae8ed729910568ebb41cbff538943a06825e793"
+  "built_at_commit": "066f01ebbfb506b733bcfd182ccec6bb59efc1d4"
 }
