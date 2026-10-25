@@ -121,10 +121,14 @@ body::before {
     contain: style;
 }
 
-#trackingSection,
-#submitSection {
+#trackingSection {
     content-visibility: auto;
     contain-intrinsic-size: 0 900px;
+}
+
+#submitSection {
+    position: relative;
+    z-index: 20;
 }
 
 #trackResultBox {
@@ -999,6 +1003,7 @@ textarea:focus {
 
 .custom-dropdown-wrapper {
     position: relative;
+    z-index: 50;
 }
 
 .custom-dropdown {
@@ -1098,13 +1103,13 @@ textarea:focus {
     border: 1.5px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--radius-md, 12px);
     box-shadow: 0 20px 42px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
-    padding: 6px 6px 12px 6px;
+    padding: 8px 6px 16px 6px;
     z-index: 100;
-    max-height: min(600px, 80vh);
+    max-height: min(580px, calc(100vh - 150px));
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
-    scroll-padding-bottom: 12px;
+    scroll-padding-bottom: 20px;
     display: flex;
     flex-direction: column;
     opacity: 0;
@@ -1124,7 +1129,7 @@ textarea:focus {
 }
 
 .custom-dropdown-menu::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 
 .custom-dropdown-menu::-webkit-scrollbar-track {
@@ -1179,7 +1184,7 @@ textarea:focus {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 10px 12px;
+    padding: 8.5px 12px;
     border-radius: var(--radius-sm, 8px);
     color: var(--text-main);
     cursor: pointer;
@@ -1192,7 +1197,7 @@ textarea:focus {
 
 .dropdown-item:last-child {
     border-bottom: none;
-    margin-bottom: 2px;
+    margin-bottom: 8px;
 }
 
 .custom-dropdown.open .dropdown-item {
@@ -1709,8 +1714,8 @@ textarea:focus {
 
     .custom-dropdown-menu {
         max-height: min(490px, 72vh);
-        padding: 6px 6px 12px 6px;
-        scroll-padding-bottom: 14px;
+        padding: 6px 6px 16px 6px;
+        scroll-padding-bottom: 18px;
     }
 
     .dropdown-item {
