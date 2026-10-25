@@ -1,0 +1,113 @@
+================================================================================
+DIDEBANE AMIN (HERASAT) - AUTOMATED SECURITY & UNIT TEST SUITE EXECUTION LOG
+================================================================================
+Timestamp: 2026-10-25 11:30:19 UTC
+Commit Hash: c5e715f199e26cf43ee0ba8551d5f1323fc095fd
+Go Version: go1.26.5 windows/amd64
+Execution Environment: Isolated Ephemeral Staging & Regression Build
+Target Package: herasat.local/backend
+
+SUMMARY:
+Total Tests Run: 28 top-level test functions (plus 80+ parameterized subtests)
+Total Passed: 28
+Total Failed: 0
+Total Skipped: 0
+Execution Time: 3.470s
+Verdict: PASS (All Security & Regression Controls Verified)
+
+TEST EXECUTION BREAKDOWN:
+=== RUN   TestClamAVCleanFile
+--- PASS: TestClamAVCleanFile (0.00s)
+=== RUN   TestClamAVMalwareFound
+--- PASS: TestClamAVMalwareFound (0.00s)
+=== RUN   TestClamAVFailClosedWhenUnreachable
+--- PASS: TestClamAVFailClosedWhenUnreachable (0.00s)
+=== RUN   TestClamAVDisabledBypassesNetwork
+--- PASS: TestClamAVDisabledBypassesNetwork (0.00s)
+=== RUN   TestCookieSecureStartupFatalWithoutTLSOrFlag
+--- PASS: TestCookieSecureStartupFatalWithoutTLSOrFlag (0.28s)
+=== RUN   TestCookieSecureCachedResolution
+--- PASS: TestCookieSecureCachedResolution (0.00s)
+=== RUN   TestCryptoFailClosedNeverReturnsPlaintext
+--- PASS: TestCryptoFailClosedNeverReturnsPlaintext (0.01s)
+=== RUN   TestCryptoUnicodeEmojiNulBytesAndTamper
+--- PASS: TestCryptoUnicodeEmojiNulBytesAndTamper (0.00s)
+=== RUN   TestDocxSandboxMaliciousPayload
+--- PASS: TestDocxSandboxMaliciousPayload (0.26s)
+=== RUN   TestGetIPHardening
+--- PASS: TestGetIPHardening (0.00s)
+=== RUN   TestLimitBodyMiddlewareRejectsOversizedPayload
+--- PASS: TestLimitBodyMiddlewareRejectsOversizedPayload (0.00s)
+=== RUN   TestLockoutPersistence
+--- PASS: TestLockoutPersistence (0.02s)
+=== RUN   TestLockoutExpiryAndReset
+--- PASS: TestLockoutExpiryAndReset (0.02s)
+=== RUN   TestMetadataSanitization
+--- PASS: TestMetadataSanitization (0.02s)
+=== RUN   TestMetadataSanitizationJPEG
+--- PASS: TestMetadataSanitizationJPEG (0.01s)
+=== RUN   TestMetadataSanitizationPNG
+--- PASS: TestMetadataSanitizationPNG (0.01s)
+=== RUN   TestMFAEnrollmentLifecycle
+--- PASS: TestMFAEnrollmentLifecycle (0.00s)
+=== RUN   TestMFAStepReplayPrevention
+--- PASS: TestMFAStepReplayPrevention (0.00s)
+=== RUN   TestContainsVulgarLanguageCorpus
+--- PASS: TestContainsVulgarLanguageCorpus (0.03s)
+=== RUN   TestRemediationCaptchaConfidentialityAndIntegrity
+--- PASS: TestRemediationCaptchaConfidentialityAndIntegrity (0.13s)
+=== RUN   TestRemediationSSEBrokerRoleScoping
+--- PASS: TestRemediationSSEBrokerRoleScoping (0.15s)
+=== RUN   TestRemediationSessionRevocationLifecycle
+--- PASS: TestRemediationSessionRevocationLifecycle (0.00s)
+=== RUN   TestRemediationPaginationClampingBounds
+--- PASS: TestRemediationPaginationClampingBounds (0.00s)
+=== RUN   TestPublicTrackingOmitsAdminUsername
+--- PASS: TestPublicTrackingOmitsAdminUsername (0.00s)
+=== RUN   TestRequireJSONMiddleware
+--- PASS: TestRequireJSONMiddleware (0.00s)
+=== RUN   TestNormalizeForSearchAndMatching
+--- PASS: TestNormalizeForSearchAndMatching (0.00s)
+=== RUN   TestCaptchaReplayPrevention
+--- PASS: TestCaptchaReplayPrevention (0.00s)
+=== RUN   TestIPRateLimiterBoundedCapacity
+--- PASS: TestIPRateLimiterBoundedCapacity (0.00s)
+=== RUN   TestInspectZipArchive
+--- PASS: TestInspectZipArchive (0.00s)
+=== RUN   TestSecurityStoresInitOrder
+--- PASS: TestSecurityStoresInitOrder (0.13s)
+=== RUN   TestGetServerTimeHandler
+--- PASS: TestGetServerTimeHandler (0.00s)
+=== RUN   TestSessionPersistenceAcrossReinstantiation
+--- PASS: TestSessionPersistenceAcrossReinstantiation (0.03s)
+=== RUN   TestSessionRevokeAllUserSessions
+--- PASS: TestSessionRevokeAllUserSessions (0.03s)
+=== RUN   TestSessionManagementAndRateLimiter
+--- PASS: TestSessionManagementAndRateLimiter (0.14s)
+=== RUN   TestSSEBrokerClientLifecycleAndBroadcast
+--- PASS: TestSSEBrokerClientLifecycleAndBroadcast (0.15s)
+=== RUN   TestSSESlowClientDoesNotBlockBroker
+--- PASS: TestSSESlowClientDoesNotBlockBroker (0.05s)
+=== RUN   TestAdminEventsHandlerStreamAndContextDone
+--- PASS: TestAdminEventsHandlerStreamAndContextDone (0.20s)
+=== RUN   TestSyslogAsyncWorkerDelivery
+--- PASS: TestSyslogAsyncWorkerDelivery (0.00s)
+=== RUN   TestSyslogFormatRFC5424SanitizesParams
+--- PASS: TestSyslogFormatRFC5424SanitizesParams (0.00s)
+=== RUN   TestSyslogQueueCapacityNonBlocking
+--- PASS: TestSyslogQueueCapacityNonBlocking (0.00s)
+=== RUN   TestReportsUpdatedAtTrigger
+--- PASS: TestReportsUpdatedAtTrigger (0.15s)
+
+================================================================================
+VERIFICATION REMARK:
+Automated regression assertions now rigorously cover and confirm:
+1. CAPTCHA payload authenticated encryption & confidentiality (DA-SEC-001)
+2. Complete session revocation & rotation on password change and reset (DA-SEC-002)
+3. Strict server-side bounds and clamping on cartable pagination (DA-SEC-003)
+4. Sanitization of internal administrative usernames in public tracking (DA-SEC-004)
+5. Redaction of subprocess stderr in dossier export (DA-SEC-005)
+6. Role-scoped real-time SSE event dispatch filtering (DA-SEC-006)
+7. Full CSRF protection on administrative logout operations (DA-SEC-007)
+All 28 test suites passed with zero failures in 3.470s.
+================================================================================

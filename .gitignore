@@ -34,6 +34,11 @@ coverage*
 #Utilities
 start_env.txt
 assets/*
+!assets/docs/
+assets/docs/*.docx
+assets/docs/*.pdf
+assets/docs/project-defense/
+assets/docs/query/
 analytics/*
 .playwright-mcp/
 homepage_dataurl.txt
