@@ -3265,7 +3265,7 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		log.Printf("ERROR: DOCX export subprocess failed for report %d: %v, stderr: %s", id, err, stderr.String())
-		http.Error(w, "خطا در ایجاد فایل ورد پرونده. لطفاً با راهبر سامانه تماس بگیرید.", http.StatusInternalServerError)
+		http.Error(w, "خطا در ایجاد فایل ورد پرونده. لطفا با راهبر سامانه تماس بگیرید.", http.StatusInternalServerError)
 		return
 	}
 

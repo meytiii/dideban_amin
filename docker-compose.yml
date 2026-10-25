@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: herasat_db
       POSTGRES_USER: herasat_user
-      POSTGRES_PASSWORD: ${HERASAT_DB_PASSWORD:-herasat1405@}
+      POSTGRES_PASSWORD: ${HERASAT_DB_PASSWORD:?err}
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
