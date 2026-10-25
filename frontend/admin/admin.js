@@ -5195,8 +5195,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('detail-type').textContent = data.report_type === 'anonymous' ? 'ناشناس' : 'با هویت';
             document.getElementById('detail-name').textContent = data.reporter_name || 'ثبت نشده';
             const phoneVal = (data.reporter_phone || '').trim();
-            const hasPhone = Boolean(phoneVal && phoneVal !== 'ثبت نشده');
-            document.getElementById('detail-phone').textContent = hasPhone ? phoneVal : 'ثبت نشده';
+            const hasPhone = Boolean(phoneVal && !['ندارد', 'ثبت نشده', 'بدون شماره تماس', '-', 'none', 'null'].includes(phoneVal) && !phoneVal.startsWith('[خطای') && /[\d\u0660-\u0669\u06F0-\u06F9]/.test(phoneVal));
+            const detailPhoneEl = document.getElementById('detail-phone');
+            if (detailPhoneEl) {
+                detailPhoneEl.textContent = hasPhone ? phoneVal : (phoneVal && phoneVal !== 'ثبت نشده' ? phoneVal : 'ندارد');
+                if (hasPhone) {
+                    detailPhoneEl.classList.add('ltr');
+                } else {
+                    detailPhoneEl.classList.remove('ltr');
+                }
+            }
             const copyPhoneBtnEl = document.getElementById('copyDetailPhoneBtn');
             if (copyPhoneBtnEl) {
                 copyPhoneBtnEl.style.display = hasPhone ? 'inline-flex' : 'none';
@@ -5994,7 +6002,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (copyPhoneBtn) {
         copyPhoneBtn.addEventListener('click', () => {
             const text = document.getElementById('detail-phone')?.textContent.trim();
-            if (text && text !== 'ثبت نشده') {
+            const isValidPhone = Boolean(text && !['ندارد', 'ثبت نشده', 'بدون شماره تماس', '-', 'none', 'null'].includes(text) && !text.startsWith('[خطای') && /[\d\u0660-\u0669\u06F0-\u06F9]/.test(text));
+            if (isValidPhone) {
                 navigator.clipboard?.writeText(text);
                 showToast('شماره تماس کپی شد');
             }

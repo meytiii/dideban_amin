@@ -1,16 +1,16 @@
-# Graph Report - Setad_Khabari_HMD  (2026-10-20)
+# Graph Report - Setad_Khabari_HMD  (2026-10-25)
 
 ## Corpus Check
-- 227 files · ~273,017 words
+- 227 files · ~273,243 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1831 nodes · 2852 edges · 161 communities (116 shown, 45 thin omitted)
+- 1831 nodes · 2852 edges · 161 communities (115 shown, 46 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 279 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e17107e2`
+- Built from commit: `8ae8ed72`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -97,7 +97,7 @@
 - Colors
 - rules/graphify.md
 - workflows/graphify.md
-- InitCrypto
+- captcha.go
 - SubmitReportHandler
 - generate_docx.py
 - rules/caveman.md
@@ -143,7 +143,7 @@
 - commit_message.md
 - ft4-dense-typographic.md
 - createShamsiDateRangePicker
-- UsedCaptchaStore
+- contextWithAdmin
 - h3-quote-led.md
 - file-card-collections-demo.tsx
 - initLoginSlider
@@ -186,7 +186,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (161 total, 45 thin omitted)
+## Communities (161 total, 46 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -421,12 +421,12 @@ Cohesion: 0.50
 Nodes (3): Output contract, Output contract & scope, Scope and limits
 
 ### Community 63 - "security.go"
-Cohesion: 0.18
-Nodes (14): sync.Mutex, time.Ticker, time.Time, isValidTrackingCode(), NewIPRateLimiter(), RateLimitMiddleware(), sanitizePhone(), truncateRunes() (+6 more)
+Cohesion: 0.19
+Nodes (13): sync.Mutex, time.Ticker, time.Time, isValidTrackingCode(), NewIPRateLimiter(), RateLimitMiddleware(), sanitizePhone(), truncateRunes() (+5 more)
 
 ### Community 64 - "SessionManager"
-Cohesion: 0.17
-Nodes (9): database/sql.DB, time.Duration, hashToken(), NewAccountLockoutManager(), AccountLockoutManager, ActiveSessionItem, AdminSession, cachedSession (+1 more)
+Cohesion: 0.14
+Nodes (11): database/sql.DB, sync.Once, time.Duration, hashToken(), NewAccountLockoutManager(), AccountLockoutManager, ActiveSessionItem, AdminSession (+3 more)
 
 ### Community 65 - "Design System: سامانه دیده‌بان امین - ستاد خبری و دریافت گزارش‌های مردمی حراست همدان"
 Cohesion: 0.15
@@ -437,8 +437,8 @@ Cohesion: 0.47
 Nodes (6): fetchServerTime(), getServerNow(), initServerSlidingClock(), tick(), updateDate(), updateDigit()
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.21
-Nodes (17): DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES(), EncryptFileBytes() (+9 more)
+Cohesion: 0.14
+Nodes (24): GenerateCaptchaToken(), DecryptAES(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), decryptWithKey(), deriveKey(), EncryptAES() (+16 more)
 
 ### Community 68 - "password-strength.tsx"
 Cohesion: 0.15
@@ -464,9 +464,9 @@ Nodes (9): SanitizeAttachment(), SanitizeJPEG(), SanitizePNG(), ScanPDFForActive
 Cohesion: 0.40
 Nodes (5): Colors, Named Rules, Neutral, Primary, Status & Accents
 
-### Community 82 - "InitCrypto"
-Cohesion: 0.18
-Nodes (16): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), InitCrypto(), inspectZipArchive() (+8 more)
+### Community 82 - "captcha.go"
+Cohesion: 0.22
+Nodes (11): cryptoRandInt(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), NewUsedCaptchaStore(), renderObfuscatedChars(), CaptchaPayload, CaptchaResponse (+3 more)
 
 ### Community 83 - "SubmitReportHandler"
 Cohesion: 0.24
@@ -518,15 +518,15 @@ Nodes (7): initAppTooltips(), convertTitles(), getOrCreateTooltip(), hide(), isM
 
 ### Community 108 - "testing.T"
 Cohesion: 0.09
-Nodes (23): testing.T, InitCookieSecurity(), TestClassificationValidationAndMath(), contextWithAdmin, TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse() (+15 more)
+Nodes (25): testing.T, inspectZipArchive(), InitCookieSecurity(), TestClassificationValidationAndMath(), TestCookieSecureCachedResolution(), TestCookieSecureStartupFatalWithoutTLSOrFlag(), TestDBCredentialsRequiredAtStartup(), TestForwardHistoryItemWithRegionalResponse() (+17 more)
 
 ### Community 111 - "Running Locally with Docker (No Local PostgreSQL Installation Required)"
 Cohesion: 0.22
 Nodes (8): 1. Prerequisites, 2. Start PostgreSQL via Docker Compose, 3. Start the Backend Application, 4. Access the Services, 5. Stopping the Database, Default Administrative Credentials:, Didebane Amin (دیده‌بان امین), Running Locally with Docker (No Local PostgreSQL Installation Required)
 
 ### Community 114 - "getTestDB"
-Cohesion: 0.17
-Nodes (10): NewSessionManager(), TestAuditFailClosed(), TestDocxSandboxMaliciousPayload(), TestAccountLockoutConcurrentFailures(), TestGetReportsPaginationAndFiltering(), getTestDB(), TestSessionManagementAndRateLimiter(), TestSessionPersistenceAcrossReinstantiation() (+2 more)
+Cohesion: 0.20
+Nodes (9): NewSessionManager(), TestAuditFailClosed(), TestAccountLockoutConcurrentFailures(), TestGetReportsPaginationAndFiltering(), getTestDB(), TestSessionManagementAndRateLimiter(), TestSessionPersistenceAcrossReinstantiation(), TestSessionRevokeAllUserSessions() (+1 more)
 
 ### Community 115 - "fetchReports"
 Cohesion: 0.27
@@ -568,10 +568,6 @@ Nodes (3): colorBannerMap, FileCardProps, FormatFileProps
 Cohesion: 0.27
 Nodes (13): createShamsiDateRangePicker(), closePopover(), commitDateRange(), openPopover(), renderCalendar(), renderCalendarHighlights(), resetRange(), getJalaliDayEndMs() (+5 more)
 
-### Community 135 - "UsedCaptchaStore"
-Cohesion: 0.24
-Nodes (5): NewUsedCaptchaStore(), sync.Once, UsedCaptchaStore, TestCaptchaPersistenceTryRedeem(), TestSecurityStoresInitOrder()
-
 ### Community 138 - "initLoginSlider"
 Cohesion: 0.70
 Nodes (5): initLoginSlider(), goToSlide(), nextSlide(), startTimer(), stopTimer()
@@ -583,7 +579,7 @@ Nodes (10): cancelMFAStep(), checkHostConnection(), forceLogoutOnConnectionDrop(
 ## Knowledge Gaps
 - **791 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+786 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **45 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **46 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

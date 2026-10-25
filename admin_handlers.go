@@ -646,7 +646,11 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 
 	if encPhone.Valid && encPhone.String != "" {
 		if dec, err := DecryptAES(encPhone.String); err == nil {
-			rep.ReporterPhone = dec
+			if strings.TrimSpace(dec) != "" {
+				rep.ReporterPhone = dec
+			} else {
+				rep.ReporterPhone = "ندارد"
+			}
 		} else {
 			rep.ReporterPhone = "[خطای رمزگشایی]"
 		}
