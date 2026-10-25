@@ -1733,16 +1733,10 @@
     "ast_hash": "74b5a8f9def064741a6f4d0460701ed0",
     "semantic_hash": ""
   },
-  "scratch/generate_defense_pdf.py": {
-    "mtime": 1792920144.5065196,
-    "seen": 1792920186.1330569,
-    "ast_hash": "90700c59bf963e94b78fb6622672876d",
-    "semantic_hash": ""
-  },
   "assets/docs/defense_report_presentation.html": {
-    "mtime": 1792920152.0865896,
-    "seen": 1792920186.1440747,
-    "ast_hash": "004b466c3636ff414892fb57c53a7993",
+    "mtime": 1792920763.0156808,
+    "seen": 1792920783.440402,
+    "ast_hash": "f61ea355f004de24ec724fa0517d1784",
     "semantic_hash": ""
   }
 }
