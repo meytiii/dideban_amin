@@ -1726,5 +1726,11 @@
     "seen": 1792918616.5640619,
     "ast_hash": "ecd2d3d45868fdf967636e8e164d25c8",
     "semantic_hash": ""
+  },
+  "assets/docs/SECURITY_PENETRATION_TEST_EXECUTIVE_SUMMARY_FA.md": {
+    "mtime": 1792918992.6798298,
+    "seen": 1792919006.5050125,
+    "ast_hash": "74b5a8f9def064741a6f4d0460701ed0",
+    "semantic_hash": ""
   }
 }
