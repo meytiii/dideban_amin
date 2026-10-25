@@ -1648,5 +1648,83 @@
     "seen": 1792915712.8139257,
     "ast_hash": "d4cdb07bdf7a4b6ed86049dd3e67c68c",
     "semantic_hash": ""
+  },
+  "assets/docs/security-evidence/pentest_results.json": {
+    "mtime": 1792918448.0948906,
+    "seen": 1792918616.5500562,
+    "ast_hash": "edc81fe18f83ba6ee8fe99a8f4f31fe3",
+    "semantic_hash": ""
+  },
+  "assets/docs/SECURITY_AFTA_READINESS.md": {
+    "mtime": 1792916534.2271805,
+    "seen": 1792918616.5640507,
+    "ast_hash": "28e77ee16cff3cbc6c0a103044eaa3e7",
+    "semantic_hash": ""
+  },
+  "assets/docs/SECURITY_ASSESSMENT_REPORT.md": {
+    "mtime": 1792915823.1176887,
+    "seen": 1792918616.564052,
+    "ast_hash": "26b261826d7588efa92b1a3370f69189",
+    "semantic_hash": ""
+  },
+  "assets/docs/SECURITY_FINDINGS.md": {
+    "mtime": 1792916473.5152133,
+    "seen": 1792918616.5640535,
+    "ast_hash": "6643c00857027e006e191045f08c4b27",
+    "semantic_hash": ""
+  },
+  "assets/docs/SECURITY_PENETRATION_TEST_REPORT.md": {
+    "mtime": 1792918396.749558,
+    "seen": 1792918616.5640545,
+    "ast_hash": "0fa31b22b70bbdc01a31c1bbbb3f991f",
+    "semantic_hash": ""
+  },
+  "assets/docs/SECURITY_REMEDIATION_PLAN.md": {
+    "mtime": 1792916548.5093029,
+    "seen": 1792918616.5640552,
+    "ast_hash": "997be9e265f26acb633842ffb9c94e67",
+    "semantic_hash": ""
+  },
+  "assets/docs/SECURITY_REMEDIATION_REPORT.md": {
+    "mtime": 1792916517.8117473,
+    "seen": 1792918616.5640564,
+    "ast_hash": "15b35d1112576af64dc7acb1124ba708",
+    "semantic_hash": ""
+  },
+  "assets/docs/SECURITY_TEST_INVENTORY.md": {
+    "mtime": 1792918425.2657578,
+    "seen": 1792918616.564057,
+    "ast_hash": "8f596923d3f732ee212367fc6709c077",
+    "semantic_hash": ""
+  },
+  "assets/docs/security-evidence/CAPTCHA_BYPASS_ANALYSIS.md": {
+    "mtime": 1792915459.0289285,
+    "seen": 1792918616.564058,
+    "ast_hash": "0052cae5a8696937b1b726084c4faaf8",
+    "semantic_hash": ""
+  },
+  "assets/docs/security-evidence/FINDINGS_VERIFICATION_MATRIX.md": {
+    "mtime": 1792915804.6672904,
+    "seen": 1792918616.564059,
+    "ast_hash": "63134696799b893cc9d408af539fee35",
+    "semantic_hash": ""
+  },
+  "assets/docs/security-evidence/REMEDIATION_TEST_EXECUTION.txt": {
+    "mtime": 1792915055.8020658,
+    "seen": 1792918616.5640602,
+    "ast_hash": "ea6cc0eea74786ccdca690a206c83bed",
+    "semantic_hash": ""
+  },
+  "assets/docs/security-evidence/RUNTIME_PENTEST_EVIDENCE.md": {
+    "mtime": 1792918439.5996692,
+    "seen": 1792918616.564061,
+    "ast_hash": "2b68a74d27f84bb186052e20d4d1f2eb",
+    "semantic_hash": ""
+  },
+  "assets/docs/security-evidence/TEST_SUITE_EXECUTION.txt": {
+    "mtime": 1792915797.9455256,
+    "seen": 1792918616.5640619,
+    "ast_hash": "ecd2d3d45868fdf967636e8e164d25c8",
+    "semantic_hash": ""
   }
 }
