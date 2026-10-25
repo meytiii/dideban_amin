@@ -882,7 +882,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const isDashboardActive = dashboardSection && dashboardSection.style.display !== 'none' && !dashboardSection.classList.contains('d-none');
         if (isDashboardActive || currentAdmin !== null) {
             try {
-                fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin', keepalive: true }).catch(() => {});
+                adminFetch('/api/admin/logout', { method: 'POST' }).catch(() => {});
             } catch (_) {}
             document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             sessionStorage.removeItem('herasat_csrf');

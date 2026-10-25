@@ -11,7 +11,13 @@ import (
 type SSEClient struct {
 	id       string
 	username string
+	role     string
 	send     chan []byte
+}
+
+type sseBroadcastMsg struct {
+	targetRoles []string
+	msg         []byte
 }
 
 type SSEBroker struct {
@@ -19,7 +25,7 @@ type SSEBroker struct {
 	clients    map[*SSEClient]bool
 	register   chan *SSEClient
 	unregister chan *SSEClient
-	broadcast  chan []byte
+	broadcast  chan sseBroadcastMsg
 	quit       chan struct{}
 }
 
@@ -30,7 +36,7 @@ func NewSSEBroker() *SSEBroker {
 		clients:    make(map[*SSEClient]bool),
 		register:   make(chan *SSEClient),
 		unregister: make(chan *SSEClient),
-		broadcast:  make(chan []byte, 128),
+		broadcast:  make(chan sseBroadcastMsg, 128),
 		quit:       make(chan struct{}),
 	}
 	go b.run()
@@ -62,11 +68,23 @@ func (b *SSEBroker) run() {
 			}
 			b.mu.Unlock()
 
-		case msg := <-b.broadcast:
+		case bm := <-b.broadcast:
 			b.mu.RLock()
 			for client := range b.clients {
+				if len(bm.targetRoles) > 0 {
+					matched := false
+					for _, r := range bm.targetRoles {
+						if client.role == r {
+							matched = true
+							break
+						}
+					}
+					if !matched {
+						continue
+					}
+				}
 				select {
-				case client.send <- msg:
+				case client.send <- bm.msg:
 				default:
 				}
 			}
@@ -80,6 +98,10 @@ func (b *SSEBroker) Close() {
 }
 
 func (b *SSEBroker) Broadcast(eventName string, data interface{}) {
+	b.BroadcastToRoles(nil, eventName, data)
+}
+
+func (b *SSEBroker) BroadcastToRoles(roles []string, eventName string, data interface{}) {
 	raw, err := json.Marshal(data)
 	if err != nil {
 		raw = []byte("{}")
@@ -87,13 +109,13 @@ func (b *SSEBroker) Broadcast(eventName string, data interface{}) {
 	msg := []byte(fmt.Sprintf("event: %s\ndata: %s\n\n", eventName, string(raw)))
 
 	select {
-	case b.broadcast <- msg:
+	case b.broadcast <- sseBroadcastMsg{targetRoles: roles, msg: msg}:
 	default:
 	}
 }
 
 func (b *SSEBroker) BroadcastNewReport(reportID int64) {
-	b.Broadcast("new_report", map[string]interface{}{"report_id": reportID})
+	b.BroadcastToRoles([]string{"superuser", "edare_kol"}, "new_report", map[string]interface{}{"report_id": reportID})
 }
 
 func (b *SSEBroker) BroadcastNewMessage(reportID int64) {
@@ -129,6 +151,7 @@ func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 	client := &SSEClient{
 		id:       admin.Token,
 		username: admin.Username,
+		role:     admin.Role,
 		send:     make(chan []byte, 32),
 	}
 

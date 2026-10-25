@@ -240,20 +240,25 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 
 	page := 1
 	pageSize := 25
-	fetchAll := r.URL.Query().Get("all") == "true" || r.URL.Query().Get("page_size") == "all"
 	if p := r.URL.Query().Get("page"); p != "" {
 		if parsed, err := strconv.Atoi(p); err == nil && parsed > 0 {
 			page = parsed
 		}
 	}
 	if ps := r.URL.Query().Get("page_size"); ps != "" && ps != "all" {
-		if parsed, err := strconv.Atoi(ps); err == nil && parsed > 0 && parsed <= 10000 {
+		if parsed, err := strconv.Atoi(ps); err == nil && parsed > 0 {
 			pageSize = parsed
 		}
 	}
-	if fetchAll {
-		pageSize = 100000
+	if r.URL.Query().Get("all") == "true" || r.URL.Query().Get("page_size") == "all" {
+		pageSize = 100
 		page = 1
+	}
+	if pageSize > 100 {
+		pageSize = 100
+	}
+	if pageSize <= 0 {
+		pageSize = 25
 	}
 
 	offset := (page - 1) * pageSize
@@ -1685,6 +1690,8 @@ func ResetUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	Sessions.RevokeAllUserSessions(targetUsername, "PASSWORD_RESET_BY_SUPERUSER")
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "رمز عبور با موفقیت تغییر کرد"}`))
 }
@@ -2100,6 +2107,49 @@ func ChangeMyPasswordHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "خطای پایگاه داده", http.StatusInternalServerError)
 		return
 	}
+
+	Sessions.RevokeAllUserSessions(admin.Username, "PASSWORD_CHANGED")
+
+	newSessionToken := generateSessionToken()
+	now := time.Now()
+	sessionExpiry := now.Add(15 * time.Minute)
+	Sessions.Set(newSessionToken, AdminSession{
+		Token:       newSessionToken,
+		Username:    admin.Username,
+		FullName:    admin.FullName,
+		Title:       admin.Title,
+		Role:        admin.Role,
+		IsSuperuser: admin.IsSuperuser,
+		IP:          getIP(r),
+		UserAgent:   r.UserAgent(),
+		CreatedAt:   now,
+		LastActive:  now,
+		Expiry:      sessionExpiry,
+	})
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "herasat_admin_session",
+		Value:    newSessionToken,
+		Path:     "/",
+		Expires:  sessionExpiry,
+		HttpOnly: true,
+		Secure:   isCookieSecure(),
+		SameSite: http.SameSiteLaxMode,
+	})
+
+	newCSRFBytes := make([]byte, 32)
+	rand.Read(newCSRFBytes)
+	newCSRFToken := base64.RawURLEncoding.EncodeToString(newCSRFBytes)
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "herasat_csrf",
+		Value:    newCSRFToken,
+		Path:     "/",
+		Expires:  sessionExpiry,
+		HttpOnly: false,
+		Secure:   isCookieSecure(),
+		SameSite: http.SameSiteStrictMode,
+	})
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "کلمه عبور شما با موفقیت تغییر یافت."}`))
@@ -3214,7 +3264,8 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "زمان پردازش ایجاد فایل ورد به پایان رسید (Timeout).", http.StatusGatewayTimeout)
 			return
 		}
-		http.Error(w, fmt.Sprintf("خطا در ایجاد فایل ورد: %s", stderr.String()), http.StatusInternalServerError)
+		log.Printf("ERROR: DOCX export subprocess failed for report %d: %v, stderr: %s", id, err, stderr.String())
+		http.Error(w, "خطا در ایجاد فایل ورد پرونده. لطفاً با راهبر سامانه تماس بگیرید.", http.StatusInternalServerError)
 		return
 	}
 

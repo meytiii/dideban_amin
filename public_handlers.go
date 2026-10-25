@@ -462,6 +462,9 @@ func TrackReportHandler(w http.ResponseWriter, r *http.Request) {
 					m.Message = "[پیام رمزنگاری‌شده]"
 				}
 				m.CreatedAt = msgCreatedAt.Format(time.RFC3339)
+				if m.SenderType == "admin" {
+					m.AdminUsername = ""
+				}
 				status.Messages = append(status.Messages, m)
 			}
 		}

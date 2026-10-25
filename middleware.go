@@ -196,4 +196,3 @@ func Custom404FileServer(dir string, fallback404Path string) http.Handler {
 		fileServer.ServeHTTP(w, r)
 	})
 }
-

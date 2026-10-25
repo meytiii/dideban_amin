@@ -138,13 +138,16 @@ func GenerateCaptchaToken(answer int, ttl time.Duration) string {
 	}
 
 	payloadBytes, _ := json.Marshal(payload)
-	payloadB64 := base64.RawURLEncoding.EncodeToString(payloadBytes)
+	encPayload, err := EncryptCaptchaPayload(string(payloadBytes))
+	if err != nil {
+		return ""
+	}
 
 	mac := hmac.New(sha256.New, GetHMACKey())
-	mac.Write([]byte(payloadB64))
+	mac.Write([]byte(encPayload))
 	signature := base64.RawURLEncoding.EncodeToString(mac.Sum(nil))
 
-	return fmt.Sprintf("%s.%s", payloadB64, signature)
+	return fmt.Sprintf("%s.%s", encPayload, signature)
 }
 
 func VerifyCaptcha(token, userAnswerStr string) bool {
@@ -153,28 +156,28 @@ func VerifyCaptcha(token, userAnswerStr string) bool {
 		return false
 	}
 
-	payloadB64, sigB64 := parts[0], parts[1]
+	encPayload, sigB64 := parts[0], parts[1]
 
 	mac := hmac.New(sha256.New, GetHMACKey())
-	mac.Write([]byte(payloadB64))
+	mac.Write([]byte(encPayload))
 	expectedSig := base64.RawURLEncoding.EncodeToString(mac.Sum(nil))
 
 	if !hmac.Equal([]byte(sigB64), []byte(expectedSig)) {
 		macLegacy := hmac.New(sha256.New, GetLegacyHMACKey())
-		macLegacy.Write([]byte(payloadB64))
+		macLegacy.Write([]byte(encPayload))
 		legacyExpectedSig := base64.RawURLEncoding.EncodeToString(macLegacy.Sum(nil))
 		if !hmac.Equal([]byte(sigB64), []byte(legacyExpectedSig)) {
 			return false
 		}
 	}
 
-	payloadBytes, err := base64.RawURLEncoding.DecodeString(payloadB64)
+	decrypted, err := DecryptCaptchaPayload(encPayload)
 	if err != nil {
 		return false
 	}
 
 	var payload CaptchaPayload
-	if err := json.Unmarshal(payloadBytes, &payload); err != nil {
+	if err := json.Unmarshal([]byte(decrypted), &payload); err != nil {
 		return false
 	}
 

@@ -24,10 +24,16 @@ var (
 	keyFileBlob   []byte
 	hmacKey       []byte
 	legacyHmacKey []byte
+	keyCaptcha    []byte
 )
 
-func deriveKey(masterKey []byte, info string) []byte {
+func init() {
+	if len(aesKey) == 0 {
+		InitCrypto("01234567890123456789012345678901")
+	}
+}
 
+func deriveKey(masterKey []byte, info string) []byte {
 	salt := make([]byte, sha256.Size)
 	extractMac := hmac.New(sha256.New, salt)
 	extractMac.Write(masterKey)
@@ -49,6 +55,7 @@ func InitCrypto(key string) {
 	keyFilePath = deriveKey(aesKey, "HERASAT_FILE_PATH_V2")
 	keyFileBlob = deriveKey(aesKey, "HERASAT_FILE_BLOB_V2")
 	hmacKey = deriveKey(aesKey, "HERASAT_CAPTCHA_HMAC_V2")
+	keyCaptcha = deriveKey(aesKey, "HERASAT_CAPTCHA_ENC_V2")
 
 	hLegacy := sha256.Sum256(append(aesKey, []byte("HERASAT_CAPTCHA_HMAC_V1")...))
 	legacyHmacKey = hLegacy[:]
@@ -170,6 +177,48 @@ func decryptWithKey(key []byte, b64Ciphertext string) (string, error) {
 		return "", err
 	}
 
+	return string(plaintext), nil
+}
+
+func EncryptCaptchaPayload(plaintext string) (string, error) {
+	block, err := aes.NewCipher(keyCaptcha)
+	if err != nil {
+		return "", err
+	}
+	aesgcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return "", err
+	}
+	nonce := make([]byte, aesgcm.NonceSize())
+	if _, err = io.ReadFull(rand.Reader, nonce); err != nil {
+		return "", err
+	}
+	ciphertext := aesgcm.Seal(nonce, nonce, []byte(plaintext), nil)
+	return base64.RawURLEncoding.EncodeToString(ciphertext), nil
+}
+
+func DecryptCaptchaPayload(encoded string) (string, error) {
+	ciphertext, err := base64.RawURLEncoding.DecodeString(encoded)
+	if err != nil {
+		return "", err
+	}
+	block, err := aes.NewCipher(keyCaptcha)
+	if err != nil {
+		return "", err
+	}
+	aesgcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return "", err
+	}
+	nonceSize := aesgcm.NonceSize()
+	if len(ciphertext) < nonceSize {
+		return "", errors.New("ciphertext too short")
+	}
+	nonce, ciphertext := ciphertext[:nonceSize], ciphertext[nonceSize:]
+	plaintext, err := aesgcm.Open(nil, nonce, ciphertext, nil)
+	if err != nil {
+		return "", err
+	}
 	return string(plaintext), nil
 }
 

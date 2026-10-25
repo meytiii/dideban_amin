@@ -204,7 +204,7 @@ func main() {
 	mux.HandleFunc("POST /api/admin/2fa/setup", AdminAuthMiddleware(CSRFMiddleware(Setup2FAHandler)))
 	mux.HandleFunc("POST /api/admin/2fa/enable", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(Enable2FAHandler)))))
 	mux.HandleFunc("POST /api/admin/2fa/disable", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(Disable2FAHandler)))))
-	mux.HandleFunc("POST /api/admin/logout", LogoutHandler)
+	mux.HandleFunc("POST /api/admin/logout", AdminAuthMiddleware(CSRFMiddleware(LogoutHandler)))
 	mux.HandleFunc("GET /api/admin/me", AdminAuthMiddleware(GetCurrentAdminHandler))
 	mux.HandleFunc("POST /api/admin/toggle-read", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(ToggleReadStatusHandler)))))
 	mux.HandleFunc("POST /api/admin/respond", AdminAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(RespondToReportHandler)))))

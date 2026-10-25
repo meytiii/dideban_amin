@@ -21,9 +21,9 @@ INSERT INTO admin_users (
     true,
     true,
     NOW(),
-    false,
+    true,
     NULL,
     false,
-    false,
+    true,
     NOW()
 ) ON CONFLICT (username) DO NOTHING;
