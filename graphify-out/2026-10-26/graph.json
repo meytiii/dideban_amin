@@ -5622,6 +5622,30 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_hallmark_references_components_ft5_statement",
+      "label": "ft5-statement.md",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "ft5-statement.md",
+      "source_file": ".agents/skills/hallmark/references/components/ft5-statement.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_ft5_statement_ft5_statement",
+      "label": "Ft5 \u00b7 Statement",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "ft5 \u00b7 statement",
+      "source_file": ".agents/skills/hallmark/references/components/ft5-statement.md",
+      "source_location": "L1"
+    },
+    {
       "id": "agents_skills_hallmark_references_components_ft6_letter_close",
       "label": "ft6-letter-close.md",
       "_origin": "ast",
@@ -5862,28 +5886,28 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n12_banner_retract",
-      "label": "n12-banner-retract.md",
+      "id": "agents_skills_hallmark_references_components_n1_wordmark_2_links",
+      "label": "n1-wordmark-2-links.md",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "n12-banner-retract.md",
-      "source_file": ".agents/skills/hallmark/references/components/n12-banner-retract.md",
+      "norm_label": "n1-wordmark-2-links.md",
+      "source_file": ".agents/skills/hallmark/references/components/n1-wordmark-2-links.md",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n12_banner_retract_n12_announcement_banner_retracting_nav",
-      "label": "N12 \u00b7 Announcement banner + retracting nav",
+      "id": "agents_skills_hallmark_references_components_n1_wordmark_2_links_n1_wordmark_2_links",
+      "label": "N1 \u00b7 Wordmark + 2 links",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "n12 \u00b7 announcement banner + retracting nav",
-      "source_file": ".agents/skills/hallmark/references/components/n12-banner-retract.md",
-      "source_location": "L1"
+      "norm_label": "n1 \u00b7 wordmark + 2 links",
+      "source_file": ".agents/skills/hallmark/references/components/n1-wordmark-2-links.md",
+      "source_location": "L2"
     },
     {
       "id": "agents_skills_hallmark_references_components_n1b_saas_three_section",
@@ -6282,15 +6306,15 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_genres_atmospheric",
-      "label": "atmospheric.md",
+      "id": "agents_skills_hallmark_references_genres_editorial",
+      "label": "editorial.md",
       "_origin": "ast",
       "community": 1,
       "community_name": "component-cookbook.md",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "atmospheric.md",
-      "source_file": ".agents/skills/hallmark/references/genres/atmospheric.md",
+      "norm_label": "editorial.md",
+      "source_file": ".agents/skills/hallmark/references/genres/editorial.md",
       "source_location": "L1"
     },
     {
@@ -6303,18 +6327,6 @@
       "node_kind": "page",
       "norm_label": "modern-minimal.md",
       "source_file": ".agents/skills/hallmark/references/genres/modern-minimal.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_genres_playful",
-      "label": "playful.md",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "playful.md",
-      "source_file": ".agents/skills/hallmark/references/genres/playful.md",
       "source_location": "L1"
     },
     {
@@ -6753,88 +6765,169 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_macrostructures_diversification_rule_mandatory",
-      "label": "Diversification rule (mandatory)",
+      "id": "security_hashtoken",
+      "label": "hashToken()",
       "_origin": "ast",
       "community": 105,
-      "community_name": "Macrostructures",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "diversification rule (mandatory)",
-      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
-      "source_location": "L7"
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": "hashtoken()",
+      "source_file": "security.go",
+      "source_location": "L57"
     },
     {
-      "id": "agents_skills_hallmark_references_macrostructures_hero_polish_patterns",
-      "label": "Hero polish patterns",
+      "id": "setad_khabari_hmd_accountlockoutmanager_getdb",
+      "label": ".getDB()",
       "_origin": "ast",
       "community": 105,
-      "community_name": "Macrostructures",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "hero polish patterns",
-      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
-      "source_location": "L13"
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".getdb()",
+      "source_file": "security.go",
+      "source_location": "L673"
     },
     {
-      "id": "agents_skills_hallmark_references_macrostructures_how_to_pick",
-      "label": "How to pick",
+      "id": "setad_khabari_hmd_adminsession",
+      "label": "AdminSession",
       "_origin": "ast",
       "community": 105,
-      "community_name": "Macrostructures",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "how to pick",
-      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
-      "source_location": "L81"
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": "adminsession",
+      "source_file": "security.go",
+      "source_location": "L14"
     },
     {
-      "id": "agents_skills_hallmark_references_macrostructures_macrostructures",
-      "label": "Macrostructures",
+      "id": "setad_khabari_hmd_cachedsession",
+      "label": "cachedSession",
       "_origin": "ast",
       "community": 105,
-      "community_name": "Macrostructures",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "macrostructures",
-      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
-      "source_location": "L1"
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": "cachedsession",
+      "source_file": "security.go",
+      "source_location": "L44"
     },
     {
-      "id": "agents_skills_hallmark_references_macrostructures_nav_and_footer_voice",
-      "label": "Nav and footer voice",
+      "id": "setad_khabari_hmd_sessionmanager",
+      "label": "SessionManager",
       "_origin": "ast",
       "community": 105,
-      "community_name": "Macrostructures",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "nav and footer voice",
-      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
-      "source_location": "L19"
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": "sessionmanager",
+      "source_file": "security.go",
+      "source_location": "L49"
     },
     {
-      "id": "agents_skills_hallmark_references_macrostructures_saas_page_sequence",
-      "label": "SaaS page sequence",
+      "id": "setad_khabari_hmd_sessionmanager_activecount",
+      "label": ".ActiveCount()",
       "_origin": "ast",
       "community": 105,
-      "community_name": "Macrostructures",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "saas page sequence",
-      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
-      "source_location": "L53"
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".activecount()",
+      "source_file": "security.go",
+      "source_location": "L480"
     },
     {
-      "id": "agents_skills_hallmark_references_macrostructures_the_21_macrostructures_index",
-      "label": "The 21 macrostructures \u2014 index",
+      "id": "setad_khabari_hmd_sessionmanager_delete",
+      "label": ".Delete()",
       "_origin": "ast",
       "community": 105,
-      "community_name": "Macrostructures",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "the 21 macrostructures \u2014 index",
-      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
-      "source_location": "L25"
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".delete()",
+      "source_file": "security.go",
+      "source_location": "L464"
+    },
+    {
+      "id": "setad_khabari_hmd_sessionmanager_get",
+      "label": ".Get()",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".get()",
+      "source_file": "security.go",
+      "source_location": "L151"
+    },
+    {
+      "id": "setad_khabari_hmd_sessionmanager_getallactivesessions",
+      "label": ".GetAllActiveSessions()",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".getallactivesessions()",
+      "source_file": "security.go",
+      "source_location": "L325"
+    },
+    {
+      "id": "setad_khabari_hmd_sessionmanager_getkickedreason",
+      "label": ".GetKickedReason()",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".getkickedreason()",
+      "source_file": "security.go",
+      "source_location": "L215"
+    },
+    {
+      "id": "setad_khabari_hmd_sessionmanager_revokeallusersessions",
+      "label": ".RevokeAllUserSessions()",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".revokeallusersessions()",
+      "source_file": "security.go",
+      "source_location": "L238"
+    },
+    {
+      "id": "setad_khabari_hmd_sessionmanager_revokesessionbytoken",
+      "label": ".RevokeSessionByToken()",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".revokesessionbytoken()",
+      "source_file": "security.go",
+      "source_location": "L291"
+    },
+    {
+      "id": "setad_khabari_hmd_sessionmanager_set",
+      "label": ".Set()",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".set()",
+      "source_file": "security.go",
+      "source_location": "L86"
+    },
+    {
+      "id": "setad_khabari_hmd_sessionmanager_startreaper",
+      "label": ".StartReaper()",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".startreaper()",
+      "source_file": "security.go",
+      "source_location": "L502"
+    },
+    {
+      "id": "setad_khabari_hmd_sessionmanager_updateactivity",
+      "label": ".UpdateActivity()",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "SessionManager",
+      "file_type": "code",
+      "norm_label": ".updateactivity()",
+      "source_file": "security.go",
+      "source_location": "L410"
     },
     {
       "id": "components_ui_morph_loading",
@@ -6848,17 +6941,6 @@
       "source_location": "L1"
     },
     {
-      "id": "admin_handlers_getservertimehandler",
-      "label": "GetServerTimeHandler()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "getservertimehandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1870"
-    },
-    {
       "id": "go_type_testing_t",
       "label": "testing.T",
       "_origin": "ast",
@@ -6870,26 +6952,15 @@
       "source_location": ""
     },
     {
-      "id": "test_audit_fail_test",
-      "label": "audit_fail_test.go",
+      "id": "security_initcookiesecurity",
+      "label": "InitCookieSecurity()",
       "_origin": "ast",
       "community": 108,
       "community_name": "testing.T",
       "file_type": "code",
-      "norm_label": "audit_fail_test.go",
-      "source_file": "test/audit_fail_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_audit_fail_test_testauditfailclosed",
-      "label": "TestAuditFailClosed()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testauditfailclosed()",
-      "source_file": "test/audit_fail_test.go",
-      "source_location": "L12"
+      "norm_label": "initcookiesecurity()",
+      "source_file": "security.go",
+      "source_location": "L825"
     },
     {
       "id": "test_classification_test",
@@ -6912,6 +6983,94 @@
       "norm_label": "testclassificationvalidationandmath()",
       "source_file": "test/classification_test.go",
       "source_location": "L8"
+    },
+    {
+      "id": "test_contextwithadmin",
+      "label": "contextWithAdmin",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "contextwithadmin",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L246"
+    },
+    {
+      "id": "test_contextwithadmin_deadline",
+      "label": ".Deadline()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": ".deadline()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L251"
+    },
+    {
+      "id": "test_contextwithadmin_done",
+      "label": ".Done()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": ".done()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L252"
+    },
+    {
+      "id": "test_contextwithadmin_err",
+      "label": ".Err()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": ".err()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L253"
+    },
+    {
+      "id": "test_contextwithadmin_value",
+      "label": ".Value()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": ".value()",
+      "source_file": "test/forwarding_test.go",
+      "source_location": "L254"
+    },
+    {
+      "id": "test_cookie_secure_test",
+      "label": "cookie_secure_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "cookie_secure_test.go",
+      "source_file": "test/cookie_secure_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_cookie_secure_test_testcookiesecurecachedresolution",
+      "label": "TestCookieSecureCachedResolution()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testcookiesecurecachedresolution()",
+      "source_file": "test/cookie_secure_test.go",
+      "source_location": "L44"
+    },
+    {
+      "id": "test_cookie_secure_test_testcookiesecurestartupfatalwithouttlsorflag",
+      "label": "TestCookieSecureStartupFatalWithoutTLSOrFlag()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testcookiesecurestartupfatalwithouttlsorflag()",
+      "source_file": "test/cookie_secure_test.go",
+      "source_location": "L10"
     },
     {
       "id": "test_db_credentials_test",
@@ -7088,83 +7247,6 @@
       "norm_label": "testgetiphardening()",
       "source_file": "test/get_ip_test.go",
       "source_location": "L9"
-    },
-    {
-      "id": "test_remediation_verification_test",
-      "label": "remediation_verification_test.go",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "remediation_verification_test.go",
-      "source_file": "test/remediation_verification_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_remediation_verification_test_parseinteger",
-      "label": "parseInteger()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "parseinteger()",
-      "source_file": "test/remediation_verification_test.go",
-      "source_location": "L215"
-    },
-    {
-      "id": "test_remediation_verification_test_parsepositiveint",
-      "label": "parsePositiveInt()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "parsepositiveint()",
-      "source_file": "test/remediation_verification_test.go",
-      "source_location": "L211"
-    },
-    {
-      "id": "test_remediation_verification_test_testpublictrackingomitsadminusername",
-      "label": "TestPublicTrackingOmitsAdminUsername()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testpublictrackingomitsadminusername()",
-      "source_file": "test/remediation_verification_test.go",
-      "source_location": "L232"
-    },
-    {
-      "id": "test_remediation_verification_test_testremediationpaginationclampingbounds",
-      "label": "TestRemediationPaginationClampingBounds()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testremediationpaginationclampingbounds()",
-      "source_file": "test/remediation_verification_test.go",
-      "source_location": "L162"
-    },
-    {
-      "id": "test_remediation_verification_test_testremediationsessionrevocationlifecycle",
-      "label": "TestRemediationSessionRevocationLifecycle()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testremediationsessionrevocationlifecycle()",
-      "source_file": "test/remediation_verification_test.go",
-      "source_location": "L126"
-    },
-    {
-      "id": "test_remediation_verification_test_testremediationssebrokerrolescoping",
-      "label": "TestRemediationSSEBrokerRoleScoping()",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testremediationssebrokerrolescoping()",
-      "source_file": "test/remediation_verification_test.go",
-      "source_location": "L70"
     },
     {
       "id": "test_server_time_test",
@@ -7973,6 +8055,50 @@
       "source_location": "L10"
     },
     {
+      "id": "db",
+      "label": "db.go",
+      "_origin": "ast",
+      "community": 116,
+      "community_name": "main",
+      "file_type": "code",
+      "norm_label": "db.go",
+      "source_file": "db.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "db_enforceimmutableauditlogs",
+      "label": "enforceImmutableAuditLogs()",
+      "_origin": "ast",
+      "community": 116,
+      "community_name": "main",
+      "file_type": "code",
+      "norm_label": "enforceimmutableauditlogs()",
+      "source_file": "db.go",
+      "source_location": "L405"
+    },
+    {
+      "id": "db_initdb",
+      "label": "InitDB()",
+      "_origin": "ast",
+      "community": 116,
+      "community_name": "main",
+      "file_type": "code",
+      "norm_label": "initdb()",
+      "source_file": "db.go",
+      "source_location": "L14"
+    },
+    {
+      "id": "db_runmigrations",
+      "label": "runMigrations()",
+      "_origin": "ast",
+      "community": 116,
+      "community_name": "main",
+      "file_type": "code",
+      "norm_label": "runmigrations()",
+      "source_file": "db.go",
+      "source_location": "L50"
+    },
+    {
       "id": "go_type_compress_gzip_writer",
       "label": "compress/gzip.Writer",
       "_origin": "ast",
@@ -8006,17 +8132,6 @@
       "source_location": ""
     },
     {
-      "id": "main",
-      "label": "main.go",
-      "_origin": "ast",
-      "community": 116,
-      "community_name": "main",
-      "file_type": "code",
-      "norm_label": "main.go",
-      "source_file": "main.go",
-      "source_location": "L1"
-    },
-    {
       "id": "main_loaddotenv",
       "label": "loadDotEnv()",
       "_origin": "ast",
@@ -8037,17 +8152,6 @@
       "norm_label": "main()",
       "source_file": "main.go",
       "source_location": "L105"
-    },
-    {
-      "id": "main_secureheadersmiddleware",
-      "label": "secureHeadersMiddleware()",
-      "_origin": "ast",
-      "community": 116,
-      "community_name": "main",
-      "file_type": "code",
-      "norm_label": "secureheadersmiddleware()",
-      "source_file": "main.go",
-      "source_location": "L14"
     },
     {
       "id": "middleware",
@@ -8080,7 +8184,7 @@
       "file_type": "code",
       "norm_label": "custom404fileserver()",
       "source_file": "middleware.go",
-      "source_location": "L141"
+      "source_location": "L143"
     },
     {
       "id": "middleware_gzipmiddleware",
@@ -8248,28 +8352,147 @@
       "source_location": "L10"
     },
     {
-      "id": "agents_skills_hallmark_references_components_ft5_statement",
-      "label": "ft5-statement.md",
+      "id": "captcha",
+      "label": "captcha.go",
       "_origin": "ast",
       "community": 117,
-      "community_name": "ft5-statement.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "ft5-statement.md",
-      "source_file": ".agents/skills/hallmark/references/components/ft5-statement.md",
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "captcha.go",
+      "source_file": "captcha.go",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_ft5_statement_ft5_statement",
-      "label": "Ft5 \u00b7 Statement",
+      "id": "captcha_cryptorandint",
+      "label": "cryptoRandInt()",
       "_origin": "ast",
       "community": 117,
-      "community_name": "ft5-statement.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "ft5 \u00b7 statement",
-      "source_file": ".agents/skills/hallmark/references/components/ft5-statement.md",
-      "source_location": "L1"
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "cryptorandint()",
+      "source_file": "captcha.go",
+      "source_location": "L200"
+    },
+    {
+      "id": "captcha_generatecaptchatoken",
+      "label": "GenerateCaptchaToken()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "generatecaptchatoken()",
+      "source_file": "captcha.go",
+      "source_location": "L134"
+    },
+    {
+      "id": "captcha_generatemathcaptchasvg",
+      "label": "GenerateMathCaptchaSVG()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "generatemathcaptchasvg()",
+      "source_file": "captcha.go",
+      "source_location": "L296"
+    },
+    {
+      "id": "captcha_generatenoiseelements",
+      "label": "generateNoiseElements()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "generatenoiseelements()",
+      "source_file": "captcha.go",
+      "source_location": "L208"
+    },
+    {
+      "id": "captcha_getcaptchahandler",
+      "label": "GetCaptchaHandler()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "getcaptchahandler()",
+      "source_file": "captcha.go",
+      "source_location": "L339"
+    },
+    {
+      "id": "captcha_renderobfuscatedchars",
+      "label": "renderObfuscatedChars()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "renderobfuscatedchars()",
+      "source_file": "captcha.go",
+      "source_location": "L252"
+    },
+    {
+      "id": "crypto_encryptcaptchapayload",
+      "label": "EncryptCaptchaPayload()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "encryptcaptchapayload()",
+      "source_file": "crypto.go",
+      "source_location": "L183"
+    },
+    {
+      "id": "setad_khabari_hmd_captchapayload",
+      "label": "CaptchaPayload",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "captchapayload",
+      "source_file": "captcha.go",
+      "source_location": "L19"
+    },
+    {
+      "id": "setad_khabari_hmd_captcharesponse",
+      "label": "CaptchaResponse",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "captcharesponse",
+      "source_file": "captcha.go",
+      "source_location": "L24"
+    },
+    {
+      "id": "test_crypto_test_testgeneratemathcaptchasvgandhandler",
+      "label": "TestGenerateMathCaptchaSVGAndHandler()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "testgeneratemathcaptchasvgandhandler()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L306"
+    },
+    {
+      "id": "test_remediation_verification_test_testremediationcaptchaconfidentialityandintegrity",
+      "label": "TestRemediationCaptchaConfidentialityAndIntegrity()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "testremediationcaptchaconfidentialityandintegrity()",
+      "source_file": "test/remediation_verification_test.go",
+      "source_location": "L13"
+    },
+    {
+      "id": "test_security_hardening_test_testcaptchareplayprevention",
+      "label": "TestCaptchaReplayPrevention()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "captcha.go",
+      "file_type": "code",
+      "norm_label": "testcaptchareplayprevention()",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L11"
     },
     {
       "id": "frontend_admin_confirm",
@@ -9852,6 +10075,17 @@
       "source_location": "L319"
     },
     {
+      "id": "admin_auth_generatesessiontoken",
+      "label": "generateSessionToken()",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "generatesessiontoken()",
+      "source_file": "admin_auth.go",
+      "source_location": "L27"
+    },
+    {
       "id": "admin_auth_getcurrentadminhandler",
       "label": "GetCurrentAdminHandler()",
       "_origin": "ast",
@@ -9929,6 +10163,17 @@
       "source_location": "L371"
     },
     {
+      "id": "admin_auth_loginhandler",
+      "label": "LoginHandler()",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "loginhandler()",
+      "source_file": "admin_auth.go",
+      "source_location": "L33"
+    },
+    {
       "id": "admin_auth_logouthandler",
       "label": "LogoutHandler()",
       "_origin": "ast",
@@ -9960,6 +10205,17 @@
       "norm_label": "canadminaccessreport()",
       "source_file": "admin_handlers.go",
       "source_location": "L106"
+    },
+    {
+      "id": "admin_handlers_changemypasswordhandler",
+      "label": "ChangeMyPasswordHandler()",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "changemypasswordhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2007"
     },
     {
       "id": "admin_handlers_classifyreporthandler",
@@ -10015,28 +10271,6 @@
       "norm_label": "disableuser2fahandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L1727"
-    },
-    {
-      "id": "admin_handlers_downloadattachmenthandler",
-      "label": "DownloadAttachmentHandler()",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "downloadattachmenthandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1039"
-    },
-    {
-      "id": "admin_handlers_exportreportdocxhandler",
-      "label": "ExportReportDocxHandler()",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "exportreportdocxhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L3080"
     },
     {
       "id": "admin_handlers_forwardreporthandler",
@@ -10127,6 +10361,17 @@
       "source_location": "L520"
     },
     {
+      "id": "admin_handlers_getservertimehandler",
+      "label": "GetServerTimeHandler()",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "getservertimehandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1870"
+    },
+    {
       "id": "admin_handlers_getsystemstatushandler",
       "label": "GetSystemStatusHandler()",
       "_origin": "ast",
@@ -10204,17 +10449,6 @@
       "source_location": "L1632"
     },
     {
-      "id": "admin_handlers_respondtoreporthandler",
-      "label": "RespondToReportHandler()",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "respondtoreporthandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1261"
-    },
-    {
       "id": "admin_handlers_setreportpriorityhandler",
       "label": "SetReportPriorityHandler()",
       "_origin": "ast",
@@ -10224,17 +10458,6 @@
       "norm_label": "setreportpriorityhandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L901"
-    },
-    {
-      "id": "admin_handlers_submitregionalresponsehandler",
-      "label": "SubmitRegionalResponseHandler()",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "submitregionalresponsehandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L3303"
     },
     {
       "id": "admin_handlers_terminatesessionhandler",
@@ -10270,17 +10493,6 @@
       "source_location": "L1459"
     },
     {
-      "id": "admin_handlers_updateinternalnoteshandler",
-      "label": "UpdateInternalNotesHandler()",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "updateinternalnoteshandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L846"
-    },
-    {
       "id": "admin_handlers_updateuserhandler",
       "label": "UpdateUserHandler()",
       "_origin": "ast",
@@ -10290,6 +10502,17 @@
       "norm_label": "updateuserhandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L1500"
+    },
+    {
+      "id": "crypto_validatepasswordcomplexity",
+      "label": "ValidatePasswordComplexity()",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "validatepasswordcomplexity()",
+      "source_file": "crypto.go",
+      "source_location": "L374"
     },
     {
       "id": "events_admineventshandler",
@@ -10358,6 +10581,17 @@
       "source_location": ""
     },
     {
+      "id": "main",
+      "label": "main.go",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "net/http.Request",
+      "file_type": "code",
+      "norm_label": "main.go",
+      "source_file": "main.go",
+      "source_location": "L1"
+    },
+    {
       "id": "main_cspreporthandler",
       "label": "CSPReportHandler()",
       "_origin": "ast",
@@ -10380,26 +10614,15 @@
       "source_location": "L70"
     },
     {
-      "id": "mfa_disable2fahandler",
-      "label": "Disable2FAHandler()",
+      "id": "main_secureheadersmiddleware",
+      "label": "secureHeadersMiddleware()",
       "_origin": "ast",
       "community": 14,
       "community_name": "net/http.Request",
       "file_type": "code",
-      "norm_label": "disable2fahandler()",
-      "source_file": "mfa.go",
-      "source_location": "L430"
-    },
-    {
-      "id": "mfa_enable2fahandler",
-      "label": "Enable2FAHandler()",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "net/http.Request",
-      "file_type": "code",
-      "norm_label": "enable2fahandler()",
-      "source_file": "mfa.go",
-      "source_location": "L369"
+      "norm_label": "secureheadersmiddleware()",
+      "source_file": "main.go",
+      "source_location": "L14"
     },
     {
       "id": "profanity_getprofanityruleshandler",
@@ -10413,26 +10636,26 @@
       "source_location": "L502"
     },
     {
-      "id": "public_handlers_submitfollowuphandler",
-      "label": "SubmitFollowUpHandler()",
+      "id": "security_iscookiesecure",
+      "label": "isCookieSecure()",
       "_origin": "ast",
       "community": 14,
       "community_name": "net/http.Request",
       "file_type": "code",
-      "norm_label": "submitfollowuphandler()",
-      "source_file": "public_handlers.go",
-      "source_location": "L480"
+      "norm_label": "iscookiesecure()",
+      "source_file": "security.go",
+      "source_location": "L830"
     },
     {
-      "id": "security_stripnul",
-      "label": "stripNul()",
+      "id": "test_crypto_test_testvalidatepasswordcomplexity",
+      "label": "TestValidatePasswordComplexity()",
       "_origin": "ast",
       "community": 14,
       "community_name": "net/http.Request",
       "file_type": "code",
-      "norm_label": "stripnul()",
-      "source_file": "security.go",
-      "source_location": "L847"
+      "norm_label": "testvalidatepasswordcomplexity()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L18"
     },
     {
       "id": "components_ui_badge_2_demo",
@@ -12429,28 +12652,136 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n1_wordmark_2_links",
-      "label": "n1-wordmark-2-links.md",
+      "id": "security_newsessionmanager",
+      "label": "NewSessionManager()",
       "_origin": "ast",
       "community": 171,
-      "community_name": "n1-wordmark-2-links.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "n1-wordmark-2-links.md",
-      "source_file": ".agents/skills/hallmark/references/components/n1-wordmark-2-links.md",
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "newsessionmanager()",
+      "source_file": "security.go",
+      "source_location": "L62"
+    },
+    {
+      "id": "test_audit_fail_test",
+      "label": "audit_fail_test.go",
+      "_origin": "ast",
+      "community": 171,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "audit_fail_test.go",
+      "source_file": "test/audit_fail_test.go",
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_n1_wordmark_2_links_n1_wordmark_2_links",
-      "label": "N1 \u00b7 Wordmark + 2 links",
+      "id": "test_audit_fail_test_testauditfailclosed",
+      "label": "TestAuditFailClosed()",
       "_origin": "ast",
       "community": 171,
-      "community_name": "n1-wordmark-2-links.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "n1 \u00b7 wordmark + 2 links",
-      "source_file": ".agents/skills/hallmark/references/components/n1-wordmark-2-links.md",
-      "source_location": "L2"
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "testauditfailclosed()",
+      "source_file": "test/audit_fail_test.go",
+      "source_location": "L12"
+    },
+    {
+      "id": "test_captcha_persistence_test",
+      "label": "captcha_persistence_test.go",
+      "_origin": "ast",
+      "community": 171,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "captcha_persistence_test.go",
+      "source_file": "test/captcha_persistence_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_captcha_persistence_test_testcaptchapersistencetryredeem",
+      "label": "TestCaptchaPersistenceTryRedeem()",
+      "_origin": "ast",
+      "community": 171,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "testcaptchapersistencetryredeem()",
+      "source_file": "test/captcha_persistence_test.go",
+      "source_location": "L8"
+    },
+    {
+      "id": "test_session_persistence_test",
+      "label": "session_persistence_test.go",
+      "_origin": "ast",
+      "community": 171,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "session_persistence_test.go",
+      "source_file": "test/session_persistence_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_session_persistence_test_gettestdb",
+      "label": "getTestDB()",
+      "_origin": "ast",
+      "community": 171,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "gettestdb()",
+      "source_file": "test/session_persistence_test.go",
+      "source_location": "L14"
+    },
+    {
+      "id": "test_session_persistence_test_testsessionmanagementandratelimiter",
+      "label": "TestSessionManagementAndRateLimiter()",
+      "_origin": "ast",
+      "community": 171,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "testsessionmanagementandratelimiter()",
+      "source_file": "test/session_persistence_test.go",
+      "source_location": "L176"
+    },
+    {
+      "id": "test_session_persistence_test_testsessionpersistenceacrossreinstantiation",
+      "label": "TestSessionPersistenceAcrossReinstantiation()",
+      "_origin": "ast",
+      "community": 171,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "testsessionpersistenceacrossreinstantiation()",
+      "source_file": "test/session_persistence_test.go",
+      "source_location": "L69"
+    },
+    {
+      "id": "test_session_persistence_test_testsessionrevokeallusersessions",
+      "label": "TestSessionRevokeAllUserSessions()",
+      "_origin": "ast",
+      "community": 171,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "testsessionrevokeallusersessions()",
+      "source_file": "test/session_persistence_test.go",
+      "source_location": "L114"
+    },
+    {
+      "id": "test_updated_at_test",
+      "label": "updated_at_test.go",
+      "_origin": "ast",
+      "community": 171,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "updated_at_test.go",
+      "source_file": "test/updated_at_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_updated_at_test_testreportsupdatedattrigger",
+      "label": "TestReportsUpdatedAtTrigger()",
+      "_origin": "ast",
+      "community": 171,
+      "community_name": "getTestDB",
+      "file_type": "code",
+      "norm_label": "testreportsupdatedattrigger()",
+      "source_file": "test/updated_at_test.go",
+      "source_location": "L8"
     },
     {
       "id": "agents_skills_hallmark_references_components_s2_hanging",
@@ -12474,6 +12805,247 @@
       "node_kind": "heading",
       "norm_label": "s2 \u00b7 hanging",
       "source_file": ".agents/skills/hallmark/references/components/s2-hanging.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "backup",
+      "label": "backup.go",
+      "_origin": "ast",
+      "community": 173,
+      "community_name": "PerformBackup",
+      "file_type": "code",
+      "norm_label": "backup.go",
+      "source_file": "backup.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "backup_dumpviadocker",
+      "label": "dumpViaDocker()",
+      "_origin": "ast",
+      "community": 173,
+      "community_name": "PerformBackup",
+      "file_type": "code",
+      "norm_label": "dumpviadocker()",
+      "source_file": "backup.go",
+      "source_location": "L146"
+    },
+    {
+      "id": "backup_dumpvianativesql",
+      "label": "dumpViaNativeSQL()",
+      "_origin": "ast",
+      "community": 173,
+      "community_name": "PerformBackup",
+      "file_type": "code",
+      "norm_label": "dumpvianativesql()",
+      "source_file": "backup.go",
+      "source_location": "L168"
+    },
+    {
+      "id": "backup_dumpviapgdump",
+      "label": "dumpViaPgDump()",
+      "_origin": "ast",
+      "community": 173,
+      "community_name": "PerformBackup",
+      "file_type": "code",
+      "norm_label": "dumpviapgdump()",
+      "source_file": "backup.go",
+      "source_location": "L129"
+    },
+    {
+      "id": "backup_performbackup",
+      "label": "PerformBackup()",
+      "_origin": "ast",
+      "community": 173,
+      "community_name": "PerformBackup",
+      "file_type": "code",
+      "norm_label": "performbackup()",
+      "source_file": "backup.go",
+      "source_location": "L63"
+    },
+    {
+      "id": "backup_rotateoldbackups",
+      "label": "rotateOldBackups()",
+      "_origin": "ast",
+      "community": 173,
+      "community_name": "PerformBackup",
+      "file_type": "code",
+      "norm_label": "rotateoldbackups()",
+      "source_file": "backup.go",
+      "source_location": "L271"
+    },
+    {
+      "id": "backup_startautobackup",
+      "label": "StartAutoBackup()",
+      "_origin": "ast",
+      "community": 173,
+      "community_name": "PerformBackup",
+      "file_type": "code",
+      "norm_label": "startautobackup()",
+      "source_file": "backup.go",
+      "source_location": "L20"
+    },
+    {
+      "id": "go_type_io_writer",
+      "label": "io.Writer",
+      "_origin": "ast",
+      "community": 173,
+      "community_name": "PerformBackup",
+      "file_type": "code",
+      "norm_label": "io.writer",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "test_backup_test",
+      "label": "backup_test.go",
+      "_origin": "ast",
+      "community": 173,
+      "community_name": "PerformBackup",
+      "file_type": "code",
+      "norm_label": "backup_test.go",
+      "source_file": "test/backup_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_backup_test_testbackuprotation",
+      "label": "TestBackupRotation()",
+      "_origin": "ast",
+      "community": 173,
+      "community_name": "PerformBackup",
+      "file_type": "code",
+      "norm_label": "testbackuprotation()",
+      "source_file": "test/backup_test.go",
+      "source_location": "L10"
+    },
+    {
+      "id": "test_remediation_verification_test",
+      "label": "remediation_verification_test.go",
+      "_origin": "ast",
+      "community": 174,
+      "community_name": "remediation_verification_test.go",
+      "file_type": "code",
+      "norm_label": "remediation_verification_test.go",
+      "source_file": "test/remediation_verification_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_remediation_verification_test_parseinteger",
+      "label": "parseInteger()",
+      "_origin": "ast",
+      "community": 174,
+      "community_name": "remediation_verification_test.go",
+      "file_type": "code",
+      "norm_label": "parseinteger()",
+      "source_file": "test/remediation_verification_test.go",
+      "source_location": "L215"
+    },
+    {
+      "id": "test_remediation_verification_test_parsepositiveint",
+      "label": "parsePositiveInt()",
+      "_origin": "ast",
+      "community": 174,
+      "community_name": "remediation_verification_test.go",
+      "file_type": "code",
+      "norm_label": "parsepositiveint()",
+      "source_file": "test/remediation_verification_test.go",
+      "source_location": "L211"
+    },
+    {
+      "id": "test_remediation_verification_test_testpublictrackingomitsadminusername",
+      "label": "TestPublicTrackingOmitsAdminUsername()",
+      "_origin": "ast",
+      "community": 174,
+      "community_name": "remediation_verification_test.go",
+      "file_type": "code",
+      "norm_label": "testpublictrackingomitsadminusername()",
+      "source_file": "test/remediation_verification_test.go",
+      "source_location": "L232"
+    },
+    {
+      "id": "test_remediation_verification_test_testremediationpaginationclampingbounds",
+      "label": "TestRemediationPaginationClampingBounds()",
+      "_origin": "ast",
+      "community": 174,
+      "community_name": "remediation_verification_test.go",
+      "file_type": "code",
+      "norm_label": "testremediationpaginationclampingbounds()",
+      "source_file": "test/remediation_verification_test.go",
+      "source_location": "L162"
+    },
+    {
+      "id": "test_remediation_verification_test_testremediationsessionrevocationlifecycle",
+      "label": "TestRemediationSessionRevocationLifecycle()",
+      "_origin": "ast",
+      "community": 174,
+      "community_name": "remediation_verification_test.go",
+      "file_type": "code",
+      "norm_label": "testremediationsessionrevocationlifecycle()",
+      "source_file": "test/remediation_verification_test.go",
+      "source_location": "L126"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_n12_banner_retract",
+      "label": "n12-banner-retract.md",
+      "_origin": "ast",
+      "community": 175,
+      "community_name": "n12-banner-retract.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "n12-banner-retract.md",
+      "source_file": ".agents/skills/hallmark/references/components/n12-banner-retract.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_n12_banner_retract_n12_announcement_banner_retracting_nav",
+      "label": "N12 \u00b7 Announcement banner + retracting nav",
+      "_origin": "ast",
+      "community": 175,
+      "community_name": "n12-banner-retract.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "n12 \u00b7 announcement banner + retracting nav",
+      "source_file": ".agents/skills/hallmark/references/components/n12-banner-retract.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "scripts_backup_db_sh__entry",
+      "label": "backup_db.sh script",
+      "_origin": "ast",
+      "community": 176,
+      "community_name": "backup_db.sh script",
+      "file_type": "code",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "norm_label": "backup_db.sh script",
+      "source_file": "scripts/backup_db.sh",
+      "source_location": "L1"
+    },
+    {
+      "id": "scripts_backup_db_sh_scripts_backup_db",
+      "label": "backup_db.sh",
+      "_origin": "ast",
+      "community": 176,
+      "community_name": "backup_db.sh script",
+      "file_type": "code",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "norm_label": "backup_db.sh",
+      "source_file": "scripts/backup_db.sh",
+      "source_location": "L1"
+    },
+    {
+      "id": "scripts_backup_db_ps1_scripts_backup_db",
+      "label": "backup_db.ps1",
+      "_origin": "ast",
+      "community": 177,
+      "community_name": "backup_db.ps1",
+      "file_type": "code",
+      "norm_label": "backup_db.ps1",
+      "source_file": "scripts/backup_db.ps1",
       "source_location": "L1"
     },
     {
@@ -16297,6 +16869,18 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_hallmark_references_genres_atmospheric",
+      "label": "atmospheric.md",
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "Genre \u2014 atmospheric",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "atmospheric.md",
+      "source_file": ".agents/skills/hallmark/references/genres/atmospheric.md",
+      "source_location": "L1"
+    },
+    {
       "id": "agents_skills_hallmark_references_genres_atmospheric_genre_atmospheric",
       "label": "Genre \u2014 atmospheric",
       "_origin": "ast",
@@ -16537,6 +17121,18 @@
       "source_location": "L5"
     },
     {
+      "id": "agents_skills_hallmark_references_genres_playful",
+      "label": "playful.md",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "Genre \u2014 playful",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "playful.md",
+      "source_file": ".agents/skills/hallmark/references/genres/playful.md",
+      "source_location": "L1"
+    },
+    {
       "id": "agents_skills_hallmark_references_genres_playful_genre_playful",
       "label": "Genre \u2014 playful",
       "_origin": "ast",
@@ -16677,6 +17273,17 @@
       "norm_label": "mfa.go",
       "source_file": "mfa.go",
       "source_location": "L1"
+    },
+    {
+      "id": "mfa_enable2fahandler",
+      "label": "Enable2FAHandler()",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "mfa.go",
+      "file_type": "code",
+      "norm_label": "enable2fahandler()",
+      "source_file": "mfa.go",
+      "source_location": "L369"
     },
     {
       "id": "mfa_generatebase32secret",
@@ -16973,18 +17580,6 @@
       "norm_label": "step 0 \u00b7 detect scope first",
       "source_file": ".agents/skills/hallmark/references/verbs/redesign.md",
       "source_location": "L15"
-    },
-    {
-      "id": "agents_skills_hallmark_references_genres_editorial",
-      "label": "editorial.md",
-      "_origin": "ast",
-      "community": 41,
-      "community_name": "Genre \u2014 editorial (default)",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "editorial.md",
-      "source_file": ".agents/skills/hallmark/references/genres/editorial.md",
-      "source_location": "L1"
     },
     {
       "id": "agents_skills_hallmark_references_genres_editorial_genre_editorial_default",
@@ -17868,6 +18463,17 @@
       "source_location": "L34"
     },
     {
+      "id": "go_type_sync_rwmutex",
+      "label": "sync.RWMutex",
+      "_origin": "ast",
+      "community": 49,
+      "community_name": "SSEBroker",
+      "file_type": "code",
+      "norm_label": "sync.rwmutex",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "setad_khabari_hmd_ssebroadcastmsg",
       "label": "sseBroadcastMsg",
       "_origin": "ast",
@@ -17987,6 +18593,17 @@
       "norm_label": "sseclient",
       "source_file": "events.go",
       "source_location": "L11"
+    },
+    {
+      "id": "test_remediation_verification_test_testremediationssebrokerrolescoping",
+      "label": "TestRemediationSSEBrokerRoleScoping()",
+      "_origin": "ast",
+      "community": 49,
+      "community_name": "SSEBroker",
+      "file_type": "code",
+      "norm_label": "testremediationssebrokerrolescoping()",
+      "source_file": "test/remediation_verification_test.go",
+      "source_location": "L70"
     },
     {
       "id": "test_sse_test",
@@ -18549,6 +19166,90 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_hallmark_references_macrostructures_diversification_rule_mandatory",
+      "label": "Diversification rule (mandatory)",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "macrostructures.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "diversification rule (mandatory)",
+      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "agents_skills_hallmark_references_macrostructures_hero_polish_patterns",
+      "label": "Hero polish patterns",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "macrostructures.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "hero polish patterns",
+      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
+      "source_location": "L13"
+    },
+    {
+      "id": "agents_skills_hallmark_references_macrostructures_how_to_pick",
+      "label": "How to pick",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "macrostructures.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "how to pick",
+      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
+      "source_location": "L81"
+    },
+    {
+      "id": "agents_skills_hallmark_references_macrostructures_macrostructures",
+      "label": "Macrostructures",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "macrostructures.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "macrostructures",
+      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_macrostructures_nav_and_footer_voice",
+      "label": "Nav and footer voice",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "macrostructures.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "nav and footer voice",
+      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
+      "source_location": "L19"
+    },
+    {
+      "id": "agents_skills_hallmark_references_macrostructures_saas_page_sequence",
+      "label": "SaaS page sequence",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "macrostructures.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "saas page sequence",
+      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
+      "source_location": "L53"
+    },
+    {
+      "id": "agents_skills_hallmark_references_macrostructures_the_21_macrostructures_index",
+      "label": "The 21 macrostructures \u2014 index",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "macrostructures.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "the 21 macrostructures \u2014 index",
+      "source_file": ".agents/skills/hallmark/references/macrostructures.md",
+      "source_location": "L25"
+    },
+    {
       "id": "components_ui_action_search_bar",
       "label": "action-search-bar.tsx",
       "_origin": "ast",
@@ -18917,147 +19618,202 @@
       "source_location": "L125"
     },
     {
-      "id": "admin_auth_generatesessiontoken",
-      "label": "generateSessionToken()",
+      "id": "go_type_sync_mutex",
+      "label": "sync.Mutex",
       "_origin": "ast",
       "community": 58,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "generatesessiontoken()",
-      "source_file": "admin_auth.go",
-      "source_location": "L27"
+      "norm_label": "sync.mutex",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "admin_auth_loginhandler",
-      "label": "LoginHandler()",
+      "id": "go_type_time_ticker",
+      "label": "time.Ticker",
       "_origin": "ast",
       "community": 58,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "loginhandler()",
-      "source_file": "admin_auth.go",
-      "source_location": "L33"
+      "norm_label": "time.ticker",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "admin_handlers_changemypasswordhandler",
-      "label": "ChangeMyPasswordHandler()",
+      "id": "go_type_time_time",
+      "label": "time.Time",
       "_origin": "ast",
       "community": 58,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "changemypasswordhandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2007"
+      "norm_label": "time.time",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "crypto_hashpassword",
-      "label": "HashPassword()",
+      "id": "public_handlers_inspectziparchive",
+      "label": "inspectZipArchive()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "hashpassword()",
-      "source_file": "crypto.go",
-      "source_location": "L294"
+      "norm_label": "inspectziparchive()",
+      "source_file": "public_handlers.go",
+      "source_location": "L35"
     },
     {
-      "id": "crypto_runcryptographicselftests",
-      "label": "RunCryptographicSelfTests()",
+      "id": "security",
+      "label": "security.go",
       "_origin": "ast",
       "community": 58,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "runcryptographicselftests()",
-      "source_file": "crypto.go",
-      "source_location": "L401"
-    },
-    {
-      "id": "crypto_verifypassword",
-      "label": "VerifyPassword()",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "verifypassword()",
-      "source_file": "crypto.go",
-      "source_location": "L369"
-    },
-    {
-      "id": "crypto_verifypasswordwithrehash",
-      "label": "VerifyPasswordWithRehash()",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "verifypasswordwithrehash()",
-      "source_file": "crypto.go",
-      "source_location": "L309"
-    },
-    {
-      "id": "security_initcookiesecurity",
-      "label": "InitCookieSecurity()",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "initcookiesecurity()",
+      "norm_label": "security.go",
       "source_file": "security.go",
-      "source_location": "L825"
-    },
-    {
-      "id": "security_iscookiesecure",
-      "label": "isCookieSecure()",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "iscookiesecure()",
-      "source_file": "security.go",
-      "source_location": "L830"
-    },
-    {
-      "id": "test_cookie_secure_test",
-      "label": "cookie_secure_test.go",
-      "_origin": "ast",
-      "community": 58,
-      "community_name": "LoginHandler",
-      "file_type": "code",
-      "norm_label": "cookie_secure_test.go",
-      "source_file": "test/cookie_secure_test.go",
       "source_location": "L1"
     },
     {
-      "id": "test_cookie_secure_test_testcookiesecurecachedresolution",
-      "label": "TestCookieSecureCachedResolution()",
+      "id": "security_newipratelimiter",
+      "label": "NewIPRateLimiter()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "testcookiesecurecachedresolution()",
-      "source_file": "test/cookie_secure_test.go",
-      "source_location": "L44"
+      "norm_label": "newipratelimiter()",
+      "source_file": "security.go",
+      "source_location": "L543"
     },
     {
-      "id": "test_cookie_secure_test_testcookiesecurestartupfatalwithouttlsorflag",
-      "label": "TestCookieSecureStartupFatalWithoutTLSOrFlag()",
+      "id": "security_ratelimitmiddleware",
+      "label": "RateLimitMiddleware()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "testcookiesecurestartupfatalwithouttlsorflag()",
-      "source_file": "test/cookie_secure_test.go",
-      "source_location": "L10"
+      "norm_label": "ratelimitmiddleware()",
+      "source_file": "security.go",
+      "source_location": "L632"
     },
     {
-      "id": "test_crypto_test_testargon2iddualformatandrehash",
-      "label": "TestArgon2idDualFormatAndRehash()",
+      "id": "security_truncaterunes",
+      "label": "truncateRunes()",
       "_origin": "ast",
       "community": 58,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "testargon2iddualformatandrehash()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L66"
+      "norm_label": "truncaterunes()",
+      "source_file": "security.go",
+      "source_location": "L839"
+    },
+    {
+      "id": "setad_khabari_hmd_activesessionitem",
+      "label": "ActiveSessionItem",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "activesessionitem",
+      "source_file": "security.go",
+      "source_location": "L28"
+    },
+    {
+      "id": "setad_khabari_hmd_cachedaccountfailure",
+      "label": "cachedAccountFailure",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "cachedaccountfailure",
+      "source_file": "security.go",
+      "source_location": "L643"
+    },
+    {
+      "id": "setad_khabari_hmd_ipratelimiter",
+      "label": "IPRateLimiter",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "ipratelimiter",
+      "source_file": "security.go",
+      "source_location": "L535"
+    },
+    {
+      "id": "setad_khabari_hmd_ipratelimiter_allow",
+      "label": ".Allow()",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": ".allow()",
+      "source_file": "security.go",
+      "source_location": "L596"
+    },
+    {
+      "id": "setad_khabari_hmd_ipratelimiter_evictstalelocked",
+      "label": ".evictStaleLocked()",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": ".evictstalelocked()",
+      "source_file": "security.go",
+      "source_location": "L568"
+    },
+    {
+      "id": "setad_khabari_hmd_totpreplaystore",
+      "label": "TOTPReplayStore",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "totpreplaystore",
+      "source_file": "mfa.go",
+      "source_location": "L36"
+    },
+    {
+      "id": "setad_khabari_hmd_visitor",
+      "label": "visitor",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "visitor",
+      "source_file": "security.go",
+      "source_location": "L529"
+    },
+    {
+      "id": "test_security_hardening_test",
+      "label": "security_hardening_test.go",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "security_hardening_test.go",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_security_hardening_test_testinspectziparchive",
+      "label": "TestInspectZipArchive()",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "testinspectziparchive()",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L57"
+    },
+    {
+      "id": "test_security_hardening_test_testipratelimiterboundedcapacity",
+      "label": "TestIPRateLimiterBoundedCapacity()",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "testipratelimiterboundedcapacity()",
+      "source_file": "test/security_hardening_test.go",
+      "source_location": "L39"
     },
     {
       "id": "agents_skills_hallmark_references_themes_lumen",
@@ -19560,6 +20316,17 @@
       "source_location": "L1"
     },
     {
+      "id": "admin_handlers_exportreportdocxhandler",
+      "label": "ExportReportDocxHandler()",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "exportreportdocxhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L3080"
+    },
+    {
       "id": "admin_handlers_formatjalalitime",
       "label": "formatJalaliTime()",
       "_origin": "ast",
@@ -19824,6 +20591,28 @@
       "source_location": "L2309"
     },
     {
+      "id": "test_docx_sandbox_test",
+      "label": "docx_sandbox_test.go",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "docx_sandbox_test.go",
+      "source_file": "test/docx_sandbox_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_docx_sandbox_test_testdocxsandboxmaliciouspayload",
+      "label": "TestDocxSandboxMaliciousPayload()",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "testdocxsandboxmaliciouspayload()",
+      "source_file": "test/docx_sandbox_test.go",
+      "source_location": "L16"
+    },
+    {
       "id": "test_repdetailtest",
       "label": "RepDetailTest",
       "_origin": "ast",
@@ -19835,145 +20624,24 @@
       "source_location": "L317"
     },
     {
-      "id": "captcha",
-      "label": "captcha.go",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "captcha.go",
-      "source_file": "captcha.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "captcha_cryptorandint",
-      "label": "cryptoRandInt()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "cryptorandint()",
-      "source_file": "captcha.go",
-      "source_location": "L200"
-    },
-    {
-      "id": "captcha_generatemathcaptchasvg",
-      "label": "GenerateMathCaptchaSVG()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "generatemathcaptchasvg()",
-      "source_file": "captcha.go",
-      "source_location": "L296"
-    },
-    {
-      "id": "captcha_generatenoiseelements",
-      "label": "generateNoiseElements()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "generatenoiseelements()",
-      "source_file": "captcha.go",
-      "source_location": "L208"
-    },
-    {
-      "id": "captcha_getcaptchahandler",
-      "label": "GetCaptchaHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "getcaptchahandler()",
-      "source_file": "captcha.go",
-      "source_location": "L339"
-    },
-    {
       "id": "captcha_newusedcaptchastore",
       "label": "NewUsedCaptchaStore()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": "newusedcaptchastore()",
       "source_file": "captcha.go",
       "source_location": "L36"
     },
     {
-      "id": "captcha_renderobfuscatedchars",
-      "label": "renderObfuscatedChars()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "renderobfuscatedchars()",
-      "source_file": "captcha.go",
-      "source_location": "L252"
-    },
-    {
-      "id": "db",
-      "label": "db.go",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "db.go",
-      "source_file": "db.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "db_enforceimmutableauditlogs",
-      "label": "enforceImmutableAuditLogs()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "enforceimmutableauditlogs()",
-      "source_file": "db.go",
-      "source_location": "L405"
-    },
-    {
-      "id": "db_initdb",
-      "label": "InitDB()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "initdb()",
-      "source_file": "db.go",
-      "source_location": "L14"
-    },
-    {
-      "id": "db_runmigrations",
-      "label": "runMigrations()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "runmigrations()",
-      "source_file": "db.go",
-      "source_location": "L50"
-    },
-    {
       "id": "go_type_database_sql_db",
       "label": "database/sql.DB",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": "database/sql.db",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_sync_mutex",
-      "label": "sync.Mutex",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "sync.mutex",
       "source_file": "",
       "source_location": ""
     },
@@ -19982,20 +20650,9 @@
       "label": "sync.Once",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": "sync.once",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_sync_rwmutex",
-      "label": "sync.RWMutex",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "sync.rwmutex",
       "source_file": "",
       "source_location": ""
     },
@@ -20004,139 +20661,40 @@
       "label": "time.Duration",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": "time.duration",
       "source_file": "",
       "source_location": ""
     },
     {
-      "id": "go_type_time_ticker",
-      "label": "time.Ticker",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "time.ticker",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_time_time",
-      "label": "time.Time",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "time.time",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "security",
-      "label": "security.go",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "security.go",
-      "source_file": "security.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "security_hashtoken",
-      "label": "hashToken()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "hashtoken()",
-      "source_file": "security.go",
-      "source_location": "L57"
-    },
-    {
       "id": "security_newaccountlockoutmanager",
       "label": "NewAccountLockoutManager()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": "newaccountlockoutmanager()",
       "source_file": "security.go",
       "source_location": "L656"
     },
     {
-      "id": "security_newipratelimiter",
-      "label": "NewIPRateLimiter()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "newipratelimiter()",
-      "source_file": "security.go",
-      "source_location": "L543"
-    },
-    {
-      "id": "security_newsessionmanager",
-      "label": "NewSessionManager()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "newsessionmanager()",
-      "source_file": "security.go",
-      "source_location": "L62"
-    },
-    {
-      "id": "security_ratelimitmiddleware",
-      "label": "RateLimitMiddleware()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "ratelimitmiddleware()",
-      "source_file": "security.go",
-      "source_location": "L632"
-    },
-    {
-      "id": "security_truncaterunes",
-      "label": "truncateRunes()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "truncaterunes()",
-      "source_file": "security.go",
-      "source_location": "L839"
-    },
-    {
       "id": "setad_khabari_hmd_accountlockoutmanager",
       "label": "AccountLockoutManager",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": "accountlockoutmanager",
       "source_file": "security.go",
       "source_location": "L649"
     },
     {
-      "id": "setad_khabari_hmd_accountlockoutmanager_getdb",
-      "label": ".getDB()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".getdb()",
-      "source_file": "security.go",
-      "source_location": "L673"
-    },
-    {
       "id": "setad_khabari_hmd_accountlockoutmanager_init",
       "label": ".init()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": ".init()",
       "source_file": "security.go",
@@ -20147,7 +20705,7 @@
       "label": ".IsLocked()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": ".islocked()",
       "source_file": "security.go",
@@ -20158,7 +20716,7 @@
       "label": ".RecordFailure()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": ".recordfailure()",
       "source_file": "security.go",
@@ -20169,271 +20727,40 @@
       "label": ".Reset()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": ".reset()",
       "source_file": "security.go",
       "source_location": "L809"
     },
     {
-      "id": "setad_khabari_hmd_activesessionitem",
-      "label": "ActiveSessionItem",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "activesessionitem",
-      "source_file": "security.go",
-      "source_location": "L28"
-    },
-    {
-      "id": "setad_khabari_hmd_adminsession",
-      "label": "AdminSession",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "adminsession",
-      "source_file": "security.go",
-      "source_location": "L14"
-    },
-    {
-      "id": "setad_khabari_hmd_cachedaccountfailure",
-      "label": "cachedAccountFailure",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "cachedaccountfailure",
-      "source_file": "security.go",
-      "source_location": "L643"
-    },
-    {
-      "id": "setad_khabari_hmd_cachedsession",
-      "label": "cachedSession",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "cachedsession",
-      "source_file": "security.go",
-      "source_location": "L44"
-    },
-    {
-      "id": "setad_khabari_hmd_captchapayload",
-      "label": "CaptchaPayload",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "captchapayload",
-      "source_file": "captcha.go",
-      "source_location": "L19"
-    },
-    {
-      "id": "setad_khabari_hmd_captcharesponse",
-      "label": "CaptchaResponse",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "captcharesponse",
-      "source_file": "captcha.go",
-      "source_location": "L24"
-    },
-    {
-      "id": "setad_khabari_hmd_ipratelimiter",
-      "label": "IPRateLimiter",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "ipratelimiter",
-      "source_file": "security.go",
-      "source_location": "L535"
-    },
-    {
-      "id": "setad_khabari_hmd_ipratelimiter_allow",
-      "label": ".Allow()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".allow()",
-      "source_file": "security.go",
-      "source_location": "L596"
-    },
-    {
-      "id": "setad_khabari_hmd_ipratelimiter_evictstalelocked",
-      "label": ".evictStaleLocked()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".evictstalelocked()",
-      "source_file": "security.go",
-      "source_location": "L568"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager",
-      "label": "SessionManager",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "sessionmanager",
-      "source_file": "security.go",
-      "source_location": "L49"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager_activecount",
-      "label": ".ActiveCount()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".activecount()",
-      "source_file": "security.go",
-      "source_location": "L480"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager_delete",
-      "label": ".Delete()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".delete()",
-      "source_file": "security.go",
-      "source_location": "L464"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager_get",
-      "label": ".Get()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".get()",
-      "source_file": "security.go",
-      "source_location": "L151"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager_getallactivesessions",
-      "label": ".GetAllActiveSessions()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".getallactivesessions()",
-      "source_file": "security.go",
-      "source_location": "L325"
-    },
-    {
       "id": "setad_khabari_hmd_sessionmanager_getdb",
       "label": ".getDB()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": ".getdb()",
       "source_file": "security.go",
       "source_location": "L79"
     },
     {
-      "id": "setad_khabari_hmd_sessionmanager_getkickedreason",
-      "label": ".GetKickedReason()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".getkickedreason()",
-      "source_file": "security.go",
-      "source_location": "L215"
-    },
-    {
       "id": "setad_khabari_hmd_sessionmanager_init",
       "label": ".init()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": ".init()",
       "source_file": "security.go",
       "source_location": "L73"
     },
     {
-      "id": "setad_khabari_hmd_sessionmanager_revokeallusersessions",
-      "label": ".RevokeAllUserSessions()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".revokeallusersessions()",
-      "source_file": "security.go",
-      "source_location": "L238"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager_revokesessionbytoken",
-      "label": ".RevokeSessionByToken()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".revokesessionbytoken()",
-      "source_file": "security.go",
-      "source_location": "L291"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager_set",
-      "label": ".Set()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".set()",
-      "source_file": "security.go",
-      "source_location": "L86"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager_startreaper",
-      "label": ".StartReaper()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".startreaper()",
-      "source_file": "security.go",
-      "source_location": "L502"
-    },
-    {
-      "id": "setad_khabari_hmd_sessionmanager_updateactivity",
-      "label": ".UpdateActivity()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".updateactivity()",
-      "source_file": "security.go",
-      "source_location": "L410"
-    },
-    {
-      "id": "setad_khabari_hmd_totpreplaystore",
-      "label": "TOTPReplayStore",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "totpreplaystore",
-      "source_file": "mfa.go",
-      "source_location": "L36"
-    },
-    {
       "id": "setad_khabari_hmd_usedcaptchastore",
       "label": "UsedCaptchaStore",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": "usedcaptchastore",
       "source_file": "captcha.go",
@@ -20444,7 +20771,7 @@
       "label": ".getDB()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": ".getdb()",
       "source_file": "captcha.go",
@@ -20455,7 +20782,7 @@
       "label": ".init()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": ".init()",
       "source_file": "captcha.go",
@@ -20466,7 +20793,7 @@
       "label": ".StartReaper()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": ".startreaper()",
       "source_file": "captcha.go",
@@ -20477,117 +20804,18 @@
       "label": ".TryRedeem()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": ".tryredeem()",
       "source_file": "captcha.go",
       "source_location": "L67"
     },
     {
-      "id": "setad_khabari_hmd_visitor",
-      "label": "visitor",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "visitor",
-      "source_file": "security.go",
-      "source_location": "L529"
-    },
-    {
-      "id": "test_captcha_persistence_test",
-      "label": "captcha_persistence_test.go",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "captcha_persistence_test.go",
-      "source_file": "test/captcha_persistence_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_captcha_persistence_test_testcaptchapersistencetryredeem",
-      "label": "TestCaptchaPersistenceTryRedeem()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testcaptchapersistencetryredeem()",
-      "source_file": "test/captcha_persistence_test.go",
-      "source_location": "L8"
-    },
-    {
-      "id": "test_contextwithadmin",
-      "label": "contextWithAdmin",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "contextwithadmin",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L246"
-    },
-    {
-      "id": "test_contextwithadmin_deadline",
-      "label": ".Deadline()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".deadline()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L251"
-    },
-    {
-      "id": "test_contextwithadmin_done",
-      "label": ".Done()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".done()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L252"
-    },
-    {
-      "id": "test_contextwithadmin_err",
-      "label": ".Err()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".err()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L253"
-    },
-    {
-      "id": "test_contextwithadmin_value",
-      "label": ".Value()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": ".value()",
-      "source_file": "test/forwarding_test.go",
-      "source_location": "L254"
-    },
-    {
-      "id": "test_crypto_test_testgeneratemathcaptchasvgandhandler",
-      "label": "TestGenerateMathCaptchaSVGAndHandler()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testgeneratemathcaptchasvgandhandler()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L306"
-    },
-    {
       "id": "test_lockout_persistence_test",
       "label": "lockout_persistence_test.go",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": "lockout_persistence_test.go",
       "source_file": "test/lockout_persistence_test.go",
@@ -20598,7 +20826,7 @@
       "label": "TestAccountLockoutConcurrentFailures()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": "testaccountlockoutconcurrentfailures()",
       "source_file": "test/lockout_persistence_test.go",
@@ -20609,7 +20837,7 @@
       "label": "security_init_order_test.go",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": "security_init_order_test.go",
       "source_file": "test/security_init_order_test.go",
@@ -20620,87 +20848,10 @@
       "label": "TestSecurityStoresInitOrder()",
       "_origin": "ast",
       "community": 64,
-      "community_name": "security.go",
+      "community_name": "database/sql.DB",
       "file_type": "code",
       "norm_label": "testsecuritystoresinitorder()",
       "source_file": "test/security_init_order_test.go",
-      "source_location": "L8"
-    },
-    {
-      "id": "test_session_persistence_test",
-      "label": "session_persistence_test.go",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "session_persistence_test.go",
-      "source_file": "test/session_persistence_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_session_persistence_test_gettestdb",
-      "label": "getTestDB()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "gettestdb()",
-      "source_file": "test/session_persistence_test.go",
-      "source_location": "L14"
-    },
-    {
-      "id": "test_session_persistence_test_testsessionmanagementandratelimiter",
-      "label": "TestSessionManagementAndRateLimiter()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testsessionmanagementandratelimiter()",
-      "source_file": "test/session_persistence_test.go",
-      "source_location": "L176"
-    },
-    {
-      "id": "test_session_persistence_test_testsessionpersistenceacrossreinstantiation",
-      "label": "TestSessionPersistenceAcrossReinstantiation()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testsessionpersistenceacrossreinstantiation()",
-      "source_file": "test/session_persistence_test.go",
-      "source_location": "L69"
-    },
-    {
-      "id": "test_session_persistence_test_testsessionrevokeallusersessions",
-      "label": "TestSessionRevokeAllUserSessions()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testsessionrevokeallusersessions()",
-      "source_file": "test/session_persistence_test.go",
-      "source_location": "L114"
-    },
-    {
-      "id": "test_updated_at_test",
-      "label": "updated_at_test.go",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "updated_at_test.go",
-      "source_file": "test/updated_at_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_updated_at_test_testreportsupdatedattrigger",
-      "label": "TestReportsUpdatedAtTrigger()",
-      "_origin": "ast",
-      "community": 64,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testreportsupdatedattrigger()",
-      "source_file": "test/updated_at_test.go",
       "source_location": "L8"
     },
     {
@@ -20864,15 +21015,15 @@
       "source_location": "L180"
     },
     {
-      "id": "admin_handlers_getreportshandler",
-      "label": "GetReportsHandler()",
+      "id": "admin_handlers_downloadattachmenthandler",
+      "label": "DownloadAttachmentHandler()",
       "_origin": "ast",
       "community": 67,
       "community_name": "crypto.go",
       "file_type": "code",
-      "norm_label": "getreportshandler()",
+      "norm_label": "downloadattachmenthandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L238"
+      "source_location": "L1039"
     },
     {
       "id": "crypto",
@@ -20895,6 +21046,17 @@
       "norm_label": "decryptaes()",
       "source_file": "crypto.go",
       "source_location": "L105"
+    },
+    {
+      "id": "crypto_decryptcaptchapayload",
+      "label": "DecryptCaptchaPayload()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "decryptcaptchapayload()",
+      "source_file": "crypto.go",
+      "source_location": "L200"
     },
     {
       "id": "crypto_decryptfilebytes",
@@ -20952,17 +21114,6 @@
       "source_location": "L36"
     },
     {
-      "id": "crypto_encryptaes",
-      "label": "EncryptAES()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "encryptaes()",
-      "source_file": "crypto.go",
-      "source_location": "L72"
-    },
-    {
       "id": "crypto_encryptfilebytes",
       "label": "EncryptFileBytes()",
       "_origin": "ast",
@@ -20996,6 +21147,28 @@
       "source_location": "L80"
     },
     {
+      "id": "crypto_getlegacyhmackey",
+      "label": "GetLegacyHMACKey()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "getlegacyhmackey()",
+      "source_file": "crypto.go",
+      "source_location": "L68"
+    },
+    {
+      "id": "crypto_hashpassword",
+      "label": "HashPassword()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "hashpassword()",
+      "source_file": "crypto.go",
+      "source_location": "L294"
+    },
+    {
       "id": "crypto_init",
       "label": "init()",
       "_origin": "ast",
@@ -21018,15 +21191,48 @@
       "source_location": "L48"
     },
     {
-      "id": "crypto_validatepasswordcomplexity",
-      "label": "ValidatePasswordComplexity()",
+      "id": "crypto_runcryptographicselftests",
+      "label": "RunCryptographicSelfTests()",
       "_origin": "ast",
       "community": 67,
       "community_name": "crypto.go",
       "file_type": "code",
-      "norm_label": "validatepasswordcomplexity()",
+      "norm_label": "runcryptographicselftests()",
       "source_file": "crypto.go",
-      "source_location": "L374"
+      "source_location": "L401"
+    },
+    {
+      "id": "crypto_verifypassword",
+      "label": "VerifyPassword()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "verifypassword()",
+      "source_file": "crypto.go",
+      "source_location": "L369"
+    },
+    {
+      "id": "crypto_verifypasswordwithrehash",
+      "label": "VerifyPasswordWithRehash()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "verifypasswordwithrehash()",
+      "source_file": "crypto.go",
+      "source_location": "L309"
+    },
+    {
+      "id": "mfa_disable2fahandler",
+      "label": "Disable2FAHandler()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "disable2fahandler()",
+      "source_file": "mfa.go",
+      "source_location": "L430"
     },
     {
       "id": "migration_v2",
@@ -21084,6 +21290,28 @@
       "source_location": "L1"
     },
     {
+      "id": "test_crypto_test_testargon2iddualformatandrehash",
+      "label": "TestArgon2idDualFormatAndRehash()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "testargon2iddualformatandrehash()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L66"
+    },
+    {
+      "id": "test_crypto_test_testcaptchaverificationsuite",
+      "label": "TestCaptchaVerificationSuite()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "testcaptchaverificationsuite()",
+      "source_file": "test/crypto_test.go",
+      "source_location": "L268"
+    },
+    {
       "id": "test_crypto_test_testcryptounicodeemojinulbytesandtamper",
       "label": "TestCryptoUnicodeEmojiNulBytesAndTamper()",
       "_origin": "ast",
@@ -21117,39 +21345,6 @@
       "source_location": "L108"
     },
     {
-      "id": "test_crypto_test_testvalidatepasswordcomplexity",
-      "label": "TestValidatePasswordComplexity()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testvalidatepasswordcomplexity()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L18"
-    },
-    {
-      "id": "test_docx_sandbox_test",
-      "label": "docx_sandbox_test.go",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "docx_sandbox_test.go",
-      "source_file": "test/docx_sandbox_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_docx_sandbox_test_testdocxsandboxmaliciouspayload",
-      "label": "TestDocxSandboxMaliciousPayload()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testdocxsandboxmaliciouspayload()",
-      "source_file": "test/docx_sandbox_test.go",
-      "source_location": "L16"
-    },
-    {
       "id": "test_migration_v2_test",
       "label": "migration_v2_test.go",
       "_origin": "ast",
@@ -21170,28 +21365,6 @@
       "norm_label": "testreencryptlegacydata()",
       "source_file": "test/migration_v2_test.go",
       "source_location": "L17"
-    },
-    {
-      "id": "test_pagination_test",
-      "label": "pagination_test.go",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "pagination_test.go",
-      "source_file": "test/pagination_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_pagination_test_testgetreportspaginationandfiltering",
-      "label": "TestGetReportsPaginationAndFiltering()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testgetreportspaginationandfiltering()",
-      "source_file": "test/pagination_test.go",
-      "source_location": "L12"
     },
     {
       "id": "components_ui_password_strength",
@@ -22810,15 +22983,48 @@
       "source_location": "L1"
     },
     {
-      "id": "captcha_generatecaptchatoken",
-      "label": "GenerateCaptchaToken()",
+      "id": "admin_handlers_getreportshandler",
+      "label": "GetReportsHandler()",
       "_origin": "ast",
       "community": 83,
       "community_name": "SubmitReportHandler",
       "file_type": "code",
-      "norm_label": "generatecaptchatoken()",
-      "source_file": "captcha.go",
-      "source_location": "L134"
+      "norm_label": "getreportshandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L238"
+    },
+    {
+      "id": "admin_handlers_respondtoreporthandler",
+      "label": "RespondToReportHandler()",
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "respondtoreporthandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1261"
+    },
+    {
+      "id": "admin_handlers_submitregionalresponsehandler",
+      "label": "SubmitRegionalResponseHandler()",
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "submitregionalresponsehandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L3303"
+    },
+    {
+      "id": "admin_handlers_updateinternalnoteshandler",
+      "label": "UpdateInternalNotesHandler()",
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "updateinternalnoteshandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L846"
     },
     {
       "id": "captcha_verifycaptcha",
@@ -22832,37 +23038,15 @@
       "source_location": "L153"
     },
     {
-      "id": "crypto_decryptcaptchapayload",
-      "label": "DecryptCaptchaPayload()",
+      "id": "crypto_encryptaes",
+      "label": "EncryptAES()",
       "_origin": "ast",
       "community": 83,
       "community_name": "SubmitReportHandler",
       "file_type": "code",
-      "norm_label": "decryptcaptchapayload()",
+      "norm_label": "encryptaes()",
       "source_file": "crypto.go",
-      "source_location": "L200"
-    },
-    {
-      "id": "crypto_encryptcaptchapayload",
-      "label": "EncryptCaptchaPayload()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "encryptcaptchapayload()",
-      "source_file": "crypto.go",
-      "source_location": "L183"
-    },
-    {
-      "id": "crypto_getlegacyhmackey",
-      "label": "GetLegacyHMACKey()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "getlegacyhmackey()",
-      "source_file": "crypto.go",
-      "source_location": "L68"
+      "source_location": "L72"
     },
     {
       "id": "metadata_validatebinarymagicbytes",
@@ -22898,15 +23082,15 @@
       "source_location": "L83"
     },
     {
-      "id": "public_handlers_inspectziparchive",
-      "label": "inspectZipArchive()",
+      "id": "public_handlers_submitfollowuphandler",
+      "label": "SubmitFollowUpHandler()",
       "_origin": "ast",
       "community": 83,
       "community_name": "SubmitReportHandler",
       "file_type": "code",
-      "norm_label": "inspectziparchive()",
+      "norm_label": "submitfollowuphandler()",
       "source_file": "public_handlers.go",
-      "source_location": "L35"
+      "source_location": "L480"
     },
     {
       "id": "public_handlers_submitreporthandler",
@@ -22964,6 +23148,17 @@
       "source_location": "L851"
     },
     {
+      "id": "security_stripnul",
+      "label": "stripNul()",
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "stripnul()",
+      "source_file": "security.go",
+      "source_location": "L847"
+    },
+    {
       "id": "setad_khabari_hmd_publicreportstatus",
       "label": "PublicReportStatus",
       "_origin": "ast",
@@ -22984,17 +23179,6 @@
       "norm_label": "reportmessageitem",
       "source_file": "public_handlers.go",
       "source_location": "L372"
-    },
-    {
-      "id": "test_crypto_test_testcaptchaverificationsuite",
-      "label": "TestCaptchaVerificationSuite()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "testcaptchaverificationsuite()",
-      "source_file": "test/crypto_test.go",
-      "source_location": "L268"
     },
     {
       "id": "test_input_limits_test",
@@ -23019,59 +23203,26 @@
       "source_location": "L14"
     },
     {
-      "id": "test_remediation_verification_test_testremediationcaptchaconfidentialityandintegrity",
-      "label": "TestRemediationCaptchaConfidentialityAndIntegrity()",
+      "id": "test_pagination_test",
+      "label": "pagination_test.go",
       "_origin": "ast",
       "community": 83,
       "community_name": "SubmitReportHandler",
       "file_type": "code",
-      "norm_label": "testremediationcaptchaconfidentialityandintegrity()",
-      "source_file": "test/remediation_verification_test.go",
-      "source_location": "L13"
-    },
-    {
-      "id": "test_security_hardening_test",
-      "label": "security_hardening_test.go",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "security_hardening_test.go",
-      "source_file": "test/security_hardening_test.go",
+      "norm_label": "pagination_test.go",
+      "source_file": "test/pagination_test.go",
       "source_location": "L1"
     },
     {
-      "id": "test_security_hardening_test_testcaptchareplayprevention",
-      "label": "TestCaptchaReplayPrevention()",
+      "id": "test_pagination_test_testgetreportspaginationandfiltering",
+      "label": "TestGetReportsPaginationAndFiltering()",
       "_origin": "ast",
       "community": 83,
       "community_name": "SubmitReportHandler",
       "file_type": "code",
-      "norm_label": "testcaptchareplayprevention()",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L11"
-    },
-    {
-      "id": "test_security_hardening_test_testinspectziparchive",
-      "label": "TestInspectZipArchive()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "testinspectziparchive()",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L57"
-    },
-    {
-      "id": "test_security_hardening_test_testipratelimiterboundedcapacity",
-      "label": "TestIPRateLimiterBoundedCapacity()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "SubmitReportHandler",
-      "file_type": "code",
-      "norm_label": "testipratelimiterboundedcapacity()",
-      "source_file": "test/security_hardening_test.go",
-      "source_location": "L39"
+      "norm_label": "testgetreportspaginationandfiltering()",
+      "source_file": "test/pagination_test.go",
+      "source_location": "L12"
     },
     {
       "id": "scripts_generate_docx",
@@ -24943,6 +25094,66 @@
       "context": "call",
       "source_file": "admin_handlers.go",
       "source_location": "L874",
+      "weight": 1.0
+    },
+    {
+      "source": "backup_performbackup",
+      "target": "backup_rotateoldbackups",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backup.go",
+      "source_location": "L123",
+      "weight": 1.0
+    },
+    {
+      "source": "backup_performbackup",
+      "target": "backup_dumpviapgdump",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backup.go",
+      "source_location": "L93",
+      "weight": 1.0
+    },
+    {
+      "source": "backup_performbackup",
+      "target": "backup_dumpviadocker",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backup.go",
+      "source_location": "L95",
+      "weight": 1.0
+    },
+    {
+      "source": "backup_performbackup",
+      "target": "backup_dumpvianativesql",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backup.go",
+      "source_location": "L97",
+      "weight": 1.0
+    },
+    {
+      "source": "backup_startautobackup",
+      "target": "backup_performbackup",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backup.go",
+      "source_location": "L43",
       "weight": 1.0
     },
     {
@@ -30366,7 +30577,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L262",
+      "source_location": "L263",
       "weight": 1.0
     },
     {
@@ -30486,7 +30697,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "middleware.go",
-      "source_location": "L149",
+      "source_location": "L151",
       "weight": 1.0
     },
     {
@@ -30498,7 +30709,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "middleware.go",
-      "source_location": "L151",
+      "source_location": "L153",
       "weight": 1.0
     },
     {
@@ -30510,7 +30721,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "middleware.go",
-      "source_location": "L169",
+      "source_location": "L171",
       "weight": 1.0
     },
     {
@@ -33562,6 +33773,78 @@
       "weight": 1.0
     },
     {
+      "source": "backup_dumpviadocker",
+      "target": "go_type_io_writer",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "backup.go",
+      "source_location": "L146",
+      "weight": 1.0
+    },
+    {
+      "source": "backup_dumpvianativesql",
+      "target": "go_type_database_sql_db",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "backup.go",
+      "source_location": "L168",
+      "weight": 1.0
+    },
+    {
+      "source": "backup_dumpvianativesql",
+      "target": "go_type_io_writer",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "backup.go",
+      "source_location": "L168",
+      "weight": 1.0
+    },
+    {
+      "source": "backup_dumpviapgdump",
+      "target": "go_type_io_writer",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "backup.go",
+      "source_location": "L129",
+      "weight": 1.0
+    },
+    {
+      "source": "backup_performbackup",
+      "target": "go_type_database_sql_db",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "backup.go",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "backup_startautobackup",
+      "target": "go_type_database_sql_db",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "backup.go",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
       "source": "captcha_generatecaptchatoken",
       "target": "go_type_time_duration",
       "relation": "references",
@@ -34063,6 +34346,18 @@
       "context": "parameter_type",
       "source_file": "test/audit_fail_test.go",
       "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "test_backup_test_testbackuprotation",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "test/backup_test.go",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -35034,7 +35329,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "middleware.go",
-      "source_location": "L141",
+      "source_location": "L143",
       "weight": 1.0
     },
     {
@@ -46531,6 +46826,72 @@
       "weight": 1.0
     },
     {
+      "source": "backup",
+      "target": "backup_dumpviapgdump",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backup.go",
+      "source_location": "L129",
+      "weight": 1.0
+    },
+    {
+      "source": "backup",
+      "target": "backup_dumpviadocker",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backup.go",
+      "source_location": "L146",
+      "weight": 1.0
+    },
+    {
+      "source": "backup",
+      "target": "backup_dumpvianativesql",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backup.go",
+      "source_location": "L168",
+      "weight": 1.0
+    },
+    {
+      "source": "backup",
+      "target": "backup_startautobackup",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backup.go",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "backup",
+      "target": "backup_rotateoldbackups",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backup.go",
+      "source_location": "L271",
+      "weight": 1.0
+    },
+    {
+      "source": "backup",
+      "target": "backup_performbackup",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backup.go",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
       "source": "captcha",
       "target": "captcha_generatecaptchatoken",
       "relation": "contains",
@@ -52731,7 +53092,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "middleware.go",
-      "source_location": "L141",
+      "source_location": "L143",
       "weight": 1.0
     },
     {
@@ -53128,6 +53489,17 @@
       "confidence_score": 1.0,
       "source_file": "README.md",
       "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "scripts_backup_db_sh_scripts_backup_db",
+      "target": "scripts_backup_db_sh__entry",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/backup_db.sh",
+      "source_location": "L1",
       "weight": 1.0
     },
     {
@@ -53546,6 +53918,17 @@
       "confidence_score": 1.0,
       "source_file": "test/audit_fail_test.go",
       "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "test_backup_test",
+      "target": "test_backup_test_testbackuprotation",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "test/backup_test.go",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -57809,6 +58192,18 @@
       "weight": 1.0
     },
     {
+      "source": "backup_performbackup",
+      "target": "admin_auth_logaudit",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "backup.go",
+      "source_location": "L73",
+      "weight": 1.0
+    },
+    {
       "source": "captcha_generatecaptchatoken",
       "target": "crypto_encryptcaptchapayload",
       "relation": "calls",
@@ -57942,6 +58337,18 @@
     },
     {
       "source": "main_main",
+      "target": "backup_startautobackup",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "main.go",
+      "source_location": "L178",
+      "weight": 1.0
+    },
+    {
+      "source": "main_main",
       "target": "security_newipratelimiter",
       "relation": "calls",
       "_origin": "ast",
@@ -57949,7 +58356,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L179",
+      "source_location": "L180",
       "weight": 1.0
     },
     {
@@ -57961,7 +58368,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L191",
+      "source_location": "L192",
       "weight": 1.0
     },
     {
@@ -57973,7 +58380,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L191",
+      "source_location": "L192",
       "weight": 1.0
     },
     {
@@ -57985,7 +58392,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L196",
+      "source_location": "L197",
       "weight": 1.0
     },
     {
@@ -57997,7 +58404,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L196",
+      "source_location": "L197",
       "weight": 1.0
     },
     {
@@ -58009,7 +58416,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L203",
+      "source_location": "L204",
       "weight": 1.0
     },
     {
@@ -58021,7 +58428,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L204",
+      "source_location": "L205",
       "weight": 1.0
     },
     {
@@ -58033,7 +58440,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L224",
+      "source_location": "L225",
       "weight": 1.0
     },
     {
@@ -58045,7 +58452,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L247",
+      "source_location": "L248",
       "weight": 1.0
     },
     {
@@ -58057,7 +58464,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L247",
+      "source_location": "L248",
       "weight": 1.0
     },
     {
@@ -58069,7 +58476,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "main.go",
-      "source_location": "L247",
+      "source_location": "L248",
       "weight": 1.0
     },
     {
@@ -58706,6 +59113,18 @@
       "context": "call",
       "source_file": "test/audit_fail_test.go",
       "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "test_backup_test_testbackuprotation",
+      "target": "backup_rotateoldbackups",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "test/backup_test.go",
+      "source_location": "L39",
       "weight": 1.0
     },
     {
@@ -60198,5 +60617,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "5fa64eaf90d262d6a7a84e16067c27226fad53f4"
+  "built_at_commit": "d8c7debade93b0baf81c146953ea990af18d00cb"
 }
