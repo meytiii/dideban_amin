@@ -215,8 +215,9 @@ func ValidateMFAPendingToken(token string) (*MFAPendingPayload, error) {
 
 func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 	var req struct {
-		MFAToken string `json:"mfa_token"`
-		TOTPCode string `json:"totp_code"`
+		MFAToken      string `json:"mfa_token"`
+		TOTPCode      string `json:"totp_code"`
+		ForceTakeover bool   `json:"force_takeover"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Bad request", http.StatusBadRequest)
@@ -284,6 +285,19 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 
 	Lockouts.Reset(payload.Username)
 	_, _ = DB.Exec("UPDATE admin_users SET last_login_at = NOW() WHERE username = $1", payload.Username)
+	if _, hasActive := Sessions.GetActiveSession(payload.Username); hasActive {
+		if isCooldown, remaining := Sessions.CheckTakeoverCooldown(payload.Username); isCooldown {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusTooManyRequests)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"error":               "takeover_cooldown",
+				"message":             fmt.Sprintf("نشست این حساب به‌تازگی به دستگاه دیگری منتقل شده است. جهت جلوگیری از اختلال، لطفاً %d ثانیه دیگر مجدداً تلاش کنید.", remaining),
+				"retry_after_seconds": remaining,
+			})
+			return
+		}
+		Sessions.RecordTakeover(payload.Username)
+	}
 
 	sessionToken := generateSessionToken()
 	now := time.Now()

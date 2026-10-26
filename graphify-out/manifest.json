@@ -1,8 +1,8 @@
 {
   "admin_auth.go": {
-    "mtime": 1792474918.627257,
-    "seen": 1792475030.2135227,
-    "ast_hash": "17e15e75d8d914b31e11358edbd7d8a1",
+    "mtime": 1793007038.6472936,
+    "seen": 1793007409.6180031,
+    "ast_hash": "7f0c17d3aa484cb6fda0c7c2472fff2b",
     "semantic_hash": ""
   },
   "admin_handlers.go": {
@@ -54,9 +54,9 @@
     "semantic_hash": ""
   },
   "security.go": {
-    "mtime": 1790064979.9794014,
-    "seen": 1790405583.7019713,
-    "ast_hash": "936371600b62ef203bc0f9fa51d60679",
+    "mtime": 1793006983.6545582,
+    "seen": 1793007409.622124,
+    "ast_hash": "34955bd6ba1c69a9aba18ea14cd4be69",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1792997086.965291,
-    "seen": 1792997302.0574293,
-    "ast_hash": "12884390ba0b2387714137d921fd05fa",
+    "mtime": 1793007204.8752024,
+    "seen": 1793007409.632812,
+    "ast_hash": "a16372290e8d8642d17f0512f42a39b2",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
@@ -246,8 +246,8 @@
     "semantic_hash": ""
   },
   "frontend/confirm.js": {
-    "mtime": 1792997254.3837657,
-    "seen": 1792997302.0459638,
+    "mtime": 1793007389.6983254,
+    "seen": 1793007409.6211255,
     "ast_hash": "bd951f53dd054c8322f829b730322a88",
     "semantic_hash": ""
   },
@@ -1074,9 +1074,9 @@
     "semantic_hash": ""
   },
   "events.go": {
-    "mtime": 1792914609.0766892,
-    "seen": 1792915082.8660495,
-    "ast_hash": "707a5429600ec027aa7a46ae7d1e5ae2",
+    "mtime": 1793007000.3589022,
+    "seen": 1793007409.6209888,
+    "ast_hash": "64251ab63297209b57dd6d23c4a75b1e",
     "semantic_hash": ""
   },
   "metadata.go": {
@@ -1086,9 +1086,9 @@
     "semantic_hash": ""
   },
   "mfa.go": {
-    "mtime": 1792474938.7705686,
-    "seen": 1792475030.2168043,
-    "ast_hash": "d7d931873fdd4d6c7d7d2218481b25ed",
+    "mtime": 1793007052.7149873,
+    "seen": 1793007409.62163,
+    "ast_hash": "94a8875d16ae8d7cbb1f6d999f66af9a",
     "semantic_hash": ""
   },
   "syslog.go": {
@@ -1560,9 +1560,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/js/admin.js": {
-    "mtime": 1792914634.339076,
-    "seen": 1792997302.0459592,
-    "ast_hash": "3498764d38705af7acb16fab8c389a70",
+    "mtime": 1793007348.7645404,
+    "seen": 1793007409.620991,
+    "ast_hash": "ccfecbfd574948643c418b8fb1c63110",
     "semantic_hash": ""
   },
   "frontend/admin/js/confirm.js": {
@@ -1761,6 +1761,12 @@
     "mtime": 1792392312.8066318,
     "seen": 1792997302.0592117,
     "ast_hash": "771d29cb28ecb5b3cebb7f806a42f46b",
+    "semantic_hash": ""
+  },
+  "test/takeover_test.go": {
+    "mtime": 1793007133.5641546,
+    "seen": 1793007409.6240146,
+    "ast_hash": "b8dfa6a5b6ced9cbd0832be05b104ae0",
     "semantic_hash": ""
   }
 }

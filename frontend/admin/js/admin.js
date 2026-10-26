@@ -84,8 +84,33 @@ function adminFetch(url, options = {}) {
             sessionStorage.setItem('herasat_csrf', newCsrf);
         }
         if (res.status === 401) {
-            if (typeof forceLogoutOnConnectionDrop === 'function') {
-                forceLogoutOnConnectionDrop();
+            try {
+                const clone = res.clone();
+                clone.json().then(data => {
+                    if (data && data.error === 'concurrent_login') {
+                        if (typeof window.triggerConcurrentLoginAlert === 'function') {
+                            window.triggerConcurrentLoginAlert(data.message);
+                        }
+                    } else {
+                        if (typeof window.forceLogoutOnConnectionDrop === 'function') {
+                            window.forceLogoutOnConnectionDrop();
+                        } else if (typeof forceLogoutOnConnectionDrop === 'function') {
+                            forceLogoutOnConnectionDrop();
+                        }
+                    }
+                }).catch(() => {
+                    if (typeof window.forceLogoutOnConnectionDrop === 'function') {
+                        window.forceLogoutOnConnectionDrop();
+                    } else if (typeof forceLogoutOnConnectionDrop === 'function') {
+                        forceLogoutOnConnectionDrop();
+                    }
+                });
+            } catch (_) {
+                if (typeof window.forceLogoutOnConnectionDrop === 'function') {
+                    window.forceLogoutOnConnectionDrop();
+                } else if (typeof forceLogoutOnConnectionDrop === 'function') {
+                    forceLogoutOnConnectionDrop();
+                }
             }
         }
         if (res.status === 403 && opts.method && opts.method.toUpperCase() !== 'GET' && !opts._retried) {
@@ -936,6 +961,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    window.forceLogoutOnConnectionDrop = forceLogoutOnConnectionDrop;
     window.__checkAdminHostConnection = checkHostConnection;
 
     window.addEventListener('offline', () => {
@@ -1306,6 +1332,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 await checkAdminProfile();
                 switchMainTab('reports');
                 runWhenIdle(fetchNotifications);
+            } else if (response.status === 409) {
+                const confData = await response.clone().json().catch(() => null);
+                if (confData && confData.status === 'session_active_conflict') {
+                    showTakeoverConfirmationModal(payload, confData.active_session);
+                    return;
+                }
+                const errText = await response.text();
+                loginMessage.textContent = errText || 'خطا در احراز هویت.';
+                loginMessage.style.display = 'block';
+                loadAdminCaptcha();
+            } else if (response.status === 429) {
+                const coolData = await response.clone().json().catch(() => null);
+                if (coolData && coolData.error === 'takeover_cooldown') {
+                    startTakeoverCooldownTimer(coolData.retry_after_seconds || 60, coolData.message);
+                    return;
+                }
+                const errText = await response.text().catch(() => '');
+                loginMessage.textContent = errText || 'درخواست‌های بیش از حد مجاز. لطفاً کمی بعد تلاش کنید.';
+                loginMessage.style.display = 'block';
+                loadAdminCaptcha();
             } else {
                 const errText = await response.text();
                 loginMessage.textContent = errText || 'نام کاربری یا رمز عبور اشتباه است.';
@@ -1631,6 +1677,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     await checkAdminProfile();
                     switchMainTab('reports');
                     runWhenIdle(fetchNotifications);
+                } else if (res.status === 429) {
+                    const coolData = await res.clone().json().catch(() => null);
+                    if (mfaOtpController) mfaOtpController.showError();
+                    if (mfaMsg) {
+                        mfaMsg.textContent = coolData?.message || 'نشست به‌تازگی منتقل شده است. لطفاً کمی بعد تلاش کنید.';
+                        mfaMsg.className = 'response-box error';
+                        mfaMsg.style.display = 'block';
+                    }
                 } else {
                     const errText = await res.text();
                     if (mfaOtpController) mfaOtpController.showError();
@@ -7398,8 +7452,15 @@ document.addEventListener('DOMContentLoaded', () => {
             scheduleReportsRefresh();
         });
 
-        _sseConnection.addEventListener('session_revoked', () => {
-            triggerConcurrentLoginAlert();
+        _sseConnection.addEventListener('session_revoked', (e) => {
+            try {
+                const data = JSON.parse(e.data || '{}');
+                if (data.username && currentAdmin && currentAdmin.username === data.username) {
+                    triggerConcurrentLoginAlert();
+                }
+            } catch (_) {
+                triggerConcurrentLoginAlert();
+            }
         });
 
         _sseConnection.addEventListener('heartbeat', () => {
@@ -8633,10 +8694,135 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const modalConcurrentAlert = document.getElementById('modal-concurrent-alert');
     const btnAckConcurrentLogout = document.getElementById('btn-ack-concurrent-logout');
+    const modalConfirmTakeover = document.getElementById('modal-confirm-takeover');
+    const btnConfirmTakeover = document.getElementById('btn-confirm-takeover');
+    const btnCancelTakeover = document.getElementById('btn-cancel-takeover');
+    const takeoverActiveIp = document.getElementById('takeover-active-ip');
+    const takeoverActiveUa = document.getElementById('takeover-active-ua');
+    const takeoverActiveTime = document.getElementById('takeover-active-time');
 
     let isKickoutHandled = false;
+    let pendingTakeoverPayload = null;
+    let cooldownTimerInterval = null;
 
-    function triggerConcurrentLoginAlert() {
+    function showTakeoverConfirmationModal(payload, activeSession) {
+        pendingTakeoverPayload = { ...payload, force_takeover: true };
+        if (takeoverActiveIp) takeoverActiveIp.textContent = activeSession?.ip || 'نامشخص';
+        if (takeoverActiveUa) takeoverActiveUa.textContent = activeSession?.user_agent || 'نامشخص';
+        if (takeoverActiveTime) {
+            try {
+                const d = new Date(activeSession?.last_active);
+                takeoverActiveTime.textContent = isNaN(d.getTime()) ? (activeSession?.last_active || '-') : d.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            } catch (_) {
+                takeoverActiveTime.textContent = activeSession?.last_active || '-';
+            }
+        }
+        if (modalConfirmTakeover) {
+            modalConfirmTakeover.style.display = 'flex';
+        }
+    }
+
+    btnCancelTakeover?.addEventListener('click', () => {
+        if (modalConfirmTakeover) modalConfirmTakeover.style.display = 'none';
+        pendingTakeoverPayload = null;
+        loadAdminCaptcha();
+    });
+
+    btnConfirmTakeover?.addEventListener('click', async () => {
+        if (!pendingTakeoverPayload) return;
+        const payloadToSubmit = pendingTakeoverPayload;
+        if (modalConfirmTakeover) modalConfirmTakeover.style.display = 'none';
+
+        const loginBtn = document.getElementById('loginBtn');
+        const btnText = loginBtn?.querySelector('.btn-text');
+        const btnSpinner = loginBtn?.querySelector('.btn-spinner');
+
+        if (loginBtn) loginBtn.disabled = true;
+        if (btnText) btnText.textContent = 'در حال انتقال نشست...';
+        if (btnSpinner) btnSpinner.classList.remove('d-none');
+        if (loginMessage) loginMessage.style.display = 'none';
+
+        try {
+            const response = await adminFetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payloadToSubmit)
+            });
+
+            if (response.ok) {
+                const data = await response.clone().json().catch(() => null);
+                if (data && data.status === 'mfa_required') {
+                    showMFAStep(data.mfa_token);
+                    return;
+                }
+                if (data && data.csrf_token) {
+                    sessionStorage.setItem('herasat_csrf', data.csrf_token);
+                }
+                sessionStorage.removeItem('2fa_prompt_shown');
+                if (loginSection) {
+                    loginSection.classList.add('d-none');
+                    loginSection.style.display = 'none';
+                }
+                if (dashboardSection) {
+                    dashboardSection.classList.remove('d-none');
+                    dashboardSection.style.display = 'block';
+                }
+                startSessionTimer();
+                startBackgroundPolling();
+                await checkAdminProfile();
+                switchMainTab('reports');
+                runWhenIdle(fetchNotifications);
+            } else if (response.status === 429) {
+                const coolData = await response.clone().json().catch(() => null);
+                startTakeoverCooldownTimer(coolData?.retry_after_seconds || 60, coolData?.message);
+            } else {
+                const errText = await response.text();
+                loginMessage.textContent = errText || 'خطا در احراز هویت و انتقال نشست.';
+                loginMessage.style.display = 'block';
+                loadAdminCaptcha();
+            }
+        } catch (_) {
+            loginMessage.textContent = 'خطای ارتباط با سرور.';
+            loginMessage.style.display = 'block';
+            loadAdminCaptcha();
+        } finally {
+            if (loginBtn) loginBtn.disabled = false;
+            if (btnText) btnText.textContent = 'ورود به سیستم';
+            if (btnSpinner) btnSpinner.classList.add('d-none');
+        }
+    });
+
+    function startTakeoverCooldownTimer(seconds, customMessage) {
+        if (cooldownTimerInterval) clearInterval(cooldownTimerInterval);
+        let rem = seconds;
+        const loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) loginBtn.disabled = true;
+
+        function updateMsg() {
+            if (loginMessage) {
+                loginMessage.textContent = `نشست این حساب به‌تازگی منتقل شده است. جهت جلوگیری از اختلال و حفظ امنیت، لطفاً ${rem} ثانیه دیگر مجدداً تلاش کنید.`;
+                loginMessage.style.display = 'block';
+            }
+        }
+        updateMsg();
+
+        cooldownTimerInterval = setInterval(() => {
+            rem--;
+            if (rem <= 0) {
+                clearInterval(cooldownTimerInterval);
+                cooldownTimerInterval = null;
+                if (loginBtn) loginBtn.disabled = false;
+                if (loginMessage) {
+                    loginMessage.textContent = 'اکنون می‌توانید مجدداً اقدام به ورود یا انتقال نشست نمایید.';
+                }
+                loadAdminCaptcha();
+            } else {
+                updateMsg();
+            }
+        }, 1000);
+    }
+
+    window.triggerConcurrentLoginAlert = function (customMsg) {
         if (isKickoutHandled) return;
         isKickoutHandled = true;
         clearInterval(timerInterval);
@@ -8646,12 +8832,24 @@ document.addEventListener('DOMContentLoaded', () => {
             _sseConnection = null;
         }
 
+        if (typeof stopBackgroundPolling === 'function') {
+            stopBackgroundPolling();
+        }
+
+        document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        sessionStorage.removeItem('herasat_csrf');
+        sessionStorage.removeItem('2fa_prompt_shown');
+
         if (modalConcurrentAlert) {
+            if (customMsg) {
+                const desc = modalConcurrentAlert.querySelector('.icon-alert-desc, p');
+                if (desc) desc.textContent = customMsg;
+            }
             modalConcurrentAlert.style.display = 'flex';
         } else {
             showConfirmDialog({
                 title: 'خروج همزمان از حساب کاربری',
-                description: 'یک ورود جدید با نام کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.',
+                description: customMsg || 'یک ورود جدید با نام کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.',
                 confirmText: 'ورود مجدد به سامانه',
                 cancelText: 'بستن',
                 variant: 'danger',
@@ -8660,6 +8858,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 location.reload();
             });
         }
+    };
+
+    function triggerConcurrentLoginAlert(customMsg) {
+        window.triggerConcurrentLoginAlert(customMsg);
     }
 
     btnAckConcurrentLogout?.addEventListener('click', () => {
@@ -10981,6 +11183,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (dashboardSection && dashboardSection.style.display !== 'none') {
                 if (typeof resumeSessionTimer === 'function') resumeSessionTimer();
                 connectAdminSSE();
+                adminFetch('/api/admin/me').catch(() => {});
                 if (typeof fetchNotifications === 'function') fetchNotifications();
             }
         }

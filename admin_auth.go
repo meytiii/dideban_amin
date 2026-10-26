@@ -36,6 +36,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		Password      string `json:"password"`
 		CaptchaID     string `json:"captcha_id"`
 		CaptchaAnswer string `json:"captcha_answer"`
+		ForceTakeover bool   `json:"force_takeover"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
 		http.Error(w, "Bad request", http.StatusBadRequest)
@@ -108,6 +109,34 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	activeSess, hasActive := Sessions.GetActiveSession(creds.Username)
+	if hasActive {
+		if !creds.ForceTakeover {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusConflict)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"status":  "session_active_conflict",
+				"message": "این حساب کاربری هم‌اکنون در دستگاه دیگری فعال است.",
+				"active_session": map[string]interface{}{
+					"ip":          activeSess.IP,
+					"user_agent":  activeSess.UserAgent,
+					"last_active": activeSess.LastActive.Format(time.RFC3339),
+				},
+			})
+			return
+		}
+		if isCooldown, remaining := Sessions.CheckTakeoverCooldown(creds.Username); isCooldown {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusTooManyRequests)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"error":               "takeover_cooldown",
+				"message":             fmt.Sprintf("نشست این حساب به‌تازگی به دستگاه دیگری منتقل شده است. جهت جلوگیری از اختلال، لطفاً %d ثانیه دیگر مجدداً تلاش کنید.", remaining),
+				"retry_after_seconds": remaining,
+			})
+			return
+		}
+	}
+
 	if totpEnabled && totpSecret != "" {
 		mfaToken, err := GenerateMFAPendingToken(creds.Username)
 		if err != nil {
@@ -131,6 +160,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	Lockouts.Reset(creds.Username)
 	_, _ = DB.Exec(`UPDATE admin_users SET last_login_at = NOW() WHERE username = $1`, creds.Username)
+	if hasActive {
+		Sessions.RecordTakeover(creds.Username)
+	}
 
 	sessionToken := generateSessionToken()
 	now := time.Now()

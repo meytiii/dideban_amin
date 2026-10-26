@@ -127,7 +127,10 @@ func (b *SSEBroker) BroadcastRegionalResponse(reportID int64) {
 }
 
 func (b *SSEBroker) BroadcastSessionRevoked(username, tokenHash string) {
-	b.Broadcast("session_revoked", map[string]string{"username": username})
+	b.Broadcast("session_revoked", map[string]string{
+		"username":           username,
+		"revoked_token_hash": tokenHash,
+	})
 }
 
 func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
@@ -149,7 +152,7 @@ func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("X-Accel-Buffering", "no")
 
 	client := &SSEClient{
-		id:       admin.Token,
+		id:       hashToken(admin.Token),
 		username: admin.Username,
 		role:     admin.Role,
 		send:     make(chan []byte, 32),

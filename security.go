@@ -52,6 +52,7 @@ type SessionManager struct {
 	cache        map[string]cachedSession
 	sessions     map[string]AdminSession
 	kickedTokens map[string]string
+	lastTakeover map[string]time.Time
 }
 
 func hashToken(token string) string {
@@ -65,6 +66,7 @@ func NewSessionManager(db *sql.DB) *SessionManager {
 		cache:        make(map[string]cachedSession),
 		sessions:     make(map[string]AdminSession),
 		kickedTokens: make(map[string]string),
+		lastTakeover: make(map[string]time.Time),
 	}
 }
 
@@ -104,6 +106,7 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 				_, _ = db.Exec(`INSERT INTO admin_session_kicks (token_hash, reason, created_at)
 					VALUES ($1, 'CONCURRENT_LOGIN', NOW())
 					ON CONFLICT (token_hash) DO UPDATE SET reason = 'CONCURRENT_LOGIN'`, oh)
+				GlobalSSEBroker.BroadcastSessionRevoked(session.Username, oh)
 			}
 			if len(oldHashes) > 0 {
 				_, _ = db.Exec(`DELETE FROM admin_sessions WHERE username = $1 AND token_hash != $2`, session.Username, tokenHash)
@@ -233,6 +236,57 @@ func (sm *SessionManager) GetKickedReason(token string) (string, bool) {
 		return reason, true
 	}
 	return "", false
+}
+
+func (sm *SessionManager) GetActiveSession(username string) (*AdminSession, bool) {
+	now := time.Now()
+	if db := sm.getDB(); db != nil {
+		var s AdminSession
+		var tokenHash string
+		err := db.QueryRow(`
+			SELECT token_hash, username, full_name, role_title, role, is_superuser, ip, user_agent, created_at, last_active, expiry
+			FROM admin_sessions
+			WHERE username = $1 AND expiry > $2 AND $2 - last_active <= INTERVAL '15 minutes' AND $2 - created_at <= INTERVAL '12 hours'
+			ORDER BY last_active DESC
+			LIMIT 1`, username, now).Scan(
+			&tokenHash, &s.Username, &s.FullName, &s.Title, &s.Role, &s.IsSuperuser,
+			&s.IP, &s.UserAgent, &s.CreatedAt, &s.LastActive, &s.Expiry)
+		if err == nil {
+			return &s, true
+		}
+	}
+
+	sm.mu.RLock()
+	defer sm.mu.RUnlock()
+	for _, s := range sm.sessions {
+		if s.Username == username && now.Before(s.Expiry) && now.Sub(s.LastActive) <= 15*time.Minute && now.Sub(s.CreatedAt) <= 12*time.Hour {
+			sess := s
+			return &sess, true
+		}
+	}
+	return nil, false
+}
+
+func (sm *SessionManager) CheckTakeoverCooldown(username string) (bool, int) {
+	sm.mu.RLock()
+	defer sm.mu.RUnlock()
+	if last, ok := sm.lastTakeover[username]; ok {
+		elapsed := time.Since(last)
+		if elapsed < 60*time.Second {
+			rem := int((60*time.Second - elapsed).Seconds())
+			if rem <= 0 {
+				rem = 1
+			}
+			return true, rem
+		}
+	}
+	return false, 0
+}
+
+func (sm *SessionManager) RecordTakeover(username string) {
+	sm.mu.Lock()
+	defer sm.mu.Unlock()
+	sm.lastTakeover[username] = time.Now()
 }
 
 func (sm *SessionManager) RevokeAllUserSessions(username, reason string) int {
