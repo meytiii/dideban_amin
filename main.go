@@ -175,6 +175,7 @@ func main() {
 
 	Sessions.StartReaper(5 * time.Minute)
 	UsedCaptchas.StartReaper(2 * time.Minute)
+	StartAutoBackup(DB)
 
 	loginLimiter := NewIPRateLimiter(0.08, 5)
 	submitLimiter := NewIPRateLimiter(0.033, 3)

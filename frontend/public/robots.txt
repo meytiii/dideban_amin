@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /privacy.html
+Allow: /terms.html
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://setadkhabari.hedu.ir/sitemap.xml

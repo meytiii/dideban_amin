@@ -26,6 +26,11 @@ yarn-error.log*
 secure_uploads/*
 !secure_uploads/.gitkeep
 
+# Database backups
+backups/*
+!backups/.gitkeep
+*.sql.gz
+
 # Sensitive document outputs
 templates/*.docx
 coverage*

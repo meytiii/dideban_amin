@@ -131,6 +131,8 @@ func StaticCacheMiddleware(next http.Handler) http.Handler {
 			} else {
 				w.Header().Set("Cache-Control", "public, max-age=86400")
 			}
+		} else if strings.HasSuffix(path, ".xml") || strings.HasSuffix(path, ".webmanifest") || strings.HasSuffix(path, "robots.txt") {
+			w.Header().Set("Cache-Control", "public, max-age=86400")
 		} else if path == "/" || strings.HasSuffix(path, ".html") {
 			w.Header().Set("Cache-Control", "no-cache")
 		}
