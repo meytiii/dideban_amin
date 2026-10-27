@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"math"
@@ -3433,6 +3434,30 @@ func gregorianToJalali(gy, gm, gd int) (jy, jm, jd int) {
 	return
 }
 
+func stripXMLControlChars(s string) string {
+	var b strings.Builder
+	for _, r := range s {
+		if r == 0x09 || r == 0x0A || r == 0x0D || (r >= 0x20 && r <= 0xD7FF) || (r >= 0xE000 && r <= 0xFFFD) {
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
+}
+
+func resolvePythonBinary() (string, error) {
+	if custom := strings.TrimSpace(os.Getenv("HERASAT_PYTHON_BIN")); custom != "" {
+		if path, err := exec.LookPath(custom); err == nil {
+			return path, nil
+		}
+	}
+	for _, bin := range []string{"python3", "python"} {
+		if path, err := exec.LookPath(bin); err == nil {
+			return path, nil
+		}
+	}
+	return "", errors.New("python runtime unavailable")
+}
+
 func formatJalaliTime(t time.Time) string {
 	t = t.Local()
 	jy, jm, jd := gregorianToJalali(t.Year(), int(t.Month()), t.Day())
@@ -3487,6 +3512,8 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "خطا در بازیابی اطلاعات پرونده", http.StatusInternalServerError)
 		return
 	}
+
+	trackingCode = ResolveTrackingCode(trackingCode)
 
 	description := ""
 	if dec, err := DecryptAES(encDesc); err == nil {
@@ -3566,20 +3593,20 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	payload := map[string]interface{}{
-		"tracking_code":   trackingCode,
-		"date":            createdJalali,
-		"print_date":      printJalali,
-		"category":        category,
-		"priority":        priorityLabel,
-		"reporter_type":   reporterTypeLabel,
-		"reporter_info":   reporterInfo,
-		"evidence_status": evidenceStatus,
-		"read_status":     readStatus,
-		"description":     description,
-		"admin_response":  adminResponse,
-		"responded_by":    respBy,
-		"responded_at":    respAtStr,
-		"internal_notes":  internalNotes,
+		"tracking_code":   stripXMLControlChars(trackingCode),
+		"date":            stripXMLControlChars(createdJalali),
+		"print_date":      stripXMLControlChars(printJalali),
+		"category":        stripXMLControlChars(category),
+		"priority":        stripXMLControlChars(priorityLabel),
+		"reporter_type":   stripXMLControlChars(reporterTypeLabel),
+		"reporter_info":   stripXMLControlChars(reporterInfo),
+		"evidence_status": stripXMLControlChars(evidenceStatus),
+		"read_status":     stripXMLControlChars(readStatus),
+		"description":     stripXMLControlChars(description),
+		"admin_response":  stripXMLControlChars(adminResponse),
+		"responded_by":    stripXMLControlChars(respBy),
+		"responded_at":    stripXMLControlChars(respAtStr),
+		"internal_notes":  stripXMLControlChars(internalNotes),
 	}
 
 	jsonBytes, err := json.Marshal(payload)
@@ -3610,10 +3637,17 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	pythonBin, err := resolvePythonBinary()
+	if err != nil {
+		log.Printf("ERROR: DOCX export python runtime missing: %v", err)
+		http.Error(w, "محیط اجرایی پایتون در سرور یافت نشد.", http.StatusServiceUnavailable)
+		return
+	}
+
 	ctx, cancel := context.WithTimeout(r.Context(), 15*time.Second)
 	defer cancel()
 
-	cmd := exec.CommandContext(ctx, "python", absScriptPath, absTemplatePath)
+	cmd := exec.CommandContext(ctx, pythonBin, absScriptPath, absTemplatePath)
 	cmd.Dir = os.TempDir()
 	cmd.Env = getRestrictedSubprocessEnv()
 	cmd.Stdin = bytes.NewReader(jsonBytes)

@@ -7,9 +7,11 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -653,6 +655,10 @@ func (limiter *IPRateLimiter) evictStaleLocked(now time.Time) {
 			entries = append(entries, ipSeen{ip: ip, lastSeen: v.lastSeen})
 		}
 
+		sort.Slice(entries, func(i, j int) bool {
+			return entries[i].lastSeen.Before(entries[j].lastSeen)
+		})
+
 		toEvict := len(entries) / 5
 		if toEvict < 1 {
 			toEvict = 1
@@ -661,6 +667,20 @@ func (limiter *IPRateLimiter) evictStaleLocked(now time.Time) {
 			delete(limiter.visitors, entries[i].ip)
 		}
 	}
+}
+
+func normalizeRateLimitKey(ipStr string) string {
+	ipStr = strings.TrimSpace(ipStr)
+	parsed := net.ParseIP(ipStr)
+	if parsed == nil {
+		return ipStr
+	}
+	if v4 := parsed.To4(); v4 != nil {
+		return v4.String()
+	}
+	mask := net.CIDRMask(64, 128)
+	network := parsed.Mask(mask)
+	return network.String() + "/64"
 }
 
 func (limiter *IPRateLimiter) Allow(ip string) bool {
@@ -702,7 +722,8 @@ func (limiter *IPRateLimiter) Allow(ip string) bool {
 func RateLimitMiddleware(limiter *IPRateLimiter, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip := getIP(r)
-		if !limiter.Allow(ip) {
+		key := normalizeRateLimitKey(ip)
+		if !limiter.Allow(key) {
 			http.Error(w, "تعداد درخواست‌های شما بیش از حد مجاز است. لطفاً کمی صبر کنید.", http.StatusTooManyRequests)
 			return
 		}

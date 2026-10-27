@@ -650,6 +650,20 @@ func SubmitFollowUpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var lastMsgEnc string
+	var lastMsgCreatedAt time.Time
+	err = DB.QueryRow(`
+		SELECT message_text, created_at FROM report_messages
+		WHERE report_id = $1 AND sender_type = 'reporter'
+		ORDER BY id DESC LIMIT 1`, reportID).Scan(&lastMsgEnc, &lastMsgCreatedAt)
+	if err == nil && time.Since(lastMsgCreatedAt) < 30*time.Second {
+		if dec, err := DecryptAES(lastMsgEnc); err == nil && dec == req.Message {
+			w.Header().Set("Content-Type", "application/json")
+			w.Write([]byte(`{"status": "success", "message": "پیام تکمیلی شما با موفقیت ثبت شد"}`))
+			return
+		}
+	}
+
 	encMsg, err := EncryptAES(req.Message)
 	if err != nil {
 		http.Error(w, "Encryption failure", http.StatusInternalServerError)

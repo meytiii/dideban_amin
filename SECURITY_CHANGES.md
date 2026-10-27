@@ -274,6 +274,49 @@ This document tracks all verified security findings, code modifications, operato
 - `crypto_test.go`: updated assertions for `v3:1:f:`, `v3:1:p:`, and `HENC\x03`.
 - Full regression: `go test ./...` passed (100%).
 
+## Phase 6: Reliability, Hygiene & Final Verification
+
+### Verified Findings
+1. **Hardcoded Python Binary & XML Control Character Injection in DOCX Export**: DOCX dossier export hardcoded `python3` or `python` command execution without checking system availability, and report content containing XML 1.0 forbidden control characters (`\x00`–`\x08`, `\x0b`, `\x0c`, `\x0e`–`\x1f`) could trigger python parser exceptions or generate corrupt `.docx` files.
+2. **Follow-Up Message Duplication on Double-Click or Network Retry**: Rapid double submission or network retries inserted duplicate identical rows in `report_messages`.
+3. **Random Rate Limiter Eviction & IPv6 Privacy Extension Vulnerability**: Rate limiter evicted entries using random Go map iteration order rather than Least Recently Used (LRU) order. Furthermore, rate limiting keyed individual IPv6 `/128` addresses, allowing attackers with standard ISP `/64` subnets to bypass rate limiting via privacy extension address hopping.
+4. **Dead Code & Orphaned Prototype Artifacts**: Unused React/Next.js component stubs (`components/ui/*.tsx`, `lib/utils.ts`) and root-level duplicate script (`frontend/confirm.js`) remained in the repository, creating confusion regarding project dependencies.
+5. **Scattered Database Migrations**: Schema and role definition files were scattered between root and Docker directories without a unified migration directory.
+
+### Code Changes
+- **Dynamic Python Resolution & XML Sanitization (`admin_handlers.go`)**:
+  - Implemented `resolvePythonBinary`: searches for `HERASAT_PYTHON_BIN`, `python3`, and `python` in system `PATH`.
+  - Implemented `stripXMLControlChars`: strips XML 1.0 forbidden control characters while preserving valid whitespace (`\t`, `\n`, `\r`) and Unicode Persian text.
+  - Ensured `trackingCode` is resolved via `ResolveTrackingCode` before generating dossiers.
+- **Idempotent Follow-Up Submission (`public_handlers.go`)**:
+  - Added duplicate detection in `SubmitFollowUpHandler`: checks if the most recent message from the reporter within the last 30 seconds matches the submission, returning HTTP 200 without creating redundant database records.
+- **Deterministic LRU Rate Limiting & IPv6 /64 Masking (`security.go`)**:
+  - Added `normalizeRateLimitKey`: masks IPv6 addresses to `/64` subnets (`net.CIDRMask(64, 128)`), keying all addresses from the same subscriber block to the same rate bucket.
+  - In `evictStaleLocked`: sorted visitor entries by `lastSeen` ascending, guaranteeing deterministic eviction of the oldest idle visitors first.
+- **Dead Code Cleanup**:
+  - Removed unused template components `components/ui/*.tsx` (40 files).
+  - Removed `lib/utils.ts`.
+  - Removed orphaned root-level duplicate `frontend/confirm.js`.
+- **Unified Migrations Directory (`migrations/`)**:
+  - Created `migrations/001_initial_schema.sql` (full database schema, triggers, and immutability rules).
+  - Created `migrations/002_least_privilege_roles.sql` (role definition and privilege delegation for `herasat_app` and `herasat_migrator`).
+- **Configuration & Documentation (`.env.example`, `env.example`, `README.md`)**:
+  - Documented all 25+ configuration flags, security gates, and operational commands.
+
+### Operator Impact
+- DOCX export is resilient across varied server environments with automatic python interpreter discovery and corrupted-file prevention.
+- Rate limiting cannot be bypassed by IPv6 rotation; rate limiter memory footprint is bounded and strictly LRU-managed.
+- Clean repository containing only production code; zero external frontend dependencies.
+
+### Tests & Verification
+- `reliability_hygiene_test.go`:
+  - `TestStripXMLControlChars`: verified removal of forbidden control characters and preservation of whitespace and Persian characters.
+  - `TestResolvePythonBinary`: verified dynamic resolution of python interpreter.
+  - `TestNormalizeRateLimitKey`: verified identical `/64` prefix hashing for diverse IPv6 addresses within the same subnet, and preservation of IPv4 addresses.
+  - `TestDeterministicLRUEviction`: verified LRU eviction when visitor limit is reached.
+- Full regression: `go test ./...` passed (100%).
+
+
 
 
 
