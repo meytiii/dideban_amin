@@ -255,7 +255,11 @@ func main() {
 		log.Fatalf("FATAL SECURITY ERROR: Environment variable HERASAT_AES_KEY must be set and exactly 32 bytes long.")
 	}
 	if isKnownPlaceholderKey(aesMasterKey) {
-		log.Fatalf("FATAL SECURITY ERROR: HERASAT_AES_KEY is using an insecure placeholder key. Generate a cryptographically secure 32-byte secret.")
+		if os.Getenv("HERASAT_DEV_MODE") == "1" {
+			log.Println("WARNING: HERASAT_AES_KEY is using an insecure placeholder key in development mode.")
+		} else {
+			log.Fatalf("FATAL SECURITY ERROR: HERASAT_AES_KEY is using an insecure placeholder key. Generate a cryptographically secure 32-byte secret.")
+		}
 	}
 	InitCrypto(aesMasterKey)
 
