@@ -23,13 +23,23 @@ func TestValidatePasswordComplexity(t *testing.T) {
 	}{
 		{
 			name:     "Valid compliant password",
-			password: "Herasat@2026Secure",
+			password: "SuperSecret#99XyZ",
 			wantErr:  false,
 		},
 		{
 			name:     "Valid with symbols and uppercase",
 			password: "MySuperSecret!2026",
 			wantErr:  false,
+		},
+		{
+			name:     "Disallowed default password",
+			password: "Herasat@2026Secure",
+			wantErr:  true,
+		},
+		{
+			name:     "Disallowed common word",
+			password: "SuperAdminP@ssword99",
+			wantErr:  true,
 		},
 		{
 			name:     "Too short (< 12 chars)",

@@ -142,6 +142,72 @@ CREATE INDEX IF NOT EXISTS idx_admin_notifs_is_read ON admin_notifications(is_re
 CREATE INDEX IF NOT EXISTS idx_admin_notifs_created_at ON admin_notifications(created_at);
 CREATE INDEX IF NOT EXISTS idx_admin_notifs_recipient ON admin_notifications(recipient_username);
 
+CREATE TABLE IF NOT EXISTS admin_sessions (
+    token_hash CHAR(64) PRIMARY KEY,
+    username VARCHAR(64) NOT NULL,
+    full_name VARCHAR(128) NOT NULL,
+    role_title VARCHAR(128) NOT NULL,
+    role VARCHAR(32) NOT NULL,
+    is_superuser BOOLEAN NOT NULL DEFAULT FALSE,
+    ip VARCHAR(45) NOT NULL,
+    user_agent TEXT NOT NULL,
+    requires_2fa_setup BOOLEAN NOT NULL DEFAULT FALSE,
+    requires_password_change BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_active TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    expiry TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_admin_sessions_username ON admin_sessions(username);
+CREATE INDEX IF NOT EXISTS idx_admin_sessions_expiry ON admin_sessions(expiry);
+
+CREATE TABLE IF NOT EXISTS admin_session_kicks (
+    token_hash CHAR(64) PRIMARY KEY,
+    reason VARCHAR(64) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS admin_login_attempts (
+    username VARCHAR(64) NOT NULL,
+    ip VARCHAR(45) NOT NULL DEFAULT '',
+    consecutive_failures INT NOT NULL DEFAULT 0,
+    locked_until TIMESTAMPTZ,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (username, ip)
+);
+
+CREATE TABLE IF NOT EXISTS used_captcha_tokens (
+    signature_b64 TEXT PRIMARY KEY,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_used_captcha_expires ON used_captcha_tokens(expires_at);
+
+CREATE TABLE IF NOT EXISTS used_mfa_nonces (
+    nonce VARCHAR(64) PRIMARY KEY,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_used_mfa_nonces_expiry ON used_mfa_nonces(expires_at);
+
+CREATE OR REPLACE FUNCTION touch_reports_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.updated_at IS NOT DISTINCT FROM OLD.updated_at THEN
+        NEW.updated_at := NOW();
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_reports_updated_at ON reports;
+CREATE TRIGGER trg_reports_updated_at
+BEFORE UPDATE ON reports
+FOR EACH ROW
+EXECUTE FUNCTION touch_reports_updated_at();
+
 CREATE OR REPLACE FUNCTION prevent_audit_log_modification()
 RETURNS TRIGGER AS $$
 BEGIN

@@ -87,6 +87,39 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		})
 		w.Header().Set("X-CSRF-Token", currentCSRF)
 
+		reqPath := strings.TrimRight(r.URL.Path, "/")
+
+		if session.RequiresPasswordChange {
+			allowed := reqPath == "/api/admin/me" ||
+				reqPath == "/api/admin/change-my-password" ||
+				reqPath == "/api/admin/logout"
+			if !allowed {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusForbidden)
+				_ = json.NewEncoder(w).Encode(map[string]string{
+					"error":   "password_change_required",
+					"message": "تغییر کلمه عبور الزامی است.",
+				})
+				return
+			}
+		}
+
+		if session.Requires2FASetup {
+			allowed := reqPath == "/api/admin/me" ||
+				reqPath == "/api/admin/2fa/setup" ||
+				reqPath == "/api/admin/2fa/enable" ||
+				reqPath == "/api/admin/logout"
+			if !allowed {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusForbidden)
+				_ = json.NewEncoder(w).Encode(map[string]string{
+					"error":   "2fa_setup_required",
+					"message": "فعال‌سازی احراز هویت دومرحله‌ای الزامی است.",
+				})
+				return
+			}
+		}
+
 		ctx := contextWithAdmin(r.Context(), session)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
@@ -1454,7 +1487,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	isSuper := (req.Role == "superuser")
 
-	if err := ValidatePasswordComplexity(req.Password); err != nil {
+	if err := ValidatePasswordPolicy(req.Password, req.Username); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -1695,15 +1728,16 @@ func ResetUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	req.NewPassword = strings.TrimSpace(req.NewPassword)
-	if err := ValidatePasswordComplexity(req.NewPassword); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
 
 	var targetUsername string
 	err := DB.QueryRow("SELECT username FROM admin_users WHERE id = $1", req.UserID).Scan(&targetUsername)
 	if err != nil {
 		http.Error(w, "کاربر یافت نشد", http.StatusNotFound)
+		return
+	}
+
+	if err := ValidatePasswordPolicy(req.NewPassword, targetUsername); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -2093,7 +2127,7 @@ func ChangeMyPasswordHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := ValidatePasswordComplexity(req.NewPassword); err != nil {
+	if err := ValidatePasswordPolicy(req.NewPassword, admin.Username); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}

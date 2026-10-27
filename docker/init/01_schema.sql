@@ -153,6 +153,8 @@ CREATE TABLE IF NOT EXISTS admin_sessions (
     is_superuser BOOLEAN NOT NULL DEFAULT FALSE,
     ip VARCHAR(45) NOT NULL,
     user_agent TEXT NOT NULL,
+    requires_2fa_setup BOOLEAN NOT NULL DEFAULT FALSE,
+    requires_password_change BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     last_active TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     expiry TIMESTAMPTZ NOT NULL
@@ -168,10 +170,12 @@ CREATE TABLE IF NOT EXISTS admin_session_kicks (
 );
 
 CREATE TABLE IF NOT EXISTS admin_login_attempts (
-    username VARCHAR(64) PRIMARY KEY,
+    username VARCHAR(64) NOT NULL,
+    ip VARCHAR(45) NOT NULL DEFAULT '',
     consecutive_failures INT NOT NULL DEFAULT 0,
     locked_until TIMESTAMPTZ,
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (username, ip)
 );
 
 CREATE TABLE IF NOT EXISTS used_captcha_tokens (
@@ -181,6 +185,14 @@ CREATE TABLE IF NOT EXISTS used_captcha_tokens (
 );
 
 CREATE INDEX IF NOT EXISTS idx_used_captcha_expires ON used_captcha_tokens(expires_at);
+
+CREATE TABLE IF NOT EXISTS used_mfa_nonces (
+    nonce VARCHAR(64) PRIMARY KEY,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_used_mfa_nonces_expiry ON used_mfa_nonces(expires_at);
 
 CREATE OR REPLACE FUNCTION touch_reports_updated_at()
 RETURNS TRIGGER AS $$

@@ -127,7 +127,17 @@ func (b *SSEBroker) BroadcastRegionalResponse(reportID int64) {
 }
 
 func (b *SSEBroker) BroadcastSessionRevoked(username, tokenHash string) {
-	b.Broadcast("session_revoked", map[string]string{"username": username})
+	b.mu.RLock()
+	defer b.mu.RUnlock()
+	msg := []byte("event: session_revoked\ndata: {}\n\n")
+	for client := range b.clients {
+		if client.username == username || hashToken(client.id) == tokenHash {
+			select {
+			case client.send <- msg:
+			default:
+			}
+		}
+	}
 }
 
 func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
@@ -165,6 +175,7 @@ func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 
 	rc := http.NewResponseController(w)
 	_ = rc.SetWriteDeadline(time.Time{})
+	_ = rc.SetReadDeadline(time.Time{})
 
 	flusher.Flush()
 
@@ -177,7 +188,11 @@ func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 			return
 
 		case <-heartbeatTicker.C:
-			_ = rc.SetWriteDeadline(time.Time{})
+			currSess, exists := Sessions.Get(admin.Token)
+			if !exists || currSess.Username != admin.Username || currSess.Role != admin.Role {
+				return
+			}
+			_ = rc.SetWriteDeadline(time.Now().Add(10 * time.Second))
 			_, err := w.Write([]byte("event: heartbeat\ndata: {}\n\n"))
 			if err != nil {
 				return
@@ -188,7 +203,7 @@ func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 			if !ok {
 				return
 			}
-			_ = rc.SetWriteDeadline(time.Time{})
+			_ = rc.SetWriteDeadline(time.Now().Add(10 * time.Second))
 			_, err := w.Write(msg)
 			if err != nil {
 				return

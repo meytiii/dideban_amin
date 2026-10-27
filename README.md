@@ -27,10 +27,8 @@ go run .
 - **Public Reporting Portal**: [http://localhost:8080/](http://localhost:8080/)
 - **Admin Cockpit**: [http://localhost:8080/admin/](http://localhost:8080/admin/)
 
-#### Default Administrative Credentials:
-- **Username**: `admin_it`
-- **Password**: `@2026Secure`
-- **Role**: `superuser`
+#### Initial Administrative Credentials:
+On initial application bootstrap, if no superuser exists, the initial administrator (`admin_it`) is provisioned. Set `HERASAT_INITIAL_ADMIN_PASSWORD` in your environment, or the backend generates a random secure password and prints it once to stdout upon first boot. Password change is enforced immediately on initial login.
 
 ### 5. Stopping the Database
 To stop the PostgreSQL container:

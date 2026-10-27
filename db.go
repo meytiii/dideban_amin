@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	"crypto/rand"
 	"database/sql"
 	"log"
+	"os"
+	"strings"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -33,6 +36,7 @@ func InitDB(connStr string) {
 	log.Println("Successfully initialized native PostgreSQL connection pool.")
 
 	runMigrations()
+	bootstrapInitialAdmin(DB)
 
 	if Sessions != nil {
 		Sessions.init(DB)
@@ -328,10 +332,14 @@ func runMigrations() {
 		is_superuser BOOLEAN NOT NULL DEFAULT FALSE,
 		ip VARCHAR(45) NOT NULL,
 		user_agent TEXT NOT NULL,
+		requires_2fa_setup BOOLEAN NOT NULL DEFAULT FALSE,
+		requires_password_change BOOLEAN NOT NULL DEFAULT FALSE,
 		created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 		last_active TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 		expiry TIMESTAMPTZ NOT NULL
 	);
+	ALTER TABLE admin_sessions ADD COLUMN IF NOT EXISTS requires_2fa_setup BOOLEAN NOT NULL DEFAULT FALSE;
+	ALTER TABLE admin_sessions ADD COLUMN IF NOT EXISTS requires_password_change BOOLEAN NOT NULL DEFAULT FALSE;
 	CREATE INDEX IF NOT EXISTS idx_admin_sessions_username ON admin_sessions(username);
 	CREATE INDEX IF NOT EXISTS idx_admin_sessions_expiry ON admin_sessions(expiry);
 
@@ -342,11 +350,14 @@ func runMigrations() {
 	);
 
 	CREATE TABLE IF NOT EXISTS admin_login_attempts (
-		username VARCHAR(64) PRIMARY KEY,
+		username VARCHAR(64) NOT NULL,
+		ip VARCHAR(45) NOT NULL DEFAULT '',
 		consecutive_failures INT NOT NULL DEFAULT 0,
 		locked_until TIMESTAMPTZ,
-		updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+		updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+		PRIMARY KEY (username, ip)
 	);
+	ALTER TABLE admin_login_attempts ADD COLUMN IF NOT EXISTS ip VARCHAR(45) NOT NULL DEFAULT '';
 
 	CREATE TABLE IF NOT EXISTS used_captcha_tokens (
 		signature_b64 TEXT PRIMARY KEY,
@@ -354,6 +365,13 @@ func runMigrations() {
 		created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 	);
 	CREATE INDEX IF NOT EXISTS idx_used_captcha_expires ON used_captcha_tokens(expires_at);
+
+	CREATE TABLE IF NOT EXISTS used_mfa_nonces (
+		nonce VARCHAR(64) PRIMARY KEY,
+		expires_at TIMESTAMPTZ NOT NULL,
+		created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+	);
+	CREATE INDEX IF NOT EXISTS idx_used_mfa_nonces_expiry ON used_mfa_nonces(expires_at);
 
 	CREATE OR REPLACE FUNCTION touch_reports_updated_at()
 	RETURNS TRIGGER AS $$
@@ -436,5 +454,70 @@ func enforceImmutableAuditLogs() {
 		log.Printf("Notice: Immutable audit log trigger status: %v", err)
 	} else {
 		log.Println("Immutable audit log security constraints active (AFTA WORM Compliant).")
+	}
+}
+
+func generateInitialPassword() string {
+	const (
+		upperChars  = "ABCDEFGHJKLMNPQRSTUVWXYZ"
+		lowerChars  = "abcdefghijkmnopqrstuvwxyz"
+		digitChars  = "23456789"
+		symbolChars = "!@#$%^&*()-_=+"
+	)
+	var password []byte
+	b := make([]byte, 1)
+
+	rand.Read(b)
+	password = append(password, upperChars[int(b[0])%len(upperChars)])
+	rand.Read(b)
+	password = append(password, lowerChars[int(b[0])%len(lowerChars)])
+	rand.Read(b)
+	password = append(password, digitChars[int(b[0])%len(digitChars)])
+	rand.Read(b)
+	password = append(password, symbolChars[int(b[0])%len(symbolChars)])
+
+	allChars := upperChars + lowerChars + digitChars + symbolChars
+	buf := make([]byte, 20)
+	rand.Read(buf)
+	for _, byteVal := range buf {
+		password = append(password, allChars[int(byteVal)%len(allChars)])
+	}
+	return string(password)
+}
+
+func bootstrapInitialAdmin(db *sql.DB) {
+	if db == nil {
+		return
+	}
+
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM admin_users WHERE is_superuser = true OR role = 'superuser'").Scan(&count)
+	if err != nil || count > 0 {
+		return
+	}
+
+	rawPassword := strings.TrimSpace(os.Getenv("HERASAT_INITIAL_ADMIN_PASSWORD"))
+	if rawPassword == "" {
+		rawPassword = generateInitialPassword()
+		log.Printf("==================================================================")
+		log.Printf("INITIAL ADMINISTRATIVE USER PROVISIONED:")
+		log.Printf("Username: admin_it")
+		log.Printf("Password: %s", rawPassword)
+		log.Printf("NOTE: Store this credential securely. Immediate password change is mandatory.")
+		log.Printf("==================================================================")
+	}
+
+	hashed, err := HashPassword(rawPassword)
+	if err != nil {
+		log.Fatalf("Failed to hash initial admin password: %v", err)
+	}
+
+	_, err = db.Exec(`
+		INSERT INTO admin_users (username, password_hash, full_name, role_title, role, is_superuser, is_active, must_change_password, totp_enforced, created_at, updated_at)
+		VALUES ('admin_it', $1, 'مدیر ارشد فناوری اطلاعات', 'پشتیبانی و امنیت فاوا', 'superuser', true, true, true, true, NOW(), NOW())
+		ON CONFLICT (username) DO NOTHING
+	`, hashed)
+	if err != nil {
+		log.Fatalf("Failed to provision initial administrator: %v", err)
 	}
 }

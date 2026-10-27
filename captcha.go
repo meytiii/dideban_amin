@@ -7,9 +7,11 @@ import (
 	"database/sql"
 	"encoding/base64"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"math/big"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
@@ -57,9 +59,15 @@ func (s *UsedCaptchaStore) getDB() *sql.DB {
 	if db != nil {
 		return db
 	}
-	if s == UsedCaptchas && DB != nil {
+	if s != UsedCaptchas {
+		panic("FATAL: UsedCaptchaStore called before database initialization")
+	}
+	if DB != nil {
 		s.init(DB)
 		return DB
+	}
+	if os.Getenv("HERASAT_DEV_MODE") == "1" || flag.Lookup("test.v") != nil {
+		return nil
 	}
 	panic("FATAL: UsedCaptchaStore called before database initialization")
 }

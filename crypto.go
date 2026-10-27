@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"unicode/utf8"
 
 	"golang.org/x/crypto/argon2"
 )
@@ -371,8 +372,8 @@ func VerifyPassword(password, encodedHash string) bool {
 	return ok
 }
 
-func ValidatePasswordComplexity(password string) error {
-	if len(password) < 12 {
+func ValidatePasswordPolicy(password string, username ...string) error {
+	if utf8.RuneCountInString(password) < 12 {
 		return errors.New("رمز عبور باید حداقل ۱۲ کاراکتر باشد.")
 	}
 
@@ -395,7 +396,28 @@ func ValidatePasswordComplexity(password string) error {
 		return errors.New("رمز عبور باید شامل حداقل یک نماد یا کاراکتر خاص (!@#$%^&*...) باشد.")
 	}
 
+	pwLower := strings.ToLower(password)
+	disallowedSubstrings := []string{
+		"@2026secure", "2026secure", "herasat", "admin", "password", "123456",
+	}
+	for _, dis := range disallowedSubstrings {
+		if strings.Contains(pwLower, dis) {
+			return errors.New("رمز عبور نباید شامل عبارت‌های پیش‌فرض، نام سامانه یا کلمات متداول باشد.")
+		}
+	}
+
+	if len(username) > 0 && username[0] != "" {
+		u := strings.ToLower(strings.TrimSpace(username[0]))
+		if len(u) >= 3 && strings.Contains(pwLower, u) {
+			return errors.New("رمز عبور نمی‌تواند شامل نام کاربری باشد.")
+		}
+	}
+
 	return nil
+}
+
+func ValidatePasswordComplexity(password string) error {
+	return ValidatePasswordPolicy(password)
 }
 
 func RunCryptographicSelfTests() error {

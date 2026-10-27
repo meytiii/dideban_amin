@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"database/sql"
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -37,33 +38,37 @@ func adminFromContext(r *http.Request) (AdminSession, bool) {
 }
 
 type AdminSession struct {
-	Token       string    `json:"token"`
-	Username    string    `json:"username"`
-	FullName    string    `json:"full_name"`
-	Title       string    `json:"role_title"`
-	Role        string    `json:"role"`
-	IsSuperuser bool      `json:"is_superuser"`
-	IP          string    `json:"ip"`
-	UserAgent   string    `json:"user_agent"`
-	CreatedAt   time.Time `json:"created_at"`
-	LastActive  time.Time `json:"last_active"`
-	Expiry      time.Time `json:"expiry"`
+	Token                  string    `json:"token"`
+	Username               string    `json:"username"`
+	FullName               string    `json:"full_name"`
+	Title                  string    `json:"role_title"`
+	Role                   string    `json:"role"`
+	IsSuperuser            bool      `json:"is_superuser"`
+	IP                     string    `json:"ip"`
+	UserAgent              string    `json:"user_agent"`
+	Requires2FASetup       bool      `json:"requires_2fa_setup"`
+	RequiresPasswordChange bool      `json:"requires_password_change"`
+	CreatedAt              time.Time `json:"created_at"`
+	LastActive             time.Time `json:"last_active"`
+	Expiry                 time.Time `json:"expiry"`
 }
 
 type ActiveSessionItem struct {
-	SessionID   string `json:"session_id"`
-	Token       string `json:"token"`
-	Username    string `json:"username"`
-	FullName    string `json:"full_name"`
-	RoleTitle   string `json:"role_title"`
-	Role        string `json:"role"`
-	IsSuperuser bool   `json:"is_superuser"`
-	IP          string `json:"ip"`
-	UserAgent   string `json:"user_agent"`
-	CreatedAt   string `json:"created_at"`
-	LastActive  string `json:"last_active"`
-	Expiry      string `json:"expiry"`
-	TTLSeconds  int64  `json:"ttl_seconds"`
+	SessionID              string `json:"session_id"`
+	Token                  string `json:"token"`
+	Username               string `json:"username"`
+	FullName               string `json:"full_name"`
+	RoleTitle              string `json:"role_title"`
+	Role                   string `json:"role"`
+	IsSuperuser            bool   `json:"is_superuser"`
+	IP                     string `json:"ip"`
+	UserAgent              string `json:"user_agent"`
+	Requires2FASetup       bool   `json:"requires_2fa_setup"`
+	RequiresPasswordChange bool   `json:"requires_password_change"`
+	CreatedAt              string `json:"created_at"`
+	LastActive             string `json:"last_active"`
+	Expiry                 string `json:"expiry"`
+	TTLSeconds             int64  `json:"ttl_seconds"`
 }
 
 type cachedSession struct {
@@ -135,8 +140,8 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 			}
 		}
 
-		_, _ = db.Exec(`INSERT INTO admin_sessions (token_hash, username, full_name, role_title, role, is_superuser, ip, user_agent, created_at, last_active, expiry)
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+		_, _ = db.Exec(`INSERT INTO admin_sessions (token_hash, username, full_name, role_title, role, is_superuser, ip, user_agent, requires_2fa_setup, requires_password_change, created_at, last_active, expiry)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 			ON CONFLICT (token_hash) DO UPDATE SET
 				full_name = EXCLUDED.full_name,
 				role_title = EXCLUDED.role_title,
@@ -144,10 +149,13 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 				is_superuser = EXCLUDED.is_superuser,
 				ip = EXCLUDED.ip,
 				user_agent = EXCLUDED.user_agent,
+				requires_2fa_setup = EXCLUDED.requires_2fa_setup,
+				requires_password_change = EXCLUDED.requires_password_change,
 				last_active = EXCLUDED.last_active,
 				expiry = EXCLUDED.expiry`,
 			tokenHash, session.Username, session.FullName, session.Title, session.Role, session.IsSuperuser,
-			session.IP, session.UserAgent, session.CreatedAt, session.LastActive, session.Expiry)
+			session.IP, session.UserAgent, session.Requires2FASetup, session.RequiresPasswordChange,
+			session.CreatedAt, session.LastActive, session.Expiry)
 	}
 
 	sm.mu.Lock()
@@ -190,11 +198,12 @@ func (sm *SessionManager) Get(token string) (AdminSession, bool) {
 	if db := sm.getDB(); db != nil {
 		var s AdminSession
 		err := db.QueryRow(`
-			SELECT username, full_name, role_title, role, is_superuser, ip, user_agent, created_at, last_active, expiry
+			SELECT username, full_name, role_title, role, is_superuser, ip, user_agent, requires_2fa_setup, requires_password_change, created_at, last_active, expiry
 			FROM admin_sessions
 			WHERE token_hash = $1`, tokenHash).Scan(
 			&s.Username, &s.FullName, &s.Title, &s.Role, &s.IsSuperuser,
-			&s.IP, &s.UserAgent, &s.CreatedAt, &s.LastActive, &s.Expiry)
+			&s.IP, &s.UserAgent, &s.Requires2FASetup, &s.RequiresPasswordChange,
+			&s.CreatedAt, &s.LastActive, &s.Expiry)
 		if err == nil {
 			if now.After(s.Expiry) || now.Sub(s.LastActive) > 15*time.Minute || now.Sub(s.CreatedAt) > 12*time.Hour {
 				sm.Delete(token)
@@ -352,7 +361,7 @@ func (sm *SessionManager) GetAllActiveSessions() []ActiveSessionItem {
 
 	if db := sm.getDB(); db != nil {
 		rows, err := db.Query(`
-			SELECT token_hash, username, full_name, role_title, role, is_superuser, ip, user_agent, created_at, last_active, expiry
+			SELECT token_hash, username, full_name, role_title, role, is_superuser, ip, user_agent, requires_2fa_setup, requires_password_change, created_at, last_active, expiry
 			FROM admin_sessions
 			WHERE expiry > NOW()
 			ORDER BY last_active DESC`)
@@ -361,9 +370,9 @@ func (sm *SessionManager) GetAllActiveSessions() []ActiveSessionItem {
 			var list []ActiveSessionItem
 			for rows.Next() {
 				var tokenHash, username, fullName, roleTitle, role, ip, userAgent string
-				var isSuperuser bool
+				var isSuperuser, req2FA, reqPwd bool
 				var createdAt, lastActive, expiry time.Time
-				if err := rows.Scan(&tokenHash, &username, &fullName, &roleTitle, &role, &isSuperuser, &ip, &userAgent, &createdAt, &lastActive, &expiry); err == nil {
+				if err := rows.Scan(&tokenHash, &username, &fullName, &roleTitle, &role, &isSuperuser, &ip, &userAgent, &req2FA, &reqPwd, &createdAt, &lastActive, &expiry); err == nil {
 					ttl := int64(expiry.Sub(now).Seconds())
 					if ttl < 0 {
 						ttl = 0
@@ -375,19 +384,21 @@ func (sm *SessionManager) GetAllActiveSessions() []ActiveSessionItem {
 					}
 					sessID := "SES-" + strings.ToUpper(shortHash)
 					list = append(list, ActiveSessionItem{
-						SessionID:   sessID,
-						Token:       cleanHash,
-						Username:    username,
-						FullName:    fullName,
-						RoleTitle:   roleTitle,
-						Role:        role,
-						IsSuperuser: isSuperuser,
-						IP:          ip,
-						UserAgent:   userAgent,
-						CreatedAt:   createdAt.Format(time.RFC3339),
-						LastActive:  lastActive.Format(time.RFC3339),
-						Expiry:      expiry.Format(time.RFC3339),
-						TTLSeconds:  ttl,
+						SessionID:              sessID,
+						Token:                  cleanHash,
+						Username:               username,
+						FullName:               fullName,
+						RoleTitle:              roleTitle,
+						Role:                   role,
+						IsSuperuser:            isSuperuser,
+						IP:                     ip,
+						UserAgent:              userAgent,
+						Requires2FASetup:       req2FA,
+						RequiresPasswordChange: reqPwd,
+						CreatedAt:              createdAt.Format(time.RFC3339),
+						LastActive:             lastActive.Format(time.RFC3339),
+						Expiry:                 expiry.Format(time.RFC3339),
+						TTLSeconds:             ttl,
 					})
 				}
 			}
@@ -410,19 +421,21 @@ func (sm *SessionManager) GetAllActiveSessions() []ActiveSessionItem {
 			}
 			sessID := "SES-" + strings.ToUpper(fmt.Sprintf("%x", sha256.Sum256([]byte(token)))[:8])
 			list = append(list, ActiveSessionItem{
-				SessionID:   sessID,
-				Token:       token,
-				Username:    s.Username,
-				FullName:    s.FullName,
-				RoleTitle:   s.Title,
-				Role:        s.Role,
-				IsSuperuser: s.IsSuperuser,
-				IP:          s.IP,
-				UserAgent:   s.UserAgent,
-				CreatedAt:   s.CreatedAt.Format(time.RFC3339),
-				LastActive:  s.LastActive.Format(time.RFC3339),
-				Expiry:      s.Expiry.Format(time.RFC3339),
-				TTLSeconds:  ttl,
+				SessionID:              sessID,
+				Token:                  token,
+				Username:               s.Username,
+				FullName:               s.FullName,
+				RoleTitle:              s.Title,
+				Role:                   s.Role,
+				IsSuperuser:            s.IsSuperuser,
+				IP:                     s.IP,
+				UserAgent:              s.UserAgent,
+				Requires2FASetup:       s.Requires2FASetup,
+				RequiresPasswordChange: s.RequiresPasswordChange,
+				CreatedAt:              s.CreatedAt.Format(time.RFC3339),
+				LastActive:             s.LastActive.Format(time.RFC3339),
+				Expiry:                 s.Expiry.Format(time.RFC3339),
+				TTLSeconds:             ttl,
 			})
 		}
 	}
@@ -702,18 +715,32 @@ func (alm *AccountLockoutManager) getDB() *sql.DB {
 	if db != nil {
 		return db
 	}
-	if alm == Lockouts && DB != nil {
+	if alm != Lockouts {
+		panic("FATAL: AccountLockoutManager called before database initialization")
+	}
+	if DB != nil {
 		alm.init(DB)
 		return DB
+	}
+	if os.Getenv("HERASAT_DEV_MODE") == "1" || flag.Lookup("test.v") != nil {
+		return nil
 	}
 	panic("FATAL: AccountLockoutManager called before database initialization")
 }
 
-func (alm *AccountLockoutManager) IsLocked(username string) (bool, time.Duration) {
+func (alm *AccountLockoutManager) IsLocked(username string, ip ...string) (bool, time.Duration) {
 	now := time.Now()
+	ipStr := ""
+	if len(ip) > 0 {
+		ipStr = strings.TrimSpace(ip[0])
+	}
+	key := username
+	if ipStr != "" {
+		key = username + "@" + ipStr
+	}
 
 	alm.mu.Lock()
-	cached, exists := alm.accounts[username]
+	cached, exists := alm.accounts[key]
 	if exists && now.Sub(cached.cachedAt) < 1*time.Second {
 		if now.Before(cached.lockedUntil) {
 			dur := time.Until(cached.lockedUntil)
@@ -721,7 +748,7 @@ func (alm *AccountLockoutManager) IsLocked(username string) (bool, time.Duration
 			return true, dur
 		}
 		if !cached.lockedUntil.IsZero() {
-			delete(alm.accounts, username)
+			delete(alm.accounts, key)
 		}
 		alm.mu.Unlock()
 		return false, 0
@@ -731,8 +758,14 @@ func (alm *AccountLockoutManager) IsLocked(username string) (bool, time.Duration
 	if db := alm.getDB(); db != nil {
 		var failures int
 		var lockedUntil sql.NullTime
-		err := db.QueryRow(`SELECT consecutive_failures, locked_until FROM admin_login_attempts WHERE username = $1`, username).
-			Scan(&failures, &lockedUntil)
+		var err error
+		if ipStr != "" {
+			err = db.QueryRow(`SELECT consecutive_failures, locked_until FROM admin_login_attempts WHERE username = $1 AND ip = $2`, username, ipStr).
+				Scan(&failures, &lockedUntil)
+		} else {
+			err = db.QueryRow(`SELECT consecutive_failures, locked_until FROM admin_login_attempts WHERE username = $1 ORDER BY consecutive_failures DESC LIMIT 1`, username).
+				Scan(&failures, &lockedUntil)
+		}
 		if err == nil {
 			var lTime time.Time
 			if lockedUntil.Valid {
@@ -740,7 +773,7 @@ func (alm *AccountLockoutManager) IsLocked(username string) (bool, time.Duration
 			}
 
 			alm.mu.Lock()
-			alm.accounts[username] = &cachedAccountFailure{
+			alm.accounts[key] = &cachedAccountFailure{
 				consecutiveFailures: failures,
 				lockedUntil:         lTime,
 				cachedAt:            now,
@@ -754,7 +787,7 @@ func (alm *AccountLockoutManager) IsLocked(username string) (bool, time.Duration
 		}
 		if err == sql.ErrNoRows {
 			alm.mu.Lock()
-			delete(alm.accounts, username)
+			delete(alm.accounts, key)
 			alm.mu.Unlock()
 			return false, 0
 		}
@@ -763,35 +796,43 @@ func (alm *AccountLockoutManager) IsLocked(username string) (bool, time.Duration
 	alm.mu.Lock()
 	defer alm.mu.Unlock()
 
-	if info, ok := alm.accounts[username]; ok {
+	if info, ok := alm.accounts[key]; ok {
 		if now.Before(info.lockedUntil) {
 			return true, time.Until(info.lockedUntil)
 		}
 		if !info.lockedUntil.IsZero() {
-			delete(alm.accounts, username)
+			delete(alm.accounts, key)
 		}
 	}
 	return false, 0
 }
 
-func (alm *AccountLockoutManager) RecordFailure(username string) (consecutiveFailures int, justLocked bool) {
+func (alm *AccountLockoutManager) RecordFailure(username string, ip ...string) (consecutiveFailures int, justLocked bool) {
 	now := time.Now()
+	ipStr := ""
+	if len(ip) > 0 {
+		ipStr = strings.TrimSpace(ip[0])
+	}
+	key := username
+	if ipStr != "" {
+		key = username + "@" + ipStr
+	}
 
 	if db := alm.getDB(); db != nil {
 		var failures int
 		var lockedUntil sql.NullTime
 
 		err := db.QueryRow(`
-			INSERT INTO admin_login_attempts (username, consecutive_failures, locked_until, updated_at)
-			VALUES ($1, 1, NULL, NOW())
-			ON CONFLICT (username) DO UPDATE SET
+			INSERT INTO admin_login_attempts (username, ip, consecutive_failures, locked_until, updated_at)
+			VALUES ($1, $2, 1, NULL, NOW())
+			ON CONFLICT (username, ip) DO UPDATE SET
 				consecutive_failures = admin_login_attempts.consecutive_failures + 1,
 				locked_until = CASE
 					WHEN admin_login_attempts.consecutive_failures + 1 >= 5 THEN NOW() + INTERVAL '15 minutes'
 					ELSE admin_login_attempts.locked_until
 				END,
 				updated_at = NOW()
-			RETURNING consecutive_failures, locked_until`, username).Scan(&failures, &lockedUntil)
+			RETURNING consecutive_failures, locked_until`, username, ipStr).Scan(&failures, &lockedUntil)
 
 		if err == nil {
 			var lTime time.Time
@@ -801,7 +842,7 @@ func (alm *AccountLockoutManager) RecordFailure(username string) (consecutiveFai
 			justLocked = (failures == 5)
 
 			alm.mu.Lock()
-			alm.accounts[username] = &cachedAccountFailure{
+			alm.accounts[key] = &cachedAccountFailure{
 				consecutiveFailures: failures,
 				lockedUntil:         lTime,
 				cachedAt:            now,
@@ -815,10 +856,10 @@ func (alm *AccountLockoutManager) RecordFailure(username string) (consecutiveFai
 	alm.mu.Lock()
 	defer alm.mu.Unlock()
 
-	info, exists := alm.accounts[username]
+	info, exists := alm.accounts[key]
 	if !exists {
 		info = &cachedAccountFailure{cachedAt: now}
-		alm.accounts[username] = info
+		alm.accounts[key] = info
 	}
 
 	info.consecutiveFailures++
@@ -831,14 +872,45 @@ func (alm *AccountLockoutManager) RecordFailure(username string) (consecutiveFai
 	return info.consecutiveFailures, false
 }
 
-func (alm *AccountLockoutManager) Reset(username string) {
+func (alm *AccountLockoutManager) Reset(username string, ip ...string) {
+	ipStr := ""
+	if len(ip) > 0 {
+		ipStr = strings.TrimSpace(ip[0])
+	}
+
 	if db := alm.getDB(); db != nil {
-		_, _ = db.Exec(`DELETE FROM admin_login_attempts WHERE username = $1`, username)
+		if ipStr != "" {
+			_, _ = db.Exec(`DELETE FROM admin_login_attempts WHERE username = $1 AND ip = $2`, username, ipStr)
+		} else {
+			_, _ = db.Exec(`DELETE FROM admin_login_attempts WHERE username = $1`, username)
+		}
 	}
 
 	alm.mu.Lock()
 	defer alm.mu.Unlock()
-	delete(alm.accounts, username)
+
+	if ipStr != "" {
+		delete(alm.accounts, username+"@"+ipStr)
+	} else {
+		for k := range alm.accounts {
+			if k == username || strings.HasPrefix(k, username+"@") {
+				delete(alm.accounts, k)
+			}
+		}
+	}
+}
+
+func ProgressiveDelay(failures int) {
+	switch {
+	case failures <= 1:
+		time.Sleep(250 * time.Millisecond)
+	case failures == 2:
+		time.Sleep(500 * time.Millisecond)
+	case failures == 3:
+		time.Sleep(1 * time.Second)
+	default:
+		time.Sleep(2 * time.Second)
+	}
 }
 
 var (
