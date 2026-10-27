@@ -1105,6 +1105,9 @@ func ClassifyReportHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
+	rc := http.NewResponseController(w)
+	_ = rc.SetWriteDeadline(time.Now().Add(10 * time.Minute))
+
 	admin, ok := adminFromContext(r)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)

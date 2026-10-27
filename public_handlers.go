@@ -39,6 +39,7 @@ func inspectZipArchive(rawBytes []byte) error {
 	}
 
 	var totalUncompressedSize uint64
+	var totalCompressedSize uint64
 	const maxAllowedUncompressed = uint64(50 << 20)
 	const maxEntries = 1000
 
@@ -67,16 +68,24 @@ func inspectZipArchive(rawBytes []byte) error {
 			continue
 		}
 
+		totalCompressedSize += f.CompressedSize64
+
 		rc, err := f.Open()
 		if err != nil {
 			return fmt.Errorf("خطا در باز کردن محتوای آرشیو: %w", err)
 		}
 		lr := io.LimitReader(rc, int64(maxAllowedUncompressed+1))
 		var readCount uint64
+		var entryBuf bytes.Buffer
 		buf := make([]byte, 8192)
 		for {
 			n, rErr := lr.Read(buf)
-			readCount += uint64(n)
+			if n > 0 {
+				readCount += uint64(n)
+				if innerExt == ".pdf" || innerExt == ".docx" || innerExt == ".xlsx" {
+					entryBuf.Write(buf[:n])
+				}
+			}
 			if readCount > maxAllowedUncompressed {
 				_ = rc.Close()
 				return errors.New("حجم غیرفشرده فایل‌های داخل آرشیو بیش از حد مجاز است (Zip Bomb)")
@@ -96,9 +105,21 @@ func inspectZipArchive(rawBytes []byte) error {
 			return errors.New("حجم غیرفشرده فایل‌های داخل آرشیو بیش از حد مجاز است (Zip Bomb)")
 		}
 
-		if f.CompressedSize64 > 0 && (readCount/f.CompressedSize64) > 20 && readCount > (512<<10) {
-			return errors.New("نسبت فشرده‌سازی فایل غیرعادی و مشکوک است (Zip Bomb)")
+		if innerExt == ".pdf" {
+			if pdfErr := ScanPDFForActiveContent(entryBuf.Bytes()); pdfErr != nil {
+				return fmt.Errorf("فایل PDF داخل آرشیو «%s» غیرمجاز است: %w", cleanName, pdfErr)
+			}
 		}
+
+		if innerExt == ".docx" || innerExt == ".xlsx" {
+			if ooxmlErr := InspectOOXML(entryBuf.Bytes()); ooxmlErr != nil {
+				return fmt.Errorf("فایل آفیس داخل آرشیو «%s» غیرمجاز است: %w", cleanName, ooxmlErr)
+			}
+		}
+	}
+
+	if totalCompressedSize > 0 && (totalUncompressedSize/totalCompressedSize) > 50 && totalUncompressedSize > (1<<20) {
+		return errors.New("نسبت فشرده‌سازی فایل غیرعادی و مشکوک است (Zip Bomb)")
 	}
 
 	return nil
@@ -145,13 +166,23 @@ func generateTrackingCode() string {
 	return string(bytesArr)
 }
 
+var uploadLimiter = make(chan struct{}, 10)
+
 func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
+	select {
+	case uploadLimiter <- struct{}{}:
+		defer func() { <-uploadLimiter }()
+	default:
+		http.Error(w, "سامانه در حال حاضر تحت بار کاری بالا است. لطفاً چند لحظه بعد مجدداً تلاش فرمایید.", http.StatusServiceUnavailable)
+		return
+	}
+
 	rc := http.NewResponseController(w)
 	_ = rc.SetReadDeadline(time.Now().Add(5 * time.Minute))
 
 	r.Body = http.MaxBytesReader(w, r.Body, 20<<20)
 
-	if err := r.ParseMultipartForm(20 << 20); err != nil {
+	if err := r.ParseMultipartForm(1 << 20); err != nil {
 		http.Error(w, "Payload too large or malformed", http.StatusBadRequest)
 		return
 	}
@@ -343,6 +374,69 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
+			sniffBuf := make([]byte, 512)
+			n, sErr := io.ReadFull(file, sniffBuf)
+			if sErr != nil && sErr != io.EOF && sErr != io.ErrUnexpectedEOF {
+				file.Close()
+				cleanupDiskFiles()
+				http.Error(w, "Error reading file signature", http.StatusInternalServerError)
+				return
+			}
+			sniffBuf = sniffBuf[:n]
+
+			if len(sniffBuf) == 0 {
+				file.Close()
+				continue
+			}
+
+			isValidSignature, detectedMime := validateMagicBytes(sniffBuf, header.Filename)
+			if !isValidSignature {
+				file.Close()
+				cleanupDiskFiles()
+				http.Error(w, fmt.Sprintf("فرمت فایل «%s» غیرمجاز است یا ساختار باینری فایل با پسوند آن همخوانی ندارد.", header.Filename), http.StatusUnsupportedMediaType)
+				return
+			}
+			mimeType := detectedMime
+			ext := strings.ToLower(filepath.Ext(header.Filename))
+
+			if _, err := file.Seek(0, io.SeekStart); err != nil {
+				file.Close()
+				cleanupDiskFiles()
+				http.Error(w, "Error rewinding file stream", http.StatusInternalServerError)
+				return
+			}
+
+			clam := NewClamAVScanner()
+			if clam.IsEnabled() {
+				clean, _, scanErr := clam.ScanStream(file)
+				if scanErr != nil {
+					file.Close()
+					if errors.Is(scanErr, ErrMalwareDetected) {
+						logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_MALICIOUS_FILE", nil, "anonymous")
+						cleanupDiskFiles()
+						http.Error(w, "فایل ارسالی آلوده به بدافزار تشخیص داده شد", http.StatusBadRequest)
+						return
+					}
+					logAudit("system", "ANTIVIRUS", "CLAMAV_SERVICE_UNAVAILABLE", nil, "anonymous")
+					cleanupDiskFiles()
+					http.Error(w, "سامانه اسکن امنیتی موقتاً در دسترس نیست.", http.StatusServiceUnavailable)
+					return
+				}
+				if !clean {
+					file.Close()
+					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_MALICIOUS_FILE", nil, "anonymous")
+					cleanupDiskFiles()
+					http.Error(w, "فایل ارسالی آلوده به بدافزار تشخیص داده شد", http.StatusBadRequest)
+					return
+				}
+				if _, err := file.Seek(0, io.SeekStart); err != nil {
+					file.Close()
+					cleanupDiskFiles()
+					http.Error(w, "Error rewinding file stream", http.StatusInternalServerError)
+					return
+				}
+			}
+
 			rawBytes, err := io.ReadAll(file)
 			file.Close()
 			if err != nil {
@@ -350,19 +444,6 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "Error reading file content", http.StatusInternalServerError)
 				return
 			}
-
-			if len(rawBytes) == 0 {
-				continue
-			}
-
-			isValidSignature, detectedMime := validateMagicBytes(rawBytes, header.Filename)
-			if !isValidSignature {
-				cleanupDiskFiles()
-				http.Error(w, fmt.Sprintf("فرمت فایل «%s» غیرمجاز است یا ساختار باینری فایل با پسوند آن همخوانی ندارد.", header.Filename), http.StatusUnsupportedMediaType)
-				return
-			}
-			mimeType := detectedMime
-			ext := strings.ToLower(filepath.Ext(header.Filename))
 
 			if mimeType == "application/pdf" || ext == ".pdf" {
 				if pdfErr := ScanPDFForActiveContent(rawBytes); pdfErr != nil {
@@ -387,29 +468,6 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_UNSAFE_OOXML_PAYLOAD", nil, "anonymous")
 					cleanupDiskFiles()
 					http.Error(w, fmt.Sprintf("فایل آفیس «%s» غیرمجاز است: %v", header.Filename, ooxmlErr), http.StatusBadRequest)
-					return
-				}
-			}
-
-			clam := NewClamAVScanner()
-			if clam.IsEnabled() {
-				clean, _, scanErr := clam.ScanBytes(rawBytes)
-				if scanErr != nil {
-					if errors.Is(scanErr, ErrMalwareDetected) {
-						logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_MALICIOUS_FILE", nil, "anonymous")
-						cleanupDiskFiles()
-						http.Error(w, "فایل ارسالی آلوده به بدافزار تشخیص داده شد", http.StatusBadRequest)
-						return
-					}
-					logAudit("system", "ANTIVIRUS", "CLAMAV_SERVICE_UNAVAILABLE", nil, "anonymous")
-					cleanupDiskFiles()
-					http.Error(w, "سامانه اسکن امنیتی موقتاً در دسترس نیست.", http.StatusServiceUnavailable)
-					return
-				}
-				if !clean {
-					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_MALICIOUS_FILE", nil, "anonymous")
-					cleanupDiskFiles()
-					http.Error(w, "فایل ارسالی آلوده به بدافزار تشخیص داده شد", http.StatusBadRequest)
 					return
 				}
 			}
