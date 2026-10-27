@@ -683,6 +683,9 @@ func bootstrapInitialAdmin(db *sql.DB) {
 	}
 
 	rawPassword := strings.TrimSpace(os.Getenv("HERASAT_INITIAL_ADMIN_PASSWORD"))
+	if rawPassword != "" && len(rawPassword) < 12 {
+		log.Fatalf("FATAL: HERASAT_INITIAL_ADMIN_PASSWORD must be at least 12 characters long.")
+	}
 	if rawPassword == "" {
 		rawPassword = generateInitialPassword()
 		log.Printf("==================================================================")

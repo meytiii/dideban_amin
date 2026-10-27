@@ -146,9 +146,17 @@ func VerifyTOTPCode(username, secretBase32, code string) (bool, error) {
 		}
 
 		if subtle.ConstantTimeCompare([]byte(expectedCode), []byte(code)) == 1 {
-			replayKey := fmt.Sprintf("%s:%d", username, step)
+			replayKey := fmt.Sprintf("totp:%s:%d", username, step)
 			if exp, exists := totpReplays.used[replayKey]; exists && time.Now().Before(exp) {
 				return false, ErrTOTPReplayed
+			}
+			if DB != nil {
+				var exists bool
+				_ = DB.QueryRow("SELECT EXISTS(SELECT 1 FROM used_mfa_nonces WHERE nonce = $1 AND expires_at > NOW())", replayKey).Scan(&exists)
+				if exists {
+					return false, ErrTOTPReplayed
+				}
+				_, _ = DB.Exec("INSERT INTO used_mfa_nonces (nonce, expires_at) VALUES ($1, NOW() + INTERVAL '120 seconds') ON CONFLICT (nonce) DO UPDATE SET expires_at = EXCLUDED.expires_at", replayKey)
 			}
 
 			totpReplays.used[replayKey] = time.Now().Add(120 * time.Second)

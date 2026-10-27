@@ -875,10 +875,13 @@ func (alm *AccountLockoutManager) RecordFailure(username string, ip ...string) (
 			INSERT INTO admin_login_attempts (username, ip, consecutive_failures, locked_until, updated_at)
 			VALUES ($1, $2, 1, NULL, NOW())
 			ON CONFLICT (username, ip) DO UPDATE SET
-				consecutive_failures = admin_login_attempts.consecutive_failures + 1,
+				consecutive_failures = CASE
+					WHEN admin_login_attempts.updated_at < NOW() - INTERVAL '15 minutes' THEN 1
+					ELSE admin_login_attempts.consecutive_failures + 1
+				END,
 				locked_until = CASE
-					WHEN admin_login_attempts.consecutive_failures + 1 >= 5 THEN NOW() + INTERVAL '15 minutes'
-					ELSE admin_login_attempts.locked_until
+					WHEN (CASE WHEN admin_login_attempts.updated_at < NOW() - INTERVAL '15 minutes' THEN 1 ELSE admin_login_attempts.consecutive_failures + 1 END) >= 5 THEN NOW() + INTERVAL '15 minutes'
+					ELSE NULL
 				END,
 				updated_at = NOW()
 			RETURNING consecutive_failures, locked_until`, username, ipStr).Scan(&failures, &lockedUntil)
@@ -906,13 +909,14 @@ func (alm *AccountLockoutManager) RecordFailure(username string, ip ...string) (
 	defer alm.mu.Unlock()
 
 	info, exists := alm.accounts[key]
-	if !exists {
-		info = &cachedAccountFailure{cachedAt: now}
+	if !exists || now.Sub(info.cachedAt) > 15*time.Minute {
+		info = &cachedAccountFailure{cachedAt: now, consecutiveFailures: 1}
 		alm.accounts[key] = info
+	} else {
+		info.consecutiveFailures++
+		info.cachedAt = now
 	}
 
-	info.consecutiveFailures++
-	info.cachedAt = now
 	if info.consecutiveFailures >= 5 {
 		info.lockedUntil = now.Add(15 * time.Minute)
 		return info.consecutiveFailures, true

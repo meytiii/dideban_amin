@@ -72,7 +72,11 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		&totpSecret, &totpEnabled, &totpEnforced, &lastLoginAt, &dbNow)
 	if err != nil {
 		_ = VerifyPassword(creds.Password, dummyArgon2Hash)
-		ProgressiveDelay(1)
+		failures, justLocked := Lockouts.RecordFailure(creds.Username, clientIP)
+		ProgressiveDelay(failures)
+		if justLocked {
+			logAudit(safeUsername, "UNKNOWN", "ACCOUNT_LOCKED", nil, clientIP)
+		}
 		logAudit(safeUsername, "UNKNOWN", "FAILED_LOGIN", nil, clientIP)
 		http.Error(w, "نام کاربری یا رمز عبور اشتباه است.", http.StatusUnauthorized)
 		return
