@@ -272,6 +272,16 @@ func normalizeForSearch(s string) string {
 	return b.String()
 }
 
+func ResolveTrackingCode(raw string) string {
+	if strings.HasPrefix(raw, "v2:") || strings.HasPrefix(raw, "v3:") {
+		dec, err := DecryptAES(raw)
+		if err == nil && dec != "" {
+			return dec
+		}
+	}
+	return raw
+}
+
 func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 	admin, ok := adminFromContext(r)
 	if !ok {
@@ -320,9 +330,11 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 		searchQuery = strings.TrimSpace(r.URL.Query().Get("search"))
 	}
 	if searchQuery != "" {
-		args = append(args, "%"+searchQuery+"%")
-		paramIdx := len(args)
-		whereClauses = append(whereClauses, fmt.Sprintf("(r.tracking_code ILIKE $%d OR r.category ILIKE $%d)", paramIdx, paramIdx))
+		hashVal := HashTrackingCode(searchQuery)
+		args = append(args, "%"+searchQuery+"%", hashVal)
+		likeIdx := len(args) - 1
+		hashIdx := len(args)
+		whereClauses = append(whereClauses, fmt.Sprintf("(r.tracking_code ILIKE $%d OR r.category ILIKE $%d OR r.tracking_code_hash = $%d)", likeIdx, likeIdx, hashIdx))
 	}
 
 	category := strings.TrimSpace(r.URL.Query().Get("category"))
@@ -475,6 +487,7 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 		if err := rows.Scan(&rep.ID, &rep.TrackingCode, &rep.Category, &rep.ReportType, &rep.Priority, &rep.IsRead, &rep.HasResponse, &createdAt, &rep.HasNewMessage, &rep.HasRegionalResponse, &rep.HasAnyRegionalResponse, &updatedAt, &readByName, &classification, &encDesc); err != nil {
 			continue
 		}
+		rep.TrackingCode = ResolveTrackingCode(rep.TrackingCode)
 		rep.CreatedAt = createdAt.Format(time.RFC3339)
 		rep.UpdatedAt = updatedAt.Format(time.RFC3339)
 		if readByName.Valid {
@@ -658,6 +671,8 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Database error", http.StatusInternalServerError)
 		return
 	}
+
+	rep.TrackingCode = ResolveTrackingCode(rep.TrackingCode)
 
 	if classification.Valid {
 		rep.Classification = classification.String
@@ -2276,9 +2291,102 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		ReportID  int64   `json:"report_id"`
 		ReportIDs []int64 `json:"report_ids"`
+		Action    string  `json:"action"`
+		PendingID int64   `json:"pending_id"`
+		Reason    string  `json:"reason"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "داده‌های درخواست نامعتبر است", http.StatusBadRequest)
+		return
+	}
+
+	twoPerson := strings.ToLower(strings.TrimSpace(os.Getenv("HERASAT_TWO_PERSON_DELETION"))) == "true"
+	if twoPerson {
+		if req.Action == "reject" {
+			if req.PendingID <= 0 {
+				http.Error(w, "شناسه درخواست نامعتبر است", http.StatusBadRequest)
+				return
+			}
+			res, err := DB.Exec("UPDATE pending_deletions SET status = 'rejected', approved_by = $1, approved_at = NOW() WHERE id = $2 AND status = 'pending'", admin.Username, req.PendingID)
+			if err != nil {
+				http.Error(w, "خطای پایگاه داده", http.StatusInternalServerError)
+				return
+			}
+			rowsAff, _ := res.RowsAffected()
+			if rowsAff == 0 {
+				http.Error(w, "درخواست در انتظار تأیید یافت نشد", http.StatusBadRequest)
+				return
+			}
+			logAuditWithDetail(admin.Username, admin.Title, "REJECT_REPORT_DELETION", nil, getIP(r), fmt.Sprintf("PENDING_ID:%d", req.PendingID))
+			w.Header().Set("Content-Type", "application/json")
+			w.Write([]byte(`{"status": "success", "message": "درخواست حذف پرونده رد گردید."}`))
+			return
+		}
+
+		if req.Action == "approve" {
+			if req.PendingID <= 0 {
+				http.Error(w, "شناسه درخواست نامعتبر است", http.StatusBadRequest)
+				return
+			}
+			var pendingID, repID int64
+			var requestedBy, status string
+			var createdAt time.Time
+			err := DB.QueryRow("SELECT id, report_id, requested_by, status, created_at FROM pending_deletions WHERE id = $1", req.PendingID).
+				Scan(&pendingID, &repID, &requestedBy, &status, &createdAt)
+			if err != nil || status != "pending" {
+				http.Error(w, "درخواست حذف معتبر در انتظار بررسی یافت نشد", http.StatusBadRequest)
+				return
+			}
+			if time.Since(createdAt) > 24*time.Hour {
+				_, _ = DB.Exec("UPDATE pending_deletions SET status = 'expired' WHERE id = $1", pendingID)
+				http.Error(w, "مهلت ۲۴ ساعته تأیید این درخواست منقضی گردیده است.", http.StatusBadRequest)
+				return
+			}
+			if requestedBy == admin.Username {
+				http.Error(w, "تأیید درخواست حذف باید توسط مدیر ارشد دیگری غیر از ثبت‌کننده اولیه انجام پذیرد.", http.StatusForbidden)
+				return
+			}
+
+			executeDeleteReportIDs(w, r, admin, []int64{repID}, req.Reason, func(tx *sql.Tx) error {
+				_, err := tx.Exec("UPDATE pending_deletions SET status = 'approved', approved_by = $1, approved_at = NOW() WHERE id = $2", admin.Username, pendingID)
+				return err
+			}, fmt.Sprintf("REQUESTED_BY:%s|PENDING_ID:%d", requestedBy, pendingID))
+			return
+		}
+
+		idMap := make(map[int64]bool)
+		if req.ReportID > 0 {
+			idMap[req.ReportID] = true
+		}
+		for _, id := range req.ReportIDs {
+			if id > 0 {
+				idMap[id] = true
+			}
+		}
+		var ids []int64
+		for id := range idMap {
+			ids = append(ids, id)
+		}
+		if len(ids) == 0 {
+			http.Error(w, "شناسه پرونده نامعتبر است", http.StatusBadRequest)
+			return
+		}
+
+		for _, id := range ids {
+			var pendID int64
+			err := DB.QueryRow("INSERT INTO pending_deletions (report_id, requested_by, reason, status) VALUES ($1, $2, $3, 'pending') RETURNING id",
+				id, admin.Username, req.Reason).Scan(&pendID)
+			if err != nil {
+				http.Error(w, "خطا در ثبت درخواست حذف پرونده", http.StatusInternalServerError)
+				return
+			}
+			repIDCopy := id
+			logAuditWithDetail(admin.Username, admin.Title, "REQUEST_REPORT_DELETION", &repIDCopy, getIP(r), fmt.Sprintf("PENDING_ID:%d|REASON:%s", pendID, req.Reason))
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusAccepted)
+		w.Write([]byte(`{"status": "pending_approval", "message": "درخواست حذف پرونده ثبت گردید و جهت اجرا نیازمند تأیید مدیر ارشد دوم می‌باشد."}`))
 		return
 	}
 
@@ -2291,17 +2399,19 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 			idMap[id] = true
 		}
 	}
-
 	var ids []int64
 	for id := range idMap {
 		ids = append(ids, id)
 	}
-
 	if len(ids) == 0 {
 		http.Error(w, "شناسه پرونده نامعتبر است", http.StatusBadRequest)
 		return
 	}
 
+	executeDeleteReportIDs(w, r, admin, ids, req.Reason, nil, fmt.Sprintf("REASON:%s", req.Reason))
+}
+
+func executeDeleteReportIDs(w http.ResponseWriter, r *http.Request, admin AdminSession, ids []int64, reason string, extraTxHook func(tx *sql.Tx) error, auditDetail string) {
 	var filesToDelete []string
 	rows, err := DB.Query("SELECT file_path FROM evidence_files WHERE report_id = ANY($1)", pq.Array(ids))
 	if err == nil {
@@ -2329,6 +2439,13 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer tx.Rollback()
 
+	if extraTxHook != nil {
+		if err := extraTxHook(tx); err != nil {
+			http.Error(w, "خطا در به‌روزرسانی وضعیت درخواست حذف", http.StatusInternalServerError)
+			return
+		}
+	}
+
 	_, err = tx.Exec("DELETE FROM reports WHERE id = ANY($1)", pq.Array(ids))
 	if err != nil {
 		http.Error(w, "خطا در حذف رکورد پرونده از پایگاه داده", http.StatusInternalServerError)
@@ -2337,7 +2454,7 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 
 	for _, repID := range ids {
 		repIDCopy := repID
-		if err := logAuditTx(tx, admin.Username, admin.Title, "DELETE_REPORT_AND_ATTACHMENTS", &repIDCopy, getIP(r)); err != nil {
+		if err := logAuditTxWithDetail(tx, admin.Username, admin.Title, "DELETE_REPORT_AND_ATTACHMENTS", &repIDCopy, getIP(r), auditDetail); err != nil {
 			http.Error(w, "سیستم ثبت لاگ با خطا مواجه شد. عملیات متوقف گردید.", http.StatusServiceUnavailable)
 			return
 		}
@@ -2367,6 +2484,117 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 		"message":       msg,
 		"deleted_count": len(ids),
 	})
+}
+
+func RedactReportHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	admin, ok := adminFromContext(r)
+	if !ok || !admin.IsSuperuser {
+		logAudit("UNKNOWN", "SECURITY_ALERT", "UNAUTHORIZED_REDACT_REPORT_ATTEMPT", nil, getIP(r))
+		http.Error(w, "دسترسی غیرمجاز: عملیات پاک‌سازی اطلاعات منحصراً در اختیار مدیر ارشد سامانه می‌باشد.", http.StatusForbidden)
+		return
+	}
+
+	var req struct {
+		ReportID      int64   `json:"report_id"`
+		RedactName    bool    `json:"redact_name"`
+		RedactPhone   bool    `json:"redact_phone"`
+		RedactDesc    bool    `json:"redact_description"`
+		RedactFileIDs []int64 `json:"redact_file_ids"`
+		Reason        string  `json:"reason"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.ReportID <= 0 {
+		http.Error(w, "داده‌های درخواست نامعتبر است", http.StatusBadRequest)
+		return
+	}
+
+	var exists bool
+	err := DB.QueryRow("SELECT EXISTS(SELECT 1 FROM reports WHERE id = $1)", req.ReportID).Scan(&exists)
+	if err != nil || !exists {
+		http.Error(w, "پرونده مورد نظر یافت نشد.", http.StatusNotFound)
+		return
+	}
+
+	marker := fmt.Sprintf("[حذف امنیتی توسط %s در %s]", admin.Username, time.Now().Format("2006-01-02 15:04:05"))
+	encMarker, err := EncryptAES(marker)
+	if err != nil {
+		http.Error(w, "خطا در رمزنگاری شناسه جایگزین", http.StatusInternalServerError)
+		return
+	}
+
+	tx, err := DB.BeginTx(r.Context(), nil)
+	if err != nil {
+		http.Error(w, "خطای پایگاه داده", http.StatusInternalServerError)
+		return
+	}
+	defer tx.Rollback()
+
+	var redactedFields []string
+
+	if req.RedactName {
+		_, err := tx.Exec("UPDATE reports SET reporter_name = $1, updated_at = NOW() WHERE id = $2", encMarker, req.ReportID)
+		if err != nil {
+			http.Error(w, "خطا در حذف نام گزارش‌دهنده", http.StatusInternalServerError)
+			return
+		}
+		redactedFields = append(redactedFields, "reporter_name")
+	}
+
+	if req.RedactPhone {
+		_, err := tx.Exec("UPDATE reports SET reporter_phone = $1, updated_at = NOW() WHERE id = $2", encMarker, req.ReportID)
+		if err != nil {
+			http.Error(w, "خطا در حذف شماره گزارش‌دهنده", http.StatusInternalServerError)
+			return
+		}
+		redactedFields = append(redactedFields, "reporter_phone")
+	}
+
+	if req.RedactDesc {
+		_, err := tx.Exec("UPDATE reports SET description = $1, updated_at = NOW() WHERE id = $2", encMarker, req.ReportID)
+		if err != nil {
+			http.Error(w, "خطا در حذف شرح گزارش", http.StatusInternalServerError)
+			return
+		}
+		redactedFields = append(redactedFields, "description")
+	}
+
+	absUploadDir, _ := filepath.Abs("./secure_uploads")
+	for _, fID := range req.RedactFileIDs {
+		if fID <= 0 {
+			continue
+		}
+		var encPath string
+		err := tx.QueryRow("SELECT file_path FROM evidence_files WHERE id = $1 AND report_id = $2", fID, req.ReportID).Scan(&encPath)
+		if err == nil {
+			if realPath, err := DecryptAES(encPath); err == nil {
+				cleanPath := filepath.Clean(realPath)
+				absFilePath, err := filepath.Abs(cleanPath)
+				if err == nil && isWithinDirectory(absUploadDir, absFilePath) {
+					_ = os.Remove(absFilePath)
+				}
+			}
+			_, _ = tx.Exec("UPDATE evidence_files SET file_name = $1, file_hash = '', file_path = '' WHERE id = $2 AND report_id = $3", encMarker, fID, req.ReportID)
+			redactedFields = append(redactedFields, fmt.Sprintf("file_%d", fID))
+		}
+	}
+
+	detail := fmt.Sprintf("FIELDS:%s|REASON:%s", strings.Join(redactedFields, ","), req.Reason)
+	if err := logAuditTxWithDetail(tx, admin.Username, admin.Title, "REPORT_REDACTION", &req.ReportID, getIP(r), detail); err != nil {
+		http.Error(w, "سیستم ثبت لاگ با خطا مواجه شد", http.StatusServiceUnavailable)
+		return
+	}
+
+	if err := tx.Commit(); err != nil {
+		http.Error(w, "خطا در ثبت نهایی تغییرات", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "بخش‌های مشخص‌شده از پرونده با موفقیت پاک‌سازی شدند."}`))
 }
 
 type AnalyticsResponse struct {
@@ -2752,6 +2980,7 @@ func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "پرونده گزارش مورد نظر یافت نشد.", http.StatusNotFound)
 		return
 	}
+	trackingCode = ResolveTrackingCode(trackingCode)
 
 	type validRecip struct {
 		id       int64
@@ -3473,6 +3702,7 @@ func SubmitRegionalResponseHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "پرونده یافت نشد.", http.StatusNotFound)
 		return
 	}
+	trackingCode = ResolveTrackingCode(trackingCode)
 
 	encResp, err := EncryptAES(req.Response)
 	if err != nil {

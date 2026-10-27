@@ -274,6 +274,7 @@ func main() {
 	mux.HandleFunc("POST /api/admin/change-my-password", AdminAuthMiddleware(CSRFMiddleware(RateLimitMiddleware(loginLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(ChangeMyPasswordHandler))))))
 
 	mux.HandleFunc("POST /api/admin/report/delete", SuperuserAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(DeleteReportHandler)))))
+	mux.HandleFunc("POST /api/admin/report/redact", SuperuserAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(RedactReportHandler)))))
 	mux.HandleFunc("GET /api/admin/users", SuperuserAuthMiddleware(GetUsersHandler))
 	mux.HandleFunc("POST /api/admin/users/create", SuperuserAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(CreateUserHandler)))))
 	mux.HandleFunc("POST /api/admin/users/update", SuperuserAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(UpdateUserHandler)))))

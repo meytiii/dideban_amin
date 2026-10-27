@@ -269,6 +269,12 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	trackingCode := generateTrackingCode()
+	trackingHash := HashTrackingCode(trackingCode)
+	encTrackingCode, err := EncryptAES(trackingCode)
+	if err != nil {
+		http.Error(w, "Encryption engine failure", http.StatusInternalServerError)
+		return
+	}
 
 	tx, err := DB.Begin()
 	if err != nil {
@@ -286,9 +292,9 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 
 	var reportID int64
 	err = tx.QueryRow(`
-		INSERT INTO reports (tracking_code, category, report_type, priority, internal_notes, reporter_name, reporter_phone, description)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
-		trackingCode, category, reportType, initialPriority, initialNotes, encName, encPhone, encDesc).Scan(&reportID)
+		INSERT INTO reports (tracking_code, tracking_code_hash, category, report_type, priority, internal_notes, reporter_name, reporter_phone, description)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+		encTrackingCode, trackingHash, category, reportType, initialPriority, initialNotes, encName, encPhone, encDesc).Scan(&reportID)
 	if err != nil {
 		http.Error(w, "Failed to save report data", http.StatusInternalServerError)
 		return
@@ -521,10 +527,11 @@ func TrackReportHandler(w http.ResponseWriter, r *http.Request) {
 	var respAt sql.NullTime
 	var reportID int64
 
+	trackingHash := HashTrackingCode(req.TrackingCode)
 	err := DB.QueryRow(`
 		SELECT id, tracking_code, category, is_read, created_at, admin_response, responded_at
 		FROM reports
-		WHERE tracking_code = $1`, req.TrackingCode).
+		WHERE tracking_code_hash = $1 OR tracking_code = $2`, trackingHash, req.TrackingCode).
 		Scan(&reportID, &status.TrackingCode, &status.Category, &status.IsRead, &createdAt, &encResponse, &respAt)
 
 	if err == sql.ErrNoRows {
@@ -534,6 +541,8 @@ func TrackReportHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Database error", http.StatusInternalServerError)
 		return
 	}
+
+	status.TrackingCode = req.TrackingCode
 
 	status.CreatedAt = createdAt.Format(time.RFC3339)
 	if respAt.Valid {
@@ -630,8 +639,9 @@ func SubmitFollowUpHandler(w http.ResponseWriter, r *http.Request) {
 		logAudit("anonymous_user", "PUBLIC_REPORTER", "FLAGGED_VULGAR_FOLLOWUP", nil, "anonymous")
 	}
 
+	trackingHash := HashTrackingCode(req.TrackingCode)
 	var reportID int64
-	err := DB.QueryRow("SELECT id FROM reports WHERE tracking_code = $1", req.TrackingCode).Scan(&reportID)
+	err := DB.QueryRow("SELECT id FROM reports WHERE tracking_code_hash = $1 OR tracking_code = $2", trackingHash, req.TrackingCode).Scan(&reportID)
 	if err == sql.ErrNoRows {
 		http.Error(w, "گزارشی با این کد پیگیری یافت نشد.", http.StatusNotFound)
 		return

@@ -3,7 +3,8 @@ REVOKE ALL ON SCHEMA public FROM PUBLIC;
 
 CREATE TABLE IF NOT EXISTS reports (
     id BIGSERIAL PRIMARY KEY,
-    tracking_code VARCHAR(32) UNIQUE NOT NULL,
+    tracking_code TEXT NOT NULL,
+    tracking_code_hash VARCHAR(64) DEFAULT NULL,
     category VARCHAR(64) NOT NULL,
     report_type VARCHAR(32) NOT NULL,
     priority VARCHAR(32) NOT NULL DEFAULT 'normal',
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS reports (
 );
 
 CREATE INDEX IF NOT EXISTS idx_reports_tracking_code ON reports(tracking_code);
+CREATE INDEX IF NOT EXISTS idx_reports_tracking_hash ON reports(tracking_code_hash);
 CREATE INDEX IF NOT EXISTS idx_reports_is_read ON reports(is_read);
 CREATE INDEX IF NOT EXISTS idx_reports_priority ON reports(priority);
 CREATE INDEX IF NOT EXISTS idx_reports_has_new_message ON reports(has_new_message);
@@ -192,6 +194,19 @@ CREATE TABLE IF NOT EXISTS used_mfa_nonces (
 );
 
 CREATE INDEX IF NOT EXISTS idx_used_mfa_nonces_expiry ON used_mfa_nonces(expires_at);
+
+CREATE TABLE IF NOT EXISTS pending_deletions (
+    id BIGSERIAL PRIMARY KEY,
+    report_id BIGINT NOT NULL REFERENCES reports(id) ON DELETE CASCADE,
+    requested_by VARCHAR(64) NOT NULL,
+    reason TEXT NOT NULL,
+    requested_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    status VARCHAR(32) NOT NULL DEFAULT 'pending',
+    approved_by VARCHAR(64) DEFAULT NULL,
+    approved_at TIMESTAMPTZ DEFAULT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_pending_del_status ON pending_deletions(status);
 
 CREATE OR REPLACE FUNCTION touch_reports_updated_at()
 RETURNS TRIGGER AS $$

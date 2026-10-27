@@ -9,6 +9,7 @@ import (
 	"crypto/sha256"
 	"crypto/subtle"
 	"encoding/base64"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -27,6 +28,7 @@ var (
 	legacyHmacKey []byte
 	keyCaptcha    []byte
 	keyAudit      []byte
+	keyBackup     []byte
 )
 
 func isKnownPlaceholderKey(k string) bool {
@@ -86,6 +88,7 @@ func InitCrypto(key string) {
 	hLegacy := sha256.Sum256(append(aesKey, []byte("HERASAT_CAPTCHA_HMAC_V1")...))
 	legacyHmacKey = hLegacy[:]
 	keyAudit = deriveKey(aesKey, "HERASAT_AUDIT_LOG_CHAIN_HMAC_V1")
+	keyBackup = deriveKey(aesKey, "HERASAT_BACKUP_ENCRYPTION_V1")
 }
 
 func GetHMACKey() []byte {
@@ -107,12 +110,91 @@ func GetAuditHMACKey() []byte {
 	return h[:]
 }
 
+func GetBackupKey() []byte {
+	if len(keyBackup) > 0 {
+		return keyBackup
+	}
+	if len(aesKey) > 0 {
+		return deriveKey(aesKey, "HERASAT_BACKUP_ENCRYPTION_V1")
+	}
+	h := sha256.Sum256([]byte("TEST_DEFAULT_BACKUP_KEY_32BYTES!"))
+	return h[:]
+}
+
+func HashTrackingCode(trackingCode string) string {
+	norm := strings.TrimSpace(trackingCode)
+	mac := hmac.New(sha256.New, GetAuditHMACKey())
+	mac.Write([]byte("TRACK:" + norm))
+	return hex.EncodeToString(mac.Sum(nil))
+}
+
+func EncryptWithAAD(key []byte, prefix string, aad, plaintext []byte) (string, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return "", err
+	}
+	aesgcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return "", err
+	}
+	nonce := make([]byte, aesgcm.NonceSize())
+	if _, err = io.ReadFull(rand.Reader, nonce); err != nil {
+		return "", err
+	}
+	ciphertext := aesgcm.Seal(nonce, nonce, plaintext, aad)
+	return prefix + base64.StdEncoding.EncodeToString(ciphertext), nil
+}
+
+func DecryptWithAAD(key []byte, b64Ciphertext string, aad []byte) ([]byte, error) {
+	ciphertext, err := base64.StdEncoding.DecodeString(b64Ciphertext)
+	if err != nil {
+		return nil, err
+	}
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	aesgcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return nil, err
+	}
+	nonceSize := aesgcm.NonceSize()
+	if len(ciphertext) < nonceSize {
+		return nil, errors.New("ciphertext too short")
+	}
+	nonce, ct := ciphertext[:nonceSize], ciphertext[nonceSize:]
+	plaintext, err := aesgcm.Open(nil, nonce, ct, aad)
+	if err != nil {
+		return nil, err
+	}
+	return plaintext, nil
+}
+
+func EncryptBoundField(table, column string, rowID int64, plaintext string) (string, error) {
+	aad := []byte(fmt.Sprintf("%s:%s:%d", table, column, rowID))
+	return EncryptWithAAD(keyFields, "v3:1:f:", aad, []byte(plaintext))
+}
+
+func DecryptBoundField(table, column string, rowID int64, rawCiphertext string) (string, error) {
+	if rawCiphertext == "" {
+		return "", nil
+	}
+	aad := []byte(fmt.Sprintf("%s:%s:%d", table, column, rowID))
+	if strings.HasPrefix(rawCiphertext, "v3:1:f:") {
+		pt, err := DecryptWithAAD(keyFields, strings.TrimPrefix(rawCiphertext, "v3:1:f:"), aad)
+		if err == nil {
+			return string(pt), nil
+		}
+	}
+	return DecryptAES(rawCiphertext)
+}
+
 func EncryptAES(plaintext string) (string, error) {
-	return encryptWithKey(keyFields, "v2:f:", plaintext)
+	return EncryptWithAAD(keyFields, "v3:1:f:", nil, []byte(plaintext))
 }
 
 func EncryptFilePath(plaintext string) (string, error) {
-	return encryptWithKey(keyFilePath, "v2:p:", plaintext)
+	return EncryptWithAAD(keyFilePath, "v3:1:p:", nil, []byte(plaintext))
 }
 
 func encryptWithKey(key []byte, prefix, plaintext string) (string, error) {
@@ -143,6 +225,20 @@ var (
 func DecryptAES(rawCiphertext string) (string, error) {
 	if rawCiphertext == "" {
 		return "", nil
+	}
+
+	if strings.HasPrefix(rawCiphertext, "v3:1:f:") {
+		pt, err := DecryptWithAAD(keyFields, strings.TrimPrefix(rawCiphertext, "v3:1:f:"), nil)
+		if err == nil {
+			return string(pt), nil
+		}
+	}
+
+	if strings.HasPrefix(rawCiphertext, "v3:1:p:") {
+		pt, err := DecryptWithAAD(keyFilePath, strings.TrimPrefix(rawCiphertext, "v3:1:p:"), nil)
+		if err == nil {
+			return string(pt), nil
+		}
 	}
 
 	if strings.HasPrefix(rawCiphertext, "v2:p:") {
@@ -276,7 +372,7 @@ func EncryptFileBytes(rawBytes []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	header := []byte("HENC\x02")
+	header := []byte("HENC\x03")
 	out := append(header, nonce...)
 	encrypted := aesgcm.Seal(out, nonce, rawBytes, nil)
 	return encrypted, nil
@@ -285,6 +381,9 @@ func EncryptFileBytes(rawBytes []byte) ([]byte, error) {
 func DecryptFileBytes(encryptedBytes []byte) ([]byte, error) {
 	if len(encryptedBytes) == 0 {
 		return nil, ErrAuthenticationFailed
+	}
+	if bytes.HasPrefix(encryptedBytes, []byte("HENC\x03")) {
+		return decryptFilePayload(keyFileBlob, encryptedBytes, 5)
 	}
 	if bytes.HasPrefix(encryptedBytes, []byte("HENC\x02")) {
 		return decryptFilePayload(keyFileBlob, encryptedBytes, 5)

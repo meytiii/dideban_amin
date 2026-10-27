@@ -131,8 +131,8 @@ func TestHKDFKeySeparationAndEncryption(t *testing.T) {
 	if err != nil {
 		t.Fatalf("EncryptAES failed: %v", err)
 	}
-	if !strings.HasPrefix(encField, "v2:f:") {
-		t.Fatalf("Expected v2:f: prefix, got %s", encField)
+	if !strings.HasPrefix(encField, "v3:1:f:") {
+		t.Fatalf("Expected v3:1:f: prefix, got %s", encField)
 	}
 	decField, err := DecryptAES(encField)
 	if err != nil {
@@ -147,8 +147,8 @@ func TestHKDFKeySeparationAndEncryption(t *testing.T) {
 	if err != nil {
 		t.Fatalf("EncryptFilePath failed: %v", err)
 	}
-	if !strings.HasPrefix(encPath, "v2:p:") {
-		t.Fatalf("Expected v2:p: prefix, got %s", encPath)
+	if !strings.HasPrefix(encPath, "v3:1:p:") {
+		t.Fatalf("Expected v3:1:p: prefix, got %s", encPath)
 	}
 	decPath, err := DecryptFilePath(encPath)
 	if err != nil {
@@ -171,8 +171,8 @@ func TestHKDFKeySeparationAndEncryption(t *testing.T) {
 	if err != nil {
 		t.Fatalf("EncryptFileBytes failed: %v", err)
 	}
-	if !bytes.HasPrefix(encBlob, []byte("HENC\x02")) {
-		t.Fatalf("Expected HENC\\x02 prefix, got %q", encBlob[:5])
+	if !bytes.HasPrefix(encBlob, []byte("HENC\x03")) {
+		t.Fatalf("Expected HENC\\x03 prefix, got %q", encBlob[:5])
 	}
 	decBlob, err := DecryptFileBytes(encBlob)
 	if err != nil {

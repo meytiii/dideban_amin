@@ -219,5 +219,61 @@ This document tracks all verified security findings, code modifications, operato
 - `audit_fail_test.go`: verified fail-closed rollback when audit logging fails.
 - Regression: `go test ./...` passed.
 
+## Phase 5: Cryptography, Data Protection & Safe Operations
+
+### Verified Findings
+1. **Plaintext Tracking Codes in Database**: `tracking_code` was stored in plaintext as `VARCHAR(32) UNIQUE NOT NULL`. A database read breach exposed all tracking codes, allowing unauthorized parties to query whistleblower reports and follow-up threads.
+2. **Missing Additional Authenticated Data (AAD) Context Binding**: AES-GCM ciphertexts lacked cryptographic binding to database columns and primary keys (`table:column:rowID`), allowing cut-and-paste ciphertext attacks between fields or rows.
+3. **Ciphertext Size Exceeding Tracking Code Column Limits**: Encrypted tracking code strings (`v3:1:f:...`) exceeded the legacy `VARCHAR(32)` column constraint.
+4. **Single-Admin Report Deletion Risk**: Full report deletion could be executed by a single compromised superuser account without dual authorization, risking destruction of whistleblowing evidence.
+5. **No Granular Report Redaction**: Operators had only binary options (keep entire report or delete entire report), forcing full deletions when only specific fields or attachments needed sanitization.
+6. **Unencrypted Backups & Process List Credential Leak**: Automated database backups produced unencrypted gzip SQL files on disk. Furthermore, `pg_dump` was invoked with `--dbname <full_conn_str>`, exposing plaintext database passwords to the system process list (`ps` / Task Manager).
+
+### Code Changes
+- **Keyed HMAC Tracking Code Lookup & At-Rest Encryption (`crypto.go`, `schema.sql`, `db.go`, `public_handlers.go`, `admin_handlers.go`)**:
+  - Implemented `HashTrackingCode`: computes deterministic keyed HMAC-SHA256 (`TRACK:<code_text>`) using `GetAuditHMACKey()`.
+  - Added `tracking_code_hash VARCHAR(64)` column and index `idx_reports_tracking_hash` on `reports`.
+  - Upgraded `reports.tracking_code` column from `VARCHAR(32)` to `TEXT` to accommodate AES-GCM ciphertexts.
+  - In `SubmitReportHandler`: generated tracking codes are hashed (`tracking_code_hash`) and encrypted at rest (`tracking_code`).
+  - In `TrackReportHandler` and `SubmitFollowUpHandler`: lookup uses `tracking_code_hash = $1 OR tracking_code = $2`.
+  - In `admin_handlers.go`: added `ResolveTrackingCode` helper to decrypt tracking codes for admin views and search queries match against `tracking_code_hash`.
+  - In `db.go`: added auto-migration (`migrateTrackingCodes`) to encrypt existing plaintext tracking codes and backfill `tracking_code_hash`.
+- **Ciphertext Context Binding & v3 AAD Encryption (`crypto.go`)**:
+  - Added `EncryptWithAAD` and `DecryptWithAAD` for AES-GCM with Additional Authenticated Data.
+  - Added `EncryptBoundField` and `DecryptBoundField` binding context as `table:column:rowID`.
+  - Upgraded field encryption to prefix `v3:1:f:` and file path encryption to `v3:1:p:`, with backward-compatible decryption of `v2:`, `v1:`, and raw ciphertexts.
+  - Upgraded `EncryptFileBytes` to header `HENC\x03`, preserving backward-compatible decryption for `HENC\x02` and `HENC\x01`.
+- **Two-Person Report Deletion Workflow (`admin_handlers.go`, `schema.sql`, `db.go`)**:
+  - Added `pending_deletions` table tracking `report_id`, `requested_by`, `reason`, `status`, and timestamps.
+  - In `DeleteReportHandler`: when `HERASAT_TWO_PERSON_DELETION=true`, deletion requests return HTTP 202 Accepted. A second distinct superuser must approve the request within 24 hours to trigger execution. Requests auto-expire after 24 hours. Self-approval is strictly forbidden (HTTP 403).
+- **Superuser Report Redaction Endpoint (`admin_handlers.go`, `main.go`)**:
+  - Added `POST /api/admin/report/redact` (superuser only).
+  - Enables granular redaction of `reporter_name`, `reporter_phone`, `description`, or specified attachment IDs.
+  - Replaces redacted content with `[حذف امنیتی توسط <username> در <date>]`, physically deletes attachments from disk, and logs a comprehensive audit entry with redacted field names and operator reason.
+- **Encrypted Backups & Safe Connection Strings (`backup.go`)**:
+  - Added `GetBackupKey()` derived from master key via `deriveKey(aesKey, "HERASAT_BACKUP_ENCRYPTION_V1")`.
+  - `PerformBackup`: creates a unified archive containing `database.sql` and `./secure_uploads/`, compresses with gzip, encrypts with AES-GCM using `GetBackupKey()` with AAD `HBAK_HEADER_V1`, prepends magic header `HBAK\x01`, and outputs `.hbak` files.
+  - `RestoreBackup`: verifies `HBAK\x01` header and AES-GCM authentication tag, extracts archive entries safely (with path traversal containment), and restores database SQL.
+  - `dumpViaPgDump`: parses connection strings to extract credentials and passes `PGPASSWORD` via environment variable, eliminating passwords from process table arguments.
+  - Added `isDockerContainerRunning` and fallback logic to guarantee dump reliability across environments.
+
+### Operator Impact
+- Report tracking codes are encrypted in the database; index lookups operate via blind HMAC hashing, preventing correlation or compromise from database dumps.
+- Operators can enforce two-person authorization for report deletions by setting `HERASAT_TWO_PERSON_DELETION=true`.
+- Backups are encrypted with authenticated AES-GCM (`.hbak`); manual tampering or invalid keys are detected and rejected.
+- Superusers can redact sensitive whistleblower information while maintaining the report shell and audit history.
+
+### Tests & Verification
+- `data_protection_test.go`:
+  - `TestV3CiphertextWithAAD`: verified encryption/decryption with AAD and verified failure on mismatched AAD (cut-and-paste attack resistance) and tampered ciphertext.
+  - `TestBoundFieldHelper`: verified field-level binding with `table:column:rowID`.
+  - `TestTrackingCodeHMACAndResolution`: verified deterministic HMAC generation, distinct hashes for distinct codes, and resolution of encrypted codes.
+  - `TestEncryptedBackupAndTamperDetection`: verified backup creation with `HBAK\x01` header, successful restore, and rejection of tampered backups.
+  - `TestTwoPersonDeletionStatusValidation`: verified 24-hour expiration check and dual-control checks.
+  - `TestRedactionMarkerFormat`: verified redaction marker format and roundtrip encryption.
+- `crypto_test.go`: updated assertions for `v3:1:f:`, `v3:1:p:`, and `HENC\x03`.
+- Full regression: `go test ./...` passed (100%).
+
+
 
 

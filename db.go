@@ -36,6 +36,7 @@ func InitDB(connStr string) {
 	log.Println("Successfully initialized native PostgreSQL connection pool.")
 
 	runMigrations()
+	_ = migrateTrackingCodes(DB)
 	bootstrapInitialAdmin(DB)
 
 	if Sessions != nil {
@@ -219,6 +220,16 @@ func runMigrations() {
 		END IF;
 
 		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'reports' AND column_name = 'tracking_code_hash'
+		) THEN
+			ALTER TABLE reports ADD COLUMN tracking_code_hash VARCHAR(64) DEFAULT NULL;
+			ALTER TABLE reports ALTER COLUMN tracking_code TYPE TEXT;
+			ALTER TABLE reports DROP CONSTRAINT IF EXISTS reports_tracking_code_key;
+			CREATE INDEX IF NOT EXISTS idx_reports_tracking_hash ON reports(tracking_code_hash);
+		END IF;
+
+		IF NOT EXISTS (
 			SELECT 1 FROM information_schema.tables
 			WHERE table_name = 'admin_password_history'
 		) THEN
@@ -380,6 +391,18 @@ func runMigrations() {
 	);
 	CREATE INDEX IF NOT EXISTS idx_used_mfa_nonces_expiry ON used_mfa_nonces(expires_at);
 
+	CREATE TABLE IF NOT EXISTS pending_deletions (
+		id BIGSERIAL PRIMARY KEY,
+		report_id BIGINT NOT NULL REFERENCES reports(id) ON DELETE CASCADE,
+		requested_by VARCHAR(64) NOT NULL,
+		reason TEXT NOT NULL,
+		requested_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+		status VARCHAR(32) NOT NULL DEFAULT 'pending',
+		approved_by VARCHAR(64) DEFAULT NULL,
+		approved_at TIMESTAMPTZ DEFAULT NULL
+	);
+	CREATE INDEX IF NOT EXISTS idx_pending_del_status ON pending_deletions(status);
+
 	CREATE OR REPLACE FUNCTION touch_reports_updated_at()
 	RETURNS TRIGGER AS $$
 	BEGIN
@@ -425,6 +448,46 @@ func runMigrations() {
 	} else {
 		log.Println("Database schema auto-migrations applied successfully.")
 	}
+}
+
+func migrateTrackingCodes(db *sql.DB) error {
+	if db == nil {
+		return nil
+	}
+	rows, err := db.Query("SELECT id, tracking_code FROM reports WHERE tracking_code_hash IS NULL OR tracking_code_hash = ''")
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	type item struct {
+		id   int64
+		code string
+	}
+	var items []item
+	for rows.Next() {
+		var it item
+		if err := rows.Scan(&it.id, &it.code); err == nil {
+			items = append(items, it)
+		}
+	}
+	_ = rows.Close()
+
+	for _, it := range items {
+		plainCode := it.code
+		if strings.HasPrefix(plainCode, "v2:") || strings.HasPrefix(plainCode, "v3:") {
+			if dec, err := DecryptAES(plainCode); err == nil && dec != "" {
+				plainCode = dec
+			}
+		}
+		hash := HashTrackingCode(plainCode)
+		enc, err := EncryptAES(plainCode)
+		if err != nil {
+			continue
+		}
+		_, _ = db.Exec("UPDATE reports SET tracking_code = $1, tracking_code_hash = $2 WHERE id = $3", enc, hash, it.id)
+	}
+	return nil
 }
 
 func enforceImmutableAuditLogs() {
