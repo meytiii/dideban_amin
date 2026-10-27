@@ -35,7 +35,6 @@ backups/*
 
 # Sensitive document outputs
 templates/*.docx
-!templates/report_template.docx
 coverage*
 *.out
 
