@@ -204,6 +204,10 @@ func main() {
 	InitDB(dbConnStr)
 	defer DB.Close()
 
+	if err := VerifyAuditChainOnStartup(DB); err != nil {
+		log.Fatalf("FATAL: %v", err)
+	}
+
 	if UsedCaptchas.db == nil || Lockouts.db == nil {
 		log.Fatal("FATAL: security stores not initialized")
 	}
@@ -281,6 +285,7 @@ func main() {
 	mux.HandleFunc("GET /api/admin/sessions", SuperuserAuthMiddleware(GetActiveSessionsHandler))
 	mux.HandleFunc("POST /api/admin/sessions/terminate", SuperuserAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(TerminateSessionHandler)))))
 	mux.HandleFunc("GET /api/admin/audit-logs", SuperuserAuthMiddleware(GetAuditLogsHandler))
+	mux.HandleFunc("GET /api/admin/audit-logs/verify", SuperuserAuthMiddleware(VerifyAuditLogsHandler))
 	mux.HandleFunc("GET /api/admin/system-status", SuperuserAuthMiddleware(GetSystemStatusHandler))
 	mux.HandleFunc("GET /api/admin/analytics", AdminAuthMiddleware(GetAnalyticsHandler))
 

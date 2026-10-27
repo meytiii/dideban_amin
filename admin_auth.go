@@ -2,26 +2,18 @@ package main
 
 import (
 	"crypto/rand"
-	"crypto/sha256"
 	"database/sql"
 	"encoding/base64"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
-	"sync"
-	"sync/atomic"
 	"time"
 )
 
 var (
-	auditFailures   uint64
-	auditMu         sync.Mutex
 	dummyArgon2Hash string
 )
 
@@ -52,7 +44,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	creds.Username = strings.TrimSpace(creds.Username)
+	creds.Username = strings.ToLower(strings.TrimSpace(creds.Username))
 	creds.Password = strings.TrimSpace(creds.Password)
 	clientIP := getIP(r)
 	safeUsername := truncateRunes(strings.ReplaceAll(strings.ReplaceAll(creds.Username, "\n", ""), "\r", ""), 32)
@@ -297,82 +289,6 @@ func getIP(r *http.Request) string {
 	}
 
 	return remoteHost
-}
-
-func computeAuditHash(prevHash, username, title, action string, targetID *int64, ip string, t time.Time) string {
-	targetStr := "none"
-	if targetID != nil {
-		targetStr = strconv.FormatInt(*targetID, 10)
-	}
-	raw := fmt.Sprintf("%s|%s|%s|%s|%s|%s|%s", prevHash, username, title, action, targetStr, ip, t.Format(time.RFC3339Nano))
-	h := sha256.Sum256([]byte(raw))
-	return hex.EncodeToString(h[:])
-}
-
-func getLatestAuditHash(db *sql.DB) string {
-	var h string
-	err := db.QueryRow("SELECT COALESCE(entry_hash, '') FROM audit_logs ORDER BY id DESC LIMIT 1").Scan(&h)
-	if err != nil || h == "" {
-		return "0000000000000000000000000000000000000000000000000000000000000000"
-	}
-	return h
-}
-
-func getLatestAuditHashTx(tx *sql.Tx) string {
-	var h string
-	err := tx.QueryRow("SELECT COALESCE(entry_hash, '') FROM audit_logs ORDER BY id DESC LIMIT 1").Scan(&h)
-	if err != nil || h == "" {
-		return "0000000000000000000000000000000000000000000000000000000000000000"
-	}
-	return h
-}
-
-func logAudit(username, title, action string, targetID *int64, ip string) error {
-	auditMu.Lock()
-	defer auditMu.Unlock()
-
-	ShipSyslogAudit(username, action, targetID, ip)
-	if DB == nil {
-		atomic.AddUint64(&auditFailures, 1)
-		log.Printf("CRITICAL AUDIT LOG FAILURE: DB is nil (user=%s, action=%s)", username, action)
-		return fmt.Errorf("DB is nil")
-	}
-	now := time.Now().UTC()
-	prevHash := getLatestAuditHash(DB)
-	entryHash := computeAuditHash(prevHash, username, title, action, targetID, ip, now)
-	_, err := DB.Exec(`INSERT INTO audit_logs (admin_username, admin_title, action, target_report_id, ip_address, prev_hash, entry_hash, created_at)
-					VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-		username, title, action, targetID, ip, prevHash, entryHash, now)
-	if err != nil {
-		atomic.AddUint64(&auditFailures, 1)
-		log.Printf("CRITICAL AUDIT LOG FAILURE: %v (user=%s, action=%s)", err, username, action)
-		return err
-	}
-	return nil
-}
-
-func logAuditTx(tx *sql.Tx, username, title, action string, targetID *int64, ip string) error {
-	auditMu.Lock()
-	defer auditMu.Unlock()
-
-	ShipSyslogAudit(username, action, targetID, ip)
-	if tx == nil {
-		atomic.AddUint64(&auditFailures, 1)
-		log.Printf("CRITICAL AUDIT LOG TX FAILURE: tx is nil (user=%s, action=%s)", username, action)
-		return fmt.Errorf("tx is nil")
-	}
-	now := time.Now().UTC()
-	prevHash := getLatestAuditHashTx(tx)
-	entryHash := computeAuditHash(prevHash, username, title, action, targetID, ip, now)
-	_, err := tx.Exec(`INSERT INTO audit_logs (admin_username, admin_title, action, target_report_id, ip_address, prev_hash, entry_hash, created_at)
-					VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-		username, title, action, targetID, ip, prevHash, entryHash, now)
-	if err != nil {
-		atomic.AddUint64(&auditFailures, 1)
-		log.Printf("CRITICAL AUDIT LOG TX FAILURE: %v (user=%s, action=%s)", err, username, action)
-		return err
-	}
-	return nil
 }
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {

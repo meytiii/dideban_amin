@@ -171,4 +171,53 @@ This document tracks all verified security findings, code modifications, operato
   - `TestCategoryValidationAllowList`: verified category allow-list validation.
 - Regression: `go test ./...` passed.
 
+## Phase 4: Audit Log Integrity & Access Control
+
+### Verified Findings
+1. **Unkeyed SHA-256 Hash Chain**: Previous audit log hash computation used unkeyed SHA-256 over row fields. Anyone with temporary write access to the database could recalculate valid forward hashes after modifying past records.
+2. **Silent Genesis Fallback on Database Error**: When reading the latest hash, if an error occurred (`err != nil || h == ""`), the system silently substituted the genesis hash (`000...000`), breaking the cryptographic continuity without alerting operators.
+3. **Audit Log Race Conditions Across Instances**: In-process mutexes did not protect against concurrent requests across multiple clustered application instances, allowing audit chain forks under high concurrent write loads.
+4. **Missing Audit Detail Field**: Audit log records lacked a structured `detail` column to capture contextual parameters (such as targeted usernames, change summaries, or event payloads), limiting forensics.
+5. **Username Normalization & Case/Homoglyph Collision Risks**: Usernames were not strictly normalized or validated against ASCII character sets, leaving room for Unicode homoglyphs, casing confusion, or whitespace spoofing in user management.
+6. **Lack of Cryptographic Chain Verification Endpoint & Startup Gate**: No built-in verification existed to audit the integrity of the audit chain from genesis to head on system boot or on demand.
+
+### Code Changes
+- **Keyed HMAC-SHA256 Audit Chain (`crypto.go`, `audit.go`)**:
+  - Implemented domain-separated audit key derivation: `keyAudit = deriveKey(aesKey, "HERASAT_AUDIT_LOG_CHAIN_HMAC_V1")`.
+  - Replaced unkeyed SHA-256 with HMAC-SHA256 incorporating `detail` along with `prev_hash`, `username`, `title`, `action`, `target_report_id`, `ip_address`, and `created_at`.
+  - Maintained backwards verification compatibility with pre-Phase-4 unkeyed SHA-256 rows via `computeLegacyAuditHash`.
+- **Advisory Locking & Fail-Closed Integrity (`audit.go`)**:
+  - Added PostgreSQL transaction-level advisory locking (`SELECT pg_advisory_xact_lock(14021105)`) to serialize all audit writes across all application instances.
+  - Required `FOR UPDATE` lock on latest audit row; eliminated silent fallback to genesis hash on database query errors. Genesis hash is permitted ONLY when the table is genuinely empty (`sql.ErrNoRows`).
+  - Unified `logAudit` and `logAuditTx` to execute through a shared transaction pipeline (`executeAuditLogTx`), guaranteeing identical semantics.
+- **Audit Detail Column & Schema (`schema.sql`, `docker/init/01_schema.sql`, `db.go`, `admin_handlers.go`)**:
+  - Added `detail TEXT DEFAULT ''` column to `audit_logs` table and auto-migration in `runMigrations()`.
+  - Updated `AuditLogItem` and `GetAuditLogsHandler` to query and return `detail` and `entry_hash`.
+  - Provided `logAuditWithDetail` and `logAuditTxWithDetail` for detailed event logging.
+- **Least-Privilege Database Roles (`docker/init/03_least_privilege_roles.sql`, `schema.sql`)**:
+  - Created least-privilege role setup for `herasat_app` (SELECT, INSERT, UPDATE, DELETE on application tables; strict REVOKE of UPDATE, DELETE, TRUNCATE on `audit_logs`) and `herasat_migrator`.
+- **Username Normalization & Homoglyph Protection (`security.go`, `admin_handlers.go`, `admin_auth.go`)**:
+  - Added `normalizeAndValidateUsername`: restricts admin usernames to lowercase ASCII alphanumeric characters, hyphens, dots, and underscores (`[a-z0-9_.-]`, length 3-32).
+  - Integrated validation into `CreateUserHandler` and normalized usernames to lowercase in `LoginHandler`.
+- **Cryptographic Audit Chain Verification (`audit.go`, `main.go`)**:
+  - Implemented `VerifyAuditChain`: sequentially validates `prev_hash` chaining and verifies each row's HMAC (or legacy SHA-256).
+  - Added `VerifyAuditChainOnStartup` on application boot; fails closed in strict mode (`HERASAT_AUDIT_STRICT=1`).
+  - Added authenticated superuser endpoint `GET /api/admin/audit-logs/verify` returning real-time chain verification status.
+
+### Operator Impact
+- Audit records are cryptographically tamper-evident with HMAC-SHA256 tied to the server's master key.
+- Database administrators can apply `docker/init/03_least_privilege_roles.sql` to restrict the web application user `herasat_app` from deleting or updating audit logs even if SQL injection occurs.
+- Superusers can verify the cryptographic chain integrity at any time via `GET /api/admin/audit-logs/verify`.
+
+### Tests & Verification
+- `audit_security_test.go`:
+  - `TestAuditKeyDerivation`: verifies 32-byte domain-separated HMAC key.
+  - `TestAuditChainHMACComputation`: verifies HMAC calculation, 64-character hex length, and tamper-sensitivity to `detail`, `username`, and `prev_hash`.
+  - `TestNormalizeAndValidateUsername`: verifies ASCII allowlist, length limits, case normalization, and rejection of spaces, symbols, and Cyrillic homoglyphs.
+  - `TestAuditLegacyHashCompatibility`: verifies compatibility with historical SHA-256 records.
+  - `TestVerifyAuditLogsHandler`: verifies superuser verification endpoint.
+- `audit_fail_test.go`: verified fail-closed rollback when audit logging fails.
+- Regression: `go test ./...` passed.
+
+
 

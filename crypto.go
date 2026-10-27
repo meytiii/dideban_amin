@@ -26,6 +26,7 @@ var (
 	hmacKey       []byte
 	legacyHmacKey []byte
 	keyCaptcha    []byte
+	keyAudit      []byte
 )
 
 func isKnownPlaceholderKey(k string) bool {
@@ -84,6 +85,7 @@ func InitCrypto(key string) {
 
 	hLegacy := sha256.Sum256(append(aesKey, []byte("HERASAT_CAPTCHA_HMAC_V1")...))
 	legacyHmacKey = hLegacy[:]
+	keyAudit = deriveKey(aesKey, "HERASAT_AUDIT_LOG_CHAIN_HMAC_V1")
 }
 
 func GetHMACKey() []byte {
@@ -92,6 +94,17 @@ func GetHMACKey() []byte {
 
 func GetLegacyHMACKey() []byte {
 	return legacyHmacKey
+}
+
+func GetAuditHMACKey() []byte {
+	if len(keyAudit) > 0 {
+		return keyAudit
+	}
+	if len(aesKey) > 0 {
+		return deriveKey(aesKey, "HERASAT_AUDIT_LOG_CHAIN_HMAC_V1")
+	}
+	h := sha256.Sum256([]byte("TEST_DEFAULT_AUDIT_HMAC_KEY_32B!"))
+	return h[:]
 }
 
 func EncryptAES(plaintext string) (string, error) {

@@ -212,6 +212,13 @@ func runMigrations() {
 		END IF;
 
 		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'audit_logs' AND column_name = 'detail'
+		) THEN
+			ALTER TABLE audit_logs ADD COLUMN detail TEXT DEFAULT '';
+		END IF;
+
+		IF NOT EXISTS (
 			SELECT 1 FROM information_schema.tables
 			WHERE table_name = 'admin_password_history'
 		) THEN

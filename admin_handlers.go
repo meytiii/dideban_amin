@@ -1471,13 +1471,18 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	req.Username = strings.TrimSpace(req.Username)
+	var err error
+	req.Username, err = normalizeAndValidateUsername(req.Username)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	req.Password = strings.TrimSpace(req.Password)
 	req.FullName = strings.TrimSpace(req.FullName)
 	req.RoleTitle = strings.TrimSpace(req.RoleTitle)
 	req.Role = strings.TrimSpace(req.Role)
 
-	if req.Username == "" || req.FullName == "" || req.RoleTitle == "" {
+	if req.FullName == "" || req.RoleTitle == "" {
 		http.Error(w, "اطلاعات ورودی ناقص است (نام و نام خانوادگی، نام کاربری و سمت سازمانی الزامی است).", http.StatusBadRequest)
 		return
 	}
@@ -1867,12 +1872,14 @@ type AuditLogItem struct {
 	TargetReportID     *int64  `json:"target_report_id"`
 	TargetTrackingCode *string `json:"target_tracking_code"`
 	IPAddress          string  `json:"ip_address"`
+	Detail             string  `json:"detail,omitempty"`
+	EntryHash          string  `json:"entry_hash,omitempty"`
 	CreatedAt          string  `json:"created_at"`
 }
 
 func GetAuditLogsHandler(w http.ResponseWriter, r *http.Request) {
 	rows, err := DB.Query(`
-		SELECT a.id, a.admin_username, a.admin_title, a.action, a.target_report_id, r.tracking_code, a.ip_address, a.created_at
+		SELECT a.id, a.admin_username, a.admin_title, a.action, a.target_report_id, r.tracking_code, a.ip_address, COALESCE(a.detail, ''), a.entry_hash, a.created_at
 		FROM audit_logs a
 		LEFT JOIN reports r ON a.target_report_id = r.id
 		ORDER BY a.id DESC
@@ -1890,7 +1897,7 @@ func GetAuditLogsHandler(w http.ResponseWriter, r *http.Request) {
 		var targetID sql.NullInt64
 		var trackingCode sql.NullString
 		var createdAt time.Time
-		if err := rows.Scan(&l.ID, &l.AdminUsername, &l.AdminTitle, &l.Action, &targetID, &trackingCode, &l.IPAddress, &createdAt); err != nil {
+		if err := rows.Scan(&l.ID, &l.AdminUsername, &l.AdminTitle, &l.Action, &targetID, &trackingCode, &l.IPAddress, &l.Detail, &l.EntryHash, &createdAt); err != nil {
 			continue
 		}
 		if targetID.Valid {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"database/sql"
+	"errors"
 	"flag"
 	"fmt"
 	"net/http"
@@ -28,6 +29,20 @@ func isWithinDirectory(parentDir, targetPath string) bool {
 	}
 	prefix := absParent + string(os.PathSeparator)
 	return strings.HasPrefix(absTarget, prefix)
+}
+
+func normalizeAndValidateUsername(raw string) (string, error) {
+	norm := strings.ToLower(strings.TrimSpace(raw))
+	if len(norm) < 3 || len(norm) > 32 {
+		return "", errors.New("نام کاربری باید بین ۳ تا ۳۲ کاراکتر باشد.")
+	}
+	for _, r := range norm {
+		if (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') || r == '_' || r == '.' || r == '-' {
+			continue
+		}
+		return "", errors.New("نام کاربری فقط می‌تواند شامل حروف کوچک انگلیسی، اعداد، خط فاصله، نقطه و زیرخط باشد.")
+	}
+	return norm, nil
 }
 
 type adminContextKeyType struct{}
