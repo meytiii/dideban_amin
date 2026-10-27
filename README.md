@@ -42,3 +42,9 @@ To stop and wipe database data volume:
 docker compose down -v
 ```
 
+## Testing
+
+Run tests across the suite:
+```bash
+go test -v ./...
+```

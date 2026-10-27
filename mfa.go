@@ -348,7 +348,11 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Setup2FAHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	secret, err := GenerateBase32Secret()
 	if err != nil {
@@ -367,7 +371,11 @@ func Setup2FAHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		Password string `json:"password"`
@@ -400,8 +408,8 @@ func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ok, err := VerifyTOTPCode(admin.Username, req.Secret, req.TOTPCode)
-	if !ok || err != nil {
+	valid, err := VerifyTOTPCode(admin.Username, req.Secret, req.TOTPCode)
+	if !valid || err != nil {
 		http.Error(w, "کد امنیتی تأیید نشد. لطفاً مجدداً امتحان کنید.", http.StatusBadRequest)
 		return
 	}
@@ -428,7 +436,11 @@ func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Disable2FAHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		Password string `json:"password"`
@@ -458,8 +470,8 @@ func Disable2FAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ok, err := VerifyTOTPCode(admin.Username, plainSecret, req.TOTPCode)
-	if !ok || err != nil {
+	valid, err := VerifyTOTPCode(admin.Username, plainSecret, req.TOTPCode)
+	if !valid || err != nil {
 		http.Error(w, "کد امنیتی اشتباه است.", http.StatusBadRequest)
 		return
 	}

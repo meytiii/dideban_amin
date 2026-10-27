@@ -195,7 +195,11 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var passwordChangedAt, dbNow time.Time
 	var mustChangePassword bool

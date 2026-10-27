@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"crypto/sha256"
 	"database/sql"
 	"fmt"
@@ -10,6 +11,30 @@ import (
 	"sync"
 	"time"
 )
+
+type adminContextKeyType struct{}
+
+var adminContextKey = adminContextKeyType{}
+
+func contextWithAdmin(ctx context.Context, session AdminSession) context.Context {
+	ctx = context.WithValue(ctx, adminContextKey, session)
+	return context.WithValue(ctx, "admin", session)
+}
+
+func adminFromContext(r *http.Request) (AdminSession, bool) {
+	if r == nil {
+		return AdminSession{}, false
+	}
+	val := r.Context().Value(adminContextKey)
+	if val == nil {
+		val = r.Context().Value("admin")
+	}
+	if val == nil {
+		return AdminSession{}, false
+	}
+	s, ok := val.(AdminSession)
+	return s, ok
+}
 
 type AdminSession struct {
 	Token       string    `json:"token"`

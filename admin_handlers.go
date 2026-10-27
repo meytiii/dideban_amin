@@ -87,15 +87,15 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		})
 		w.Header().Set("X-CSRF-Token", currentCSRF)
 
-		ctx := context.WithValue(r.Context(), "admin", session)
+		ctx := contextWithAdmin(r.Context(), session)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
 func SuperuserAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return AdminAuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
-		admin := r.Context().Value("admin").(AdminSession)
-		if !admin.IsSuperuser && admin.Role != "superuser" {
+		admin, ok := adminFromContext(r)
+		if !ok || (!admin.IsSuperuser && admin.Role != "superuser") {
 			http.Error(w, "دسترسی غیرمجاز: این بخش منحصراً متعلق به پشتیبانی سامانه است.", http.StatusForbidden)
 			return
 		}
@@ -121,7 +121,11 @@ func canAdminAccessReport(admin AdminSession, reportID int64) bool {
 }
 
 func ToggleReadStatusHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		ReportID int64 `json:"report_id"`
@@ -236,7 +240,11 @@ func normalizeForSearch(s string) string {
 }
 
 func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	page := 1
 	pageSize := 25
@@ -518,7 +526,11 @@ type ReportAttachmentItem struct {
 }
 
 func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	reportIDStr := r.URL.Query().Get("id")
 	reportID, err := strconv.ParseInt(reportIDStr, 10, 64)
@@ -844,7 +856,11 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateInternalNotesHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		http.Error(w, "شما به این قسمت دسترسی ندارید", http.StatusForbidden)
@@ -899,7 +915,11 @@ func UpdateInternalNotesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SetReportPriorityHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		http.Error(w, "شما به این قسمت دسترسی ندارید", http.StatusForbidden)
@@ -939,7 +959,11 @@ func SetReportPriorityHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ClassifyReportHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		http.Error(w, "دسترسی غیرمجاز: کارشناسان نواحی و مناطق مجاز به ارزیابی یا تغییر کیفیت گزارش نیستند.", http.StatusForbidden)
@@ -1037,7 +1061,11 @@ func ClassifyReportHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	reportIDStr := r.URL.Query().Get("id")
 	reportID, err := strconv.ParseInt(reportIDStr, 10, 64)
@@ -1259,7 +1287,11 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RespondToReportHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		http.Error(w, "شما به این قسمت دسترسی ندارید", http.StatusForbidden)
@@ -1387,7 +1419,11 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		Username           string `json:"username"`
@@ -1457,7 +1493,11 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ToggleUserActiveHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID int64 `json:"user_id"`
@@ -1498,7 +1538,11 @@ func ToggleUserActiveHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID             int64  `json:"user_id"`
@@ -1572,7 +1616,11 @@ func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID int64 `json:"user_id"`
@@ -1630,7 +1678,11 @@ func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ResetUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID             int64  `json:"user_id"`
@@ -1697,7 +1749,11 @@ func ResetUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LiftUserLockoutHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID   int64  `json:"user_id"`
@@ -1725,7 +1781,11 @@ func LiftUserLockoutHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DisableUser2FAHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID   int64  `json:"user_id"`
@@ -1897,7 +1957,7 @@ func GetServerTimeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetActiveSessionsHandler(w http.ResponseWriter, r *http.Request) {
-	admin, ok := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
 	if !ok || !admin.IsSuperuser {
 		http.Error(w, "دسترسی غیرمجاز: دسترسی به این بخش محدود به پشتیبانی سامانه می‌باشد.", http.StatusForbidden)
 		return
@@ -1915,7 +1975,7 @@ func TerminateSessionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	admin, ok := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
 	if !ok || !admin.IsSuperuser {
 		http.Error(w, "دسترسی غیرمجاز: دسترسی به این بخش محدود به پشتیبانی سامانه می‌باشد.", http.StatusForbidden)
 		return
@@ -2005,7 +2065,11 @@ func TerminateSessionHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ChangeMyPasswordHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		CurrentPassword string `json:"current_password"`
@@ -2161,7 +2225,7 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	admin, ok := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
 	if !ok || !admin.IsSuperuser {
 		logAudit("UNKNOWN", "SECURITY_ALERT", "UNAUTHORIZED_DELETE_REPORT_ATTEMPT", nil, getIP(r))
 		http.Error(w, "دسترسی غیرمجاز: عملیات حذف پرونده منحصراً در اختیار پشتیبانی سامانه می‌باشد.", http.StatusForbidden)
@@ -2312,7 +2376,11 @@ type TypeCount struct {
 }
 
 func GetAnalyticsHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 	var resp AnalyticsResponse
 
 	if admin.Role == "navahi_manategh" {
@@ -2572,7 +2640,11 @@ type RecipientUserItem struct {
 }
 
 func GetForwardingRecipientsHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 	if admin.Role != "superuser" && admin.Role != "edare_kol" && !admin.IsSuperuser {
 		http.Error(w, "دسترسی غیرمجاز", http.StatusForbidden)
 		return
@@ -2612,7 +2684,11 @@ type ForwardReportRequest struct {
 }
 
 func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 	if admin.Role != "superuser" && admin.Role != "edare_kol" && !admin.IsSuperuser {
 		http.Error(w, "دسترسی غیرمجاز: تنها اداره کل و مدیر ارشد مجاز به ارجاع خبر هستند.", http.StatusForbidden)
 		return
@@ -2770,7 +2846,11 @@ type ForwardHistoryItem struct {
 }
 
 func GetForwardingHistoryHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	reportIDStr := r.URL.Query().Get("id")
 	reportID, err := strconv.ParseInt(reportIDStr, 10, 64)
@@ -2868,7 +2948,11 @@ type AdminNotificationsResponse struct {
 }
 
 func GetNotificationsHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var resp AdminNotificationsResponse
 	resp.Notifications = []AdminNotificationItem{}
@@ -2959,7 +3043,11 @@ func GetNotificationsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func MarkNotificationReadHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 	var req struct {
 		ID int64 `json:"id"`
 	}
@@ -2997,7 +3085,11 @@ func MarkNotificationReadHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func MarkAllNotificationsReadHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		_, err := DB.Exec(`
@@ -3078,7 +3170,7 @@ func formatJalaliTime(t time.Time) string {
 }
 
 func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
-	admin, ok := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -3301,7 +3393,11 @@ type SubmitRegionalResponseRequest struct {
 }
 
 func SubmitRegionalResponseHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req SubmitRegionalResponseRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -3396,7 +3492,11 @@ type RemoveForwardingRequest struct {
 }
 
 func RemoveForwardingHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		http.Error(w, "شما مجوز لغو ارجاع پرونده را ندارید.", http.StatusForbidden)
