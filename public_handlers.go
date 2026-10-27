@@ -250,24 +250,6 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 		reportType = "identified"
 	}
 
-	encDesc, err := EncryptAES(description)
-	if err != nil {
-		http.Error(w, "Encryption engine failure", http.StatusInternalServerError)
-		return
-	}
-
-	var encName, encPhone sql.NullString
-	if reportType == "identified" {
-		if rawName != "" {
-			name, _ := EncryptAES(rawName)
-			encName = sql.NullString{String: name, Valid: name != ""}
-		}
-		if rawPhone != "" {
-			phone, _ := EncryptAES(rawPhone)
-			encPhone = sql.NullString{String: phone, Valid: phone != ""}
-		}
-	}
-
 	trackingCode := generateTrackingCode()
 	trackingHash := HashTrackingCode(trackingCode)
 	encTrackingCode, err := EncryptAES(trackingCode)
@@ -283,18 +265,46 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer tx.Rollback()
 
+	var reportID int64
+	err = tx.QueryRow("SELECT nextval(pg_get_serial_sequence('reports', 'id'))").Scan(&reportID)
+	if err != nil {
+		http.Error(w, "Failed to allocate report identifier", http.StatusInternalServerError)
+		return
+	}
+
+	encDesc, err := EncryptBoundField("reports", "description", reportID, description)
+	if err != nil {
+		http.Error(w, "Encryption engine failure", http.StatusInternalServerError)
+		return
+	}
+
+	var encName, encPhone sql.NullString
+	if reportType == "identified" {
+		if rawName != "" {
+			if name, err := EncryptBoundField("reports", "reporter_name", reportID, rawName); err == nil {
+				encName = sql.NullString{String: name, Valid: true}
+			}
+		}
+		if rawPhone != "" {
+			if phone, err := EncryptBoundField("reports", "reporter_phone", reportID, rawPhone); err == nil {
+				encPhone = sql.NullString{String: phone, Valid: true}
+			}
+		}
+	}
+
 	initialPriority := "normal"
 	var initialNotes sql.NullString
 	if flaggedVulgar {
 		initialPriority = "high"
-		initialNotes = sql.NullString{String: "سیستم: حاوی الفاظ نامتعارف، علامت‌گذاری جهت بررسی توسط کارشناس.", Valid: true}
+		if notes, err := EncryptBoundField("reports", "internal_notes", reportID, "سیستم: حاوی الفاظ نامتعارف، علامت‌گذاری جهت بررسی توسط کارشناس."); err == nil {
+			initialNotes = sql.NullString{String: notes, Valid: true}
+		}
 	}
 
-	var reportID int64
-	err = tx.QueryRow(`
-		INSERT INTO reports (tracking_code, tracking_code_hash, category, report_type, priority, internal_notes, reporter_name, reporter_phone, description)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
-		encTrackingCode, trackingHash, category, reportType, initialPriority, initialNotes, encName, encPhone, encDesc).Scan(&reportID)
+	_, err = tx.Exec(`
+		INSERT INTO reports (id, tracking_code, tracking_code_hash, category, report_type, priority, internal_notes, reporter_name, reporter_phone, description)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+		reportID, encTrackingCode, trackingHash, category, reportType, initialPriority, initialNotes, encName, encPhone, encDesc)
 	if err != nil {
 		http.Error(w, "Failed to save report data", http.StatusInternalServerError)
 		return
@@ -433,23 +443,25 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			savedFilesOnDisk = append(savedFilesOnDisk, savePath)
 
-			encPath, _ := EncryptFilePath(savePath)
-			encFileName, _ := EncryptFilePath(header.Filename)
+			var fileID int64
+			err = tx.QueryRow("SELECT nextval(pg_get_serial_sequence('evidence_files', 'id'))").Scan(&fileID)
+			if err != nil {
+				cleanupDiskFiles()
+				http.Error(w, "Failed to allocate file identifier", http.StatusInternalServerError)
+				return
+			}
+
+			encPath, _ := EncryptBoundField("evidence_files", "file_path", fileID, savePath)
+			encFileName, _ := EncryptBoundField("evidence_files", "file_name", fileID, header.Filename)
 
 			_, err = tx.Exec(`
-				INSERT INTO evidence_files (report_id, file_path, file_hash, mime_type, file_name, file_size)
-				VALUES ($1, $2, $3, $4, $5, $6)`,
-				reportID, encPath, fileHash, mimeType, encFileName, int64(len(canonicalBytes)))
+				INSERT INTO evidence_files (id, report_id, file_path, file_hash, mime_type, file_name, file_size)
+				VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+				fileID, reportID, encPath, fileHash, mimeType, encFileName, int64(len(canonicalBytes)))
 			if err != nil {
-				_, err2 := tx.Exec(`
-					INSERT INTO evidence_files (report_id, file_path, file_hash, mime_type)
-					VALUES ($1, $2, $3, $4)`,
-					reportID, encPath, fileHash, mimeType)
-				if err2 != nil {
-					cleanupDiskFiles()
-					http.Error(w, "Failed to save file metadata", http.StatusInternalServerError)
-					return
-				}
+				cleanupDiskFiles()
+				http.Error(w, "Failed to save file metadata", http.StatusInternalServerError)
+				return
 			}
 		}
 	}
@@ -463,13 +475,12 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 	GlobalSSEBroker.BroadcastNewReport(reportID)
 
 	_, _ = DB.Exec(`
-		INSERT INTO admin_notifications (notif_type, title, message, target_report_id, target_tracking_code)
-		VALUES ($1, $2, $3, $4, $5)`,
+		INSERT INTO admin_notifications (notif_type, title, message, target_report_id)
+		VALUES ($1, $2, $3, $4)`,
 		"new_report",
 		"گزارش محرمانه جدید در کارتابل",
-		"موضوع: "+category+" | شماره پرونده: "+trackingCode,
+		"موضوع: "+category,
 		reportID,
-		trackingCode,
 	)
 
 	w.Header().Set("Content-Type", "application/json")
@@ -531,7 +542,7 @@ func TrackReportHandler(w http.ResponseWriter, r *http.Request) {
 	err := DB.QueryRow(`
 		SELECT id, tracking_code, category, is_read, created_at, admin_response, responded_at
 		FROM reports
-		WHERE tracking_code_hash = $1 OR tracking_code = $2`, trackingHash, req.TrackingCode).
+		WHERE tracking_code_hash = $1`, trackingHash).
 		Scan(&reportID, &status.TrackingCode, &status.Category, &status.IsRead, &createdAt, &encResponse, &respAt)
 
 	if err == sql.ErrNoRows {
@@ -550,7 +561,7 @@ func TrackReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encResponse.Valid && encResponse.String != "" {
-		decResp, err := DecryptAES(encResponse.String)
+		decResp, err := DecryptBoundField("reports", "admin_response", reportID, encResponse.String)
 		if err == nil {
 			status.AdminResponse = decResp
 		}
@@ -569,7 +580,7 @@ func TrackReportHandler(w http.ResponseWriter, r *http.Request) {
 			var encMsg string
 			var msgCreatedAt time.Time
 			if err := msgRows.Scan(&m.ID, &m.SenderType, &encMsg, &m.AdminUsername, &msgCreatedAt); err == nil {
-				decMsg, err := DecryptAES(encMsg)
+				decMsg, err := DecryptBoundField("report_messages", "message", m.ID, encMsg)
 				if err == nil {
 					m.Message = decMsg
 				} else {
@@ -641,7 +652,7 @@ func SubmitFollowUpHandler(w http.ResponseWriter, r *http.Request) {
 
 	trackingHash := HashTrackingCode(req.TrackingCode)
 	var reportID int64
-	err := DB.QueryRow("SELECT id FROM reports WHERE tracking_code_hash = $1 OR tracking_code = $2", trackingHash, req.TrackingCode).Scan(&reportID)
+	err := DB.QueryRow("SELECT id FROM reports WHERE tracking_code_hash = $1", trackingHash).Scan(&reportID)
 	if err == sql.ErrNoRows {
 		http.Error(w, "گزارشی با این کد پیگیری یافت نشد.", http.StatusNotFound)
 		return
@@ -650,30 +661,38 @@ func SubmitFollowUpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var lastMsgID int64
 	var lastMsgEnc string
 	var lastMsgCreatedAt time.Time
 	err = DB.QueryRow(`
-		SELECT message_text, created_at FROM report_messages
+		SELECT id, message_text, created_at FROM report_messages
 		WHERE report_id = $1 AND sender_type = 'reporter'
-		ORDER BY id DESC LIMIT 1`, reportID).Scan(&lastMsgEnc, &lastMsgCreatedAt)
+		ORDER BY id DESC LIMIT 1`, reportID).Scan(&lastMsgID, &lastMsgEnc, &lastMsgCreatedAt)
 	if err == nil && time.Since(lastMsgCreatedAt) < 30*time.Second {
-		if dec, err := DecryptAES(lastMsgEnc); err == nil && dec == req.Message {
+		if dec, err := DecryptBoundField("report_messages", "message", lastMsgID, lastMsgEnc); err == nil && dec == req.Message {
 			w.Header().Set("Content-Type", "application/json")
 			w.Write([]byte(`{"status": "success", "message": "پیام تکمیلی شما با موفقیت ثبت شد"}`))
 			return
 		}
 	}
 
-	encMsg, err := EncryptAES(req.Message)
+	var msgID int64
+	err = DB.QueryRow("SELECT nextval(pg_get_serial_sequence('report_messages', 'id'))").Scan(&msgID)
+	if err != nil {
+		http.Error(w, "Failed to allocate message identifier", http.StatusInternalServerError)
+		return
+	}
+
+	encMsg, err := EncryptBoundField("report_messages", "message", msgID, req.Message)
 	if err != nil {
 		http.Error(w, "Encryption failure", http.StatusInternalServerError)
 		return
 	}
 
 	_, err = DB.Exec(`
-		INSERT INTO report_messages (report_id, sender_type, message_text)
-		VALUES ($1, 'reporter', $2)`,
-		reportID, encMsg)
+		INSERT INTO report_messages (id, report_id, sender_type, message_text)
+		VALUES ($1, $2, 'reporter', $3)`,
+		msgID, reportID, encMsg)
 	if err != nil {
 		http.Error(w, "Failed to save follow-up message", http.StatusInternalServerError)
 		return
@@ -688,13 +707,12 @@ func SubmitFollowUpHandler(w http.ResponseWriter, r *http.Request) {
 	GlobalSSEBroker.BroadcastNewMessage(reportID)
 
 	_, _ = DB.Exec(`
-		INSERT INTO admin_notifications (notif_type, title, message, target_report_id, target_tracking_code, recipient_username)
-		VALUES ($1, $2, $3, $4, $5, NULL)`,
+		INSERT INTO admin_notifications (notif_type, title, message, target_report_id, recipient_username)
+		VALUES ($1, $2, $3, $4, NULL)`,
 		"new_reply",
 		"پاسخ و پیام تکمیلی از گزارش‌دهنده",
-		"پیام جدید در پرونده: "+req.TrackingCode,
+		"پیام جدید از طرف گزارش‌دهنده دریافت شد.",
 		reportID,
-		req.TrackingCode,
 	)
 
 	fwdRows, err := DB.Query("SELECT recipient_username FROM report_forwardings WHERE report_id = $1", reportID)
@@ -704,13 +722,12 @@ func SubmitFollowUpHandler(w http.ResponseWriter, r *http.Request) {
 			var recipUser string
 			if scanErr := fwdRows.Scan(&recipUser); scanErr == nil && recipUser != "" {
 				_, _ = DB.Exec(`
-					INSERT INTO admin_notifications (notif_type, title, message, target_report_id, target_tracking_code, recipient_username)
-					VALUES ($1, $2, $3, $4, $5, $6)`,
+					INSERT INTO admin_notifications (notif_type, title, message, target_report_id, recipient_username)
+					VALUES ($1, $2, $3, $4, $5)`,
 					"new_reply",
 					"پاسخ و پیام تکمیلی از گزارش‌دهنده",
-					"پیام جدید در پرونده ارجاعی: "+req.TrackingCode,
+					"پیام جدید در پرونده ارجاعی دریافت شد.",
 					reportID,
-					req.TrackingCode,
 					recipUser,
 				)
 			}

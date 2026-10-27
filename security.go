@@ -52,8 +52,7 @@ type adminContextKeyType struct{}
 var adminContextKey = adminContextKeyType{}
 
 func contextWithAdmin(ctx context.Context, session AdminSession) context.Context {
-	ctx = context.WithValue(ctx, adminContextKey, session)
-	return context.WithValue(ctx, "admin", session)
+	return context.WithValue(ctx, adminContextKey, session)
 }
 
 func adminFromContext(r *http.Request) (AdminSession, bool) {
@@ -61,9 +60,6 @@ func adminFromContext(r *http.Request) (AdminSession, bool) {
 		return AdminSession{}, false
 	}
 	val := r.Context().Value(adminContextKey)
-	if val == nil {
-		val = r.Context().Value("admin")
-	}
 	if val == nil {
 		return AdminSession{}, false
 	}

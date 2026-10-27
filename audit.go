@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -96,7 +97,6 @@ func logAuditTxWithDetail(tx *sql.Tx, username, title, action string, targetID *
 	auditMu.Lock()
 	defer auditMu.Unlock()
 
-	ShipSyslogAudit(username, action, targetID, ip)
 	if tx == nil {
 		atomic.AddUint64(&auditFailures, 1)
 		log.Printf("CRITICAL AUDIT LOG TX FAILURE: tx is nil (user=%s, action=%s)", username, action)
@@ -117,7 +117,6 @@ func logAuditWithDetail(username, title, action string, targetID *int64, ip, det
 	auditMu.Lock()
 	defer auditMu.Unlock()
 
-	ShipSyslogAudit(username, action, targetID, ip)
 	if DB == nil {
 		atomic.AddUint64(&auditFailures, 1)
 		log.Printf("CRITICAL AUDIT LOG FAILURE: DB is nil (user=%s, action=%s)", username, action)
@@ -145,6 +144,7 @@ func logAuditWithDetail(username, title, action string, targetID *int64, ip, det
 		return fmt.Errorf("failed to commit audit transaction: %w", err)
 	}
 
+	ShipSyslogAudit(username, action, targetID, ip)
 	return nil
 }
 
@@ -161,6 +161,17 @@ type AuditVerificationResult struct {
 	VerifiedCount int     `json:"verified_count"`
 	FallbackRows  []int64 `json:"fallback_rows,omitempty"`
 	BrokenRowID   int64   `json:"broken_row_id,omitempty"`
+}
+
+func isAuditStrict() bool {
+	val := strings.ToLower(strings.TrimSpace(os.Getenv("HERASAT_AUDIT_STRICT")))
+	if val == "false" || val == "0" {
+		return false
+	}
+	if val == "true" || val == "1" {
+		return true
+	}
+	return os.Getenv("HERASAT_DEV_MODE") != "1"
 }
 
 func VerifyAuditChainDetailed(db *sql.DB) (AuditVerificationResult, error) {
@@ -181,6 +192,12 @@ func VerifyAuditChainDetailed(db *sql.DB) (AuditVerificationResult, error) {
 	expectedPrevHash := genesisAuditHash
 	verifiedCount := 0
 
+	cutoverIDStr := strings.TrimSpace(os.Getenv("HERASAT_AUDIT_LEGACY_CUTOVER_ID"))
+	var cutoverID int64
+	if cutoverIDStr != "" {
+		cutoverID, _ = strconv.ParseInt(cutoverIDStr, 10, 64)
+	}
+
 	for rows.Next() {
 		var id int64
 		var username, title, action, ip, detail, prevHash, entryHash string
@@ -191,6 +208,12 @@ func VerifyAuditChainDetailed(db *sql.DB) (AuditVerificationResult, error) {
 			res.VerifiedCount = verifiedCount
 			res.BrokenRowID = id
 			return res, fmt.Errorf("failed to scan audit row %d: %w", id, err)
+		}
+
+		if entryHash == "" {
+			res.VerifiedCount = verifiedCount
+			res.BrokenRowID = id
+			return res, fmt.Errorf("audit chain integrity failure at id %d: empty or null entry_hash", id)
 		}
 
 		if prevHash != expectedPrevHash {
@@ -214,6 +237,11 @@ func VerifyAuditChainDetailed(db *sql.DB) (AuditVerificationResult, error) {
 			} else {
 				legacySHA := computeLegacyAuditHash(prevHash, username, title, action, tidPtr, ip, createdAt)
 				if legacySHA == entryHash {
+					if isAuditStrict() && cutoverID > 0 && id > cutoverID {
+						res.VerifiedCount = verifiedCount
+						res.BrokenRowID = id
+						return res, fmt.Errorf("audit entry %d uses unkeyed legacy hash beyond cutover threshold %d", id, cutoverID)
+					}
 					res.FallbackRows = append(res.FallbackRows, id)
 				} else {
 					res.VerifiedCount = verifiedCount
@@ -246,16 +274,24 @@ func VerifyAuditChainOnStartup(db *sql.DB) error {
 	_, count, err := VerifyAuditChain(db)
 	if err != nil {
 		log.Printf("[AUDIT ALERT] Audit log chain integrity verification failed: %v", err)
-		if os.Getenv("HERASAT_DEV_MODE") != "1" && os.Getenv("HERASAT_AUDIT_STRICT") == "1" {
+		if isAuditStrict() {
 			return fmt.Errorf("audit log chain integrity failure: %w", err)
 		}
-		return nil
+		log.Println("[WARN] Running with broken audit chain in non-strict mode.")
+	} else {
+		log.Printf("[INFO] Audit log chain verified successfully (%d entries).", count)
 	}
-	log.Printf("[AUDIT] Successfully verified integrity of %d audit log entries in cryptographic chain.", count)
 	return nil
 }
 
+var auditVerifyRateLimiter = NewIPRateLimiter(0.1, 5)
+
 func VerifyAuditLogsHandler(w http.ResponseWriter, r *http.Request) {
+	if !auditVerifyRateLimiter.Allow(getIP(r)) {
+		http.Error(w, "تعداد درخواست‌های اعتبارسنجی بیش از حد مجاز است. لطفاً کمی صبر کنید.", http.StatusTooManyRequests)
+		return
+	}
+
 	valid, count, err := VerifyAuditChain(DB)
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")

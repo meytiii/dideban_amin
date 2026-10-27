@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "admin_handlers.go": {
-    "mtime": 1793093351.791845,
-    "seen": 1793094470.5493817,
-    "ast_hash": "399964a2eee2dd30163db0ce95c0545f",
+    "mtime": 1793095664.885828,
+    "seen": 1793096622.3055036,
+    "ast_hash": "07459aedd6448b763f37bf4bfd946e88",
     "semantic_hash": ""
   },
   "captcha.go": {
@@ -24,9 +24,9 @@
     "semantic_hash": ""
   },
   "db.go": {
-    "mtime": 1793091852.7770762,
-    "seen": 1793094470.5521255,
-    "ast_hash": "e92faf7f399a304b7fe9f40dee00a356",
+    "mtime": 1793096448.012277,
+    "seen": 1793096622.3073182,
+    "ast_hash": "6831e3b9331a383154991bf3d24e6441",
     "semantic_hash": ""
   },
   "go.mod": {
@@ -864,9 +864,9 @@
     "semantic_hash": ""
   },
   "metadata.go": {
-    "mtime": 1793090736.360269,
-    "seen": 1793090825.3440437,
-    "ast_hash": "0fe441186fdd978402c08211ebfd6d10",
+    "mtime": 1793095806.5126753,
+    "seen": 1793096622.308997,
+    "ast_hash": "9175ae57275f21604131310617458d3d",
     "semantic_hash": ""
   },
   "mfa.go": {
@@ -1380,9 +1380,9 @@
     "semantic_hash": ""
   },
   "docx_sandbox_test.go": {
-    "mtime": 1793087024.54869,
-    "seen": 1793087077.4233437,
-    "ast_hash": "e73ae8d4fc725f600776aa378e2ce41e",
+    "mtime": 1793096489.812641,
+    "seen": 1793096622.3075442,
+    "ast_hash": "d2bdca8c441841a973047cecb0f05e6a",
     "semantic_hash": ""
   },
   "forwarding_test.go": {
@@ -1428,9 +1428,9 @@
     "semantic_hash": ""
   },
   "migration_v2_test.go": {
-    "mtime": 1793086482.3634331,
-    "seen": 1793087077.4233656,
-    "ast_hash": "190f5209ac9a7435930b430f6008231f",
+    "mtime": 1793096473.4036436,
+    "seen": 1793096622.3094475,
+    "ast_hash": "d5adeaf0886c29d65142c31ee421402b",
     "semantic_hash": ""
   },
   "pagination_test.go": {
@@ -1482,9 +1482,9 @@
     "semantic_hash": ""
   },
   "session_persistence_test.go": {
-    "mtime": 1793086482.3748991,
-    "seen": 1793087077.4233792,
-    "ast_hash": "8b942a1d27c50a4c83190ddb0c338b59",
+    "mtime": 1793096363.2735868,
+    "seen": 1793096622.310938,
+    "ast_hash": "d74821f9d3c33c11aeb08a8cd0a800f1",
     "semantic_hash": ""
   },
   "sse_test.go": {
@@ -1505,12 +1505,6 @@
     "ast_hash": "8030f5e42b59c5f6d2bef9bc2fa2e413",
     "semantic_hash": ""
   },
-  "agent_fix_prompt.md": {
-    "mtime": 1793094428.7072117,
-    "seen": 1793094470.5759728,
-    "ast_hash": "a0c4d79edbe12d56258ace1a7838ca27",
-    "semantic_hash": ""
-  },
   "auth_hardening_test.go": {
     "mtime": 1793088627.0165958,
     "seen": 1793088703.4724784,
@@ -1518,9 +1512,9 @@
     "semantic_hash": ""
   },
   "SECURITY_CHANGES.md": {
-    "mtime": 1793094428.7061613,
-    "seen": 1793094470.575971,
-    "ast_hash": "e38ffa2fa77897093212d21f657282e6",
+    "mtime": 1793096611.166632,
+    "seen": 1793096622.323461,
+    "ast_hash": "d805a6eaa9dfe64e0d11819ca1a2cbd2",
     "semantic_hash": ""
   },
   "deployment_security_test.go": {
@@ -1548,9 +1542,9 @@
     "semantic_hash": ""
   },
   "audit.go": {
-    "mtime": 1793091173.7020185,
-    "seen": 1793091528.8558936,
-    "ast_hash": "7ef7f1e50febbadb98d934520e38d462",
+    "mtime": 1793095854.702206,
+    "seen": 1793096622.3055062,
+    "ast_hash": "5817245f3f26eaefddc7587db6784413",
     "semantic_hash": ""
   },
   "audit_security_test.go": {
@@ -1569,6 +1563,36 @@
     "mtime": 1793093320.8829029,
     "seen": 1793094470.5558808,
     "ast_hash": "03a46caa65a4cd38cb820dd9d6182cd0",
+    "semantic_hash": ""
+  },
+  "phase1_test.go": {
+    "mtime": 1793096220.9670608,
+    "seen": 1793096622.309625,
+    "ast_hash": "c3d3afb8854f1353833b81002d3ae7f5",
+    "semantic_hash": ""
+  },
+  "testdata/clean_photo.pdf": {
+    "mtime": 1793095972.8434932,
+    "seen": 1793096622.3241858,
+    "ast_hash": "2e16aa2af37a7f248f7007105f441e9e",
+    "semantic_hash": ""
+  },
+  "testdata/encrypted.pdf": {
+    "mtime": 1793095972.844493,
+    "seen": 1793096622.324187,
+    "ast_hash": "1a9949855467c6012a84de12e57be324",
+    "semantic_hash": ""
+  },
+  "testdata/flate_js.pdf": {
+    "mtime": 1793095972.8434932,
+    "seen": 1793096622.3241882,
+    "ast_hash": "894d2bbf27bb79cbcbc2a9b6c73c4fc8",
+    "semantic_hash": ""
+  },
+  "testdata/hex_js.pdf": {
+    "mtime": 1793095972.844493,
+    "seen": 1793096622.3241892,
+    "ast_hash": "cac93bab02de25bfd332ee694e064e0d",
     "semantic_hash": ""
   }
 }

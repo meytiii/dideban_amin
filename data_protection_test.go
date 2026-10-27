@@ -103,6 +103,10 @@ func TestTrackingCodeHMACAndResolution(t *testing.T) {
 }
 
 func TestEncryptedBackupAndTamperDetection(t *testing.T) {
+	if getPgDumpPath() == "" && os.Getenv("HERASAT_DOCKER_CONTAINER") == "" {
+		t.Skip("Skipping backup test: neither pg_dump nor HERASAT_DOCKER_CONTAINER is configured")
+	}
+
 	tmpDir, err := os.MkdirTemp("", "herasat_backup_test_*")
 	if err != nil {
 		t.Fatalf("failed to create temp dir: %v", err)
@@ -123,8 +127,8 @@ func TestEncryptedBackupAndTamperDetection(t *testing.T) {
 		t.Fatalf("failed to read backup file: %v", err)
 	}
 
-	if len(data) < 5 || string(data[:5]) != "HBAK\x01" {
-		t.Fatalf("expected HBAK\\x01 magic header, got: %q", data[:5])
+	if len(data) < 5 || string(data[:5]) != "HBAK\x02" {
+		t.Fatalf("expected HBAK\\x02 magic header, got: %q", data[:5])
 	}
 
 	err = RestoreBackup(backupPath, nil)

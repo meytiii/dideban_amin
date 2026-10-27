@@ -70,7 +70,7 @@ func TestReencryptLegacyData(t *testing.T) {
 	if !strings.HasPrefix(migratedDesc, "v2:f:") && !strings.HasPrefix(migratedDesc, "v3:") {
 		t.Fatalf("Expected migrated description to start with v2:f: or v3:, got %s", migratedDesc)
 	}
-	decDesc, err := DecryptAES(migratedDesc)
+	decDesc, err := DecryptBoundField("reports", "description", reportID, migratedDesc)
 	if err != nil || decDesc != plainDesc {
 		t.Fatalf("Decryption failed on migrated description: %v (got %q)", err, decDesc)
 	}

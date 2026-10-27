@@ -133,8 +133,87 @@ func loadDotEnv() {
 	}
 }
 
+func getDBConnStr() string {
+	dbConnStr := strings.TrimSpace(os.Getenv("HERASAT_DB_CONN"))
+	if dbConnStr == "" && os.Getenv("HERASAT_DEV_MODE") == "1" {
+		if envBytes, err := os.ReadFile(".env"); err == nil {
+			lines := strings.Split(string(envBytes), "\n")
+			for _, line := range lines {
+				line = strings.TrimSpace(line)
+				if strings.HasPrefix(line, "HERASAT_DB_CONN=") {
+					dbConnStr = strings.TrimPrefix(line, "HERASAT_DB_CONN=")
+					dbConnStr = strings.Trim(dbConnStr, "\"'")
+					break
+				}
+			}
+		}
+	}
+	if dbConnStr == "" {
+		log.Fatal("FATAL: HERASAT_DB_CONN environment variable is required.")
+	}
+	return dbConnStr
+}
+
 func main() {
 	loadDotEnv()
+
+	if len(os.Args) > 1 {
+		subcmd := os.Args[1]
+		switch subcmd {
+		case "backup":
+			aesMasterKey := os.Getenv("HERASAT_AES_KEY")
+			if len(aesMasterKey) != 32 {
+				log.Fatalf("FATAL: HERASAT_AES_KEY must be 32 bytes")
+			}
+			InitCrypto(aesMasterKey)
+			dbConnStr := getDBConnStr()
+			InitDB(dbConnStr)
+			defer DB.Close()
+			targetPath := ""
+			if len(os.Args) > 2 {
+				targetPath = os.Args[2]
+			}
+			dest, err := PerformBackup(DB, targetPath)
+			if err != nil {
+				log.Fatalf("Backup failed: %v", err)
+			}
+			fmt.Printf("Backup completed successfully: %s\n", dest)
+			return
+		case "restore":
+			if len(os.Args) < 3 {
+				log.Fatalf("Usage: herasat restore <backup_file_path>")
+			}
+			aesMasterKey := os.Getenv("HERASAT_AES_KEY")
+			if len(aesMasterKey) != 32 {
+				log.Fatalf("FATAL: HERASAT_AES_KEY must be 32 bytes")
+			}
+			InitCrypto(aesMasterKey)
+			dbConnStr := getDBConnStr()
+			InitDB(dbConnStr)
+			defer DB.Close()
+			if err := RestoreBackup(os.Args[2], DB); err != nil {
+				log.Fatalf("Restore failed: %v", err)
+			}
+			fmt.Println("Restore completed successfully.")
+			return
+		case "reencrypt":
+			aesMasterKey := os.Getenv("HERASAT_AES_KEY")
+			if len(aesMasterKey) != 32 {
+				log.Fatalf("FATAL: HERASAT_AES_KEY must be 32 bytes")
+			}
+			InitCrypto(aesMasterKey)
+			dbConnStr := getDBConnStr()
+			InitDB(dbConnStr)
+			defer DB.Close()
+			count, err := ReencryptDatabase(DB)
+			if err != nil {
+				log.Fatalf("Re-encryption failed: %v", err)
+			}
+			fmt.Printf("Re-encryption completed successfully. %d records updated.\n", count)
+			return
+		}
+	}
+
 	InitSyslogShipper()
 	defer GlobalSyslogShipper.Close()
 	defer GlobalSSEBroker.Close()
@@ -184,23 +263,7 @@ func main() {
 		log.Fatalf("FATAL SECURITY ERROR: Cryptographic self-tests failed: %v", err)
 	}
 
-	dbConnStr := strings.TrimSpace(os.Getenv("HERASAT_DB_CONN"))
-	if dbConnStr == "" && os.Getenv("HERASAT_DEV_MODE") == "1" {
-		if envBytes, err := os.ReadFile(".env"); err == nil {
-			lines := strings.Split(string(envBytes), "\n")
-			for _, line := range lines {
-				line = strings.TrimSpace(line)
-				if strings.HasPrefix(line, "HERASAT_DB_CONN=") {
-					dbConnStr = strings.TrimPrefix(line, "HERASAT_DB_CONN=")
-					dbConnStr = strings.Trim(dbConnStr, "\"'")
-					break
-				}
-			}
-		}
-	}
-	if dbConnStr == "" {
-		log.Fatal("FATAL: HERASAT_DB_CONN environment variable is required.")
-	}
+	dbConnStr := getDBConnStr()
 	InitDB(dbConnStr)
 	defer DB.Close()
 

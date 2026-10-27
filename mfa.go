@@ -298,18 +298,19 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var userID int64
 	var storedHash, fullName, roleTitle, role, encSecret string
 	var isSuperuser, totpEnabled bool
 	var passwordChangedAt, dbNow time.Time
 	var mustChangePassword bool
 
 	err = DB.QueryRow(`
-		SELECT password_hash, COALESCE(full_name, ''), role_title, COALESCE(role, 'edare_kol'), is_superuser,
+		SELECT id, password_hash, COALESCE(full_name, ''), role_title, COALESCE(role, 'edare_kol'), is_superuser,
 		       COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false),
 		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), NOW()
 		FROM admin_users
 		WHERE username=$1 AND is_active=true`, payload.Username).Scan(
-		&storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword,
+		&userID, &storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword,
 		&encSecret, &totpEnabled, &dbNow)
 	if err != nil {
 		http.Error(w, "کاربر یافت نشد یا حساب غیرفعال است.", http.StatusUnauthorized)
@@ -321,7 +322,7 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	plainSecret, err := DecryptAES(encSecret)
+	plainSecret, err := DecryptBoundField("admin_users", "totp_secret", userID, encSecret)
 	if err != nil {
 		http.Error(w, "خطای رمزگشایی کلید امنیتی دومرحله‌ای", http.StatusInternalServerError)
 		return
@@ -462,8 +463,9 @@ func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	clientIP := getIP(r)
+	var userID int64
 	var storedHash string
-	err := DB.QueryRow(`SELECT password_hash FROM admin_users WHERE username=$1`, admin.Username).Scan(&storedHash)
+	err := DB.QueryRow(`SELECT id, password_hash FROM admin_users WHERE username=$1`, admin.Username).Scan(&userID, &storedHash)
 	if err != nil {
 		http.Error(w, "کاربر یافت نشد.", http.StatusUnauthorized)
 		return
@@ -485,7 +487,7 @@ func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	encSecret, err := EncryptAES(req.Secret)
+	encSecret, err := EncryptBoundField("admin_users", "totp_secret", userID, req.Secret)
 	if err != nil {
 		http.Error(w, "خطا در ذخیره‌سازی امن کلید", http.StatusInternalServerError)
 		return
@@ -528,11 +530,12 @@ func Disable2FAHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	clientIP := getIP(r)
+	var userID int64
 	var storedHash, encSecret string
 	var totpEnabled, isSuperuser, totpEnforced bool
 	err := DB.QueryRow(`
-		SELECT password_hash, COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), is_superuser, COALESCE(totp_enforced, false)
-		FROM admin_users WHERE username=$1`, admin.Username).Scan(&storedHash, &encSecret, &totpEnabled, &isSuperuser, &totpEnforced)
+		SELECT id, password_hash, COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), is_superuser, COALESCE(totp_enforced, false)
+		FROM admin_users WHERE username=$1`, admin.Username).Scan(&userID, &storedHash, &encSecret, &totpEnabled, &isSuperuser, &totpEnforced)
 	if err != nil || !totpEnabled || encSecret == "" {
 		http.Error(w, "تنظیمات احراز هویت دومرحله‌ای نامعتبر است.", http.StatusBadRequest)
 		return
@@ -553,7 +556,7 @@ func Disable2FAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	plainSecret, err := DecryptAES(encSecret)
+	plainSecret, err := DecryptBoundField("admin_users", "totp_secret", userID, encSecret)
 	if err != nil {
 		http.Error(w, "خطای رمزگشایی کلید امنیتی", http.StatusInternalServerError)
 		return

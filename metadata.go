@@ -12,6 +12,7 @@ import (
 	"image/png"
 	"io"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"unicode/utf8"
 )
@@ -201,14 +202,25 @@ func ScanPDFForActiveContent(data []byte) error {
 	return nil
 }
 
+var (
+	rsidAttrRe   = regexp.MustCompile(`\s*w:rsid[A-Za-z0-9]*="[^"]*"`)
+	commentTagRe = regexp.MustCompile(`<w:comment(RangeStart|RangeEnd|Reference)[^>]*/>`)
+	trackRevRe   = regexp.MustCompile(`<(w:trackRevisions|w:documentProtection|w:writeProtection)[^>]*/>`)
+	relsDropRe   = regexp.MustCompile(`<Relationship [^>]*Target="[^"]*(comments|people\.xml|customXml)[^"]*"[^>]*/>`)
+)
+
 func SanitizePDF(data []byte) ([]byte, error) {
 	if err := ScanPDFForActiveContent(data); err != nil {
 		return nil, err
 	}
 
-	metadataFields := []string{"/Author", "/Creator", "/Producer", "/CreationDate", "/ModDate"}
 	res := make([]byte, len(data))
 	copy(res, data)
+
+	metadataFields := []string{
+		"/Author", "/Creator", "/Producer", "/CreationDate", "/ModDate",
+		"/Title", "/Subject", "/Keywords", "/Company", "/SourceModified",
+	}
 
 	for _, field := range metadataFields {
 		fBytes := []byte(field)
@@ -219,19 +231,87 @@ func SanitizePDF(data []byte) ([]byte, error) {
 				break
 			}
 			matchPos := idx + pos + len(fBytes)
-			for matchPos < len(res) && (res[matchPos] == ' ' || res[matchPos] == '\t') {
+			for matchPos < len(res) && (res[matchPos] == ' ' || res[matchPos] == '\t' || res[matchPos] == '\r' || res[matchPos] == '\n') {
 				matchPos++
 			}
 			if matchPos < len(res) && res[matchPos] == '(' {
-				closePos := bytes.IndexByte(res[matchPos:], ')')
+				depth := 1
+				k := matchPos + 1
+				for k < len(res) && depth > 0 {
+					if res[k] == '\\' && k+1 < len(res) {
+						res[k] = ' '
+						res[k+1] = ' '
+						k += 2
+						continue
+					}
+					if res[k] == '(' {
+						depth++
+					} else if res[k] == ')' {
+						depth--
+					}
+					if depth > 0 {
+						res[k] = ' '
+					}
+					k++
+				}
+			} else if matchPos < len(res) && res[matchPos] == '<' {
+				closePos := bytes.IndexByte(res[matchPos:], '>')
 				if closePos != -1 {
 					for k := matchPos + 1; k < matchPos+closePos; k++ {
-						res[k] = ' '
+						res[k] = '0'
 					}
 				}
 			}
 			idx = matchPos + 1
 		}
+	}
+
+	infoRefRe := regexp.MustCompile(`/Info\s+\d+\s+\d+\s+R`)
+	res = infoRefRe.ReplaceAllFunc(res, func(m []byte) []byte {
+		return bytes.Repeat([]byte(" "), len(m))
+	})
+
+	metaRefRe := regexp.MustCompile(`/Metadata\s+\d+\s+\d+\s+R`)
+	res = metaRefRe.ReplaceAllFunc(res, func(m []byte) []byte {
+		return bytes.Repeat([]byte(" "), len(m))
+	})
+
+	xmpStart := []byte("<?xpacket begin")
+	xmpEnd := []byte("<?xpacket end")
+	idx := 0
+	for {
+		sPos := bytes.Index(res[idx:], xmpStart)
+		if sPos == -1 {
+			break
+		}
+		actualStart := idx + sPos
+		ePos := bytes.Index(res[actualStart:], xmpEnd)
+		if ePos == -1 {
+			break
+		}
+		actualEnd := actualStart + ePos + len(xmpEnd)
+		for actualEnd < len(res) && res[actualEnd] != '>' {
+			actualEnd++
+		}
+		if actualEnd < len(res) {
+			actualEnd++
+		}
+		for k := actualStart; k < actualEnd; k++ {
+			res[k] = ' '
+		}
+		idx = actualEnd
+	}
+
+	eofMarker := []byte("%%EOF")
+	firstEOF := bytes.Index(res, eofMarker)
+	lastEOF := bytes.LastIndex(res, eofMarker)
+	if firstEOF != -1 && lastEOF != -1 && firstEOF < lastEOF {
+		prevTrailerRe := regexp.MustCompile(`trailer\s*<<[\s\S]*?>>`)
+		earlierPortion := res[:lastEOF]
+		cleared := prevTrailerRe.ReplaceAllFunc(earlierPortion, func(m []byte) []byte {
+			return bytes.Repeat([]byte(" "), len(m))
+		})
+		copy(res[:lastEOF], cleared)
 	}
 
 	return res, nil
@@ -307,7 +387,14 @@ func SanitizeOOXML(data []byte) ([]byte, error) {
 
 	for _, f := range zr.File {
 		clean := strings.ToLower(filepath.ToSlash(filepath.Clean(f.Name)))
-		if clean == "docprops/custom.xml" {
+		if clean == "docprops/custom.xml" ||
+			clean == "word/comments.xml" ||
+			clean == "word/commentsextended.xml" ||
+			clean == "word/commentsids.xml" ||
+			clean == "word/people.xml" ||
+			clean == "word/commentauthors.xml" ||
+			strings.HasPrefix(clean, "customxml/") ||
+			strings.Contains(clean, "/customxml/") {
 			continue
 		}
 
@@ -334,9 +421,23 @@ func SanitizeOOXML(data []byte) ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		_, err = io.Copy(w, rc)
+
+		content, err := io.ReadAll(rc)
 		_ = rc.Close()
 		if err != nil {
+			return nil, err
+		}
+
+		if clean == "word/document.xml" {
+			content = rsidAttrRe.ReplaceAll(content, nil)
+			content = commentTagRe.ReplaceAll(content, nil)
+		} else if clean == "word/settings.xml" {
+			content = trackRevRe.ReplaceAll(content, nil)
+		} else if strings.HasSuffix(clean, ".rels") {
+			content = relsDropRe.ReplaceAll(content, nil)
+		}
+
+		if _, err := w.Write(content); err != nil {
 			return nil, err
 		}
 	}

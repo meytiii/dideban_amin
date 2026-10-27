@@ -9,10 +9,11 @@ import (
 )
 
 type SSEClient struct {
-	id       string
-	username string
-	role     string
-	send     chan []byte
+	id          string
+	username    string
+	role        string
+	isSuperuser bool
+	send        chan []byte
 }
 
 type sseBroadcastMsg struct {
@@ -119,11 +120,51 @@ func (b *SSEBroker) BroadcastNewReport(reportID int64) {
 }
 
 func (b *SSEBroker) BroadcastNewMessage(reportID int64) {
-	b.Broadcast("new_message", map[string]interface{}{"report_id": reportID})
+	raw, err := json.Marshal(map[string]interface{}{"report_id": reportID})
+	if err != nil {
+		raw = []byte("{}")
+	}
+	msg := []byte(fmt.Sprintf("event: new_message\ndata: %s\n\n", string(raw)))
+
+	b.mu.RLock()
+	defer b.mu.RUnlock()
+	for client := range b.clients {
+		sess := AdminSession{
+			Username:    client.username,
+			Role:        client.role,
+			IsSuperuser: client.isSuperuser,
+		}
+		if canAdminAccessReport(sess, reportID) {
+			select {
+			case client.send <- msg:
+			default:
+			}
+		}
+	}
 }
 
 func (b *SSEBroker) BroadcastRegionalResponse(reportID int64) {
-	b.Broadcast("regional_response", map[string]interface{}{"report_id": reportID})
+	raw, err := json.Marshal(map[string]interface{}{"report_id": reportID})
+	if err != nil {
+		raw = []byte("{}")
+	}
+	msg := []byte(fmt.Sprintf("event: regional_response\ndata: %s\n\n", string(raw)))
+
+	b.mu.RLock()
+	defer b.mu.RUnlock()
+	for client := range b.clients {
+		sess := AdminSession{
+			Username:    client.username,
+			Role:        client.role,
+			IsSuperuser: client.isSuperuser,
+		}
+		if canAdminAccessReport(sess, reportID) {
+			select {
+			case client.send <- msg:
+			default:
+			}
+		}
+	}
 }
 
 func (b *SSEBroker) BroadcastSessionRevoked(username, tokenHash string) {
@@ -139,6 +180,8 @@ func (b *SSEBroker) BroadcastSessionRevoked(username, tokenHash string) {
 		}
 	}
 }
+
+const maxConcurrentSSEPerUser = 5
 
 func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 	flusher, ok := w.(http.Flusher)
@@ -158,11 +201,26 @@ func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Connection", "keep-alive")
 	w.Header().Set("X-Accel-Buffering", "no")
 
+	GlobalSSEBroker.mu.Lock()
+	var userClients []*SSEClient
+	for c := range GlobalSSEBroker.clients {
+		if c.username == admin.Username {
+			userClients = append(userClients, c)
+		}
+	}
+	if len(userClients) >= maxConcurrentSSEPerUser {
+		oldest := userClients[0]
+		delete(GlobalSSEBroker.clients, oldest)
+		close(oldest.send)
+	}
+	GlobalSSEBroker.mu.Unlock()
+
 	client := &SSEClient{
-		id:       admin.Token,
-		username: admin.Username,
-		role:     admin.Role,
-		send:     make(chan []byte, 32),
+		id:          admin.Token,
+		username:    admin.Username,
+		role:        admin.Role,
+		isSuperuser: admin.IsSuperuser,
+		send:        make(chan []byte, 32),
 	}
 
 	GlobalSSEBroker.register <- client

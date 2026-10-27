@@ -13,13 +13,26 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"strings"
+	"sync"
 	"unicode/utf8"
 
 	"golang.org/x/crypto/argon2"
 )
 
+type keyRingEntry struct {
+	kid         string
+	aesKey      []byte
+	keyFields   []byte
+	keyFilePath []byte
+	keyFileBlob []byte
+}
+
 var (
+	keyRingMu     sync.RWMutex
+	keyRing       = make(map[string]keyRingEntry)
+	activeKeyID   = "1"
 	aesKey        []byte
 	keyFields     []byte
 	keyFilePath   []byte
@@ -29,6 +42,7 @@ var (
 	keyCaptcha    []byte
 	keyAudit      []byte
 	keyBackup     []byte
+	keyTracking   []byte
 )
 
 func isKnownPlaceholderKey(k string) bool {
@@ -73,15 +87,39 @@ func deriveKey(masterKey []byte, info string) []byte {
 	return expandMac.Sum(nil)
 }
 
+func registerKeyRingEntry(kid string, rawKey []byte) keyRingEntry {
+	entry := keyRingEntry{
+		kid:         kid,
+		aesKey:      rawKey,
+		keyFields:   deriveKey(rawKey, "HERASAT_REPORT_FIELDS_V2"),
+		keyFilePath: deriveKey(rawKey, "HERASAT_FILE_PATH_V2"),
+		keyFileBlob: deriveKey(rawKey, "HERASAT_FILE_BLOB_V2"),
+	}
+	keyRing[kid] = entry
+	return entry
+}
+
 func InitCrypto(key string) {
 	if len(key) != 32 {
 		panic("AES key must be exactly 32 bytes for AES-256")
 	}
-	aesKey = []byte(key)
 
-	keyFields = deriveKey(aesKey, "HERASAT_REPORT_FIELDS_V2")
-	keyFilePath = deriveKey(aesKey, "HERASAT_FILE_PATH_V2")
-	keyFileBlob = deriveKey(aesKey, "HERASAT_FILE_BLOB_V2")
+	keyRingMu.Lock()
+	defer keyRingMu.Unlock()
+
+	activeKeyID = strings.TrimSpace(os.Getenv("HERASAT_KEY_ID"))
+	if activeKeyID == "" {
+		activeKeyID = "1"
+	}
+
+	keyRing = make(map[string]keyRingEntry)
+	entry := registerKeyRingEntry(activeKeyID, []byte(key))
+
+	aesKey = entry.aesKey
+	keyFields = entry.keyFields
+	keyFilePath = entry.keyFilePath
+	keyFileBlob = entry.keyFileBlob
+
 	hmacKey = deriveKey(aesKey, "HERASAT_CAPTCHA_HMAC_V2")
 	keyCaptcha = deriveKey(aesKey, "HERASAT_CAPTCHA_ENC_V2")
 
@@ -89,6 +127,27 @@ func InitCrypto(key string) {
 	legacyHmacKey = hLegacy[:]
 	keyAudit = deriveKey(aesKey, "HERASAT_AUDIT_LOG_CHAIN_HMAC_V1")
 	keyBackup = deriveKey(aesKey, "HERASAT_BACKUP_ENCRYPTION_V1")
+	keyTracking = deriveKey(aesKey, "HERASAT_TRACKING_CODE_HMAC_V1")
+
+	prevEnv := strings.TrimSpace(os.Getenv("HERASAT_AES_KEY_PREVIOUS"))
+	if prevEnv != "" {
+		for _, part := range strings.Split(prevEnv, ",") {
+			part = strings.TrimSpace(part)
+			if idx := strings.Index(part, ":"); idx > 0 {
+				kid := part[:idx]
+				rawKey := part[idx+1:]
+				if len(rawKey) == 32 {
+					registerKeyRingEntry(kid, []byte(rawKey))
+				}
+			} else if len(part) == 32 {
+				prevKID := strings.TrimSpace(os.Getenv("HERASAT_KEY_ID_PREVIOUS"))
+				if prevKID == "" {
+					prevKID = "0"
+				}
+				registerKeyRingEntry(prevKID, []byte(part))
+			}
+		}
+	}
 }
 
 func GetHMACKey() []byte {
@@ -121,9 +180,20 @@ func GetBackupKey() []byte {
 	return h[:]
 }
 
+func GetTrackingCodeHMACKey() []byte {
+	if len(keyTracking) > 0 {
+		return keyTracking
+	}
+	if len(aesKey) > 0 {
+		return deriveKey(aesKey, "HERASAT_TRACKING_CODE_HMAC_V1")
+	}
+	h := sha256.Sum256([]byte("TEST_DEFAULT_TRACKING_HMAC_KEY!"))
+	return h[:]
+}
+
 func HashTrackingCode(trackingCode string) string {
 	norm := strings.TrimSpace(trackingCode)
-	mac := hmac.New(sha256.New, GetAuditHMACKey())
+	mac := hmac.New(sha256.New, GetTrackingCodeHMACKey())
 	mac.Write([]byte("TRACK:" + norm))
 	return hex.EncodeToString(mac.Sum(nil))
 }
@@ -171,8 +241,19 @@ func DecryptWithAAD(key []byte, b64Ciphertext string, aad []byte) ([]byte, error
 }
 
 func EncryptBoundField(table, column string, rowID int64, plaintext string) (string, error) {
+	if plaintext == "" {
+		return "", nil
+	}
+	keyRingMu.RLock()
+	entry, ok := keyRing[activeKeyID]
+	kid := activeKeyID
+	keyRingMu.RUnlock()
+	if !ok {
+		return "", errors.New("active encryption key not initialized")
+	}
 	aad := []byte(fmt.Sprintf("%s:%s:%d", table, column, rowID))
-	return EncryptWithAAD(keyFields, "v3:1:f:", aad, []byte(plaintext))
+	prefix := fmt.Sprintf("v3:%s:b:", kid)
+	return EncryptWithAAD(entry.keyFields, prefix, aad, []byte(plaintext))
 }
 
 func DecryptBoundField(table, column string, rowID int64, rawCiphertext string) (string, error) {
@@ -180,21 +261,62 @@ func DecryptBoundField(table, column string, rowID int64, rawCiphertext string) 
 		return "", nil
 	}
 	aad := []byte(fmt.Sprintf("%s:%s:%d", table, column, rowID))
-	if strings.HasPrefix(rawCiphertext, "v3:1:f:") {
-		pt, err := DecryptWithAAD(keyFields, strings.TrimPrefix(rawCiphertext, "v3:1:f:"), aad)
-		if err == nil {
-			return string(pt), nil
+
+	if strings.HasPrefix(rawCiphertext, "v3:") {
+		parts := strings.SplitN(rawCiphertext, ":", 4)
+		if len(parts) == 4 && parts[2] == "b" {
+			kid := parts[1]
+			b64Payload := parts[3]
+
+			keyRingMu.RLock()
+			entry, ok := keyRing[kid]
+			if ok {
+				pt, err := DecryptWithAAD(entry.keyFields, b64Payload, aad)
+				if err == nil {
+					keyRingMu.RUnlock()
+					return string(pt), nil
+				}
+			}
+			for k, e := range keyRing {
+				if k == kid {
+					continue
+				}
+				pt, err := DecryptWithAAD(e.keyFields, b64Payload, aad)
+				if err == nil {
+					keyRingMu.RUnlock()
+					return string(pt), nil
+				}
+			}
+			keyRingMu.RUnlock()
+			return "", fmt.Errorf("%w: bound field integrity check failed for %s:%s:%d", ErrAuthenticationFailed, table, column, rowID)
 		}
 	}
+
 	return DecryptAES(rawCiphertext)
 }
 
 func EncryptAES(plaintext string) (string, error) {
-	return EncryptWithAAD(keyFields, "v3:1:f:", nil, []byte(plaintext))
+	keyRingMu.RLock()
+	entry, ok := keyRing[activeKeyID]
+	kid := activeKeyID
+	keyRingMu.RUnlock()
+	if !ok {
+		return "", errors.New("active encryption key not initialized")
+	}
+	prefix := fmt.Sprintf("v3:%s:f:", kid)
+	return EncryptWithAAD(entry.keyFields, prefix, nil, []byte(plaintext))
 }
 
 func EncryptFilePath(plaintext string) (string, error) {
-	return EncryptWithAAD(keyFilePath, "v3:1:p:", nil, []byte(plaintext))
+	keyRingMu.RLock()
+	entry, ok := keyRing[activeKeyID]
+	kid := activeKeyID
+	keyRingMu.RUnlock()
+	if !ok {
+		return "", errors.New("active encryption key not initialized")
+	}
+	prefix := fmt.Sprintf("v3:%s:p:", kid)
+	return EncryptWithAAD(entry.keyFilePath, prefix, nil, []byte(plaintext))
 }
 
 func encryptWithKey(key []byte, prefix, plaintext string) (string, error) {
@@ -227,17 +349,41 @@ func DecryptAES(rawCiphertext string) (string, error) {
 		return "", nil
 	}
 
-	if strings.HasPrefix(rawCiphertext, "v3:1:f:") {
-		pt, err := DecryptWithAAD(keyFields, strings.TrimPrefix(rawCiphertext, "v3:1:f:"), nil)
-		if err == nil {
-			return string(pt), nil
-		}
-	}
+	if strings.HasPrefix(rawCiphertext, "v3:") {
+		parts := strings.SplitN(rawCiphertext, ":", 4)
+		if len(parts) == 4 {
+			if parts[2] == "b" {
+				return "", fmt.Errorf("%w: bound ciphertext cannot be decrypted without AAD context", ErrAuthenticationFailed)
+			}
+			kid := parts[1]
+			kind := parts[2]
+			b64Payload := parts[3]
 
-	if strings.HasPrefix(rawCiphertext, "v3:1:p:") {
-		pt, err := DecryptWithAAD(keyFilePath, strings.TrimPrefix(rawCiphertext, "v3:1:p:"), nil)
-		if err == nil {
-			return string(pt), nil
+			keyRingMu.RLock()
+			defer keyRingMu.RUnlock()
+
+			entry, ok := keyRing[kid]
+			if ok {
+				targetKey := entry.keyFields
+				if kind == "p" {
+					targetKey = entry.keyFilePath
+				}
+				if pt, err := DecryptWithAAD(targetKey, b64Payload, nil); err == nil {
+					return string(pt), nil
+				}
+			}
+
+			for _, e := range keyRing {
+				targetKey := e.keyFields
+				if kind == "p" {
+					targetKey = e.keyFilePath
+				}
+				if pt, err := DecryptWithAAD(targetKey, b64Payload, nil); err == nil {
+					return string(pt), nil
+				}
+			}
+
+			return "", ErrAuthenticationFailed
 		}
 	}
 
@@ -382,14 +528,28 @@ func DecryptFileBytes(encryptedBytes []byte) ([]byte, error) {
 	if len(encryptedBytes) == 0 {
 		return nil, ErrAuthenticationFailed
 	}
-	if bytes.HasPrefix(encryptedBytes, []byte("HENC\x03")) {
-		return decryptFilePayload(keyFileBlob, encryptedBytes, 5)
-	}
-	if bytes.HasPrefix(encryptedBytes, []byte("HENC\x02")) {
-		return decryptFilePayload(keyFileBlob, encryptedBytes, 5)
+	keyRingMu.RLock()
+	defer keyRingMu.RUnlock()
+
+	if bytes.HasPrefix(encryptedBytes, []byte("HENC\x03")) || bytes.HasPrefix(encryptedBytes, []byte("HENC\x02")) {
+		for _, e := range keyRing {
+			if pt, err := decryptFilePayload(e.keyFileBlob, encryptedBytes, 5); err == nil {
+				return pt, nil
+			}
+		}
+		if pt, err := decryptFilePayload(keyFileBlob, encryptedBytes, 5); err == nil {
+			return pt, nil
+		}
 	}
 	if bytes.HasPrefix(encryptedBytes, []byte("HENC\x01")) {
-		return decryptFilePayload(aesKey, encryptedBytes, 5)
+		for _, e := range keyRing {
+			if pt, err := decryptFilePayload(e.aesKey, encryptedBytes, 5); err == nil {
+				return pt, nil
+			}
+		}
+		if pt, err := decryptFilePayload(aesKey, encryptedBytes, 5); err == nil {
+			return pt, nil
+		}
 	}
 	return nil, ErrAuthenticationFailed
 }

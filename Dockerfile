@@ -15,7 +15,8 @@ RUN apk add --no-cache \
     python3 \
     py3-pip \
     ca-certificates \
-    tzdata && \
+    tzdata \
+    postgresql16-client && \
     pip install --no-cache-dir --break-system-packages python-docx==1.1.2
 
 RUN addgroup -g 10001 -S herasat && \

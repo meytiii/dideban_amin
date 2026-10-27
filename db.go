@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"database/sql"
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -50,10 +51,81 @@ func InitDB(connStr string) {
 	}
 
 	enforceImmutableAuditLogs()
+
+	if err := VerifyWORMTriggers(DB); err != nil {
+		log.Fatalf("AFTA WORM Trigger verification failed: %v", err)
+	}
+	if err := VerifyAppRolePrivileges(DB); err != nil {
+		log.Fatalf("Database role privilege verification failed: %v", err)
+	}
+}
+
+type schemaMigration struct {
+	version int
+	name    string
+	sql     string
 }
 
 func runMigrations() {
-	migrationSQL := `
+	if _, err := DB.Exec(`
+		CREATE TABLE IF NOT EXISTS schema_migrations (
+			version INT PRIMARY KEY,
+			name VARCHAR(255) NOT NULL,
+			applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+		);
+	`); err != nil {
+		log.Fatalf("Failed to initialize schema_migrations: %v", err)
+	}
+
+	migrations := []schemaMigration{
+		{
+			version: 1,
+			name:    "initial_schema_and_extensions",
+			sql:     legacyMigrationSQL,
+		},
+		{
+			version: 2,
+			name:    "unique_tracking_hash_index",
+			sql: `
+				DROP INDEX IF EXISTS idx_reports_tracking_hash;
+				CREATE UNIQUE INDEX IF NOT EXISTS idx_reports_tracking_hash ON reports(tracking_code_hash);
+			`,
+		},
+	}
+
+	for _, m := range migrations {
+		var exists bool
+		err := DB.QueryRow("SELECT EXISTS(SELECT 1 FROM schema_migrations WHERE version = $1)", m.version).Scan(&exists)
+		if err != nil {
+			log.Fatalf("Failed to check migration version %d: %v", m.version, err)
+		}
+		if exists {
+			continue
+		}
+
+		tx, err := DB.Begin()
+		if err != nil {
+			log.Fatalf("Failed to begin transaction for migration %d (%s): %v", m.version, m.name, err)
+		}
+
+		if _, err := tx.Exec(m.sql); err != nil {
+			_ = tx.Rollback()
+			log.Fatalf("Migration %d (%s) failed: %v", m.version, m.name, err)
+		}
+
+		if _, err := tx.Exec("INSERT INTO schema_migrations (version, name, applied_at) VALUES ($1, $2, NOW())", m.version, m.name); err != nil {
+			_ = tx.Rollback()
+			log.Fatalf("Failed to record migration %d: %v", m.version, err)
+		}
+
+		if err := tx.Commit(); err != nil {
+			log.Fatalf("Failed to commit migration %d: %v", m.version, err)
+		}
+		log.Printf("Applied database migration %d: %s", m.version, m.name)
+	}
+}
+
+const legacyMigrationSQL = `
 	DO $$
 	BEGIN
 		IF NOT EXISTS (
@@ -456,13 +528,7 @@ func runMigrations() {
 	  AND NOT EXISTS (
 	      SELECT 1 FROM report_messages rm WHERE rm.report_id = reports.id AND rm.sender_type = 'admin'
 	  );
-	`
-	if _, err := DB.Exec(migrationSQL); err != nil {
-		log.Printf("Warning: Schema migration notice: %v", err)
-	} else {
-		log.Println("Database schema auto-migrations applied successfully.")
-	}
-}
+`
 
 func migrateTrackingCodes(db *sql.DB) error {
 	if db == nil {
@@ -539,6 +605,42 @@ func enforceImmutableAuditLogs() {
 	} else {
 		log.Println("Immutable audit log security constraints active (AFTA WORM Compliant).")
 	}
+}
+
+func VerifyWORMTriggers(db *sql.DB) error {
+	var count int
+	err := db.QueryRow(`
+		SELECT COUNT(*)
+		FROM pg_trigger
+		WHERE tgname IN ('trg_immutable_audit_logs', 'trg_immutable_audit_logs_truncate')
+		  AND tgrelid = 'audit_logs'::regclass
+		  AND tgenabled = 'O'
+	`).Scan(&count)
+	if err != nil {
+		return fmt.Errorf("failed to verify WORM triggers on audit_logs: %w", err)
+	}
+	if count < 2 {
+		return fmt.Errorf("WORM triggers missing or disabled on audit_logs table (found %d of 2)", count)
+	}
+	return nil
+}
+
+func VerifyAppRolePrivileges(db *sql.DB) error {
+	var currentUser string
+	if err := db.QueryRow("SELECT current_user").Scan(&currentUser); err != nil {
+		return fmt.Errorf("failed to query current database user: %w", err)
+	}
+	if currentUser == "herasat_app" {
+		var hasPrivilege bool
+		err := db.QueryRow(`
+			SELECT has_table_privilege('herasat_app', 'audit_logs', 'TRUNCATE') OR
+			       has_table_privilege('herasat_app', 'audit_logs', 'DELETE')
+		`).Scan(&hasPrivilege)
+		if err == nil && hasPrivilege {
+			return fmt.Errorf("security violation: herasat_app possesses prohibited TRUNCATE or DELETE privileges on audit_logs")
+		}
+	}
+	return nil
 }
 
 func generateInitialPassword() string {

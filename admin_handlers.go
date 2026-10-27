@@ -696,7 +696,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encName.Valid && encName.String != "" {
-		if dec, err := DecryptAES(encName.String); err == nil {
+		if dec, err := DecryptBoundField("reports", "reporter_name", rep.ID, encName.String); err == nil {
 			rep.ReporterName = dec
 		} else {
 			rep.ReporterName = "[خطای رمزگشایی]"
@@ -706,7 +706,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encPhone.Valid && encPhone.String != "" {
-		if dec, err := DecryptAES(encPhone.String); err == nil {
+		if dec, err := DecryptBoundField("reports", "reporter_phone", rep.ID, encPhone.String); err == nil {
 			if strings.TrimSpace(dec) != "" {
 				rep.ReporterPhone = dec
 			} else {
@@ -720,7 +720,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encDesc.Valid && encDesc.String != "" {
-		if dec, err := DecryptAES(encDesc.String); err == nil {
+		if dec, err := DecryptBoundField("reports", "description", rep.ID, encDesc.String); err == nil {
 			rep.Description = dec
 		} else {
 			rep.Description = "[خطای رمزگشایی - اصالت محتوا تأیید نشد]"
@@ -730,7 +730,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encNotes.Valid && encNotes.String != "" {
-		decNotes, err := DecryptAES(encNotes.String)
+		decNotes, err := DecryptBoundField("reports", "internal_notes", rep.ID, encNotes.String)
 		if err == nil {
 			rep.InternalNotes = decNotes
 		} else {
@@ -741,7 +741,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encResponse.Valid && encResponse.String != "" {
-		if dec, err := DecryptAES(encResponse.String); err == nil {
+		if dec, err := DecryptBoundField("reports", "admin_response", rep.ID, encResponse.String); err == nil {
 			rep.AdminResponse = dec
 		} else {
 			rep.AdminResponse = "[خطای رمزگشایی]"
@@ -780,13 +780,13 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			var encFilePath, encFileName string
 			if err := attRows.Scan(&att.ID, &att.MimeType, &encFilePath, &encFileName, &att.FileSize); err == nil {
 				if encFileName != "" {
-					decName, err := DecryptAES(encFileName)
+					decName, err := DecryptBoundField("evidence_files", "file_name", att.ID, encFileName)
 					if err == nil && decName != "" {
 						att.FileName = decName
 					}
 				}
 				if att.FileName == "" {
-					decPath, err := DecryptAES(encFilePath)
+					decPath, err := DecryptBoundField("evidence_files", "file_path", att.ID, encFilePath)
 					if err == nil {
 						att.FileName = filepath.Base(decPath)
 					} else {
@@ -813,7 +813,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			var encMsg string
 			var msgCreatedAt time.Time
 			if err := msgRows.Scan(&m.ID, &m.SenderType, &encMsg, &m.AdminUsername, &msgCreatedAt, &m.AdminFullName); err == nil {
-				decMsg, err := DecryptAES(encMsg)
+				decMsg, err := DecryptBoundField("report_messages", "message", m.ID, encMsg)
 				if err == nil {
 					m.Message = decMsg
 				} else {
@@ -848,7 +848,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 				var respAt sql.NullTime
 				if err := rRows.Scan(&rr.ID, &rr.RecipientUsername, &rr.RecipientName, &rr.RecipientTitle, &encResp, &respAt); err == nil {
 					if encResp.Valid && encResp.String != "" {
-						dec, err := DecryptAES(encResp.String)
+						dec, err := DecryptBoundField("report_forwardings", "response_text", rr.ID, encResp.String)
 						if err == nil {
 							rr.ResponseText = dec
 						} else {
@@ -877,7 +877,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		`, reportID, admin.Username).Scan(&myRR.ID, &myRR.RecipientUsername, &myRR.RecipientName, &myRR.RecipientTitle, &encResp, &respAt)
 		if err == nil {
 			if encResp.Valid && encResp.String != "" {
-				dec, err := DecryptAES(encResp.String)
+				dec, err := DecryptBoundField("report_forwardings", "response_text", myRR.ID, encResp.String)
 				if err == nil {
 					myRR.ResponseText = dec
 				}
@@ -938,7 +938,7 @@ func UpdateInternalNotesHandler(w http.ResponseWriter, r *http.Request) {
 
 	var encNotes *string
 	if notesText != "" {
-		encrypted, err := EncryptAES(notesText)
+		encrypted, err := EncryptBoundField("reports", "internal_notes", req.ReportID, notesText)
 		if err != nil {
 			http.Error(w, "Encryption error", http.StatusInternalServerError)
 			return
@@ -1143,7 +1143,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		realPath, err := DecryptAES(encPath)
+		realPath, err := DecryptBoundField("evidence_files", "file_path", fileID, encPath)
 		if err != nil {
 			http.Error(w, "Failed to decrypt file path", http.StatusInternalServerError)
 			return
@@ -1174,7 +1174,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 		ext := filepath.Ext(cleanPath)
 		downloadName := "evidence_" + reportIDStr + "_" + fileIDStr + ext
 		if encFileName != "" {
-			if decName, err := DecryptAES(encFileName); err == nil && decName != "" {
+			if decName, err := DecryptBoundField("evidence_files", "file_name", fileID, encFileName); err == nil && decName != "" {
 				downloadName = decName
 			}
 		}
@@ -1216,7 +1216,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 
 	if len(files) == 1 {
 		f := files[0]
-		realPath, err := DecryptAES(f.encPath)
+		realPath, err := DecryptBoundField("evidence_files", "file_path", f.id, f.encPath)
 		if err != nil {
 			http.Error(w, "Failed to decrypt file path", http.StatusInternalServerError)
 			return
@@ -1247,7 +1247,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 		ext := filepath.Ext(cleanPath)
 		downloadName := "evidence_" + reportIDStr + ext
 		if f.encFileName != "" {
-			if decName, err := DecryptAES(f.encFileName); err == nil && decName != "" {
+			if decName, err := DecryptBoundField("evidence_files", "file_name", f.id, f.encFileName); err == nil && decName != "" {
 				downloadName = decName
 			}
 		}
@@ -1265,7 +1265,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 	usedNames := make(map[string]int)
 
 	for _, f := range files {
-		realPath, err := DecryptAES(f.encPath)
+		realPath, err := DecryptBoundField("evidence_files", "file_path", f.id, f.encPath)
 		if err != nil {
 			continue
 		}
@@ -1287,7 +1287,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 
 		entryName := fmt.Sprintf("evidence_%d_%d%s", reportID, f.id, filepath.Ext(cleanPath))
 		if f.encFileName != "" {
-			if decName, err := DecryptAES(f.encFileName); err == nil && decName != "" {
+			if decName, err := DecryptBoundField("evidence_files", "file_name", f.id, f.encFileName); err == nil && decName != "" {
 				entryName = decName
 			}
 		}
@@ -1367,7 +1367,7 @@ func RespondToReportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	encResponse, err := EncryptAES(req.Response)
+	encResponse, err := EncryptBoundField("reports", "admin_response", req.ReportID, req.Response)
 	if err != nil {
 		http.Error(w, "Encryption failure", http.StatusInternalServerError)
 		return
@@ -1383,12 +1383,17 @@ func RespondToReportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = DB.Exec(`
-		INSERT INTO report_messages (report_id, sender_type, message_text, admin_username, created_at)
-		VALUES ($1, 'admin', $2, $3, NOW())`,
-		req.ReportID, encResponse, admin.Username)
-	if err != nil {
-		log.Printf("Failed to insert message into report_messages: %v", err)
+	var msgID int64
+	if err := DB.QueryRow("SELECT nextval(pg_get_serial_sequence('report_messages', 'id'))").Scan(&msgID); err == nil {
+		if encMsg, err := EncryptBoundField("report_messages", "message", msgID, req.Response); err == nil {
+			_, err = DB.Exec(`
+				INSERT INTO report_messages (id, report_id, sender_type, message_text, admin_username, created_at)
+				VALUES ($1, $2, 'admin', $3, $4, NOW())`,
+				msgID, req.ReportID, encMsg, admin.Username)
+			if err != nil {
+				log.Printf("Failed to insert message into report_messages: %v", err)
+			}
+		}
 	}
 
 	GlobalSSEBroker.BroadcastNewMessage(req.ReportID)
@@ -3513,20 +3518,20 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 	trackingCode = ResolveTrackingCode(trackingCode)
 
 	description := ""
-	if dec, err := DecryptAES(encDesc); err == nil {
+	if dec, err := DecryptBoundField("reports", "description", id, encDesc); err == nil {
 		description = dec
 	} else {
 		description = "[خطای رمزگشایی - اصالت محتوا تأیید نشد]"
 	}
 	reporterName := "ثبت نشده"
 	if encName.Valid && encName.String != "" {
-		if dec, err := DecryptAES(encName.String); err == nil && dec != "" {
+		if dec, err := DecryptBoundField("reports", "reporter_name", id, encName.String); err == nil && dec != "" {
 			reporterName = dec
 		}
 	}
 	reporterPhone := "ثبت نشده"
 	if encPhone.Valid && encPhone.String != "" {
-		if dec, err := DecryptAES(encPhone.String); err == nil && dec != "" {
+		if dec, err := DecryptBoundField("reports", "reporter_phone", id, encPhone.String); err == nil && dec != "" {
 			reporterPhone = dec
 		}
 	}
@@ -3534,7 +3539,7 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 	adminResponse := "فاقد پاسخ کارشناس حراست"
 	hasAdminResponse := false
 	if encResponse.Valid && strings.TrimSpace(encResponse.String) != "" {
-		if dec, err := DecryptAES(encResponse.String); err == nil && strings.TrimSpace(dec) != "" {
+		if dec, err := DecryptBoundField("reports", "admin_response", id, encResponse.String); err == nil && strings.TrimSpace(dec) != "" {
 			adminResponse = strings.TrimSpace(dec)
 			hasAdminResponse = true
 		}
@@ -3542,7 +3547,7 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 
 	internalNotes := "فاقد یادداشت محرمانه داخلی."
 	if encNotes.Valid && encNotes.String != "" {
-		if dec, err := DecryptAES(encNotes.String); err == nil && dec != "" {
+		if dec, err := DecryptBoundField("reports", "internal_notes", id, encNotes.String); err == nil && dec != "" {
 			internalNotes = dec
 		}
 	}
@@ -3735,7 +3740,7 @@ func SubmitRegionalResponseHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	trackingCode = ResolveTrackingCode(trackingCode)
 
-	encResp, err := EncryptAES(req.Response)
+	encResp, err := EncryptBoundField("report_forwardings", "response_text", fwdID, req.Response)
 	if err != nil {
 		http.Error(w, "خطا در رمزنگاری داده‌ها", http.StatusInternalServerError)
 		return
