@@ -55,3 +55,60 @@ This document tracks all verified security findings, code modifications, operato
 ### Tests & Verification
 - `auth_hardening_test.go`: Added test cases for compound lockout by IP, bound MFA token verification and replay prevention, Unicode rune-based password policy, restricted session middleware enforcement, and initial admin password generation.
 - Full regression suite: `go test ./...` passed.
+
+---
+
+## Phase 2: Deployment, Environment & Network Safety
+
+### Verified Findings
+1. **Unrestricted Admin Interface Access**: If `HERASAT_ADMIN_ALLOWED_CIDRS` was left empty, the application started without restriction and permitted admin panel and login access from any IP address without explicit operator approval.
+2. **Reverse Proxy Spoofing & Header Forgery**: When running behind a reverse proxy (`HERASAT_COOKIE_SECURE=true` without TLS), an empty `HERASAT_TRUSTED_PROXIES` allowed untrusted clients to forge `X-Forwarded-For` or caused all requests to appear as the reverse proxy IP, undermining rate limiting, account lockouts, and IP whitelisting.
+3. **Repeated Dynamic CIDR Parsing**: Network CIDR environment variables were parsed on every HTTP request, risking runtime panics, log flooding, or silent dropping of malformed entries.
+4. **Silent ClamAV Inactivity**: When ClamAV antivirus daemon was disabled or unreachable, no prominent warning was logged, leaving operators unaware of uninspected file uploads.
+5. **Insecure AES Master Key Fallback & Placeholders**: `crypto.go` contained a hardcoded fallback key (`"01234567890123456789012345678901"`) in `init()`, and `.env.example` placeholders were not rejected at startup.
+6. **Deprecated Headers & TLS Configurations**: `X-XSS-Protection` header (deprecated and prone to browser-level side-channels) and `PreferServerCipherSuites: true` (deprecated in Go 1.17+) were present in production configurations. CSP was not aligned with `HERASAT_ALLOWED_ORIGINS`.
+7. **Incomplete Docker Stack**: `docker-compose.yml` only defined Postgres without an application container or ClamAV daemon.
+
+### Code Changes
+- **Startup CIDR Validation & Network Caching (`network.go`)**:
+  - Implemented `parseCIDRs` with strict syntax and bitmask validation, failing fast at startup on malformed entries.
+  - Pre-parsed and cached `HERASAT_ADMIN_ALLOWED_CIDRS` and `HERASAT_TRUSTED_PROXIES` at startup; avoided per-request parsing.
+  - Refused startup if `HERASAT_ADMIN_ALLOWED_CIDRS` is empty unless `HERASAT_ADMIN_ALLOW_ANY=true` or `HERASAT_DEV_MODE=1` is explicitly set.
+  - Refused startup if `HERASAT_COOKIE_SECURE=true` without TLS certificates and `HERASAT_TRUSTED_PROXIES` is empty (unless `HERASAT_DEV_MODE=1`).
+- **ClamAV Antivirus Daemon Hardening (`clamav.go`)**:
+  - Added `Ping()` method using ClamAV's zero-delimited protocol (`zPING\x00` expecting `PONG`).
+  - Added `CheckClamAVStartup`: enabled by default in production (`HERASAT_DEV_MODE != "1"`), logs prominent warnings if disabled or unreachable, and enforces fail-closed startup termination if `HERASAT_CLAMAV_REQUIRED=1`.
+  - Added fallback host/port resolution for `CLAMAV_URL` / `CLAMAV_PORT`.
+- **Cryptographic Master Key Enforcement (`crypto.go`)**:
+  - Removed hardcoded fallback key in `crypto.go`'s `init()`.
+  - Added `isKnownPlaceholderKey` rejecting known development keys (including `.env.example` placeholders and repeated-byte strings).
+  - Configured `TestMain` in `test_main_test.go` to provide a dedicated test key for unit testing.
+- **Security Headers & TLS Hardening (`main.go`)**:
+  - Removed deprecated `X-XSS-Protection` header and deprecated `PreferServerCipherSuites: true`.
+  - Aligned Content-Security-Policy `connect-src` and `form-action` with `HERASAT_ALLOWED_ORIGINS`.
+  - Added `Vary: Origin` and enforced 403 Forbidden for preflight `OPTIONS` requests from unauthorized origins.
+- **Production Containerization (`Dockerfile`, `docker-compose.yml`)**:
+  - Created multi-stage `Dockerfile` (Go 1.24 alpine builder, Alpine 3.20 runtime, non-root user `herasat:herasat` UID/GID 10001).
+  - Pinned `python3`, `py3-pip`, and `python-docx==1.1.2` in the container.
+  - Updated `docker-compose.yml` with full multi-service stack: `app`, `postgres` (with healthcheck), and `clamav`.
+- **Configuration Templates**:
+  - Updated `.env.example` and `env.example` with all new deployment parameters (`HERASAT_ADMIN_ALLOW_ANY`, `HERASAT_CLAMAV_REQUIRED`, `HERASAT_DEV_MODE`, etc.).
+
+### Operator Impact
+- Production deployments must either specify `HERASAT_ADMIN_ALLOWED_CIDRS` or explicitly set `HERASAT_ADMIN_ALLOW_ANY=true`.
+- Reverse proxy deployments (`HERASAT_COOKIE_SECURE=true` without local TLS) must declare `HERASAT_TRUSTED_PROXIES` with proxy IP/CIDRs.
+- Placeholders such as `CHANGE_ME_TO_EXACTLY_32_BYTES_!` for `HERASAT_AES_KEY` will halt startup with an actionable error.
+- ClamAV is enabled by default in production mode; to require daemon availability before serving requests, operators can set `HERASAT_CLAMAV_REQUIRED=1`.
+
+### Tests & Verification
+- `deployment_security_test.go`:
+  - `TestParseCIDRs`: valid CIDRs, bare IPs, IPv6, and malformed CIDR rejection.
+  - `TestAdminAllowedCIDRsStartupRefusal`: startup failure when CIDRs empty, bypass verification via `ALLOW_ANY` or `DEV_MODE`.
+  - `TestReverseProxyCookieSecureStartupRefusal`: startup refusal when cookie secure without TLS and empty trusted proxies.
+  - `TestIsKnownPlaceholderKey`: rejection of example placeholders and acceptance of valid 32-byte keys.
+  - `TestSecureHeadersMiddlewareHardening`: verification of header removals, CSP origin alignment, and CORS preflight rejection.
+  - `TestAdminIPWhitelistMiddlewareCached`: verification of admin IP whitelisting using pre-cached CIDR data.
+- `clamav_test.go`:
+  - `TestClamAVPingAndStartupChecks`: daemon pinging, disabled bypass, and startup failure with `HERASAT_CLAMAV_REQUIRED=1`.
+- Regression: `go test ./...` passed.
+

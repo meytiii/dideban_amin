@@ -27,6 +27,10 @@ func startMockClamAVServer(t *testing.T, eicarSig string) (string, func()) {
 				defer c.Close()
 				cmdBuf := make([]byte, 10)
 				n, _ := c.Read(cmdBuf)
+				if bytes.HasPrefix(cmdBuf[:n], []byte("zPING\x00")) || bytes.HasPrefix(cmdBuf[:n], []byte("PING")) {
+					_, _ = c.Write([]byte("PONG\x00"))
+					return
+				}
 				if n < 9 || !bytes.HasPrefix(cmdBuf, []byte("zINSTREAM\x00")) {
 					return
 				}
@@ -136,5 +140,46 @@ func TestClamAVDisabledBypassesNetwork(t *testing.T) {
 	ok, _, err := scanner.ScanStream(bytes.NewReader([]byte("Any bytes")))
 	if err != nil || !ok {
 		t.Fatalf("when disabled, ScanStream should return ok=true and err=nil, got ok=%v, err: %v", ok, err)
+	}
+}
+
+func TestClamAVPingAndStartupChecks(t *testing.T) {
+	addr, cleanup := startMockClamAVServer(t, "EICAR-STANDARD-ANTIVIRUS-TEST-FILE")
+	defer cleanup()
+
+	_ = os.Setenv("HERASAT_CLAMAV_ENABLED", "true")
+	_ = os.Setenv("HERASAT_CLAMAV_ADDR", addr)
+	defer func() {
+		_ = os.Unsetenv("HERASAT_CLAMAV_ENABLED")
+		_ = os.Unsetenv("HERASAT_CLAMAV_ADDR")
+	}()
+
+	scanner := NewClamAVScanner()
+	if err := scanner.Ping(); err != nil {
+		t.Fatalf("expected ping to succeed, got: %v", err)
+	}
+
+	if err := CheckClamAVStartup(scanner); err != nil {
+		t.Fatalf("expected CheckClamAVStartup to succeed, got: %v", err)
+	}
+
+	_ = os.Setenv("HERASAT_CLAMAV_ADDR", "127.0.0.1:54322")
+	scannerDown := NewClamAVScanner()
+	_ = os.Setenv("HERASAT_CLAMAV_REQUIRED", "1")
+	defer os.Unsetenv("HERASAT_CLAMAV_REQUIRED")
+
+	if err := CheckClamAVStartup(scannerDown); err == nil {
+		t.Fatalf("expected error when HERASAT_CLAMAV_REQUIRED=1 and daemon down")
+	}
+
+	_ = os.Setenv("HERASAT_CLAMAV_REQUIRED", "0")
+	if err := CheckClamAVStartup(scannerDown); err != nil {
+		t.Fatalf("expected warning but no fatal error when HERASAT_CLAMAV_REQUIRED=0")
+	}
+
+	_ = os.Setenv("HERASAT_CLAMAV_ENABLED", "false")
+	scannerDisabled := NewClamAVScanner()
+	if err := CheckClamAVStartup(scannerDisabled); err != nil {
+		t.Fatalf("expected nil when clamav disabled")
 	}
 }

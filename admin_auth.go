@@ -266,43 +266,6 @@ func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func parseTrustedProxies(envVal string) []*net.IPNet {
-	if strings.TrimSpace(envVal) == "" {
-		return nil
-	}
-	var nets []*net.IPNet
-	for _, cidr := range strings.Split(envVal, ",") {
-		cidr = strings.TrimSpace(cidr)
-		if cidr == "" {
-			continue
-		}
-		if !strings.Contains(cidr, "/") {
-			if strings.Contains(cidr, ":") {
-				cidr += "/128"
-			} else {
-				cidr += "/32"
-			}
-		}
-		_, ipNet, err := net.ParseCIDR(cidr)
-		if err == nil && ipNet != nil {
-			nets = append(nets, ipNet)
-		}
-	}
-	return nets
-}
-
-func ipInCIDRs(ip net.IP, cidrs []*net.IPNet) bool {
-	if ip == nil {
-		return false
-	}
-	for _, cidr := range cidrs {
-		if cidr.Contains(ip) {
-			return true
-		}
-	}
-	return false
-}
-
 func getIP(r *http.Request) string {
 	remoteHost, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
@@ -310,7 +273,7 @@ func getIP(r *http.Request) string {
 	}
 	remoteIP := net.ParseIP(strings.TrimSpace(remoteHost))
 
-	trustedNets := parseTrustedProxies(os.Getenv("HERASAT_TRUSTED_PROXIES"))
+	trustedNets := GetTrustedProxies()
 	if len(trustedNets) == 0 || !ipInCIDRs(remoteIP, trustedNets) {
 		return remoteHost
 	}

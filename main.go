@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -32,7 +33,27 @@ func secureHeadersMiddleware(next http.Handler) http.Handler {
 			}
 		}
 
-		w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; report-uri /api/security/csp-report;")
+		allowedOriginsEnv := os.Getenv("HERASAT_ALLOWED_ORIGINS")
+		var allowedOrigins []string
+		if allowedOriginsEnv != "" {
+			for _, o := range strings.Split(allowedOriginsEnv, ",") {
+				o = strings.TrimSpace(o)
+				if o != "" {
+					allowedOrigins = append(allowedOrigins, o)
+				}
+			}
+		}
+
+		cspConnect := "connect-src 'self'"
+		cspForm := "form-action 'self'"
+		if len(allowedOrigins) > 0 {
+			extra := " " + strings.Join(allowedOrigins, " ")
+			cspConnect += extra
+			cspForm += extra
+		}
+
+		csp := fmt.Sprintf("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; %s; %s; frame-ancestors 'none'; report-uri /api/security/csp-report;", cspForm, cspConnect)
+		w.Header().Set("Content-Security-Policy", csp)
 		w.Header().Set("Cross-Origin-Opener-Policy", "same-origin")
 		w.Header().Set("Cross-Origin-Resource-Policy", "same-origin")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -40,25 +61,35 @@ func secureHeadersMiddleware(next http.Handler) http.Handler {
 		if isCookieSecure() {
 			w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
 		}
-		w.Header().Set("X-XSS-Protection", "1; mode=block")
 		w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
 		w.Header().Set("Permissions-Policy", "geolocation=(), microphone=(), camera=(), payment=()")
 
 		origin := r.Header.Get("Origin")
-		allowedOriginsEnv := os.Getenv("HERASAT_ALLOWED_ORIGINS")
-		if origin != "" && allowedOriginsEnv != "" {
-			for _, allowed := range strings.Split(allowedOriginsEnv, ",") {
-				if strings.TrimSpace(allowed) == origin {
-					w.Header().Set("Access-Control-Allow-Origin", origin)
-					w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-					w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-CSRF-Token")
-					w.Header().Set("Access-Control-Allow-Credentials", "true")
+		if len(allowedOrigins) > 0 {
+			w.Header().Add("Vary", "Origin")
+		}
+		originAllowed := false
+		if origin != "" && len(allowedOrigins) > 0 {
+			for _, allowed := range allowedOrigins {
+				if allowed == origin {
+					originAllowed = true
 					break
 				}
 			}
 		}
 
+		if originAllowed {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-CSRF-Token")
+			w.Header().Set("Access-Control-Allow-Credentials", "true")
+		}
+
 		if r.Method == http.MethodOptions {
+			if origin != "" && !originAllowed {
+				http.Error(w, "CORS origin not allowed", http.StatusForbidden)
+				return
+			}
 			w.WriteHeader(http.StatusOK)
 			return
 		}
@@ -113,16 +144,16 @@ func main() {
 	tlsConfigured := certFile != "" && keyFile != ""
 	cookieSecureEnv := os.Getenv("HERASAT_COOKIE_SECURE")
 	enableTLSEnv := os.Getenv("HERASAT_ENABLE_TLS")
-	allowInsecureHTTP := enableTLSEnv == "false" || os.Getenv("HERASAT_INSECURE_HTTP") == "true" || os.Getenv("HERASAT_DEV_MODE") == "1" || cookieSecureEnv == "false"
+	allowInsecureHTTP := enableTLSEnv == "false" || os.Getenv("HERASAT_INSECURE_HTTP") == "true" || os.Getenv("HERASAT_DEV_MODE") == "1" || cookieSecureEnv == "false" || cookieSecureEnv == "0"
 
-	if !tlsConfigured && cookieSecureEnv != "true" && !allowInsecureHTTP {
+	if !tlsConfigured && cookieSecureEnv != "true" && cookieSecureEnv != "1" && !allowInsecureHTTP {
 		log.Fatalf("FATAL: refusing to start without TLS and without HERASAT_COOKIE_SECURE=true. Set HERASAT_TLS_CERT/HERASAT_TLS_KEY or explicitly set HERASAT_COOKIE_SECURE=true behind a trusted TLS-terminating reverse proxy.")
 	}
 
 	if allowInsecureHTTP {
 		log.Println("WARNING: Running in HTTP mode. Session cookies will not have Secure flag.")
 		InitCookieSecurity(false)
-	} else if cookieSecureEnv == "true" {
+	} else if cookieSecureEnv == "true" || cookieSecureEnv == "1" {
 		if !tlsConfigured {
 			log.Println("WARNING: HERASAT_COOKIE_SECURE=true set without TLS certificates; assuming trusted TLS-terminating reverse proxy.")
 		}
@@ -131,9 +162,21 @@ func main() {
 		InitCookieSecurity(tlsConfigured)
 	}
 
+	if err := InitNetworkSecurity(); err != nil {
+		log.Fatalf("%v", err)
+	}
+
+	clamScanner := NewClamAVScanner()
+	if err := CheckClamAVStartup(clamScanner); err != nil {
+		log.Fatalf("%v", err)
+	}
+
 	aesMasterKey := os.Getenv("HERASAT_AES_KEY")
 	if len(aesMasterKey) != 32 {
 		log.Fatalf("FATAL SECURITY ERROR: Environment variable HERASAT_AES_KEY must be set and exactly 32 bytes long.")
+	}
+	if isKnownPlaceholderKey(aesMasterKey) {
+		log.Fatalf("FATAL SECURITY ERROR: HERASAT_AES_KEY is using an insecure placeholder key. Generate a cryptographically secure 32-byte secret.")
 	}
 	InitCrypto(aesMasterKey)
 
@@ -270,8 +313,7 @@ func main() {
 
 	if tlsConfigured {
 		server.TLSConfig = &tls.Config{
-			MinVersion:               tls.VersionTLS12,
-			PreferServerCipherSuites: true,
+			MinVersion: tls.VersionTLS12,
 			CipherSuites: []uint16{
 				tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
 				tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,

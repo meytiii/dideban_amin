@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net"
 	"os"
 	"strings"
@@ -24,10 +25,29 @@ type ClamAVScanner struct {
 }
 
 func NewClamAVScanner() *ClamAVScanner {
-	enabled := strings.ToLower(os.Getenv("HERASAT_CLAMAV_ENABLED")) == "true"
+	val := strings.ToLower(strings.TrimSpace(os.Getenv("HERASAT_CLAMAV_ENABLED")))
+	enabled := false
+	if val == "true" || val == "1" {
+		enabled = true
+	} else if val == "false" || val == "0" {
+		enabled = false
+	} else {
+		enabled = os.Getenv("HERASAT_DEV_MODE") != "1"
+	}
+
 	addr := os.Getenv("HERASAT_CLAMAV_ADDR")
 	if addr == "" {
-		addr = "127.0.0.1:3310"
+		host := os.Getenv("CLAMAV_URL")
+		port := os.Getenv("CLAMAV_PORT")
+		if host != "" {
+			if port != "" {
+				addr = net.JoinHostPort(host, port)
+			} else {
+				addr = net.JoinHostPort(host, "3310")
+			}
+		} else {
+			addr = "127.0.0.1:3310"
+		}
 	}
 	timeoutStr := os.Getenv("HERASAT_CLAMAV_TIMEOUT")
 	timeout := 10 * time.Second
@@ -45,6 +65,56 @@ func NewClamAVScanner() *ClamAVScanner {
 
 func (s *ClamAVScanner) IsEnabled() bool {
 	return s.enabled
+}
+
+func (s *ClamAVScanner) Ping() error {
+	if !s.enabled {
+		return nil
+	}
+	conn, err := net.DialTimeout("tcp", s.address, s.timeout)
+	if err != nil {
+		return fmt.Errorf("%w: %v", ErrClamAVUnavailable, err)
+	}
+	defer conn.Close()
+
+	if err := conn.SetDeadline(time.Now().Add(s.timeout)); err != nil {
+		return fmt.Errorf("%w: %v", ErrClamAVUnavailable, err)
+	}
+
+	if _, err := conn.Write([]byte("zPING\x00")); err != nil {
+		return fmt.Errorf("%w: %v", ErrClamAVUnavailable, err)
+	}
+
+	buf := make([]byte, 16)
+	n, err := conn.Read(buf)
+	if err != nil && err != io.EOF {
+		return fmt.Errorf("%w: %v", ErrClamAVUnavailable, err)
+	}
+
+	resp := strings.TrimSpace(strings.ReplaceAll(string(buf[:n]), "\x00", ""))
+	if !strings.Contains(resp, "PONG") {
+		return fmt.Errorf("%w: unexpected clamav ping response: %s", ErrClamAVUnavailable, resp)
+	}
+	return nil
+}
+
+func CheckClamAVStartup(scanner *ClamAVScanner) error {
+	if !scanner.IsEnabled() {
+		log.Println("WARNING: ClamAV antivirus scanner is DISABLED. Uploaded files will not be scanned for malware! Do not run with ClamAV disabled in production.")
+		return nil
+	}
+
+	err := scanner.Ping()
+	if err != nil {
+		required := os.Getenv("HERASAT_CLAMAV_REQUIRED") == "1" || os.Getenv("HERASAT_CLAMAV_REQUIRED") == "true"
+		if required {
+			return fmt.Errorf("FATAL: ClamAV is required (HERASAT_CLAMAV_REQUIRED=1) but daemon at %s is unreachable: %w", scanner.address, err)
+		}
+		log.Printf("WARNING: ClamAV daemon at %s is currently unreachable: %v. Scans will fail closed on file uploads until service is available.", scanner.address, err)
+	} else {
+		log.Printf("ClamAV antivirus daemon reachable at %s (PING/PONG verified)", scanner.address)
+	}
+	return nil
 }
 
 func (s *ClamAVScanner) ScanStream(r io.Reader) (bool, string, error) {

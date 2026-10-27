@@ -924,10 +924,17 @@ func InitCookieSecurity(secure bool) {
 	cookieSecureExplicit = true
 }
 
+func ResetCookieSecurityForTest() {
+	cachedCookieSecure = false
+	cookieSecureExplicit = false
+	cookieSecureOnce = sync.Once{}
+}
+
 func isCookieSecure() bool {
 	if !cookieSecureExplicit {
 		cookieSecureOnce.Do(func() {
-			cachedCookieSecure = os.Getenv("HERASAT_COOKIE_SECURE") == "true"
+			val := strings.ToLower(strings.TrimSpace(os.Getenv("HERASAT_COOKIE_SECURE")))
+			cachedCookieSecure = val == "true" || val == "1"
 		})
 	}
 	return cachedCookieSecure

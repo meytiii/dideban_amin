@@ -2,7 +2,6 @@ package main
 
 import (
 	"compress/gzip"
-	"net"
 	"net/http"
 	"os"
 	"strings"
@@ -38,26 +37,12 @@ func NoStoreMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 func AdminIPWhitelistMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		allowedEnv := strings.TrimSpace(os.Getenv("HERASAT_ADMIN_ALLOWED_CIDRS"))
-		if allowedEnv == "" {
-			next.ServeHTTP(w, r)
-			return
-		}
-
-		allowedNets := parseTrustedProxies(allowedEnv)
-		if len(allowedNets) == 0 {
-			next.ServeHTTP(w, r)
-			return
-		}
-
-		clientIPStr := getIP(r)
-		clientIP := net.ParseIP(clientIPStr)
-		if clientIP == nil || !ipInCIDRs(clientIP, allowedNets) {
+		if !isAdminAccessAllowed(r) {
+			clientIPStr := getIP(r)
 			logAudit("UNKNOWN", "SECURITY_ALERT", "ADMIN_IP_WHITELIST_BLOCKED:"+clientIPStr, nil, clientIPStr)
 			http.Error(w, "دسترسی به بخش مدیریت از این آدرس شبکه مجاز نمی‌باشد.", http.StatusForbidden)
 			return
 		}
-
 		next.ServeHTTP(w, r)
 	}
 }

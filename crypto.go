@@ -28,10 +28,34 @@ var (
 	keyCaptcha    []byte
 )
 
-func init() {
-	if len(aesKey) == 0 {
-		InitCrypto("01234567890123456789012345678901")
+func isKnownPlaceholderKey(k string) bool {
+	k = strings.TrimSpace(k)
+	placeholders := []string{
+		"CHANGE_ME_TO_EXACTLY_32_BYTES_!",
+		"01234567890123456789012345678901",
+		"12345678901234567890123456789012",
+		"00000000000000000000000000000000",
+		"11111111111111111111111111111111",
+		"abcdefghijklmnopqrstuvwxyz012345",
 	}
+	for _, p := range placeholders {
+		if k == p {
+			return true
+		}
+	}
+	if len(k) == 32 {
+		allSame := true
+		for i := 1; i < 32; i++ {
+			if k[i] != k[0] {
+				allSame = false
+				break
+			}
+		}
+		if allSame {
+			return true
+		}
+	}
+	return false
 }
 
 func deriveKey(masterKey []byte, info string) []byte {
