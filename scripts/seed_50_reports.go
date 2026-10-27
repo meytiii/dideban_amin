@@ -61,12 +61,12 @@ func genTrackingCode() string {
 func main() {
 	connStr := os.Getenv("HERASAT_DB_CONN")
 	if connStr == "" {
-		connStr = "host=127.0.0.1 port=5432 user=herasat_user password=herasat1405@ dbname=herasat_db sslmode=disable"
+		log.Fatalf("HERASAT_DB_CONN environment variable must be set")
 	}
 
 	aesKeyStr := os.Getenv("HERASAT_AES_KEY")
 	if aesKeyStr == "" {
-		aesKeyStr = "HERASAT_SECURE_KEY_32_CHARS_LONG"
+		log.Fatalf("HERASAT_AES_KEY environment variable must be set")
 	}
 	if len(aesKeyStr) != 32 {
 		log.Fatalf("AES key must be 32 bytes")
