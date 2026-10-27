@@ -870,6 +870,30 @@
       "source_location": "L1673"
     },
     {
+      "id": "frontend_admin_js_admin_initmfaotpinput",
+      "label": "initMfaOtpInput()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 106,
+      "community_name": "createOtpController",
+      "file_type": "code",
+      "norm_label": "initmfaotpinput()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L1504"
+    },
+    {
+      "id": "frontend_admin_js_admin_showmfastep",
+      "label": "showMFAStep()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 106,
+      "community_name": "createOtpController",
+      "file_type": "code",
+      "norm_label": "showmfastep()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L1513"
+    },
+    {
       "id": "frontend_admin_js_admin_toasciidigits",
       "label": "toAsciiDigits()",
       "_callable": true,
@@ -2226,18 +2250,6 @@
       "source_location": "L751"
     },
     {
-      "id": "frontend_admin_js_admin_cancelmfastep",
-      "label": "cancelMFAStep()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "cancelmfastep()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L1554"
-    },
-    {
       "id": "frontend_admin_js_admin_check2faenforcementnotice",
       "label": "check2FAEnforcementNotice()",
       "_callable": true,
@@ -2260,18 +2272,6 @@
       "norm_label": "checkadminprofile()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L7485"
-    },
-    {
-      "id": "frontend_admin_js_admin_checkhostconnection",
-      "label": "checkHostConnection()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "checkhostconnection()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L843"
     },
     {
       "id": "frontend_admin_js_admin_checkmustchangepasswordpolicy",
@@ -2358,16 +2358,16 @@
       "source_location": "L2975"
     },
     {
-      "id": "frontend_admin_js_admin_forcelogoutonconnectiondrop",
-      "label": "forceLogoutOnConnectionDrop()",
+      "id": "frontend_admin_js_admin_fetchforwardingrecipients",
+      "label": "fetchForwardingRecipients()",
       "_callable": true,
       "_origin": "ast",
       "community": 26,
       "community_name": "admin.js",
       "file_type": "code",
-      "norm_label": "forcelogoutonconnectiondrop()",
+      "norm_label": "fetchforwardingrecipients()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L881"
+      "source_location": "L10398"
     },
     {
       "id": "frontend_admin_js_admin_getelementpersianlabel",
@@ -2382,6 +2382,30 @@
       "source_location": "L629"
     },
     {
+      "id": "frontend_admin_js_admin_getscrollbehavior",
+      "label": "getScrollBehavior()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "getscrollbehavior()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L185"
+    },
+    {
+      "id": "frontend_admin_js_admin_handlekpicardfilter",
+      "label": "handleKPICardFilter()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "handlekpicardfilter()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L3796"
+    },
+    {
       "id": "frontend_admin_js_admin_handletimertick",
       "label": "handleTimerTick()",
       "_callable": true,
@@ -2392,30 +2416,6 @@
       "norm_label": "handletimertick()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L1045"
-    },
-    {
-      "id": "frontend_admin_js_admin_hideofflinebanner",
-      "label": "hideOfflineBanner()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "hideofflinebanner()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L804"
-    },
-    {
-      "id": "frontend_admin_js_admin_initmfaotpinput",
-      "label": "initMfaOtpInput()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "initmfaotpinput()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L1504"
     },
     {
       "id": "frontend_admin_js_admin_initpasswordstrengthindicators",
@@ -2430,16 +2430,16 @@
       "source_location": "L3048"
     },
     {
-      "id": "frontend_admin_js_admin_loadadmincaptcha",
-      "label": "loadAdminCaptcha()",
+      "id": "frontend_admin_js_admin_inittableheadersinteractions",
+      "label": "initTableHeadersInteractions()",
       "_callable": true,
       "_origin": "ast",
       "community": 26,
       "community_name": "admin.js",
       "file_type": "code",
-      "norm_label": "loadadmincaptcha()",
+      "norm_label": "inittableheadersinteractions()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L1106"
+      "source_location": "L2467"
     },
     {
       "id": "frontend_admin_js_admin_onreadycheck",
@@ -2466,16 +2466,52 @@
       "source_location": "L1075"
     },
     {
-      "id": "frontend_admin_js_admin_pinghost",
-      "label": "pingHost()",
+      "id": "frontend_admin_js_admin_openforwardmodal",
+      "label": "openForwardModal()",
       "_callable": true,
       "_origin": "ast",
       "community": 26,
       "community_name": "admin.js",
       "file_type": "code",
-      "norm_label": "pinghost()",
+      "norm_label": "openforwardmodal()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L826"
+      "source_location": "L10549"
+    },
+    {
+      "id": "frontend_admin_js_admin_openresetpwdmodal",
+      "label": "openResetPwdModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "openresetpwdmodal()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L8343"
+    },
+    {
+      "id": "frontend_admin_js_admin_openshortcutsmodal",
+      "label": "openShortcutsModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "openshortcutsmodal()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L4898"
+    },
+    {
+      "id": "frontend_admin_js_admin_promotetemporarily",
+      "label": "promoteTemporarily()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "promotetemporarily()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L187"
     },
     {
       "id": "frontend_admin_js_admin_refresh2fastatus",
@@ -2488,6 +2524,30 @@
       "norm_label": "refresh2fastatus()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L1722"
+    },
+    {
+      "id": "frontend_admin_js_admin_renderrecipientlist",
+      "label": "renderRecipientList()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "renderrecipientlist()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L10417"
+    },
+    {
+      "id": "frontend_admin_js_admin_renderrecipientlistskeleton",
+      "label": "renderRecipientListSkeleton()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "renderrecipientlistskeleton()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L10529"
     },
     {
       "id": "frontend_admin_js_admin_reset2famodalviews",
@@ -2574,42 +2634,6 @@
       "source_location": "L7558"
     },
     {
-      "id": "frontend_admin_js_admin_showmfastep",
-      "label": "showMFAStep()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "showmfastep()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L1513"
-    },
-    {
-      "id": "frontend_admin_js_admin_showofflinebanner",
-      "label": "showOfflineBanner()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "showofflinebanner()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L782"
-    },
-    {
-      "id": "frontend_admin_js_admin_startrecoverypolling",
-      "label": "startRecoveryPolling()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "startrecoverypolling()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L865"
-    },
-    {
       "id": "frontend_admin_js_admin_startsessiontimer",
       "label": "startSessionTimer()",
       "_callable": true,
@@ -2622,28 +2646,16 @@
       "source_location": "L1095"
     },
     {
-      "id": "frontend_admin_js_admin_stopbackgroundpolling",
-      "label": "stopBackgroundPolling()",
+      "id": "frontend_admin_js_admin_syncalladmincustomselects",
+      "label": "syncAllAdminCustomSelects()",
       "_callable": true,
       "_origin": "ast",
       "community": 26,
       "community_name": "admin.js",
       "file_type": "code",
-      "norm_label": "stopbackgroundpolling()",
+      "norm_label": "syncalladmincustomselects()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L7467"
-    },
-    {
-      "id": "frontend_admin_js_admin_stoprecoverypolling",
-      "label": "stopRecoveryPolling()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "stoprecoverypolling()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L874"
+      "source_location": "L2162"
     },
     {
       "id": "frontend_admin_js_admin_triggerpassworderror",
@@ -2668,6 +2680,30 @@
       "norm_label": "updatepasswordstrengthwidget()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L3012"
+    },
+    {
+      "id": "frontend_admin_js_admin_updateselectedrecipientscounter",
+      "label": "updateSelectedRecipientsCounter()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "updateselectedrecipientscounter()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L10411"
+    },
+    {
+      "id": "frontend_admin_js_admin_updatetableheadersfromfilters",
+      "label": "updateTableHeadersFromFilters()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "updatetableheadersfromfilters()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L2426"
     },
     {
       "id": "frontend_admin_js_admin_updatetimerdisplay",
@@ -3090,28 +3126,16 @@
       "source_location": "L16"
     },
     {
-      "id": "frontend_admin_js_admin_closedetailview",
-      "label": "closeDetailView()",
+      "id": "frontend_admin_js_admin_adminfetch",
+      "label": "adminFetch()",
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
-      "norm_label": "closedetailview()",
+      "norm_label": "adminfetch()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L4853"
-    },
-    {
-      "id": "frontend_admin_js_admin_connectadminsse",
-      "label": "connectAdminSSE()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "connectadminsse()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L7380"
+      "source_location": "L67"
     },
     {
       "id": "frontend_admin_js_admin_createreportstatusbadge",
@@ -3119,7 +3143,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "createreportstatusbadge()",
       "source_file": "frontend/admin/js/admin.js",
@@ -3131,7 +3155,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "deletereportpermanently()",
       "source_file": "frontend/admin/js/admin.js",
@@ -3143,7 +3167,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "dismisstoast()",
       "source_file": "frontend/admin/js/admin.js",
@@ -3155,35 +3179,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "exportreportstocsv()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L3741"
-    },
-    {
-      "id": "frontend_admin_js_admin_fetchnotifications",
-      "label": "fetchNotifications()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "fetchnotifications()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L10107"
-    },
-    {
-      "id": "frontend_admin_js_admin_fetchreports",
-      "label": "fetchReports()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "fetchreports()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L4269"
     },
     {
       "id": "frontend_admin_js_admin_fetchsystemstatus",
@@ -3191,11 +3191,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "fetchsystemstatus()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L9861"
+    },
+    {
+      "id": "frontend_admin_js_admin_fetchwithtimeout",
+      "label": "fetchWithTimeout()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 52,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "fetchwithtimeout()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L9"
     },
     {
       "id": "frontend_admin_js_admin_formatjalalidatetime",
@@ -3203,11 +3215,47 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "formatjalalidatetime()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L3937"
+    },
+    {
+      "id": "frontend_admin_js_admin_getcsrftoken",
+      "label": "getCsrfToken()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 52,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "getcsrftoken()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L57"
+    },
+    {
+      "id": "frontend_admin_js_admin_getmatchsnippet",
+      "label": "getMatchSnippet()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 52,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "getmatchsnippet()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L4093"
+    },
+    {
+      "id": "frontend_admin_js_admin_handleadminlogout",
+      "label": "handleAdminLogout()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 52,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "handleadminlogout()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L6084"
     },
     {
       "id": "frontend_admin_js_admin_highlightandfocusinvalidfield",
@@ -3215,11 +3263,35 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "highlightandfocusinvalidfield()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L652"
+    },
+    {
+      "id": "frontend_admin_js_admin_highlightsearchterm",
+      "label": "highlightSearchTerm()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 52,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "highlightsearchterm()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L4083"
+    },
+    {
+      "id": "frontend_admin_js_admin_makepersianregex",
+      "label": "makePersianRegex()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 52,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "makepersianregex()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L4056"
     },
     {
       "id": "frontend_admin_js_admin_maketextareaautoexpand",
@@ -3227,23 +3299,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "maketextareaautoexpand()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L5953"
-    },
-    {
-      "id": "frontend_admin_js_admin_markreporthasnewmessage",
-      "label": "markReportHasNewMessage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "markreporthasnewmessage()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L7425"
     },
     {
       "id": "frontend_admin_js_admin_openforwardhistorymodal",
@@ -3251,7 +3311,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "openforwardhistorymodal()",
       "source_file": "frontend/admin/js/admin.js",
@@ -3263,7 +3323,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "renderforwardhistoryflowchart()",
       "source_file": "frontend/admin/js/admin.js",
@@ -3275,35 +3335,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "renderforwardhistoryskeleton()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L10655"
-    },
-    {
-      "id": "frontend_admin_js_admin_rendernotificationslist",
-      "label": "renderNotificationsList()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "rendernotificationslist()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L10154"
-    },
-    {
-      "id": "frontend_admin_js_admin_renderreportstableskeleton",
-      "label": "renderReportsTableSkeleton()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "renderreportstableskeleton()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L4247"
     },
     {
       "id": "frontend_admin_js_admin_rendertable",
@@ -3311,35 +3347,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "rendertable()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L4562"
     },
     {
-      "id": "frontend_admin_js_admin_renewsessioninteractive",
-      "label": "renewSessionInteractive()",
+      "id": "frontend_admin_js_admin_setupclassificationmodal",
+      "label": "setupClassificationModal()",
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
-      "norm_label": "renewsessioninteractive()",
+      "norm_label": "setupclassificationmodal()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L998"
-    },
-    {
-      "id": "frontend_admin_js_admin_schedulereportsrefresh",
-      "label": "scheduleReportsRefresh()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "schedulereportsrefresh()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L7417"
+      "source_location": "L6225"
     },
     {
       "id": "frontend_admin_js_admin_showtoast",
@@ -3347,47 +3371,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "showtoast()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L558"
     },
     {
-      "id": "frontend_admin_js_admin_startbackgroundpolling",
-      "label": "startBackgroundPolling()",
+      "id": "frontend_admin_js_admin_submitclassification",
+      "label": "submitClassification()",
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
-      "norm_label": "startbackgroundpolling()",
+      "norm_label": "submitclassification()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L7448"
-    },
-    {
-      "id": "frontend_admin_js_admin_startfallbackpolling",
-      "label": "startFallbackPolling()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "startfallbackpolling()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L7433"
-    },
-    {
-      "id": "frontend_admin_js_admin_switchmaintab",
-      "label": "switchMainTab()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "switchmaintab()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L7602"
+      "source_location": "L6168"
     },
     {
       "id": "frontend_admin_js_admin_togglereadstatus",
@@ -3395,35 +3395,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "togglereadstatus()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L5892"
     },
     {
-      "id": "frontend_admin_js_admin_triggerconcurrentloginalert",
-      "label": "triggerConcurrentLoginAlert()",
+      "id": "frontend_admin_js_admin_updateclassificationui",
+      "label": "updateClassificationUI()",
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
-      "norm_label": "triggerconcurrentloginalert()",
+      "norm_label": "updateclassificationui()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L8639"
-    },
-    {
-      "id": "frontend_admin_js_admin_updatebulktoolbar",
-      "label": "updateBulkToolbar()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 52,
-      "community_name": "viewReport",
-      "file_type": "code",
-      "norm_label": "updatebulktoolbar()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L4121"
+      "source_location": "L6111"
     },
     {
       "id": "frontend_admin_js_admin_updatedetailnavbuttons",
@@ -3431,7 +3419,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "updatedetailnavbuttons()",
       "source_file": "frontend/admin/js/admin.js",
@@ -3443,7 +3431,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "updatekpicards()",
       "source_file": "frontend/admin/js/admin.js",
@@ -3455,7 +3443,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "viewreport()",
       "source_file": "frontend/admin/js/admin.js",
@@ -3467,7 +3455,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 52,
-      "community_name": "viewReport",
+      "community_name": "adminFetch",
       "file_type": "code",
       "norm_label": "renderadminfilecard()",
       "source_file": "frontend/admin/js/admin.js",
@@ -3498,76 +3486,148 @@
       "source_location": "L69"
     },
     {
-      "id": "frontend_admin_js_admin_initadmincustomfilters",
-      "label": "initAdminCustomFilters()",
+      "id": "frontend_admin_js_admin_connectadminsse",
+      "label": "connectAdminSSE()",
       "_callable": true,
       "_origin": "ast",
       "community": 58,
-      "community_name": "initAdminCustomSelect",
+      "community_name": "fetchReports",
       "file_type": "code",
-      "norm_label": "initadmincustomfilters()",
+      "norm_label": "connectadminsse()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L2384"
+      "source_location": "L7380"
     },
     {
-      "id": "frontend_admin_js_admin_initadmincustomselect",
-      "label": "initAdminCustomSelect()",
+      "id": "frontend_admin_js_admin_fetchnotifications",
+      "label": "fetchNotifications()",
       "_callable": true,
       "_origin": "ast",
       "community": 58,
-      "community_name": "initAdminCustomSelect",
+      "community_name": "fetchReports",
       "file_type": "code",
-      "norm_label": "initadmincustomselect()",
+      "norm_label": "fetchnotifications()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L2170"
+      "source_location": "L10107"
     },
     {
-      "id": "frontend_admin_js_admin_initadmincustomselect_closemenu",
-      "label": "closeMenu()",
+      "id": "frontend_admin_js_admin_fetchreports",
+      "label": "fetchReports()",
       "_callable": true,
       "_origin": "ast",
       "community": 58,
-      "community_name": "initAdminCustomSelect",
+      "community_name": "fetchReports",
       "file_type": "code",
-      "norm_label": "closemenu()",
+      "norm_label": "fetchreports()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L2307"
+      "source_location": "L4269"
     },
     {
-      "id": "frontend_admin_js_admin_initadmincustomselect_openmenu",
-      "label": "openMenu()",
+      "id": "frontend_admin_js_admin_markreporthasnewmessage",
+      "label": "markReportHasNewMessage()",
       "_callable": true,
       "_origin": "ast",
       "community": 58,
-      "community_name": "initAdminCustomSelect",
+      "community_name": "fetchReports",
       "file_type": "code",
-      "norm_label": "openmenu()",
+      "norm_label": "markreporthasnewmessage()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L2290"
+      "source_location": "L7425"
     },
     {
-      "id": "frontend_admin_js_admin_initadmincustomselect_syncstate",
-      "label": "syncState()",
+      "id": "frontend_admin_js_admin_rendernotificationslist",
+      "label": "renderNotificationsList()",
       "_callable": true,
       "_origin": "ast",
       "community": 58,
-      "community_name": "initAdminCustomSelect",
+      "community_name": "fetchReports",
       "file_type": "code",
-      "norm_label": "syncstate()",
+      "norm_label": "rendernotificationslist()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L2341"
+      "source_location": "L10154"
     },
     {
-      "id": "frontend_admin_js_admin_initadmincustomselect_togglemenu",
-      "label": "toggleMenu()",
+      "id": "frontend_admin_js_admin_renderreportstableskeleton",
+      "label": "renderReportsTableSkeleton()",
       "_callable": true,
       "_origin": "ast",
       "community": 58,
-      "community_name": "initAdminCustomSelect",
+      "community_name": "fetchReports",
       "file_type": "code",
-      "norm_label": "togglemenu()",
+      "norm_label": "renderreportstableskeleton()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L2317"
+      "source_location": "L4247"
+    },
+    {
+      "id": "frontend_admin_js_admin_renewsessioninteractive",
+      "label": "renewSessionInteractive()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "fetchReports",
+      "file_type": "code",
+      "norm_label": "renewsessioninteractive()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L998"
+    },
+    {
+      "id": "frontend_admin_js_admin_schedulereportsrefresh",
+      "label": "scheduleReportsRefresh()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "fetchReports",
+      "file_type": "code",
+      "norm_label": "schedulereportsrefresh()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L7417"
+    },
+    {
+      "id": "frontend_admin_js_admin_startbackgroundpolling",
+      "label": "startBackgroundPolling()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "fetchReports",
+      "file_type": "code",
+      "norm_label": "startbackgroundpolling()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L7448"
+    },
+    {
+      "id": "frontend_admin_js_admin_startfallbackpolling",
+      "label": "startFallbackPolling()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "fetchReports",
+      "file_type": "code",
+      "norm_label": "startfallbackpolling()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L7433"
+    },
+    {
+      "id": "frontend_admin_js_admin_switchmaintab",
+      "label": "switchMainTab()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "fetchReports",
+      "file_type": "code",
+      "norm_label": "switchmaintab()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L7602"
+    },
+    {
+      "id": "frontend_admin_js_admin_triggerconcurrentloginalert",
+      "label": "triggerConcurrentLoginAlert()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "fetchReports",
+      "file_type": "code",
+      "norm_label": "triggerconcurrentloginalert()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L8639"
     },
     {
       "id": "frontend_admin_js_admin_populateanalyticsdom",
@@ -4014,6 +4074,18 @@
       "source_location": "L4447"
     },
     {
+      "id": "frontend_admin_js_admin_closedetailview",
+      "label": "closeDetailView()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 71,
+      "community_name": "applyFilters",
+      "file_type": "code",
+      "norm_label": "closedetailview()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L4853"
+    },
+    {
       "id": "frontend_admin_js_admin_getjalalidatekeyfromdate",
       "label": "getJalaliDateKeyFromDate()",
       "_callable": true,
@@ -4024,30 +4096,6 @@
       "norm_label": "getjalalidatekeyfromdate()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L3921"
-    },
-    {
-      "id": "frontend_admin_js_admin_getmatchsnippet",
-      "label": "getMatchSnippet()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "applyFilters",
-      "file_type": "code",
-      "norm_label": "getmatchsnippet()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L4093"
-    },
-    {
-      "id": "frontend_admin_js_admin_getscrollbehavior",
-      "label": "getScrollBehavior()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "applyFilters",
-      "file_type": "code",
-      "norm_label": "getscrollbehavior()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L185"
     },
     {
       "id": "frontend_admin_js_admin_getvisiblepaginationpages",
@@ -4062,30 +4110,6 @@
       "source_location": "L4407"
     },
     {
-      "id": "frontend_admin_js_admin_handlekpicardfilter",
-      "label": "handleKPICardFilter()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "applyFilters",
-      "file_type": "code",
-      "norm_label": "handlekpicardfilter()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L3796"
-    },
-    {
-      "id": "frontend_admin_js_admin_highlightsearchterm",
-      "label": "highlightSearchTerm()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "applyFilters",
-      "file_type": "code",
-      "norm_label": "highlightsearchterm()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L4083"
-    },
-    {
       "id": "frontend_admin_js_admin_indexreportforsearch",
       "label": "indexReportForSearch()",
       "_callable": true,
@@ -4096,30 +4120,6 @@
       "norm_label": "indexreportforsearch()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L3948"
-    },
-    {
-      "id": "frontend_admin_js_admin_inittableheadersinteractions",
-      "label": "initTableHeadersInteractions()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "applyFilters",
-      "file_type": "code",
-      "norm_label": "inittableheadersinteractions()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L2467"
-    },
-    {
-      "id": "frontend_admin_js_admin_makepersianregex",
-      "label": "makePersianRegex()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "applyFilters",
-      "file_type": "code",
-      "norm_label": "makepersianregex()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L4056"
     },
     {
       "id": "frontend_admin_js_admin_normalizepersianforsearch",
@@ -4170,28 +4170,16 @@
       "source_location": "L4507"
     },
     {
-      "id": "frontend_admin_js_admin_syncalladmincustomselects",
-      "label": "syncAllAdminCustomSelects()",
+      "id": "frontend_admin_js_admin_updatebulktoolbar",
+      "label": "updateBulkToolbar()",
       "_callable": true,
       "_origin": "ast",
       "community": 71,
       "community_name": "applyFilters",
       "file_type": "code",
-      "norm_label": "syncalladmincustomselects()",
+      "norm_label": "updatebulktoolbar()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L2162"
-    },
-    {
-      "id": "frontend_admin_js_admin_updatetableheadersfromfilters",
-      "label": "updateTableHeadersFromFilters()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 71,
-      "community_name": "applyFilters",
-      "file_type": "code",
-      "norm_label": "updatetableheadersfromfilters()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L2426"
+      "source_location": "L4121"
     },
     {
       "id": "components_ui_badge_2_badge",
@@ -4242,16 +4230,28 @@
       "source_location": "L7686"
     },
     {
-      "id": "frontend_admin_js_admin_fetchforwardingrecipients",
-      "label": "fetchForwardingRecipients()",
+      "id": "frontend_admin_js_admin_deleteuser",
+      "label": "deleteUser()",
       "_callable": true,
       "_origin": "ast",
       "community": 75,
       "community_name": "openEditUserModal",
       "file_type": "code",
-      "norm_label": "fetchforwardingrecipients()",
+      "norm_label": "deleteuser()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L10398"
+      "source_location": "L7963"
+    },
+    {
+      "id": "frontend_admin_js_admin_fetchadminusers",
+      "label": "fetchAdminUsers()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 75,
+      "community_name": "openEditUserModal",
+      "file_type": "code",
+      "norm_label": "fetchadminusers()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L7793"
     },
     {
       "id": "frontend_admin_js_admin_liftuserlockout",
@@ -4266,6 +4266,18 @@
       "source_location": "L7939"
     },
     {
+      "id": "frontend_admin_js_admin_loadadvsubview",
+      "label": "loadAdvSubView()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 75,
+      "community_name": "openEditUserModal",
+      "file_type": "code",
+      "norm_label": "loadadvsubview()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L7659"
+    },
+    {
       "id": "frontend_admin_js_admin_openeditusermodal",
       "label": "openEditUserModal()",
       "_callable": true,
@@ -4276,54 +4288,6 @@
       "norm_label": "openeditusermodal()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L8070"
-    },
-    {
-      "id": "frontend_admin_js_admin_openforwardmodal",
-      "label": "openForwardModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 75,
-      "community_name": "openEditUserModal",
-      "file_type": "code",
-      "norm_label": "openforwardmodal()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L10549"
-    },
-    {
-      "id": "frontend_admin_js_admin_openresetpwdmodal",
-      "label": "openResetPwdModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 75,
-      "community_name": "openEditUserModal",
-      "file_type": "code",
-      "norm_label": "openresetpwdmodal()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L8343"
-    },
-    {
-      "id": "frontend_admin_js_admin_openshortcutsmodal",
-      "label": "openShortcutsModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 75,
-      "community_name": "openEditUserModal",
-      "file_type": "code",
-      "norm_label": "openshortcutsmodal()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L4898"
-    },
-    {
-      "id": "frontend_admin_js_admin_promotetemporarily",
-      "label": "promoteTemporarily()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 75,
-      "community_name": "openEditUserModal",
-      "file_type": "code",
-      "norm_label": "promotetemporarily()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L187"
     },
     {
       "id": "frontend_admin_js_admin_renderadminuserspage",
@@ -4338,30 +4302,6 @@
       "source_location": "L7735"
     },
     {
-      "id": "frontend_admin_js_admin_renderrecipientlist",
-      "label": "renderRecipientList()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 75,
-      "community_name": "openEditUserModal",
-      "file_type": "code",
-      "norm_label": "renderrecipientlist()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L10417"
-    },
-    {
-      "id": "frontend_admin_js_admin_renderrecipientlistskeleton",
-      "label": "renderRecipientListSkeleton()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 75,
-      "community_name": "openEditUserModal",
-      "file_type": "code",
-      "norm_label": "renderrecipientlistskeleton()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L10529"
-    },
-    {
       "id": "frontend_admin_js_admin_renderuserstable",
       "label": "renderUsersTable()",
       "_callable": true,
@@ -4372,6 +4312,18 @@
       "norm_label": "renderuserstable()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L7834"
+    },
+    {
+      "id": "frontend_admin_js_admin_renderuserstableskeleton",
+      "label": "renderUsersTableSkeleton()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 75,
+      "community_name": "openEditUserModal",
+      "file_type": "code",
+      "norm_label": "renderuserstableskeleton()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L7772"
     },
     {
       "id": "frontend_admin_js_admin_syncallfloatinglabels",
@@ -4386,48 +4338,12 @@
       "source_location": "L11042"
     },
     {
-      "id": "frontend_admin_js_admin_updateselectedrecipientscounter",
-      "label": "updateSelectedRecipientsCounter()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 75,
-      "community_name": "openEditUserModal",
-      "file_type": "code",
-      "norm_label": "updateselectedrecipientscounter()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L10411"
-    },
-    {
-      "id": "frontend_admin_js_admin_adminfetch",
-      "label": "adminFetch()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 77,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "adminfetch()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L67"
-    },
-    {
-      "id": "frontend_admin_js_admin_deleteuser",
-      "label": "deleteUser()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 77,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "deleteuser()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L7963"
-    },
-    {
       "id": "frontend_admin_js_admin_escapehtml",
       "label": "escapeHTML()",
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
       "norm_label": "escapehtml()",
       "source_file": "frontend/admin/js/admin.js",
@@ -4439,23 +4355,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
       "norm_label": "fetchactivesessions()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L9926"
-    },
-    {
-      "id": "frontend_admin_js_admin_fetchadminusers",
-      "label": "fetchAdminUsers()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 77,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "fetchadminusers()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L7793"
     },
     {
       "id": "frontend_admin_js_admin_fetchauditlogs",
@@ -4463,59 +4367,83 @@
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
       "norm_label": "fetchauditlogs()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L9794"
     },
     {
-      "id": "frontend_admin_js_admin_fetchwithtimeout",
-      "label": "fetchWithTimeout()",
+      "id": "frontend_admin_js_admin_initadmincustomfilters",
+      "label": "initAdminCustomFilters()",
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
-      "norm_label": "fetchwithtimeout()",
+      "norm_label": "initadmincustomfilters()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L9"
+      "source_location": "L2384"
     },
     {
-      "id": "frontend_admin_js_admin_getcsrftoken",
-      "label": "getCsrfToken()",
+      "id": "frontend_admin_js_admin_initadmincustomselect",
+      "label": "initAdminCustomSelect()",
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
-      "norm_label": "getcsrftoken()",
+      "norm_label": "initadmincustomselect()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L57"
+      "source_location": "L2170"
     },
     {
-      "id": "frontend_admin_js_admin_handleadminlogout",
-      "label": "handleAdminLogout()",
+      "id": "frontend_admin_js_admin_initadmincustomselect_closemenu",
+      "label": "closeMenu()",
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
-      "norm_label": "handleadminlogout()",
+      "norm_label": "closemenu()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L6084"
+      "source_location": "L2307"
     },
     {
-      "id": "frontend_admin_js_admin_loadadvsubview",
-      "label": "loadAdvSubView()",
+      "id": "frontend_admin_js_admin_initadmincustomselect_openmenu",
+      "label": "openMenu()",
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
-      "norm_label": "loadadvsubview()",
+      "norm_label": "openmenu()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L7659"
+      "source_location": "L2290"
+    },
+    {
+      "id": "frontend_admin_js_admin_initadmincustomselect_syncstate",
+      "label": "syncState()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 77,
+      "community_name": "escapeHTML",
+      "file_type": "code",
+      "norm_label": "syncstate()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L2341"
+    },
+    {
+      "id": "frontend_admin_js_admin_initadmincustomselect_togglemenu",
+      "label": "toggleMenu()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 77,
+      "community_name": "escapeHTML",
+      "file_type": "code",
+      "norm_label": "togglemenu()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L2317"
     },
     {
       "id": "frontend_admin_js_admin_parseuseragent",
@@ -4523,7 +4451,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
       "norm_label": "parseuseragent()",
       "source_file": "frontend/admin/js/admin.js",
@@ -4535,7 +4463,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
       "norm_label": "populateauditusersdropdown()",
       "source_file": "frontend/admin/js/admin.js",
@@ -4547,7 +4475,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
       "norm_label": "renderaudittable()",
       "source_file": "frontend/admin/js/admin.js",
@@ -4559,7 +4487,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
       "norm_label": "renderaudittableskeleton()",
       "source_file": "frontend/admin/js/admin.js",
@@ -4571,7 +4499,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
       "norm_label": "rendersessionstable()",
       "source_file": "frontend/admin/js/admin.js",
@@ -4583,47 +4511,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
       "norm_label": "rendersessionstableskeleton()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L9904"
-    },
-    {
-      "id": "frontend_admin_js_admin_renderuserstableskeleton",
-      "label": "renderUsersTableSkeleton()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 77,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "renderuserstableskeleton()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L7772"
-    },
-    {
-      "id": "frontend_admin_js_admin_setupclassificationmodal",
-      "label": "setupClassificationModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 77,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "setupclassificationmodal()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L6225"
-    },
-    {
-      "id": "frontend_admin_js_admin_submitclassification",
-      "label": "submitClassification()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 77,
-      "community_name": "adminFetch",
-      "file_type": "code",
-      "norm_label": "submitclassification()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L6168"
     },
     {
       "id": "frontend_admin_js_admin_terminatesession",
@@ -4631,23 +4523,131 @@
       "_callable": true,
       "_origin": "ast",
       "community": 77,
-      "community_name": "adminFetch",
+      "community_name": "escapeHTML",
       "file_type": "code",
       "norm_label": "terminatesession()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L10046"
     },
     {
-      "id": "frontend_admin_js_admin_updateclassificationui",
-      "label": "updateClassificationUI()",
+      "id": "frontend_admin_js_admin_cancelmfastep",
+      "label": "cancelMFAStep()",
       "_callable": true,
       "_origin": "ast",
-      "community": 77,
-      "community_name": "adminFetch",
+      "community": 83,
+      "community_name": "forceLogoutOnConnectionDrop",
       "file_type": "code",
-      "norm_label": "updateclassificationui()",
+      "norm_label": "cancelmfastep()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L6111"
+      "source_location": "L1554"
+    },
+    {
+      "id": "frontend_admin_js_admin_checkhostconnection",
+      "label": "checkHostConnection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "forceLogoutOnConnectionDrop",
+      "file_type": "code",
+      "norm_label": "checkhostconnection()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L843"
+    },
+    {
+      "id": "frontend_admin_js_admin_forcelogoutonconnectiondrop",
+      "label": "forceLogoutOnConnectionDrop()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "forceLogoutOnConnectionDrop",
+      "file_type": "code",
+      "norm_label": "forcelogoutonconnectiondrop()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L881"
+    },
+    {
+      "id": "frontend_admin_js_admin_hideofflinebanner",
+      "label": "hideOfflineBanner()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "forceLogoutOnConnectionDrop",
+      "file_type": "code",
+      "norm_label": "hideofflinebanner()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L804"
+    },
+    {
+      "id": "frontend_admin_js_admin_loadadmincaptcha",
+      "label": "loadAdminCaptcha()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "forceLogoutOnConnectionDrop",
+      "file_type": "code",
+      "norm_label": "loadadmincaptcha()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L1106"
+    },
+    {
+      "id": "frontend_admin_js_admin_pinghost",
+      "label": "pingHost()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "forceLogoutOnConnectionDrop",
+      "file_type": "code",
+      "norm_label": "pinghost()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L826"
+    },
+    {
+      "id": "frontend_admin_js_admin_showofflinebanner",
+      "label": "showOfflineBanner()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "forceLogoutOnConnectionDrop",
+      "file_type": "code",
+      "norm_label": "showofflinebanner()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L782"
+    },
+    {
+      "id": "frontend_admin_js_admin_startrecoverypolling",
+      "label": "startRecoveryPolling()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "forceLogoutOnConnectionDrop",
+      "file_type": "code",
+      "norm_label": "startrecoverypolling()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L865"
+    },
+    {
+      "id": "frontend_admin_js_admin_stopbackgroundpolling",
+      "label": "stopBackgroundPolling()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "forceLogoutOnConnectionDrop",
+      "file_type": "code",
+      "norm_label": "stopbackgroundpolling()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L7467"
+    },
+    {
+      "id": "frontend_admin_js_admin_stoprecoverypolling",
+      "label": "stopRecoveryPolling()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "forceLogoutOnConnectionDrop",
+      "file_type": "code",
+      "norm_label": "stoprecoverypolling()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L874"
     },
     {
       "id": "scripts_generate_docx_format_persian_text_with_dates",
@@ -6210,6 +6210,18 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_hallmark_references_genres_atmospheric",
+      "label": "atmospheric.md",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "atmospheric.md",
+      "source_file": ".agents/skills/hallmark/references/genres/atmospheric.md",
+      "source_location": "L1"
+    },
+    {
       "id": "agents_skills_hallmark_references_genres_editorial",
       "label": "editorial.md",
       "_origin": "ast",
@@ -6231,18 +6243,6 @@
       "node_kind": "page",
       "norm_label": "modern-minimal.md",
       "source_file": ".agents/skills/hallmark/references/genres/modern-minimal.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_genres_playful",
-      "label": "playful.md",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "playful.md",
-      "source_file": ".agents/skills/hallmark/references/genres/playful.md",
       "source_location": "L1"
     },
     {
@@ -6813,6 +6813,28 @@
       "source_location": "L10"
     },
     {
+      "id": "docx_sandbox_test",
+      "label": "docx_sandbox_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "docx_sandbox_test.go",
+      "source_file": "docx_sandbox_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "docx_sandbox_test_testdocxsandboxmaliciouspayload",
+      "label": "TestDocxSandboxMaliciousPayload()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testdocxsandboxmaliciouspayload()",
+      "source_file": "docx_sandbox_test.go",
+      "source_location": "L15"
+    },
+    {
       "id": "forwarding_test",
       "label": "forwarding_test.go",
       "_origin": "ast",
@@ -6978,6 +7000,28 @@
       "source_location": ""
     },
     {
+      "id": "pagination_test",
+      "label": "pagination_test.go",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "pagination_test.go",
+      "source_file": "pagination_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "pagination_test_testgetreportspaginationandfiltering",
+      "label": "TestGetReportsPaginationAndFiltering()",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testgetreportspaginationandfiltering()",
+      "source_file": "pagination_test.go",
+      "source_location": "L11"
+    },
+    {
       "id": "security_contextwithadmin",
       "label": "contextWithAdmin()",
       "_origin": "ast",
@@ -6986,7 +7030,7 @@
       "file_type": "code",
       "norm_label": "contextwithadmin()",
       "source_file": "security.go",
-      "source_location": "L20"
+      "source_location": "L37"
     },
     {
       "id": "server_time_test",
@@ -8364,7 +8408,7 @@
       "file_type": "code",
       "norm_label": "initcookiesecurity()",
       "source_file": "security.go",
-      "source_location": "L922"
+      "source_location": "L939"
     },
     {
       "id": "security_resetcookiesecurityfortest",
@@ -8375,7 +8419,7 @@
       "file_type": "code",
       "norm_label": "resetcookiesecurityfortest()",
       "source_file": "security.go",
-      "source_location": "L927"
+      "source_location": "L944"
     },
     {
       "id": "setad_khabari_hmd_gzipresponsewriter",
@@ -8441,7 +8485,7 @@
       "file_type": "code",
       "norm_label": "cryptorandint()",
       "source_file": "captcha.go",
-      "source_location": "L208"
+      "source_location": "L231"
     },
     {
       "id": "captcha_generatecaptchatoken",
@@ -8452,7 +8496,7 @@
       "file_type": "code",
       "norm_label": "generatecaptchatoken()",
       "source_file": "captcha.go",
-      "source_location": "L142"
+      "source_location": "L163"
     },
     {
       "id": "captcha_generatemathcaptchasvg",
@@ -8463,7 +8507,7 @@
       "file_type": "code",
       "norm_label": "generatemathcaptchasvg()",
       "source_file": "captcha.go",
-      "source_location": "L304"
+      "source_location": "L327"
     },
     {
       "id": "captcha_generatenoiseelements",
@@ -8474,7 +8518,7 @@
       "file_type": "code",
       "norm_label": "generatenoiseelements()",
       "source_file": "captcha.go",
-      "source_location": "L216"
+      "source_location": "L239"
     },
     {
       "id": "captcha_getcaptchahandler",
@@ -8485,7 +8529,7 @@
       "file_type": "code",
       "norm_label": "getcaptchahandler()",
       "source_file": "captcha.go",
-      "source_location": "L347"
+      "source_location": "L370"
     },
     {
       "id": "captcha_renderobfuscatedchars",
@@ -8496,7 +8540,7 @@
       "file_type": "code",
       "norm_label": "renderobfuscatedchars()",
       "source_file": "captcha.go",
-      "source_location": "L260"
+      "source_location": "L283"
     },
     {
       "id": "captcha_verifycaptcha",
@@ -8507,7 +8551,7 @@
       "file_type": "code",
       "norm_label": "verifycaptcha()",
       "source_file": "captcha.go",
-      "source_location": "L161"
+      "source_location": "L182"
     },
     {
       "id": "crypto_decryptcaptchapayload",
@@ -8541,17 +8585,6 @@
       "norm_label": "getlegacyhmackey()",
       "source_file": "crypto.go",
       "source_location": "L93"
-    },
-    {
-      "id": "crypto_test_testcaptchaverificationsuite",
-      "label": "TestCaptchaVerificationSuite()",
-      "_origin": "ast",
-      "community": 117,
-      "community_name": "VerifyCaptcha",
-      "file_type": "code",
-      "norm_label": "testcaptchaverificationsuite()",
-      "source_file": "crypto_test.go",
-      "source_location": "L278"
     },
     {
       "id": "crypto_test_testgeneratemathcaptchasvgandhandler",
@@ -8629,6 +8662,39 @@
       "norm_label": "captcharesponse",
       "source_file": "captcha.go",
       "source_location": "L26"
+    },
+    {
+      "id": "setad_khabari_hmd_usedcaptchastore_recordfailure",
+      "label": ".RecordFailure()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "VerifyCaptcha",
+      "file_type": "code",
+      "norm_label": ".recordfailure()",
+      "source_file": "captcha.go",
+      "source_location": "L77"
+    },
+    {
+      "id": "uploads_security_test_testcaptchabruteforceprotection",
+      "label": "TestCaptchaBruteForceProtection()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "VerifyCaptcha",
+      "file_type": "code",
+      "norm_label": "testcaptchabruteforceprotection()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L318"
+    },
+    {
+      "id": "uploads_security_test_testcaptchasingleuseredemption",
+      "label": "TestCaptchaSingleUseRedemption()",
+      "_origin": "ast",
+      "community": 117,
+      "community_name": "VerifyCaptcha",
+      "file_type": "code",
+      "norm_label": "testcaptchasingleuseredemption()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L337"
     },
     {
       "id": "frontend_admin_js_confirm",
@@ -10451,39 +10517,6 @@
       "source_location": "L502"
     },
     {
-      "id": "public_handlers",
-      "label": "public_handlers.go",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "public_handlers.go",
-      "source_file": "public_handlers.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "public_handlers_generatetrackingcode",
-      "label": "generateTrackingCode()",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "generatetrackingcode()",
-      "source_file": "public_handlers.go",
-      "source_location": "L83"
-    },
-    {
-      "id": "public_handlers_inspectziparchive",
-      "label": "inspectZipArchive()",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "inspectziparchive()",
-      "source_file": "public_handlers.go",
-      "source_location": "L35"
-    },
-    {
       "id": "public_handlers_submitfollowuphandler",
       "label": "SubmitFollowUpHandler()",
       "_origin": "ast",
@@ -10492,18 +10525,7 @@
       "file_type": "code",
       "norm_label": "submitfollowuphandler()",
       "source_file": "public_handlers.go",
-      "source_location": "L480"
-    },
-    {
-      "id": "public_handlers_submitreporthandler",
-      "label": "SubmitReportHandler()",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "submitreporthandler()",
-      "source_file": "public_handlers.go",
-      "source_location": "L95"
+      "source_location": "L585"
     },
     {
       "id": "public_handlers_trackreporthandler",
@@ -10514,18 +10536,7 @@
       "file_type": "code",
       "norm_label": "trackreporthandler()",
       "source_file": "public_handlers.go",
-      "source_location": "L391"
-    },
-    {
-      "id": "public_handlers_validatemagicbytes",
-      "label": "validateMagicBytes()",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "validatemagicbytes()",
-      "source_file": "public_handlers.go",
-      "source_location": "L79"
+      "source_location": "L496"
     },
     {
       "id": "security_adminfromcontext",
@@ -10536,7 +10547,7 @@
       "file_type": "code",
       "norm_label": "adminfromcontext()",
       "source_file": "security.go",
-      "source_location": "L25"
+      "source_location": "L42"
     },
     {
       "id": "security_iscookiesecure",
@@ -10547,7 +10558,7 @@
       "file_type": "code",
       "norm_label": "iscookiesecure()",
       "source_file": "security.go",
-      "source_location": "L933"
+      "source_location": "L950"
     },
     {
       "id": "security_isvalidtrackingcode",
@@ -10558,7 +10569,18 @@
       "file_type": "code",
       "norm_label": "isvalidtrackingcode()",
       "source_file": "security.go",
-      "source_location": "L965"
+      "source_location": "L982"
+    },
+    {
+      "id": "security_iswithindirectory",
+      "label": "isWithinDirectory()",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "iswithindirectory()",
+      "source_file": "security.go",
+      "source_location": "L17"
     },
     {
       "id": "security_progressivedelay",
@@ -10569,7 +10591,7 @@
       "file_type": "code",
       "norm_label": "progressivedelay()",
       "source_file": "security.go",
-      "source_location": "L903"
+      "source_location": "L920"
     },
     {
       "id": "security_sanitizephone",
@@ -10580,7 +10602,7 @@
       "file_type": "code",
       "norm_label": "sanitizephone()",
       "source_file": "security.go",
-      "source_location": "L955"
+      "source_location": "L972"
     },
     {
       "id": "security_stripnul",
@@ -10591,7 +10613,7 @@
       "file_type": "code",
       "norm_label": "stripnul()",
       "source_file": "security.go",
-      "source_location": "L951"
+      "source_location": "L968"
     },
     {
       "id": "security_truncaterunes",
@@ -10602,7 +10624,7 @@
       "file_type": "code",
       "norm_label": "truncaterunes()",
       "source_file": "security.go",
-      "source_location": "L943"
+      "source_location": "L960"
     },
     {
       "id": "setad_khabari_hmd_adminnotificationitem",
@@ -10748,17 +10770,6 @@
       "source_location": "L2402"
     },
     {
-      "id": "setad_khabari_hmd_publicreportstatus",
-      "label": "PublicReportStatus",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "publicreportstatus",
-      "source_file": "public_handlers.go",
-      "source_location": "L381"
-    },
-    {
       "id": "setad_khabari_hmd_recipientuseritem",
       "label": "RecipientUserItem",
       "_origin": "ast",
@@ -10823,17 +10834,6 @@
       "norm_label": "reportdetail",
       "source_file": "admin_handlers.go",
       "source_location": "L523"
-    },
-    {
-      "id": "setad_khabari_hmd_reportmessageitem",
-      "label": "ReportMessageItem",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "reportmessageitem",
-      "source_file": "public_handlers.go",
-      "source_location": "L372"
     },
     {
       "id": "setad_khabari_hmd_reportsummary",
@@ -11397,6 +11397,72 @@
       "norm_label": "pulsating-loader-demo.tsx",
       "source_file": "components/ui/pulsating-loader-demo.tsx",
       "source_location": "L1"
+    },
+    {
+      "id": "metadata_test",
+      "label": "metadata_test.go",
+      "_origin": "ast",
+      "community": 156,
+      "community_name": "metadata_test.go",
+      "file_type": "code",
+      "norm_label": "metadata_test.go",
+      "source_file": "metadata_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "metadata_test_createtestjpegwithexif",
+      "label": "createTestJPEGWithEXIF()",
+      "_origin": "ast",
+      "community": 156,
+      "community_name": "metadata_test.go",
+      "file_type": "code",
+      "norm_label": "createtestjpegwithexif()",
+      "source_file": "metadata_test.go",
+      "source_location": "L14"
+    },
+    {
+      "id": "metadata_test_createtestpng",
+      "label": "createTestPNG()",
+      "_origin": "ast",
+      "community": 156,
+      "community_name": "metadata_test.go",
+      "file_type": "code",
+      "norm_label": "createtestpng()",
+      "source_file": "metadata_test.go",
+      "source_location": "L44"
+    },
+    {
+      "id": "metadata_test_testmetadatasanitizationjpeg",
+      "label": "TestMetadataSanitizationJPEG()",
+      "_origin": "ast",
+      "community": 156,
+      "community_name": "metadata_test.go",
+      "file_type": "code",
+      "norm_label": "testmetadatasanitizationjpeg()",
+      "source_file": "metadata_test.go",
+      "source_location": "L56"
+    },
+    {
+      "id": "metadata_test_testmetadatasanitizationpng",
+      "label": "TestMetadataSanitizationPNG()",
+      "_origin": "ast",
+      "community": 156,
+      "community_name": "metadata_test.go",
+      "file_type": "code",
+      "norm_label": "testmetadatasanitizationpng()",
+      "source_file": "metadata_test.go",
+      "source_location": "L86"
+    },
+    {
+      "id": "metadata_test_testsanitizeattachmentpassthrough",
+      "label": "TestSanitizeAttachmentPassthrough()",
+      "_origin": "ast",
+      "community": 156,
+      "community_name": "metadata_test.go",
+      "file_type": "code",
+      "norm_label": "testsanitizeattachmentpassthrough()",
+      "source_file": "metadata_test.go",
+      "source_location": "L102"
     },
     {
       "id": "agents_skills_hallmark_references_themes_carnival",
@@ -12530,50 +12596,6 @@
       "source_location": "L8"
     },
     {
-      "id": "docx_sandbox_test",
-      "label": "docx_sandbox_test.go",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "getTestDB",
-      "file_type": "code",
-      "norm_label": "docx_sandbox_test.go",
-      "source_file": "docx_sandbox_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "docx_sandbox_test_testdocxsandboxmaliciouspayload",
-      "label": "TestDocxSandboxMaliciousPayload()",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "getTestDB",
-      "file_type": "code",
-      "norm_label": "testdocxsandboxmaliciouspayload()",
-      "source_file": "docx_sandbox_test.go",
-      "source_location": "L15"
-    },
-    {
-      "id": "pagination_test",
-      "label": "pagination_test.go",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "getTestDB",
-      "file_type": "code",
-      "norm_label": "pagination_test.go",
-      "source_file": "pagination_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "pagination_test_testgetreportspaginationandfiltering",
-      "label": "TestGetReportsPaginationAndFiltering()",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "getTestDB",
-      "file_type": "code",
-      "norm_label": "testgetreportspaginationandfiltering()",
-      "source_file": "pagination_test.go",
-      "source_location": "L11"
-    },
-    {
       "id": "security_hardening_test_testipratelimiterboundedcapacity",
       "label": "TestIPRateLimiterBoundedCapacity()",
       "_origin": "ast",
@@ -12593,7 +12615,7 @@
       "file_type": "code",
       "norm_label": "newipratelimiter()",
       "source_file": "security.go",
-      "source_location": "L581"
+      "source_location": "L598"
     },
     {
       "id": "security_newsessionmanager",
@@ -12604,7 +12626,7 @@
       "file_type": "code",
       "norm_label": "newsessionmanager()",
       "source_file": "security.go",
-      "source_location": "L92"
+      "source_location": "L109"
     },
     {
       "id": "session_persistence_test",
@@ -15565,18 +15587,6 @@
       "source_location": "L50"
     },
     {
-      "id": "agents_skills_hallmark_references_genres_atmospheric",
-      "label": "atmospheric.md",
-      "_origin": "ast",
-      "community": 37,
-      "community_name": "Genre \u2014 atmospheric",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "atmospheric.md",
-      "source_file": ".agents/skills/hallmark/references/genres/atmospheric.md",
-      "source_location": "L1"
-    },
-    {
       "id": "agents_skills_hallmark_references_genres_atmospheric_genre_atmospheric",
       "label": "Genre \u2014 atmospheric",
       "_origin": "ast",
@@ -15817,6 +15827,18 @@
       "source_location": "L5"
     },
     {
+      "id": "agents_skills_hallmark_references_genres_playful",
+      "label": "playful.md",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "Genre \u2014 playful",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "playful.md",
+      "source_file": ".agents/skills/hallmark/references/genres/playful.md",
+      "source_location": "L1"
+    },
+    {
       "id": "agents_skills_hallmark_references_genres_playful_genre_playful",
       "label": "Genre \u2014 playful",
       "_origin": "ast",
@@ -15935,17 +15957,6 @@
       "norm_label": "when to pick it",
       "source_file": ".agents/skills/hallmark/references/genres/playful.md",
       "source_location": "L5"
-    },
-    {
-      "id": "auth_hardening_test_testmfapendingtokenclientbindingandreplay",
-      "label": "TestMFAPendingTokenClientBindingAndReplay()",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "mfa.go",
-      "file_type": "code",
-      "norm_label": "testmfapendingtokenclientbindingandreplay()",
-      "source_file": "auth_hardening_test.go",
-      "source_location": "L41"
     },
     {
       "id": "crypto_gethmackey",
@@ -17127,6 +17138,18 @@
       "source_location": "L13"
     },
     {
+      "id": "security_changes_code_changes_126",
+      "label": "Code Changes",
+      "_origin": "ast",
+      "community": 49,
+      "community_name": "Phase 0: Test Baseline & Context Types",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "code changes",
+      "source_file": "SECURITY_CHANGES.md",
+      "source_location": "L126"
+    },
+    {
       "id": "security_changes_code_changes_40",
       "label": "Code Changes",
       "_origin": "ast",
@@ -17161,6 +17184,18 @@
       "norm_label": "operator impact",
       "source_file": "SECURITY_CHANGES.md",
       "source_location": "L19"
+    },
+    {
+      "id": "security_changes_operator_impact_155",
+      "label": "Operator Impact",
+      "_origin": "ast",
+      "community": 49,
+      "community_name": "Phase 0: Test Baseline & Context Types",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "operator impact",
+      "source_file": "SECURITY_CHANGES.md",
+      "source_location": "L155"
     },
     {
       "id": "security_changes_operator_impact_51",
@@ -17223,6 +17258,18 @@
       "source_location": "L61"
     },
     {
+      "id": "security_changes_phase_3_upload_pipeline_content_security",
+      "label": "Phase 3: Upload Pipeline & Content Security",
+      "_origin": "ast",
+      "community": 49,
+      "community_name": "Phase 0: Test Baseline & Context Types",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "phase 3: upload pipeline & content security",
+      "source_file": "SECURITY_CHANGES.md",
+      "source_location": "L115"
+    },
+    {
       "id": "security_changes_security_reliability_remediation_log",
       "label": "Security & Reliability Remediation Log",
       "_origin": "ast",
@@ -17259,6 +17306,18 @@
       "source_location": "L103"
     },
     {
+      "id": "security_changes_tests_verification_160",
+      "label": "Tests & Verification",
+      "_origin": "ast",
+      "community": 49,
+      "community_name": "Phase 0: Test Baseline & Context Types",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "tests & verification",
+      "source_file": "SECURITY_CHANGES.md",
+      "source_location": "L160"
+    },
+    {
       "id": "security_changes_tests_verification_55",
       "label": "Tests & Verification",
       "_origin": "ast",
@@ -17281,6 +17340,18 @@
       "norm_label": "verified findings",
       "source_file": "SECURITY_CHANGES.md",
       "source_location": "L9"
+    },
+    {
+      "id": "security_changes_verified_findings_117",
+      "label": "Verified Findings",
+      "_origin": "ast",
+      "community": 49,
+      "community_name": "Phase 0: Test Baseline & Context Types",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "verified findings",
+      "source_file": "SECURITY_CHANGES.md",
+      "source_location": "L117"
     },
     {
       "id": "security_changes_verified_findings_30",
@@ -18002,17 +18073,6 @@
       "source_location": "L34"
     },
     {
-      "id": "go_type_sync_rwmutex",
-      "label": "sync.RWMutex",
-      "_origin": "ast",
-      "community": 54,
-      "community_name": "SSEBroker",
-      "file_type": "code",
-      "norm_label": "sync.rwmutex",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "remediation_verification_test_testremediationssebrokerrolescoping",
       "label": "TestRemediationSSEBrokerRoleScoping()",
       "_origin": "ast",
@@ -18088,17 +18148,6 @@
       "norm_label": ".broadcastregionalresponse()",
       "source_file": "events.go",
       "source_location": "L125"
-    },
-    {
-      "id": "setad_khabari_hmd_ssebroker_broadcastsessionrevoked",
-      "label": ".BroadcastSessionRevoked()",
-      "_origin": "ast",
-      "community": 54,
-      "community_name": "SSEBroker",
-      "file_type": "code",
-      "norm_label": ".broadcastsessionrevoked()",
-      "source_file": "events.go",
-      "source_location": "L129"
     },
     {
       "id": "setad_khabari_hmd_ssebroker_broadcasttoroles",
@@ -18941,7 +18990,7 @@
       "file_type": "code",
       "norm_label": "newusedcaptchastore()",
       "source_file": "captcha.go",
-      "source_location": "L38"
+      "source_location": "L39"
     },
     {
       "id": "go_type_database_sql_db",
@@ -18984,6 +19033,17 @@
       "community_name": "security.go",
       "file_type": "code",
       "norm_label": "sync.once",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "go_type_sync_rwmutex",
+      "label": "sync.RWMutex",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "sync.rwmutex",
       "source_file": "",
       "source_location": ""
     },
@@ -19062,7 +19122,7 @@
       "file_type": "code",
       "norm_label": "hashtoken()",
       "source_file": "security.go",
-      "source_location": "L87"
+      "source_location": "L104"
     },
     {
       "id": "security_init_order_test",
@@ -19095,7 +19155,7 @@
       "file_type": "code",
       "norm_label": "newaccountlockoutmanager()",
       "source_file": "security.go",
-      "source_location": "L694"
+      "source_location": "L711"
     },
     {
       "id": "security_ratelimitmiddleware",
@@ -19106,7 +19166,7 @@
       "file_type": "code",
       "norm_label": "ratelimitmiddleware()",
       "source_file": "security.go",
-      "source_location": "L670"
+      "source_location": "L687"
     },
     {
       "id": "setad_khabari_hmd_accountlockoutmanager",
@@ -19117,7 +19177,7 @@
       "file_type": "code",
       "norm_label": "accountlockoutmanager",
       "source_file": "security.go",
-      "source_location": "L687"
+      "source_location": "L704"
     },
     {
       "id": "setad_khabari_hmd_accountlockoutmanager_getdb",
@@ -19128,7 +19188,7 @@
       "file_type": "code",
       "norm_label": ".getdb()",
       "source_file": "security.go",
-      "source_location": "L711"
+      "source_location": "L728"
     },
     {
       "id": "setad_khabari_hmd_accountlockoutmanager_init",
@@ -19139,7 +19199,7 @@
       "file_type": "code",
       "norm_label": ".init()",
       "source_file": "security.go",
-      "source_location": "L703"
+      "source_location": "L720"
     },
     {
       "id": "setad_khabari_hmd_accountlockoutmanager_islocked",
@@ -19150,7 +19210,7 @@
       "file_type": "code",
       "norm_label": ".islocked()",
       "source_file": "security.go",
-      "source_location": "L731"
+      "source_location": "L748"
     },
     {
       "id": "setad_khabari_hmd_accountlockoutmanager_recordfailure",
@@ -19161,7 +19221,7 @@
       "file_type": "code",
       "norm_label": ".recordfailure()",
       "source_file": "security.go",
-      "source_location": "L810"
+      "source_location": "L827"
     },
     {
       "id": "setad_khabari_hmd_accountlockoutmanager_reset",
@@ -19172,7 +19232,7 @@
       "file_type": "code",
       "norm_label": ".reset()",
       "source_file": "security.go",
-      "source_location": "L875"
+      "source_location": "L892"
     },
     {
       "id": "setad_khabari_hmd_activesessionitem",
@@ -19183,7 +19243,7 @@
       "file_type": "code",
       "norm_label": "activesessionitem",
       "source_file": "security.go",
-      "source_location": "L56"
+      "source_location": "L73"
     },
     {
       "id": "setad_khabari_hmd_admincontextkeytype",
@@ -19194,7 +19254,7 @@
       "file_type": "code",
       "norm_label": "admincontextkeytype",
       "source_file": "security.go",
-      "source_location": "L16"
+      "source_location": "L33"
     },
     {
       "id": "setad_khabari_hmd_adminsession",
@@ -19205,7 +19265,7 @@
       "file_type": "code",
       "norm_label": "adminsession",
       "source_file": "security.go",
-      "source_location": "L40"
+      "source_location": "L57"
     },
     {
       "id": "setad_khabari_hmd_cachedaccountfailure",
@@ -19216,7 +19276,7 @@
       "file_type": "code",
       "norm_label": "cachedaccountfailure",
       "source_file": "security.go",
-      "source_location": "L681"
+      "source_location": "L698"
     },
     {
       "id": "setad_khabari_hmd_cachedsession",
@@ -19227,7 +19287,7 @@
       "file_type": "code",
       "norm_label": "cachedsession",
       "source_file": "security.go",
-      "source_location": "L74"
+      "source_location": "L91"
     },
     {
       "id": "setad_khabari_hmd_ipratelimiter",
@@ -19238,7 +19298,7 @@
       "file_type": "code",
       "norm_label": "ipratelimiter",
       "source_file": "security.go",
-      "source_location": "L573"
+      "source_location": "L590"
     },
     {
       "id": "setad_khabari_hmd_ipratelimiter_allow",
@@ -19249,7 +19309,7 @@
       "file_type": "code",
       "norm_label": ".allow()",
       "source_file": "security.go",
-      "source_location": "L634"
+      "source_location": "L651"
     },
     {
       "id": "setad_khabari_hmd_ipratelimiter_evictstalelocked",
@@ -19260,7 +19320,7 @@
       "file_type": "code",
       "norm_label": ".evictstalelocked()",
       "source_file": "security.go",
-      "source_location": "L606"
+      "source_location": "L623"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager",
@@ -19271,7 +19331,7 @@
       "file_type": "code",
       "norm_label": "sessionmanager",
       "source_file": "security.go",
-      "source_location": "L79"
+      "source_location": "L96"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_activecount",
@@ -19282,7 +19342,7 @@
       "file_type": "code",
       "norm_label": ".activecount()",
       "source_file": "security.go",
-      "source_location": "L518"
+      "source_location": "L535"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_delete",
@@ -19293,7 +19353,7 @@
       "file_type": "code",
       "norm_label": ".delete()",
       "source_file": "security.go",
-      "source_location": "L502"
+      "source_location": "L519"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_get",
@@ -19304,7 +19364,7 @@
       "file_type": "code",
       "norm_label": ".get()",
       "source_file": "security.go",
-      "source_location": "L184"
+      "source_location": "L201"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_getallactivesessions",
@@ -19315,7 +19375,7 @@
       "file_type": "code",
       "norm_label": ".getallactivesessions()",
       "source_file": "security.go",
-      "source_location": "L359"
+      "source_location": "L376"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_getdb",
@@ -19326,7 +19386,7 @@
       "file_type": "code",
       "norm_label": ".getdb()",
       "source_file": "security.go",
-      "source_location": "L109"
+      "source_location": "L126"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_getkickedreason",
@@ -19337,7 +19397,7 @@
       "file_type": "code",
       "norm_label": ".getkickedreason()",
       "source_file": "security.go",
-      "source_location": "L249"
+      "source_location": "L266"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_init",
@@ -19348,7 +19408,7 @@
       "file_type": "code",
       "norm_label": ".init()",
       "source_file": "security.go",
-      "source_location": "L103"
+      "source_location": "L120"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_revokeallusersessions",
@@ -19359,7 +19419,7 @@
       "file_type": "code",
       "norm_label": ".revokeallusersessions()",
       "source_file": "security.go",
-      "source_location": "L272"
+      "source_location": "L289"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_revokesessionbytoken",
@@ -19370,7 +19430,7 @@
       "file_type": "code",
       "norm_label": ".revokesessionbytoken()",
       "source_file": "security.go",
-      "source_location": "L325"
+      "source_location": "L342"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_set",
@@ -19381,7 +19441,7 @@
       "file_type": "code",
       "norm_label": ".set()",
       "source_file": "security.go",
-      "source_location": "L116"
+      "source_location": "L133"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_startreaper",
@@ -19392,7 +19452,7 @@
       "file_type": "code",
       "norm_label": ".startreaper()",
       "source_file": "security.go",
-      "source_location": "L540"
+      "source_location": "L557"
     },
     {
       "id": "setad_khabari_hmd_sessionmanager_updateactivity",
@@ -19403,7 +19463,18 @@
       "file_type": "code",
       "norm_label": ".updateactivity()",
       "source_file": "security.go",
-      "source_location": "L448"
+      "source_location": "L465"
+    },
+    {
+      "id": "setad_khabari_hmd_ssebroker_broadcastsessionrevoked",
+      "label": ".BroadcastSessionRevoked()",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": ".broadcastsessionrevoked()",
+      "source_file": "events.go",
+      "source_location": "L129"
     },
     {
       "id": "setad_khabari_hmd_totpreplaystore",
@@ -19436,7 +19507,7 @@
       "file_type": "code",
       "norm_label": ".getdb()",
       "source_file": "captcha.go",
-      "source_location": "L55"
+      "source_location": "L57"
     },
     {
       "id": "setad_khabari_hmd_usedcaptchastore_init",
@@ -19447,7 +19518,7 @@
       "file_type": "code",
       "norm_label": ".init()",
       "source_file": "captcha.go",
-      "source_location": "L47"
+      "source_location": "L49"
     },
     {
       "id": "setad_khabari_hmd_usedcaptchastore_startreaper",
@@ -19458,7 +19529,7 @@
       "file_type": "code",
       "norm_label": ".startreaper()",
       "source_file": "captcha.go",
-      "source_location": "L121"
+      "source_location": "L142"
     },
     {
       "id": "setad_khabari_hmd_usedcaptchastore_tryredeem",
@@ -19469,7 +19540,7 @@
       "file_type": "code",
       "norm_label": ".tryredeem()",
       "source_file": "captcha.go",
-      "source_location": "L75"
+      "source_location": "L95"
     },
     {
       "id": "setad_khabari_hmd_visitor",
@@ -19480,7 +19551,7 @@
       "file_type": "code",
       "norm_label": "visitor",
       "source_file": "security.go",
-      "source_location": "L567"
+      "source_location": "L584"
     },
     {
       "id": "design",
@@ -19759,6 +19830,17 @@
       "source_location": "L193"
     },
     {
+      "id": "auth_hardening_test_testmfapendingtokenclientbindingandreplay",
+      "label": "TestMFAPendingTokenClientBindingAndReplay()",
+      "_origin": "ast",
+      "community": 66,
+      "community_name": "auth_hardening_test.go",
+      "file_type": "code",
+      "norm_label": "testmfapendingtokenclientbindingandreplay()",
+      "source_file": "auth_hardening_test.go",
+      "source_location": "L41"
+    },
+    {
       "id": "auth_hardening_test_testpasswordpolicyunicodeandrestrictions",
       "label": "TestPasswordPolicyUnicodeAndRestrictions()",
       "_origin": "ast",
@@ -19990,6 +20072,17 @@
       "source_location": "L1"
     },
     {
+      "id": "crypto_test_testcaptchaverificationsuite",
+      "label": "TestCaptchaVerificationSuite()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "testcaptchaverificationsuite()",
+      "source_file": "crypto_test.go",
+      "source_location": "L278"
+    },
+    {
       "id": "crypto_test_testcryptounicodeemojinulbytesandtamper",
       "label": "TestCryptoUnicodeEmojiNulBytesAndTamper()",
       "_origin": "ast",
@@ -20034,6 +20127,17 @@
       "source_location": "L146"
     },
     {
+      "id": "go_type_testing_m",
+      "label": "testing.M",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "testing.m",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "migration_v2",
       "label": "migration_v2.go",
       "_origin": "ast",
@@ -20076,6 +20180,28 @@
       "norm_label": "testreencryptlegacydata()",
       "source_file": "migration_v2_test.go",
       "source_location": "L17"
+    },
+    {
+      "id": "test_main_test",
+      "label": "test_main_test.go",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "test_main_test.go",
+      "source_file": "test_main_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_main_test_testmain",
+      "label": "TestMain()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "testmain()",
+      "source_file": "test_main_test.go",
+      "source_location": "L8"
     },
     {
       "id": "components_ui_password_strength",
@@ -20717,132 +20843,352 @@
       "label": "metadata.go",
       "_origin": "ast",
       "community": 78,
-      "community_name": "metadata.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "metadata.go",
       "source_file": "metadata.go",
       "source_location": "L1"
     },
     {
+      "id": "metadata_decodepdfhexnames",
+      "label": "decodePDFHexNames()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "decodepdfhexnames()",
+      "source_file": "metadata.go",
+      "source_location": "L71"
+    },
+    {
+      "id": "metadata_inspectooxml",
+      "label": "InspectOOXML()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "inspectooxml()",
+      "source_file": "metadata.go",
+      "source_location": "L217"
+    },
+    {
       "id": "metadata_sanitizeattachment",
       "label": "SanitizeAttachment()",
       "_origin": "ast",
       "community": 78,
-      "community_name": "metadata.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "sanitizeattachment()",
       "source_file": "metadata.go",
-      "source_location": "L45"
+      "source_location": "L381"
     },
     {
       "id": "metadata_sanitizejpeg",
       "label": "SanitizeJPEG()",
       "_origin": "ast",
       "community": 78,
-      "community_name": "metadata.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "sanitizejpeg()",
       "source_file": "metadata.go",
-      "source_location": "L14"
+      "source_location": "L24"
+    },
+    {
+      "id": "metadata_sanitizemp3",
+      "label": "SanitizeMP3()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "sanitizemp3()",
+      "source_file": "metadata.go",
+      "source_location": "L320"
+    },
+    {
+      "id": "metadata_sanitizeooxml",
+      "label": "SanitizeOOXML()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "sanitizeooxml()",
+      "source_file": "metadata.go",
+      "source_location": "L261"
+    },
+    {
+      "id": "metadata_sanitizepdf",
+      "label": "SanitizePDF()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "sanitizepdf()",
+      "source_file": "metadata.go",
+      "source_location": "L181"
     },
     {
       "id": "metadata_sanitizepng",
       "label": "SanitizePNG()",
       "_origin": "ast",
       "community": 78,
-      "community_name": "metadata.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "sanitizepng()",
       "source_file": "metadata.go",
-      "source_location": "L29"
+      "source_location": "L47"
+    },
+    {
+      "id": "metadata_sanitizewav",
+      "label": "SanitizeWAV()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "sanitizewav()",
+      "source_file": "metadata.go",
+      "source_location": "L340"
+    },
+    {
+      "id": "metadata_scanbufferforpdfkeywords",
+      "label": "scanBufferForPDFKeywords()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "scanbufferforpdfkeywords()",
+      "source_file": "metadata.go",
+      "source_location": "L104"
     },
     {
       "id": "metadata_scanpdfforactivecontent",
       "label": "ScanPDFForActiveContent()",
       "_origin": "ast",
       "community": 78,
-      "community_name": "metadata.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "scanpdfforactivecontent()",
       "source_file": "metadata.go",
-      "source_location": "L59"
-    },
-    {
-      "id": "metadata_test",
-      "label": "metadata_test.go",
-      "_origin": "ast",
-      "community": 78,
-      "community_name": "metadata.go",
-      "file_type": "code",
-      "norm_label": "metadata_test.go",
-      "source_file": "metadata_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "metadata_test_createtestjpegwithexif",
-      "label": "createTestJPEGWithEXIF()",
-      "_origin": "ast",
-      "community": 78,
-      "community_name": "metadata.go",
-      "file_type": "code",
-      "norm_label": "createtestjpegwithexif()",
-      "source_file": "metadata_test.go",
-      "source_location": "L14"
-    },
-    {
-      "id": "metadata_test_createtestpng",
-      "label": "createTestPNG()",
-      "_origin": "ast",
-      "community": 78,
-      "community_name": "metadata.go",
-      "file_type": "code",
-      "norm_label": "createtestpng()",
-      "source_file": "metadata_test.go",
-      "source_location": "L44"
-    },
-    {
-      "id": "metadata_test_testmetadatasanitizationjpeg",
-      "label": "TestMetadataSanitizationJPEG()",
-      "_origin": "ast",
-      "community": 78,
-      "community_name": "metadata.go",
-      "file_type": "code",
-      "norm_label": "testmetadatasanitizationjpeg()",
-      "source_file": "metadata_test.go",
-      "source_location": "L56"
-    },
-    {
-      "id": "metadata_test_testmetadatasanitizationpng",
-      "label": "TestMetadataSanitizationPNG()",
-      "_origin": "ast",
-      "community": 78,
-      "community_name": "metadata.go",
-      "file_type": "code",
-      "norm_label": "testmetadatasanitizationpng()",
-      "source_file": "metadata_test.go",
-      "source_location": "L86"
-    },
-    {
-      "id": "metadata_test_testsanitizeattachmentpassthrough",
-      "label": "TestSanitizeAttachmentPassthrough()",
-      "_origin": "ast",
-      "community": 78,
-      "community_name": "metadata.go",
-      "file_type": "code",
-      "norm_label": "testsanitizeattachmentpassthrough()",
-      "source_file": "metadata_test.go",
-      "source_location": "L102"
+      "source_location": "L119"
     },
     {
       "id": "metadata_validatebinarymagicbytes",
       "label": "ValidateBinaryMagicBytes()",
       "_origin": "ast",
       "community": 78,
-      "community_name": "metadata.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "validatebinarymagicbytes()",
       "source_file": "metadata.go",
-      "source_location": "L83"
+      "source_location": "L411"
+    },
+    {
+      "id": "public_handlers",
+      "label": "public_handlers.go",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "public_handlers.go",
+      "source_file": "public_handlers.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "public_handlers_generatetrackingcode",
+      "label": "generateTrackingCode()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "generatetrackingcode()",
+      "source_file": "public_handlers.go",
+      "source_location": "L136"
+    },
+    {
+      "id": "public_handlers_inspectziparchive",
+      "label": "inspectZipArchive()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "inspectziparchive()",
+      "source_file": "public_handlers.go",
+      "source_location": "L35"
+    },
+    {
+      "id": "public_handlers_isvalidreportcategory",
+      "label": "isValidReportCategory()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "isvalidreportcategory()",
+      "source_file": "public_handlers.go",
+      "source_location": "L128"
+    },
+    {
+      "id": "public_handlers_submitreporthandler",
+      "label": "SubmitReportHandler()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "submitreporthandler()",
+      "source_file": "public_handlers.go",
+      "source_location": "L148"
+    },
+    {
+      "id": "public_handlers_validatemagicbytes",
+      "label": "validateMagicBytes()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "validatemagicbytes()",
+      "source_file": "public_handlers.go",
+      "source_location": "L132"
+    },
+    {
+      "id": "setad_khabari_hmd_publicreportstatus",
+      "label": "PublicReportStatus",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "publicreportstatus",
+      "source_file": "public_handlers.go",
+      "source_location": "L486"
+    },
+    {
+      "id": "setad_khabari_hmd_reportmessageitem",
+      "label": "ReportMessageItem",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "reportmessageitem",
+      "source_file": "public_handlers.go",
+      "source_location": "L477"
+    },
+    {
+      "id": "uploads_security_test",
+      "label": "uploads_security_test.go",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "uploads_security_test.go",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "uploads_security_test_testaudiosanitization",
+      "label": "TestAudioSanitization()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testaudiosanitization()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L227"
+    },
+    {
+      "id": "uploads_security_test_testcategoryvalidationallowlist",
+      "label": "TestCategoryValidationAllowList()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testcategoryvalidationallowlist()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L373"
+    },
+    {
+      "id": "uploads_security_test_testiswithindirectory",
+      "label": "TestIsWithinDirectory()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testiswithindirectory()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L352"
+    },
+    {
+      "id": "uploads_security_test_testjpegdecompressionbomb",
+      "label": "TestJPEGDecompressionBomb()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testjpegdecompressionbomb()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L14"
+    },
+    {
+      "id": "uploads_security_test_testooxmlmacroandtemplaterejection",
+      "label": "TestOOXMLMacroAndTemplateRejection()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testooxmlmacroandtemplaterejection()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L112"
+    },
+    {
+      "id": "uploads_security_test_testpdfactivecontentrejection",
+      "label": "TestPDFActiveContentRejection()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testpdfactivecontentrejection()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L55"
+    },
+    {
+      "id": "uploads_security_test_testpdfmetadatasanitization",
+      "label": "TestPDFMetadataSanitization()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testpdfmetadatasanitization()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L98"
+    },
+    {
+      "id": "uploads_security_test_testpngdecompressionbomb",
+      "label": "TestPNGDecompressionBomb()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testpngdecompressionbomb()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L31"
+    },
+    {
+      "id": "uploads_security_test_testvalidatebinarymagicbytes",
+      "label": "TestValidateBinaryMagicBytes()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testvalidatebinarymagicbytes()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L290"
+    },
+    {
+      "id": "uploads_security_test_testziparchiveinspection",
+      "label": "TestZipArchiveInspection()",
+      "_origin": "ast",
+      "community": 78,
+      "community_name": "SubmitReportHandler",
+      "file_type": "code",
+      "norm_label": "testziparchiveinspection()",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L177"
     },
     {
       "id": "design_colors",
@@ -21343,39 +21689,6 @@
       "norm_label": "c4 \u00b7 sticky bottom bar",
       "source_file": ".agents/skills/hallmark/references/components/c4-sticky-bottom-bar.md",
       "source_location": "L1"
-    },
-    {
-      "id": "go_type_testing_m",
-      "label": "testing.M",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "TestMain",
-      "file_type": "code",
-      "norm_label": "testing.m",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "test_main_test",
-      "label": "test_main_test.go",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "TestMain",
-      "file_type": "code",
-      "norm_label": "test_main_test.go",
-      "source_file": "test_main_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "test_main_test_testmain",
-      "label": "TestMain()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "TestMain",
-      "file_type": "code",
-      "norm_label": "testmain()",
-      "source_file": "test_main_test.go",
-      "source_location": "L8"
     },
     {
       "id": "scripts_generate_docx",
@@ -23042,7 +23355,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L305",
+      "source_location": "L328",
       "weight": 1.0
     },
     {
@@ -23054,7 +23367,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L323",
+      "source_location": "L346",
       "weight": 1.0
     },
     {
@@ -23066,7 +23379,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L324",
+      "source_location": "L347",
       "weight": 1.0
     },
     {
@@ -23078,7 +23391,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L325",
+      "source_location": "L348",
       "weight": 1.0
     },
     {
@@ -23090,7 +23403,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L221",
+      "source_location": "L244",
       "weight": 1.0
     },
     {
@@ -23102,7 +23415,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L348",
+      "source_location": "L371",
       "weight": 1.0
     },
     {
@@ -23114,7 +23427,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L289",
+      "source_location": "L312",
+      "weight": 1.0
+    },
+    {
+      "source": "captcha_verifycaptcha",
+      "target": "setad_khabari_hmd_usedcaptchastore_recordfailure",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "captcha.go",
+      "source_location": "L219",
       "weight": 1.0
     },
     {
@@ -23126,7 +23451,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L205",
+      "source_location": "L228",
       "weight": 1.0
     },
     {
@@ -28550,7 +28875,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "metadata.go",
-      "source_location": "L49",
+      "source_location": "L385",
       "weight": 1.0
     },
     {
@@ -28562,7 +28887,103 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "metadata.go",
-      "source_location": "L53",
+      "source_location": "L389",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_sanitizeattachment",
+      "target": "metadata_sanitizepdf",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "metadata.go",
+      "source_location": "L393",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_sanitizeattachment",
+      "target": "metadata_sanitizeooxml",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "metadata.go",
+      "source_location": "L397",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_sanitizeattachment",
+      "target": "metadata_sanitizemp3",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "metadata.go",
+      "source_location": "L401",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_sanitizeattachment",
+      "target": "metadata_sanitizewav",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "metadata.go",
+      "source_location": "L405",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_sanitizeooxml",
+      "target": "metadata_inspectooxml",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "metadata.go",
+      "source_location": "L262",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_sanitizepdf",
+      "target": "metadata_scanpdfforactivecontent",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "metadata.go",
+      "source_location": "L182",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_scanbufferforpdfkeywords",
+      "target": "metadata_decodepdfhexnames",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "metadata.go",
+      "source_location": "L105",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_scanpdfforactivecontent",
+      "target": "metadata_scanbufferforpdfkeywords",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "metadata.go",
+      "source_location": "L128",
       "weight": 1.0
     },
     {
@@ -29059,6 +29480,18 @@
     },
     {
       "source": "public_handlers_submitreporthandler",
+      "target": "public_handlers_isvalidreportcategory",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "public_handlers.go",
+      "source_location": "L194",
+      "weight": 1.0
+    },
+    {
+      "source": "public_handlers_submitreporthandler",
       "target": "public_handlers_generatetrackingcode",
       "relation": "calls",
       "_origin": "ast",
@@ -29066,7 +29499,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L183",
+      "source_location": "L271",
       "weight": 1.0
     },
     {
@@ -29078,7 +29511,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L247",
+      "source_location": "L342",
       "weight": 1.0
     },
     {
@@ -29090,7 +29523,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L265",
+      "source_location": "L361",
       "weight": 1.0
     },
     {
@@ -29246,7 +29679,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L673",
+      "source_location": "L690",
       "weight": 1.0
     },
     {
@@ -29294,7 +29727,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L722",
+      "source_location": "L739",
       "weight": 1.0
     },
     {
@@ -29306,7 +29739,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L758",
+      "source_location": "L775",
       "weight": 1.0
     },
     {
@@ -29318,7 +29751,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L821",
+      "source_location": "L838",
       "weight": 1.0
     },
     {
@@ -29330,7 +29763,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L881",
+      "source_location": "L898",
       "weight": 1.0
     },
     {
@@ -29366,7 +29799,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L643",
+      "source_location": "L660",
       "weight": 1.0
     },
     {
@@ -29378,7 +29811,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L519",
+      "source_location": "L536",
       "weight": 1.0
     },
     {
@@ -29390,7 +29823,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L503",
+      "source_location": "L520",
       "weight": 1.0
     },
     {
@@ -29402,7 +29835,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L505",
+      "source_location": "L522",
       "weight": 1.0
     },
     {
@@ -29414,7 +29847,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L185",
+      "source_location": "L202",
       "weight": 1.0
     },
     {
@@ -29426,7 +29859,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L198",
+      "source_location": "L215",
       "weight": 1.0
     },
     {
@@ -29438,7 +29871,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L209",
+      "source_location": "L226",
       "weight": 1.0
     },
     {
@@ -29450,7 +29883,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L362",
+      "source_location": "L379",
       "weight": 1.0
     },
     {
@@ -29462,7 +29895,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L250",
+      "source_location": "L267",
       "weight": 1.0
     },
     {
@@ -29474,7 +29907,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L252",
+      "source_location": "L269",
       "weight": 1.0
     },
     {
@@ -29486,7 +29919,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L276",
+      "source_location": "L293",
       "weight": 1.0
     },
     {
@@ -29498,7 +29931,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L326",
+      "source_location": "L343",
       "weight": 1.0
     },
     {
@@ -29510,7 +29943,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L329",
+      "source_location": "L346",
       "weight": 1.0
     },
     {
@@ -29522,7 +29955,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L117",
+      "source_location": "L134",
       "weight": 1.0
     },
     {
@@ -29534,7 +29967,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L120",
+      "source_location": "L137",
       "weight": 1.0
     },
     {
@@ -29546,7 +29979,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L546",
+      "source_location": "L563",
       "weight": 1.0
     },
     {
@@ -29558,7 +29991,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L449",
+      "source_location": "L466",
       "weight": 1.0
     },
     {
@@ -29570,7 +30003,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L462",
+      "source_location": "L479",
       "weight": 1.0
     },
     {
@@ -29582,7 +30015,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L473",
+      "source_location": "L490",
       "weight": 1.0
     },
     {
@@ -29726,7 +30159,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L66",
+      "source_location": "L68",
       "weight": 1.0
     },
     {
@@ -29738,7 +30171,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L127",
+      "source_location": "L148",
       "weight": 1.0
     },
     {
@@ -29750,7 +30183,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L90",
+      "source_location": "L111",
       "weight": 1.0
     },
     {
@@ -30194,7 +30627,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L688",
+      "source_location": "L705",
       "weight": 1.0
     },
     {
@@ -30206,7 +30639,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L689",
+      "source_location": "L706",
       "weight": 1.0
     },
     {
@@ -30218,7 +30651,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L690",
+      "source_location": "L707",
       "weight": 1.0
     },
     {
@@ -30230,7 +30663,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L691",
+      "source_location": "L708",
       "weight": 1.0
     },
     {
@@ -30254,7 +30687,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L53",
+      "source_location": "L70",
       "weight": 1.0
     },
     {
@@ -30326,7 +30759,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L684",
+      "source_location": "L701",
       "weight": 1.0
     },
     {
@@ -30338,7 +30771,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L75",
+      "source_location": "L92",
       "weight": 1.0
     },
     {
@@ -30350,7 +30783,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L76",
+      "source_location": "L93",
       "weight": 1.0
     },
     {
@@ -30398,7 +30831,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L574",
+      "source_location": "L591",
       "weight": 1.0
     },
     {
@@ -30410,7 +30843,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L575",
+      "source_location": "L592",
       "weight": 1.0
     },
     {
@@ -30434,7 +30867,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "public_handlers.go",
-      "source_location": "L388",
+      "source_location": "L493",
       "weight": 1.0
     },
     {
@@ -30487,6 +30920,18 @@
     },
     {
       "source": "setad_khabari_hmd_sessionmanager",
+      "target": "setad_khabari_hmd_adminsession",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "field",
+      "source_file": "security.go",
+      "source_location": "L100",
+      "weight": 1.0
+    },
+    {
+      "source": "setad_khabari_hmd_sessionmanager",
       "target": "go_type_sync_rwmutex",
       "relation": "references",
       "_origin": "ast",
@@ -30494,7 +30939,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L80",
+      "source_location": "L97",
       "weight": 1.0
     },
     {
@@ -30506,7 +30951,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L81",
+      "source_location": "L98",
       "weight": 1.0
     },
     {
@@ -30518,19 +30963,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L82",
-      "weight": 1.0
-    },
-    {
-      "source": "setad_khabari_hmd_sessionmanager",
-      "target": "setad_khabari_hmd_adminsession",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "field",
-      "source_file": "security.go",
-      "source_location": "L83",
+      "source_location": "L99",
       "weight": 1.0
     },
     {
@@ -30722,7 +31155,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "security.go",
-      "source_location": "L570",
+      "source_location": "L587",
       "weight": 1.0
     },
     {
@@ -31886,7 +32319,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "captcha.go",
-      "source_location": "L142",
+      "source_location": "L163",
       "weight": 1.0
     },
     {
@@ -31898,7 +32331,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "captcha.go",
-      "source_location": "L347",
+      "source_location": "L370",
       "weight": 1.0
     },
     {
@@ -31910,7 +32343,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "captcha.go",
-      "source_location": "L347",
+      "source_location": "L370",
       "weight": 1.0
     },
     {
@@ -31922,7 +32355,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "captcha.go",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0
     },
     {
@@ -32846,7 +33279,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "public_handlers.go",
-      "source_location": "L480",
+      "source_location": "L585",
       "weight": 1.0
     },
     {
@@ -32858,7 +33291,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "public_handlers.go",
-      "source_location": "L480",
+      "source_location": "L585",
       "weight": 1.0
     },
     {
@@ -32870,7 +33303,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "public_handlers.go",
-      "source_location": "L95",
+      "source_location": "L148",
       "weight": 1.0
     },
     {
@@ -32882,7 +33315,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "public_handlers.go",
-      "source_location": "L95",
+      "source_location": "L148",
       "weight": 1.0
     },
     {
@@ -32894,7 +33327,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "public_handlers.go",
-      "source_location": "L391",
+      "source_location": "L496",
       "weight": 1.0
     },
     {
@@ -32906,7 +33339,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "public_handlers.go",
-      "source_location": "L391",
+      "source_location": "L496",
       "weight": 1.0
     },
     {
@@ -33002,7 +33435,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "security.go",
-      "source_location": "L25",
+      "source_location": "L42",
       "weight": 1.0
     },
     {
@@ -33014,7 +33447,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "security.go",
-      "source_location": "L20",
+      "source_location": "L37",
       "weight": 1.0
     },
     {
@@ -33074,7 +33507,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "security.go",
-      "source_location": "L694",
+      "source_location": "L711",
       "weight": 1.0
     },
     {
@@ -33086,7 +33519,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "security.go",
-      "source_location": "L92",
+      "source_location": "L109",
       "weight": 1.0
     },
     {
@@ -33098,7 +33531,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "security.go",
-      "source_location": "L670",
+      "source_location": "L687",
       "weight": 1.0
     },
     {
@@ -33182,7 +33615,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "security.go",
-      "source_location": "L703",
+      "source_location": "L720",
       "weight": 1.0
     },
     {
@@ -33206,7 +33639,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "security.go",
-      "source_location": "L606",
+      "source_location": "L623",
       "weight": 1.0
     },
     {
@@ -33218,7 +33651,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "security.go",
-      "source_location": "L103",
+      "source_location": "L120",
       "weight": 1.0
     },
     {
@@ -33230,7 +33663,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "security.go",
-      "source_location": "L116",
+      "source_location": "L133",
       "weight": 1.0
     },
     {
@@ -33242,7 +33675,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "security.go",
-      "source_location": "L540",
+      "source_location": "L557",
       "weight": 1.0
     },
     {
@@ -33290,7 +33723,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "captcha.go",
-      "source_location": "L47",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -33302,7 +33735,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "captcha.go",
-      "source_location": "L121",
+      "source_location": "L142",
       "weight": 1.0
     },
     {
@@ -33402,6 +33835,150 @@
       "weight": 1.0
     },
     {
+      "source": "uploads_security_test_testaudiosanitization",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L227",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testcaptchabruteforceprotection",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L318",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testcaptchasingleuseredemption",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L337",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testcategoryvalidationallowlist",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L373",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testiswithindirectory",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L352",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testjpegdecompressionbomb",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testooxmlmacroandtemplaterejection",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testpdfactivecontentrejection",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L55",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testpdfmetadatasanitization",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L98",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testpngdecompressionbomb",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testvalidatebinarymagicbytes",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L290",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testziparchiveinspection",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L177",
+      "weight": 1.0
+    },
+    {
       "source": "admin_handlers_adminauthmiddleware",
       "target": "go_type_net_http_handlerfunc",
       "relation": "references",
@@ -33434,7 +34011,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "captcha.go",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0
     },
     {
@@ -33638,7 +34215,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "security.go",
-      "source_location": "L25",
+      "source_location": "L42",
       "weight": 1.0
     },
     {
@@ -33650,7 +34227,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "security.go",
-      "source_location": "L20",
+      "source_location": "L37",
       "weight": 1.0
     },
     {
@@ -33662,7 +34239,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "security.go",
-      "source_location": "L694",
+      "source_location": "L711",
       "weight": 1.0
     },
     {
@@ -33674,7 +34251,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "security.go",
-      "source_location": "L581",
+      "source_location": "L598",
       "weight": 1.0
     },
     {
@@ -33686,7 +34263,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "security.go",
-      "source_location": "L92",
+      "source_location": "L109",
       "weight": 1.0
     },
     {
@@ -33698,7 +34275,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "security.go",
-      "source_location": "L670",
+      "source_location": "L687",
       "weight": 1.0
     },
     {
@@ -33722,7 +34299,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "security.go",
-      "source_location": "L711",
+      "source_location": "L728",
       "weight": 1.0
     },
     {
@@ -33734,7 +34311,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "security.go",
-      "source_location": "L731",
+      "source_location": "L748",
       "weight": 1.0
     },
     {
@@ -33746,7 +34323,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "security.go",
-      "source_location": "L184",
+      "source_location": "L201",
       "weight": 1.0
     },
     {
@@ -33758,7 +34335,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "security.go",
-      "source_location": "L359",
+      "source_location": "L376",
       "weight": 1.0
     },
     {
@@ -33770,7 +34347,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "security.go",
-      "source_location": "L109",
+      "source_location": "L126",
       "weight": 1.0
     },
     {
@@ -33782,7 +34359,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "captcha.go",
-      "source_location": "L55",
+      "source_location": "L57",
       "weight": 1.0
     },
     {
@@ -42826,7 +43403,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L142",
+      "source_location": "L163",
       "weight": 1.0
     },
     {
@@ -42837,18 +43414,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L161",
-      "weight": 1.0
-    },
-    {
-      "source": "captcha",
-      "target": "captcha_cryptorandint",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "captcha.go",
-      "source_location": "L208",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -42864,13 +43430,24 @@
     },
     {
       "source": "captcha",
+      "target": "captcha_cryptorandint",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "captcha.go",
+      "source_location": "L231",
+      "weight": 1.0
+    },
+    {
+      "source": "captcha",
       "target": "captcha_generatenoiseelements",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L216",
+      "source_location": "L239",
       "weight": 1.0
     },
     {
@@ -42892,18 +43469,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L260",
-      "weight": 1.0
-    },
-    {
-      "source": "captcha",
-      "target": "captcha_generatemathcaptchasvg",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "captcha.go",
-      "source_location": "L304",
+      "source_location": "L283",
       "weight": 1.0
     },
     {
@@ -42919,13 +43485,24 @@
     },
     {
       "source": "captcha",
+      "target": "captcha_generatemathcaptchasvg",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "captcha.go",
+      "source_location": "L327",
+      "weight": 1.0
+    },
+    {
+      "source": "captcha",
       "target": "captcha_getcaptchahandler",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L347",
+      "source_location": "L370",
       "weight": 1.0
     },
     {
@@ -42936,7 +43513,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0
     },
     {
@@ -49288,35 +49865,13 @@
     },
     {
       "source": "metadata",
-      "target": "metadata_sanitizejpeg",
+      "target": "metadata_scanbufferforpdfkeywords",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "metadata.go",
-      "source_location": "L14",
-      "weight": 1.0
-    },
-    {
-      "source": "metadata",
-      "target": "metadata_sanitizepng",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "metadata.go",
-      "source_location": "L29",
-      "weight": 1.0
-    },
-    {
-      "source": "metadata",
-      "target": "metadata_sanitizeattachment",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "metadata.go",
-      "source_location": "L45",
+      "source_location": "L104",
       "weight": 1.0
     },
     {
@@ -49327,7 +49882,84 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "metadata.go",
-      "source_location": "L59",
+      "source_location": "L119",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata",
+      "target": "metadata_sanitizepdf",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "metadata.go",
+      "source_location": "L181",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata",
+      "target": "metadata_inspectooxml",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "metadata.go",
+      "source_location": "L217",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata",
+      "target": "metadata_sanitizejpeg",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "metadata.go",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata",
+      "target": "metadata_sanitizeooxml",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "metadata.go",
+      "source_location": "L261",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata",
+      "target": "metadata_sanitizemp3",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "metadata.go",
+      "source_location": "L320",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata",
+      "target": "metadata_sanitizewav",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "metadata.go",
+      "source_location": "L340",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata",
+      "target": "metadata_sanitizeattachment",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "metadata.go",
+      "source_location": "L381",
       "weight": 1.0
     },
     {
@@ -49338,7 +49970,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "metadata.go",
-      "source_location": "L83",
+      "source_location": "L411",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata",
+      "target": "metadata_sanitizepng",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "metadata.go",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata",
+      "target": "metadata_decodepdfhexnames",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "metadata.go",
+      "source_location": "L71",
       "weight": 1.0
     },
     {
@@ -50025,6 +50679,50 @@
     },
     {
       "source": "public_handlers",
+      "target": "public_handlers_isvalidreportcategory",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public_handlers.go",
+      "source_location": "L128",
+      "weight": 1.0
+    },
+    {
+      "source": "public_handlers",
+      "target": "public_handlers_validatemagicbytes",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public_handlers.go",
+      "source_location": "L132",
+      "weight": 1.0
+    },
+    {
+      "source": "public_handlers",
+      "target": "public_handlers_generatetrackingcode",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public_handlers.go",
+      "source_location": "L136",
+      "weight": 1.0
+    },
+    {
+      "source": "public_handlers",
+      "target": "public_handlers_submitreporthandler",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public_handlers.go",
+      "source_location": "L148",
+      "weight": 1.0
+    },
+    {
+      "source": "public_handlers",
       "target": "public_handlers_inspectziparchive",
       "relation": "contains",
       "_origin": "ast",
@@ -50042,7 +50740,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "public_handlers.go",
-      "source_location": "L372",
+      "source_location": "L477",
       "weight": 1.0
     },
     {
@@ -50053,7 +50751,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "public_handlers.go",
-      "source_location": "L381",
+      "source_location": "L486",
       "weight": 1.0
     },
     {
@@ -50064,7 +50762,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "public_handlers.go",
-      "source_location": "L391",
+      "source_location": "L496",
       "weight": 1.0
     },
     {
@@ -50075,40 +50773,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "public_handlers.go",
-      "source_location": "L480",
-      "weight": 1.0
-    },
-    {
-      "source": "public_handlers",
-      "target": "public_handlers_validatemagicbytes",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "public_handlers.go",
-      "source_location": "L79",
-      "weight": 1.0
-    },
-    {
-      "source": "public_handlers",
-      "target": "public_handlers_generatetrackingcode",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "public_handlers.go",
-      "source_location": "L83",
-      "weight": 1.0
-    },
-    {
-      "source": "public_handlers",
-      "target": "public_handlers_submitreporthandler",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "public_handlers.go",
-      "source_location": "L95",
+      "source_location": "L585",
       "weight": 1.0
     },
     {
@@ -50443,178 +51108,13 @@
     },
     {
       "source": "security",
-      "target": "setad_khabari_hmd_admincontextkeytype",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L16",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "security_contextwithadmin",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L20",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "security_adminfromcontext",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L25",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "setad_khabari_hmd_adminsession",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L40",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "setad_khabari_hmd_activesessionitem",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L56",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "setad_khabari_hmd_visitor",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L567",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "setad_khabari_hmd_ipratelimiter",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L573",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "security_newipratelimiter",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L581",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "security_ratelimitmiddleware",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L670",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "setad_khabari_hmd_cachedaccountfailure",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L681",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "setad_khabari_hmd_accountlockoutmanager",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L687",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "security_newaccountlockoutmanager",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L694",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "setad_khabari_hmd_cachedsession",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L74",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "setad_khabari_hmd_sessionmanager",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L79",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
       "target": "security_hashtoken",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L87",
-      "weight": 1.0
-    },
-    {
-      "source": "security",
-      "target": "security_progressivedelay",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "security.go",
-      "source_location": "L903",
+      "source_location": "L104",
       "weight": 1.0
     },
     {
@@ -50625,7 +51125,172 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L92",
+      "source_location": "L109",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "security_iswithindirectory",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "setad_khabari_hmd_admincontextkeytype",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "security_contextwithadmin",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "security_adminfromcontext",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "setad_khabari_hmd_adminsession",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "setad_khabari_hmd_visitor",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L584",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "setad_khabari_hmd_ipratelimiter",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L590",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "security_newipratelimiter",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L598",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "security_ratelimitmiddleware",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L687",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "setad_khabari_hmd_cachedaccountfailure",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L698",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "setad_khabari_hmd_accountlockoutmanager",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L704",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "security_newaccountlockoutmanager",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L711",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "setad_khabari_hmd_activesessionitem",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L73",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "setad_khabari_hmd_cachedsession",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L91",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "security_progressivedelay",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L920",
       "weight": 1.0
     },
     {
@@ -50636,7 +51301,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L922",
+      "source_location": "L939",
       "weight": 1.0
     },
     {
@@ -50647,7 +51312,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L927",
+      "source_location": "L944",
       "weight": 1.0
     },
     {
@@ -50658,7 +51323,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L933",
+      "source_location": "L950",
+      "weight": 1.0
+    },
+    {
+      "source": "security",
+      "target": "setad_khabari_hmd_sessionmanager",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "security.go",
+      "source_location": "L96",
       "weight": 1.0
     },
     {
@@ -50669,7 +51345,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L943",
+      "source_location": "L960",
       "weight": 1.0
     },
     {
@@ -50680,7 +51356,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L951",
+      "source_location": "L968",
       "weight": 1.0
     },
     {
@@ -50691,7 +51367,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L955",
+      "source_location": "L972",
       "weight": 1.0
     },
     {
@@ -50702,7 +51378,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L965",
+      "source_location": "L982",
       "weight": 1.0
     },
     {
@@ -50846,6 +51522,61 @@
       "confidence_score": 1.0,
       "source_file": "SECURITY_CHANGES.md",
       "source_location": "L97",
+      "weight": 1.0
+    },
+    {
+      "source": "security_changes_phase_3_upload_pipeline_content_security",
+      "target": "security_changes_verified_findings_117",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY_CHANGES.md",
+      "source_location": "L117",
+      "weight": 1.0
+    },
+    {
+      "source": "security_changes_phase_3_upload_pipeline_content_security",
+      "target": "security_changes_code_changes_126",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY_CHANGES.md",
+      "source_location": "L126",
+      "weight": 1.0
+    },
+    {
+      "source": "security_changes_phase_3_upload_pipeline_content_security",
+      "target": "security_changes_operator_impact_155",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY_CHANGES.md",
+      "source_location": "L155",
+      "weight": 1.0
+    },
+    {
+      "source": "security_changes_phase_3_upload_pipeline_content_security",
+      "target": "security_changes_tests_verification_160",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY_CHANGES.md",
+      "source_location": "L160",
+      "weight": 1.0
+    },
+    {
+      "source": "security_changes_security_reliability_remediation_log",
+      "target": "security_changes_phase_3_upload_pipeline_content_security",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY_CHANGES.md",
+      "source_location": "L115",
       "weight": 1.0
     },
     {
@@ -51157,6 +51888,138 @@
       "weight": 1.0
     },
     {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testooxmlmacroandtemplaterejection",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testjpegdecompressionbomb",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testziparchiveinspection",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L177",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testaudiosanitization",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L227",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testvalidatebinarymagicbytes",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L290",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testpngdecompressionbomb",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testcaptchabruteforceprotection",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L318",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testcaptchasingleuseredemption",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L337",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testiswithindirectory",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L352",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testcategoryvalidationallowlist",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L373",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testpdfactivecontentrejection",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L55",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test",
+      "target": "uploads_security_test_testpdfmetadatasanitization",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "uploads_security_test.go",
+      "source_location": "L98",
+      "weight": 1.0
+    },
+    {
       "source": "setad_khabari_hmd_gzipresponsewriter",
       "target": "go_type_net_http_responsewriter",
       "relation": "embeds",
@@ -51175,7 +52038,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L703",
+      "source_location": "L720",
       "weight": 1.0
     },
     {
@@ -51186,7 +52049,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L711",
+      "source_location": "L728",
       "weight": 1.0
     },
     {
@@ -51197,7 +52060,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L731",
+      "source_location": "L748",
       "weight": 1.0
     },
     {
@@ -51208,7 +52071,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L810",
+      "source_location": "L827",
       "weight": 1.0
     },
     {
@@ -51219,7 +52082,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L875",
+      "source_location": "L892",
       "weight": 1.0
     },
     {
@@ -51307,7 +52170,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L606",
+      "source_location": "L623",
       "weight": 1.0
     },
     {
@@ -51318,7 +52181,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L634",
+      "source_location": "L651",
       "weight": 1.0
     },
     {
@@ -51329,7 +52192,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L103",
+      "source_location": "L120",
       "weight": 1.0
     },
     {
@@ -51340,7 +52203,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L109",
+      "source_location": "L126",
       "weight": 1.0
     },
     {
@@ -51351,7 +52214,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L116",
+      "source_location": "L133",
       "weight": 1.0
     },
     {
@@ -51362,7 +52225,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L184",
+      "source_location": "L201",
       "weight": 1.0
     },
     {
@@ -51373,7 +52236,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L249",
+      "source_location": "L266",
       "weight": 1.0
     },
     {
@@ -51384,7 +52247,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L272",
+      "source_location": "L289",
       "weight": 1.0
     },
     {
@@ -51395,7 +52258,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L325",
+      "source_location": "L342",
       "weight": 1.0
     },
     {
@@ -51406,7 +52269,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L359",
+      "source_location": "L376",
       "weight": 1.0
     },
     {
@@ -51417,7 +52280,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L448",
+      "source_location": "L465",
       "weight": 1.0
     },
     {
@@ -51428,7 +52291,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L502",
+      "source_location": "L519",
       "weight": 1.0
     },
     {
@@ -51439,7 +52302,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L518",
+      "source_location": "L535",
       "weight": 1.0
     },
     {
@@ -51450,7 +52313,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "security.go",
-      "source_location": "L540",
+      "source_location": "L557",
       "weight": 1.0
     },
     {
@@ -51626,7 +52489,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L121",
+      "source_location": "L142",
       "weight": 1.0
     },
     {
@@ -51637,7 +52500,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L47",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -51648,7 +52511,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L55",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "setad_khabari_hmd_usedcaptchastore",
+      "target": "setad_khabari_hmd_usedcaptchastore_recordfailure",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "captcha.go",
+      "source_location": "L77",
       "weight": 1.0
     },
     {
@@ -51659,7 +52533,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "captcha.go",
-      "source_location": "L75",
+      "source_location": "L95",
       "weight": 1.0
     },
     {
@@ -54025,6 +54899,18 @@
     },
     {
       "source": "admin_handlers_deletereporthandler",
+      "target": "security_iswithindirectory",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2310",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_handlers_deletereporthandler",
       "target": "admin_auth_logaudittx",
       "relation": "calls",
       "_origin": "ast",
@@ -54129,6 +55015,18 @@
       "context": "call",
       "source_file": "admin_handlers.go",
       "source_location": "L1135",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_handlers_downloadattachmenthandler",
+      "target": "security_iswithindirectory",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1143",
       "weight": 1.0
     },
     {
@@ -55124,7 +56022,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L149",
+      "source_location": "L170",
       "weight": 1.0
     },
     {
@@ -55136,7 +56034,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L154",
+      "source_location": "L175",
       "weight": 1.0
     },
     {
@@ -55172,7 +56070,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L169",
+      "source_location": "L190",
       "weight": 1.0
     },
     {
@@ -55184,7 +56082,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L174",
+      "source_location": "L195",
       "weight": 1.0
     },
     {
@@ -55196,7 +56094,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "captcha.go",
-      "source_location": "L182",
+      "source_location": "L203",
       "weight": 1.0
     },
     {
@@ -57248,7 +58146,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L492",
+      "source_location": "L597",
       "weight": 1.0
     },
     {
@@ -57260,7 +58158,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L497",
+      "source_location": "L602",
       "weight": 1.0
     },
     {
@@ -57272,7 +58170,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L504",
+      "source_location": "L609",
       "weight": 1.0
     },
     {
@@ -57284,19 +58182,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L514",
-      "weight": 1.0
-    },
-    {
-      "source": "public_handlers_submitfollowuphandler",
-      "target": "admin_auth_getip",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "public_handlers.go",
-      "source_location": "L515",
+      "source_location": "L620",
       "weight": 1.0
     },
     {
@@ -57308,7 +58194,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L515",
+      "source_location": "L623",
       "weight": 1.0
     },
     {
@@ -57320,7 +58206,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L532",
+      "source_location": "L643",
       "weight": 1.0
     },
     {
@@ -57332,7 +58218,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L107",
+      "source_location": "L172",
       "weight": 1.0
     },
     {
@@ -57344,7 +58230,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L112",
+      "source_location": "L177",
       "weight": 1.0
     },
     {
@@ -57356,7 +58242,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L117",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -57368,19 +58254,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L145",
-      "weight": 1.0
-    },
-    {
-      "source": "public_handlers_submitreporthandler",
-      "target": "admin_auth_getip",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "public_handlers.go",
-      "source_location": "L146",
+      "source_location": "L224",
       "weight": 1.0
     },
     {
@@ -57392,7 +58266,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L146",
+      "source_location": "L228",
       "weight": 1.0
     },
     {
@@ -57404,7 +58278,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L165",
+      "source_location": "L253",
       "weight": 1.0
     },
     {
@@ -57416,7 +58290,19 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L256",
+      "source_location": "L352",
+      "weight": 1.0
+    },
+    {
+      "source": "public_handlers_submitreporthandler",
+      "target": "metadata_inspectooxml",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "public_handlers.go",
+      "source_location": "L370",
       "weight": 1.0
     },
     {
@@ -57428,7 +58314,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L273",
+      "source_location": "L378",
       "weight": 1.0
     },
     {
@@ -57440,7 +58326,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L296",
+      "source_location": "L401",
       "weight": 1.0
     },
     {
@@ -57452,7 +58338,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L308",
+      "source_location": "L413",
       "weight": 1.0
     },
     {
@@ -57464,7 +58350,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L325",
+      "source_location": "L430",
       "weight": 1.0
     },
     {
@@ -57476,7 +58362,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L402",
+      "source_location": "L507",
       "weight": 1.0
     },
     {
@@ -57488,7 +58374,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L407",
+      "source_location": "L512",
       "weight": 1.0
     },
     {
@@ -57500,7 +58386,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L408",
+      "source_location": "L513",
       "weight": 1.0
     },
     {
@@ -57512,7 +58398,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L439",
+      "source_location": "L544",
       "weight": 1.0
     },
     {
@@ -57524,7 +58410,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "public_handlers.go",
-      "source_location": "L80",
+      "source_location": "L133",
       "weight": 1.0
     },
     {
@@ -57740,7 +58626,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "security.go",
-      "source_location": "L672",
+      "source_location": "L689",
       "weight": 1.0
     },
     {
@@ -57948,6 +58834,198 @@
       "weight": 1.0
     },
     {
+      "source": "uploads_security_test_testaudiosanitization",
+      "target": "metadata_sanitizemp3",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L242",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testaudiosanitization",
+      "target": "metadata_sanitizewav",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L277",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testcaptchabruteforceprotection",
+      "target": "captcha_generatecaptchatoken",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L319",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testcaptchabruteforceprotection",
+      "target": "captcha_verifycaptcha",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L324",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testcaptchasingleuseredemption",
+      "target": "captcha_generatecaptchatoken",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L338",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testcaptchasingleuseredemption",
+      "target": "captcha_verifycaptcha",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L343",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testcategoryvalidationallowlist",
+      "target": "public_handlers_isvalidreportcategory",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L374",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testiswithindirectory",
+      "target": "security_iswithindirectory",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L359",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testjpegdecompressionbomb",
+      "target": "metadata_sanitizejpeg",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testooxmlmacroandtemplaterejection",
+      "target": "metadata_inspectooxml",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L120",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testooxmlmacroandtemplaterejection",
+      "target": "metadata_sanitizeooxml",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L150",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testpdfactivecontentrejection",
+      "target": "metadata_scanpdfforactivecontent",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L58",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testpdfmetadatasanitization",
+      "target": "metadata_sanitizepdf",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L100",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testpngdecompressionbomb",
+      "target": "metadata_sanitizepng",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testvalidatebinarymagicbytes",
+      "target": "metadata_validatebinarymagicbytes",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L310",
+      "weight": 1.0
+    },
+    {
+      "source": "uploads_security_test_testziparchiveinspection",
+      "target": "public_handlers_inspectziparchive",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "uploads_security_test.go",
+      "source_location": "L185",
+      "weight": 1.0
+    },
+    {
       "source": "frontend_admin_js_admin_createotpcontroller",
       "target": "frontend_admin_js_admin_createotpcontroller_clearall",
       "relation": "indirect_call",
@@ -57985,5 +59063,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "47f3f2c879d4fd5ff03564ea3dc6b962d1f99be4"
+  "built_at_commit": "e5f85bd63f4326e2c34b3088b3321457dc6487d2"
 }

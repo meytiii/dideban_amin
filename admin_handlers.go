@@ -1140,7 +1140,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 
 		cleanPath := filepath.Clean(realPath)
 		absFilePath, err := filepath.Abs(cleanPath)
-		if err != nil || !strings.HasPrefix(absFilePath, absUploadDir) {
+		if err != nil || !isWithinDirectory(absUploadDir, absFilePath) {
 			logAudit(admin.Username, admin.Title, "ILLEGAL_FILE_ACCESS_ATTEMPT", &reportID, getIP(r))
 			http.Error(w, "Access Denied: Invalid file path boundary", http.StatusForbidden)
 			return
@@ -1213,7 +1213,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 
 		cleanPath := filepath.Clean(realPath)
 		absFilePath, err := filepath.Abs(cleanPath)
-		if err != nil || !strings.HasPrefix(absFilePath, absUploadDir) {
+		if err != nil || !isWithinDirectory(absUploadDir, absFilePath) {
 			logAudit(admin.Username, admin.Title, "ILLEGAL_FILE_ACCESS_ATTEMPT", &reportID, getIP(r))
 			http.Error(w, "Access Denied: Invalid file path boundary", http.StatusForbidden)
 			return
@@ -1260,7 +1260,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		cleanPath := filepath.Clean(realPath)
 		absFilePath, err := filepath.Abs(cleanPath)
-		if err != nil || !strings.HasPrefix(absFilePath, absUploadDir) {
+		if err != nil || !isWithinDirectory(absUploadDir, absFilePath) {
 			continue
 		}
 
@@ -2307,7 +2307,7 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 				if realPath, err := DecryptAES(encPath); err == nil {
 					cleanPath := filepath.Clean(realPath)
 					absFilePath, err := filepath.Abs(cleanPath)
-					if err == nil && strings.HasPrefix(absFilePath, absUploadDir) {
+					if err == nil && isWithinDirectory(absUploadDir, absFilePath) {
 						filesToDelete = append(filesToDelete, absFilePath)
 					}
 				}

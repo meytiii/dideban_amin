@@ -112,3 +112,63 @@ This document tracks all verified security findings, code modifications, operato
   - `TestClamAVPingAndStartupChecks`: daemon pinging, disabled bypass, and startup failure with `HERASAT_CLAMAV_REQUIRED=1`.
 - Regression: `go test ./...` passed.
 
+## Phase 3: Upload Pipeline & Content Security
+
+### Verified Findings
+1. **Decompression Bomb Vulnerability in Images**: Previously, image upload resizing parsed pixel streams without decoding headers first, allowing small files to exhaust system RAM upon decompression.
+2. **Missing Active Content Inspection in PDFs**: Active script constructs (`/JavaScript`, `/JS`, `/Launch`, `/EmbeddedFiles`, `/EmbeddedFile`, `/OpenAction`, `/AA`, `/SubmitForm`, `/ImportData`, `/RichMedia`, `/GoToR`) as well as encrypted payloads (`/Encrypt`) were not comprehensively checked, including within compressed `/FlateDecode` streams and hex-encoded keywords (`#xx`).
+3. **Sensitive Metadata in PDFs and Office Documents**: PDFs retained `/Author`, `/Creator`, `/Producer`, `/CreationDate`, and `/ModDate`. Word/Excel OOXML files retained author details in `docProps/core.xml` and company properties in `docProps/custom.xml`.
+4. **Dangerous Archive & OOXML Macro Vectors**: Embedded macro bytecode (`vbaProject.bin`, `.bin`) and external template references (`TargetMode="External"`) could be embedded inside `.docx` or `.xlsx` files. Archive uploads lacked decompression size checking against actual bytes read.
+5. **Path Traversal Boundary Vulnerability**: Sibling directory traversal was possible in attachment retrieval and report deletion due to `strings.HasPrefix(absFilePath, absUploadDir)` matching folders sharing the same prefix name without a path separator boundary.
+6. **Captcha Brute-Force & Token Reuse**: Captcha tokens did not enforce attempt limits on failed answers, allowing brute-force attempts on the math answer range before expiration.
+7. **Whistleblower IP Disclosure in Audit Logs**: Public report submissions and follow-ups logged reporter client IPs in the audit trail, violating anonymity guarantees.
+
+### Code Changes
+- **Image Bomb Protection (`metadata.go`)**:
+  - Implemented `jpeg.DecodeConfig` and `png.DecodeConfig` checks enforcing max 40 megapixels and max 10,000x10,000 pixel dimensions before full memory allocation.
+- **Active PDF Inspection & Stripping (`metadata.go`)**:
+  - Implemented `ScanPDFForActiveContent`: rejects encrypted PDFs (`/Encrypt`), scans uncompressed and decompressing `/FlateDecode` object streams for dangerous keywords, and decodes hex-encoded PDF name literals (`#xx`).
+  - Added `SanitizePDF`: strips `/Author`, `/Creator`, `/Producer`, `/CreationDate`, and `/ModDate` fields from `/Info` dictionaries.
+- **OOXML Security & Sanitization (`metadata.go`)**:
+  - Added `InspectOOXML`: rejects macro streams (`vbaProject.bin`, `.bin`, `externalLink`, `oleObject`) and external template references.
+  - Added `SanitizeOOXML`: replaces `docProps/core.xml` and `docProps/app.xml` with sanitized minimal XML without author or creation timestamps, and deletes `docProps/custom.xml`.
+- **Audio File Sanitization (`metadata.go`)**:
+  - Added `SanitizeMP3`: strips ID3v2 headers and ID3v1 trailing tags.
+  - Added `SanitizeWAV`: parses RIFF chunks, retaining only valid `fmt ` and `data` chunks while dropping metadata chunks such as `LIST INFO`.
+- **Archive Security (`public_handlers.go`)**:
+  - Added `inspectZipArchive`: verifies actual uncompressed bytes do not exceed 50MB, bounds maximum archive entries to 1000, rejects encrypted zip entries, bans nested dangerous file extensions, and aborts on suspicious decompression ratios (>20:1 above 512KB).
+- **Public Handler Protections (`public_handlers.go`)**:
+  - Added `http.ResponseController` read deadline (5 minutes) for multi-part file uploads.
+  - Added `defer r.MultipartForm.RemoveAll()` for guaranteed disk cleanup of multipart temporary files.
+  - Enforced max 5 attachments limit and 64-character category allow-list validation.
+  - Content moderation: supported `HERASAT_PROFANITY_ACTION=flag` (default) which elevates report priority to high while preserving whistleblower evidence, and `HERASAT_PROFANITY_ACTION=reject` for strict blocking.
+  - Scrubbed client IP from public reporter audit logs to pass `"anonymous"`.
+- **Path Traversal Boundary Hardening (`security.go`, `admin_handlers.go`)**:
+  - Added `isWithinDirectory` ensuring paths are within the parent directory with proper path separator boundaries.
+  - Updated attachment download and report deletion handlers to use `isWithinDirectory`.
+- **Captcha Brute-Force Hardening (`captcha.go`)**:
+  - Expanded math operands (`[25, 95]` and `[10, 45]`) to expand the search space.
+  - Added `RecordFailure` and attempt tracking; burns captcha token after repeated failed attempts.
+- **Frontend File Picker Alignment (`frontend/public/index.html`)**:
+  - Removed `.rar` and `application/x-rar-compressed` from file input accept attributes.
+
+### Operator Impact
+- Uploaded files are strictly validated against magic bytes; unsupported file types (`.rar`, `.mp4`, `.ogg`) and active PDFs or macro-enabled documents will be rejected with clear Persian error messages.
+- Operators can control vulgarity handling via `HERASAT_PROFANITY_ACTION=flag` (default) or `HERASAT_PROFANITY_ACTION=reject`.
+- Public reporter logs record `"anonymous"` for IP addresses to guarantee whistleblower safety.
+
+### Tests & Verification
+- `uploads_security_test.go`:
+  - `TestJPEGDecompressionBomb` and `TestPNGDecompressionBomb`: verified rejection of oversized dimensions.
+  - `TestPDFActiveContentRejection`: verified rejection of encrypted PDFs, direct JavaScript, hex-encoded keywords, and `/FlateDecode` streams with launch commands.
+  - `TestPDFMetadataSanitization`: verified stripping of Author and Creator metadata.
+  - `TestOOXMLMacroAndTemplateRejection`: verified rejection of `vbaProject.bin`, external templates, and sanitization of `docProps/core.xml`.
+  - `TestZipArchiveInspection`: verified rejection of nested executables, encrypted entries, and zip bomb ratios.
+  - `TestAudioSanitization`: verified removal of ID3v2/ID3v1 tags in MP3 and non-audio chunks in WAV.
+  - `TestValidateBinaryMagicBytes`: verified allowed and rejected file formats.
+  - `TestCaptchaBruteForceProtection` and `TestCaptchaSingleUseRedemption`: verified failure burning and replay prevention.
+  - `TestIsWithinDirectory`: verified directory boundary containment and rejection of sibling directory traversal.
+  - `TestCategoryValidationAllowList`: verified category allow-list validation.
+- Regression: `go test ./...` passed.
+
+

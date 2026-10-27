@@ -8,10 +8,27 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 )
+
+func isWithinDirectory(parentDir, targetPath string) bool {
+	absParent, err := filepath.Abs(filepath.Clean(parentDir))
+	if err != nil {
+		return false
+	}
+	absTarget, err := filepath.Abs(filepath.Clean(targetPath))
+	if err != nil {
+		return false
+	}
+	if absParent == absTarget {
+		return true
+	}
+	prefix := absParent + string(os.PathSeparator)
+	return strings.HasPrefix(absTarget, prefix)
+}
 
 type adminContextKeyType struct{}
 

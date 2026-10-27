@@ -63,17 +63,70 @@ func inspectZipArchive(rawBytes []byte) error {
 			return fmt.Errorf("فایل فشرده حاوی پسوند غیرمجاز یا آرشیو تودرتو است (%s)", innerExt)
 		}
 
-		totalUncompressedSize += f.UncompressedSize64
+		if f.FileInfo().IsDir() {
+			continue
+		}
+
+		rc, err := f.Open()
+		if err != nil {
+			return fmt.Errorf("خطا در باز کردن محتوای آرشیو: %w", err)
+		}
+		lr := io.LimitReader(rc, int64(maxAllowedUncompressed+1))
+		var readCount uint64
+		buf := make([]byte, 8192)
+		for {
+			n, rErr := lr.Read(buf)
+			readCount += uint64(n)
+			if readCount > maxAllowedUncompressed {
+				_ = rc.Close()
+				return errors.New("حجم غیرفشرده فایل‌های داخل آرشیو بیش از حد مجاز است (Zip Bomb)")
+			}
+			if rErr != nil {
+				if rErr == io.EOF {
+					break
+				}
+				_ = rc.Close()
+				return fmt.Errorf("خطا در خواندن محتوای فشرده: %w", rErr)
+			}
+		}
+		_ = rc.Close()
+
+		totalUncompressedSize += readCount
 		if totalUncompressedSize > maxAllowedUncompressed {
 			return errors.New("حجم غیرفشرده فایل‌های داخل آرشیو بیش از حد مجاز است (Zip Bomb)")
 		}
 
-		if f.CompressedSize64 > 0 && (f.UncompressedSize64/f.CompressedSize64) > 20 && f.UncompressedSize64 > (512<<10) {
+		if f.CompressedSize64 > 0 && (readCount/f.CompressedSize64) > 20 && readCount > (512<<10) {
 			return errors.New("نسبت فشرده‌سازی فایل غیرعادی و مشکوک است (Zip Bomb)")
 		}
 	}
 
 	return nil
+}
+
+var allowedReportCategories = map[string]bool{
+	"تخلفات مالی":                      true,
+	"مسائل امنیتی":                     true,
+	"تخلفات اداری":                     true,
+	"تخلفات قانونی و اداری":            true,
+	"تخلفات آموزشی":                    true,
+	"پرسنلی":                           true,
+	"مسائل پرسنلی":                     true,
+	"دانش آموزی":                       true,
+	"مسائل دانش آموزی":                 true,
+	"مدارس غیردولتی":                   true,
+	"مدارس و آموزشگاه‌های غیردولتی":    true,
+	"آموزش مجازی":                      true,
+	"مسائل مربوط به آموزش مجازی":       true,
+	"فضای مجازی":                       true,
+	"هنجارشکنی و تخلفات در فضای مجازی": true,
+	"سایر":                 true,
+	"عمومی و سایر موضوعات": true,
+	"عمومی":                true,
+}
+
+func isValidReportCategory(cat string) bool {
+	return allowedReportCategories[cat]
 }
 
 func validateMagicBytes(buff []byte, filename string) (bool, string) {
@@ -93,11 +146,23 @@ func generateTrackingCode() string {
 }
 
 func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
+	rc := http.NewResponseController(w)
+	_ = rc.SetReadDeadline(time.Now().Add(5 * time.Minute))
 
 	r.Body = http.MaxBytesReader(w, r.Body, 20<<20)
 
 	if err := r.ParseMultipartForm(20 << 20); err != nil {
 		http.Error(w, "Payload too large or malformed", http.StatusBadRequest)
+		return
+	}
+	defer func() {
+		if r.MultipartForm != nil {
+			_ = r.MultipartForm.RemoveAll()
+		}
+	}()
+
+	if r.MultipartForm != nil && len(r.MultipartForm.File["evidence"]) > 5 {
+		http.Error(w, "حداکثر ۵ فایل پیوست مجاز است.", http.StatusBadRequest)
 		return
 	}
 
@@ -122,6 +187,15 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if utf8.RuneCountInString(category) > 64 || len(category) > 64 {
+		http.Error(w, "موضوع انتخاب‌شده نامعتبر یا طولانی‌تر از حد مجاز است.", http.StatusBadRequest)
+		return
+	}
+	if !isValidReportCategory(category) {
+		http.Error(w, "موضوع انتخاب‌شده برای گزارش معتبر نمی‌باشد.", http.StatusBadRequest)
+		return
+	}
+
 	descRunes := utf8.RuneCountInString(description)
 	if descRunes < 50 {
 		http.Error(w, "متن شرح گزارش باید حداقل ۵۰ کاراکتر باشد.", http.StatusBadRequest)
@@ -142,19 +216,33 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if hasVulgar, _ := ContainsVulgarLanguage(description); hasVulgar {
-		logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_VULGAR_CONTENT", nil, getIP(r))
+	profanityAction := strings.ToLower(strings.TrimSpace(os.Getenv("HERASAT_PROFANITY_ACTION")))
+	if profanityAction == "" {
+		profanityAction = "flag"
+	}
+
+	hasVulgarDesc, _ := ContainsVulgarLanguage(description)
+	hasVulgarName, _ := ContainsVulgarLanguage(rawName)
+
+	if hasVulgarName {
+		logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_VULGAR_NAME", nil, "anonymous")
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(VulgarityLegalWarningMessage))
 		return
 	}
-	if hasVulgar, _ := ContainsVulgarLanguage(rawName); hasVulgar {
-		logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_VULGAR_CONTENT", nil, getIP(r))
-		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(VulgarityLegalWarningMessage))
-		return
+
+	flaggedVulgar := false
+	if hasVulgarDesc {
+		if profanityAction == "reject" {
+			logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_VULGAR_CONTENT", nil, "anonymous")
+			w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(VulgarityLegalWarningMessage))
+			return
+		}
+		flaggedVulgar = true
+		logAudit("anonymous_user", "PUBLIC_REPORTER", "FLAGGED_PROFANITY_CONTENT", nil, "anonymous")
 	}
 
 	reportType := "anonymous"
@@ -189,11 +277,18 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer tx.Rollback()
 
+	initialPriority := "normal"
+	var initialNotes sql.NullString
+	if flaggedVulgar {
+		initialPriority = "high"
+		initialNotes = sql.NullString{String: "سیستم: حاوی الفاظ نامتعارف، علامت‌گذاری جهت بررسی توسط کارشناس.", Valid: true}
+	}
+
 	var reportID int64
 	err = tx.QueryRow(`
-		INSERT INTO reports (tracking_code, category, report_type, reporter_name, reporter_phone, description)
-		VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
-		trackingCode, category, reportType, encName, encPhone, encDesc).Scan(&reportID)
+		INSERT INTO reports (tracking_code, category, report_type, priority, internal_notes, reporter_name, reporter_phone, description)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+		trackingCode, category, reportType, initialPriority, initialNotes, encName, encPhone, encDesc).Scan(&reportID)
 	if err != nil {
 		http.Error(w, "Failed to save report data", http.StatusInternalServerError)
 		return
@@ -251,21 +346,31 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			mimeType := detectedMime
+			ext := strings.ToLower(filepath.Ext(header.Filename))
 
-			if mimeType == "application/pdf" || strings.ToLower(filepath.Ext(header.Filename)) == ".pdf" {
+			if mimeType == "application/pdf" || ext == ".pdf" {
 				if pdfErr := ScanPDFForActiveContent(rawBytes); pdfErr != nil {
-					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_ACTIVE_PDF_PAYLOAD", nil, getIP(r))
+					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_ACTIVE_PDF_PAYLOAD", nil, "anonymous")
 					cleanupDiskFiles()
 					http.Error(w, fmt.Sprintf("فایل «%s» غیرمجاز است: %v", header.Filename, pdfErr), http.StatusBadRequest)
 					return
 				}
 			}
 
-			if mimeType == "application/zip" || strings.ToLower(filepath.Ext(header.Filename)) == ".zip" {
+			if mimeType == "application/zip" || ext == ".zip" {
 				if zipErr := inspectZipArchive(rawBytes); zipErr != nil {
-					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_UNSAFE_ZIP_PAYLOAD", nil, getIP(r))
+					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_UNSAFE_ZIP_PAYLOAD", nil, "anonymous")
 					cleanupDiskFiles()
 					http.Error(w, fmt.Sprintf("فایل فشرده «%s» نامعتبر یا غیرمجاز است: %v", header.Filename, zipErr), http.StatusBadRequest)
+					return
+				}
+			}
+
+			if ext == ".docx" || ext == ".xlsx" {
+				if ooxmlErr := InspectOOXML(rawBytes); ooxmlErr != nil {
+					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_UNSAFE_OOXML_PAYLOAD", nil, "anonymous")
+					cleanupDiskFiles()
+					http.Error(w, fmt.Sprintf("فایل آفیس «%s» غیرمجاز است: %v", header.Filename, ooxmlErr), http.StatusBadRequest)
 					return
 				}
 			}
@@ -275,18 +380,18 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 				clean, _, scanErr := clam.ScanBytes(rawBytes)
 				if scanErr != nil {
 					if errors.Is(scanErr, ErrMalwareDetected) {
-						logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_MALICIOUS_FILE", nil, getIP(r))
+						logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_MALICIOUS_FILE", nil, "anonymous")
 						cleanupDiskFiles()
 						http.Error(w, "فایل ارسالی آلوده به بدافزار تشخیص داده شد", http.StatusBadRequest)
 						return
 					}
-					logAudit("system", "ANTIVIRUS", "CLAMAV_SERVICE_UNAVAILABLE", nil, getIP(r))
+					logAudit("system", "ANTIVIRUS", "CLAMAV_SERVICE_UNAVAILABLE", nil, "anonymous")
 					cleanupDiskFiles()
 					http.Error(w, "سامانه اسکن امنیتی موقتاً در دسترس نیست.", http.StatusServiceUnavailable)
 					return
 				}
 				if !clean {
-					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_MALICIOUS_FILE", nil, getIP(r))
+					logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_MALICIOUS_FILE", nil, "anonymous")
 					cleanupDiskFiles()
 					http.Error(w, "فایل ارسالی آلوده به بدافزار تشخیص داده شد", http.StatusBadRequest)
 					return
@@ -511,12 +616,18 @@ func SubmitFollowUpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	flaggedFollowUpVulgar := false
 	if hasVulgar, _ := ContainsVulgarLanguage(req.Message); hasVulgar {
-		logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_VULGAR_FOLLOWUP", nil, getIP(r))
-		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(VulgarityLegalWarningMessage))
-		return
+		action := strings.ToLower(strings.TrimSpace(os.Getenv("HERASAT_PROFANITY_ACTION")))
+		if action == "reject" {
+			logAudit("anonymous_user", "PUBLIC_REPORTER", "REJECTED_VULGAR_FOLLOWUP", nil, "anonymous")
+			w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(VulgarityLegalWarningMessage))
+			return
+		}
+		flaggedFollowUpVulgar = true
+		logAudit("anonymous_user", "PUBLIC_REPORTER", "FLAGGED_VULGAR_FOLLOWUP", nil, "anonymous")
 	}
 
 	var reportID int64
@@ -544,7 +655,11 @@ func SubmitFollowUpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, _ = DB.Exec("UPDATE reports SET has_new_message = true, updated_at = NOW() WHERE id = $1", reportID)
+	if flaggedFollowUpVulgar {
+		_, _ = DB.Exec("UPDATE reports SET has_new_message = true, priority = 'high', updated_at = NOW() WHERE id = $1", reportID)
+	} else {
+		_, _ = DB.Exec("UPDATE reports SET has_new_message = true, updated_at = NOW() WHERE id = $1", reportID)
+	}
 
 	GlobalSSEBroker.BroadcastNewMessage(reportID)
 

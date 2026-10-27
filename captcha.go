@@ -33,12 +33,14 @@ type UsedCaptchaStore struct {
 	db       *sql.DB
 	initOnce sync.Once
 	tokens   map[string]int64
+	attempts map[string]int
 }
 
 func NewUsedCaptchaStore(db *sql.DB) *UsedCaptchaStore {
 	return &UsedCaptchaStore{
-		db:     db,
-		tokens: make(map[string]int64),
+		db:       db,
+		tokens:   make(map[string]int64),
+		attempts: make(map[string]int),
 	}
 }
 
@@ -72,6 +74,24 @@ func (s *UsedCaptchaStore) getDB() *sql.DB {
 	panic("FATAL: UsedCaptchaStore called before database initialization")
 }
 
+func (s *UsedCaptchaStore) RecordFailure(signature string, expiresAt int64) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.attempts[signature]++
+	if s.attempts[signature] >= 2 {
+		delete(s.attempts, signature)
+		s.tokens[signature] = expiresAt
+		if db := s.db; db != nil {
+			_, _ = db.Exec(`
+				INSERT INTO used_captcha_tokens (signature_b64, expires_at)
+				VALUES ($1, TO_TIMESTAMP($2))
+				ON CONFLICT (signature_b64) DO NOTHING`, signature, expiresAt)
+		}
+		return true
+	}
+	return false
+}
+
 func (s *UsedCaptchaStore) TryRedeem(signature string, expiresAt int64) bool {
 	now := time.Now().Unix()
 	if now > expiresAt {
@@ -79,6 +99,7 @@ func (s *UsedCaptchaStore) TryRedeem(signature string, expiresAt int64) bool {
 	}
 
 	s.mu.Lock()
+	delete(s.attempts, signature)
 	if exp, exists := s.tokens[signature]; exists {
 		s.mu.Unlock()
 		if now <= exp {
@@ -195,10 +216,12 @@ func VerifyCaptcha(token, userAnswerStr string) bool {
 
 	userAnswer, err := strconv.Atoi(strings.TrimSpace(userAnswerStr))
 	if err != nil {
+		UsedCaptchas.RecordFailure(sigB64, payload.ExpiresAt)
 		return false
 	}
 
 	if userAnswer != payload.Answer {
+		UsedCaptchas.RecordFailure(sigB64, payload.ExpiresAt)
 		return false
 	}
 
@@ -302,8 +325,8 @@ func renderObfuscatedChars(expr string) string {
 }
 
 func GenerateMathCaptchaSVG() (string, string) {
-	num1 := cryptoRandInt(14, 45)
-	num2 := cryptoRandInt(4, 18)
+	num1 := cryptoRandInt(25, 95)
+	num2 := cryptoRandInt(10, 45)
 	isAddition := cryptoRandInt(0, 1) == 1
 
 	var text string
