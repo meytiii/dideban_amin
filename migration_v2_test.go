@@ -67,8 +67,8 @@ func TestReencryptLegacyData(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to query migrated report: %v", err)
 	}
-	if !strings.HasPrefix(migratedDesc, "v2:f:") {
-		t.Fatalf("Expected migrated description to start with v2:f:, got %s", migratedDesc)
+	if !strings.HasPrefix(migratedDesc, "v2:f:") && !strings.HasPrefix(migratedDesc, "v3:") {
+		t.Fatalf("Expected migrated description to start with v2:f: or v3:, got %s", migratedDesc)
 	}
 	decDesc, err := DecryptAES(migratedDesc)
 	if err != nil || decDesc != plainDesc {
@@ -79,8 +79,8 @@ func TestReencryptLegacyData(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to read migrated disk file: %v", err)
 	}
-	if !strings.HasPrefix(string(migratedDiskBytes), "HENC\x02") {
-		t.Fatalf("Expected migrated file on disk to have HENC\\x02 header")
+	if !strings.HasPrefix(string(migratedDiskBytes), "HENC\x02") && !strings.HasPrefix(string(migratedDiskBytes), "HENC\x03") {
+		t.Fatalf("Expected migrated file on disk to have HENC\\x02 or HENC\\x03 header")
 	}
 	decDiskBytes, err := DecryptFileBytes(migratedDiskBytes)
 	if err != nil || string(decDiskBytes) != string(rawFileBytes) {

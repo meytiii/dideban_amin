@@ -376,6 +376,20 @@ func runMigrations() {
 		PRIMARY KEY (username, ip)
 	);
 	ALTER TABLE admin_login_attempts ADD COLUMN IF NOT EXISTS ip VARCHAR(45) NOT NULL DEFAULT '';
+	DO $$
+	BEGIN
+		IF EXISTS (
+			SELECT 1 FROM pg_constraint
+			WHERE conrelid = 'admin_login_attempts'::regclass
+			AND contype = 'p'
+			AND array_length(conkey, 1) = 1
+		) THEN
+			ALTER TABLE admin_login_attempts DROP CONSTRAINT admin_login_attempts_pkey;
+			ALTER TABLE admin_login_attempts ADD PRIMARY KEY (username, ip);
+		END IF;
+	EXCEPTION WHEN OTHERS THEN
+		NULL;
+	END $$;
 
 	CREATE TABLE IF NOT EXISTS used_captcha_tokens (
 		signature_b64 TEXT PRIMARY KEY,

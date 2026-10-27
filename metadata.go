@@ -68,50 +68,69 @@ func SanitizePNG(data []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func decodePDFHexNames(data []byte) []byte {
-	var sb bytes.Buffer
-	i := 0
-	for i < len(data) {
-		if data[i] == '#' && i+2 < len(data) {
-			h := data[i+1 : i+3]
-			decoded, err := hex.DecodeString(string(h))
-			if err == nil && len(decoded) == 1 {
-				sb.WriteByte(decoded[0])
+var dangerousPDFNames = map[string]bool{
+	"JavaScript":    true,
+	"JS":            true,
+	"Launch":        true,
+	"EmbeddedFile":  true,
+	"EmbeddedFiles": true,
+	"OpenAction":    true,
+	"AA":            true,
+	"SubmitForm":    true,
+	"ImportData":    true,
+	"RichMedia":     true,
+	"GoToR":         true,
+	"Encrypt":       true,
+}
+
+func isPDFDelimiter(b byte) bool {
+	switch b {
+	case ' ', '\t', '\r', '\n', '\x00', '\f',
+		'(', ')', '<', '>', '[', ']', '{', '}', '/', '%':
+		return true
+	default:
+		return false
+	}
+}
+
+func decodePDFNameToken(raw []byte) string {
+	var sb strings.Builder
+	for i := 0; i < len(raw); {
+		if raw[i] == '#' && i+2 < len(raw) {
+			h, err := hex.DecodeString(string(raw[i+1 : i+3]))
+			if err == nil && len(h) == 1 {
+				sb.WriteByte(h[0])
 				i += 3
 				continue
 			}
 		}
-		sb.WriteByte(data[i])
+		sb.WriteByte(raw[i])
 		i++
 	}
-	return sb.Bytes()
+	return sb.String()
 }
 
-var dangerousPDFKeywords = [][]byte{
-	[]byte("/JavaScript"),
-	[]byte("/JS"),
-	[]byte("/Launch"),
-	[]byte("/EmbeddedFiles"),
-	[]byte("/EmbeddedFile"),
-	[]byte("/OpenAction"),
-	[]byte("/AA"),
-	[]byte("/SubmitForm"),
-	[]byte("/ImportData"),
-	[]byte("/RichMedia"),
-	[]byte("/GoToR"),
-}
-
-func scanBufferForPDFKeywords(buf []byte) error {
-	norm := decodePDFHexNames(buf)
-	lower := bytes.ToLower(buf)
-	normLower := bytes.ToLower(norm)
-
-	for _, kw := range dangerousPDFKeywords {
-		kwLower := bytes.ToLower(kw)
-		if bytes.Contains(buf, kw) || bytes.Contains(lower, kwLower) ||
-			bytes.Contains(norm, kw) || bytes.Contains(normLower, kwLower) {
-			return fmt.Errorf("فایل PDF حاوی عنصر اجرایی یا اسکریپت فعال است (%s)", string(kw))
+func scanPDFBufferTokens(buf []byte) error {
+	for i := 0; i < len(buf); {
+		if buf[i] == '/' {
+			start := i + 1
+			end := start
+			for end < len(buf) && !isPDFDelimiter(buf[end]) {
+				end++
+			}
+			if end > start {
+				name := decodePDFNameToken(buf[start:end])
+				if dangerousPDFNames[name] {
+					if name == "Encrypt" {
+						return errors.New("فایل‌های PDF رمزگذاری‌شده یا دارای کلمه عبور به دلایل امنیتی غیرمجاز هستند")
+					}
+					return fmt.Errorf("فایل PDF حاوی عنصر اجرایی یا اسکریپت فعال است (/%s)", name)
+				}
+			}
+			i = end
+			continue
 		}
+		i++
 	}
 	return nil
 }
@@ -121,24 +140,25 @@ func ScanPDFForActiveContent(data []byte) error {
 		return errors.New("فایل فاقد امضای معتبر PDF است")
 	}
 
-	if bytes.Contains(data, []byte("/Encrypt")) {
-		return errors.New("فایل‌های PDF رمزگذاری‌شده یا دارای کلمه عبور به دلایل امنیتی غیرمجاز هستند")
-	}
-
-	if err := scanBufferForPDFKeywords(data); err != nil {
-		return err
-	}
-
 	streamMarker := []byte("stream")
 	endStreamMarker := []byte("endstream")
 
 	idx := 0
-	for {
+	for idx < len(data) {
 		sIdx := bytes.Index(data[idx:], streamMarker)
 		if sIdx == -1 {
+			if err := scanPDFBufferTokens(data[idx:]); err != nil {
+				return err
+			}
 			break
 		}
-		streamStart := idx + sIdx + len(streamMarker)
+
+		streamPos := idx + sIdx
+		if err := scanPDFBufferTokens(data[idx:streamPos]); err != nil {
+			return err
+		}
+
+		streamStart := streamPos + len(streamMarker)
 		if streamStart < len(data) && data[streamStart] == '\r' {
 			streamStart++
 		}
@@ -148,15 +168,18 @@ func ScanPDFForActiveContent(data []byte) error {
 
 		eIdx := bytes.Index(data[streamStart:], endStreamMarker)
 		if eIdx == -1 {
+			if err := scanPDFBufferTokens(data[streamStart:]); err != nil {
+				return err
+			}
 			break
 		}
 		streamEnd := streamStart + eIdx
 
-		headerStart := idx + sIdx - 256
+		headerStart := streamPos - 512
 		if headerStart < 0 {
 			headerStart = 0
 		}
-		header := data[headerStart : idx+sIdx]
+		header := data[headerStart:streamPos]
 
 		if bytes.Contains(header, []byte("/FlateDecode")) || bytes.Contains(header, []byte("/Fl")) {
 			compressed := data[streamStart:streamEnd]
@@ -165,7 +188,7 @@ func ScanPDFForActiveContent(data []byte) error {
 				decompressed, rErr := io.ReadAll(io.LimitReader(zr, 10<<20))
 				_ = zr.Close()
 				if rErr == nil && len(decompressed) > 0 {
-					if err := scanBufferForPDFKeywords(decompressed); err != nil {
+					if err := scanPDFBufferTokens(decompressed); err != nil {
 						return fmt.Errorf("استریم فشرده PDF حاوی محتوای فعال است: %w", err)
 					}
 				}
@@ -220,23 +243,31 @@ func InspectOOXML(data []byte) error {
 		return fmt.Errorf("ساختار فایل آفیس معتبر نیست: %w", err)
 	}
 
-	dangerousOOXMLParts := []string{
-		"vbaproject.bin",
-		".bin",
-		"externallink",
-		"oleobject",
-	}
-
 	for _, f := range zr.File {
 		cleanName := strings.ToLower(filepath.ToSlash(filepath.Clean(f.Name)))
 		if strings.HasPrefix(cleanName, "..") || strings.HasPrefix(cleanName, "/") || strings.HasPrefix(cleanName, "\\") {
 			return errors.New("مسیر نامعتبر در ساختار آفیس")
 		}
 
-		for _, part := range dangerousOOXMLParts {
-			if strings.Contains(cleanName, part) {
-				return fmt.Errorf("فایل آفیس حاوی ماکرو، ارجاع خارجی یا شیء غیرمجاز است (%s)", part)
-			}
+		baseName := filepath.Base(cleanName)
+
+		if baseName == "vbaproject.bin" || strings.HasSuffix(cleanName, "/vbaproject.bin") {
+			return fmt.Errorf("فایل آفیس حاوی ماکرو غیرمجاز است (%s)", baseName)
+		}
+
+		if strings.Contains(cleanName, "/embeddings/") || strings.HasPrefix(cleanName, "embeddings/") {
+			return fmt.Errorf("فایل آفیس حاوی شیء جاسازی‌شده غیرمجاز است (%s)", cleanName)
+		}
+
+		if strings.HasPrefix(baseName, "oleobject") && strings.HasSuffix(baseName, ".bin") {
+			return fmt.Errorf("فایل آفیس حاوی شیء OLE غیرمجاز است (%s)", baseName)
+		}
+
+		if strings.Contains(cleanName, "/externallinks/") ||
+			strings.HasPrefix(cleanName, "xl/externallinks/") ||
+			strings.HasPrefix(cleanName, "word/externallinks/") ||
+			strings.Contains(cleanName, "externallink") {
+			return fmt.Errorf("فایل آفیس حاوی پیوند خارجی غیرمجاز است (%s)", cleanName)
 		}
 
 		if strings.HasSuffix(cleanName, ".rels") {

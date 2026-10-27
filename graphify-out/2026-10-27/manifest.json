@@ -1570,17 +1570,5 @@
     "seen": 1793094470.5558808,
     "ast_hash": "03a46caa65a4cd38cb820dd9d6182cd0",
     "semantic_hash": ""
-  },
-  "scripts/create_template.py": {
-    "mtime": 1793094363.641748,
-    "seen": 1793094470.5566444,
-    "ast_hash": "66917dc06230f6eaa33759aa8fa56387",
-    "semantic_hash": ""
-  },
-  "graphify-out/converted/report_template_64ced46b.md": {
-    "mtime": 1793094466.0428064,
-    "seen": 1793094470.5767188,
-    "ast_hash": "19db3deb8dc72f0bcbfba3e4cb11fd63",
-    "semantic_hash": ""
   }
 }

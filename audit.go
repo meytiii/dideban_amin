@@ -68,6 +68,8 @@ func executeAuditLogTx(tx *sql.Tx, username, title, action string, targetID *int
 		return errors.New("audit transaction is nil")
 	}
 
+	t = t.UTC().Truncate(time.Microsecond)
+
 	if _, err := tx.Exec("SELECT pg_advisory_xact_lock($1)", auditAdvisoryLockID); err != nil {
 		return fmt.Errorf("failed to acquire audit advisory lock: %w", err)
 	}
@@ -154,9 +156,17 @@ func logAuditTx(tx *sql.Tx, username, title, action string, targetID *int64, ip 
 	return logAuditTxWithDetail(tx, username, title, action, targetID, ip, "")
 }
 
-func VerifyAuditChain(db *sql.DB) (bool, int, error) {
+type AuditVerificationResult struct {
+	Valid         bool    `json:"valid"`
+	VerifiedCount int     `json:"verified_count"`
+	FallbackRows  []int64 `json:"fallback_rows,omitempty"`
+	BrokenRowID   int64   `json:"broken_row_id,omitempty"`
+}
+
+func VerifyAuditChainDetailed(db *sql.DB) (AuditVerificationResult, error) {
+	res := AuditVerificationResult{}
 	if db == nil {
-		return false, 0, errors.New("db is nil")
+		return res, errors.New("db is nil")
 	}
 
 	rows, err := db.Query(`
@@ -164,7 +174,7 @@ func VerifyAuditChain(db *sql.DB) (bool, int, error) {
 		FROM audit_logs
 		ORDER BY id ASC`)
 	if err != nil {
-		return false, 0, fmt.Errorf("failed to query audit logs for verification: %w", err)
+		return res, fmt.Errorf("failed to query audit logs for verification: %w", err)
 	}
 	defer rows.Close()
 
@@ -178,11 +188,15 @@ func VerifyAuditChain(db *sql.DB) (bool, int, error) {
 		var createdAt time.Time
 
 		if err := rows.Scan(&id, &username, &title, &action, &targetID, &ip, &detail, &prevHash, &entryHash, &createdAt); err != nil {
-			return false, verifiedCount, fmt.Errorf("failed to scan audit row %d: %w", id, err)
+			res.VerifiedCount = verifiedCount
+			res.BrokenRowID = id
+			return res, fmt.Errorf("failed to scan audit row %d: %w", id, err)
 		}
 
 		if prevHash != expectedPrevHash {
-			return false, verifiedCount, fmt.Errorf("audit chain broken at id %d: expected prev_hash %s, got %s", id, expectedPrevHash, prevHash)
+			res.VerifiedCount = verifiedCount
+			res.BrokenRowID = id
+			return res, fmt.Errorf("audit chain broken at id %d: expected prev_hash %s, got %s", id, expectedPrevHash, prevHash)
 		}
 
 		var tidPtr *int64
@@ -191,11 +205,21 @@ func VerifyAuditChain(db *sql.DB) (bool, int, error) {
 			tidPtr = &v
 		}
 
-		computedHMAC := computeAuditHash(prevHash, username, title, action, tidPtr, ip, detail, createdAt)
+		createdAtTrunc := createdAt.UTC().Truncate(time.Microsecond)
+		computedHMAC := computeAuditHash(prevHash, username, title, action, tidPtr, ip, detail, createdAtTrunc)
 		if computedHMAC != entryHash {
-			legacySHA := computeLegacyAuditHash(prevHash, username, title, action, tidPtr, ip, createdAt)
-			if legacySHA != entryHash {
-				return false, verifiedCount, fmt.Errorf("audit hash mismatch at id %d: computed %s, stored %s", id, computedHMAC, entryHash)
+			fallbackHMAC := computeAuditHash(prevHash, username, title, action, tidPtr, ip, detail, createdAt)
+			if fallbackHMAC == entryHash {
+				res.FallbackRows = append(res.FallbackRows, id)
+			} else {
+				legacySHA := computeLegacyAuditHash(prevHash, username, title, action, tidPtr, ip, createdAt)
+				if legacySHA == entryHash {
+					res.FallbackRows = append(res.FallbackRows, id)
+				} else {
+					res.VerifiedCount = verifiedCount
+					res.BrokenRowID = id
+					return res, fmt.Errorf("audit hash mismatch at id %d: computed %s, stored %s", id, computedHMAC, entryHash)
+				}
 			}
 		}
 
@@ -204,10 +228,18 @@ func VerifyAuditChain(db *sql.DB) (bool, int, error) {
 	}
 
 	if err := rows.Err(); err != nil {
-		return false, verifiedCount, err
+		res.VerifiedCount = verifiedCount
+		return res, err
 	}
 
-	return true, verifiedCount, nil
+	res.Valid = true
+	res.VerifiedCount = verifiedCount
+	return res, nil
+}
+
+func VerifyAuditChain(db *sql.DB) (bool, int, error) {
+	res, err := VerifyAuditChainDetailed(db)
+	return res.Valid, res.VerifiedCount, err
 }
 
 func VerifyAuditChainOnStartup(db *sql.DB) error {

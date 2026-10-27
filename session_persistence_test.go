@@ -14,13 +14,24 @@ import (
 func getTestDB(t *testing.T) *sql.DB {
 	connStr := os.Getenv("HERASAT_DB_CONN")
 	if connStr == "" {
-		connStr = "host=127.0.0.1 port=5432 user=herasat_user password=herasat1405@ dbname=herasat_db sslmode=disable"
+		if os.Getenv("HERASAT_REQUIRE_DB_TESTS") == "1" {
+			t.Fatalf("HERASAT_REQUIRE_DB_TESTS=1 is set but HERASAT_DB_CONN is unset")
+		}
+		t.Skip("Skipping PostgreSQL integration test: HERASAT_DB_CONN unset")
+		return nil
 	}
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
+		if os.Getenv("HERASAT_REQUIRE_DB_TESTS") == "1" {
+			t.Fatalf("Required PostgreSQL integration test failed to open connection: %v", err)
+		}
 		t.Skipf("Skipping PostgreSQL integration test: %v", err)
+		return nil
 	}
 	if err := db.Ping(); err != nil {
+		if os.Getenv("HERASAT_REQUIRE_DB_TESTS") == "1" {
+			t.Fatalf("Required PostgreSQL integration test failed to ping database: %v", err)
+		}
 		t.Skipf("Skipping PostgreSQL integration test (ping failed): %v", err)
 	}
 
@@ -48,10 +59,12 @@ func getTestDB(t *testing.T) *sql.DB {
 	);
 
 	CREATE TABLE IF NOT EXISTS admin_login_attempts (
-		username VARCHAR(64) PRIMARY KEY,
+		username VARCHAR(64) NOT NULL,
+		ip VARCHAR(45) NOT NULL DEFAULT '',
 		consecutive_failures INT NOT NULL DEFAULT 0,
 		locked_until TIMESTAMPTZ,
-		updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+		updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+		PRIMARY KEY (username, ip)
 	);
 
 	CREATE TABLE IF NOT EXISTS used_captcha_tokens (
@@ -63,6 +76,8 @@ func getTestDB(t *testing.T) *sql.DB {
 	if _, err := db.Exec(migrationSQL); err != nil {
 		t.Fatalf("Failed to create test session tables: %v", err)
 	}
+	DB = db
+	runMigrations()
 	return db
 }
 

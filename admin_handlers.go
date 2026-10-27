@@ -90,33 +90,28 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 		reqPath := strings.TrimRight(r.URL.Path, "/")
 
-		if session.RequiresPasswordChange {
-			allowed := reqPath == "/api/admin/me" ||
-				reqPath == "/api/admin/change-my-password" ||
-				reqPath == "/api/admin/logout"
-			if !allowed {
-				w.Header().Set("Content-Type", "application/json")
-				w.WriteHeader(http.StatusForbidden)
-				_ = json.NewEncoder(w).Encode(map[string]string{
-					"error":   "password_change_required",
-					"message": "تغییر کلمه عبور الزامی است.",
-				})
-				return
+		if session.RequiresPasswordChange || session.Requires2FASetup {
+			allowed := reqPath == "/api/admin/me" || reqPath == "/api/admin/logout"
+			if session.RequiresPasswordChange && reqPath == "/api/admin/change-my-password" {
+				allowed = true
 			}
-		}
-
-		if session.Requires2FASetup {
-			allowed := reqPath == "/api/admin/me" ||
-				reqPath == "/api/admin/2fa/setup" ||
-				reqPath == "/api/admin/2fa/enable" ||
-				reqPath == "/api/admin/logout"
+			if session.Requires2FASetup && (reqPath == "/api/admin/2fa/setup" || reqPath == "/api/admin/2fa/enable") {
+				allowed = true
+			}
 			if !allowed {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusForbidden)
-				_ = json.NewEncoder(w).Encode(map[string]string{
-					"error":   "2fa_setup_required",
-					"message": "فعال‌سازی احراز هویت دومرحله‌ای الزامی است.",
-				})
+				if session.RequiresPasswordChange {
+					_ = json.NewEncoder(w).Encode(map[string]string{
+						"error":   "password_change_required",
+						"message": "تغییر کلمه عبور الزامی است.",
+					})
+				} else {
+					_ = json.NewEncoder(w).Encode(map[string]string{
+						"error":   "2fa_setup_required",
+						"message": "فعال‌سازی احراز هویت دومرحله‌ای الزامی است.",
+					})
+				}
 				return
 			}
 		}
@@ -2235,17 +2230,19 @@ func ChangeMyPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	now := time.Now()
 	sessionExpiry := now.Add(15 * time.Minute)
 	Sessions.Set(newSessionToken, AdminSession{
-		Token:       newSessionToken,
-		Username:    admin.Username,
-		FullName:    admin.FullName,
-		Title:       admin.Title,
-		Role:        admin.Role,
-		IsSuperuser: admin.IsSuperuser,
-		IP:          getIP(r),
-		UserAgent:   r.UserAgent(),
-		CreatedAt:   now,
-		LastActive:  now,
-		Expiry:      sessionExpiry,
+		Token:                  newSessionToken,
+		Username:               admin.Username,
+		FullName:               admin.FullName,
+		Title:                  admin.Title,
+		Role:                   admin.Role,
+		IsSuperuser:            admin.IsSuperuser,
+		IP:                     getIP(r),
+		UserAgent:              r.UserAgent(),
+		CreatedAt:              now,
+		LastActive:             now,
+		Expiry:                 sessionExpiry,
+		Requires2FASetup:       admin.Requires2FASetup,
+		RequiresPasswordChange: false,
 	})
 
 	http.SetCookie(w, &http.Cookie{
