@@ -34,7 +34,6 @@ backups/*
 *.sql.gz
 
 # Sensitive document outputs
-templates/*.docx
 coverage*
 *.out
 
