@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-28)
 
 ## Corpus Check
-- 296 files · ~451,932 words
+- 296 files · ~451,802 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3155 nodes · 4521 edges · 203 communities (187 shown, 16 thin omitted)
+- 3155 nodes · 4521 edges · 205 communities (187 shown, 18 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 494 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f940f928`
+- Built from commit: `af083771`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -217,6 +217,8 @@
 - CI/CD Pipeline Security
 - Runtime Security
 - vbsec Security Scan Report: Setad_Khabari_HMD
+- ft2-inline-rule-single-line.md
+- h6-photographic-fold.md
 
 ## God Nodes (most connected - your core abstractions)
 1. `adminFromContext()` - 39 edges
@@ -245,7 +247,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (203 total, 16 thin omitted)
+## Communities (205 total, 18 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -253,7 +255,7 @@ Nodes (35): 10. Persian Jalali Date-Range Popover (`.date-range-popover`), 11. I
 
 ### Community 1 - "component-cookbook.md"
 Cohesion: 0.02
-Nodes (47): C1 · Outlined chip, C2 · Inline form-as-CTA, C3 · Typographic link, C4 · Sticky bottom bar, F1 · Bento grid, F2 · Sticky-scroll stack, F3 · Tabular spec sheet, F4 · Step sequence (+39 more)
+Nodes (46): C1 · Outlined chip, C2 · Inline form-as-CTA, C3 · Typographic link, C4 · Sticky bottom bar, F1 · Bento grid, F2 · Sticky-scroll stack, F3 · Tabular spec sheet, F4 · Step sequence (+38 more)
 
 ### Community 2 - "Security Audit Checklist (Full Platform)"
 Cohesion: 0.04
@@ -353,7 +355,7 @@ Nodes (4): deriveKey(), encryptWithKey(), genTrackingCode(), main()
 
 ### Community 26 - "admin.js"
 Cohesion: 0.06
-Nodes (39): buildPaginationHTML(), cancelMFAStep(), check2FAEnforcementNotice(), checkAdminProfile(), checkHostConnection(), checkMustChangePasswordPolicy(), evaluatePasswordStrength(), fetchWithTimeout() (+31 more)
+Nodes (40): buildPaginationHTML(), cancelMFAStep(), check2FAEnforcementNotice(), checkAdminProfile(), checkHostConnection(), checkMustChangePasswordPolicy(), evaluatePasswordStrength(), fetchWithTimeout() (+32 more)
 
 ### Community 27 - "NewClamAVScanner"
 Cohesion: 0.23
@@ -440,8 +442,8 @@ Cohesion: 0.04
 Nodes (45): A01:2025 – Broken Access Control, A02:2025 – Security Misconfiguration, A03:2025 – Software Supply Chain Failures, A04:2025 – Cryptographic Failures, A05:2025 – Injection, A06:2025 – Insecure Design, A07:2025 – Authentication Failures, A08:2025 – Software or Data Integrity Failures (+37 more)
 
 ### Community 48 - "Floating nav on scroll — the cross-fade morph"
-Cohesion: 0.22
-Nodes (7): N10 · Floating-on-scroll morph, Anti-patterns Hallmark refuses, Floating nav on scroll — the cross-fade morph, The four laws — non-negotiable, The property morph (10 properties, one curve), The scroll handler, The structure
+Cohesion: 0.33
+Nodes (6): Anti-patterns Hallmark refuses, Floating nav on scroll — the cross-fade morph, The four laws — non-negotiable, The property morph (10 properties, one curve), The scroll handler, The structure
 
 ### Community 49 - "SSEBroker"
 Cohesion: 0.27
@@ -453,7 +455,7 @@ Nodes (33): Directory Structure, Finding ID Format, How It Works, License, Quick
 
 ### Community 52 - "adminFetch"
 Cohesion: 0.11
-Nodes (44): adminFetch(), closeDetailView(), connectAdminSSE(), createReportStatusBadge(), deleteReportPermanently(), dismissToast(), escapeHTML(), exportReportsToCSV() (+36 more)
+Nodes (45): adminFetch(), closeDetailView(), connectAdminSSE(), createReportStatusBadge(), deleteReportPermanently(), dismissToast(), escapeHTML(), exportReportsToCSV() (+37 more)
 
 ### Community 53 - "AI/LLM Security Deep Dive"
 Cohesion: 0.12
@@ -616,8 +618,8 @@ Cohesion: 0.38
 Nodes (9): applyWrapperToNode(), canConnect(), enhanceElement(), enhanceText(), enhanceWord(), getViewportIntensity(), init(), recheckOverflow() (+1 more)
 
 ### Community 106 - "createOtpController"
-Cohesion: 0.28
-Nodes (8): createOtpController(), clearAll(), showError(), syncValue(), init2FAModalOtpControllers(), initMfaOtpInput(), showMFAStep(), toAsciiDigits()
+Cohesion: 0.38
+Nodes (6): createOtpController(), clearAll(), showError(), syncValue(), init2FAModalOtpControllers(), toAsciiDigits()
 
 ### Community 107 - "Quy tắc render"
 Cohesion: 0.12
@@ -989,12 +991,12 @@ Nodes (4): Dangerous Flags (Audit for These), Docker Run Hardening, Docker Socke
 
 ### Community 202 - "vbsec Security Scan Report: Setad_Khabari_HMD"
 Cohesion: 0.50
-Nodes (3): Executive Summary, Findings Table, vbsec Security Scan Report: Setad_Khabari_HMD
+Nodes (3): Executive Summary, Remediation Verification Summary, vbsec Security Scan Report: Setad_Khabari_HMD
 
 ## Knowledge Gaps
 - **1748 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+1743 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

@@ -292,30 +292,6 @@
       "source_location": "L1727"
     },
     {
-      "id": "frontend_admin_js_admin_initmfaotpinput",
-      "label": "initMfaOtpInput()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 106,
-      "community_name": "createOtpController",
-      "file_type": "code",
-      "norm_label": "initmfaotpinput()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L1550"
-    },
-    {
-      "id": "frontend_admin_js_admin_showmfastep",
-      "label": "showMFAStep()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 106,
-      "community_name": "createOtpController",
-      "file_type": "code",
-      "norm_label": "showmfastep()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L1559"
-    },
-    {
       "id": "frontend_admin_js_admin_toasciidigits",
       "label": "toAsciiDigits()",
       "_callable": true,
@@ -1480,18 +1456,6 @@
       "source_location": "L9"
     },
     {
-      "id": "frontend_admin_js_admin_forcelogoutonconnectiondrop",
-      "label": "forceLogoutOnConnectionDrop()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "admin.js",
-      "file_type": "code",
-      "norm_label": "forcelogoutonconnectiondrop()",
-      "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L906"
-    },
-    {
       "id": "frontend_admin_js_admin_getcsrftoken",
       "label": "getCsrfToken()",
       "_callable": true,
@@ -1562,6 +1526,18 @@
       "norm_label": "hideofflinebanner()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L829"
+    },
+    {
+      "id": "frontend_admin_js_admin_initmfaotpinput",
+      "label": "initMfaOtpInput()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "initmfaotpinput()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L1550"
     },
     {
       "id": "frontend_admin_js_admin_initpasswordstrengthindicators",
@@ -1778,6 +1754,18 @@
       "norm_label": "setupsuperuserui()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L7619"
+    },
+    {
+      "id": "frontend_admin_js_admin_showmfastep",
+      "label": "showMFAStep()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "admin.js",
+      "file_type": "code",
+      "norm_label": "showmfastep()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L1559"
     },
     {
       "id": "frontend_admin_js_admin_showofflinebanner",
@@ -2498,6 +2486,18 @@
       "norm_label": "fetchsystemstatus()",
       "source_file": "frontend/admin/js/admin.js",
       "source_location": "L10063"
+    },
+    {
+      "id": "frontend_admin_js_admin_forcelogoutonconnectiondrop",
+      "label": "forceLogoutOnConnectionDrop()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 52,
+      "community_name": "adminFetch",
+      "file_type": "code",
+      "norm_label": "forcelogoutonconnectiondrop()",
+      "source_file": "frontend/admin/js/admin.js",
+      "source_location": "L906"
     },
     {
       "id": "frontend_admin_js_admin_formatjalalidatetime",
@@ -4504,30 +4504,6 @@
       "source_location": "L2"
     },
     {
-      "id": "agents_skills_hallmark_references_components_ft2_inline_rule_single_line",
-      "label": "ft2-inline-rule-single-line.md",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "ft2-inline-rule-single-line.md",
-      "source_file": ".agents/skills/hallmark/references/components/ft2-inline-rule-single-line.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_ft2_inline_rule_single_line_ft2_inline_rule_single_line",
-      "label": "Ft2 \u00b7 Inline-rule single line",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "ft2 \u00b7 inline-rule single line",
-      "source_file": ".agents/skills/hallmark/references/components/ft2-inline-rule-single-line.md",
-      "source_location": "L1"
-    },
-    {
       "id": "agents_skills_hallmark_references_components_ft3_index_style_category_list",
       "label": "ft3-index-style-category-list.md",
       "_origin": "ast",
@@ -4792,30 +4768,6 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_hallmark_references_components_h6_photographic_fold",
-      "label": "h6-photographic-fold.md",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "h6-photographic-fold.md",
-      "source_file": ".agents/skills/hallmark/references/components/h6-photographic-fold.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_h6_photographic_fold_h6_photographic_fold",
-      "label": "H6 \u00b7 Photographic Fold",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "component-cookbook.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "h6 \u00b7 photographic fold",
-      "source_file": ".agents/skills/hallmark/references/components/h6-photographic-fold.md",
-      "source_location": "L1"
-    },
-    {
       "id": "agents_skills_hallmark_references_components_h8_mockup_split_browser_framed",
       "label": "h8-mockup-split-browser-framed.md",
       "_origin": "ast",
@@ -4837,6 +4789,30 @@
       "node_kind": "heading",
       "norm_label": "h8 \u00b7 mockup split (browser-framed)",
       "source_file": ".agents/skills/hallmark/references/components/h8-mockup-split-browser-framed.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_n10_floating_on_scroll_morph",
+      "label": "n10-floating-on-scroll-morph.md",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "n10-floating-on-scroll-morph.md",
+      "source_file": ".agents/skills/hallmark/references/components/n10-floating-on-scroll-morph.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_n10_floating_on_scroll_morph_n10_floating_on_scroll_morph",
+      "label": "N10 \u00b7 Floating-on-scroll morph",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "n10 \u00b7 floating-on-scroll morph",
+      "source_file": ".agents/skills/hallmark/references/components/n10-floating-on-scroll-morph.md",
       "source_location": "L1"
     },
     {
@@ -5365,6 +5341,18 @@
       "node_kind": "heading",
       "norm_label": "t4 \u00b7 numbered stat strip",
       "source_file": ".agents/skills/hallmark/references/components/t4-numbered-stat-strip.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_floating_nav",
+      "label": "floating-nav.md",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "component-cookbook.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "floating-nav.md",
+      "source_file": ".agents/skills/hallmark/references/floating-nav.md",
       "source_location": "L1"
     },
     {
@@ -23606,16 +23594,16 @@
       "source_location": "L8"
     },
     {
-      "id": "vbsec_reports_scan_20261028_audit_findings_table",
-      "label": "Findings Table",
+      "id": "vbsec_reports_scan_20261028_audit_remediation_verification_summary",
+      "label": "Remediation Verification Summary",
       "_origin": "ast",
       "community": 202,
       "community_name": "vbsec Security Scan Report: Setad_Khabari_HMD",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "findings table",
+      "norm_label": "remediation verification summary",
       "source_file": "vbsec-reports/scan-20261028-audit.md",
-      "source_location": "L11"
+      "source_location": "L13"
     },
     {
       "id": "vbsec_reports_scan_20261028_audit_vbsec_security_scan_report_setad_khabari_hmd",
@@ -23627,6 +23615,54 @@
       "node_kind": "heading",
       "norm_label": "vbsec security scan report: setad_khabari_hmd",
       "source_file": "vbsec-reports/scan-20261028-audit.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_ft2_inline_rule_single_line",
+      "label": "ft2-inline-rule-single-line.md",
+      "_origin": "ast",
+      "community": 203,
+      "community_name": "ft2-inline-rule-single-line.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "ft2-inline-rule-single-line.md",
+      "source_file": ".agents/skills/hallmark/references/components/ft2-inline-rule-single-line.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_ft2_inline_rule_single_line_ft2_inline_rule_single_line",
+      "label": "Ft2 \u00b7 Inline-rule single line",
+      "_origin": "ast",
+      "community": 203,
+      "community_name": "ft2-inline-rule-single-line.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "ft2 \u00b7 inline-rule single line",
+      "source_file": ".agents/skills/hallmark/references/components/ft2-inline-rule-single-line.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_h6_photographic_fold",
+      "label": "h6-photographic-fold.md",
+      "_origin": "ast",
+      "community": 204,
+      "community_name": "h6-photographic-fold.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "h6-photographic-fold.md",
+      "source_file": ".agents/skills/hallmark/references/components/h6-photographic-fold.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_hallmark_references_components_h6_photographic_fold_h6_photographic_fold",
+      "label": "H6 \u00b7 Photographic Fold",
+      "_origin": "ast",
+      "community": 204,
+      "community_name": "h6-photographic-fold.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "h6 \u00b7 photographic fold",
+      "source_file": ".agents/skills/hallmark/references/components/h6-photographic-fold.md",
       "source_location": "L1"
     },
     {
@@ -28396,42 +28432,6 @@
       "norm_label": "verification levels",
       "source_file": ".agents/skills/owasp-security/reference/owasp-report.md",
       "source_location": "L497"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_n10_floating_on_scroll_morph",
-      "label": "n10-floating-on-scroll-morph.md",
-      "_origin": "ast",
-      "community": 48,
-      "community_name": "Floating nav on scroll \u2014 the cross-fade morph",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "n10-floating-on-scroll-morph.md",
-      "source_file": ".agents/skills/hallmark/references/components/n10-floating-on-scroll-morph.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_components_n10_floating_on_scroll_morph_n10_floating_on_scroll_morph",
-      "label": "N10 \u00b7 Floating-on-scroll morph",
-      "_origin": "ast",
-      "community": 48,
-      "community_name": "Floating nav on scroll \u2014 the cross-fade morph",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "n10 \u00b7 floating-on-scroll morph",
-      "source_file": ".agents/skills/hallmark/references/components/n10-floating-on-scroll-morph.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_hallmark_references_floating_nav",
-      "label": "floating-nav.md",
-      "_origin": "ast",
-      "community": 48,
-      "community_name": "Floating nav on scroll \u2014 the cross-fade morph",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "floating-nav.md",
-      "source_file": ".agents/skills/hallmark/references/floating-nav.md",
-      "source_location": "L1"
     },
     {
       "id": "agents_skills_hallmark_references_floating_nav_anti_patterns_hallmark_refuses",
@@ -80133,13 +80133,13 @@
     },
     {
       "source": "vbsec_reports_scan_20261028_audit_vbsec_security_scan_report_setad_khabari_hmd",
-      "target": "vbsec_reports_scan_20261028_audit_findings_table",
+      "target": "vbsec_reports_scan_20261028_audit_remediation_verification_summary",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "vbsec-reports/scan-20261028-audit.md",
-      "source_location": "L11",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -88910,5 +88910,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f940f9286772520f4277da935bdca99ce268c2a7"
+  "built_at_commit": "af0837718e3046efe382b74b1602b1944fc5ddeb"
 }

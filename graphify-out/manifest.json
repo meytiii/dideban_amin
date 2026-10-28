@@ -2154,9 +2154,9 @@
     "semantic_hash": ""
   },
   "vbsec-reports/scan-20261028-audit.md": {
-    "mtime": 1793173891.247276,
-    "seen": 1793175227.6276495,
-    "ast_hash": "d34bcda64742910a5164e3d2a34f4c0d",
+    "mtime": 1793175690.0681365,
+    "seen": 1793175704.8975668,
+    "ast_hash": "c9ec4c10572441e8c411b580c5dea1aa",
     "semantic_hash": ""
   }
 }
