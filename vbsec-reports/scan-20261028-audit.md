@@ -63,3 +63,4 @@ Comprehensive security scan of Go backend, frontend assets, database migrations,
   ]
 }
 ```
+

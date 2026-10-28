@@ -311,7 +311,8 @@ func main() {
 	mux.HandleFunc("POST /api/report/track", RateLimitMiddleware(trackLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(TrackReportHandler))))
 	mux.HandleFunc("POST /api/report/follow-up", RateLimitMiddleware(submitLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(SubmitFollowUpHandler))))
 
-	mux.HandleFunc("POST /api/security/csp-report", CSPReportHandler)
+	cspLimiter := NewIPRateLimiter(5.0, 50)
+	mux.HandleFunc("POST /api/security/csp-report", RateLimitMiddleware(cspLimiter, CSPReportHandler))
 
 	mux.HandleFunc("POST /api/admin/login", AdminIPWhitelistMiddleware(RateLimitMiddleware(loginLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(LoginHandler)))))
 	mux.HandleFunc("POST /api/admin/login/verify-mfa", AdminIPWhitelistMiddleware(RateLimitMiddleware(loginLimiter, LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(VerifyMFAHandler)))))

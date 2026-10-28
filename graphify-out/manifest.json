@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "admin_handlers.go": {
-    "mtime": 1793165292.875593,
-    "seen": 1793165909.9754229,
-    "ast_hash": "72a2089636e713f772e281838d36ba67",
+    "mtime": 1793175192.030075,
+    "seen": 1793175227.609106,
+    "ast_hash": "d9da0ca1db4fca0a847f9b046bf0c1d3",
     "semantic_hash": ""
   },
   "captcha.go": {
@@ -36,15 +36,15 @@
     "semantic_hash": ""
   },
   "main.go": {
-    "mtime": 1793165293.1165671,
-    "seen": 1793165909.976096,
-    "ast_hash": "6814be27cbead4a61ad04dfb12d56703",
+    "mtime": 1793175192.0310755,
+    "seen": 1793175227.610048,
+    "ast_hash": "49d1f3848c064cebb6fc6cf64483e5fd",
     "semantic_hash": ""
   },
   "public_handlers.go": {
-    "mtime": 1793165293.1368747,
-    "seen": 1793165909.976174,
-    "ast_hash": "335767a7e28ef1227df34c8540137791",
+    "mtime": 1793175192.0280745,
+    "seen": 1793175227.610412,
+    "ast_hash": "bc336e5db1cd7456e993cbf0e7b62e45",
     "semantic_hash": ""
   },
   "schema.sql": {
@@ -858,9 +858,9 @@
     "semantic_hash": ""
   },
   "events.go": {
-    "mtime": 1793165502.1305397,
-    "seen": 1793165909.9755108,
-    "ast_hash": "6b97e5b64fd4d38bf14d02f60b3ba6f7",
+    "mtime": 1793175192.030075,
+    "seen": 1793175227.6095302,
+    "ast_hash": "2c9a65d8249564f81558eda04ba0cfe5",
     "semantic_hash": ""
   },
   "metadata.go": {
@@ -2151,6 +2151,12 @@
     "mtime": 1793166547.9456792,
     "seen": 1793166890.0921638,
     "ast_hash": "594df3ccc6c0e2878143f663bf432537",
+    "semantic_hash": ""
+  },
+  "vbsec-reports/scan-20261028-audit.md": {
+    "mtime": 1793173891.247276,
+    "seen": 1793175227.6276495,
+    "ast_hash": "d34bcda64742910a5164e3d2a34f4c0d",
     "semantic_hash": ""
   }
 }

@@ -1178,7 +1178,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 		downloadName := "evidence_" + reportIDStr + "_" + fileIDStr + ext
 		if encFileName != "" {
 			if decName, err := DecryptBoundField("evidence_files", "file_name", fileID, encFileName); err == nil && decName != "" {
-				downloadName = decName
+				downloadName = filepath.Base(stripNul(decName))
 			}
 		}
 
@@ -1291,7 +1291,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 		entryName := fmt.Sprintf("evidence_%d_%d%s", reportID, f.id, filepath.Ext(cleanPath))
 		if f.encFileName != "" {
 			if decName, err := DecryptBoundField("evidence_files", "file_name", f.id, f.encFileName); err == nil && decName != "" {
-				entryName = decName
+				entryName = filepath.Base(stripNul(decName))
 			}
 		}
 

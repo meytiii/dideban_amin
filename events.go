@@ -140,7 +140,7 @@ func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	admin, ok := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
 	if !ok || admin.Username == "" {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return

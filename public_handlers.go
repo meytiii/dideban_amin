@@ -510,7 +510,8 @@ func SubmitReportHandler(w http.ResponseWriter, r *http.Request) {
 			}
 
 			encPath, _ := EncryptBoundField("evidence_files", "file_path", fileID, savePath)
-			encFileName, _ := EncryptBoundField("evidence_files", "file_name", fileID, header.Filename)
+			cleanFileName := filepath.Base(stripNul(header.Filename))
+			encFileName, _ := EncryptBoundField("evidence_files", "file_name", fileID, cleanFileName)
 
 			_, err = tx.Exec(`
 				INSERT INTO evidence_files (id, report_id, file_path, file_hash, mime_type, file_name, file_size)

@@ -26,6 +26,8 @@ WORKDIR /app
 
 COPY --from=builder --chown=herasat:herasat /build/herasat /app/herasat
 COPY --chown=herasat:herasat frontend/ /app/frontend/
+COPY --chown=herasat:herasat templates/ /app/templates/
+COPY --chown=herasat:herasat scripts/ /app/scripts/
 COPY --chown=herasat:herasat schema.sql /app/schema.sql
 
 RUN mkdir -p /app/secure_uploads /app/backups && \
