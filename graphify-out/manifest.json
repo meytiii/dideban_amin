@@ -1643,30 +1643,6 @@
     "ast_hash": "25bb34de6fee0bcba83a13c0948570b5",
     "semantic_hash": ""
   },
-  "testdata/clean_photo.pdf": {
-    "mtime": 1793165293.1707437,
-    "seen": 1793165909.9849043,
-    "ast_hash": "2e16aa2af37a7f248f7007105f441e9e",
-    "semantic_hash": ""
-  },
-  "testdata/encrypted.pdf": {
-    "mtime": 1793165293.1742003,
-    "seen": 1793165909.9849055,
-    "ast_hash": "073f06efd7144104427336e2970521c9",
-    "semantic_hash": ""
-  },
-  "testdata/flate_js.pdf": {
-    "mtime": 1793165293.1747231,
-    "seen": 1793165909.9849064,
-    "ast_hash": "894d2bbf27bb79cbcbc2a9b6c73c4fc8",
-    "semantic_hash": ""
-  },
-  "testdata/hex_js.pdf": {
-    "mtime": 1793165293.1752567,
-    "seen": 1793165909.9849076,
-    "ast_hash": "686417ab3b20163ca44b9414d95285d9",
-    "semantic_hash": ""
-  },
   ".agents/skills/vbs-scan-security/references/load-rules.sh": {
     "mtime": 1793166857.2170696,
     "seen": 1793166890.0787625,
@@ -2154,8 +2130,8 @@
     "semantic_hash": ""
   },
   "vbsec-reports/scan-20261028-audit.md": {
-    "mtime": 1793175690.0681365,
-    "seen": 1793175704.8975668,
+    "mtime": 1793175766.0127552,
+    "seen": 1793175977.763756,
     "ast_hash": "c9ec4c10572441e8c411b580c5dea1aa",
     "semantic_hash": ""
   }
