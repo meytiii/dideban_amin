@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"math"
@@ -87,15 +88,43 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		})
 		w.Header().Set("X-CSRF-Token", currentCSRF)
 
-		ctx := context.WithValue(r.Context(), "admin", session)
+		reqPath := strings.TrimRight(r.URL.Path, "/")
+
+		if session.RequiresPasswordChange || session.Requires2FASetup {
+			allowed := reqPath == "/api/admin/me" || reqPath == "/api/admin/logout"
+			if session.RequiresPasswordChange && reqPath == "/api/admin/change-my-password" {
+				allowed = true
+			}
+			if session.Requires2FASetup && (reqPath == "/api/admin/2fa/setup" || reqPath == "/api/admin/2fa/enable") {
+				allowed = true
+			}
+			if !allowed {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusForbidden)
+				if session.RequiresPasswordChange {
+					_ = json.NewEncoder(w).Encode(map[string]string{
+						"error":   "password_change_required",
+						"message": "تغییر کلمه عبور الزامی است.",
+					})
+				} else {
+					_ = json.NewEncoder(w).Encode(map[string]string{
+						"error":   "2fa_setup_required",
+						"message": "فعال‌سازی احراز هویت دومرحله‌ای الزامی است.",
+					})
+				}
+				return
+			}
+		}
+
+		ctx := contextWithAdmin(r.Context(), session)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
 func SuperuserAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return AdminAuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
-		admin := r.Context().Value("admin").(AdminSession)
-		if !admin.IsSuperuser && admin.Role != "superuser" {
+		admin, ok := adminFromContext(r)
+		if !ok || (!admin.IsSuperuser && admin.Role != "superuser") {
 			http.Error(w, "دسترسی غیرمجاز: این بخش منحصراً متعلق به پشتیبانی سامانه است.", http.StatusForbidden)
 			return
 		}
@@ -121,7 +150,11 @@ func canAdminAccessReport(admin AdminSession, reportID int64) bool {
 }
 
 func ToggleReadStatusHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		ReportID int64 `json:"report_id"`
@@ -235,8 +268,22 @@ func normalizeForSearch(s string) string {
 	return b.String()
 }
 
+func ResolveTrackingCode(raw string) string {
+	if strings.HasPrefix(raw, "v2:") || strings.HasPrefix(raw, "v3:") {
+		dec, err := DecryptAES(raw)
+		if err == nil && dec != "" {
+			return dec
+		}
+	}
+	return raw
+}
+
 func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	page := 1
 	pageSize := 25
@@ -279,9 +326,11 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 		searchQuery = strings.TrimSpace(r.URL.Query().Get("search"))
 	}
 	if searchQuery != "" {
-		args = append(args, "%"+searchQuery+"%")
-		paramIdx := len(args)
-		whereClauses = append(whereClauses, fmt.Sprintf("(r.tracking_code ILIKE $%d OR r.category ILIKE $%d)", paramIdx, paramIdx))
+		hashVal := HashTrackingCode(searchQuery)
+		args = append(args, "%"+searchQuery+"%", hashVal)
+		likeIdx := len(args) - 1
+		hashIdx := len(args)
+		whereClauses = append(whereClauses, fmt.Sprintf("(r.tracking_code ILIKE $%d OR r.category ILIKE $%d OR r.tracking_code_hash = $%d)", likeIdx, likeIdx, hashIdx))
 	}
 
 	category := strings.TrimSpace(r.URL.Query().Get("category"))
@@ -434,6 +483,7 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 		if err := rows.Scan(&rep.ID, &rep.TrackingCode, &rep.Category, &rep.ReportType, &rep.Priority, &rep.IsRead, &rep.HasResponse, &createdAt, &rep.HasNewMessage, &rep.HasRegionalResponse, &rep.HasAnyRegionalResponse, &updatedAt, &readByName, &classification, &encDesc); err != nil {
 			continue
 		}
+		rep.TrackingCode = ResolveTrackingCode(rep.TrackingCode)
 		rep.CreatedAt = createdAt.Format(time.RFC3339)
 		rep.UpdatedAt = updatedAt.Format(time.RFC3339)
 		if readByName.Valid {
@@ -518,7 +568,11 @@ type ReportAttachmentItem struct {
 }
 
 func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	reportIDStr := r.URL.Query().Get("id")
 	reportID, err := strconv.ParseInt(reportIDStr, 10, 64)
@@ -614,6 +668,8 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	rep.TrackingCode = ResolveTrackingCode(rep.TrackingCode)
+
 	if classification.Valid {
 		rep.Classification = classification.String
 	}
@@ -640,7 +696,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encName.Valid && encName.String != "" {
-		if dec, err := DecryptAES(encName.String); err == nil {
+		if dec, err := DecryptBoundField("reports", "reporter_name", rep.ID, encName.String); err == nil {
 			rep.ReporterName = dec
 		} else {
 			rep.ReporterName = "[خطای رمزگشایی]"
@@ -650,7 +706,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encPhone.Valid && encPhone.String != "" {
-		if dec, err := DecryptAES(encPhone.String); err == nil {
+		if dec, err := DecryptBoundField("reports", "reporter_phone", rep.ID, encPhone.String); err == nil {
 			if strings.TrimSpace(dec) != "" {
 				rep.ReporterPhone = dec
 			} else {
@@ -664,7 +720,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encDesc.Valid && encDesc.String != "" {
-		if dec, err := DecryptAES(encDesc.String); err == nil {
+		if dec, err := DecryptBoundField("reports", "description", rep.ID, encDesc.String); err == nil {
 			rep.Description = dec
 		} else {
 			rep.Description = "[خطای رمزگشایی - اصالت محتوا تأیید نشد]"
@@ -674,7 +730,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encNotes.Valid && encNotes.String != "" {
-		decNotes, err := DecryptAES(encNotes.String)
+		decNotes, err := DecryptBoundField("reports", "internal_notes", rep.ID, encNotes.String)
 		if err == nil {
 			rep.InternalNotes = decNotes
 		} else {
@@ -685,7 +741,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if encResponse.Valid && encResponse.String != "" {
-		if dec, err := DecryptAES(encResponse.String); err == nil {
+		if dec, err := DecryptBoundField("reports", "admin_response", rep.ID, encResponse.String); err == nil {
 			rep.AdminResponse = dec
 		} else {
 			rep.AdminResponse = "[خطای رمزگشایی]"
@@ -724,13 +780,13 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			var encFilePath, encFileName string
 			if err := attRows.Scan(&att.ID, &att.MimeType, &encFilePath, &encFileName, &att.FileSize); err == nil {
 				if encFileName != "" {
-					decName, err := DecryptAES(encFileName)
+					decName, err := DecryptBoundField("evidence_files", "file_name", att.ID, encFileName)
 					if err == nil && decName != "" {
 						att.FileName = decName
 					}
 				}
 				if att.FileName == "" {
-					decPath, err := DecryptAES(encFilePath)
+					decPath, err := DecryptBoundField("evidence_files", "file_path", att.ID, encFilePath)
 					if err == nil {
 						att.FileName = filepath.Base(decPath)
 					} else {
@@ -757,7 +813,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			var encMsg string
 			var msgCreatedAt time.Time
 			if err := msgRows.Scan(&m.ID, &m.SenderType, &encMsg, &m.AdminUsername, &msgCreatedAt, &m.AdminFullName); err == nil {
-				decMsg, err := DecryptAES(encMsg)
+				decMsg, err := DecryptBoundField("report_messages", "message", m.ID, encMsg)
 				if err == nil {
 					m.Message = decMsg
 				} else {
@@ -792,7 +848,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 				var respAt sql.NullTime
 				if err := rRows.Scan(&rr.ID, &rr.RecipientUsername, &rr.RecipientName, &rr.RecipientTitle, &encResp, &respAt); err == nil {
 					if encResp.Valid && encResp.String != "" {
-						dec, err := DecryptAES(encResp.String)
+						dec, err := DecryptBoundField("report_forwardings", "response_text", rr.ID, encResp.String)
 						if err == nil {
 							rr.ResponseText = dec
 						} else {
@@ -821,7 +877,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		`, reportID, admin.Username).Scan(&myRR.ID, &myRR.RecipientUsername, &myRR.RecipientName, &myRR.RecipientTitle, &encResp, &respAt)
 		if err == nil {
 			if encResp.Valid && encResp.String != "" {
-				dec, err := DecryptAES(encResp.String)
+				dec, err := DecryptBoundField("report_forwardings", "response_text", myRR.ID, encResp.String)
 				if err == nil {
 					myRR.ResponseText = dec
 				}
@@ -844,7 +900,11 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateInternalNotesHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		http.Error(w, "شما به این قسمت دسترسی ندارید", http.StatusForbidden)
@@ -878,7 +938,7 @@ func UpdateInternalNotesHandler(w http.ResponseWriter, r *http.Request) {
 
 	var encNotes *string
 	if notesText != "" {
-		encrypted, err := EncryptAES(notesText)
+		encrypted, err := EncryptBoundField("reports", "internal_notes", req.ReportID, notesText)
 		if err != nil {
 			http.Error(w, "Encryption error", http.StatusInternalServerError)
 			return
@@ -899,7 +959,11 @@ func UpdateInternalNotesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SetReportPriorityHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		http.Error(w, "شما به این قسمت دسترسی ندارید", http.StatusForbidden)
@@ -939,7 +1003,11 @@ func SetReportPriorityHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ClassifyReportHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		http.Error(w, "دسترسی غیرمجاز: کارشناسان نواحی و مناطق مجاز به ارزیابی یا تغییر کیفیت گزارش نیستند.", http.StatusForbidden)
@@ -1037,7 +1105,14 @@ func ClassifyReportHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	rc := http.NewResponseController(w)
+	_ = rc.SetWriteDeadline(time.Now().Add(10 * time.Minute))
+
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	reportIDStr := r.URL.Query().Get("id")
 	reportID, err := strconv.ParseInt(reportIDStr, 10, 64)
@@ -1071,7 +1146,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		realPath, err := DecryptAES(encPath)
+		realPath, err := DecryptBoundField("evidence_files", "file_path", fileID, encPath)
 		if err != nil {
 			http.Error(w, "Failed to decrypt file path", http.StatusInternalServerError)
 			return
@@ -1079,7 +1154,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 
 		cleanPath := filepath.Clean(realPath)
 		absFilePath, err := filepath.Abs(cleanPath)
-		if err != nil || !strings.HasPrefix(absFilePath, absUploadDir) {
+		if err != nil || !isWithinDirectory(absUploadDir, absFilePath) {
 			logAudit(admin.Username, admin.Title, "ILLEGAL_FILE_ACCESS_ATTEMPT", &reportID, getIP(r))
 			http.Error(w, "Access Denied: Invalid file path boundary", http.StatusForbidden)
 			return
@@ -1102,7 +1177,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 		ext := filepath.Ext(cleanPath)
 		downloadName := "evidence_" + reportIDStr + "_" + fileIDStr + ext
 		if encFileName != "" {
-			if decName, err := DecryptAES(encFileName); err == nil && decName != "" {
+			if decName, err := DecryptBoundField("evidence_files", "file_name", fileID, encFileName); err == nil && decName != "" {
 				downloadName = decName
 			}
 		}
@@ -1144,7 +1219,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 
 	if len(files) == 1 {
 		f := files[0]
-		realPath, err := DecryptAES(f.encPath)
+		realPath, err := DecryptBoundField("evidence_files", "file_path", f.id, f.encPath)
 		if err != nil {
 			http.Error(w, "Failed to decrypt file path", http.StatusInternalServerError)
 			return
@@ -1152,7 +1227,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 
 		cleanPath := filepath.Clean(realPath)
 		absFilePath, err := filepath.Abs(cleanPath)
-		if err != nil || !strings.HasPrefix(absFilePath, absUploadDir) {
+		if err != nil || !isWithinDirectory(absUploadDir, absFilePath) {
 			logAudit(admin.Username, admin.Title, "ILLEGAL_FILE_ACCESS_ATTEMPT", &reportID, getIP(r))
 			http.Error(w, "Access Denied: Invalid file path boundary", http.StatusForbidden)
 			return
@@ -1175,7 +1250,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 		ext := filepath.Ext(cleanPath)
 		downloadName := "evidence_" + reportIDStr + ext
 		if f.encFileName != "" {
-			if decName, err := DecryptAES(f.encFileName); err == nil && decName != "" {
+			if decName, err := DecryptBoundField("evidence_files", "file_name", f.id, f.encFileName); err == nil && decName != "" {
 				downloadName = decName
 			}
 		}
@@ -1193,13 +1268,13 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 	usedNames := make(map[string]int)
 
 	for _, f := range files {
-		realPath, err := DecryptAES(f.encPath)
+		realPath, err := DecryptBoundField("evidence_files", "file_path", f.id, f.encPath)
 		if err != nil {
 			continue
 		}
 		cleanPath := filepath.Clean(realPath)
 		absFilePath, err := filepath.Abs(cleanPath)
-		if err != nil || !strings.HasPrefix(absFilePath, absUploadDir) {
+		if err != nil || !isWithinDirectory(absUploadDir, absFilePath) {
 			continue
 		}
 
@@ -1215,7 +1290,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 
 		entryName := fmt.Sprintf("evidence_%d_%d%s", reportID, f.id, filepath.Ext(cleanPath))
 		if f.encFileName != "" {
-			if decName, err := DecryptAES(f.encFileName); err == nil && decName != "" {
+			if decName, err := DecryptBoundField("evidence_files", "file_name", f.id, f.encFileName); err == nil && decName != "" {
 				entryName = decName
 			}
 		}
@@ -1259,7 +1334,11 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RespondToReportHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		http.Error(w, "شما به این قسمت دسترسی ندارید", http.StatusForbidden)
@@ -1291,7 +1370,7 @@ func RespondToReportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	encResponse, err := EncryptAES(req.Response)
+	encResponse, err := EncryptBoundField("reports", "admin_response", req.ReportID, req.Response)
 	if err != nil {
 		http.Error(w, "Encryption failure", http.StatusInternalServerError)
 		return
@@ -1307,12 +1386,17 @@ func RespondToReportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = DB.Exec(`
-		INSERT INTO report_messages (report_id, sender_type, message_text, admin_username, created_at)
-		VALUES ($1, 'admin', $2, $3, NOW())`,
-		req.ReportID, encResponse, admin.Username)
-	if err != nil {
-		log.Printf("Failed to insert message into report_messages: %v", err)
+	var msgID int64
+	if err := DB.QueryRow("SELECT nextval(pg_get_serial_sequence('report_messages', 'id'))").Scan(&msgID); err == nil {
+		if encMsg, err := EncryptBoundField("report_messages", "message", msgID, req.Response); err == nil {
+			_, err = DB.Exec(`
+				INSERT INTO report_messages (id, report_id, sender_type, message_text, admin_username, created_at)
+				VALUES ($1, $2, 'admin', $3, $4, NOW())`,
+				msgID, req.ReportID, encMsg, admin.Username)
+			if err != nil {
+				log.Printf("Failed to insert message into report_messages: %v", err)
+			}
+		}
 	}
 
 	GlobalSSEBroker.BroadcastNewMessage(req.ReportID)
@@ -1387,7 +1471,11 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		Username           string `json:"username"`
@@ -1402,13 +1490,18 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	req.Username = strings.TrimSpace(req.Username)
+	var err error
+	req.Username, err = normalizeAndValidateUsername(req.Username)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	req.Password = strings.TrimSpace(req.Password)
 	req.FullName = strings.TrimSpace(req.FullName)
 	req.RoleTitle = strings.TrimSpace(req.RoleTitle)
 	req.Role = strings.TrimSpace(req.Role)
 
-	if req.Username == "" || req.FullName == "" || req.RoleTitle == "" {
+	if req.FullName == "" || req.RoleTitle == "" {
 		http.Error(w, "اطلاعات ورودی ناقص است (نام و نام خانوادگی، نام کاربری و سمت سازمانی الزامی است).", http.StatusBadRequest)
 		return
 	}
@@ -1418,7 +1511,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	isSuper := (req.Role == "superuser")
 
-	if err := ValidatePasswordComplexity(req.Password); err != nil {
+	if err := ValidatePasswordPolicy(req.Password, req.Username); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -1457,7 +1550,11 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ToggleUserActiveHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID int64 `json:"user_id"`
@@ -1498,7 +1595,11 @@ func ToggleUserActiveHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID             int64  `json:"user_id"`
@@ -1572,7 +1673,11 @@ func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID int64 `json:"user_id"`
@@ -1630,7 +1735,11 @@ func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ResetUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID             int64  `json:"user_id"`
@@ -1643,15 +1752,16 @@ func ResetUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	req.NewPassword = strings.TrimSpace(req.NewPassword)
-	if err := ValidatePasswordComplexity(req.NewPassword); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
 
 	var targetUsername string
 	err := DB.QueryRow("SELECT username FROM admin_users WHERE id = $1", req.UserID).Scan(&targetUsername)
 	if err != nil {
 		http.Error(w, "کاربر یافت نشد", http.StatusNotFound)
+		return
+	}
+
+	if err := ValidatePasswordPolicy(req.NewPassword, targetUsername); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -1697,7 +1807,11 @@ func ResetUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LiftUserLockoutHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID   int64  `json:"user_id"`
@@ -1725,7 +1839,11 @@ func LiftUserLockoutHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DisableUser2FAHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		UserID   int64  `json:"user_id"`
@@ -1773,12 +1891,14 @@ type AuditLogItem struct {
 	TargetReportID     *int64  `json:"target_report_id"`
 	TargetTrackingCode *string `json:"target_tracking_code"`
 	IPAddress          string  `json:"ip_address"`
+	Detail             string  `json:"detail,omitempty"`
+	EntryHash          string  `json:"entry_hash,omitempty"`
 	CreatedAt          string  `json:"created_at"`
 }
 
 func GetAuditLogsHandler(w http.ResponseWriter, r *http.Request) {
 	rows, err := DB.Query(`
-		SELECT a.id, a.admin_username, a.admin_title, a.action, a.target_report_id, r.tracking_code, a.ip_address, a.created_at
+		SELECT a.id, a.admin_username, a.admin_title, a.action, a.target_report_id, r.tracking_code, a.ip_address, COALESCE(a.detail, ''), a.entry_hash, a.created_at
 		FROM audit_logs a
 		LEFT JOIN reports r ON a.target_report_id = r.id
 		ORDER BY a.id DESC
@@ -1796,7 +1916,7 @@ func GetAuditLogsHandler(w http.ResponseWriter, r *http.Request) {
 		var targetID sql.NullInt64
 		var trackingCode sql.NullString
 		var createdAt time.Time
-		if err := rows.Scan(&l.ID, &l.AdminUsername, &l.AdminTitle, &l.Action, &targetID, &trackingCode, &l.IPAddress, &createdAt); err != nil {
+		if err := rows.Scan(&l.ID, &l.AdminUsername, &l.AdminTitle, &l.Action, &targetID, &trackingCode, &l.IPAddress, &l.Detail, &l.EntryHash, &createdAt); err != nil {
 			continue
 		}
 		if targetID.Valid {
@@ -1897,7 +2017,7 @@ func GetServerTimeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetActiveSessionsHandler(w http.ResponseWriter, r *http.Request) {
-	admin, ok := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
 	if !ok || !admin.IsSuperuser {
 		http.Error(w, "دسترسی غیرمجاز: دسترسی به این بخش محدود به پشتیبانی سامانه می‌باشد.", http.StatusForbidden)
 		return
@@ -1915,7 +2035,7 @@ func TerminateSessionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	admin, ok := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
 	if !ok || !admin.IsSuperuser {
 		http.Error(w, "دسترسی غیرمجاز: دسترسی به این بخش محدود به پشتیبانی سامانه می‌باشد.", http.StatusForbidden)
 		return
@@ -2005,7 +2125,11 @@ func TerminateSessionHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ChangeMyPasswordHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		CurrentPassword string `json:"current_password"`
@@ -2029,7 +2153,7 @@ func ChangeMyPasswordHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := ValidatePasswordComplexity(req.NewPassword); err != nil {
+	if err := ValidatePasswordPolicy(req.NewPassword, admin.Username); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -2114,17 +2238,19 @@ func ChangeMyPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	now := time.Now()
 	sessionExpiry := now.Add(15 * time.Minute)
 	Sessions.Set(newSessionToken, AdminSession{
-		Token:       newSessionToken,
-		Username:    admin.Username,
-		FullName:    admin.FullName,
-		Title:       admin.Title,
-		Role:        admin.Role,
-		IsSuperuser: admin.IsSuperuser,
-		IP:          getIP(r),
-		UserAgent:   r.UserAgent(),
-		CreatedAt:   now,
-		LastActive:  now,
-		Expiry:      sessionExpiry,
+		Token:                  newSessionToken,
+		Username:               admin.Username,
+		FullName:               admin.FullName,
+		Title:                  admin.Title,
+		Role:                   admin.Role,
+		IsSuperuser:            admin.IsSuperuser,
+		IP:                     getIP(r),
+		UserAgent:              r.UserAgent(),
+		CreatedAt:              now,
+		LastActive:             now,
+		Expiry:                 sessionExpiry,
+		Requires2FASetup:       admin.Requires2FASetup,
+		RequiresPasswordChange: false,
 	})
 
 	http.SetCookie(w, &http.Cookie{
@@ -2161,7 +2287,7 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	admin, ok := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
 	if !ok || !admin.IsSuperuser {
 		logAudit("UNKNOWN", "SECURITY_ALERT", "UNAUTHORIZED_DELETE_REPORT_ATTEMPT", nil, getIP(r))
 		http.Error(w, "دسترسی غیرمجاز: عملیات حذف پرونده منحصراً در اختیار پشتیبانی سامانه می‌باشد.", http.StatusForbidden)
@@ -2171,9 +2297,102 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		ReportID  int64   `json:"report_id"`
 		ReportIDs []int64 `json:"report_ids"`
+		Action    string  `json:"action"`
+		PendingID int64   `json:"pending_id"`
+		Reason    string  `json:"reason"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "داده‌های درخواست نامعتبر است", http.StatusBadRequest)
+		return
+	}
+
+	twoPerson := strings.ToLower(strings.TrimSpace(os.Getenv("HERASAT_TWO_PERSON_DELETION"))) == "true"
+	if twoPerson {
+		if req.Action == "reject" {
+			if req.PendingID <= 0 {
+				http.Error(w, "شناسه درخواست نامعتبر است", http.StatusBadRequest)
+				return
+			}
+			res, err := DB.Exec("UPDATE pending_deletions SET status = 'rejected', approved_by = $1, approved_at = NOW() WHERE id = $2 AND status = 'pending'", admin.Username, req.PendingID)
+			if err != nil {
+				http.Error(w, "خطای پایگاه داده", http.StatusInternalServerError)
+				return
+			}
+			rowsAff, _ := res.RowsAffected()
+			if rowsAff == 0 {
+				http.Error(w, "درخواست در انتظار تأیید یافت نشد", http.StatusBadRequest)
+				return
+			}
+			logAuditWithDetail(admin.Username, admin.Title, "REJECT_REPORT_DELETION", nil, getIP(r), fmt.Sprintf("PENDING_ID:%d", req.PendingID))
+			w.Header().Set("Content-Type", "application/json")
+			w.Write([]byte(`{"status": "success", "message": "درخواست حذف پرونده رد گردید."}`))
+			return
+		}
+
+		if req.Action == "approve" {
+			if req.PendingID <= 0 {
+				http.Error(w, "شناسه درخواست نامعتبر است", http.StatusBadRequest)
+				return
+			}
+			var pendingID, repID int64
+			var requestedBy, status string
+			var createdAt time.Time
+			err := DB.QueryRow("SELECT id, report_id, requested_by, status, created_at FROM pending_deletions WHERE id = $1", req.PendingID).
+				Scan(&pendingID, &repID, &requestedBy, &status, &createdAt)
+			if err != nil || status != "pending" {
+				http.Error(w, "درخواست حذف معتبر در انتظار بررسی یافت نشد", http.StatusBadRequest)
+				return
+			}
+			if time.Since(createdAt) > 24*time.Hour {
+				_, _ = DB.Exec("UPDATE pending_deletions SET status = 'expired' WHERE id = $1", pendingID)
+				http.Error(w, "مهلت ۲۴ ساعته تأیید این درخواست منقضی گردیده است.", http.StatusBadRequest)
+				return
+			}
+			if requestedBy == admin.Username {
+				http.Error(w, "تأیید درخواست حذف باید توسط مدیر ارشد دیگری غیر از ثبت‌کننده اولیه انجام پذیرد.", http.StatusForbidden)
+				return
+			}
+
+			executeDeleteReportIDs(w, r, admin, []int64{repID}, req.Reason, func(tx *sql.Tx) error {
+				_, err := tx.Exec("UPDATE pending_deletions SET status = 'approved', approved_by = $1, approved_at = NOW() WHERE id = $2", admin.Username, pendingID)
+				return err
+			}, fmt.Sprintf("REQUESTED_BY:%s|PENDING_ID:%d", requestedBy, pendingID))
+			return
+		}
+
+		idMap := make(map[int64]bool)
+		if req.ReportID > 0 {
+			idMap[req.ReportID] = true
+		}
+		for _, id := range req.ReportIDs {
+			if id > 0 {
+				idMap[id] = true
+			}
+		}
+		var ids []int64
+		for id := range idMap {
+			ids = append(ids, id)
+		}
+		if len(ids) == 0 {
+			http.Error(w, "شناسه پرونده نامعتبر است", http.StatusBadRequest)
+			return
+		}
+
+		for _, id := range ids {
+			var pendID int64
+			err := DB.QueryRow("INSERT INTO pending_deletions (report_id, requested_by, reason, status) VALUES ($1, $2, $3, 'pending') RETURNING id",
+				id, admin.Username, req.Reason).Scan(&pendID)
+			if err != nil {
+				http.Error(w, "خطا در ثبت درخواست حذف پرونده", http.StatusInternalServerError)
+				return
+			}
+			repIDCopy := id
+			logAuditWithDetail(admin.Username, admin.Title, "REQUEST_REPORT_DELETION", &repIDCopy, getIP(r), fmt.Sprintf("PENDING_ID:%d|REASON:%s", pendID, req.Reason))
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusAccepted)
+		w.Write([]byte(`{"status": "pending_approval", "message": "درخواست حذف پرونده ثبت گردید و جهت اجرا نیازمند تأیید مدیر ارشد دوم می‌باشد."}`))
 		return
 	}
 
@@ -2186,17 +2405,19 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 			idMap[id] = true
 		}
 	}
-
 	var ids []int64
 	for id := range idMap {
 		ids = append(ids, id)
 	}
-
 	if len(ids) == 0 {
 		http.Error(w, "شناسه پرونده نامعتبر است", http.StatusBadRequest)
 		return
 	}
 
+	executeDeleteReportIDs(w, r, admin, ids, req.Reason, nil, fmt.Sprintf("REASON:%s", req.Reason))
+}
+
+func executeDeleteReportIDs(w http.ResponseWriter, r *http.Request, admin AdminSession, ids []int64, reason string, extraTxHook func(tx *sql.Tx) error, auditDetail string) {
 	var filesToDelete []string
 	rows, err := DB.Query("SELECT file_path FROM evidence_files WHERE report_id = ANY($1)", pq.Array(ids))
 	if err == nil {
@@ -2209,7 +2430,7 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 				if realPath, err := DecryptAES(encPath); err == nil {
 					cleanPath := filepath.Clean(realPath)
 					absFilePath, err := filepath.Abs(cleanPath)
-					if err == nil && strings.HasPrefix(absFilePath, absUploadDir) {
+					if err == nil && isWithinDirectory(absUploadDir, absFilePath) {
 						filesToDelete = append(filesToDelete, absFilePath)
 					}
 				}
@@ -2224,6 +2445,13 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer tx.Rollback()
 
+	if extraTxHook != nil {
+		if err := extraTxHook(tx); err != nil {
+			http.Error(w, "خطا در به‌روزرسانی وضعیت درخواست حذف", http.StatusInternalServerError)
+			return
+		}
+	}
+
 	_, err = tx.Exec("DELETE FROM reports WHERE id = ANY($1)", pq.Array(ids))
 	if err != nil {
 		http.Error(w, "خطا در حذف رکورد پرونده از پایگاه داده", http.StatusInternalServerError)
@@ -2232,7 +2460,7 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 
 	for _, repID := range ids {
 		repIDCopy := repID
-		if err := logAuditTx(tx, admin.Username, admin.Title, "DELETE_REPORT_AND_ATTACHMENTS", &repIDCopy, getIP(r)); err != nil {
+		if err := logAuditTxWithDetail(tx, admin.Username, admin.Title, "DELETE_REPORT_AND_ATTACHMENTS", &repIDCopy, getIP(r), auditDetail); err != nil {
 			http.Error(w, "سیستم ثبت لاگ با خطا مواجه شد. عملیات متوقف گردید.", http.StatusServiceUnavailable)
 			return
 		}
@@ -2262,6 +2490,117 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 		"message":       msg,
 		"deleted_count": len(ids),
 	})
+}
+
+func RedactReportHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	admin, ok := adminFromContext(r)
+	if !ok || !admin.IsSuperuser {
+		logAudit("UNKNOWN", "SECURITY_ALERT", "UNAUTHORIZED_REDACT_REPORT_ATTEMPT", nil, getIP(r))
+		http.Error(w, "دسترسی غیرمجاز: عملیات پاک‌سازی اطلاعات منحصراً در اختیار مدیر ارشد سامانه می‌باشد.", http.StatusForbidden)
+		return
+	}
+
+	var req struct {
+		ReportID      int64   `json:"report_id"`
+		RedactName    bool    `json:"redact_name"`
+		RedactPhone   bool    `json:"redact_phone"`
+		RedactDesc    bool    `json:"redact_description"`
+		RedactFileIDs []int64 `json:"redact_file_ids"`
+		Reason        string  `json:"reason"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.ReportID <= 0 {
+		http.Error(w, "داده‌های درخواست نامعتبر است", http.StatusBadRequest)
+		return
+	}
+
+	var exists bool
+	err := DB.QueryRow("SELECT EXISTS(SELECT 1 FROM reports WHERE id = $1)", req.ReportID).Scan(&exists)
+	if err != nil || !exists {
+		http.Error(w, "پرونده مورد نظر یافت نشد.", http.StatusNotFound)
+		return
+	}
+
+	marker := fmt.Sprintf("[حذف امنیتی توسط %s در %s]", admin.Username, time.Now().Format("2006-01-02 15:04:05"))
+	encMarker, err := EncryptAES(marker)
+	if err != nil {
+		http.Error(w, "خطا در رمزنگاری شناسه جایگزین", http.StatusInternalServerError)
+		return
+	}
+
+	tx, err := DB.BeginTx(r.Context(), nil)
+	if err != nil {
+		http.Error(w, "خطای پایگاه داده", http.StatusInternalServerError)
+		return
+	}
+	defer tx.Rollback()
+
+	var redactedFields []string
+
+	if req.RedactName {
+		_, err := tx.Exec("UPDATE reports SET reporter_name = $1, updated_at = NOW() WHERE id = $2", encMarker, req.ReportID)
+		if err != nil {
+			http.Error(w, "خطا در حذف نام گزارش‌دهنده", http.StatusInternalServerError)
+			return
+		}
+		redactedFields = append(redactedFields, "reporter_name")
+	}
+
+	if req.RedactPhone {
+		_, err := tx.Exec("UPDATE reports SET reporter_phone = $1, updated_at = NOW() WHERE id = $2", encMarker, req.ReportID)
+		if err != nil {
+			http.Error(w, "خطا در حذف شماره گزارش‌دهنده", http.StatusInternalServerError)
+			return
+		}
+		redactedFields = append(redactedFields, "reporter_phone")
+	}
+
+	if req.RedactDesc {
+		_, err := tx.Exec("UPDATE reports SET description = $1, updated_at = NOW() WHERE id = $2", encMarker, req.ReportID)
+		if err != nil {
+			http.Error(w, "خطا در حذف شرح گزارش", http.StatusInternalServerError)
+			return
+		}
+		redactedFields = append(redactedFields, "description")
+	}
+
+	absUploadDir, _ := filepath.Abs("./secure_uploads")
+	for _, fID := range req.RedactFileIDs {
+		if fID <= 0 {
+			continue
+		}
+		var encPath string
+		err := tx.QueryRow("SELECT file_path FROM evidence_files WHERE id = $1 AND report_id = $2", fID, req.ReportID).Scan(&encPath)
+		if err == nil {
+			if realPath, err := DecryptAES(encPath); err == nil {
+				cleanPath := filepath.Clean(realPath)
+				absFilePath, err := filepath.Abs(cleanPath)
+				if err == nil && isWithinDirectory(absUploadDir, absFilePath) {
+					_ = os.Remove(absFilePath)
+				}
+			}
+			_, _ = tx.Exec("UPDATE evidence_files SET file_name = $1, file_hash = '', file_path = '' WHERE id = $2 AND report_id = $3", encMarker, fID, req.ReportID)
+			redactedFields = append(redactedFields, fmt.Sprintf("file_%d", fID))
+		}
+	}
+
+	detail := fmt.Sprintf("FIELDS:%s|REASON:%s", strings.Join(redactedFields, ","), req.Reason)
+	if err := logAuditTxWithDetail(tx, admin.Username, admin.Title, "REPORT_REDACTION", &req.ReportID, getIP(r), detail); err != nil {
+		http.Error(w, "سیستم ثبت لاگ با خطا مواجه شد", http.StatusServiceUnavailable)
+		return
+	}
+
+	if err := tx.Commit(); err != nil {
+		http.Error(w, "خطا در ثبت نهایی تغییرات", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "بخش‌های مشخص‌شده از پرونده با موفقیت پاک‌سازی شدند."}`))
 }
 
 type AnalyticsResponse struct {
@@ -2312,7 +2651,11 @@ type TypeCount struct {
 }
 
 func GetAnalyticsHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 	var resp AnalyticsResponse
 
 	if admin.Role == "navahi_manategh" {
@@ -2572,7 +2915,11 @@ type RecipientUserItem struct {
 }
 
 func GetForwardingRecipientsHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 	if admin.Role != "superuser" && admin.Role != "edare_kol" && !admin.IsSuperuser {
 		http.Error(w, "دسترسی غیرمجاز", http.StatusForbidden)
 		return
@@ -2612,7 +2959,11 @@ type ForwardReportRequest struct {
 }
 
 func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 	if admin.Role != "superuser" && admin.Role != "edare_kol" && !admin.IsSuperuser {
 		http.Error(w, "دسترسی غیرمجاز: تنها اداره کل و مدیر ارشد مجاز به ارجاع خبر هستند.", http.StatusForbidden)
 		return
@@ -2635,6 +2986,7 @@ func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "پرونده گزارش مورد نظر یافت نشد.", http.StatusNotFound)
 		return
 	}
+	trackingCode = ResolveTrackingCode(trackingCode)
 
 	type validRecip struct {
 		id       int64
@@ -2770,7 +3122,11 @@ type ForwardHistoryItem struct {
 }
 
 func GetForwardingHistoryHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	reportIDStr := r.URL.Query().Get("id")
 	reportID, err := strconv.ParseInt(reportIDStr, 10, 64)
@@ -2868,7 +3224,11 @@ type AdminNotificationsResponse struct {
 }
 
 func GetNotificationsHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var resp AdminNotificationsResponse
 	resp.Notifications = []AdminNotificationItem{}
@@ -2959,7 +3319,11 @@ func GetNotificationsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func MarkNotificationReadHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 	var req struct {
 		ID int64 `json:"id"`
 	}
@@ -2997,7 +3361,11 @@ func MarkNotificationReadHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func MarkAllNotificationsReadHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		_, err := DB.Exec(`
@@ -3071,6 +3439,30 @@ func gregorianToJalali(gy, gm, gd int) (jy, jm, jd int) {
 	return
 }
 
+func stripXMLControlChars(s string) string {
+	var b strings.Builder
+	for _, r := range s {
+		if r == 0x09 || r == 0x0A || r == 0x0D || (r >= 0x20 && r <= 0xD7FF) || (r >= 0xE000 && r <= 0xFFFD) {
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
+}
+
+func resolvePythonBinary() (string, error) {
+	if custom := strings.TrimSpace(os.Getenv("HERASAT_PYTHON_BIN")); custom != "" {
+		if path, err := exec.LookPath(custom); err == nil {
+			return path, nil
+		}
+	}
+	for _, bin := range []string{"python3", "python"} {
+		if path, err := exec.LookPath(bin); err == nil {
+			return path, nil
+		}
+	}
+	return "", errors.New("python runtime unavailable")
+}
+
 func formatJalaliTime(t time.Time) string {
 	t = t.Local()
 	jy, jm, jd := gregorianToJalali(t.Year(), int(t.Month()), t.Day())
@@ -3078,7 +3470,7 @@ func formatJalaliTime(t time.Time) string {
 }
 
 func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
-	admin, ok := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -3126,21 +3518,23 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	trackingCode = ResolveTrackingCode(trackingCode)
+
 	description := ""
-	if dec, err := DecryptAES(encDesc); err == nil {
+	if dec, err := DecryptBoundField("reports", "description", id, encDesc); err == nil {
 		description = dec
 	} else {
 		description = "[خطای رمزگشایی - اصالت محتوا تأیید نشد]"
 	}
 	reporterName := "ثبت نشده"
 	if encName.Valid && encName.String != "" {
-		if dec, err := DecryptAES(encName.String); err == nil && dec != "" {
+		if dec, err := DecryptBoundField("reports", "reporter_name", id, encName.String); err == nil && dec != "" {
 			reporterName = dec
 		}
 	}
 	reporterPhone := "ثبت نشده"
 	if encPhone.Valid && encPhone.String != "" {
-		if dec, err := DecryptAES(encPhone.String); err == nil && dec != "" {
+		if dec, err := DecryptBoundField("reports", "reporter_phone", id, encPhone.String); err == nil && dec != "" {
 			reporterPhone = dec
 		}
 	}
@@ -3148,7 +3542,7 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 	adminResponse := "فاقد پاسخ کارشناس حراست"
 	hasAdminResponse := false
 	if encResponse.Valid && strings.TrimSpace(encResponse.String) != "" {
-		if dec, err := DecryptAES(encResponse.String); err == nil && strings.TrimSpace(dec) != "" {
+		if dec, err := DecryptBoundField("reports", "admin_response", id, encResponse.String); err == nil && strings.TrimSpace(dec) != "" {
 			adminResponse = strings.TrimSpace(dec)
 			hasAdminResponse = true
 		}
@@ -3156,7 +3550,7 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 
 	internalNotes := "فاقد یادداشت محرمانه داخلی."
 	if encNotes.Valid && encNotes.String != "" {
-		if dec, err := DecryptAES(encNotes.String); err == nil && dec != "" {
+		if dec, err := DecryptBoundField("reports", "internal_notes", id, encNotes.String); err == nil && dec != "" {
 			internalNotes = dec
 		}
 	}
@@ -3204,20 +3598,20 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	payload := map[string]interface{}{
-		"tracking_code":   trackingCode,
-		"date":            createdJalali,
-		"print_date":      printJalali,
-		"category":        category,
-		"priority":        priorityLabel,
-		"reporter_type":   reporterTypeLabel,
-		"reporter_info":   reporterInfo,
-		"evidence_status": evidenceStatus,
-		"read_status":     readStatus,
-		"description":     description,
-		"admin_response":  adminResponse,
-		"responded_by":    respBy,
-		"responded_at":    respAtStr,
-		"internal_notes":  internalNotes,
+		"tracking_code":   stripXMLControlChars(trackingCode),
+		"date":            stripXMLControlChars(createdJalali),
+		"print_date":      stripXMLControlChars(printJalali),
+		"category":        stripXMLControlChars(category),
+		"priority":        stripXMLControlChars(priorityLabel),
+		"reporter_type":   stripXMLControlChars(reporterTypeLabel),
+		"reporter_info":   stripXMLControlChars(reporterInfo),
+		"evidence_status": stripXMLControlChars(evidenceStatus),
+		"read_status":     stripXMLControlChars(readStatus),
+		"description":     stripXMLControlChars(description),
+		"admin_response":  stripXMLControlChars(adminResponse),
+		"responded_by":    stripXMLControlChars(respBy),
+		"responded_at":    stripXMLControlChars(respAtStr),
+		"internal_notes":  stripXMLControlChars(internalNotes),
 	}
 
 	jsonBytes, err := json.Marshal(payload)
@@ -3248,10 +3642,17 @@ func ExportReportDocxHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	pythonBin, err := resolvePythonBinary()
+	if err != nil {
+		log.Printf("ERROR: DOCX export python runtime missing: %v", err)
+		http.Error(w, "محیط اجرایی پایتون در سرور یافت نشد.", http.StatusServiceUnavailable)
+		return
+	}
+
 	ctx, cancel := context.WithTimeout(r.Context(), 15*time.Second)
 	defer cancel()
 
-	cmd := exec.CommandContext(ctx, "python", absScriptPath, absTemplatePath)
+	cmd := exec.CommandContext(ctx, pythonBin, absScriptPath, absTemplatePath)
 	cmd.Dir = os.TempDir()
 	cmd.Env = getRestrictedSubprocessEnv()
 	cmd.Stdin = bytes.NewReader(jsonBytes)
@@ -3301,7 +3702,11 @@ type SubmitRegionalResponseRequest struct {
 }
 
 func SubmitRegionalResponseHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req SubmitRegionalResponseRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -3336,8 +3741,9 @@ func SubmitRegionalResponseHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "پرونده یافت نشد.", http.StatusNotFound)
 		return
 	}
+	trackingCode = ResolveTrackingCode(trackingCode)
 
-	encResp, err := EncryptAES(req.Response)
+	encResp, err := EncryptBoundField("report_forwardings", "response_text", fwdID, req.Response)
 	if err != nil {
 		http.Error(w, "خطا در رمزنگاری داده‌ها", http.StatusInternalServerError)
 		return
@@ -3396,7 +3802,11 @@ type RemoveForwardingRequest struct {
 }
 
 func RemoveForwardingHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if admin.Role == "navahi_manategh" {
 		http.Error(w, "شما مجوز لغو ارجاع پرونده را ندارید.", http.StatusForbidden)

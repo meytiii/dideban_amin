@@ -1,11 +1,20 @@
 package main
 
 import (
+	"archive/tar"
+	"bytes"
 	"compress/gzip"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
 	"database/sql"
+	"encoding/binary"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -16,6 +25,43 @@ import (
 )
 
 var backupMutex sync.Mutex
+
+const (
+	backupMagicV1   = "HBAK\x01"
+	backupMagicV2   = "HBAK\x02"
+	backupChunkSize = 1024 * 1024
+)
+
+type BackupManifest struct {
+	Version   string    `json:"version"`
+	CreatedAt time.Time `json:"created_at"`
+	Files     []string  `json:"files"`
+	ChunkSize int       `json:"chunk_size"`
+}
+
+func getPgDumpPath() string {
+	if p := strings.TrimSpace(os.Getenv("HERASAT_PG_DUMP_PATH")); p != "" {
+		if _, err := os.Stat(p); err == nil {
+			return p
+		}
+	}
+	if p, err := exec.LookPath("pg_dump"); err == nil {
+		return p
+	}
+	return ""
+}
+
+func getPsqlPath() string {
+	if p := strings.TrimSpace(os.Getenv("HERASAT_PSQL_PATH")); p != "" {
+		if _, err := os.Stat(p); err == nil {
+			return p
+		}
+	}
+	if p, err := exec.LookPath("psql"); err == nil {
+		return p
+	}
+	return ""
+}
 
 func StartAutoBackup(db *sql.DB) {
 	if db == nil {
@@ -60,7 +106,78 @@ func StartAutoBackup(db *sql.DB) {
 	}()
 }
 
-func PerformBackup(db *sql.DB) (string, error) {
+func parseDBConn(connStr string) (string, string) {
+	connStr = strings.TrimSpace(connStr)
+	if strings.HasPrefix(connStr, "postgres://") || strings.HasPrefix(connStr, "postgresql://") {
+		if u, err := url.Parse(connStr); err == nil {
+			if p, ok := u.User.Password(); ok {
+				u.User = url.User(u.User.Username())
+				return u.String(), p
+			}
+			return connStr, ""
+		}
+	}
+	parts := strings.Fields(connStr)
+	var safeParts []string
+	var password string
+	for _, p := range parts {
+		if strings.HasPrefix(p, "password=") {
+			password = strings.TrimPrefix(p, "password=")
+			password = strings.Trim(password, "'\"")
+		} else {
+			safeParts = append(safeParts, p)
+		}
+	}
+	return strings.Join(safeParts, " "), password
+}
+
+func dumpViaPgDumpToFile(targetFilePath string) error {
+	dockerContainer := strings.TrimSpace(os.Getenv("HERASAT_DOCKER_CONTAINER"))
+	pgDumpPath := getPgDumpPath()
+	if pgDumpPath == "" && dockerContainer == "" {
+		return errors.New("pg_dump executable not found: automated streaming backup requires PostgreSQL client utilities")
+	}
+
+	connStr := os.Getenv("HERASAT_DB_CONN")
+	if connStr == "" {
+		return fmt.Errorf("HERASAT_DB_CONN is empty")
+	}
+
+	safeConn, password := parseDBConn(connStr)
+	var cmd *exec.Cmd
+	if pgDumpPath != "" {
+		cmd = exec.Command(pgDumpPath, "--dbname", safeConn, "--no-owner", "--no-acl", "--clean", "--if-exists")
+		if password != "" {
+			cmd.Env = append(os.Environ(), "PGPASSWORD="+password)
+		}
+	} else {
+		cmd = exec.Command("docker", "exec", "-e", "PGPASSWORD="+password, dockerContainer, "pg_dump", "--dbname", safeConn, "--no-owner", "--no-acl", "--clean", "--if-exists")
+	}
+
+	outFile, err := os.OpenFile(targetFilePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
+	if err != nil {
+		return err
+	}
+	defer outFile.Close()
+
+	gzw := gzip.NewWriter(outFile)
+	defer gzw.Close()
+
+	cmd.Stdout = gzw
+	var stderr strings.Builder
+	cmd.Stderr = &stderr
+
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("pg_dump failure: %v - stderr: %s", err, stderr.String())
+	}
+
+	if err := gzw.Close(); err != nil {
+		return err
+	}
+	return outFile.Close()
+}
+
+func PerformBackup(db *sql.DB, customTarget ...string) (string, error) {
 	backupMutex.Lock()
 	defer backupMutex.Unlock()
 
@@ -70,47 +187,199 @@ func PerformBackup(db *sql.DB) (string, error) {
 	}
 
 	if err := os.MkdirAll(backupDir, 0700); err != nil {
-		_ = logAudit("SYSTEM", "BACKUP_FAILED", "MKDIR_ERROR:"+err.Error(), nil, "127.0.0.1")
+		_ = logAuditWithDetail("SYSTEM", "BackupEngine", "BACKUP_FAILED", nil, "127.0.0.1", "MKDIR_ERROR: "+err.Error())
 		return "", fmt.Errorf("failed to create backup directory: %w", err)
 	}
 
 	timestamp := time.Now().Format("20060102_150405")
-	filename := fmt.Sprintf("backup_herasat_%s.sql.gz", timestamp)
+	filename := fmt.Sprintf("backup_herasat_%s.hbak", timestamp)
 	targetPath := filepath.Join(backupDir, filename)
-
-	f, err := os.OpenFile(targetPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
-	if err != nil {
-		_ = logAudit("SYSTEM", "BACKUP_FAILED", "CREATE_FILE_ERROR:"+err.Error(), nil, "127.0.0.1")
-		return "", fmt.Errorf("failed to open backup target file: %w", err)
-	}
-	defer f.Close()
-
-	gzw := gzip.NewWriter(f)
-	defer gzw.Close()
-
-	var dumpErr error
-	if _, lookErr := exec.LookPath("pg_dump"); lookErr == nil {
-		dumpErr = dumpViaPgDump(gzw)
-	} else if _, dockerErr := exec.LookPath("docker"); dockerErr == nil {
-		dumpErr = dumpViaDocker(gzw)
-	} else {
-		dumpErr = dumpViaNativeSQL(db, gzw)
-	}
-
-	if dumpErr != nil {
-		if closeErr := gzw.Close(); closeErr != nil {
-			log.Printf("[WARN] Failed closing gzip stream during error unwind: %v", closeErr)
+	if len(customTarget) > 0 && strings.TrimSpace(customTarget[0]) != "" {
+		targetPath = strings.TrimSpace(customTarget[0])
+		if dir := filepath.Dir(targetPath); dir != "" {
+			_ = os.MkdirAll(dir, 0700)
 		}
-		_ = f.Close()
-		_ = os.Remove(targetPath)
-		_ = logAudit("SYSTEM", "BACKUP_FAILED", dumpErr.Error(), nil, "127.0.0.1")
-		return "", fmt.Errorf("database backup failed: %w", dumpErr)
 	}
 
-	if err := gzw.Flush(); err != nil {
+	tmpDir, err := os.MkdirTemp("", "herasat_backup_*")
+	if err != nil {
+		_ = logAuditWithDetail("SYSTEM", "BackupEngine", "BACKUP_FAILED", nil, "127.0.0.1", "TMPDIR_ERROR: "+err.Error())
 		return "", err
 	}
-	if err := gzw.Close(); err != nil {
+	defer os.RemoveAll(tmpDir)
+
+	dbDumpPath := filepath.Join(tmpDir, "database.sql.gz")
+	if err := dumpViaPgDumpToFile(dbDumpPath); err != nil {
+		_ = logAuditWithDetail("SYSTEM", "BackupEngine", "BACKUP_FAILED", nil, "127.0.0.1", "PG_DUMP_ERROR: "+err.Error())
+		return "", err
+	}
+
+	var fileList []string
+	fileList = append(fileList, "database.sql.gz")
+
+	uploadsDir := "./secure_uploads"
+	var uploadFiles []string
+	if entries, err := os.ReadDir(uploadsDir); err == nil {
+		for _, e := range entries {
+			if !e.IsDir() {
+				uploadFiles = append(uploadFiles, e.Name())
+				fileList = append(fileList, "uploads/"+e.Name())
+			}
+		}
+	}
+
+	manifest := BackupManifest{
+		Version:   "2.0",
+		CreatedAt: time.Now().UTC(),
+		Files:     fileList,
+		ChunkSize: backupChunkSize,
+	}
+	manifestBytes, err := json.Marshal(manifest)
+	if err != nil {
+		return "", err
+	}
+
+	key := GetBackupKey()
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return "", err
+	}
+	aesgcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return "", err
+	}
+
+	manifestNonce := make([]byte, aesgcm.NonceSize())
+	if _, err := io.ReadFull(rand.Reader, manifestNonce); err != nil {
+		return "", err
+	}
+	manifestCipher := aesgcm.Seal(nil, manifestNonce, manifestBytes, []byte("MANIFEST"))
+
+	tmpTarget := targetPath + ".tmp"
+	outFile, err := os.OpenFile(tmpTarget, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
+	if err != nil {
+		_ = logAuditWithDetail("SYSTEM", "BackupEngine", "BACKUP_FAILED", nil, "127.0.0.1", "WRITE_FILE_ERROR: "+err.Error())
+		return "", err
+	}
+	defer func() {
+		outFile.Close()
+		_ = os.Remove(tmpTarget)
+	}()
+
+	if _, err := outFile.Write([]byte(backupMagicV2)); err != nil {
+		return "", err
+	}
+
+	var mLenBuf [4]byte
+	binary.BigEndian.PutUint32(mLenBuf[:], uint32(len(manifestCipher)))
+	if _, err := outFile.Write(mLenBuf[:]); err != nil {
+		return "", err
+	}
+	if _, err := outFile.Write(manifestNonce); err != nil {
+		return "", err
+	}
+	if _, err := outFile.Write(manifestCipher); err != nil {
+		return "", err
+	}
+
+	pr, pw := io.Pipe()
+
+	go func() {
+		tw := tar.NewWriter(pw)
+
+		dbInfo, statErr := os.Stat(dbDumpPath)
+		if statErr == nil {
+			dbHdr := &tar.Header{
+				Name:    "database.sql.gz",
+				Mode:    0600,
+				Size:    dbInfo.Size(),
+				ModTime: dbInfo.ModTime(),
+			}
+			if err := tw.WriteHeader(dbHdr); err == nil {
+				if f, err := os.Open(dbDumpPath); err == nil {
+					_, _ = io.Copy(tw, f)
+					f.Close()
+				}
+			}
+		}
+
+		for _, name := range uploadFiles {
+			p := filepath.Join(uploadsDir, name)
+			if fi, err := os.Stat(p); err == nil {
+				hdr := &tar.Header{
+					Name:    "uploads/" + name,
+					Mode:    0600,
+					Size:    fi.Size(),
+					ModTime: fi.ModTime(),
+				}
+				if err := tw.WriteHeader(hdr); err == nil {
+					if uf, err := os.Open(p); err == nil {
+						_, _ = io.Copy(tw, uf)
+						uf.Close()
+					}
+				}
+			}
+		}
+
+		_ = tw.Close()
+		_ = pw.Close()
+	}()
+
+	chunkBuf := make([]byte, backupChunkSize)
+	chunkIndex := 0
+
+	for {
+		n, readErr := io.ReadFull(pr, chunkBuf)
+		if n > 0 {
+			chunkData := chunkBuf[:n]
+			isFinal := byte(0x00)
+			if readErr == io.EOF || readErr == io.ErrUnexpectedEOF {
+				isFinal = 0x01
+			}
+
+			chunkNonce := make([]byte, aesgcm.NonceSize())
+			if _, err := io.ReadFull(rand.Reader, chunkNonce); err != nil {
+				pr.Close()
+				return "", err
+			}
+
+			aad := []byte(fmt.Sprintf("CHUNK:%d", chunkIndex))
+			encryptedChunk := aesgcm.Seal(nil, chunkNonce, chunkData, aad)
+
+			var headerBuf [5]byte
+			binary.BigEndian.PutUint32(headerBuf[0:4], uint32(len(encryptedChunk)))
+			headerBuf[4] = isFinal
+
+			if _, err := outFile.Write(headerBuf[:]); err != nil {
+				pr.Close()
+				return "", err
+			}
+			if _, err := outFile.Write(chunkNonce); err != nil {
+				pr.Close()
+				return "", err
+			}
+			if _, err := outFile.Write(encryptedChunk); err != nil {
+				pr.Close()
+				return "", err
+			}
+
+			chunkIndex++
+		}
+
+		if readErr == io.EOF || readErr == io.ErrUnexpectedEOF {
+			break
+		}
+		if readErr != nil {
+			pr.Close()
+			return "", readErr
+		}
+	}
+
+	if err := outFile.Close(); err != nil {
+		return "", err
+	}
+
+	if err := os.Rename(tmpTarget, targetPath); err != nil {
 		return "", err
 	}
 
@@ -122,149 +391,296 @@ func PerformBackup(db *sql.DB) (string, error) {
 	}
 	rotateOldBackups(backupDir, retentionDays)
 
-	_ = logAudit("SYSTEM", "BACKUP_COMPLETED", filename, nil, "127.0.0.1")
+	_ = logAuditWithDetail("SYSTEM", "BackupEngine", "BACKUP_COMPLETED", nil, "127.0.0.1", filename)
 	return targetPath, nil
 }
 
-func dumpViaPgDump(w io.Writer) error {
-	connStr := os.Getenv("HERASAT_DB_CONN")
-	if connStr == "" {
-		return fmt.Errorf("HERASAT_DB_CONN is empty")
+func RestoreBackup(backupFilePath string, db *sql.DB) error {
+	f, err := os.Open(backupFilePath)
+	if err != nil {
+		return fmt.Errorf("failed to open backup file: %w", err)
+	}
+	defer f.Close()
+
+	magicBuf := make([]byte, 5)
+	if _, err := io.ReadFull(f, magicBuf); err != nil {
+		return fmt.Errorf("corrupted backup header: %w", err)
 	}
 
-	cmd := exec.Command("pg_dump", "--dbname", connStr, "--no-owner", "--no-acl", "--clean", "--if-exists")
-	cmd.Stdout = w
-	var stderr strings.Builder
-	cmd.Stderr = &stderr
-
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("pg_dump failure: %v - stderr: %s", err, stderr.String())
-	}
-	return nil
-}
-
-func dumpViaDocker(w io.Writer) error {
-	containerName := "herasat_postgres"
-	dbUser := "herasat_user"
-	dbName := "herasat_db"
-
-	checkCmd := exec.Command("docker", "inspect", "-f", "{{.State.Running}}", containerName)
-	out, err := checkCmd.Output()
-	if err != nil || !strings.Contains(string(out), "true") {
-		return fmt.Errorf("container %s not actively running", containerName)
+	if string(magicBuf) == backupMagicV1 {
+		return restoreLegacyV1Backup(f, db)
 	}
 
-	cmd := exec.Command("docker", "exec", containerName, "pg_dump", "-U", dbUser, "--no-owner", "--no-acl", "--clean", "--if-exists", dbName)
-	cmd.Stdout = w
-	var stderr strings.Builder
-	cmd.Stderr = &stderr
-
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("docker exec pg_dump failure: %v - stderr: %s", err, stderr.String())
+	if string(magicBuf) != backupMagicV2 {
+		return errors.New("unrecognized backup format or corrupted header")
 	}
-	return nil
-}
 
-func dumpViaNativeSQL(db *sql.DB, w io.Writer) error {
-	header := "SET statement_timeout = 0;\nSET client_encoding = 'UTF8';\nBEGIN;\n\n"
-	if _, err := io.WriteString(w, header); err != nil {
+	key := GetBackupKey()
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return err
+	}
+	aesgcm, err := cipher.NewGCM(block)
+	if err != nil {
 		return err
 	}
 
-	rows, err := db.Query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE' ORDER BY table_name")
+	var mLenBuf [4]byte
+	if _, err := io.ReadFull(f, mLenBuf[:]); err != nil {
+		return fmt.Errorf("failed reading manifest length: %w", err)
+	}
+	mLen := binary.BigEndian.Uint32(mLenBuf[:])
+	if mLen > 10<<20 {
+		return errors.New("manifest payload exceeds safety threshold")
+	}
+
+	mNonce := make([]byte, aesgcm.NonceSize())
+	if _, err := io.ReadFull(f, mNonce); err != nil {
+		return fmt.Errorf("failed reading manifest nonce: %w", err)
+	}
+
+	mCipher := make([]byte, mLen)
+	if _, err := io.ReadFull(f, mCipher); err != nil {
+		return fmt.Errorf("failed reading manifest ciphertext: %w", err)
+	}
+
+	mPlain, err := aesgcm.Open(nil, mNonce, mCipher, []byte("MANIFEST"))
 	if err != nil {
-		return fmt.Errorf("failed querying table list: %w", err)
+		return fmt.Errorf("manifest integrity check failed: %w", err)
 	}
-	defer rows.Close()
 
-	var tables []string
-	for rows.Next() {
-		var name string
-		if err := rows.Scan(&name); err == nil {
-			tables = append(tables, name)
-		}
+	var manifest BackupManifest
+	if err := json.Unmarshal(mPlain, &manifest); err != nil {
+		return fmt.Errorf("corrupted manifest structure: %w", err)
 	}
-	_ = rows.Close()
 
-	for _, tbl := range tables {
-		colRows, err := db.Query("SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = 'public' AND table_name = $1 ORDER BY ordinal_position", tbl)
-		if err != nil {
-			continue
-		}
+	pr, pw := io.Pipe()
 
-		var colNames []string
-		for colRows.Next() {
-			var colName, colType string
-			if err := colRows.Scan(&colName, &colType); err == nil {
-				colNames = append(colNames, colName)
-			}
-		}
-		_ = colRows.Close()
+	go func() {
+		defer pw.Close()
+		chunkIndex := 0
 
-		if len(colNames) == 0 {
-			continue
-		}
-
-		qColList := make([]string, len(colNames))
-		for i, c := range colNames {
-			qColList[i] = fmt.Sprintf("\"%s\"", c)
-		}
-		colsJoined := strings.Join(qColList, ", ")
-
-		dataRows, err := db.Query(fmt.Sprintf("SELECT %s FROM \"%s\"", colsJoined, tbl))
-		if err != nil {
-			continue
-		}
-
-		scanArgs := make([]interface{}, len(colNames))
-		values := make([]interface{}, len(colNames))
-		for i := range values {
-			scanArgs[i] = &values[i]
-		}
-
-		for dataRows.Next() {
-			if err := dataRows.Scan(scanArgs...); err != nil {
-				continue
-			}
-
-			valStrings := make([]string, len(values))
-			for i, v := range values {
-				if v == nil {
-					valStrings[i] = "NULL"
-				} else {
-					switch val := v.(type) {
-					case []byte:
-						escaped := strings.ReplaceAll(string(val), "'", "''")
-						valStrings[i] = fmt.Sprintf("'%s'", escaped)
-					case string:
-						escaped := strings.ReplaceAll(val, "'", "''")
-						valStrings[i] = fmt.Sprintf("'%s'", escaped)
-					case time.Time:
-						valStrings[i] = fmt.Sprintf("'%s'", val.Format(time.RFC3339Nano))
-					case bool:
-						if val {
-							valStrings[i] = "TRUE"
-						} else {
-							valStrings[i] = "FALSE"
-						}
-					default:
-						valStrings[i] = fmt.Sprintf("%v", val)
-					}
+		for {
+			var hBuf [5]byte
+			if _, err := io.ReadFull(f, hBuf[:]); err != nil {
+				if err == io.EOF {
+					break
 				}
+				pw.CloseWithError(err)
+				return
 			}
 
-			insertStmt := fmt.Sprintf("INSERT INTO \"%s\" (%s) VALUES (%s);\n", tbl, colsJoined, strings.Join(valStrings, ", "))
-			if _, err := io.WriteString(w, insertStmt); err != nil {
-				_ = dataRows.Close()
+			payloadLen := binary.BigEndian.Uint32(hBuf[0:4])
+			isFinal := hBuf[4]
+			if payloadLen > 10<<20 {
+				pw.CloseWithError(errors.New("chunk payload exceeds safety limit"))
+				return
+			}
+
+			cNonce := make([]byte, aesgcm.NonceSize())
+			if _, err := io.ReadFull(f, cNonce); err != nil {
+				pw.CloseWithError(err)
+				return
+			}
+
+			cPayload := make([]byte, payloadLen)
+			if _, err := io.ReadFull(f, cPayload); err != nil {
+				pw.CloseWithError(err)
+				return
+			}
+
+			aad := []byte(fmt.Sprintf("CHUNK:%d", chunkIndex))
+			chunkPlain, err := aesgcm.Open(nil, cNonce, cPayload, aad)
+			if err != nil {
+				pw.CloseWithError(fmt.Errorf("chunk %d authentication failed: %w", chunkIndex, ErrAuthenticationFailed))
+				return
+			}
+
+			if _, err := pw.Write(chunkPlain); err != nil {
+				return
+			}
+
+			chunkIndex++
+			if isFinal == 0x01 {
+				break
+			}
+		}
+	}()
+
+	tr := tar.NewReader(pr)
+	absUploadDir, _ := filepath.Abs("./secure_uploads")
+	_ = os.MkdirAll(absUploadDir, 0700)
+
+	var extractedSQLPath string
+	tmpDir, err := os.MkdirTemp("", "herasat_restore_*")
+	if err != nil {
+		return err
+	}
+	defer os.RemoveAll(tmpDir)
+
+	for {
+		hdr, err := tr.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return fmt.Errorf("archive stream read error: %w", err)
+		}
+
+		if hdr.Name == "database.sql.gz" {
+			extractedSQLPath = filepath.Join(tmpDir, "database.sql.gz")
+			sf, err := os.OpenFile(extractedSQLPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
+			if err != nil {
 				return err
 			}
+			if _, err := io.Copy(sf, tr); err != nil {
+				sf.Close()
+				return err
+			}
+			sf.Close()
+		} else if strings.HasPrefix(hdr.Name, "uploads/") {
+			relName := strings.TrimPrefix(hdr.Name, "uploads/")
+			targetPath := filepath.Join(absUploadDir, filepath.Clean(relName))
+			if isWithinDirectory(absUploadDir, targetPath) {
+				_ = os.MkdirAll(filepath.Dir(targetPath), 0700)
+				f, err := os.OpenFile(targetPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
+				if err == nil {
+					_, _ = io.Copy(f, tr)
+					f.Close()
+				}
+			}
 		}
-		_ = dataRows.Close()
 	}
 
-	if _, err := io.WriteString(w, "\nCOMMIT;\n"); err != nil {
+	if extractedSQLPath != "" {
+		if err := executeRestoredSQLGz(extractedSQLPath, db); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func executeRestoredSQLGz(sqlGzPath string, db *sql.DB) error {
+	f, err := os.Open(sqlGzPath)
+	if err != nil {
 		return err
 	}
+	defer f.Close()
+
+	gzr, err := gzip.NewReader(f)
+	if err != nil {
+		return err
+	}
+	defer gzr.Close()
+
+	psqlPath := getPsqlPath()
+	dockerContainer := strings.TrimSpace(os.Getenv("HERASAT_DOCKER_CONTAINER"))
+	connStr := os.Getenv("HERASAT_DB_CONN")
+
+	if (psqlPath != "" || dockerContainer != "") && connStr != "" {
+		safeConn, password := parseDBConn(connStr)
+		var cmd *exec.Cmd
+		if psqlPath != "" {
+			cmd = exec.Command(psqlPath, safeConn)
+			if password != "" {
+				cmd.Env = append(os.Environ(), "PGPASSWORD="+password)
+			}
+		} else {
+			cmd = exec.Command("docker", "exec", "-i", "-e", "PGPASSWORD="+password, dockerContainer, "psql", safeConn)
+		}
+		cmd.Stdin = gzr
+		var stderr strings.Builder
+		cmd.Stderr = &stderr
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("psql restore execution failed: %v - %s", err, stderr.String())
+		}
+		return nil
+	}
+
+	if db != nil {
+		b, err := io.ReadAll(gzr)
+		if err != nil {
+			return err
+		}
+		if len(b) > 0 {
+			if _, err := db.Exec(string(b)); err != nil {
+				return fmt.Errorf("failed executing restored SQL: %w", err)
+			}
+		}
+	}
+
+	return nil
+}
+
+func restoreLegacyV1Backup(f *os.File, db *sql.DB) error {
+	data, err := io.ReadAll(f)
+	if err != nil {
+		return err
+	}
+	if len(data) < 12+16 {
+		return errors.New("corrupted legacy backup: insufficient length")
+	}
+
+	nonce := data[:12]
+	ciphertext := data[12:]
+
+	key := GetBackupKey()
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return err
+	}
+	aesgcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return err
+	}
+
+	decrypted, err := aesgcm.Open(nil, nonce, ciphertext, []byte("HBAK_HEADER_V1"))
+	if err != nil {
+		return fmt.Errorf("backup decryption failed: authentication tag mismatch: %w", err)
+	}
+
+	gzr, err := gzip.NewReader(bytes.NewReader(decrypted))
+	if err != nil {
+		return fmt.Errorf("failed to initialize gzip reader: %w", err)
+	}
+	defer gzr.Close()
+
+	tr := tar.NewReader(gzr)
+	absUploadDir, _ := filepath.Abs("./secure_uploads")
+
+	var sqlContent string
+	for {
+		hdr, err := tr.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			break
+		}
+		if hdr.Name == "database.sql" {
+			if b, err := io.ReadAll(tr); err == nil {
+				sqlContent = string(b)
+			}
+		} else if strings.HasPrefix(hdr.Name, "uploads/") {
+			relName := strings.TrimPrefix(hdr.Name, "uploads/")
+			targetPath := filepath.Join(absUploadDir, filepath.Clean(relName))
+			if isWithinDirectory(absUploadDir, targetPath) {
+				_ = os.MkdirAll(filepath.Dir(targetPath), 0700)
+				if outF, err := os.OpenFile(targetPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600); err == nil {
+					_, _ = io.Copy(outF, tr)
+					outF.Close()
+				}
+			}
+		}
+	}
+
+	if sqlContent != "" && db != nil {
+		if _, err := db.Exec(sqlContent); err != nil {
+			return fmt.Errorf("failed executing restored SQL: %w", err)
+		}
+	}
+
 	return nil
 }
 
@@ -276,7 +692,10 @@ func rotateOldBackups(backupDir string, retentionDays int) {
 
 	cutoff := time.Now().AddDate(0, 0, -retentionDays)
 	for _, entry := range entries {
-		if entry.IsDir() || !strings.HasPrefix(entry.Name(), "backup_herasat_") || !strings.HasSuffix(entry.Name(), ".sql.gz") {
+		if entry.IsDir() || !strings.HasPrefix(entry.Name(), "backup_herasat_") {
+			continue
+		}
+		if !strings.HasSuffix(entry.Name(), ".sql.gz") && !strings.HasSuffix(entry.Name(), ".hbak") {
 			continue
 		}
 		info, err := entry.Info()

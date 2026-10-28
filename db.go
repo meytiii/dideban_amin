@@ -2,8 +2,12 @@ package main
 
 import (
 	"context"
+	"crypto/rand"
 	"database/sql"
+	"fmt"
 	"log"
+	"os"
+	"strings"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -33,6 +37,8 @@ func InitDB(connStr string) {
 	log.Println("Successfully initialized native PostgreSQL connection pool.")
 
 	runMigrations()
+	_ = migrateTrackingCodes(DB)
+	bootstrapInitialAdmin(DB)
 
 	if Sessions != nil {
 		Sessions.init(DB)
@@ -45,10 +51,81 @@ func InitDB(connStr string) {
 	}
 
 	enforceImmutableAuditLogs()
+
+	if err := VerifyWORMTriggers(DB); err != nil {
+		log.Fatalf("AFTA WORM Trigger verification failed: %v", err)
+	}
+	if err := VerifyAppRolePrivileges(DB); err != nil {
+		log.Fatalf("Database role privilege verification failed: %v", err)
+	}
+}
+
+type schemaMigration struct {
+	version int
+	name    string
+	sql     string
 }
 
 func runMigrations() {
-	migrationSQL := `
+	if _, err := DB.Exec(`
+		CREATE TABLE IF NOT EXISTS schema_migrations (
+			version INT PRIMARY KEY,
+			name VARCHAR(255) NOT NULL,
+			applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+		);
+	`); err != nil {
+		log.Fatalf("Failed to initialize schema_migrations: %v", err)
+	}
+
+	migrations := []schemaMigration{
+		{
+			version: 1,
+			name:    "initial_schema_and_extensions",
+			sql:     legacyMigrationSQL,
+		},
+		{
+			version: 2,
+			name:    "unique_tracking_hash_index",
+			sql: `
+				DROP INDEX IF EXISTS idx_reports_tracking_hash;
+				CREATE UNIQUE INDEX IF NOT EXISTS idx_reports_tracking_hash ON reports(tracking_code_hash);
+			`,
+		},
+	}
+
+	for _, m := range migrations {
+		var exists bool
+		err := DB.QueryRow("SELECT EXISTS(SELECT 1 FROM schema_migrations WHERE version = $1)", m.version).Scan(&exists)
+		if err != nil {
+			log.Fatalf("Failed to check migration version %d: %v", m.version, err)
+		}
+		if exists {
+			continue
+		}
+
+		tx, err := DB.Begin()
+		if err != nil {
+			log.Fatalf("Failed to begin transaction for migration %d (%s): %v", m.version, m.name, err)
+		}
+
+		if _, err := tx.Exec(m.sql); err != nil {
+			_ = tx.Rollback()
+			log.Fatalf("Migration %d (%s) failed: %v", m.version, m.name, err)
+		}
+
+		if _, err := tx.Exec("INSERT INTO schema_migrations (version, name, applied_at) VALUES ($1, $2, NOW())", m.version, m.name); err != nil {
+			_ = tx.Rollback()
+			log.Fatalf("Failed to record migration %d: %v", m.version, err)
+		}
+
+		if err := tx.Commit(); err != nil {
+			log.Fatalf("Failed to commit migration %d: %v", m.version, err)
+		}
+		log.Printf("Applied database migration %d: %s", m.version, m.name)
+	}
+}
+
+const legacyMigrationSQL = `
 	DO $$
 	BEGIN
 		IF NOT EXISTS (
@@ -208,6 +285,23 @@ func runMigrations() {
 		END IF;
 
 		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'audit_logs' AND column_name = 'detail'
+		) THEN
+			ALTER TABLE audit_logs ADD COLUMN detail TEXT DEFAULT '';
+		END IF;
+
+		IF NOT EXISTS (
+			SELECT 1 FROM information_schema.columns
+			WHERE table_name = 'reports' AND column_name = 'tracking_code_hash'
+		) THEN
+			ALTER TABLE reports ADD COLUMN tracking_code_hash VARCHAR(64) DEFAULT NULL;
+			ALTER TABLE reports ALTER COLUMN tracking_code TYPE TEXT;
+			ALTER TABLE reports DROP CONSTRAINT IF EXISTS reports_tracking_code_key;
+			CREATE INDEX IF NOT EXISTS idx_reports_tracking_hash ON reports(tracking_code_hash);
+		END IF;
+
+		IF NOT EXISTS (
 			SELECT 1 FROM information_schema.tables
 			WHERE table_name = 'admin_password_history'
 		) THEN
@@ -328,10 +422,14 @@ func runMigrations() {
 		is_superuser BOOLEAN NOT NULL DEFAULT FALSE,
 		ip VARCHAR(45) NOT NULL,
 		user_agent TEXT NOT NULL,
+		requires_2fa_setup BOOLEAN NOT NULL DEFAULT FALSE,
+		requires_password_change BOOLEAN NOT NULL DEFAULT FALSE,
 		created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 		last_active TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 		expiry TIMESTAMPTZ NOT NULL
 	);
+	ALTER TABLE admin_sessions ADD COLUMN IF NOT EXISTS requires_2fa_setup BOOLEAN NOT NULL DEFAULT FALSE;
+	ALTER TABLE admin_sessions ADD COLUMN IF NOT EXISTS requires_password_change BOOLEAN NOT NULL DEFAULT FALSE;
 	CREATE INDEX IF NOT EXISTS idx_admin_sessions_username ON admin_sessions(username);
 	CREATE INDEX IF NOT EXISTS idx_admin_sessions_expiry ON admin_sessions(expiry);
 
@@ -342,11 +440,28 @@ func runMigrations() {
 	);
 
 	CREATE TABLE IF NOT EXISTS admin_login_attempts (
-		username VARCHAR(64) PRIMARY KEY,
+		username VARCHAR(64) NOT NULL,
+		ip VARCHAR(45) NOT NULL DEFAULT '',
 		consecutive_failures INT NOT NULL DEFAULT 0,
 		locked_until TIMESTAMPTZ,
-		updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+		updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+		PRIMARY KEY (username, ip)
 	);
+	ALTER TABLE admin_login_attempts ADD COLUMN IF NOT EXISTS ip VARCHAR(45) NOT NULL DEFAULT '';
+	DO $$
+	BEGIN
+		IF EXISTS (
+			SELECT 1 FROM pg_constraint
+			WHERE conrelid = 'admin_login_attempts'::regclass
+			AND contype = 'p'
+			AND array_length(conkey, 1) = 1
+		) THEN
+			ALTER TABLE admin_login_attempts DROP CONSTRAINT admin_login_attempts_pkey;
+			ALTER TABLE admin_login_attempts ADD PRIMARY KEY (username, ip);
+		END IF;
+	EXCEPTION WHEN OTHERS THEN
+		NULL;
+	END $$;
 
 	CREATE TABLE IF NOT EXISTS used_captcha_tokens (
 		signature_b64 TEXT PRIMARY KEY,
@@ -354,6 +469,25 @@ func runMigrations() {
 		created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 	);
 	CREATE INDEX IF NOT EXISTS idx_used_captcha_expires ON used_captcha_tokens(expires_at);
+
+	CREATE TABLE IF NOT EXISTS used_mfa_nonces (
+		nonce VARCHAR(64) PRIMARY KEY,
+		expires_at TIMESTAMPTZ NOT NULL,
+		created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+	);
+	CREATE INDEX IF NOT EXISTS idx_used_mfa_nonces_expiry ON used_mfa_nonces(expires_at);
+
+	CREATE TABLE IF NOT EXISTS pending_deletions (
+		id BIGSERIAL PRIMARY KEY,
+		report_id BIGINT NOT NULL REFERENCES reports(id) ON DELETE CASCADE,
+		requested_by VARCHAR(64) NOT NULL,
+		reason TEXT NOT NULL,
+		requested_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+		status VARCHAR(32) NOT NULL DEFAULT 'pending',
+		approved_by VARCHAR(64) DEFAULT NULL,
+		approved_at TIMESTAMPTZ DEFAULT NULL
+	);
+	CREATE INDEX IF NOT EXISTS idx_pending_del_status ON pending_deletions(status);
 
 	CREATE OR REPLACE FUNCTION touch_reports_updated_at()
 	RETURNS TRIGGER AS $$
@@ -394,12 +528,46 @@ func runMigrations() {
 	  AND NOT EXISTS (
 	      SELECT 1 FROM report_messages rm WHERE rm.report_id = reports.id AND rm.sender_type = 'admin'
 	  );
-	`
-	if _, err := DB.Exec(migrationSQL); err != nil {
-		log.Printf("Warning: Schema migration notice: %v", err)
-	} else {
-		log.Println("Database schema auto-migrations applied successfully.")
+`
+
+func migrateTrackingCodes(db *sql.DB) error {
+	if db == nil {
+		return nil
 	}
+	rows, err := db.Query("SELECT id, tracking_code FROM reports WHERE tracking_code_hash IS NULL OR tracking_code_hash = ''")
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	type item struct {
+		id   int64
+		code string
+	}
+	var items []item
+	for rows.Next() {
+		var it item
+		if err := rows.Scan(&it.id, &it.code); err == nil {
+			items = append(items, it)
+		}
+	}
+	_ = rows.Close()
+
+	for _, it := range items {
+		plainCode := it.code
+		if strings.HasPrefix(plainCode, "v2:") || strings.HasPrefix(plainCode, "v3:") {
+			if dec, err := DecryptAES(plainCode); err == nil && dec != "" {
+				plainCode = dec
+			}
+		}
+		hash := HashTrackingCode(plainCode)
+		enc, err := EncryptAES(plainCode)
+		if err != nil {
+			continue
+		}
+		_, _ = db.Exec("UPDATE reports SET tracking_code = $1, tracking_code_hash = $2 WHERE id = $3", enc, hash, it.id)
+	}
+	return nil
 }
 
 func enforceImmutableAuditLogs() {
@@ -436,5 +604,109 @@ func enforceImmutableAuditLogs() {
 		log.Printf("Notice: Immutable audit log trigger status: %v", err)
 	} else {
 		log.Println("Immutable audit log security constraints active (AFTA WORM Compliant).")
+	}
+}
+
+func VerifyWORMTriggers(db *sql.DB) error {
+	var count int
+	err := db.QueryRow(`
+		SELECT COUNT(*)
+		FROM pg_trigger
+		WHERE tgname IN ('trg_immutable_audit_logs', 'trg_immutable_audit_logs_truncate')
+		  AND tgrelid = 'audit_logs'::regclass
+		  AND tgenabled = 'O'
+	`).Scan(&count)
+	if err != nil {
+		return fmt.Errorf("failed to verify WORM triggers on audit_logs: %w", err)
+	}
+	if count < 2 {
+		return fmt.Errorf("WORM triggers missing or disabled on audit_logs table (found %d of 2)", count)
+	}
+	return nil
+}
+
+func VerifyAppRolePrivileges(db *sql.DB) error {
+	var currentUser string
+	if err := db.QueryRow("SELECT current_user").Scan(&currentUser); err != nil {
+		return fmt.Errorf("failed to query current database user: %w", err)
+	}
+	if currentUser == "herasat_app" {
+		var hasPrivilege bool
+		err := db.QueryRow(`
+			SELECT has_table_privilege('herasat_app', 'audit_logs', 'TRUNCATE') OR
+			       has_table_privilege('herasat_app', 'audit_logs', 'DELETE')
+		`).Scan(&hasPrivilege)
+		if err == nil && hasPrivilege {
+			return fmt.Errorf("security violation: herasat_app possesses prohibited TRUNCATE or DELETE privileges on audit_logs")
+		}
+	}
+	return nil
+}
+
+func generateInitialPassword() string {
+	const (
+		upperChars  = "ABCDEFGHJKLMNPQRSTUVWXYZ"
+		lowerChars  = "abcdefghijkmnopqrstuvwxyz"
+		digitChars  = "23456789"
+		symbolChars = "!@#$%^&*()-_=+"
+	)
+	var password []byte
+	b := make([]byte, 1)
+
+	rand.Read(b)
+	password = append(password, upperChars[int(b[0])%len(upperChars)])
+	rand.Read(b)
+	password = append(password, lowerChars[int(b[0])%len(lowerChars)])
+	rand.Read(b)
+	password = append(password, digitChars[int(b[0])%len(digitChars)])
+	rand.Read(b)
+	password = append(password, symbolChars[int(b[0])%len(symbolChars)])
+
+	allChars := upperChars + lowerChars + digitChars + symbolChars
+	buf := make([]byte, 20)
+	rand.Read(buf)
+	for _, byteVal := range buf {
+		password = append(password, allChars[int(byteVal)%len(allChars)])
+	}
+	return string(password)
+}
+
+func bootstrapInitialAdmin(db *sql.DB) {
+	if db == nil {
+		return
+	}
+
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM admin_users WHERE is_superuser = true OR role = 'superuser'").Scan(&count)
+	if err != nil || count > 0 {
+		return
+	}
+
+	rawPassword := strings.TrimSpace(os.Getenv("HERASAT_INITIAL_ADMIN_PASSWORD"))
+	if rawPassword != "" && len(rawPassword) < 12 {
+		log.Fatalf("FATAL: HERASAT_INITIAL_ADMIN_PASSWORD must be at least 12 characters long.")
+	}
+	if rawPassword == "" {
+		rawPassword = generateInitialPassword()
+		log.Printf("==================================================================")
+		log.Printf("INITIAL ADMINISTRATIVE USER PROVISIONED:")
+		log.Printf("Username: admin_it")
+		log.Printf("Password: %s", rawPassword)
+		log.Printf("NOTE: Store this credential securely. Immediate password change is mandatory.")
+		log.Printf("==================================================================")
+	}
+
+	hashed, err := HashPassword(rawPassword)
+	if err != nil {
+		log.Fatalf("Failed to hash initial admin password: %v", err)
+	}
+
+	_, err = db.Exec(`
+		INSERT INTO admin_users (username, password_hash, full_name, role_title, role, is_superuser, is_active, must_change_password, totp_enforced, created_at, updated_at)
+		VALUES ('admin_it', $1, 'مدیر ارشد فناوری اطلاعات', 'پشتیبانی و امنیت فاوا', 'superuser', true, true, true, true, NOW(), NOW())
+		ON CONFLICT (username) DO NOTHING
+	`, hashed)
+	if err != nil {
+		log.Fatalf("Failed to provision initial administrator: %v", err)
 	}
 }

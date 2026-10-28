@@ -13,6 +13,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -26,11 +27,13 @@ var (
 )
 
 type MFAPendingPayload struct {
-	Username string `json:"username"`
-	Scope    string `json:"scope"`
-	Exp      int64  `json:"exp"`
-	Iat      int64  `json:"iat"`
-	Nonce    string `json:"nonce"`
+	Username  string `json:"username"`
+	Scope     string `json:"scope"`
+	Exp       int64  `json:"exp"`
+	Iat       int64  `json:"iat"`
+	Nonce     string `json:"nonce"`
+	IP        string `json:"ip"`
+	UserAgent string `json:"user_agent"`
 }
 
 type TOTPReplayStore struct {
@@ -43,18 +46,31 @@ var totpReplays = &TOTPReplayStore{
 	used: make(map[string]time.Time),
 }
 
+var (
+	mfaNoncesMu   sync.Mutex
+	mfaUsedNonces = make(map[string]time.Time)
+)
+
 func init() {
 	go func() {
 		ticker := time.NewTicker(2 * time.Minute)
 		for range ticker.C {
-			totpReplays.mu.Lock()
 			now := time.Now()
+			totpReplays.mu.Lock()
 			for k, exp := range totpReplays.used {
 				if now.After(exp) {
 					delete(totpReplays.used, k)
 				}
 			}
 			totpReplays.mu.Unlock()
+
+			mfaNoncesMu.Lock()
+			for k, exp := range mfaUsedNonces {
+				if now.After(exp) {
+					delete(mfaUsedNonces, k)
+				}
+			}
+			mfaNoncesMu.Unlock()
 		}
 	}()
 }
@@ -122,7 +138,7 @@ func VerifyTOTPCode(username, secretBase32, code string) (bool, error) {
 	totpReplays.mu.Lock()
 	defer totpReplays.mu.Unlock()
 
-	for stepOffset := int64(-2); stepOffset <= 2; stepOffset++ {
+	for stepOffset := int64(-1); stepOffset <= 1; stepOffset++ {
 		step := currentStep + stepOffset
 		expectedCode, err := GenerateTOTPCode(cleanSecret, step)
 		if err != nil {
@@ -130,9 +146,17 @@ func VerifyTOTPCode(username, secretBase32, code string) (bool, error) {
 		}
 
 		if subtle.ConstantTimeCompare([]byte(expectedCode), []byte(code)) == 1 {
-			replayKey := fmt.Sprintf("%s:%d", username, step)
+			replayKey := fmt.Sprintf("totp:%s:%d", username, step)
 			if exp, exists := totpReplays.used[replayKey]; exists && time.Now().Before(exp) {
 				return false, ErrTOTPReplayed
+			}
+			if DB != nil {
+				var exists bool
+				_ = DB.QueryRow("SELECT EXISTS(SELECT 1 FROM used_mfa_nonces WHERE nonce = $1 AND expires_at > NOW())", replayKey).Scan(&exists)
+				if exists {
+					return false, ErrTOTPReplayed
+				}
+				_, _ = DB.Exec("INSERT INTO used_mfa_nonces (nonce, expires_at) VALUES ($1, NOW() + INTERVAL '120 seconds') ON CONFLICT (nonce) DO UPDATE SET expires_at = EXCLUDED.expires_at", replayKey)
 			}
 
 			totpReplays.used[replayKey] = time.Now().Add(120 * time.Second)
@@ -143,19 +167,30 @@ func VerifyTOTPCode(username, secretBase32, code string) (bool, error) {
 	return false, ErrInvalidTOTPCode
 }
 
-func GenerateMFAPendingToken(username string) (string, error) {
+func GenerateMFAPendingToken(username string, ipAndUA ...string) (string, error) {
 	nonceBytes := make([]byte, 16)
 	if _, err := rand.Read(nonceBytes); err != nil {
 		return "", err
 	}
 
+	ip := ""
+	ua := ""
+	if len(ipAndUA) > 0 {
+		ip = ipAndUA[0]
+	}
+	if len(ipAndUA) > 1 {
+		ua = ipAndUA[1]
+	}
+
 	now := time.Now()
 	payload := MFAPendingPayload{
-		Username: username,
-		Scope:    "mfa_pending",
-		Iat:      now.Unix(),
-		Exp:      now.Add(3 * time.Minute).Unix(),
-		Nonce:    base64.RawURLEncoding.EncodeToString(nonceBytes),
+		Username:  username,
+		Scope:     "mfa_pending",
+		Iat:       now.Unix(),
+		Exp:       now.Add(3 * time.Minute).Unix(),
+		Nonce:     base64.RawURLEncoding.EncodeToString(nonceBytes),
+		IP:        ip,
+		UserAgent: ua,
 	}
 
 	rawJSON, err := json.Marshal(payload)
@@ -171,10 +206,19 @@ func GenerateMFAPendingToken(username string) (string, error) {
 	return b64Payload + "." + sig, nil
 }
 
-func ValidateMFAPendingToken(token string) (*MFAPendingPayload, error) {
+func ValidateMFAPendingToken(token string, ipAndUA ...string) (*MFAPendingPayload, error) {
 	parts := strings.Split(token, ".")
 	if len(parts) != 2 {
 		return nil, ErrInvalidMFAToken
+	}
+
+	clientIP := ""
+	clientUA := ""
+	if len(ipAndUA) > 0 {
+		clientIP = ipAndUA[0]
+	}
+	if len(ipAndUA) > 1 {
+		clientUA = ipAndUA[1]
 	}
 
 	b64Payload, sig := parts[0], parts[1]
@@ -210,6 +254,31 @@ func ValidateMFAPendingToken(token string) (*MFAPendingPayload, error) {
 		return nil, ErrInvalidMFAToken
 	}
 
+	if payload.IP != "" && clientIP != "" && payload.IP != clientIP {
+		return nil, ErrInvalidMFAToken
+	}
+
+	if payload.UserAgent != "" && clientUA != "" && payload.UserAgent != clientUA {
+		return nil, ErrInvalidMFAToken
+	}
+
+	mfaNoncesMu.Lock()
+	if exp, ok := mfaUsedNonces[payload.Nonce]; ok && time.Now().Before(exp) {
+		mfaNoncesMu.Unlock()
+		return nil, errors.New("mfa token already used")
+	}
+	mfaUsedNonces[payload.Nonce] = time.Unix(payload.Exp, 0)
+	mfaNoncesMu.Unlock()
+
+	if DB != nil {
+		var exists bool
+		_ = DB.QueryRow("SELECT EXISTS(SELECT 1 FROM used_mfa_nonces WHERE nonce = $1)", payload.Nonce).Scan(&exists)
+		if exists {
+			return nil, errors.New("mfa token already used")
+		}
+		_, _ = DB.Exec("INSERT INTO used_mfa_nonces (nonce, expires_at) VALUES ($1, $2)", payload.Nonce, time.Unix(payload.Exp, 0))
+	}
+
 	return &payload, nil
 }
 
@@ -224,31 +293,33 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload, err := ValidateMFAPendingToken(req.MFAToken)
+	clientIP := getIP(r)
+	payload, err := ValidateMFAPendingToken(req.MFAToken, clientIP, r.UserAgent())
 	if err != nil {
 		http.Error(w, "توکن احراز هویت دومرحله‌ای منقضی شده یا نامعتبر است.", http.StatusUnauthorized)
 		return
 	}
 
-	if isLocked, remaining := Lockouts.IsLocked(payload.Username); isLocked {
-		logAudit(payload.Username, "UNKNOWN", "LOCKED_MFA_ATTEMPT", nil, getIP(r))
+	if isLocked, remaining := Lockouts.IsLocked(payload.Username, clientIP); isLocked {
+		logAudit(payload.Username, "UNKNOWN", "LOCKED_MFA_ATTEMPT", nil, clientIP)
 		minutes := int(remaining.Minutes()) + 1
 		http.Error(w, fmt.Sprintf("حساب کاربری شما به دلیل تلاش‌های ناموفق متعدد به مدت %d دقیقه موقتاً مسدود شده است.", minutes), http.StatusTooManyRequests)
 		return
 	}
 
+	var userID int64
 	var storedHash, fullName, roleTitle, role, encSecret string
 	var isSuperuser, totpEnabled bool
 	var passwordChangedAt, dbNow time.Time
 	var mustChangePassword bool
 
 	err = DB.QueryRow(`
-		SELECT password_hash, COALESCE(full_name, ''), role_title, COALESCE(role, 'edare_kol'), is_superuser,
+		SELECT id, password_hash, COALESCE(full_name, ''), role_title, COALESCE(role, 'edare_kol'), is_superuser,
 		       COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false),
 		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), NOW()
 		FROM admin_users
 		WHERE username=$1 AND is_active=true`, payload.Username).Scan(
-		&storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword,
+		&userID, &storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword,
 		&encSecret, &totpEnabled, &dbNow)
 	if err != nil {
 		http.Error(w, "کاربر یافت نشد یا حساب غیرفعال است.", http.StatusUnauthorized)
@@ -260,7 +331,7 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	plainSecret, err := DecryptAES(encSecret)
+	plainSecret, err := DecryptBoundField("admin_users", "totp_secret", userID, encSecret)
 	if err != nil {
 		http.Error(w, "خطای رمزگشایی کلید امنیتی دومرحله‌ای", http.StatusInternalServerError)
 		return
@@ -272,10 +343,12 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "این کد امنیتی قبلاً استفاده شده است. لطفاً منتظر تولید کد بعدی بمانید.", http.StatusConflict)
 			return
 		}
-		if _, justLocked := Lockouts.RecordFailure(payload.Username); justLocked {
-			logAudit(payload.Username, roleTitle, "ACCOUNT_LOCKED", nil, getIP(r))
+		failures, justLocked := Lockouts.RecordFailure(payload.Username, clientIP)
+		ProgressiveDelay(failures)
+		if justLocked {
+			logAudit(payload.Username, roleTitle, "ACCOUNT_LOCKED", nil, clientIP)
 		}
-		logAudit(payload.Username, roleTitle, "FAILED_MFA_VERIFICATION", nil, getIP(r))
+		logAudit(payload.Username, roleTitle, "FAILED_MFA_VERIFICATION", nil, clientIP)
 		http.Error(w, "کد ۶ رقمی امنیتی وارد شده اشتباه است یا منقضی شده است.", http.StatusUnauthorized)
 		return
 	}
@@ -283,7 +356,7 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 	isPasswordExpired := time.Since(passwordChangedAt) > 30*24*time.Hour
 	requiresPasswordChange := mustChangePassword || isPasswordExpired
 
-	Lockouts.Reset(payload.Username)
+	Lockouts.Reset(payload.Username, clientIP)
 	_, _ = DB.Exec("UPDATE admin_users SET last_login_at = NOW() WHERE username = $1", payload.Username)
 	if _, hasActive := Sessions.GetActiveSession(payload.Username); hasActive {
 		if isCooldown, remaining := Sessions.CheckTakeoverCooldown(payload.Username); isCooldown {
@@ -303,17 +376,18 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 	now := time.Now()
 	sessionExpiry := now.Add(15 * time.Minute)
 	Sessions.Set(sessionToken, AdminSession{
-		Token:       sessionToken,
-		Username:    payload.Username,
-		FullName:    fullName,
-		Title:       roleTitle,
-		Role:        role,
-		IsSuperuser: isSuperuser,
-		IP:          getIP(r),
-		UserAgent:   r.UserAgent(),
-		CreatedAt:   now,
-		LastActive:  now,
-		Expiry:      sessionExpiry,
+		Token:                  sessionToken,
+		Username:               payload.Username,
+		FullName:               fullName,
+		Title:                  roleTitle,
+		Role:                   role,
+		IsSuperuser:            isSuperuser,
+		IP:                     clientIP,
+		UserAgent:              r.UserAgent(),
+		RequiresPasswordChange: requiresPasswordChange,
+		CreatedAt:              now,
+		LastActive:             now,
+		Expiry:                 sessionExpiry,
 	})
 
 	http.SetCookie(w, &http.Cookie{
@@ -340,7 +414,7 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteStrictMode,
 	})
 
-	logAudit(payload.Username, roleTitle, "LOGIN_MFA_SUCCESS", nil, getIP(r))
+	logAudit(payload.Username, roleTitle, "LOGIN_MFA_SUCCESS", nil, clientIP)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("X-Server-Time", dbNow.Format(time.RFC3339Nano))
@@ -362,7 +436,11 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Setup2FAHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	secret, err := GenerateBase32Secret()
 	if err != nil {
@@ -381,7 +459,11 @@ func Setup2FAHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		Password string `json:"password"`
@@ -402,25 +484,32 @@ func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	clientIP := getIP(r)
+	var userID int64
 	var storedHash string
-	err := DB.QueryRow(`SELECT password_hash FROM admin_users WHERE username=$1`, admin.Username).Scan(&storedHash)
+	err := DB.QueryRow(`SELECT id, password_hash FROM admin_users WHERE username=$1`, admin.Username).Scan(&userID, &storedHash)
 	if err != nil {
 		http.Error(w, "کاربر یافت نشد.", http.StatusUnauthorized)
 		return
 	}
 
 	if !VerifyPassword(req.Password, storedHash) {
+		failures, justLocked := Lockouts.RecordFailure(admin.Username, clientIP)
+		ProgressiveDelay(failures)
+		if justLocked {
+			logAudit(admin.Username, admin.Title, "ACCOUNT_LOCKED", nil, clientIP)
+		}
 		http.Error(w, "کلمه عبور جاری اشتباه است.", http.StatusUnauthorized)
 		return
 	}
 
-	ok, err := VerifyTOTPCode(admin.Username, req.Secret, req.TOTPCode)
-	if !ok || err != nil {
+	valid, err := VerifyTOTPCode(admin.Username, req.Secret, req.TOTPCode)
+	if !valid || err != nil {
 		http.Error(w, "کد امنیتی تأیید نشد. لطفاً مجدداً امتحان کنید.", http.StatusBadRequest)
 		return
 	}
 
-	encSecret, err := EncryptAES(req.Secret)
+	encSecret, err := EncryptBoundField("admin_users", "totp_secret", userID, req.Secret)
 	if err != nil {
 		http.Error(w, "خطا در ذخیره‌سازی امن کلید", http.StatusInternalServerError)
 		return
@@ -432,7 +521,12 @@ func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logAudit(admin.Username, admin.Title, "ENABLE_2FA", nil, getIP(r))
+	if admin.Requires2FASetup {
+		admin.Requires2FASetup = false
+		Sessions.Set(admin.Token, admin)
+	}
+
+	logAudit(admin.Username, admin.Title, "ENABLE_2FA", nil, clientIP)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
@@ -442,7 +536,11 @@ func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Disable2FAHandler(w http.ResponseWriter, r *http.Request) {
-	admin := r.Context().Value("admin").(AdminSession)
+	admin, ok := adminFromContext(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	var req struct {
 		Password string `json:"password"`
@@ -453,27 +551,41 @@ func Disable2FAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	clientIP := getIP(r)
+	var userID int64
 	var storedHash, encSecret string
-	var totpEnabled bool
-	err := DB.QueryRow(`SELECT password_hash, COALESCE(totp_secret, ''), COALESCE(totp_enabled, false) FROM admin_users WHERE username=$1`, admin.Username).Scan(&storedHash, &encSecret, &totpEnabled)
+	var totpEnabled, isSuperuser, totpEnforced bool
+	err := DB.QueryRow(`
+		SELECT id, password_hash, COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), is_superuser, COALESCE(totp_enforced, false)
+		FROM admin_users WHERE username=$1`, admin.Username).Scan(&userID, &storedHash, &encSecret, &totpEnabled, &isSuperuser, &totpEnforced)
 	if err != nil || !totpEnabled || encSecret == "" {
 		http.Error(w, "تنظیمات احراز هویت دومرحله‌ای نامعتبر است.", http.StatusBadRequest)
 		return
 	}
 
+	if isSuperuser || totpEnforced || os.Getenv("HERASAT_REQUIRE_2FA") == "1" || os.Getenv("HERASAT_REQUIRE_2FA") == "true" {
+		http.Error(w, "امکان غیرفعال‌سازی احراز هویت دومرحله‌ای طبق خط‌مشی امنیتی برای این حساب کاربری وجود ندارد.", http.StatusForbidden)
+		return
+	}
+
 	if !VerifyPassword(req.Password, storedHash) {
+		failures, justLocked := Lockouts.RecordFailure(admin.Username, clientIP)
+		ProgressiveDelay(failures)
+		if justLocked {
+			logAudit(admin.Username, admin.Title, "ACCOUNT_LOCKED", nil, clientIP)
+		}
 		http.Error(w, "رمز عبور جاری اشتباه است.", http.StatusUnauthorized)
 		return
 	}
 
-	plainSecret, err := DecryptAES(encSecret)
+	plainSecret, err := DecryptBoundField("admin_users", "totp_secret", userID, encSecret)
 	if err != nil {
 		http.Error(w, "خطای رمزگشایی کلید امنیتی", http.StatusInternalServerError)
 		return
 	}
 
-	ok, err := VerifyTOTPCode(admin.Username, plainSecret, req.TOTPCode)
-	if !ok || err != nil {
+	valid, err := VerifyTOTPCode(admin.Username, plainSecret, req.TOTPCode)
+	if !valid || err != nil {
 		http.Error(w, "کد امنیتی اشتباه است.", http.StatusBadRequest)
 		return
 	}
@@ -484,7 +596,7 @@ func Disable2FAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logAudit(admin.Username, admin.Title, "DISABLE_2FA", nil, getIP(r))
+	logAudit(admin.Username, admin.Title, "DISABLE_2FA", nil, clientIP)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{

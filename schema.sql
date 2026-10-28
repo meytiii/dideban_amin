@@ -3,7 +3,8 @@ REVOKE ALL ON SCHEMA public FROM PUBLIC;
 
 CREATE TABLE IF NOT EXISTS reports (
     id BIGSERIAL PRIMARY KEY,
-    tracking_code VARCHAR(32) UNIQUE NOT NULL,
+    tracking_code TEXT NOT NULL,
+    tracking_code_hash VARCHAR(64) DEFAULT NULL,
     category VARCHAR(64) NOT NULL,
     report_type VARCHAR(32) NOT NULL,
     priority VARCHAR(32) NOT NULL DEFAULT 'normal',
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS reports (
 );
 
 CREATE INDEX IF NOT EXISTS idx_reports_tracking_code ON reports(tracking_code);
+CREATE INDEX IF NOT EXISTS idx_reports_tracking_hash ON reports(tracking_code_hash);
 CREATE INDEX IF NOT EXISTS idx_reports_is_read ON reports(is_read);
 CREATE INDEX IF NOT EXISTS idx_reports_priority ON reports(priority);
 CREATE INDEX IF NOT EXISTS idx_reports_has_new_message ON reports(has_new_message);
@@ -107,6 +109,7 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     action VARCHAR(64) NOT NULL,
     target_report_id BIGINT DEFAULT NULL,
     ip_address VARCHAR(45) NOT NULL,
+    detail TEXT DEFAULT '',
     prev_hash VARCHAR(64) NOT NULL DEFAULT '0000000000000000000000000000000000000000000000000000000000000000',
     entry_hash VARCHAR(64) NOT NULL DEFAULT '',
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -142,6 +145,85 @@ CREATE INDEX IF NOT EXISTS idx_admin_notifs_is_read ON admin_notifications(is_re
 CREATE INDEX IF NOT EXISTS idx_admin_notifs_created_at ON admin_notifications(created_at);
 CREATE INDEX IF NOT EXISTS idx_admin_notifs_recipient ON admin_notifications(recipient_username);
 
+CREATE TABLE IF NOT EXISTS admin_sessions (
+    token_hash CHAR(64) PRIMARY KEY,
+    username VARCHAR(64) NOT NULL,
+    full_name VARCHAR(128) NOT NULL,
+    role_title VARCHAR(128) NOT NULL,
+    role VARCHAR(32) NOT NULL,
+    is_superuser BOOLEAN NOT NULL DEFAULT FALSE,
+    ip VARCHAR(45) NOT NULL,
+    user_agent TEXT NOT NULL,
+    requires_2fa_setup BOOLEAN NOT NULL DEFAULT FALSE,
+    requires_password_change BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_active TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    expiry TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_admin_sessions_username ON admin_sessions(username);
+CREATE INDEX IF NOT EXISTS idx_admin_sessions_expiry ON admin_sessions(expiry);
+
+CREATE TABLE IF NOT EXISTS admin_session_kicks (
+    token_hash CHAR(64) PRIMARY KEY,
+    reason VARCHAR(64) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS admin_login_attempts (
+    username VARCHAR(64) NOT NULL,
+    ip VARCHAR(45) NOT NULL DEFAULT '',
+    consecutive_failures INT NOT NULL DEFAULT 0,
+    locked_until TIMESTAMPTZ,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (username, ip)
+);
+
+CREATE TABLE IF NOT EXISTS used_captcha_tokens (
+    signature_b64 TEXT PRIMARY KEY,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_used_captcha_expires ON used_captcha_tokens(expires_at);
+
+CREATE TABLE IF NOT EXISTS used_mfa_nonces (
+    nonce VARCHAR(64) PRIMARY KEY,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_used_mfa_nonces_expiry ON used_mfa_nonces(expires_at);
+
+CREATE TABLE IF NOT EXISTS pending_deletions (
+    id BIGSERIAL PRIMARY KEY,
+    report_id BIGINT NOT NULL REFERENCES reports(id) ON DELETE CASCADE,
+    requested_by VARCHAR(64) NOT NULL,
+    reason TEXT NOT NULL,
+    requested_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    status VARCHAR(32) NOT NULL DEFAULT 'pending',
+    approved_by VARCHAR(64) DEFAULT NULL,
+    approved_at TIMESTAMPTZ DEFAULT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_pending_del_status ON pending_deletions(status);
+
+CREATE OR REPLACE FUNCTION touch_reports_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.updated_at IS NOT DISTINCT FROM OLD.updated_at THEN
+        NEW.updated_at := NOW();
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_reports_updated_at ON reports;
+CREATE TRIGGER trg_reports_updated_at
+BEFORE UPDATE ON reports
+FOR EACH ROW
+EXECUTE FUNCTION touch_reports_updated_at();
+
 CREATE OR REPLACE FUNCTION prevent_audit_log_modification()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -162,3 +244,12 @@ FOR EACH STATEMENT
 EXECUTE FUNCTION prevent_audit_log_modification();
 
 REVOKE UPDATE, DELETE, TRUNCATE ON audit_logs FROM PUBLIC;
+
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'herasat_app') THEN
+        GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO herasat_app;
+        REVOKE UPDATE, DELETE, TRUNCATE ON audit_logs FROM herasat_app;
+        GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO herasat_app;
+    END IF;
+END $$;

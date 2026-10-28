@@ -9,225 +9,197 @@ import (
 	"strings"
 )
 
-func reencryptLegacyData(db *sql.DB) error {
-	log.Println("[MIGRATION-V2] Starting cryptographic key separation data migration...")
+func ReencryptDatabase(db *sql.DB) (int, error) {
+	if db == nil {
+		return 0, fmt.Errorf("database connection is nil")
+	}
 
-	reportsMigrated := 0
-	rows, err := db.Query(`
-		SELECT id, description, reporter_name, reporter_phone, admin_response, internal_notes
+	keyRingMu.RLock()
+	currentKID := activeKeyID
+	keyRingMu.RUnlock()
+	boundPrefix := fmt.Sprintf("v3:%s:b:", currentKID)
+	unboundPrefix := fmt.Sprintf("v3:%s:f:", currentKID)
+
+	totalMigrated := 0
+
+	repRows, err := db.Query(`
+		SELECT id, description, reporter_name, reporter_phone, admin_response, internal_notes, tracking_code
 		FROM reports
+		ORDER BY id ASC
 	`)
 	if err != nil {
-		return fmt.Errorf("failed to query reports for migration: %w", err)
+		return totalMigrated, fmt.Errorf("failed to query reports: %w", err)
 	}
-	defer rows.Close()
+	defer repRows.Close()
 
-	type reportMigrationItem struct {
-		id          int64
-		desc        string
-		name        sql.NullString
-		phone       sql.NullString
-		response    sql.NullString
-		notes       sql.NullString
-		needsUpdate bool
+	type repItem struct {
+		id           int64
+		desc         string
+		name         sql.NullString
+		phone        sql.NullString
+		response     sql.NullString
+		notes        sql.NullString
+		trackingCode string
 	}
-
-	var reportItems []reportMigrationItem
-	for rows.Next() {
-		var item reportMigrationItem
-		if err := rows.Scan(&item.id, &item.desc, &item.name, &item.phone, &item.response, &item.notes); err != nil {
-			return fmt.Errorf("failed to scan report row: %w", err)
-		}
-
-		if !strings.HasPrefix(item.desc, "v2:") {
-			item.needsUpdate = true
-		}
-		if item.name.Valid && item.name.String != "" && !strings.HasPrefix(item.name.String, "v2:") {
-			item.needsUpdate = true
-		}
-		if item.phone.Valid && item.phone.String != "" && !strings.HasPrefix(item.phone.String, "v2:") {
-			item.needsUpdate = true
-		}
-		if item.response.Valid && item.response.String != "" && !strings.HasPrefix(item.response.String, "v2:") {
-			item.needsUpdate = true
-		}
-		if item.notes.Valid && item.notes.String != "" && !strings.HasPrefix(item.notes.String, "v2:") {
-			item.needsUpdate = true
-		}
-
-		if item.needsUpdate {
-			reportItems = append(reportItems, item)
+	var repItems []repItem
+	for repRows.Next() {
+		var it repItem
+		if err := repRows.Scan(&it.id, &it.desc, &it.name, &it.phone, &it.response, &it.notes, &it.trackingCode); err == nil {
+			repItems = append(repItems, it)
 		}
 	}
-	rows.Close()
+	_ = repRows.Close()
 
-	for _, item := range reportItems {
-		tx, err := db.Begin()
-		if err != nil {
-			return fmt.Errorf("failed to start report tx: %w", err)
-		}
+	for _, it := range repItems {
+		needsUpdate := false
 
-		newDesc := item.desc
-		if !strings.HasPrefix(item.desc, "v2:") {
-			dec, err := DecryptAES(item.desc)
-			if err != nil {
-				log.Printf("[MIGRATION-V2] Warning: failed to decrypt report %d description: %v (skipping)", item.id, err)
-				tx.Rollback()
-				continue
-			}
-			newDesc, err = EncryptAES(dec)
-			if err != nil {
-				log.Printf("[MIGRATION-V2] Warning: failed to re-encrypt report %d description: %v (skipping)", item.id, err)
-				tx.Rollback()
-				continue
+		newDesc := it.desc
+		if !strings.HasPrefix(it.desc, boundPrefix) {
+			dec, err := DecryptBoundField("reports", "description", it.id, it.desc)
+			if err == nil {
+				if enc, err := EncryptBoundField("reports", "description", it.id, dec); err == nil {
+					newDesc = enc
+					needsUpdate = true
+				}
 			}
 		}
 
-		var newName sql.NullString
-		if item.name.Valid && item.name.String != "" {
-			if strings.HasPrefix(item.name.String, "v2:") {
-				newName = item.name
-			} else {
-				dec, err := DecryptAES(item.name.String)
-				if err != nil {
-					log.Printf("[MIGRATION-V2] Warning: failed to decrypt report %d name: %v", item.id, err)
-				} else if enc, err := EncryptAES(dec); err == nil {
+		newName := it.name
+		if it.name.Valid && it.name.String != "" && !strings.HasPrefix(it.name.String, boundPrefix) {
+			dec, err := DecryptBoundField("reports", "reporter_name", it.id, it.name.String)
+			if err == nil {
+				if enc, err := EncryptBoundField("reports", "reporter_name", it.id, dec); err == nil {
 					newName = sql.NullString{String: enc, Valid: true}
+					needsUpdate = true
 				}
 			}
 		}
 
-		var newPhone sql.NullString
-		if item.phone.Valid && item.phone.String != "" {
-			if strings.HasPrefix(item.phone.String, "v2:") {
-				newPhone = item.phone
-			} else {
-				dec, err := DecryptAES(item.phone.String)
-				if err != nil {
-					log.Printf("[MIGRATION-V2] Warning: failed to decrypt report %d phone: %v", item.id, err)
-				} else if enc, err := EncryptAES(dec); err == nil {
+		newPhone := it.phone
+		if it.phone.Valid && it.phone.String != "" && !strings.HasPrefix(it.phone.String, boundPrefix) {
+			dec, err := DecryptBoundField("reports", "reporter_phone", it.id, it.phone.String)
+			if err == nil {
+				if enc, err := EncryptBoundField("reports", "reporter_phone", it.id, dec); err == nil {
 					newPhone = sql.NullString{String: enc, Valid: true}
+					needsUpdate = true
 				}
 			}
 		}
 
-		var newResponse sql.NullString
-		if item.response.Valid && item.response.String != "" {
-			if strings.HasPrefix(item.response.String, "v2:") {
-				newResponse = item.response
-			} else {
-				dec, err := DecryptAES(item.response.String)
-				if err != nil {
-					log.Printf("[MIGRATION-V2] Warning: failed to decrypt report %d response: %v", item.id, err)
-				} else if enc, err := EncryptAES(dec); err == nil {
+		newResponse := it.response
+		if it.response.Valid && it.response.String != "" && !strings.HasPrefix(it.response.String, boundPrefix) {
+			dec, err := DecryptBoundField("reports", "admin_response", it.id, it.response.String)
+			if err == nil {
+				if enc, err := EncryptBoundField("reports", "admin_response", it.id, dec); err == nil {
 					newResponse = sql.NullString{String: enc, Valid: true}
+					needsUpdate = true
 				}
 			}
 		}
 
-		var newNotes sql.NullString
-		if item.notes.Valid && item.notes.String != "" {
-			if strings.HasPrefix(item.notes.String, "v2:") {
-				newNotes = item.notes
-			} else {
-				dec, err := DecryptAES(item.notes.String)
-				if err != nil {
-					log.Printf("[MIGRATION-V2] Warning: failed to decrypt report %d notes: %v", item.id, err)
-				} else if enc, err := EncryptAES(dec); err == nil {
+		newNotes := it.notes
+		if it.notes.Valid && it.notes.String != "" && !strings.HasPrefix(it.notes.String, boundPrefix) {
+			dec, err := DecryptBoundField("reports", "internal_notes", it.id, it.notes.String)
+			if err == nil {
+				if enc, err := EncryptBoundField("reports", "internal_notes", it.id, dec); err == nil {
 					newNotes = sql.NullString{String: enc, Valid: true}
+					needsUpdate = true
 				}
 			}
 		}
 
-		_, err = tx.Exec(`
-			UPDATE reports
-			SET description = $1, reporter_name = $2, reporter_phone = $3, admin_response = $4, internal_notes = $5
-			WHERE id = $6
-		`, newDesc, newName, newPhone, newResponse, newNotes, item.id)
-		if err != nil {
-			tx.Rollback()
-			return fmt.Errorf("failed to update report %d: %w", item.id, err)
+		newTrackingCode := it.trackingCode
+		plainTracking := it.trackingCode
+		if strings.HasPrefix(plainTracking, "v2:") || strings.HasPrefix(plainTracking, "v3:") {
+			if dec, err := DecryptAES(plainTracking); err == nil && dec != "" {
+				plainTracking = dec
+			}
+		}
+		newTrackingHash := HashTrackingCode(plainTracking)
+		if !strings.HasPrefix(it.trackingCode, unboundPrefix) {
+			if enc, err := EncryptAES(plainTracking); err == nil {
+				newTrackingCode = enc
+				needsUpdate = true
+			}
 		}
 
-		if err := tx.Commit(); err != nil {
-			return fmt.Errorf("failed to commit report %d update: %w", item.id, err)
+		if needsUpdate {
+			_, err = db.Exec(`
+				UPDATE reports
+				SET description = $1, reporter_name = $2, reporter_phone = $3, admin_response = $4, internal_notes = $5,
+				    tracking_code = $6, tracking_code_hash = $7
+				WHERE id = $8
+			`, newDesc, newName, newPhone, newResponse, newNotes, newTrackingCode, newTrackingHash, it.id)
+			if err == nil {
+				totalMigrated++
+			}
 		}
-		reportsMigrated++
 	}
-	log.Printf("[MIGRATION-V2] Migrated %d reports to v2 encryption.", reportsMigrated)
 
-	messagesMigrated := 0
-	msgRows, err := db.Query(`SELECT id, message_text FROM report_messages`)
+	msgRows, err := db.Query(`SELECT id, message_text FROM report_messages ORDER BY id ASC`)
 	if err == nil {
-		defer msgRows.Close()
 		type msgItem struct {
-			id      int64
-			message string
+			id  int64
+			msg string
 		}
 		var msgItems []msgItem
 		for msgRows.Next() {
 			var m msgItem
-			if err := msgRows.Scan(&m.id, &m.message); err == nil {
-				if !strings.HasPrefix(m.message, "v2:") {
-					msgItems = append(msgItems, m)
+			if err := msgRows.Scan(&m.id, &m.msg); err == nil {
+				msgItems = append(msgItems, m)
+			}
+		}
+		_ = msgRows.Close()
+
+		for _, m := range msgItems {
+			if !strings.HasPrefix(m.msg, boundPrefix) {
+				dec, err := DecryptBoundField("report_messages", "message", m.id, m.msg)
+				if err == nil {
+					if enc, err := EncryptBoundField("report_messages", "message", m.id, dec); err == nil {
+						if _, err := db.Exec(`UPDATE report_messages SET message_text = $1 WHERE id = $2`, enc, m.id); err == nil {
+							totalMigrated++
+						}
+					}
 				}
 			}
 		}
-		msgRows.Close()
-
-		for _, m := range msgItems {
-			dec, err := DecryptAES(m.message)
-			if err != nil {
-				return fmt.Errorf("failed to decrypt message %d: %w", m.id, err)
-			}
-			enc, err := EncryptAES(dec)
-			if err != nil {
-				return fmt.Errorf("failed to re-encrypt message %d: %w", m.id, err)
-			}
-			_, err = db.Exec(`UPDATE report_messages SET message_text = $1 WHERE id = $2`, enc, m.id)
-			if err != nil {
-				return fmt.Errorf("failed to update message %d: %w", m.id, err)
-			}
-			messagesMigrated++
-		}
 	}
-	log.Printf("[MIGRATION-V2] Migrated %d messages to v2 encryption.", messagesMigrated)
 
-	filesMigrated := 0
-	diskBlobsMigrated := 0
-	fileRows, err := db.Query(`SELECT id, file_path, file_name FROM evidence_files`)
+	fileRows, err := db.Query(`SELECT id, file_path, file_name FROM evidence_files ORDER BY id ASC`)
 	if err == nil {
-		defer fileRows.Close()
 		type fileItem struct {
 			id       int64
 			encPath  string
 			fileName sql.NullString
 		}
-		var fItems []fileItem
+		var fileItems []fileItem
 		for fileRows.Next() {
 			var fi fileItem
 			if err := fileRows.Scan(&fi.id, &fi.encPath, &fi.fileName); err == nil {
-				fItems = append(fItems, fi)
+				fileItems = append(fileItems, fi)
 			}
 		}
-		fileRows.Close()
+		_ = fileRows.Close()
 
-		for _, fi := range fItems {
+		for _, fi := range fileItems {
+			needsUpdate := false
+			newPath := fi.encPath
+			realPath, err := DecryptBoundField("evidence_files", "file_path", fi.id, fi.encPath)
+			if err == nil && !strings.HasPrefix(fi.encPath, boundPrefix) {
+				if enc, err := EncryptBoundField("evidence_files", "file_path", fi.id, realPath); err == nil {
+					newPath = enc
+					needsUpdate = true
+				}
+			}
 
-			realPath, decErr := DecryptFilePath(fi.encPath)
-			if decErr == nil && realPath != "" {
-
-				if fileData, readErr := os.ReadFile(realPath); readErr == nil {
-					if !bytes.HasPrefix(fileData, []byte("HENC\x02")) {
-						decBlob, decBlobErr := DecryptFileBytes(fileData)
-						if decBlobErr == nil {
-							encBlob, encBlobErr := EncryptFileBytes(decBlob)
-							if encBlobErr == nil {
+			if realPath != "" {
+				if fileData, err := os.ReadFile(realPath); err == nil {
+					if !bytes.HasPrefix(fileData, []byte("HENC\x03")) {
+						if decBlob, err := DecryptFileBytes(fileData); err == nil {
+							if encBlob, err := EncryptFileBytes(decBlob); err == nil {
 								tmpPath := realPath + ".migtmp"
-								if writeErr := os.WriteFile(tmpPath, encBlob, 0600); writeErr == nil {
-									if renErr := os.Rename(tmpPath, realPath); renErr == nil {
-										diskBlobsMigrated++
-									} else {
+								if err := os.WriteFile(tmpPath, encBlob, 0600); err == nil {
+									if err := os.Rename(tmpPath, realPath); err != nil {
 										_ = os.Remove(tmpPath)
 									}
 								}
@@ -237,39 +209,91 @@ func reencryptLegacyData(db *sql.DB) error {
 				}
 			}
 
-			needsPathUpdate := !strings.HasPrefix(fi.encPath, "v2:p:")
-			needsNameUpdate := fi.fileName.Valid && fi.fileName.String != "" && !strings.HasPrefix(fi.fileName.String, "v2:p:")
-
-			if needsPathUpdate || needsNameUpdate {
-				newEncPath := fi.encPath
-				if needsPathUpdate && decErr == nil {
-					newEncPath, _ = EncryptFilePath(realPath)
-				}
-
-				newEncName := fi.fileName
-				if needsNameUpdate {
-					decName, err := DecryptFilePath(fi.fileName.String)
-					if err == nil {
-						encName, err := EncryptFilePath(decName)
-						if err == nil {
-							newEncName = sql.NullString{String: encName, Valid: true}
-						}
+			newName := fi.fileName
+			if fi.fileName.Valid && fi.fileName.String != "" && !strings.HasPrefix(fi.fileName.String, boundPrefix) {
+				decName, err := DecryptBoundField("evidence_files", "file_name", fi.id, fi.fileName.String)
+				if err == nil {
+					if encName, err := EncryptBoundField("evidence_files", "file_name", fi.id, decName); err == nil {
+						newName = sql.NullString{String: encName, Valid: true}
+						needsUpdate = true
 					}
 				}
+			}
 
-				_, err = db.Exec(`
-					UPDATE evidence_files
-					SET file_path = $1, file_name = $2
-					WHERE id = $3
-				`, newEncPath, newEncName, fi.id)
-				if err == nil {
-					filesMigrated++
+			if needsUpdate {
+				if _, err := db.Exec(`UPDATE evidence_files SET file_path = $1, file_name = $2 WHERE id = $3`, newPath, newName, fi.id); err == nil {
+					totalMigrated++
 				}
 			}
 		}
 	}
-	log.Printf("[MIGRATION-V2] Migrated %d evidence file records and %d disk blobs.", filesMigrated, diskBlobsMigrated)
 
-	log.Println("[MIGRATION-V2] Cryptographic migration completed successfully.")
+	userRows, err := db.Query(`SELECT id, totp_secret FROM admin_users WHERE totp_secret IS NOT NULL AND totp_secret != ''`)
+	if err == nil {
+		type userItem struct {
+			id     int64
+			secret string
+		}
+		var userItems []userItem
+		for userRows.Next() {
+			var ui userItem
+			if err := userRows.Scan(&ui.id, &ui.secret); err == nil {
+				userItems = append(userItems, ui)
+			}
+		}
+		_ = userRows.Close()
+
+		for _, ui := range userItems {
+			if !strings.HasPrefix(ui.secret, boundPrefix) {
+				dec, err := DecryptBoundField("admin_users", "totp_secret", ui.id, ui.secret)
+				if err == nil {
+					if enc, err := EncryptBoundField("admin_users", "totp_secret", ui.id, dec); err == nil {
+						if _, err := db.Exec(`UPDATE admin_users SET totp_secret = $1 WHERE id = $2`, enc, ui.id); err == nil {
+							totalMigrated++
+						}
+					}
+				}
+			}
+		}
+	}
+
+	fwdRows, err := db.Query(`SELECT id, response_text FROM report_forwardings WHERE response_text IS NOT NULL AND response_text != ''`)
+	if err == nil {
+		type fwdItem struct {
+			id       int64
+			response string
+		}
+		var fwdItems []fwdItem
+		for fwdRows.Next() {
+			var fi fwdItem
+			if err := fwdRows.Scan(&fi.id, &fi.response); err == nil {
+				fwdItems = append(fwdItems, fi)
+			}
+		}
+		_ = fwdRows.Close()
+
+		for _, fi := range fwdItems {
+			if !strings.HasPrefix(fi.response, boundPrefix) {
+				dec, err := DecryptBoundField("report_forwardings", "response_text", fi.id, fi.response)
+				if err == nil {
+					if enc, err := EncryptBoundField("report_forwardings", "response_text", fi.id, dec); err == nil {
+						if _, err := db.Exec(`UPDATE report_forwardings SET response_text = $1 WHERE id = $2`, enc, fi.id); err == nil {
+							totalMigrated++
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return totalMigrated, nil
+}
+
+func reencryptLegacyData(db *sql.DB) error {
+	count, err := ReencryptDatabase(db)
+	if err != nil {
+		return err
+	}
+	log.Printf("[INFO] Cryptographic database re-encryption completed: %d records updated to bound format.", count)
 	return nil
 }
