@@ -1,0 +1,14 @@
+.git
+.gitignore
+.env
+*.env
+.env.*
+backups/
+secure_uploads/
+tests/
+scratch/
+graphify-out/
+.gemini/
+.agents/
+*.exe
+*.log

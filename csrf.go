@@ -2,34 +2,57 @@ package main
 
 import (
 	"crypto/subtle"
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 )
 
-func isOriginAllowed(origin string) bool {
-	allowed := os.Getenv("HERASAT_ALLOWED_ORIGINS")
-	if strings.TrimSpace(allowed) == "" {
+func isOriginAllowed(origin string, r *http.Request) bool {
+	allowed := strings.TrimSpace(os.Getenv("HERASAT_ALLOWED_ORIGINS"))
+	if allowed != "" {
+		origins := strings.Split(allowed, ",")
+		for _, o := range origins {
+			if strings.TrimSpace(o) == origin {
+				return true
+			}
+		}
+		return false
+	}
+	if origin == "" {
 		return true
 	}
-	origins := strings.Split(allowed, ",")
-	for _, o := range origins {
-		if strings.TrimSpace(o) == origin {
-			return true
-		}
+	u, err := url.Parse(origin)
+	if err != nil {
+		return false
 	}
-	return false
+	host := r.Host
+	if h, _, err := net.SplitHostPort(host); err == nil {
+		host = h
+	}
+	originHost := u.Host
+	if h, _, err := net.SplitHostPort(originHost); err == nil {
+		originHost = h
+	}
+	return strings.EqualFold(host, originHost)
 }
 
 func CSRFMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		method := strings.ToUpper(r.Method)
 		if method == http.MethodPost || method == http.MethodPut || method == http.MethodPatch || method == http.MethodDelete {
-			if origin := r.Header.Get("Origin"); origin != "" {
-				if !isOriginAllowed(origin) {
-					http.Error(w, "Forbidden: Invalid Origin", http.StatusForbidden)
-					return
+			origin := r.Header.Get("Origin")
+			if origin == "" {
+				if ref := r.Header.Get("Referer"); ref != "" {
+					if u, err := url.Parse(ref); err == nil {
+						origin = u.Scheme + "://" + u.Host
+					}
 				}
+			}
+			if origin != "" && !isOriginAllowed(origin, r) {
+				http.Error(w, "Forbidden: Invalid Origin", http.StatusForbidden)
+				return
 			}
 
 			csrfHeader := r.Header.Get("X-CSRF-Token")

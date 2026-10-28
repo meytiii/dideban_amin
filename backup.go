@@ -151,7 +151,10 @@ func dumpViaPgDumpToFile(targetFilePath string) error {
 			cmd.Env = append(os.Environ(), "PGPASSWORD="+password)
 		}
 	} else {
-		cmd = exec.Command("docker", "exec", "-e", "PGPASSWORD="+password, dockerContainer, "pg_dump", "--dbname", safeConn, "--no-owner", "--no-acl", "--clean", "--if-exists")
+		cmd = exec.Command("docker", "exec", "-e", "PGPASSWORD", dockerContainer, "pg_dump", "--dbname", safeConn, "--no-owner", "--no-acl", "--clean", "--if-exists")
+		if password != "" {
+			cmd.Env = append(os.Environ(), "PGPASSWORD="+password)
+		}
 	}
 
 	outFile, err := os.OpenFile(targetFilePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
@@ -528,24 +531,33 @@ func RestoreBackup(backupFilePath string, db *sql.DB) error {
 		}
 
 		if hdr.Name == "database.sql.gz" {
+			if hdr.Typeflag != tar.TypeReg {
+				continue
+			}
 			extractedSQLPath = filepath.Join(tmpDir, "database.sql.gz")
 			sf, err := os.OpenFile(extractedSQLPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
 			if err != nil {
 				return err
 			}
-			if _, err := io.Copy(sf, tr); err != nil {
+			if _, err := io.Copy(sf, io.LimitReader(tr, 500<<20)); err != nil {
 				sf.Close()
 				return err
 			}
 			sf.Close()
 		} else if strings.HasPrefix(hdr.Name, "uploads/") {
+			if hdr.Typeflag != tar.TypeReg {
+				continue
+			}
 			relName := strings.TrimPrefix(hdr.Name, "uploads/")
 			targetPath := filepath.Join(absUploadDir, filepath.Clean(relName))
 			if isWithinDirectory(absUploadDir, targetPath) {
+				if fi, err := os.Lstat(targetPath); err == nil && (fi.Mode()&os.ModeSymlink != 0) {
+					_ = os.Remove(targetPath)
+				}
 				_ = os.MkdirAll(filepath.Dir(targetPath), 0700)
 				f, err := os.OpenFile(targetPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
 				if err == nil {
-					_, _ = io.Copy(f, tr)
+					_, _ = io.Copy(f, io.LimitReader(tr, 50<<20))
 					f.Close()
 				}
 			}
@@ -587,7 +599,10 @@ func executeRestoredSQLGz(sqlGzPath string, db *sql.DB) error {
 				cmd.Env = append(os.Environ(), "PGPASSWORD="+password)
 			}
 		} else {
-			cmd = exec.Command("docker", "exec", "-i", "-e", "PGPASSWORD="+password, dockerContainer, "psql", safeConn)
+			cmd = exec.Command("docker", "exec", "-i", "-e", "PGPASSWORD", dockerContainer, "psql", safeConn)
+			if password != "" {
+				cmd.Env = append(os.Environ(), "PGPASSWORD="+password)
+			}
 		}
 		cmd.Stdin = gzr
 		var stderr strings.Builder
@@ -599,9 +614,14 @@ func executeRestoredSQLGz(sqlGzPath string, db *sql.DB) error {
 	}
 
 	if db != nil {
-		b, err := io.ReadAll(gzr)
+		const maxMemSQLBytes = 50 << 20
+		lr := io.LimitReader(gzr, maxMemSQLBytes+1)
+		b, err := io.ReadAll(lr)
 		if err != nil {
 			return err
+		}
+		if int64(len(b)) > maxMemSQLBytes {
+			return errors.New("restored SQL script exceeds maximum memory buffer limit (50MB); configure psql or docker utilities")
 		}
 		if len(b) > 0 {
 			if _, err := db.Exec(string(b)); err != nil {
@@ -614,9 +634,14 @@ func executeRestoredSQLGz(sqlGzPath string, db *sql.DB) error {
 }
 
 func restoreLegacyV1Backup(f *os.File, db *sql.DB) error {
-	data, err := io.ReadAll(f)
+	const maxLegacyBackupSize = 100 << 20
+	lr := io.LimitReader(f, maxLegacyBackupSize+1)
+	data, err := io.ReadAll(lr)
 	if err != nil {
 		return err
+	}
+	if int64(len(data)) > maxLegacyBackupSize {
+		return errors.New("legacy backup exceeds maximum supported payload limit (100MB)")
 	}
 	if len(data) < 12+16 {
 		return errors.New("corrupted legacy backup: insufficient length")
@@ -663,12 +688,18 @@ func restoreLegacyV1Backup(f *os.File, db *sql.DB) error {
 				sqlContent = string(b)
 			}
 		} else if strings.HasPrefix(hdr.Name, "uploads/") {
+			if hdr.Typeflag != tar.TypeReg {
+				continue
+			}
 			relName := strings.TrimPrefix(hdr.Name, "uploads/")
 			targetPath := filepath.Join(absUploadDir, filepath.Clean(relName))
 			if isWithinDirectory(absUploadDir, targetPath) {
+				if fi, err := os.Lstat(targetPath); err == nil && (fi.Mode()&os.ModeSymlink != 0) {
+					_ = os.Remove(targetPath)
+				}
 				_ = os.MkdirAll(filepath.Dir(targetPath), 0700)
 				if outF, err := os.OpenFile(targetPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600); err == nil {
-					_, _ = io.Copy(outF, tr)
+					_, _ = io.Copy(outF, io.LimitReader(tr, 50<<20))
 					outF.Close()
 				}
 			}

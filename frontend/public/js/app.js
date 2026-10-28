@@ -993,7 +993,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const ALLOWED_EXTENSIONS = ['.pdf', '.jpg', '.jpeg', '.png', '.zip', '.rar'];
 
     function renderFileCardHtml(fileName, mimeType = '', sizeClass = '') {
-        const ext = fileName && fileName.includes('.') ? fileName.split('.').pop().toLowerCase() : '';
+        const rawExt = fileName && fileName.includes('.') ? fileName.split('.').pop() : '';
+        const ext = rawExt.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toLowerCase();
         let format = 'doc';
         let bannerText = ext ? ext.toUpperCase() : 'DOC';
 
@@ -1082,7 +1083,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return `
             <div class="file-card-preview ${sizeClass}" data-format="${format}" aria-hidden="true">
-                <span class="file-card-banner file-banner-${format}">${bannerText}</span>
+                <span class="file-card-banner file-banner-${format}">${escapeHtml(bannerText)}</span>
                 <div class="file-card-sheet">
                     ${placeholder}
                 </div>

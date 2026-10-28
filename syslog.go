@@ -222,7 +222,9 @@ func (s *SyslogShipper) formatRFC5424(msg SyslogMessage) string {
 }
 
 func sanitizeSyslogParam(input string) string {
-	clean := strings.ReplaceAll(input, "\"", "")
+	clean := strings.ReplaceAll(input, "\\", "")
+	clean = strings.ReplaceAll(clean, "\"", "")
+	clean = strings.ReplaceAll(clean, "]", "")
 	clean = strings.ReplaceAll(clean, "\n", " ")
 	clean = strings.ReplaceAll(clean, "\r", "")
 	clean = strings.ReplaceAll(clean, "\x00", "")

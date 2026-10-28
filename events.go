@@ -34,8 +34,8 @@ var GlobalSSEBroker = NewSSEBroker()
 func NewSSEBroker() *SSEBroker {
 	b := &SSEBroker{
 		clients:    make(map[*SSEClient]bool),
-		register:   make(chan *SSEClient),
-		unregister: make(chan *SSEClient),
+		register:   make(chan *SSEClient, 128),
+		unregister: make(chan *SSEClient, 128),
 		broadcast:  make(chan sseBroadcastMsg, 128),
 		quit:       make(chan struct{}),
 	}
@@ -119,15 +119,15 @@ func (b *SSEBroker) BroadcastNewReport(reportID int64) {
 }
 
 func (b *SSEBroker) BroadcastNewMessage(reportID int64) {
-	b.Broadcast("new_message", map[string]interface{}{"report_id": reportID})
+	b.BroadcastToRoles([]string{"superuser", "edare_kol"}, "new_message", map[string]interface{}{"report_id": reportID})
 }
 
 func (b *SSEBroker) BroadcastRegionalResponse(reportID int64) {
-	b.Broadcast("regional_response", map[string]interface{}{"report_id": reportID})
+	b.BroadcastToRoles([]string{"superuser", "edare_kol"}, "regional_response", map[string]interface{}{"report_id": reportID})
 }
 
 func (b *SSEBroker) BroadcastSessionRevoked(username, tokenHash string) {
-	b.Broadcast("session_revoked", map[string]string{
+	b.BroadcastToRoles([]string{"superuser"}, "session_revoked", map[string]string{
 		"username":           username,
 		"revoked_token_hash": tokenHash,
 	})
@@ -158,11 +158,19 @@ func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {
 		send:     make(chan []byte, 32),
 	}
 
-	GlobalSSEBroker.register <- client
+	select {
+	case GlobalSSEBroker.register <- client:
+	default:
+		http.Error(w, "Broker busy", http.StatusServiceUnavailable)
+		return
+	}
 	defer func() {
 		select {
 		case GlobalSSEBroker.unregister <- client:
-		case <-time.After(500 * time.Millisecond):
+		default:
+			go func() {
+				GlobalSSEBroker.unregister <- client
+			}()
 		}
 	}()
 

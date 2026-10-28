@@ -71,6 +71,10 @@ func init() {
 				}
 			}
 			mfaNoncesMu.Unlock()
+
+			if DB != nil {
+				_, _ = DB.Exec("DELETE FROM used_mfa_nonces WHERE expires_at <= NOW()")
+			}
 		}
 	}()
 }
@@ -151,12 +155,14 @@ func VerifyTOTPCode(username, secretBase32, code string) (bool, error) {
 				return false, ErrTOTPReplayed
 			}
 			if DB != nil {
-				var exists bool
-				_ = DB.QueryRow("SELECT EXISTS(SELECT 1 FROM used_mfa_nonces WHERE nonce = $1 AND expires_at > NOW())", replayKey).Scan(&exists)
-				if exists {
+				res, err := DB.Exec("INSERT INTO used_mfa_nonces (nonce, expires_at) VALUES ($1, NOW() + INTERVAL '120 seconds') ON CONFLICT (nonce) DO UPDATE SET expires_at = EXCLUDED.expires_at WHERE used_mfa_nonces.expires_at <= NOW()", replayKey)
+				if err != nil {
+					return false, err
+				}
+				affected, _ := res.RowsAffected()
+				if affected == 0 {
 					return false, ErrTOTPReplayed
 				}
-				_, _ = DB.Exec("INSERT INTO used_mfa_nonces (nonce, expires_at) VALUES ($1, NOW() + INTERVAL '120 seconds') ON CONFLICT (nonce) DO UPDATE SET expires_at = EXCLUDED.expires_at", replayKey)
 			}
 
 			totpReplays.used[replayKey] = time.Now().Add(120 * time.Second)
@@ -199,7 +205,7 @@ func GenerateMFAPendingToken(username string, ipAndUA ...string) (string, error)
 	}
 
 	b64Payload := base64.RawURLEncoding.EncodeToString(rawJSON)
-	mac := hmac.New(sha256.New, GetHMACKey())
+	mac := hmac.New(sha256.New, GetMFAPendingHMACKey())
 	mac.Write([]byte(b64Payload))
 	sig := base64.RawURLEncoding.EncodeToString(mac.Sum(nil))
 
@@ -223,7 +229,7 @@ func ValidateMFAPendingToken(token string, ipAndUA ...string) (*MFAPendingPayloa
 
 	b64Payload, sig := parts[0], parts[1]
 
-	mac := hmac.New(sha256.New, GetHMACKey())
+	mac := hmac.New(sha256.New, GetMFAPendingHMACKey())
 	mac.Write([]byte(b64Payload))
 	expectedSig := mac.Sum(nil)
 
@@ -233,7 +239,11 @@ func ValidateMFAPendingToken(token string, ipAndUA ...string) (*MFAPendingPayloa
 	}
 
 	if subtle.ConstantTimeCompare(expectedSig, actualSig) != 1 {
-		return nil, ErrInvalidMFAToken
+		macLegacy := hmac.New(sha256.New, GetHMACKey())
+		macLegacy.Write([]byte(b64Payload))
+		if subtle.ConstantTimeCompare(macLegacy.Sum(nil), actualSig) != 1 {
+			return nil, ErrInvalidMFAToken
+		}
 	}
 
 	rawJSON, err := base64.RawURLEncoding.DecodeString(b64Payload)
@@ -271,12 +281,14 @@ func ValidateMFAPendingToken(token string, ipAndUA ...string) (*MFAPendingPayloa
 	mfaNoncesMu.Unlock()
 
 	if DB != nil {
-		var exists bool
-		_ = DB.QueryRow("SELECT EXISTS(SELECT 1 FROM used_mfa_nonces WHERE nonce = $1)", payload.Nonce).Scan(&exists)
-		if exists {
+		res, err := DB.Exec("INSERT INTO used_mfa_nonces (nonce, expires_at) VALUES ($1, $2) ON CONFLICT (nonce) DO NOTHING", payload.Nonce, time.Unix(payload.Exp, 0))
+		if err != nil {
+			return nil, err
+		}
+		affected, _ := res.RowsAffected()
+		if affected == 0 {
 			return nil, errors.New("mfa token already used")
 		}
-		_, _ = DB.Exec("INSERT INTO used_mfa_nonces (nonce, expires_at) VALUES ($1, $2)", payload.Nonce, time.Unix(payload.Exp, 0))
 	}
 
 	return &payload, nil
@@ -340,6 +352,12 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 	ok, err := VerifyTOTPCode(payload.Username, plainSecret, req.TOTPCode)
 	if !ok || err != nil {
 		if err == ErrTOTPReplayed {
+			failures, justLocked := Lockouts.RecordFailure(payload.Username, clientIP)
+			ProgressiveDelay(failures)
+			if justLocked {
+				logAudit(payload.Username, roleTitle, "ACCOUNT_LOCKED", nil, clientIP)
+			}
+			logAudit(payload.Username, roleTitle, "REPLAYED_MFA_VERIFICATION", nil, clientIP)
 			http.Error(w, "این کد امنیتی قبلاً استفاده شده است. لطفاً منتظر تولید کد بعدی بمانید.", http.StatusConflict)
 			return
 		}
@@ -484,10 +502,21 @@ func Enable2FAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	rawSecretBytes, decErr := base32.StdEncoding.WithPadding(base32.NoPadding).DecodeString(strings.ToUpper(strings.ReplaceAll(req.Secret, " ", "")))
+	if decErr != nil || len(rawSecretBytes) < 16 {
+		http.Error(w, "کلید امنیتی نامعتبر یا دارای انتروپی ناکافی است.", http.StatusBadRequest)
+		return
+	}
+
 	clientIP := getIP(r)
 	var userID int64
 	var storedHash string
-	err := DB.QueryRow(`SELECT id, password_hash FROM admin_users WHERE username=$1`, admin.Username).Scan(&userID, &storedHash)
+	var totpAlreadyEnabled bool
+	err := DB.QueryRow(`SELECT id, password_hash, totp_enabled FROM admin_users WHERE username=$1`, admin.Username).Scan(&userID, &storedHash, &totpAlreadyEnabled)
+	if err == nil && totpAlreadyEnabled && !admin.Requires2FASetup {
+		http.Error(w, "احراز هویت دومرحله‌ای قبلاً برای این حساب فعال شده است.", http.StatusBadRequest)
+		return
+	}
 	if err != nil {
 		http.Error(w, "کاربر یافت نشد.", http.StatusUnauthorized)
 		return

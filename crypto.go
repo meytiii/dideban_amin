@@ -13,6 +13,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"strings"
 	"sync"
@@ -43,6 +44,7 @@ var (
 	keyAudit      []byte
 	keyBackup     []byte
 	keyTracking   []byte
+	keyMFAPending []byte
 )
 
 func isKnownPlaceholderKey(k string) bool {
@@ -128,6 +130,9 @@ func InitCrypto(key string) {
 	keyAudit = deriveKey(aesKey, "HERASAT_AUDIT_LOG_CHAIN_HMAC_V1")
 	keyBackup = deriveKey(aesKey, "HERASAT_BACKUP_ENCRYPTION_V1")
 	keyTracking = deriveKey(aesKey, "HERASAT_TRACKING_CODE_HMAC_V1")
+	keyMFAPending = deriveKey(aesKey, "HERASAT_MFA_PENDING_HMAC_V1")
+	keyMFAPending = deriveKey(aesKey, "HERASAT_MFA_PENDING_HMAC_V1")
+	keyMFAPending = deriveKey(aesKey, "HERASAT_MFA_PENDING_HMAC_V1")
 
 	prevEnv := strings.TrimSpace(os.Getenv("HERASAT_AES_KEY_PREVIOUS"))
 	if prevEnv != "" {
@@ -154,6 +159,13 @@ func GetHMACKey() []byte {
 	return hmacKey
 }
 
+func GetMFAPendingHMACKey() []byte {
+	if len(keyMFAPending) > 0 {
+		return keyMFAPending
+	}
+	return hmacKey
+}
+
 func GetLegacyHMACKey() []byte {
 	return legacyHmacKey
 }
@@ -165,8 +177,12 @@ func GetAuditHMACKey() []byte {
 	if len(aesKey) > 0 {
 		return deriveKey(aesKey, "HERASAT_AUDIT_LOG_CHAIN_HMAC_V1")
 	}
-	h := sha256.Sum256([]byte("TEST_DEFAULT_AUDIT_HMAC_KEY_32B!"))
-	return h[:]
+	if os.Getenv("HERASAT_DEV_MODE") == "1" {
+		h := sha256.Sum256([]byte("TEST_DEFAULT_AUDIT_HMAC_KEY_32B!"))
+		return h[:]
+	}
+	log.Fatal("FATAL: audit HMAC key uninitialized and HERASAT_DEV_MODE!=1")
+	return nil
 }
 
 func GetBackupKey() []byte {
@@ -176,8 +192,12 @@ func GetBackupKey() []byte {
 	if len(aesKey) > 0 {
 		return deriveKey(aesKey, "HERASAT_BACKUP_ENCRYPTION_V1")
 	}
-	h := sha256.Sum256([]byte("TEST_DEFAULT_BACKUP_KEY_32BYTES!"))
-	return h[:]
+	if os.Getenv("HERASAT_DEV_MODE") == "1" {
+		h := sha256.Sum256([]byte("TEST_DEFAULT_BACKUP_KEY_32BYTES!"))
+		return h[:]
+	}
+	log.Fatal("FATAL: backup key uninitialized and HERASAT_DEV_MODE!=1")
+	return nil
 }
 
 func GetTrackingCodeHMACKey() []byte {
@@ -187,8 +207,12 @@ func GetTrackingCodeHMACKey() []byte {
 	if len(aesKey) > 0 {
 		return deriveKey(aesKey, "HERASAT_TRACKING_CODE_HMAC_V1")
 	}
-	h := sha256.Sum256([]byte("TEST_DEFAULT_TRACKING_HMAC_KEY!"))
-	return h[:]
+	if os.Getenv("HERASAT_DEV_MODE") == "1" {
+		h := sha256.Sum256([]byte("TEST_DEFAULT_TRACKING_HMAC_KEY!"))
+		return h[:]
+	}
+	log.Fatal("FATAL: tracking HMAC key uninitialized and HERASAT_DEV_MODE!=1")
+	return nil
 }
 
 func HashTrackingCode(trackingCode string) string {

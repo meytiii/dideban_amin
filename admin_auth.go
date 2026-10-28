@@ -191,7 +191,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		Expires:  sessionExpiry,
 		HttpOnly: true,
 		Secure:   isCookieSecure(),
-		SameSite: http.SameSiteLaxMode,
+		SameSite: http.SameSiteStrictMode,
 	})
 
 	csrfBytes := make([]byte, 32)

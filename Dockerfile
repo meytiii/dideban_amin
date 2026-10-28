@@ -31,7 +31,8 @@ COPY --chown=herasat:herasat scripts/ /app/scripts/
 COPY --chown=herasat:herasat schema.sql /app/schema.sql
 
 RUN mkdir -p /app/secure_uploads /app/backups && \
-    chown -R herasat:herasat /app/secure_uploads /app/backups
+    chown -R herasat:herasat /app/secure_uploads /app/backups && \
+    chmod 700 /app/secure_uploads /app/backups
 
 USER herasat
 

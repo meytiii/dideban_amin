@@ -176,9 +176,12 @@ func ScanPDFForActiveContent(data []byte) error {
 		}
 		streamEnd := streamStart + eIdx
 
-		headerStart := streamPos - 512
-		if headerStart < 0 {
-			headerStart = 0
+		headerStart := bytes.LastIndex(data[:streamPos], []byte("<<"))
+		if headerStart == -1 || streamPos-headerStart > 4096 {
+			headerStart = streamPos - 512
+			if headerStart < 0 {
+				headerStart = 0
+			}
 		}
 		header := data[headerStart:streamPos]
 
@@ -323,8 +326,17 @@ func InspectOOXML(data []byte) error {
 		return fmt.Errorf("ساختار فایل آفیس معتبر نیست: %w", err)
 	}
 
+	hasContentTypes := false
+	hasDocumentOrWorkbook := false
+
 	for _, f := range zr.File {
 		cleanName := strings.ToLower(filepath.ToSlash(filepath.Clean(f.Name)))
+		if cleanName == "[content_types].xml" {
+			hasContentTypes = true
+		}
+		if cleanName == "word/document.xml" || cleanName == "xl/workbook.xml" {
+			hasDocumentOrWorkbook = true
+		}
 		if strings.HasPrefix(cleanName, "..") || strings.HasPrefix(cleanName, "/") || strings.HasPrefix(cleanName, "\\") {
 			return errors.New("مسیر نامعتبر در ساختار آفیس")
 		}
@@ -364,6 +376,18 @@ func InspectOOXML(data []byte) error {
 				}
 			}
 		}
+	}
+
+	if !hasContentTypes || !hasDocumentOrWorkbook {
+		return errors.New("ساختار فایل آفیس ناقص یا نامعتبر است")
+	}
+
+	if !hasContentTypes || !hasDocumentOrWorkbook {
+		return errors.New("ساختار فایل آفیس ناقص یا نامعتبر است")
+	}
+
+	if !hasContentTypes || !hasDocumentOrWorkbook {
+		return errors.New("ساختار فایل آفیس ناقص یا نامعتبر است")
 	}
 
 	return nil

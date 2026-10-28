@@ -5439,7 +5439,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             function renderAdminFileCard(fileName, mimeType = '', sizeClass = '') {
-                const ext = fileName && fileName.includes('.') ? fileName.split('.').pop().toLowerCase() : '';
+                const rawExt = fileName && fileName.includes('.') ? fileName.split('.').pop() : '';
+                const ext = rawExt.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toLowerCase();
                 let format = 'doc';
                 let bannerText = ext ? ext.toUpperCase() : 'DOC';
 
@@ -5528,7 +5529,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 return `
                     <div class="file-card-preview ${sizeClass}" data-format="${format}" aria-hidden="true">
-                        <span class="file-card-banner file-banner-${format}">${bannerText}</span>
+                        <span class="file-card-banner file-banner-${format}">${escapeHTML(bannerText)}</span>
                         <div class="file-card-sheet">
                             ${placeholder}
                         </div>
@@ -5569,18 +5570,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const att = data.attachments[0];
                     const nameText = att.file_name || 'فایل ضمیمه';
                     const szText = att.file_size ? formatAdminFileSize(att.file_size) : '';
-                    const extText = nameText.includes('.') ? nameText.split('.').pop().toUpperCase() : 'FILE';
-                    const metaStr = szText ? `${szText} • ${extText}` : extText;
+                    const rawExtText = nameText.includes('.') ? nameText.split('.').pop() : '';
+                    const cleanExtText = rawExtText.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase() || 'FILE';
+                    const metaStr = szText ? `${szText} • ${cleanExtText}` : cleanExtText;
 
                     const card = document.createElement('a');
                     card.className = 'admin-file-card-item';
                     card.href = `/api/admin/download?id=${id}&file_id=${att.id}`;
-                    card.setAttribute('data-tooltip', `دانلود مستقیم: ${nameText}`);
+                    card.setAttribute('data-tooltip', `دانلود مستقیم: ${escapeHTML(nameText)}`);
                     card.innerHTML = `
                         ${renderAdminFileCard(nameText, att.mime_type, 'card-lg')}
                         <div class="admin-file-card-info">
                             <p class="admin-file-card-name" title="${escapeHTML(nameText)}" dir="auto">${escapeHTML(nameText)}</p>
-                            <p class="admin-file-card-meta">${metaStr}</p>
+                            <p class="admin-file-card-meta">${escapeHTML(metaStr)}</p>
                         </div>
                         <div class="admin-file-card-download-btn" aria-hidden="true">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">

@@ -13,6 +13,7 @@ services:
       HERASAT_BIND_ADDR: 0.0.0.0:8080
       HERASAT_PORT: 8080
       HERASAT_AES_KEY: ${HERASAT_AES_KEY:?err}
+      HERASAT_HMAC_KEY: ${HERASAT_HMAC_KEY:-}
       HERASAT_COOKIE_SECURE: ${HERASAT_COOKIE_SECURE:-true}
       HERASAT_TRUSTED_PROXIES: ${HERASAT_TRUSTED_PROXIES:-10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.1/32}
       HERASAT_ADMIN_ALLOWED_CIDRS: ${HERASAT_ADMIN_ALLOWED_CIDRS:-}
@@ -23,6 +24,8 @@ services:
       HERASAT_ALLOWED_HOSTS: ${HERASAT_ALLOWED_HOSTS:-}
     ports:
       - "8080:8080"
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - herasat_uploads:/app/secure_uploads
       - herasat_backups:/app/backups
@@ -40,6 +43,8 @@ services:
     volumes:
       - herasat_pgdata:/var/lib/postgresql/data
       - ./docker/init:/docker-entrypoint-initdb.d:ro
+    security_opt:
+      - no-new-privileges:true
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U herasat_user -d herasat_db"]
       interval: 5s
@@ -47,9 +52,11 @@ services:
       retries: 5
 
   clamav:
-    image: clamav/clamav:latest
+    image: clamav/clamav:1.4
     container_name: herasat_clamav
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     ports:
       - "127.0.0.1:3310:3310"
     volumes:

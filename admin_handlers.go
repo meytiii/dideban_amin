@@ -65,7 +65,7 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			Expires:  session.Expiry,
 			HttpOnly: true,
 			Secure:   isCookieSecure(),
-			SameSite: http.SameSiteLaxMode,
+			SameSite: http.SameSiteStrictMode,
 		})
 
 		var currentCSRF string
@@ -1251,7 +1251,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 		downloadName := "evidence_" + reportIDStr + ext
 		if f.encFileName != "" {
 			if decName, err := DecryptBoundField("evidence_files", "file_name", f.id, f.encFileName); err == nil && decName != "" {
-				downloadName = decName
+				downloadName = filepath.Base(stripNul(decName))
 			}
 		}
 
@@ -1539,7 +1539,9 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	_, _ = DB.Exec("INSERT INTO admin_password_history (admin_username, user_id, password_hash, created_at) VALUES ($1, $2, $3, NOW())", req.Username, newID, passHash)
 
-	logAudit(admin.Username, admin.Title, "CREATE_ADMIN_USER:"+req.Username, nil, getIP(r))
+	if err := logAudit(admin.Username, admin.Title, "CREATE_ADMIN_USER:"+req.Username, nil, getIP(r)); err != nil {
+		log.Printf("ERROR: Failed to record audit log for user creation: %v", err)
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
@@ -1588,7 +1590,9 @@ func ToggleUserActiveHandler(w http.ResponseWriter, r *http.Request) {
 		Sessions.RevokeAllUserSessions(targetUsername, "DEACTIVATED")
 	}
 
-	logAudit(admin.Username, admin.Title, "TOGGLE_USER_ACTIVE:"+targetUsername, nil, getIP(r))
+	if err := logAudit(admin.Username, admin.Title, "TOGGLE_USER_ACTIVE:"+targetUsername, nil, getIP(r)); err != nil {
+		log.Printf("ERROR: Failed to record audit log for user activation toggle: %v", err)
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "وضعیت کاربر با موفقیت تغییر یافت"}`))
@@ -1666,7 +1670,9 @@ func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 		Sessions.RevokeAllUserSessions(targetUsername, "ROLE_OR_STATUS_CHANGED")
 	}
 
-	logAudit(admin.Username, admin.Title, "UPDATE_ADMIN_USER:"+targetUsername, nil, getIP(r))
+	if err := logAudit(admin.Username, admin.Title, "UPDATE_ADMIN_USER:"+targetUsername, nil, getIP(r)); err != nil {
+		log.Printf("ERROR: Failed to record audit log for user update: %v", err)
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "اطلاعات کاربر با موفقیت بروزرسانی شد."}`))
@@ -1832,7 +1838,9 @@ func LiftUserLockoutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	Lockouts.Reset(req.Username)
-	logAudit(admin.Username, admin.Title, "LIFT_LOCKOUT:"+req.Username, nil, getIP(r))
+	if err := logAudit(admin.Username, admin.Title, "LIFT_LOCKOUT:"+req.Username, nil, getIP(r)); err != nil {
+		log.Printf("ERROR: Failed to record audit log for lockout reset: %v", err)
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "قفل موقت ورود با موفقیت برداشته شد و کاربر می‌تواند وارد شود."}`))
@@ -1877,7 +1885,9 @@ func DisableUser2FAHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logAudit(admin.Username, admin.Title, "SUPERUSER_DISABLE_2FA:"+req.Username, &targetID, getIP(r))
+	if err := logAudit(admin.Username, admin.Title, "SUPERUSER_DISABLE_2FA:"+req.Username, &targetID, getIP(r)); err != nil {
+		log.Printf("ERROR: Failed to record audit log for 2FA deactivation: %v", err)
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "احراز هویت دومرحله‌ای برای این حساب با موفقیت غیرفعال شد."}`))
@@ -2419,15 +2429,20 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 
 func executeDeleteReportIDs(w http.ResponseWriter, r *http.Request, admin AdminSession, ids []int64, reason string, extraTxHook func(tx *sql.Tx) error, auditDetail string) {
 	var filesToDelete []string
-	rows, err := DB.Query("SELECT file_path FROM evidence_files WHERE report_id = ANY($1)", pq.Array(ids))
+	rows, err := DB.Query("SELECT id, file_path FROM evidence_files WHERE report_id = ANY($1)", pq.Array(ids))
 	if err == nil {
 		defer rows.Close()
 		absUploadDir, _ := filepath.Abs("./secure_uploads")
 
 		for rows.Next() {
+			var attID int64
 			var encPath string
-			if err := rows.Scan(&encPath); err == nil {
-				if realPath, err := DecryptAES(encPath); err == nil {
+			if err := rows.Scan(&attID, &encPath); err == nil {
+				realPath, err := DecryptBoundField("evidence_files", "file_path", attID, encPath)
+				if err != nil {
+					realPath, err = DecryptAES(encPath)
+				}
+				if err == nil {
 					cleanPath := filepath.Clean(realPath)
 					absFilePath, err := filepath.Abs(cleanPath)
 					if err == nil && isWithinDirectory(absUploadDir, absFilePath) {
@@ -2576,7 +2591,11 @@ func RedactReportHandler(w http.ResponseWriter, r *http.Request) {
 		var encPath string
 		err := tx.QueryRow("SELECT file_path FROM evidence_files WHERE id = $1 AND report_id = $2", fID, req.ReportID).Scan(&encPath)
 		if err == nil {
-			if realPath, err := DecryptAES(encPath); err == nil {
+			realPath, err := DecryptBoundField("evidence_files", "file_path", fID, encPath)
+			if err != nil {
+				realPath, err = DecryptAES(encPath)
+			}
+			if err == nil {
 				cleanPath := filepath.Clean(realPath)
 				absFilePath, err := filepath.Abs(cleanPath)
 				if err == nil && isWithinDirectory(absUploadDir, absFilePath) {

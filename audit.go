@@ -287,7 +287,7 @@ func VerifyAuditChainOnStartup(db *sql.DB) error {
 var auditVerifyRateLimiter = NewIPRateLimiter(0.1, 5)
 
 func VerifyAuditLogsHandler(w http.ResponseWriter, r *http.Request) {
-	if !auditVerifyRateLimiter.Allow(getIP(r)) {
+	if !auditVerifyRateLimiter.Allow(normalizeRateLimitKey(getIP(r))) {
 		http.Error(w, "تعداد درخواست‌های اعتبارسنجی بیش از حد مجاز است. لطفاً کمی صبر کنید.", http.StatusTooManyRequests)
 		return
 	}

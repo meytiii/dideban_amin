@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"math/big"
 	"os"
 	"strings"
 	"time"
@@ -663,10 +664,15 @@ func generateInitialPassword() string {
 	password = append(password, symbolChars[int(b[0])%len(symbolChars)])
 
 	allChars := upperChars + lowerChars + digitChars + symbolChars
-	buf := make([]byte, 20)
-	rand.Read(buf)
-	for _, byteVal := range buf {
-		password = append(password, allChars[int(byteVal)%len(allChars)])
+	for i := 0; i < 20; i++ {
+		n, err := rand.Int(rand.Reader, big.NewInt(int64(len(allChars))))
+		if err != nil {
+			b := make([]byte, 1)
+			rand.Read(b)
+			password = append(password, allChars[int(b[0])%len(allChars)])
+		} else {
+			password = append(password, allChars[n.Int64()])
+		}
 	}
 	return string(password)
 }
@@ -688,12 +694,16 @@ func bootstrapInitialAdmin(db *sql.DB) {
 	}
 	if rawPassword == "" {
 		rawPassword = generateInitialPassword()
-		log.Printf("==================================================================")
-		log.Printf("INITIAL ADMINISTRATIVE USER PROVISIONED:")
-		log.Printf("Username: admin_it")
-		log.Printf("Password: %s", rawPassword)
-		log.Printf("NOTE: Store this credential securely. Immediate password change is mandatory.")
-		log.Printf("==================================================================")
+		if os.Getenv("HERASAT_DEV_MODE") == "1" {
+			log.Printf("==================================================================")
+			log.Printf("INITIAL ADMINISTRATIVE USER PROVISIONED:")
+			log.Printf("Username: admin_it")
+			log.Printf("Password: %s", rawPassword)
+			log.Printf("NOTE: Store this credential securely. Immediate password change is mandatory.")
+			log.Printf("==================================================================")
+		} else {
+			log.Printf("INITIAL ADMINISTRATIVE USER PROVISIONED (Username: admin_it). Temporary credentials configured.")
+		}
 	}
 
 	hashed, err := HashPassword(rawPassword)

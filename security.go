@@ -506,7 +506,7 @@ func (sm *SessionManager) GetAllActiveSessions() []ActiveSessionItem {
 			sessID := "SES-" + strings.ToUpper(fmt.Sprintf("%x", sha256.Sum256([]byte(token)))[:8])
 			list = append(list, ActiveSessionItem{
 				SessionID:              sessID,
-				Token:                  token,
+				Token:                  hashToken(token),
 				Username:               s.Username,
 				FullName:               s.FullName,
 				RoleTitle:              s.Title,
