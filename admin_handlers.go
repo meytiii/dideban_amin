@@ -90,6 +90,11 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 		reqPath := strings.TrimRight(r.URL.Path, "/")
 
+		if session.Requires2FASetup && session.IsSuperuser && os.Getenv("HERASAT_REQUIRE_2FA") != "1" && os.Getenv("HERASAT_REQUIRE_2FA") != "true" {
+			session.Requires2FASetup = false
+			Sessions.Set(cookie.Value, session)
+		}
+
 		if session.RequiresPasswordChange || session.Requires2FASetup {
 			allowed := reqPath == "/api/admin/me" || reqPath == "/api/admin/logout"
 			if session.RequiresPasswordChange && reqPath == "/api/admin/change-my-password" {

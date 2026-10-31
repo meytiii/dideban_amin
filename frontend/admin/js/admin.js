@@ -64,6 +64,36 @@ function getCsrfToken() {
     return sessionStorage.getItem('herasat_csrf') || '';
 }
 
+let _activeErrorModal = false;
+function showGlobalErrorModal(title, message, options = {}) {
+    if (_activeErrorModal) return Promise.resolve();
+    _activeErrorModal = true;
+    const variant = options.variant || 'danger';
+    const iconType = options.iconType || 'shield-alert';
+    const confirmText = options.confirmText || 'متوجه شدم';
+    if (typeof window.showConfirmDialog !== 'function') {
+        if (typeof showToast === 'function') {
+            showToast(message || title, 5000, 'error');
+        }
+        _activeErrorModal = false;
+        return Promise.resolve();
+    }
+    return window.showConfirmDialog({
+        title: title || 'خطا در ارتباط یا دسترسی',
+        description: message || 'متأسفانه در پردازش درخواست شما خطایی رخ داده است.',
+        singleButton: true,
+        confirmText: confirmText,
+        variant: variant,
+        iconType: iconType
+    }).finally(() => {
+        _activeErrorModal = false;
+        if (typeof options.onClose === 'function') {
+            options.onClose();
+        }
+    });
+}
+window.showGlobalErrorModal = showGlobalErrorModal;
+
 function adminFetch(url, options = {}) {
     const opts = { credentials: 'same-origin', ...options };
     opts.headers = { ...(opts.headers || {}) };
@@ -132,7 +162,62 @@ function adminFetch(url, options = {}) {
                 } catch (_) {}
             }
         }
+        if (!res.ok && !opts.silentError && !opts.skipGlobalError) {
+            let errData = null;
+            try {
+                const clone = res.clone();
+                errData = await clone.json();
+            } catch (_) {}
+            if (res.status === 403) {
+                if (errData && errData.error === '2fa_setup_required') {
+                    showGlobalErrorModal('الزام فعال‌سازی احراز هویت دومرحله‌ای', errData.message || 'فعال‌سازی احراز هویت دومرحله‌ای جهت دسترسی به کارتابل و اطلاعات گزارش‌ها الزامی است.', {
+                        variant: 'warning',
+                        iconType: 'shield-alert',
+                        confirmText: 'فعال‌سازی احراز هویت',
+                        onClose: () => {
+                            const modal2FA = document.getElementById('modal-2fa-management');
+                            const btnStart = document.getElementById('btn-start-setup-2fa');
+                            if (modal2FA) modal2FA.style.display = 'flex';
+                            if (typeof reset2FAModalViews === 'function') reset2FAModalViews();
+                            if (typeof refresh2FAStatus === 'function') refresh2FAStatus();
+                            if (btnStart) btnStart.click();
+                        }
+                    });
+                } else if (errData && errData.error === 'password_change_required') {
+                    const modalForcePwd = document.getElementById('modal-force-change-password');
+                    if (modalForcePwd) modalForcePwd.style.display = 'flex';
+                } else {
+                    let errorMsg = errData && (errData.message || errData.error);
+                    if (!errorMsg) {
+                        try {
+                            const clone = res.clone();
+                            const txt = await clone.text();
+                            if (txt && !txt.startsWith('<')) errorMsg = txt;
+                        } catch (_) {}
+                    }
+                    showGlobalErrorModal('دسترسی غیرمجاز (خطای ۴۰۳)', errorMsg || 'شما مجوز لازم برای دسترسی به این بخش یا مشاهده این اطلاعات را ندارید.', {
+                        variant: 'danger',
+                        iconType: 'shield-alert',
+                        confirmText: 'متوجه شدم'
+                    });
+                }
+            } else if (res.status === 429) {
+                const msg = (errData && (errData.message || errData.error)) || 'تعداد درخواست‌های ارسالی شما بیش از حد مجاز است. لطفاً چند لحظه تأمل نموده و مجدداً تلاش فرمایید.';
+                showGlobalErrorModal('محدودیت تعداد درخواست (خطای ۴۲۹)', msg, { variant: 'warning', iconType: 'shield-alert' });
+            } else if (res.status >= 500) {
+                const msg = (errData && (errData.message || errData.error)) || `خطای داخلی سرور رخ داده است (کد ${res.status}). لطفاً در صورت تکرار، وضعیت سرور را بررسی فرمایید.`;
+                showGlobalErrorModal(`خطای سرور (${res.status})`, msg, { variant: 'danger', iconType: 'shield-alert' });
+            }
+        }
         return res;
+    }).catch(err => {
+        if (!opts.silentError && !opts.skipGlobalError && err && err.name !== 'AbortError') {
+            showGlobalErrorModal('خطای برقراری ارتباط با سرور', 'امکان برقراری ارتباط با سرور سامانه وجود ندارد. لطفاً اتصال شبکه یا وضعیت سرور را بررسی فرمایید.', {
+                variant: 'danger',
+                iconType: 'shield-alert'
+            });
+        }
+        throw err;
     });
 }
 
@@ -4337,7 +4422,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             }
             if (!response.ok) {
-                throw new Error(`خطای دریافت اطلاعات: ${response.status}`);
+                let errDetail = `خطای دریافت اطلاعات (${response.status})`;
+                try {
+                    const d = await response.clone().json();
+                    if (d && (d.message || d.error)) errDetail = d.message || d.error;
+                } catch (_) {
+                    try {
+                        const txt = await response.clone().text();
+                        if (txt && !txt.startsWith('<')) errDetail = txt;
+                    } catch (_) {}
+                }
+                throw new Error(errDetail);
             }
             const data = await response.json();
 
@@ -4380,7 +4475,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error("Failed to load reports:", error);
             if (reportsBody && (!allReports || allReports.length === 0)) {
-                reportsBody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--color-danger, #ef4444);">خطا در دریافت اطلاعات گزارش‌ها: ${escapeHTML(error.message)}</td></tr>`;
+                reportsBody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--color-danger, #ef4444);"><div style="display:inline-flex; align-items:center; justify-content:center; gap:8px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>خطا در دریافت اطلاعات گزارش‌ها: ${escapeHTML(error.message)}</span></div></td></tr>`;
             }
             throw error;
         }

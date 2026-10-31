@@ -155,7 +155,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	require2FA := isSuperuser || totpEnforced || os.Getenv("HERASAT_REQUIRE_2FA") == "1" || os.Getenv("HERASAT_REQUIRE_2FA") == "true"
+	require2FA := (os.Getenv("HERASAT_REQUIRE_2FA") == "1" || os.Getenv("HERASAT_REQUIRE_2FA") == "true") && totpEnforced && !totpEnabled
 	isPasswordExpired := time.Since(passwordChangedAt) > 30*24*time.Hour
 	requiresPasswordChange := mustChangePassword || isPasswordExpired
 
@@ -264,8 +264,8 @@ func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 	isPasswordExpired := time.Since(passwordChangedAt) > 30*24*time.Hour
 	requiresPasswordChange := mustChangePassword || isPasswordExpired
-	require2FA := admin.IsSuperuser || totpEnforced || os.Getenv("HERASAT_REQUIRE_2FA") == "1" || os.Getenv("HERASAT_REQUIRE_2FA") == "true"
-	requires2FASetup := admin.Requires2FASetup || (require2FA && !totpEnabled)
+	require2FA := (os.Getenv("HERASAT_REQUIRE_2FA") == "1" || os.Getenv("HERASAT_REQUIRE_2FA") == "true") && totpEnforced && !totpEnabled
+	requires2FASetup := require2FA
 
 	csrfToken := ""
 	if csrfCookie, err := r.Cookie("herasat_csrf"); err == nil && csrfCookie.Value != "" {
