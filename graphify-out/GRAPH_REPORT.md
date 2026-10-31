@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-10-31)
 
 ## Corpus Check
-- 295 files · ~452,934 words
+- 296 files · ~453,442 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3153 nodes · 4531 edges · 200 communities (185 shown, 15 thin omitted)
-- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 498 edges (avg confidence: 0.85)
+- 3157 nodes · 4543 edges · 200 communities (185 shown, 15 thin omitted)
+- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 505 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `28bb4021`
+- Built from commit: `f3d5008e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -29,7 +29,7 @@
 - hallmark/SKILL.md
 - Recipes
 - Study — extracting design DNA from a screenshot or URL
-- admin_handlers.go
+- net/http.Request
 - Hero enrichment — when, what, and how much
 - Theme — Carnival
 - Interaction and states
@@ -42,7 +42,7 @@
 - Typography
 - seed_50_reports.go
 - admin.js
-- network.go
+- OWASP Top 10 for Agentic Applications 2026
 - Microinteraction tells
 - Archetype index — load ONLY the picks you need
 - Theme — Cobalt
@@ -65,7 +65,7 @@
 - OWASP Top 10:2025
 - Floating nav on scroll — the cross-fade morph
 - SSEBroker
-- 資安審核技能（Security Audit Skill）
+- Security Audit Skill
 - Hallmark Design Directives
 - adminFetch
 - AI/LLM Security Deep Dive
@@ -78,7 +78,7 @@
 - Contents
 - Manual Update Workflow
 - Output contract & scope
-- AnalyticsResponse
+- admin_handlers.go
 - database/sql.DB
 - Design System: سامانه دیده‌بان امین - ستاد خبری و دریافت گزارش‌های مردمی حراست همدان
 - createShamsiDateRangePicker
@@ -86,19 +86,19 @@
 - NewClamAVScanner
 - Container Security Guide
 - herasat.local/backend
-- db.go
+- OWASP Top 10 for LLM Applications 2026
 - security-audit/SKILL.md
 - workflows/hallmark.md
 - Scan Commands by Platform
 - Data Flow Classification — Trust Levels L1-L4
-- audit.go
+- OWASP Security Best Practices 2025-2026
 - SyslogShipper
 - metadata.go
 - Colors
 - rules/graphify.md
 - workflows/graphify.md
 - Cross-Site Request Forgery (CSRF)
-- SubmitReportHandler
+- security.go
 - generate_docx.py
 - rules/caveman.md
 - workflows/caveman.md
@@ -127,12 +127,12 @@
 - Insecure Deserialization
 - Server-Side Request Forgery (SSRF)
 - Dideban-e Amin (دیده‌بان امین)
-- Security Audit Skill
+- Container Security (Phase 10) — Added 2026-02
 - Macrostructures
 - initAppTooltips
 - Steps
 - main
-- VerifyCaptcha
+- captcha.go
 - admin/js/confirm.js
 - vbs-scan-security/SKILL.md
 - public/js/confirm.js
@@ -202,16 +202,16 @@
 - PHP Specialization
 - auth_hardening_test.go
 - crypto.go
-- Security Audit Skill — Changelog
+- AI/LLM Security (Phase 11) — Added 2026-02
 - Language Detection
 - Go Specialization
-- computeAuditHash
+- Audit Workflow (6 Stages)
 - owasp-security/SKILL.md
 - load-rules.sh
 - .NET 10 Specialization Rules
 - metadata_test.go
-- Prompt Injection
-- Output Safety
+- AI-Assisted Security Tools
+- Model Access & Cost Control
 - Data Privacy & Compliance
 - validate-report.py
 
@@ -230,13 +230,13 @@
 ## Surprising Connections (you probably didn't know these)
 - `init()` --calls--> `HashPassword()`  [INFERRED]
   admin_auth.go → crypto.go
-- `VerifyMFAHandler()` --calls--> `generateSessionToken()`  [INFERRED]
-  mfa.go → admin_auth.go
 - `LoginHandler()` --calls--> `logAudit()`  [INFERRED]
   admin_auth.go → audit.go
-- `LoginHandler()` --calls--> `VerifyCaptcha()`  [INFERRED]
-  admin_auth.go → captcha.go
 - `LoginHandler()` --calls--> `GenerateMFAPendingToken()`  [INFERRED]
+  admin_auth.go → mfa.go
+- `LoginHandler()` --calls--> `GenerateTakeoverToken()`  [INFERRED]
+  admin_auth.go → mfa.go
+- `LoginHandler()` --calls--> `ValidateTakeoverToken()`  [INFERRED]
   admin_auth.go → mfa.go
 
 ## Import Cycles
@@ -250,7 +250,7 @@ Nodes (35): 10. Persian Jalali Date-Range Popover (`.date-range-popover`), 11. I
 
 ### Community 1 - "component-cookbook.md"
 Cohesion: 0.02
-Nodes (47): C1 · Outlined chip, C2 · Inline form-as-CTA, C3 · Typographic link, C4 · Sticky bottom bar, F1 · Bento grid, F2 · Sticky-scroll stack, F3 · Tabular spec sheet, F4 · Step sequence (+39 more)
+Nodes (48): C1 · Outlined chip, C2 · Inline form-as-CTA, C3 · Typographic link, C4 · Sticky bottom bar, F1 · Bento grid, F2 · Sticky-scroll stack, F3 · Tabular spec sheet, F4 · Step sequence (+40 more)
 
 ### Community 2 - "Security Audit Checklist (Full Platform)"
 Cohesion: 0.04
@@ -261,8 +261,8 @@ Cohesion: 0.05
 Nodes (44): Abstract backgrounds, App mockups / device frames, Assets — sourcing canon for icons, logos, illustrations, photography, video, Avoid, Avoid, Avoid, Avoid, Avoid (+36 more)
 
 ### Community 4 - "mfa.go"
-Cohesion: 0.22
-Nodes (16): GetHMACKey(), GetMFAPendingHMACKey(), GenerateBase32Secret(), GenerateMFAPendingToken(), GenerateTOTPCode(), normalizeTOTPCode(), ValidateMFAPendingToken(), VerifyTOTPCode() (+8 more)
+Cohesion: 0.18
+Nodes (19): GetHMACKey(), GetMFAPendingHMACKey(), GenerateBase32Secret(), GenerateMFAPendingToken(), GenerateTakeoverToken(), GenerateTOTPCode(), normalizeTOTPCode(), ValidateMFAPendingToken() (+11 more)
 
 ### Community 5 - "macrostructures.md"
 Cohesion: 0.05
@@ -300,9 +300,9 @@ Nodes (27): Accessibility ground truth, Button press, Command palette navigation
 Cohesion: 0.08
 Nodes (26): After the file is written, Emitting a `design.md` from `study`, Image-mode template, Junk-or-blocked detection, Limits and disclaimers, Refusal — when not to study, Remote URL safety, Source mode — image or URL (+18 more)
 
-### Community 14 - "admin_handlers.go"
-Cohesion: 0.11
-Nodes (67): GetCurrentAdminHandler(), getIP(), LogoutHandler(), canAdminAccessReport(), ClassifyReportHandler(), CreateUserHandler(), DeleteReportHandler(), DeleteUserHandler() (+59 more)
+### Community 14 - "net/http.Request"
+Cohesion: 0.16
+Nodes (47): GetCurrentAdminHandler(), getIP(), LogoutHandler(), canAdminAccessReport(), ClassifyReportHandler(), CreateUserHandler(), DeleteReportHandler(), DeleteUserHandler() (+39 more)
 
 ### Community 15 - "Hero enrichment — when, what, and how much"
 Cohesion: 0.09
@@ -352,9 +352,9 @@ Nodes (4): deriveKey(), encryptWithKey(), genTrackingCode(), main()
 Cohesion: 0.07
 Nodes (41): applyFilters(), buildPaginationHTML(), check2FAEnforcementNotice(), checkAdminProfile(), checkMustChangePasswordPolicy(), evaluatePasswordStrength(), fetchForwardingRecipients(), getJalaliDateKeyFromDate() (+33 more)
 
-### Community 27 - "network.go"
+### Community 27 - "OWASP Top 10 for Agentic Applications 2026"
 Cohesion: 0.17
-Nodes (19): net.IPNet, GetAdminAllowedCIDRs(), GetTrustedProxies(), InitNetworkSecurity(), parseCIDRs(), parseTrustedProxies(), ResetNetworkSecurityForTest(), SetAdminAllowAny() (+11 more)
+Nodes (12): ASI01: Agent Goal Hijack, ASI02: Tool Misuse & Exploitation, ASI03: Identity & Privilege Abuse, ASI04: Agentic Supply Chain Vulnerabilities, ASI05: Unexpected Code Execution, ASI06: Memory & Context Poisoning, ASI07: Insecure Inter-Agent Communication, ASI08: Cascading Failures (+4 more)
 
 ### Community 28 - "Microinteraction tells"
 Cohesion: 0.14
@@ -393,7 +393,7 @@ Cohesion: 0.14
 Nodes (27): applyAdminUsersFilter(), applyAuditFiltersAndPagination(), initActionSearchBar(), closeDropdown(), computeAndRender(), executeItem(), openDropdown(), renderItems() (+19 more)
 
 ### Community 37 - "Genre — atmospheric"
-Cohesion: 0.18
+Cohesion: 0.20
 Nodes (10): Genre — atmospheric, Nav and footer voice, Reference register, Stamp signature, Themes that belong, Voice, Voice fixtures, What this genre allows (+2 more)
 
 ### Community 38 - "Genre — modern-minimal"
@@ -401,7 +401,7 @@ Cohesion: 0.18
 Nodes (10): Genre — modern-minimal, Nav and footer voice, Reference register (for the LLM, not credited to anyone), Stamp signature, Themes that belong, Voice, Voice fixtures, What this genre allows (+2 more)
 
 ### Community 39 - "Genre — playful"
-Cohesion: 0.20
+Cohesion: 0.18
 Nodes (10): Genre — playful, Nav and footer voice, Reference register, Stamp signature, Themes that belong, Voice, Voice fixtures, What this genre allows (+2 more)
 
 ### Community 40 - "§ Multi-page flow — design.md first, then redesign"
@@ -433,20 +433,20 @@ Cohesion: 0.29
 Nodes (7): Bans, Colour, Contrast, Dark mode recipe, Palette construction, Principles, Use of the accent
 
 ### Community 47 - "OWASP Top 10:2025"
-Cohesion: 0.04
-Nodes (45): A01:2025 – Broken Access Control, A02:2025 – Security Misconfiguration, A03:2025 – Software Supply Chain Failures, A04:2025 – Cryptographic Failures, A05:2025 – Injection, A06:2025 – Insecure Design, A07:2025 – Authentication Failures, A08:2025 – Software or Data Integrity Failures (+37 more)
+Cohesion: 0.17
+Nodes (12): A01:2025 – Broken Access Control, A02:2025 – Security Misconfiguration, A03:2025 – Software Supply Chain Failures, A04:2025 – Cryptographic Failures, A05:2025 – Injection, A06:2025 – Insecure Design, A07:2025 – Authentication Failures, A08:2025 – Software or Data Integrity Failures (+4 more)
 
 ### Community 48 - "Floating nav on scroll — the cross-fade morph"
-Cohesion: 0.22
-Nodes (7): N10 · Floating-on-scroll morph, Anti-patterns Hallmark refuses, Floating nav on scroll — the cross-fade morph, The four laws — non-negotiable, The property morph (10 properties, one curve), The scroll handler, The structure
+Cohesion: 0.33
+Nodes (6): Anti-patterns Hallmark refuses, Floating nav on scroll — the cross-fade morph, The four laws — non-negotiable, The property morph (10 properties, one curve), The scroll handler, The structure
 
 ### Community 49 - "SSEBroker"
 Cohesion: 0.27
 Nodes (4): sync.RWMutex, sseBroadcastMsg, SSEBroker, SSEClient
 
-### Community 50 - "資安審核技能（Security Audit Skill）"
-Cohesion: 0.14
-Nodes (14): 功能概述, 參考標準, 嚴重等級定義, 工具生態系, 快速開始, 授權, 版本歷史, 發現編號格式 (+6 more)
+### Community 50 - "Security Audit Skill"
+Cohesion: 0.06
+Nodes (33): Directory Structure, Finding ID Format, How It Works, License, Quick Start, References & Standards, Security Audit Skill, Self-Update (+25 more)
 
 ### Community 52 - "adminFetch"
 Cohesion: 0.11
@@ -454,15 +454,15 @@ Nodes (37): adminFetch(), deleteUser(), dismissToast(), escapeHTML(), exportRepo
 
 ### Community 53 - "AI/LLM Security Deep Dive"
 Cohesion: 0.12
-Nodes (17): AI-Assisted Security Tools, AI/LLM Security Deep Dive, AI Supply Chain Security, API Key Security, Available Tools (as of 2026-02), Behavioral Monitoring, Claude Code Security Specifics, Dependency Risks (+9 more)
+Nodes (17): AI/LLM Security Deep Dive, AI Supply Chain Security, Anthropic Constitutional AI Approach, Behavioral Monitoring, Code Execution Safety, Content Filtering, Defense Checklist, Dependency Risks (+9 more)
 
 ### Community 54 - "Outdated Dependency (Known CVE)"
 Cohesion: 0.11
 Nodes (18): Cross-references, Cách reasoning (KHÔNG pattern-match thuần), Examples, Fix recommendation, Go / Ruby, HIGH — flag, Intent, Java / Maven (+10 more)
 
 ### Community 56 - "Security Audit Skill"
-Cohesion: 0.07
-Nodes (29): 10.1 Dockerfile Security, 10.2 Image Supply Chain, 10.3 Runtime Security, 10.4 Secrets Management, 10.5 Network & Orchestration, 10.6 Logging & Monitoring, 11.1 Prompt Injection, 11.2 Model Access Control (+21 more)
+Cohesion: 0.25
+Nodes (8): Overview, Quick Start Example, Reference Files, Scripts, `scripts/self-update.py` — Security Intelligence Self-Update, Security Audit Skill, Severity Definitions, Tool Recommendations
 
 ### Community 57 - "Electron Security Guide"
 Cohesion: 0.12
@@ -488,13 +488,13 @@ Nodes (13): 1. New Vulnerability Type, 2. New Scan Pattern, 3. New Tool, 4. New 
 Cohesion: 0.50
 Nodes (3): Output contract, Output contract & scope, Scope and limits
 
-### Community 63 - "AnalyticsResponse"
-Cohesion: 0.29
-Nodes (7): AnalyticsResponse, CategoryCount, ClassificationAnalytics, ClassificationCount, MonthCount, PriorityCount, TypeCount
+### Community 63 - "admin_handlers.go"
+Cohesion: 0.08
+Nodes (35): AdminAuthMiddleware(), ExportReportDocxHandler(), formatJalaliTime(), GetAuditLogsHandler(), getRestrictedSubprocessEnv(), GetServerTimeHandler(), GetUsersHandler(), gregorianToJalali() (+27 more)
 
 ### Community 64 - "database/sql.DB"
-Cohesion: 0.06
-Nodes (38): dumpViaPgDumpToFile(), executeRestoredSQLGz(), getPgDumpPath(), getPsqlPath(), parseDBConn(), PerformBackup(), RestoreBackup(), restoreLegacyV1Backup() (+30 more)
+Cohesion: 0.05
+Nodes (55): computeAuditHash(), computeLegacyAuditHash(), executeAuditLogTx(), getLatestAuditHashLocked(), isAuditStrict(), logAuditTxWithDetail(), logAuditWithDetail(), VerifyAuditChain() (+47 more)
 
 ### Community 65 - "Design System: سامانه دیده‌بان امین - ستاد خبری و دریافت گزارش‌های مردمی حراست همدان"
 Cohesion: 0.15
@@ -505,8 +505,8 @@ Cohesion: 0.17
 Nodes (19): createShamsiDateRangePicker(), closePopover(), commitDateRange(), openPopover(), renderCalendar(), renderCalendarHighlights(), resetRange(), fetchServerTime() (+11 more)
 
 ### Community 67 - "InitCrypto"
-Cohesion: 0.11
-Nodes (33): DecryptAES(), DecryptBoundField(), DecryptFileBytes(), DecryptFilePath(), DecryptWithAAD(), EncryptAES(), EncryptBoundField(), EncryptFileBytes() (+25 more)
+Cohesion: 0.09
+Nodes (38): GetReportsHandler(), ResolveTrackingCode(), DecryptAES(), DecryptBoundField(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), DecryptWithAAD() (+30 more)
 
 ### Community 68 - "NewClamAVScanner"
 Cohesion: 0.23
@@ -516,9 +516,9 @@ Nodes (10): CheckClamAVStartup(), NewClamAVScanner(), io.Reader, ClamAVScanner, 
 Cohesion: 0.05
 Nodes (40): Alerts to Configure, Bad vs Good Patterns, Base Image Selection, CI/CD Pipeline Security, CI Integration Examples, Common Dockerfile Vulnerabilities, Container Security Guide, Dangerous Flags (Audit for These) (+32 more)
 
-### Community 71 - "db.go"
+### Community 71 - "OWASP Top 10 for LLM Applications 2026"
 Cohesion: 0.17
-Nodes (14): bootstrapInitialAdmin(), enforceImmutableAuditLogs(), generateInitialPassword(), InitDB(), runMigrations(), VerifyAppRolePrivileges(), VerifyWORMTriggers(), schemaMigration (+6 more)
+Nodes (12): LLM01: Prompt Injection, LLM02: Sensitive Information Disclosure, LLM03: Excessive Agency, LLM04: Supply Chain, LLM05: Data and Model Poisoning, LLM06: Unbounded Consumption, LLM07: Misinformation, LLM08: Hidden Context Exposure (+4 more)
 
 ### Community 74 - "Scan Commands by Platform"
 Cohesion: 0.25
@@ -528,17 +528,17 @@ Nodes (8): AI/LLM 🤖, Backend (Node.js), Backend 🖥️ (Python), Container �
 Cohesion: 0.11
 Nodes (18): Bot/messaging, Bốn mức tin cậy, Data Flow Classification — Trust Levels L1-L4, File system / streams, L1 — Untrusted sources (LUÔN coi là attacker-controlled), L2 — Database / persistent storage, L3 — Internal code, L4 — System / runtime (+10 more)
 
-### Community 76 - "audit.go"
-Cohesion: 0.30
-Nodes (13): computeLegacyAuditHash(), executeAuditLogTx(), getLatestAuditHashLocked(), isAuditStrict(), logAuditTx(), logAuditTxWithDetail(), logAuditWithDetail(), VerifyAuditChain() (+5 more)
+### Community 76 - "OWASP Security Best Practices 2025-2026"
+Cohesion: 0.22
+Nodes (9): ASVS 5.0 Chapters, Key Requirements Examples, Official OWASP Resources, OWASP ASVS 5.0.0, OWASP Security Best Practices 2025-2026, Sources and References, Standards and Guidelines, Table of Contents (+1 more)
 
 ### Community 77 - "SyslogShipper"
 Cohesion: 0.24
 Nodes (9): net.Conn, sync.WaitGroup, SyslogMessage, SyslogSeverity, SyslogShipper, InitSyslogShipper(), MapActionToSyslogSeverity(), sanitizeSyslogParam() (+1 more)
 
 ### Community 78 - "metadata.go"
-Cohesion: 0.12
-Nodes (26): decodePDFNameToken(), InspectOOXML(), isPDFDelimiter(), SanitizeAttachment(), SanitizeJPEG(), SanitizeMP3(), SanitizeOOXML(), SanitizePDF() (+18 more)
+Cohesion: 0.09
+Nodes (32): GenerateCaptchaToken(), EncryptCaptchaPayload(), decodePDFNameToken(), InspectOOXML(), isPDFDelimiter(), SanitizeAttachment(), SanitizeJPEG(), SanitizeMP3() (+24 more)
 
 ### Community 79 - "Colors"
 Cohesion: 0.40
@@ -548,9 +548,9 @@ Nodes (5): Colors, Named Rules, Neutral, Primary, Status & Accents
 Cohesion: 0.11
 Nodes (17): Cookie attributes thiếu, Cross-references, Cross-Site Request Forgery (CSRF), Cách reasoning (KHÔNG pattern-match thuần), Django (cảnh báo nếu tắt), Examples, Fix recommendation, HIGH — flag (+9 more)
 
-### Community 83 - "SubmitReportHandler"
-Cohesion: 0.17
-Nodes (14): generateTrackingCode(), isValidReportCategory(), SubmitReportHandler(), sanitizePhone(), stripNul(), truncateRunes(), PublicReportStatus, RegionalResponseItem (+6 more)
+### Community 83 - "security.go"
+Cohesion: 0.19
+Nodes (14): generateTrackingCode(), SubmitReportHandler(), TrackReportHandler(), isValidTrackingCode(), normalizeAndValidateUsername(), normalizeRateLimitKey(), RateLimitMiddleware(), sanitizePhone() (+6 more)
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -561,8 +561,8 @@ Cohesion: 0.20
 Nodes (17): normalizeForSearch(), cleanRune(), collapseRepeatedRunes(), containsBoundedPhrase(), ContainsVulgarLanguage(), hasVulgarLatinSuffix(), hasVulgarPersianSuffix(), init() (+9 more)
 
 ### Community 88 - "getTestDB"
-Cohesion: 0.17
-Nodes (13): NewUsedCaptchaStore(), NewSessionManager(), TestCaptchaPersistenceTryRedeem(), TestAuditChainConcurrentAndTamperDetection(), TestChangeMyPasswordPreservesRequires2FA(), TestInspectOOXMLFixtures(), TestSessionDeadlockAndPermutations(), TestSecurityStoresInitOrder() (+5 more)
+Cohesion: 0.22
+Nodes (10): NewSessionManager(), TestChangeMyPasswordPreservesRequires2FA(), TestSessionDeadlockAndPermutations(), TestRemediationSessionRevocationLifecycle(), getTestDB(), TestSessionManagementAndRateLimiter(), TestSessionPersistenceAcrossReinstantiation(), TestSessionRevokeAllUserSessions() (+2 more)
 
 ### Community 89 - "Typography"
 Cohesion: 0.50
@@ -582,7 +582,7 @@ Nodes (22): 10. Header Action Buttons (Icon-Only Pattern), 11. Animated Floating
 
 ### Community 93 - "remediation_verification_test.go"
 Cohesion: 0.21
-Nodes (9): NewSSEBroker(), parseInteger(), parsePositiveInt(), TestPublicTrackingOmitsAdminUsername(), TestRemediationPaginationClampingBounds(), TestRemediationSessionRevocationLifecycle(), TestRemediationSSEBrokerRoleScoping(), TestSSEBrokerClientLifecycleAndBroadcast() (+1 more)
+Nodes (9): NewSSEBroker(), parseInteger(), parsePositiveInt(), TestPublicTrackingOmitsAdminUsername(), TestRemediationCaptchaConfidentialityAndIntegrity(), TestRemediationPaginationClampingBounds(), TestRemediationSSEBrokerRoleScoping(), TestSSEBrokerClientLifecycleAndBroadcast() (+1 more)
 
 ### Community 98 - "Verbose Error / Debug Mode in Production"
 Cohesion: 0.11
@@ -625,8 +625,8 @@ Cohesion: 0.12
 Nodes (17): 1. Section nào không có finding thì bỏ section đó, 2. Severity cap theo rule, 3. File:Line format, 4. Issue column ngắn gọn, 5. Fix column, 6. PASSED section, 7. JSON summary cuối, 8. Footer disclaimer (bắt buộc) (+9 more)
 
 ### Community 108 - "testing.T"
-Cohesion: 0.07
-Nodes (31): context.Context, testing.T, contextWithAdmin(), TestAuditFailClosed(), TestClassificationValidationAndMath(), TestCSRFProtectionMiddleware(), TestTwoPersonDeletionStatusValidation(), TestDBCredentialsRequiredAtStartup() (+23 more)
+Cohesion: 0.06
+Nodes (38): context.Context, testing.T, contextWithAdmin(), TestAuditFailClosed(), TestAuditChainHMACComputation(), TestAuditKeyDerivation(), TestAuditLegacyHashCompatibility(), TestNormalizeAndValidateUsername() (+30 more)
 
 ### Community 109 - "Insecure Deserialization"
 Cohesion: 0.12
@@ -640,9 +640,9 @@ Nodes (16): Cross-references, Cách reasoning (KHÔNG pattern-match thuần), Ex
 Cohesion: 0.20
 Nodes (9): 1. Database Migrations & Startup, 2. Manual Backup, 3. Database Restore, 4. Cryptographic Key Re-encryption, Core Security Architecture, Dideban-e Amin (دیده‌بان امین), Environment Configuration, Operational Commands & CLI (+1 more)
 
-### Community 112 - "Security Audit Skill"
-Cohesion: 0.15
-Nodes (13): Directory Structure, Finding ID Format, How It Works, License, Quick Start, References & Standards, Security Audit Skill, Self-Update (+5 more)
+### Community 112 - "Container Security (Phase 10) — Added 2026-02"
+Cohesion: 0.29
+Nodes (7): 10.1 Dockerfile Security, 10.2 Image Supply Chain, 10.3 Runtime Security, 10.4 Secrets Management, 10.5 Network & Orchestration, 10.6 Logging & Monitoring, Container Security (Phase 10) — Added 2026-02
 
 ### Community 113 - "Macrostructures"
 Cohesion: 0.29
@@ -657,12 +657,12 @@ Cohesion: 0.12
 Nodes (17): Edge cases, Inputs (đã có sẵn từ SKILL.md context), LARGE Review Workflow — Sequential (Codex/Antigravity), Performance target, Resume protocol, Step L10 — Cleanup, Step L1 — Load rule files (1 lần duy nhất), Step L2 — Setup workspace (+9 more)
 
 ### Community 116 - "main"
-Cohesion: 0.10
-Nodes (26): AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed(), compress/gzip.Writer, net/http.Handler, net/http.HandlerFunc, net.IP (+18 more)
+Cohesion: 0.07
+Nodes (41): isKnownPlaceholderKey(), CSRFMiddleware(), isOriginAllowed(), compress/gzip.Writer, net/http.Handler, net.IP, net.IPNet, getDBConnStr() (+33 more)
 
-### Community 117 - "VerifyCaptcha"
-Cohesion: 0.16
-Nodes (19): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), VerifyCaptcha(), DecryptCaptchaPayload() (+11 more)
+### Community 117 - "captcha.go"
+Cohesion: 0.17
+Nodes (13): cryptoRandInt(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), NewUsedCaptchaStore(), renderObfuscatedChars(), NewAccountLockoutManager(), CaptchaPayload (+5 more)
 
 ### Community 118 - "admin/js/confirm.js"
 Cohesion: 0.60
@@ -889,8 +889,8 @@ Cohesion: 0.17
 Nodes (11): Cross-references, Cách reasoning, Examples, Fix recommendation, HIGH — flag, Intent (TypeScript-specific), Khi nào HIGH, Khi nào MEDIUM/LOW (+3 more)
 
 ### Community 176 - "inspectZipArchive"
-Cohesion: 0.24
-Nodes (8): inspectZipArchive(), TestDownloadResponseControllerDeadline(), TestUploadLimiterCapacity(), TestZipInspectionLargeRatioTrigger(), TestZipInspectionNestedMaliciousPDF(), TestZipInspectionSmallTextNotFalsePositive(), TestInspectZipArchive(), TestIPRateLimiterBoundedCapacity()
+Cohesion: 0.18
+Nodes (11): inspectZipArchive(), NewIPRateLimiter(), TestDownloadResponseControllerDeadline(), TestUploadLimiterCapacity(), TestZipInspectionLargeRatioTrigger(), TestZipInspectionNestedMaliciousPDF(), TestZipInspectionSmallTextNotFalsePositive(), TestCaptchaReplayPrevention() (+3 more)
 
 ### Community 177 - "OWASP Security"
 Cohesion: 0.18
@@ -933,12 +933,12 @@ Cohesion: 0.29
 Nodes (6): ValidatePasswordComplexity(), TestCompoundAccountLockoutByIP(), TestInitialAdminPasswordGenerator(), TestPasswordPolicyUnicodeAndRestrictions(), TestRestrictedSessionMiddlewareEnforcement(), TestValidatePasswordComplexity()
 
 ### Community 187 - "crypto.go"
-Cohesion: 0.16
-Nodes (19): generateSessionToken(), init(), LoginHandler(), ChangeMyPasswordHandler(), decryptFilePayload(), decryptWithKey(), deriveKey(), GetTrackingCodeHMACKey() (+11 more)
+Cohesion: 0.15
+Nodes (21): generateSessionToken(), init(), LoginHandler(), ChangeMyPasswordHandler(), VerifyCaptcha(), DecryptCaptchaPayload(), deriveKey(), GetAuditHMACKey() (+13 more)
 
-### Community 188 - "Security Audit Skill — Changelog"
-Cohesion: 0.25
-Nodes (6): Security Audit Skill — Changelog, v1.0.0 — 2026-02-25, v2.0.0 — 2026-02-25, v3.0.0 — 2026-02-25, v3.1.0 — 2026-02-25, v3.2.0 — 2026-02-25
+### Community 188 - "AI/LLM Security (Phase 11) — Added 2026-02"
+Cohesion: 0.29
+Nodes (7): 11.1 Prompt Injection, 11.2 Model Access Control, 11.3 Output Safety, 11.4 Data Privacy & Training, 11.5 AI Supply Chain, 11.6 AI-Assisted Security Tools Integration, AI/LLM Security (Phase 11) — Added 2026-02
 
 ### Community 189 - "Language Detection"
 Cohesion: 0.29
@@ -948,9 +948,9 @@ Nodes (6): Algorithm, Edge cases, Frontend framework detection (sub-classificati
 Cohesion: 0.29
 Nodes (6): Contributing, Files in this folder, Frameworks covered, Go Specialization, How override works, Reasoning still applies
 
-### Community 191 - "computeAuditHash"
-Cohesion: 0.25
-Nodes (8): computeAuditHash(), GetAuditHMACKey(), normalizeAndValidateUsername(), TestAuditChainHMACComputation(), TestAuditKeyDerivation(), TestAuditLegacyHashCompatibility(), TestNormalizeAndValidateUsername(), TestVerifyAuditLogsHandler()
+### Community 191 - "Audit Workflow (6 Stages)"
+Cohesion: 0.29
+Nodes (7): Audit Workflow (6 Stages), Stage 1 — Context Building, Stage 2 — Threat Modeling (STRIDE), Stage 3 — Systematic Scanning, Stage 4 — Deep Analysis, Stage 5 — Report Writing, Stage 6 — Feedback Loop & Self-Update
 
 ### Community 193 - "load-rules.sh"
 Cohesion: 0.47
@@ -964,13 +964,13 @@ Nodes (4): Detection notes, .NET 10 Specialization Rules, Reasoning, Rules
 Cohesion: 0.47
 Nodes (5): createTestJPEGWithEXIF(), createTestPNG(), TestMetadataSanitizationJPEG(), TestMetadataSanitizationPNG(), TestSanitizeAttachmentPassthrough()
 
-### Community 196 - "Prompt Injection"
+### Community 196 - "AI-Assisted Security Tools"
 Cohesion: 0.50
-Nodes (4): Anthropic Constitutional AI Approach, Defense Checklist, Direct Injection Patterns, Prompt Injection
+Nodes (4): AI-Assisted Security Tools, Available Tools (as of 2026-02), Claude Code Security Specifics, Integration Best Practices
 
-### Community 197 - "Output Safety"
+### Community 197 - "Model Access & Cost Control"
 Cohesion: 0.50
-Nodes (4): Code Execution Safety, Content Filtering, Output Safety, Untrusted Output Principle
+Nodes (4): API Key Security, Model Access & Cost Control, Rate Limiting Requirements, Spending Controls
 
 ### Community 198 - "Data Privacy & Compliance"
 Cohesion: 0.50
@@ -989,7 +989,7 @@ Nodes (3): canonical_rule_ids(), main(), validate()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Anti-patterns — the named tells` connect `Minor (small taste issues)` to `Major (looks AI-generated)`, `hallmark/SKILL.md`, `Microinteraction tells`, `Critical (ships as slop)`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+  _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Why does `Assets — sourcing canon for icons, logos, illustrations, photography, video` connect `Assets — sourcing canon for icons, logos, illustrations, photography, video` to `hallmark/SKILL.md`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Why does `Hallmark` connect `Design flow (default)` to `hallmark/SKILL.md`?**

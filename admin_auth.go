@@ -34,14 +34,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		CaptchaID     string `json:"captcha_id"`
 		CaptchaAnswer string `json:"captcha_answer"`
 		ForceTakeover bool   `json:"force_takeover"`
+		TakeoverToken string `json:"takeover_token"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
 		http.Error(w, "Bad request", http.StatusBadRequest)
-		return
-	}
-
-	if !VerifyCaptcha(creds.CaptchaID, creds.CaptchaAnswer) {
-		http.Error(w, "کد امنیتی اشتباه است یا منقضی شده است.", http.StatusBadRequest)
 		return
 	}
 
@@ -49,6 +45,20 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	creds.Password = strings.TrimSpace(creds.Password)
 	clientIP := getIP(r)
 	safeUsername := truncateRunes(strings.ReplaceAll(strings.ReplaceAll(creds.Username, "\n", ""), "\r", ""), 32)
+
+	isTakeoverFlow := creds.ForceTakeover && creds.TakeoverToken != ""
+	if isTakeoverFlow {
+		payload, err := ValidateTakeoverToken(creds.TakeoverToken, clientIP, r.UserAgent())
+		if err != nil || payload.Username != creds.Username {
+			http.Error(w, "توکن انتقال نشست منقضی شده است. لطفاً مجدداً وارد شوید.", http.StatusBadRequest)
+			return
+		}
+	} else {
+		if !VerifyCaptcha(creds.CaptchaID, creds.CaptchaAnswer) {
+			http.Error(w, "کد امنیتی اشتباه است یا منقضی شده است.", http.StatusBadRequest)
+			return
+		}
+	}
 
 	if isLocked, remaining := Lockouts.IsLocked(creds.Username, clientIP); isLocked {
 		logAudit(safeUsername, "UNKNOWN", "LOCKED_LOGIN_ATTEMPT", nil, clientIP)
@@ -83,8 +93,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ok, needsRehash := VerifyPasswordWithRehash(creds.Password, storedHash)
-	if !ok {
+	if !isTakeoverFlow {
+		ok, needsRehash := VerifyPasswordWithRehash(creds.Password, storedHash)
+		if !ok {
 		failures, justLocked := Lockouts.RecordFailure(creds.Username, clientIP)
 		ProgressiveDelay(failures)
 		if justLocked {
@@ -94,6 +105,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "نام کاربری یا رمز عبور اشتباه است.", http.StatusUnauthorized)
 		return
 	}
+		if needsRehash {
+			if newHash, err := HashPassword(creds.Password); err == nil {
+				_, _ = DB.Exec(`UPDATE admin_users SET password_hash = $1 WHERE username = $2`, newHash, creds.Username)
+				logAudit(safeUsername, roleTitle, "PASSWORD_REHASHED", nil, clientIP)
+			}
+		}
+	}
 
 	if lastLoginAt.Valid && time.Since(lastLoginAt.Time) > 90*24*time.Hour {
 		_, _ = DB.Exec(`UPDATE admin_users SET is_active = false WHERE username = $1`, creds.Username)
@@ -102,21 +120,18 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if needsRehash {
-		if newHash, err := HashPassword(creds.Password); err == nil {
-			_, _ = DB.Exec(`UPDATE admin_users SET password_hash = $1 WHERE username = $2`, newHash, creds.Username)
-			logAudit(safeUsername, roleTitle, "PASSWORD_REHASHED", nil, clientIP)
-		}
-	}
+
 
 	activeSess, hasActive := Sessions.GetActiveSession(creds.Username)
 	if hasActive {
 		if !creds.ForceTakeover {
+			takeoverToken, _ := GenerateTakeoverToken(creds.Username, clientIP, r.UserAgent())
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusConflict)
 			json.NewEncoder(w).Encode(map[string]interface{}{
-				"status":  "session_active_conflict",
-				"message": "این حساب کاربری هم‌اکنون در دستگاه دیگری فعال است.",
+				"status":         "session_active_conflict",
+				"message":        "این حساب کاربری هم‌اکنون در دستگاه دیگری فعال است.",
+				"takeover_token": takeoverToken,
 				"active_session": map[string]interface{}{
 					"ip":          activeSess.IP,
 					"user_agent":  activeSess.UserAgent,

@@ -1420,7 +1420,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 409) {
                 const confData = await response.clone().json().catch(() => null);
                 if (confData && confData.status === 'session_active_conflict') {
-                    showTakeoverConfirmationModal(payload, confData.active_session);
+                    showTakeoverConfirmationModal(payload, confData.active_session, confData.takeover_token);
                     return;
                 }
                 const errText = await response.text();
@@ -8802,8 +8802,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let pendingTakeoverPayload = null;
     let cooldownTimerInterval = null;
 
-    function showTakeoverConfirmationModal(payload, activeSession) {
-        pendingTakeoverPayload = { ...payload, force_takeover: true };
+    function showTakeoverConfirmationModal(payload, activeSession, takeoverToken) {
+        pendingTakeoverPayload = {
+            username: payload.username,
+            takeover_token: takeoverToken || '',
+            force_takeover: true
+        };
         if (takeoverActiveIp) takeoverActiveIp.textContent = activeSession?.ip || 'نامشخص';
         if (takeoverActiveUa) takeoverActiveUa.textContent = activeSession?.user_agent || 'نامشخص';
         if (takeoverActiveTime) {

@@ -633,3 +633,96 @@ func Disable2FAHandler(w http.ResponseWriter, r *http.Request) {
 		"message": "احراز هویت دومرحله‌ای با موفقیت غیرفعال شد.",
 	})
 }
+func GenerateTakeoverToken(username, ip, ua string) (string, error) {
+	nonceBytes := make([]byte, 16)
+	if _, err := rand.Read(nonceBytes); err != nil {
+		return "", err
+	}
+	now := time.Now()
+	payload := MFAPendingPayload{
+		Username:  username,
+		Scope:     "takeover_pending",
+		Iat:       now.Unix(),
+		Exp:       now.Add(3 * time.Minute).Unix(),
+		Nonce:     base64.RawURLEncoding.EncodeToString(nonceBytes),
+		IP:        ip,
+		UserAgent: ua,
+	}
+	rawJSON, err := json.Marshal(payload)
+	if err != nil {
+		return "", err
+	}
+	b64Payload := base64.RawURLEncoding.EncodeToString(rawJSON)
+	mac := hmac.New(sha256.New, GetMFAPendingHMACKey())
+	mac.Write([]byte(b64Payload))
+	sig := base64.RawURLEncoding.EncodeToString(mac.Sum(nil))
+	return b64Payload + "." + sig, nil
+}
+
+func ValidateTakeoverToken(token string, ipAndUA ...string) (*MFAPendingPayload, error) {
+	parts := strings.Split(token, ".")
+	if len(parts) != 2 {
+		return nil, ErrInvalidMFAToken
+	}
+	clientIP := ""
+	clientUA := ""
+	if len(ipAndUA) > 0 {
+		clientIP = ipAndUA[0]
+	}
+	if len(ipAndUA) > 1 {
+		clientUA = ipAndUA[1]
+	}
+	b64Payload, sig := parts[0], parts[1]
+	mac := hmac.New(sha256.New, GetMFAPendingHMACKey())
+	mac.Write([]byte(b64Payload))
+	expectedSig := mac.Sum(nil)
+	actualSig, err := base64.RawURLEncoding.DecodeString(sig)
+	if err != nil {
+		return nil, ErrInvalidMFAToken
+	}
+	if subtle.ConstantTimeCompare(expectedSig, actualSig) != 1 {
+		macLegacy := hmac.New(sha256.New, GetHMACKey())
+		macLegacy.Write([]byte(b64Payload))
+		if subtle.ConstantTimeCompare(macLegacy.Sum(nil), actualSig) != 1 {
+			return nil, ErrInvalidMFAToken
+		}
+	}
+	rawJSON, err := base64.RawURLEncoding.DecodeString(b64Payload)
+	if err != nil {
+		return nil, ErrInvalidMFAToken
+	}
+	var payload MFAPendingPayload
+	if err := json.Unmarshal(rawJSON, &payload); err != nil {
+		return nil, ErrInvalidMFAToken
+	}
+	if payload.Scope != "takeover_pending" {
+		return nil, ErrMFAScopeMismatch
+	}
+	if time.Now().Unix() > payload.Exp {
+		return nil, ErrInvalidMFAToken
+	}
+	if payload.IP != "" && clientIP != "" && payload.IP != clientIP {
+		return nil, ErrInvalidMFAToken
+	}
+	if payload.UserAgent != "" && clientUA != "" && payload.UserAgent != clientUA {
+		return nil, ErrInvalidMFAToken
+	}
+	mfaNoncesMu.Lock()
+	if exp, ok := mfaUsedNonces[payload.Nonce]; ok && time.Now().Before(exp) {
+		mfaNoncesMu.Unlock()
+		return nil, errors.New("takeover token already used")
+	}
+	mfaUsedNonces[payload.Nonce] = time.Unix(payload.Exp, 0)
+	mfaNoncesMu.Unlock()
+	if DB != nil {
+		res, err := DB.Exec("INSERT INTO used_mfa_nonces (nonce, expires_at) VALUES ($1, $2) ON CONFLICT (nonce) DO NOTHING", payload.Nonce, time.Unix(payload.Exp, 0))
+		if err != nil {
+			return nil, err
+		}
+		affected, _ := res.RowsAffected()
+		if affected == 0 {
+			return nil, errors.New("takeover token already used")
+		}
+	}
+	return &payload, nil
+}
