@@ -325,20 +325,19 @@ func renderObfuscatedChars(expr string) string {
 }
 
 func GenerateMathCaptchaSVG() (string, string) {
-	num1 := cryptoRandInt(25, 95)
-	num2 := cryptoRandInt(10, 45)
 	isAddition := cryptoRandInt(0, 1) == 1
 
 	var text string
 	var answer int
 
 	if isAddition {
+		num1 := cryptoRandInt(1, 9)
+		num2 := cryptoRandInt(1, 9)
 		answer = num1 + num2
 		text = fmt.Sprintf("%d + %d = ?", num1, num2)
 	} else {
-		if num1 < num2 {
-			num1, num2 = num2, num1
-		}
+		num1 := cryptoRandInt(2, 9)
+		num2 := cryptoRandInt(1, num1-1)
 		answer = num1 - num2
 		text = fmt.Sprintf("%d - %d = ?", num1, num2)
 	}

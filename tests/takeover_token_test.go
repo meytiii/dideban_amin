@@ -33,3 +33,4 @@ func TestTakeoverTokenLifecycle(t *testing.T) {
 		t.Fatalf("expected error on IP mismatch, got nil")
 	}
 }
+
