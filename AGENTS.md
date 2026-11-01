@@ -114,3 +114,16 @@ PLUGINS OR EXTERNAL LIBRARIES ARE FORBIDDEN.
 ## Mandatory Task Completion & Auto-Commit Rule
 - Whenever a task is done, ALWAYS write a commit summary (≤50 characters, Conventional Commits format) and a clear, descriptive commit description fit for the task done.
 - Automatically commit changes to the main branch of the repository: https://github.com/meytiii/dideban_amin.
+
+<!-- antislop:start -->
+## antislop
+For UI, copy, people, mobile layout, or code comments work, read these installed skill files directly (use these paths even if a same-named global skill exists):
+- Core filter, always on: `antislop`: `.agents/skills/antislop/SKILL.md`
+- UI / visual: `antislop-ui`: `.agents/skills/antislop-ui/SKILL.md`
+- Copy & text: `antislop-copywriting`: `.agents/skills/antislop-copywriting/SKILL.md`
+- People: `antislop-human`: `.agents/skills/antislop-human/SKILL.md`
+- Mobile / responsive: `antislop-layoutmobile`: `.agents/skills/antislop-layoutmobile/SKILL.md`
+- Code comments: `antislop-code`: `.agents/skills/antislop-code/SKILL.md`
+
+Notice: Project-specific guidelines (such as strict NO COMMENTS rule, single color lock, and Persian error formatting) take absolute precedence over any conflicting skill instructions.
+<!-- antislop:end -->
