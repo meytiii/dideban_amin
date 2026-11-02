@@ -7,7 +7,52 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"sync"
+	"time"
 )
+
+var (
+	csrfAuditMu       sync.Mutex
+	csrfAuditThrottle = make(map[string]time.Time)
+)
+
+func logThrottledCSRFAudit(r *http.Request, alertType string) {
+	clientIP := getIP(r)
+	username := "UNKNOWN"
+	sessionKey := clientIP
+	if admin, ok := adminFromContext(r); ok && admin.Username != "" {
+		username = admin.Username
+		sessionKey = username + ":" + clientIP
+	} else if c, err := r.Cookie("herasat_admin_session"); err == nil && c.Value != "" {
+		if s, ok := Sessions.Get(c.Value); ok && s.Username != "" {
+			username = s.Username
+			sessionKey = username + ":" + clientIP
+		} else {
+			sessionKey = hashToken(c.Value) + ":" + clientIP
+		}
+	}
+
+	key := alertType + ":" + sessionKey
+	now := time.Now()
+
+	csrfAuditMu.Lock()
+	lastLog, exists := csrfAuditThrottle[key]
+	if exists && now.Sub(lastLog) < time.Minute {
+		csrfAuditMu.Unlock()
+		return
+	}
+	csrfAuditThrottle[key] = now
+	if len(csrfAuditThrottle) > 10000 {
+		for k, t := range csrfAuditThrottle {
+			if now.Sub(t) >= time.Minute {
+				delete(csrfAuditThrottle, k)
+			}
+		}
+	}
+	csrfAuditMu.Unlock()
+
+	logAudit(username, "SECURITY_ALERT", alertType, nil, clientIP)
+}
 
 func isOriginAllowed(origin string, r *http.Request) bool {
 	allowed := strings.TrimSpace(os.Getenv("HERASAT_ALLOWED_ORIGINS"))
@@ -51,8 +96,7 @@ func CSRFMiddleware(next http.HandlerFunc) http.HandlerFunc {
 				}
 			}
 			if origin != "" && !isOriginAllowed(origin, r) {
-				clientIP := getIP(r)
-				logAudit("UNKNOWN", "SECURITY_ALERT", "CSRF_INVALID_ORIGIN:"+origin, nil, clientIP)
+				logThrottledCSRFAudit(r, "CSRF_INVALID_ORIGIN:"+origin)
 				writeAuthJSONError(w, http.StatusForbidden, "origin_invalid", "درخواست ارسالی از مبدأ شبکه غیرمجاز رد گردید.")
 				return
 			}
@@ -60,15 +104,13 @@ func CSRFMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			csrfHeader := r.Header.Get("X-CSRF-Token")
 			cookie, err := r.Cookie("herasat_csrf")
 			if err != nil || cookie.Value == "" || csrfHeader == "" {
-				clientIP := getIP(r)
-				logAudit("UNKNOWN", "SECURITY_ALERT", "CSRF_MISSING", nil, clientIP)
+				logThrottledCSRFAudit(r, "CSRF_MISSING")
 				writeAuthJSONError(w, http.StatusForbidden, "csrf_missing", "شناسه امنیتی درخواست ارسال نشده است.")
 				return
 			}
 
 			if subtle.ConstantTimeCompare([]byte(csrfHeader), []byte(cookie.Value)) != 1 {
-				clientIP := getIP(r)
-				logAudit("UNKNOWN", "SECURITY_ALERT", "CSRF_MISMATCH", nil, clientIP)
+				logThrottledCSRFAudit(r, "CSRF_MISMATCH")
 				writeAuthJSONError(w, http.StatusForbidden, "csrf_invalid", "شناسه امنیتی درخواست معتبر نمی‌باشد.")
 				return
 			}

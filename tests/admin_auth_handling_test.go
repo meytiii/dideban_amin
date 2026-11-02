@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 )
@@ -364,3 +365,148 @@ func TestRateLimitMiddlewareAdminJSON(t *testing.T) {
 		}
 	}
 }
+
+func TestSessionTerminatedParallelPersistence(t *testing.T) {
+	dummyHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":"ok"}`))
+	})
+	wrapped := AdminAuthMiddleware(dummyHandler)
+
+	termToken := "parallel-term-test-token"
+	th := hashToken(termToken)
+	Sessions.SetTombstone(th, "TERMINATED_BY_SUPERUSER")
+
+	var wg sync.WaitGroup
+	errCount := 0
+	var mu sync.Mutex
+
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			req := httptest.NewRequest(http.MethodGet, "/api/admin/reports", nil)
+			req.AddCookie(&http.Cookie{Name: "herasat_admin_session", Value: termToken})
+			rec := httptest.NewRecorder()
+			wrapped.ServeHTTP(rec, req)
+
+			if rec.Code != http.StatusUnauthorized {
+				mu.Lock()
+				errCount++
+				mu.Unlock()
+				return
+			}
+			var body map[string]any
+			if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil || body["error"] != "session_terminated" {
+				mu.Lock()
+				errCount++
+				mu.Unlock()
+			}
+		}()
+	}
+	wg.Wait()
+
+	if errCount > 0 {
+		t.Fatalf("expected all 10 parallel requests to get session_terminated, but %d failed", errCount)
+	}
+}
+
+func TestConcurrentLoginParallelPersistence(t *testing.T) {
+	dummyHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":"ok"}`))
+	})
+	wrapped := AdminAuthMiddleware(dummyHandler)
+
+	token1 := "concurrent-token-first-12345"
+	session1 := AdminSession{
+		Token:      token1,
+		Username:   "concurrent_user_test",
+		Role:       "superuser",
+		CreatedAt:  time.Now(),
+		LastActive: time.Now(),
+		Expiry:     time.Now().Add(1 * time.Hour),
+	}
+	Sessions.Set(token1, session1)
+
+	token2 := "concurrent-token-second-67890"
+	session2 := AdminSession{
+		Token:      token2,
+		Username:   "concurrent_user_test",
+		Role:       "superuser",
+		CreatedAt:  time.Now(),
+		LastActive: time.Now(),
+		Expiry:     time.Now().Add(1 * time.Hour),
+	}
+	Sessions.Set(token2, session2)
+
+	var wg sync.WaitGroup
+	errCount := 0
+	var mu sync.Mutex
+
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			req := httptest.NewRequest(http.MethodGet, "/api/admin/reports", nil)
+			req.AddCookie(&http.Cookie{Name: "herasat_admin_session", Value: token1})
+			rec := httptest.NewRecorder()
+			wrapped.ServeHTTP(rec, req)
+
+			if rec.Code != http.StatusUnauthorized {
+				mu.Lock()
+				errCount++
+				mu.Unlock()
+				return
+			}
+			var body map[string]any
+			if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil || body["error"] != "concurrent_login" {
+				mu.Lock()
+				errCount++
+				mu.Unlock()
+			}
+		}()
+	}
+	wg.Wait()
+
+	if errCount > 0 {
+		t.Fatalf("expected all 10 parallel requests to get concurrent_login, but %d failed", errCount)
+	}
+}
+
+func TestCSRFAuditThrottling(t *testing.T) {
+	csrfAuditMu.Lock()
+	csrfAuditThrottle = make(map[string]time.Time)
+	csrfAuditMu.Unlock()
+
+	dummyHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":"ok"}`))
+	})
+	wrapped := CSRFMiddleware(dummyHandler)
+
+	req1 := httptest.NewRequest(http.MethodPost, "/api/admin/respond", nil)
+	req1.RemoteAddr = "192.168.1.55:1234"
+	rec1 := httptest.NewRecorder()
+	wrapped.ServeHTTP(rec1, req1)
+	if rec1.Code != http.StatusForbidden {
+		t.Fatalf("expected 403 on missing CSRF, got %d", rec1.Code)
+	}
+
+	req2 := httptest.NewRequest(http.MethodPost, "/api/admin/respond", nil)
+	req2.RemoteAddr = "192.168.1.55:1234"
+	rec2 := httptest.NewRecorder()
+	wrapped.ServeHTTP(rec2, req2)
+	if rec2.Code != http.StatusForbidden {
+		t.Fatalf("expected 403 on missing CSRF second time, got %d", rec2.Code)
+	}
+
+	csrfAuditMu.Lock()
+	throttleCount := len(csrfAuditThrottle)
+	csrfAuditMu.Unlock()
+
+	if throttleCount != 1 {
+		t.Fatalf("expected exactly 1 throttled audit record, got %d", throttleCount)
+	}
+}
+

@@ -131,11 +131,35 @@ func (b *SSEBroker) BroadcastSessionRevoked(username, tokenHash string, reason .
 	if len(reason) > 0 && reason[0] != "" {
 		r = reason[0]
 	}
-	b.BroadcastToRoles([]string{"superuser", "operator", "edare_kol"}, "session_revoked", map[string]string{
+
+	targetData, _ := json.Marshal(map[string]string{
+		"reason": r,
+	})
+	targetMsg := []byte(fmt.Sprintf("event: session_revoked\ndata: %s\n\n", string(targetData)))
+
+	superData, _ := json.Marshal(map[string]string{
 		"username":           username,
 		"revoked_token_hash": tokenHash,
 		"reason":             r,
 	})
+	superMsg := []byte(fmt.Sprintf("event: session_revoked\ndata: %s\n\n", string(superData)))
+
+	b.mu.RLock()
+	defer b.mu.RUnlock()
+
+	for client := range b.clients {
+		if client.username == username {
+			select {
+			case client.send <- targetMsg:
+			default:
+			}
+		} else if client.role == "superuser" {
+			select {
+			case client.send <- superMsg:
+			default:
+			}
+		}
+	}
 }
 
 func AdminEventsHandler(w http.ResponseWriter, r *http.Request) {

@@ -108,146 +108,9 @@ function broadcastAuthEvent(type, data = {}) {
     } catch (_) {}
 }
 
-if (_authSyncChannel) {
-    _authSyncChannel.onmessage = (event) => {
-        const msg = event && event.data;
-        if (msg && (msg.type === 'auth_failure' || msg.type === 'logout')) {
-            handleAuthFailure(msg.code || 'session_invalid', msg.message || '', { fromBroadcast: true, reason: msg.reason });
-        }
-    };
-}
-window.addEventListener('storage', (event) => {
-    if (event.key === 'herasat_auth_sync' && event.newValue) {
-        try {
-            const msg = JSON.parse(event.newValue);
-            if (msg && (msg.type === 'auth_failure' || msg.type === 'logout')) {
-                handleAuthFailure(msg.code || 'session_invalid', msg.message || '', { fromBroadcast: true, reason: msg.reason });
-            }
-        } catch (_) {}
-    }
-});
-
 function handleAuthFailure(code, message, details = {}) {
-    const dashboardEl = document.getElementById('dashboard-section');
-    const loginEl = document.getElementById('login-section');
-    const isDashboardActive = dashboardEl && dashboardEl.style.display !== 'none' && !dashboardEl.classList.contains('d-none');
-    const hasAdmin = (typeof currentAdmin !== 'undefined' && currentAdmin) || window.currentAdmin;
-    if (!hasAdmin && !isDashboardActive) {
-        return;
-    }
-    if (isAuthFailureHandled) return;
-    isAuthFailureHandled = true;
-    window.isKickoutHandled = true;
-
-    if (typeof timerInterval !== 'undefined' && timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
-    if (typeof stopBackgroundPolling === 'function') {
-        stopBackgroundPolling();
-    }
-    if (typeof reportPollingInterval !== 'undefined' && reportPollingInterval) {
-        clearInterval(reportPollingInterval);
-        reportPollingInterval = null;
-    }
-    if (typeof notifPollingInterval !== 'undefined' && notifPollingInterval) {
-        clearInterval(notifPollingInterval);
-        notifPollingInterval = null;
-    }
-    if (typeof _sseConnection !== 'undefined' && _sseConnection) {
-        _sseConnection.close();
-        _sseConnection = null;
-    }
-
-    try {
-        fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' }).catch(() => {});
-    } catch (_) {}
-
-    sessionStorage.removeItem('herasat_csrf');
-    sessionStorage.removeItem('2fa_prompt_shown');
-    if (typeof currentAdmin !== 'undefined') currentAdmin = null;
-    window.currentAdmin = null;
-    if (typeof allReports !== 'undefined') allReports = [];
-    window.allReports = [];
-    const reportsBodyEl = document.getElementById('reportsBody');
-    if (reportsBodyEl) reportsBodyEl.innerHTML = '';
-
-    document.querySelectorAll('.admin-modal-overlay').forEach(m => m.style.display = 'none');
-    if (typeof cancelMFAStep === 'function') cancelMFAStep();
-
-    if (dashboardEl) {
-        dashboardEl.style.display = 'none';
-        dashboardEl.classList.add('d-none');
-    }
-    if (loginEl) {
-        loginEl.style.display = 'flex';
-        loginEl.classList.remove('d-none');
-    }
-    if (typeof loadAdminCaptcha === 'function') {
-        loadAdminCaptcha();
-    }
-
-    if (!details.fromBroadcast) {
-        broadcastAuthEvent('auth_failure', { code, message, reason: details.reason });
-    }
-
-    let title = 'پایان نشست کاری';
-    let desc = message || 'نشست کاری شما نامعتبر است یا خاتمه یافته است. لطفاً مجدداً وارد شوید.';
-    let variant = 'warning';
-    let iconType = 'shield-alert';
-
-    if (code === 'session_expired') {
-        if (details.reason === 'absolute') {
-            title = 'پایان سقف مجاز نشست کاری';
-            desc = 'سقف مجاز فعالیت در سامانه (۱۲ ساعت) به پایان رسید. جهت حفظ امنیت، لطفاً مجدداً وارد شوید.';
-        } else {
-            title = 'پایان نشست کاری';
-            desc = 'نشست کاری شما به دلیل عدم فعالیت به پایان رسید. لطفاً مجدداً وارد شوید.';
-        }
-    } else if (code === 'session_terminated') {
-        title = 'خاتمه نشست توسط پشتیبانی';
-        desc = message || 'نشست کاری شما توسط پشتیبانی سامانه خاتمه یافت.';
-        variant = 'danger';
-    } else if (code === 'concurrent_login') {
-        title = 'خروج همزمان از حساب کاربری';
-        desc = message || 'یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.';
-        variant = 'danger';
-    } else if (code === 'csrf_invalid' || code === 'csrf_missing') {
-        title = 'خطای امنیتی نشست';
-        desc = 'شناسه امنیتی درخواست نامعتبر است یا نشست منقضی گردیده است. جهت حفظ امنیت از سامانه خارج شدید.';
-        variant = 'danger';
-    } else if (code === 'origin_invalid') {
-        title = 'خطای امنیتی مبدأ درخواست';
-        desc = 'درخواست ارسالی از مبدأ شبکه غیرمجاز تشخیص داده شد و نشست کاری شما متوقف گردید.';
-        variant = 'danger';
-    } else if (code === 'ip_not_allowed') {
-        title = 'محدودیت دسترسی شبکه';
-        desc = message || 'دسترسی به بخش مدیریت از این آدرس شبکه مجاز نمی‌باشد.';
-        variant = 'danger';
-    }
-
-    if (typeof window.showConfirmDialog === 'function') {
-        window.showConfirmDialog({
-            title: title,
-            description: desc,
-            singleButton: true,
-            confirmText: 'ورود مجدد به سامانه',
-            variant: variant,
-            iconType: iconType
-        }).finally(() => {
-            isAuthFailureHandled = false;
-            window.isKickoutHandled = false;
-            const userInput = document.getElementById('adminUsername') || document.querySelector('#loginForm input[name="username"]');
-            if (userInput) userInput.focus();
-        });
-    } else {
-        const loginMsgEl = document.getElementById('loginMessage');
-        if (loginMsgEl) {
-            loginMsgEl.textContent = desc;
-            loginMsgEl.style.display = 'block';
-        }
-        isAuthFailureHandled = false;
-        window.isKickoutHandled = false;
+    if (typeof window.handleAuthFailure === 'function') {
+        window.handleAuthFailure(code, message, details);
     }
 }
 window.handleAuthFailure = handleAuthFailure;
@@ -326,6 +189,13 @@ function adminFetch(url, options = {}) {
                                 opts.headers['X-CSRF-Token'] = refreshedCsrf;
                                 return adminFetch(url, opts);
                             }
+                        } else if (meRes.status === 401) {
+                            const meData = await meRes.json().catch(() => null);
+                            if (!opts.skipGlobalError) {
+                                const meCode = (meData && meData.error) || 'session_invalid';
+                                handleAuthFailure(meCode, meData && meData.message, { reason: meData && meData.reason });
+                            }
+                            return meRes;
                         }
                     } catch (_) {}
                     if (!opts.skipGlobalError) {
@@ -1644,7 +1514,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadAdminCaptcha();
             } else {
                 const errData = await response.clone().json().catch(() => null);
-                loginMessage.textContent = (errData && errData.message) || 'نام کاربری یا رمز عبور اشتباه است.';
+                let fallback = 'نام کاربری یا رمز عبور اشتباه است.';
+                if (response.status >= 500) {
+                    fallback = 'خطای داخلی سرور رخ داده است. لطفاً چند لحظه دیگر تلاش فرمایید.';
+                } else if (response.status === 403) {
+                    fallback = 'حساب کاربری شما غیرفعال شده یا دسترسی مجاز نمی‌باشد.';
+                } else if (response.status === 429) {
+                    fallback = 'درخواست‌های بیش از حد مجاز. لطفاً کمی بعد تلاش کنید.';
+                }
+                loginMessage.textContent = (errData && errData.message) || fallback;
                 loginMessage.style.display = 'block';
                 loadAdminCaptcha();
             }
@@ -1995,9 +1873,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 } else {
                     const errData = await res.clone().json().catch(() => null);
+                    let fallback = 'کد امنیتی اشتباه است یا منقضی شده است.';
+                    if (res.status >= 500) {
+                        fallback = 'خطای داخلی سرور رخ داده است. لطفاً چند لحظه دیگر تلاش فرمایید.';
+                    } else if (res.status === 403) {
+                        fallback = 'حساب کاربری شما غیرفعال شده یا دسترسی مجاز نمی‌باشد.';
+                    }
                     if (mfaOtpController) mfaOtpController.showError();
                     if (mfaMsg) {
-                        mfaMsg.textContent = (errData && errData.message) || 'کد امنیتی اشتباه است یا منقضی شده است.';
+                        mfaMsg.textContent = (errData && errData.message) || fallback;
                         mfaMsg.className = 'response-box error';
                         mfaMsg.style.display = 'block';
                     }
@@ -4569,7 +4453,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(data.message || `${countFa} پرونده با موفقیت حذف گردید`, 3500, 'success');
             selectedReportIds.clear();
             updateBulkToolbar();
-            await fetchReports().catch(() => { });
+            await fetchReports().catch(err => { console.error('Reports refresh failed:', err); });
         } catch (err) {
             showToast('خطا در اجرای عملیات حذف گروهی: ' + err.message, 4000, 'error');
         }
@@ -4600,7 +4484,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(`${toPersianNum(unreadSelected.length)} پرونده به عنوان بررسی‌شده علامت‌گذاری شدند`, 2500, 'success');
             selectedReportIds.clear();
             updateBulkToolbar();
-            await fetchReports().catch(() => { });
+            await fetchReports().catch(err => { console.error('Reports refresh failed:', err); });
         } catch (err) {
             showToast('خطا در انجام عملیات گروهی', 3000, 'error');
         }
@@ -4697,6 +4581,12 @@ document.addEventListener('DOMContentLoaded', () => {
             updateTableHeadersFromFilters();
             return true;
         } catch (error) {
+            consecutiveReportsErrors++;
+            if (consecutiveReportsErrors === 3) {
+                if (typeof showToast === 'function') {
+                    showToast('برقراری ارتباط با کارتابل با اختلال مواجه شد. در حال تلاش مجدد...', 5000, 'warning');
+                }
+            }
             console.error("Failed to load reports:", error);
             if (reportsBody && (!allReports || allReports.length === 0)) {
                 reportsBody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--color-danger, #ef4444);"><div style="display:inline-flex; align-items:center; justify-content:center; gap:8px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>خطا در دریافت اطلاعات گزارش‌ها: ${escapeHTML(error.message)}</span></div></td></tr>`;
@@ -4704,6 +4594,7 @@ document.addEventListener('DOMContentLoaded', () => {
             throw error;
         }
     }
+    window.fetchReports = fetchReports;
 
     let activeSearchContext = { rawTerm: '', normTerm: '', lowerTerm: '', regex: null };
 
@@ -5553,7 +5444,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             });
                             if (res.ok) {
                                 showToast('اولویت پرونده با موفقیت تغییر یافت', 2500, 'success');
-                                fetchReports().catch(() => { });
+                                fetchReports().catch(err => { console.error('Reports refresh failed:', err); });
                             } else {
                                 const errText = await res.text();
                                 showToast(errText || 'خطا در تغییر اولویت', 3000, 'error');
@@ -6269,7 +6160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isInsideDetail && backBtn) {
                 backBtn.click();
             }
-            await fetchReports().catch(() => { });
+            await fetchReports().catch(err => { console.error('Reports refresh failed:', err); });
         } catch (err) {
             showToast('خطا در اجرای عملیات حذف: ' + err.message, 4000, 'error');
         }
@@ -6329,7 +6220,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateKPICards();
                 fetchNotifications();
 
-                if (shouldRefresh) fetchReports().catch(() => { });
+                if (shouldRefresh) fetchReports().catch(err => { console.error('Reports refresh failed:', err); });
             }
         } catch (error) {
             console.error('Failed to toggle read status');
@@ -6444,7 +6335,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     if (responseInput) responseInput.value = '';
                     await viewReport(currentViewingReportId, true, true);
-                    fetchReports().catch(() => { });
+                    fetchReports().catch(err => { console.error('Reports refresh failed:', err); });
                 } else {
                     const err = await res.text();
                     if (statusMsg) {
@@ -6483,7 +6374,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error('Logout error:', err);
         } finally {
+            broadcastAuthEvent('logout');
             sessionStorage.removeItem('2fa_prompt_shown');
+            sessionStorage.removeItem('herasat_csrf');
             document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             location.reload();
         }
@@ -7787,12 +7680,13 @@ document.addEventListener('DOMContentLoaded', () => {
         _sseConnection.addEventListener('session_revoked', (e) => {
             try {
                 const data = JSON.parse(e.data || '{}');
-                if (data.username && currentAdmin && currentAdmin.username === data.username) {
-                    if (data.reason === 'TERMINATED_BY_SUPERUSER') {
-                        handleAuthFailure('session_terminated', 'نشست کاری شما توسط پشتیبانی سامانه خاتمه یافت.');
-                    } else {
-                        handleAuthFailure('concurrent_login', data.message || 'یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.');
-                    }
+                if (data.username && currentAdmin && currentAdmin.username !== data.username) {
+                    return;
+                }
+                if (data.reason === 'TERMINATED_BY_SUPERUSER') {
+                    handleAuthFailure('session_terminated', 'نشست کاری شما توسط پشتیبانی سامانه خاتمه یافت.');
+                } else {
+                    handleAuthFailure('concurrent_login', data.message || 'یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.');
                 }
             } catch (_) {
                 handleAuthFailure('concurrent_login', 'یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.');
@@ -7817,8 +7711,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function scheduleReportsRefresh() {
         clearTimeout(_refreshDebounceTimer);
         _refreshDebounceTimer = setTimeout(() => {
-            fetchReports(true, false).catch(() => { });
-            fetchNotifications().catch(() => { });
+            fetchReports(true, false).catch(err => { console.error('Reports refresh failed:', err); });
+            fetchNotifications().catch(err => { console.error('Notifications refresh failed:', err); });
         }, 200);
     }
 
@@ -7836,12 +7730,12 @@ document.addEventListener('DOMContentLoaded', () => {
         reportPollingInterval = setInterval(() => {
             if (document.hidden) return;
             if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
-            fetchReports(false, false).catch(() => { });
+            fetchReports(false, false).catch(err => { console.error('Reports refresh failed:', err); });
         }, 15000);
         notifPollingInterval = setInterval(() => {
             if (document.hidden) return;
             if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
-            fetchNotifications().catch(() => { });
+            fetchNotifications().catch(err => { console.error('Notifications refresh failed:', err); });
         }, 15000);
     }
 
@@ -7852,14 +7746,14 @@ document.addEventListener('DOMContentLoaded', () => {
             reportPollingInterval = setInterval(() => {
                 if (document.hidden) return;
                 if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
-                fetchReports(false, false).catch(() => { });
+                fetchReports(false, false).catch(err => { console.error('Reports refresh failed:', err); });
             }, 15000);
         }
         if (!notifPollingInterval) {
             notifPollingInterval = setInterval(() => {
                 if (document.hidden) return;
                 if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) return;
-                fetchNotifications().catch(() => { });
+                fetchNotifications().catch(err => { console.error('Notifications refresh failed:', err); });
             }, 15000);
         }
     }
@@ -7875,10 +7769,145 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function handleAuthFailure(code, message, details = {}) {
+        const isDashboardActive = dashboardSection && dashboardSection.style.display !== 'none' && !dashboardSection.classList.contains('d-none');
+        if (!currentAdmin && !isDashboardActive) {
+            return;
+        }
+        if (isAuthFailureHandled) return;
+        isAuthFailureHandled = true;
+        window.isKickoutHandled = true;
+
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+        stopBackgroundPolling();
+
+        try {
+            fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' }).catch(() => {});
+        } catch (_) {}
+
+        sessionStorage.removeItem('herasat_csrf');
+        sessionStorage.removeItem('2fa_prompt_shown');
+        currentAdmin = null;
+        window.currentAdmin = null;
+        allReports = [];
+        window.allReports = [];
+        if (reportsBody) reportsBody.innerHTML = '';
+
+        document.querySelectorAll('.admin-modal-overlay').forEach(m => m.style.display = 'none');
+        cancelMFAStep();
+
+        if (dashboardSection) {
+            dashboardSection.style.display = 'none';
+            dashboardSection.classList.add('d-none');
+        }
+        if (loginSection) {
+            loginSection.style.display = 'flex';
+            loginSection.classList.remove('d-none');
+        }
+        loadAdminCaptcha();
+
+        if (!details.fromBroadcast) {
+            broadcastAuthEvent(code === 'logout' ? 'logout' : 'auth_failure', { code, message, reason: details.reason });
+        }
+
+        if (code === 'logout' || details.silent) {
+            isAuthFailureHandled = false;
+            window.isKickoutHandled = false;
+            return;
+        }
+
+        let title = 'پایان نشست کاری';
+        let desc = message || 'نشست کاری شما نامعتبر است یا خاتمه یافته است. لطفاً مجدداً وارد شوید.';
+        let variant = 'warning';
+        let iconType = 'shield-alert';
+
+        if (code === 'session_expired') {
+            if (details.reason === 'absolute') {
+                title = 'پایان سقف مجاز نشست کاری';
+                desc = 'سقف مجاز فعالیت در سامانه (۱۲ ساعت) به پایان رسید. جهت حفظ امنیت، لطفاً مجدداً وارد شوید.';
+            } else {
+                title = 'پایان نشست کاری';
+                desc = 'نشست کاری شما به دلیل عدم فعالیت به پایان رسید. لطفاً مجدداً وارد شوید.';
+            }
+        } else if (code === 'session_terminated') {
+            title = 'خاتمه نشست توسط پشتیبانی';
+            desc = message || 'نشست کاری شما توسط پشتیبانی سامانه خاتمه یافت.';
+            variant = 'danger';
+        } else if (code === 'concurrent_login') {
+            title = 'خروج همزمان از حساب کاربری';
+            desc = message || 'یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.';
+            variant = 'danger';
+        } else if (code === 'csrf_invalid' || code === 'csrf_missing') {
+            title = 'خطای امنیتی نشست';
+            desc = 'شناسه امنیتی درخواست نامعتبر است یا نشست منقضی گردیده است. جهت حفظ امنیت از سامانه خارج شدید.';
+            variant = 'danger';
+        } else if (code === 'origin_invalid') {
+            title = 'خطای امنیتی مبدأ درخواست';
+            desc = 'درخواست ارسالی از مبدأ شبکه غیرمجاز تشخیص داده شد و نشست کاری شما متوقف گردید.';
+            variant = 'danger';
+        } else if (code === 'ip_not_allowed') {
+            title = 'محدودیت دسترسی شبکه';
+            desc = message || 'دسترسی به بخش مدیریت از این آدرس شبکه مجاز نمی‌باشد.';
+            variant = 'danger';
+        }
+
+        if (typeof showConfirmDialog === 'function') {
+            showConfirmDialog({
+                title: title,
+                description: desc,
+                singleButton: true,
+                confirmText: 'ورود مجدد به سامانه',
+                variant: variant,
+                iconType: iconType
+            }).finally(() => {
+                isAuthFailureHandled = false;
+                window.isKickoutHandled = false;
+                const userInput = document.getElementById('adminUsername') || document.querySelector('#loginForm input[name="username"]');
+                if (userInput) userInput.focus();
+            });
+        } else {
+            const loginMsgEl = document.getElementById('loginMessage');
+            if (loginMsgEl) {
+                loginMsgEl.textContent = desc;
+                loginMsgEl.style.display = 'block';
+            }
+            isAuthFailureHandled = false;
+            window.isKickoutHandled = false;
+        }
+    }
+    window.handleAuthFailure = handleAuthFailure;
+
+    if (_authSyncChannel) {
+        _authSyncChannel.onmessage = (event) => {
+            const msg = event && event.data;
+            if (msg && msg.type === 'logout') {
+                handleAuthFailure('logout', '', { fromBroadcast: true, silent: true });
+            } else if (msg && msg.type === 'auth_failure') {
+                handleAuthFailure(msg.code || 'session_invalid', msg.message || '', { fromBroadcast: true, reason: msg.reason });
+            }
+        };
+    }
+
+    window.addEventListener('storage', (event) => {
+        if (event.key === 'herasat_auth_sync' && event.newValue) {
+            try {
+                const msg = JSON.parse(event.newValue);
+                if (msg && msg.type === 'logout') {
+                    handleAuthFailure('logout', '', { fromBroadcast: true, silent: true });
+                } else if (msg && msg.type === 'auth_failure') {
+                    handleAuthFailure(msg.code || 'session_invalid', msg.message || '', { fromBroadcast: true, reason: msg.reason });
+                }
+            } catch (_) {}
+        }
+    });
+
     document.addEventListener('visibilitychange', () => {
         if (!document.hidden && dashboardSection && dashboardSection.style.display !== 'none' && !dashboardSection.classList.contains('d-none') && currentAdmin) {
-            fetchReports(false, false).catch(() => { });
-            fetchNotifications().catch(() => { });
+            fetchReports(false, false).catch(err => { console.error('Reports refresh failed:', err); });
+            fetchNotifications().catch(err => { console.error('Notifications refresh failed:', err); });
         }
     });
 
@@ -8016,8 +8045,8 @@ document.addEventListener('DOMContentLoaded', () => {
             updateBulkToolbar();
             if (advancedSection) advancedSection.style.display = 'none';
             if (analyticsSection) analyticsSection.style.display = 'none';
-            fetchReports(true, false).catch(() => { });
-            fetchNotifications().catch(() => { });
+            fetchReports(true, false).catch(err => { console.error('Reports refresh failed:', err); });
+            fetchNotifications().catch(err => { console.error('Notifications refresh failed:', err); });
         } else if (tabName === 'analytics') {
             tabBtnAnalytics?.classList.add('active');
             tabBtnReports?.classList.remove('active');
@@ -9133,7 +9162,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 startTakeoverCooldownTimer(coolData?.retry_after_seconds || 60, coolData?.message);
             } else {
                 const errData = await response.clone().json().catch(() => null);
-                loginMessage.textContent = errData?.message || (await response.text()) || 'خطا در احراز هویت و انتقال نشست.';
+                let fallback = 'خطا در احراز هویت و انتقال نشست.';
+                if (response.status >= 500) {
+                    fallback = 'خطای داخلی سرور رخ داده است. لطفاً چند لحظه دیگر تلاش فرمایید.';
+                } else if (response.status === 403) {
+                    fallback = 'حساب کاربری شما غیرفعال شده یا دسترسی مجاز نمی‌باشد.';
+                } else if (response.status === 401) {
+                    fallback = 'نام کاربری یا رمز عبور اشتباه است.';
+                }
+                loginMessage.textContent = (errData && errData.message) || fallback;
                 loginMessage.style.display = 'block';
                 loadAdminCaptcha();
             }
@@ -10662,7 +10699,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     void btnNotifBell.offsetWidth;
                     btnNotifBell.classList.add('bell-shake');
                 }
-                fetchReports(true, false).catch(() => { });
+                fetchReports(true, false).catch(err => { console.error('Reports refresh failed:', err); });
             }
             previousNotifUnreadCount = unreadCount;
 

@@ -124,6 +124,11 @@ type cachedSession struct {
 	cachedUntil time.Time
 }
 
+type sessionTombstone struct {
+	reason    string
+	expiresAt time.Time
+}
+
 type SessionManager struct {
 	mu           sync.RWMutex
 	db           *sql.DB
@@ -131,6 +136,7 @@ type SessionManager struct {
 	sessions     map[string]AdminSession
 	kickedTokens map[string]string
 	lastTakeover map[string]time.Time
+	tombstones   map[string]sessionTombstone
 }
 
 func hashToken(token string) string {
@@ -145,6 +151,7 @@ func NewSessionManager(db *sql.DB) *SessionManager {
 		sessions:     make(map[string]AdminSession),
 		kickedTokens: make(map[string]string),
 		lastTakeover: make(map[string]time.Time),
+		tombstones:   make(map[string]sessionTombstone),
 	}
 }
 
@@ -166,12 +173,12 @@ func (sm *SessionManager) getDB() *sql.DB {
 func (sm *SessionManager) Set(token string, session AdminSession) {
 	tokenHash := hashToken(token)
 	session.Token = token
+	var oldHashes []string
 
 	if db := sm.getDB(); db != nil {
 
 		rows, err := db.Query(`SELECT token_hash FROM admin_sessions WHERE username = $1 AND token_hash != $2`, session.Username, tokenHash)
 		if err == nil {
-			var oldHashes []string
 			for rows.Next() {
 				var oh string
 				if err := rows.Scan(&oh); err == nil {
@@ -212,6 +219,10 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
+	for _, oh := range oldHashes {
+		sm.setTombstoneLocked(oh, "CONCURRENT_LOGIN")
+	}
+
 	for th, cs := range sm.cache {
 		if cs.session.Username == session.Username && th != tokenHash {
 			delete(sm.cache, th)
@@ -220,6 +231,7 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 	for oldToken, oldSession := range sm.sessions {
 		if oldSession.Username == session.Username && oldToken != token {
 			sm.kickedTokens[oldToken] = "CONCURRENT_LOGIN"
+			sm.setTombstoneLocked(hashToken(oldToken), "CONCURRENT_LOGIN")
 			delete(sm.sessions, oldToken)
 			GlobalSSEBroker.BroadcastSessionRevoked(oldSession.Username, hashToken(oldToken), "CONCURRENT_LOGIN")
 		}
@@ -232,6 +244,35 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 	sm.sessions[token] = session
 }
 
+func (sm *SessionManager) SetTombstone(tokenHash, reason string) {
+	sm.mu.Lock()
+	defer sm.mu.Unlock()
+	sm.setTombstoneLocked(tokenHash, reason)
+}
+
+func (sm *SessionManager) setTombstoneLocked(tokenHash, reason string) {
+	if sm.tombstones == nil {
+		sm.tombstones = make(map[string]sessionTombstone)
+	}
+	sm.tombstones[tokenHash] = sessionTombstone{
+		reason:    reason,
+		expiresAt: time.Now().Add(60 * time.Second),
+	}
+}
+
+func (sm *SessionManager) GetTombstone(tokenHash string) (string, bool) {
+	sm.mu.RLock()
+	defer sm.mu.RUnlock()
+	if sm.tombstones == nil {
+		return "", false
+	}
+	ts, ok := sm.tombstones[tokenHash]
+	if ok && time.Now().Before(ts.expiresAt) {
+		return ts.reason, true
+	}
+	return "", false
+}
+
 func (sm *SessionManager) Get(token string) (AdminSession, bool) {
 	s, _, ok := sm.GetWithReason(token)
 	return s, ok
@@ -240,6 +281,10 @@ func (sm *SessionManager) Get(token string) (AdminSession, bool) {
 func (sm *SessionManager) GetWithReason(token string) (AdminSession, string, bool) {
 	tokenHash := hashToken(token)
 	now := time.Now()
+
+	if reason, ok := sm.GetTombstone(tokenHash); ok {
+		return AdminSession{}, reason, false
+	}
 
 	sm.mu.RLock()
 	if c, ok := sm.cache[tokenHash]; ok {
@@ -262,10 +307,12 @@ func (sm *SessionManager) GetWithReason(token string) (AdminSession, string, boo
 			&s.CreatedAt, &s.LastActive, &s.Expiry)
 		if err == nil {
 			if now.Sub(s.CreatedAt) > 12*time.Hour {
+				sm.SetTombstone(tokenHash, "absolute")
 				sm.Delete(token)
 				return AdminSession{}, "absolute", false
 			}
 			if now.After(s.Expiry) || now.Sub(s.LastActive) > 15*time.Minute {
+				sm.SetTombstone(tokenHash, "idle")
 				sm.Delete(token)
 				return AdminSession{}, "idle", false
 			}
@@ -287,6 +334,7 @@ func (sm *SessionManager) GetWithReason(token string) (AdminSession, string, boo
 			delete(sm.sessions, token)
 			sm.mu.Unlock()
 			if reason, kicked := sm.GetKickedReason(token); kicked {
+				sm.SetTombstone(tokenHash, reason)
 				return AdminSession{}, reason, false
 			}
 			return AdminSession{}, "invalid", false
@@ -299,16 +347,19 @@ func (sm *SessionManager) GetWithReason(token string) (AdminSession, string, boo
 
 	if !exists {
 		if reason, kicked := sm.GetKickedReason(token); kicked {
+			sm.SetTombstone(tokenHash, reason)
 			return AdminSession{}, reason, false
 		}
 		return AdminSession{}, "invalid", false
 	}
 
 	if now.Sub(session.CreatedAt) > 12*time.Hour {
+		sm.SetTombstone(tokenHash, "absolute")
 		sm.Delete(token)
 		return AdminSession{}, "absolute", false
 	}
 	if now.After(session.Expiry) || now.Sub(session.LastActive) > 15*time.Minute {
+		sm.SetTombstone(tokenHash, "idle")
 		sm.Delete(token)
 		return AdminSession{}, "idle", false
 	}
@@ -321,19 +372,20 @@ func (sm *SessionManager) GetKickedReason(token string) (string, bool) {
 
 	if db := sm.getDB(); db != nil {
 		var reason string
-		err := db.QueryRow(`SELECT reason FROM admin_session_kicks WHERE token_hash = $1`, tokenHash).Scan(&reason)
+		var createdAt time.Time
+		err := db.QueryRow(`SELECT reason, created_at FROM admin_session_kicks WHERE token_hash = $1`, tokenHash).Scan(&reason, &createdAt)
 		if err == nil && reason != "" {
-			_, _ = db.Exec(`DELETE FROM admin_session_kicks WHERE token_hash = $1`, tokenHash)
-			return reason, true
+			if time.Since(createdAt) <= 24*time.Hour {
+				return reason, true
+			}
 		}
 	}
 
-	sm.mu.Lock()
-	defer sm.mu.Unlock()
+	sm.mu.RLock()
+	defer sm.mu.RUnlock()
 
 	reason, exists := sm.kickedTokens[token]
 	if exists {
-		delete(sm.kickedTokens, token)
 		return reason, true
 	}
 	return "", false

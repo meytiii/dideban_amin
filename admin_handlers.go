@@ -2132,6 +2132,7 @@ func TerminateSessionHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	Sessions.kickedTokens[req.Token] = "TERMINATED_BY_SUPERUSER"
+	Sessions.setTombstoneLocked(tokenHash, "TERMINATED_BY_SUPERUSER")
 	Sessions.mu.Unlock()
 
 	GlobalSSEBroker.BroadcastSessionRevoked(targetUsername, tokenHash, "TERMINATED_BY_SUPERUSER")
