@@ -40,6 +40,10 @@ func AdminIPWhitelistMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		if !isAdminAccessAllowed(r) {
 			clientIPStr := getIP(r)
 			logAudit("UNKNOWN", "SECURITY_ALERT", "ADMIN_IP_WHITELIST_BLOCKED:"+clientIPStr, nil, clientIPStr)
+			if strings.HasPrefix(r.URL.Path, "/api/") {
+				writeAuthJSONError(w, http.StatusForbidden, "ip_not_allowed", "دسترسی به بخش مدیریت از این آدرس شبکه مجاز نمی‌باشد.")
+				return
+			}
 			http.Error(w, "دسترسی به بخش مدیریت از این آدرس شبکه مجاز نمی‌باشد.", http.StatusForbidden)
 			return
 		}

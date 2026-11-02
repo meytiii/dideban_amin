@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -65,6 +66,23 @@ func adminFromContext(r *http.Request) (AdminSession, bool) {
 	}
 	s, ok := val.(AdminSession)
 	return s, ok
+}
+
+func writeAuthJSONError(w http.ResponseWriter, status int, errCode, message string, extraFields ...map[string]any) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+	w.Header().Set("Pragma", "no-cache")
+	w.WriteHeader(status)
+	payload := map[string]any{
+		"error":   errCode,
+		"message": message,
+	}
+	for _, extra := range extraFields {
+		for k, v := range extra {
+			payload[k] = v
+		}
+	}
+	_ = json.NewEncoder(w).Encode(payload)
 }
 
 type AdminSession struct {
@@ -166,7 +184,7 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 				_, _ = db.Exec(`INSERT INTO admin_session_kicks (token_hash, reason, created_at)
 					VALUES ($1, 'CONCURRENT_LOGIN', NOW())
 					ON CONFLICT (token_hash) DO UPDATE SET reason = 'CONCURRENT_LOGIN'`, oh)
-				GlobalSSEBroker.BroadcastSessionRevoked(session.Username, oh)
+				GlobalSSEBroker.BroadcastSessionRevoked(session.Username, oh, "CONCURRENT_LOGIN")
 			}
 			if len(oldHashes) > 0 {
 				_, _ = db.Exec(`DELETE FROM admin_sessions WHERE username = $1 AND token_hash != $2`, session.Username, tokenHash)
@@ -203,7 +221,7 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 		if oldSession.Username == session.Username && oldToken != token {
 			sm.kickedTokens[oldToken] = "CONCURRENT_LOGIN"
 			delete(sm.sessions, oldToken)
-			GlobalSSEBroker.BroadcastSessionRevoked(oldSession.Username, hashToken(oldToken))
+			GlobalSSEBroker.BroadcastSessionRevoked(oldSession.Username, hashToken(oldToken), "CONCURRENT_LOGIN")
 		}
 	}
 
@@ -215,6 +233,11 @@ func (sm *SessionManager) Set(token string, session AdminSession) {
 }
 
 func (sm *SessionManager) Get(token string) (AdminSession, bool) {
+	s, _, ok := sm.GetWithReason(token)
+	return s, ok
+}
+
+func (sm *SessionManager) GetWithReason(token string) (AdminSession, string, bool) {
 	tokenHash := hashToken(token)
 	now := time.Now()
 
@@ -223,7 +246,7 @@ func (sm *SessionManager) Get(token string) (AdminSession, bool) {
 		if now.Before(c.cachedUntil) && now.Before(c.session.Expiry) && now.Sub(c.session.LastActive) <= 15*time.Minute && now.Sub(c.session.CreatedAt) <= 12*time.Hour {
 			sess := c.session
 			sm.mu.RUnlock()
-			return sess, true
+			return sess, "", true
 		}
 	}
 	sm.mu.RUnlock()
@@ -238,9 +261,13 @@ func (sm *SessionManager) Get(token string) (AdminSession, bool) {
 			&s.IP, &s.UserAgent, &s.Requires2FASetup, &s.RequiresPasswordChange,
 			&s.CreatedAt, &s.LastActive, &s.Expiry)
 		if err == nil {
-			if now.After(s.Expiry) || now.Sub(s.LastActive) > 15*time.Minute || now.Sub(s.CreatedAt) > 12*time.Hour {
+			if now.Sub(s.CreatedAt) > 12*time.Hour {
 				sm.Delete(token)
-				return AdminSession{}, false
+				return AdminSession{}, "absolute", false
+			}
+			if now.After(s.Expiry) || now.Sub(s.LastActive) > 15*time.Minute {
+				sm.Delete(token)
+				return AdminSession{}, "idle", false
 			}
 			s.Token = token
 
@@ -252,14 +279,17 @@ func (sm *SessionManager) Get(token string) (AdminSession, bool) {
 			sm.sessions[token] = s
 			sm.mu.Unlock()
 
-			return s, true
+			return s, "", true
 		}
 		if err == sql.ErrNoRows {
 			sm.mu.Lock()
 			delete(sm.cache, tokenHash)
 			delete(sm.sessions, token)
 			sm.mu.Unlock()
-			return AdminSession{}, false
+			if reason, kicked := sm.GetKickedReason(token); kicked {
+				return AdminSession{}, reason, false
+			}
+			return AdminSession{}, "invalid", false
 		}
 	}
 
@@ -268,15 +298,22 @@ func (sm *SessionManager) Get(token string) (AdminSession, bool) {
 	sm.mu.RUnlock()
 
 	if !exists {
-		return AdminSession{}, false
+		if reason, kicked := sm.GetKickedReason(token); kicked {
+			return AdminSession{}, reason, false
+		}
+		return AdminSession{}, "invalid", false
 	}
 
-	if now.After(session.Expiry) || now.Sub(session.LastActive) > 15*time.Minute || now.Sub(session.CreatedAt) > 12*time.Hour {
+	if now.Sub(session.CreatedAt) > 12*time.Hour {
 		sm.Delete(token)
-		return AdminSession{}, false
+		return AdminSession{}, "absolute", false
+	}
+	if now.After(session.Expiry) || now.Sub(session.LastActive) > 15*time.Minute {
+		sm.Delete(token)
+		return AdminSession{}, "idle", false
 	}
 
-	return session, true
+	return session, "", true
 }
 
 func (sm *SessionManager) GetKickedReason(token string) (string, bool) {
@@ -774,6 +811,10 @@ func RateLimitMiddleware(limiter *IPRateLimiter, next http.HandlerFunc) http.Han
 		ip := getIP(r)
 		key := normalizeRateLimitKey(ip)
 		if !limiter.Allow(key) {
+			if strings.HasPrefix(r.URL.Path, "/api/admin/") {
+				writeAuthJSONError(w, http.StatusTooManyRequests, "rate_limited", "تعداد درخواست‌های شما بیش از حد مجاز است. لطفاً کمی صبر کنید.")
+				return
+			}
 			http.Error(w, "تعداد درخواست‌های شما بیش از حد مجاز است. لطفاً کمی صبر کنید.", http.StatusTooManyRequests)
 			return
 		}

@@ -51,19 +51,25 @@ func CSRFMiddleware(next http.HandlerFunc) http.HandlerFunc {
 				}
 			}
 			if origin != "" && !isOriginAllowed(origin, r) {
-				http.Error(w, "Forbidden: Invalid Origin", http.StatusForbidden)
+				clientIP := getIP(r)
+				logAudit("UNKNOWN", "SECURITY_ALERT", "CSRF_INVALID_ORIGIN:"+origin, nil, clientIP)
+				writeAuthJSONError(w, http.StatusForbidden, "origin_invalid", "درخواست ارسالی از مبدأ شبکه غیرمجاز رد گردید.")
 				return
 			}
 
 			csrfHeader := r.Header.Get("X-CSRF-Token")
 			cookie, err := r.Cookie("herasat_csrf")
 			if err != nil || cookie.Value == "" || csrfHeader == "" {
-				http.Error(w, "Forbidden: Missing CSRF token", http.StatusForbidden)
+				clientIP := getIP(r)
+				logAudit("UNKNOWN", "SECURITY_ALERT", "CSRF_MISSING", nil, clientIP)
+				writeAuthJSONError(w, http.StatusForbidden, "csrf_missing", "شناسه امنیتی درخواست ارسال نشده است.")
 				return
 			}
 
 			if subtle.ConstantTimeCompare([]byte(csrfHeader), []byte(cookie.Value)) != 1 {
-				http.Error(w, "Forbidden: Invalid CSRF token", http.StatusForbidden)
+				clientIP := getIP(r)
+				logAudit("UNKNOWN", "SECURITY_ALERT", "CSRF_MISMATCH", nil, clientIP)
+				writeAuthJSONError(w, http.StatusForbidden, "csrf_invalid", "شناسه امنیتی درخواست معتبر نمی‌باشد.")
 				return
 			}
 		}

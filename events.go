@@ -126,10 +126,15 @@ func (b *SSEBroker) BroadcastRegionalResponse(reportID int64) {
 	b.BroadcastToRoles([]string{"superuser", "edare_kol"}, "regional_response", map[string]interface{}{"report_id": reportID})
 }
 
-func (b *SSEBroker) BroadcastSessionRevoked(username, tokenHash string) {
-	b.BroadcastToRoles([]string{"superuser"}, "session_revoked", map[string]string{
+func (b *SSEBroker) BroadcastSessionRevoked(username, tokenHash string, reason ...string) {
+	r := "CONCURRENT_LOGIN"
+	if len(reason) > 0 && reason[0] != "" {
+		r = reason[0]
+	}
+	b.BroadcastToRoles([]string{"superuser", "operator", "edare_kol"}, "session_revoked", map[string]string{
 		"username":           username,
 		"revoked_token_hash": tokenHash,
+		"reason":             r,
 	})
 }
 

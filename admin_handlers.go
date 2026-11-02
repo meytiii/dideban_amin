@@ -34,24 +34,25 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		w.Header().Set("X-Server-Time", time.Now().Format(time.RFC3339Nano))
 
 		cookie, err := r.Cookie("herasat_admin_session")
-		if err != nil {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		if err != nil || cookie.Value == "" {
+			writeAuthJSONError(w, http.StatusUnauthorized, "session_missing", "نشست کاربری یافت نشد. لطفاً وارد حساب خود شوید.")
 			return
 		}
 
-		session, exists := Sessions.Get(cookie.Value)
+		session, reason, exists := Sessions.GetWithReason(cookie.Value)
 		if !exists {
-			if reason, wasKicked := Sessions.GetKickedReason(cookie.Value); wasKicked {
-				w.Header().Set("Content-Type", "application/json")
-				w.WriteHeader(http.StatusUnauthorized)
-				json.NewEncoder(w).Encode(map[string]string{
-					"error":   "concurrent_login",
-					"reason":  reason,
-					"message": "یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.",
-				})
-				return
+			switch reason {
+			case "CONCURRENT_LOGIN":
+				writeAuthJSONError(w, http.StatusUnauthorized, "concurrent_login", "یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.", map[string]any{"reason": "CONCURRENT_LOGIN"})
+			case "TERMINATED_BY_SUPERUSER":
+				writeAuthJSONError(w, http.StatusUnauthorized, "session_terminated", "نشست کاری شما توسط پشتیبانی سامانه خاتمه یافت.")
+			case "idle":
+				writeAuthJSONError(w, http.StatusUnauthorized, "session_expired", "نشست کاری شما به دلیل عدم فعالیت به پایان رسید.", map[string]any{"reason": "idle"})
+			case "absolute":
+				writeAuthJSONError(w, http.StatusUnauthorized, "session_expired", "سقف مجاز نشست کاری (۱۲ ساعت) به پایان رسید. لطفاً دوباره وارد شوید.", map[string]any{"reason": "absolute"})
+			default:
+				writeAuthJSONError(w, http.StatusUnauthorized, "session_invalid", "نشست کاری شما نامعتبر است یا خاتمه یافته است.")
 			}
-			http.Error(w, "Session expired or invalid", http.StatusUnauthorized)
 			return
 		}
 
@@ -130,7 +131,7 @@ func SuperuserAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return AdminAuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		admin, ok := adminFromContext(r)
 		if !ok || (!admin.IsSuperuser && admin.Role != "superuser") {
-			http.Error(w, "دسترسی غیرمجاز: این بخش منحصراً متعلق به پشتیبانی سامانه است.", http.StatusForbidden)
+			writeAuthJSONError(w, http.StatusForbidden, "forbidden", "دسترسی غیرمجاز: این بخش منحصراً متعلق به پشتیبانی سامانه است.")
 			return
 		}
 		next.ServeHTTP(w, r)
@@ -1161,7 +1162,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 		absFilePath, err := filepath.Abs(cleanPath)
 		if err != nil || !isWithinDirectory(absUploadDir, absFilePath) {
 			logAudit(admin.Username, admin.Title, "ILLEGAL_FILE_ACCESS_ATTEMPT", &reportID, getIP(r))
-			http.Error(w, "Access Denied: Invalid file path boundary", http.StatusForbidden)
+			writeAuthJSONError(w, http.StatusForbidden, "forbidden", "دسترسی غیرمجاز: مسیر فایل نامعتبر است.")
 			return
 		}
 
@@ -1234,7 +1235,7 @@ func DownloadAttachmentHandler(w http.ResponseWriter, r *http.Request) {
 		absFilePath, err := filepath.Abs(cleanPath)
 		if err != nil || !isWithinDirectory(absUploadDir, absFilePath) {
 			logAudit(admin.Username, admin.Title, "ILLEGAL_FILE_ACCESS_ATTEMPT", &reportID, getIP(r))
-			http.Error(w, "Access Denied: Invalid file path boundary", http.StatusForbidden)
+			writeAuthJSONError(w, http.StatusForbidden, "forbidden", "دسترسی غیرمجاز: مسیر فایل نامعتبر است.")
 			return
 		}
 
@@ -2133,7 +2134,7 @@ func TerminateSessionHandler(w http.ResponseWriter, r *http.Request) {
 	Sessions.kickedTokens[req.Token] = "TERMINATED_BY_SUPERUSER"
 	Sessions.mu.Unlock()
 
-	GlobalSSEBroker.BroadcastSessionRevoked(targetUsername, tokenHash)
+	GlobalSSEBroker.BroadcastSessionRevoked(targetUsername, tokenHash, "TERMINATED_BY_SUPERUSER")
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "نشست کاربر با موفقیت خاتمه یافت."}`))

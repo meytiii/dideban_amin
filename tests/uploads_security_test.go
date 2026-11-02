@@ -139,6 +139,8 @@ func TestOOXMLMacroAndTemplateRejection(t *testing.T) {
 	t.Run("SanitizesOOXMLMetadata", func(t *testing.T) {
 		var buf bytes.Buffer
 		zw := zip.NewWriter(&buf)
+		w0, _ := zw.Create("[Content_Types].xml")
+		_, _ = w0.Write([]byte(`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="xml" ContentType="application/xml"/></Types>`))
 		w1, _ := zw.Create("docProps/core.xml")
 		_, _ = w1.Write([]byte(`<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:creator>John Doe</dc:creator></cp:coreProperties>`))
 		w2, _ := zw.Create("docProps/custom.xml")

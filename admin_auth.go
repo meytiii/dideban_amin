@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -37,7 +38,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		TakeoverToken string `json:"takeover_token"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
-		http.Error(w, "Bad request", http.StatusBadRequest)
+		writeAuthJSONError(w, http.StatusBadRequest, "bad_request", "درخواست نامعتبر است.")
 		return
 	}
 
@@ -50,12 +51,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if isTakeoverFlow {
 		payload, err := ValidateTakeoverToken(creds.TakeoverToken, clientIP, r.UserAgent())
 		if err != nil || payload.Username != creds.Username {
-			http.Error(w, "توکن انتقال نشست منقضی شده است. لطفاً مجدداً وارد شوید.", http.StatusBadRequest)
+			writeAuthJSONError(w, http.StatusBadRequest, "bad_request", "توکن انتقال نشست منقضی شده است. لطفاً مجدداً وارد شوید.")
 			return
 		}
 	} else {
 		if !VerifyCaptcha(creds.CaptchaID, creds.CaptchaAnswer) {
-			http.Error(w, "کد امنیتی اشتباه است یا منقضی شده است.", http.StatusBadRequest)
+			writeAuthJSONError(w, http.StatusBadRequest, "invalid_captcha", "کد امنیتی اشتباه است یا منقضی شده است.")
 			return
 		}
 	}
@@ -63,7 +64,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if isLocked, remaining := Lockouts.IsLocked(creds.Username, clientIP); isLocked {
 		logAudit(safeUsername, "UNKNOWN", "LOCKED_LOGIN_ATTEMPT", nil, clientIP)
 		minutes := int(remaining.Minutes()) + 1
-		http.Error(w, fmt.Sprintf("حساب کاربری شما به دلیل تلاش‌های ناموفق متعدد به مدت %d دقیقه موقتاً مسدود شده است.", minutes), http.StatusTooManyRequests)
+		writeAuthJSONError(w, http.StatusTooManyRequests, "account_locked", fmt.Sprintf("حساب کاربری شما به دلیل تلاش‌های ناموفق متعدد به مدت %d دقیقه موقتاً مسدود شده است.", minutes), map[string]any{"lockout_minutes": minutes})
 		return
 	}
 
@@ -89,7 +90,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			logAudit(safeUsername, "UNKNOWN", "ACCOUNT_LOCKED", nil, clientIP)
 		}
 		logAudit(safeUsername, "UNKNOWN", "FAILED_LOGIN", nil, clientIP)
-		http.Error(w, "نام کاربری یا رمز عبور اشتباه است.", http.StatusUnauthorized)
+		writeAuthJSONError(w, http.StatusUnauthorized, "invalid_credentials", "نام کاربری یا رمز عبور اشتباه است.")
 		return
 	}
 
@@ -102,7 +103,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			logAudit(safeUsername, "UNKNOWN", "ACCOUNT_LOCKED", nil, clientIP)
 		}
 		logAudit(safeUsername, "UNKNOWN", "FAILED_LOGIN", nil, clientIP)
-		http.Error(w, "نام کاربری یا رمز عبور اشتباه است.", http.StatusUnauthorized)
+		writeAuthJSONError(w, http.StatusUnauthorized, "invalid_credentials", "نام کاربری یا رمز عبور اشتباه است.")
 		return
 	}
 		if needsRehash {
@@ -116,7 +117,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if lastLoginAt.Valid && time.Since(lastLoginAt.Time) > 90*24*time.Hour {
 		_, _ = DB.Exec(`UPDATE admin_users SET is_active = false WHERE username = $1`, creds.Username)
 		logAudit(safeUsername, roleTitle, "ACCOUNT_DORMANT_AUTO_LOCKED", nil, clientIP)
-		http.Error(w, "حساب کاربری شما به دلیل عدم فعالیت بیش از ۹۰ روز به صورت خودکار غیرفعال شده است. لطفاً با مدیر ارشد تماس بگیرید.", http.StatusForbidden)
+		writeAuthJSONError(w, http.StatusForbidden, "account_inactive", "حساب کاربری شما به دلیل عدم فعالیت بیش از ۹۰ روز به صورت خودکار غیرفعال شده است. لطفاً با مدیر ارشد تماس بگیرید.")
 		return
 	}
 
@@ -155,7 +156,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if totpEnabled && totpSecret != "" {
 		mfaToken, err := GenerateMFAPendingToken(creds.Username, clientIP, r.UserAgent())
 		if err != nil {
-			http.Error(w, "خطای تولید شناسه ورود دومرحله‌ای", http.StatusInternalServerError)
+			writeAuthJSONError(w, http.StatusInternalServerError, "server_error", "خطای تولید شناسه ورود دومرحله‌ای")
 			return
 		}
 
@@ -253,7 +254,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 func GetCurrentAdminHandler(w http.ResponseWriter, r *http.Request) {
 	admin, ok := adminFromContext(r)
 	if !ok {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		writeAuthJSONError(w, http.StatusUnauthorized, "session_missing", "نشست کاربری یافت نشد.")
 		return
 	}
 
@@ -343,6 +344,21 @@ func getIP(r *http.Request) string {
 }
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	origin := r.Header.Get("Origin")
+	if origin == "" {
+		if ref := r.Header.Get("Referer"); ref != "" {
+			if u, err := url.Parse(ref); err == nil {
+				origin = u.Scheme + "://" + u.Host
+			}
+		}
+	}
+	if origin != "" && !isOriginAllowed(origin, r) {
+		clientIP := getIP(r)
+		logAudit("UNKNOWN", "SECURITY_ALERT", "LOGOUT_INVALID_ORIGIN:"+origin, nil, clientIP)
+		writeAuthJSONError(w, http.StatusForbidden, "origin_invalid", "درخواست ارسالی از مبدأ شبکه غیرمجاز رد گردید.")
+		return
+	}
+
 	cookie, err := r.Cookie("herasat_admin_session")
 	if err == nil && cookie.Value != "" {
 		if session, exists := Sessions.Get(cookie.Value); exists {

@@ -94,6 +94,185 @@ function showGlobalErrorModal(title, message, options = {}) {
 }
 window.showGlobalErrorModal = showGlobalErrorModal;
 
+let isAuthFailureHandled = false;
+window.isAuthFailureHandled = false;
+window.isKickoutHandled = false;
+
+const _authSyncChannel = (typeof BroadcastChannel !== 'undefined') ? new BroadcastChannel('herasat_admin_auth') : null;
+function broadcastAuthEvent(type, data = {}) {
+    if (_authSyncChannel) {
+        _authSyncChannel.postMessage({ type, ...data, timestamp: Date.now() });
+    }
+    try {
+        localStorage.setItem('herasat_auth_sync', JSON.stringify({ type, ...data, timestamp: Date.now() }));
+    } catch (_) {}
+}
+
+if (_authSyncChannel) {
+    _authSyncChannel.onmessage = (event) => {
+        const msg = event && event.data;
+        if (msg && (msg.type === 'auth_failure' || msg.type === 'logout')) {
+            handleAuthFailure(msg.code || 'session_invalid', msg.message || '', { fromBroadcast: true, reason: msg.reason });
+        }
+    };
+}
+window.addEventListener('storage', (event) => {
+    if (event.key === 'herasat_auth_sync' && event.newValue) {
+        try {
+            const msg = JSON.parse(event.newValue);
+            if (msg && (msg.type === 'auth_failure' || msg.type === 'logout')) {
+                handleAuthFailure(msg.code || 'session_invalid', msg.message || '', { fromBroadcast: true, reason: msg.reason });
+            }
+        } catch (_) {}
+    }
+});
+
+function handleAuthFailure(code, message, details = {}) {
+    const dashboardEl = document.getElementById('dashboard-section');
+    const loginEl = document.getElementById('login-section');
+    const isDashboardActive = dashboardEl && dashboardEl.style.display !== 'none' && !dashboardEl.classList.contains('d-none');
+    const hasAdmin = (typeof currentAdmin !== 'undefined' && currentAdmin) || window.currentAdmin;
+    if (!hasAdmin && !isDashboardActive) {
+        return;
+    }
+    if (isAuthFailureHandled) return;
+    isAuthFailureHandled = true;
+    window.isKickoutHandled = true;
+
+    if (typeof timerInterval !== 'undefined' && timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    if (typeof stopBackgroundPolling === 'function') {
+        stopBackgroundPolling();
+    }
+    if (typeof reportPollingInterval !== 'undefined' && reportPollingInterval) {
+        clearInterval(reportPollingInterval);
+        reportPollingInterval = null;
+    }
+    if (typeof notifPollingInterval !== 'undefined' && notifPollingInterval) {
+        clearInterval(notifPollingInterval);
+        notifPollingInterval = null;
+    }
+    if (typeof _sseConnection !== 'undefined' && _sseConnection) {
+        _sseConnection.close();
+        _sseConnection = null;
+    }
+
+    try {
+        fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' }).catch(() => {});
+    } catch (_) {}
+
+    sessionStorage.removeItem('herasat_csrf');
+    sessionStorage.removeItem('2fa_prompt_shown');
+    if (typeof currentAdmin !== 'undefined') currentAdmin = null;
+    window.currentAdmin = null;
+    if (typeof allReports !== 'undefined') allReports = [];
+    window.allReports = [];
+    const reportsBodyEl = document.getElementById('reportsBody');
+    if (reportsBodyEl) reportsBodyEl.innerHTML = '';
+
+    document.querySelectorAll('.admin-modal-overlay').forEach(m => m.style.display = 'none');
+    if (typeof cancelMFAStep === 'function') cancelMFAStep();
+
+    if (dashboardEl) {
+        dashboardEl.style.display = 'none';
+        dashboardEl.classList.add('d-none');
+    }
+    if (loginEl) {
+        loginEl.style.display = 'flex';
+        loginEl.classList.remove('d-none');
+    }
+    if (typeof loadAdminCaptcha === 'function') {
+        loadAdminCaptcha();
+    }
+
+    if (!details.fromBroadcast) {
+        broadcastAuthEvent('auth_failure', { code, message, reason: details.reason });
+    }
+
+    let title = 'پایان نشست کاری';
+    let desc = message || 'نشست کاری شما نامعتبر است یا خاتمه یافته است. لطفاً مجدداً وارد شوید.';
+    let variant = 'warning';
+    let iconType = 'shield-alert';
+
+    if (code === 'session_expired') {
+        if (details.reason === 'absolute') {
+            title = 'پایان سقف مجاز نشست کاری';
+            desc = 'سقف مجاز فعالیت در سامانه (۱۲ ساعت) به پایان رسید. جهت حفظ امنیت، لطفاً مجدداً وارد شوید.';
+        } else {
+            title = 'پایان نشست کاری';
+            desc = 'نشست کاری شما به دلیل عدم فعالیت به پایان رسید. لطفاً مجدداً وارد شوید.';
+        }
+    } else if (code === 'session_terminated') {
+        title = 'خاتمه نشست توسط پشتیبانی';
+        desc = message || 'نشست کاری شما توسط پشتیبانی سامانه خاتمه یافت.';
+        variant = 'danger';
+    } else if (code === 'concurrent_login') {
+        title = 'خروج همزمان از حساب کاربری';
+        desc = message || 'یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.';
+        variant = 'danger';
+    } else if (code === 'csrf_invalid' || code === 'csrf_missing') {
+        title = 'خطای امنیتی نشست';
+        desc = 'شناسه امنیتی درخواست نامعتبر است یا نشست منقضی گردیده است. جهت حفظ امنیت از سامانه خارج شدید.';
+        variant = 'danger';
+    } else if (code === 'origin_invalid') {
+        title = 'خطای امنیتی مبدأ درخواست';
+        desc = 'درخواست ارسالی از مبدأ شبکه غیرمجاز تشخیص داده شد و نشست کاری شما متوقف گردید.';
+        variant = 'danger';
+    } else if (code === 'ip_not_allowed') {
+        title = 'محدودیت دسترسی شبکه';
+        desc = message || 'دسترسی به بخش مدیریت از این آدرس شبکه مجاز نمی‌باشد.';
+        variant = 'danger';
+    }
+
+    if (typeof window.showConfirmDialog === 'function') {
+        window.showConfirmDialog({
+            title: title,
+            description: desc,
+            singleButton: true,
+            confirmText: 'ورود مجدد به سامانه',
+            variant: variant,
+            iconType: iconType
+        }).finally(() => {
+            isAuthFailureHandled = false;
+            window.isKickoutHandled = false;
+            const userInput = document.getElementById('adminUsername') || document.querySelector('#loginForm input[name="username"]');
+            if (userInput) userInput.focus();
+        });
+    } else {
+        const loginMsgEl = document.getElementById('loginMessage');
+        if (loginMsgEl) {
+            loginMsgEl.textContent = desc;
+            loginMsgEl.style.display = 'block';
+        }
+        isAuthFailureHandled = false;
+        window.isKickoutHandled = false;
+    }
+}
+window.handleAuthFailure = handleAuthFailure;
+
+async function downloadAdminFile(url, fallbackFilename) {
+    try {
+        const res = await adminFetch(url);
+        if (!res.ok) return;
+        const disp = res.headers.get('content-disposition') || '';
+        let filename = fallbackFilename || 'download';
+        const match = disp.match(/filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i);
+        if (match && match[1]) filename = decodeURIComponent(match[1]);
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    } catch (_) {}
+}
+window.downloadAdminFile = downloadAdminFile;
+
 function adminFetch(url, options = {}) {
     const opts = { credentials: 'same-origin', ...options };
     opts.headers = { ...(opts.headers || {}) };
@@ -113,61 +292,66 @@ function adminFetch(url, options = {}) {
         if (newCsrf) {
             sessionStorage.setItem('herasat_csrf', newCsrf);
         }
-        if (res.status === 401) {
-            try {
-                const clone = res.clone();
-                clone.json().then(data => {
-                    if (data && data.error === 'concurrent_login') {
-                        if (typeof window.triggerConcurrentLoginAlert === 'function') {
-                            window.triggerConcurrentLoginAlert(data.message);
-                        }
-                    } else {
-                        if (typeof window.forceLogoutOnConnectionDrop === 'function') {
-                            window.forceLogoutOnConnectionDrop();
-                        } else if (typeof forceLogoutOnConnectionDrop === 'function') {
-                            forceLogoutOnConnectionDrop();
-                        }
-                    }
-                }).catch(() => {
-                    if (typeof window.forceLogoutOnConnectionDrop === 'function') {
-                        window.forceLogoutOnConnectionDrop();
-                    } else if (typeof forceLogoutOnConnectionDrop === 'function') {
-                        forceLogoutOnConnectionDrop();
-                    }
-                });
-            } catch (_) {
-                if (typeof window.forceLogoutOnConnectionDrop === 'function') {
-                    window.forceLogoutOnConnectionDrop();
-                } else if (typeof forceLogoutOnConnectionDrop === 'function') {
-                    forceLogoutOnConnectionDrop();
-                }
-            }
-        }
-        if (res.status === 403 && opts.method && opts.method.toUpperCase() !== 'GET' && !opts._retried) {
-            const clone = res.clone();
-            const text = await clone.text().catch(() => '');
-            if (text.includes('CSRF')) {
-                try {
-                    const meRes = await fetchWithTimeout('/api/admin/me', { credentials: 'same-origin' }, 10000);
-                    if (meRes.ok) {
-                        const meData = await meRes.json();
-                        const refreshedCsrf = meData.csrf_token || getCsrfToken();
-                        if (refreshedCsrf) {
-                            sessionStorage.setItem('herasat_csrf', refreshedCsrf);
-                            opts._retried = true;
-                            opts.headers['X-CSRF-Token'] = refreshedCsrf;
-                            return fetchWithTimeout(url, opts, 20000);
-                        }
-                    }
-                } catch (_) {}
-            }
-        }
-        if (!res.ok && !opts.silentError && !opts.skipGlobalError) {
-            let errData = null;
+
+        let errData = null;
+        if (!res.ok) {
             try {
                 const clone = res.clone();
                 errData = await clone.json();
             } catch (_) {}
+        }
+
+        if (res.status === 401) {
+            if (!opts.skipGlobalError) {
+                const code = errData && errData.error;
+                if (code === 'session_missing' || code === 'session_expired' || code === 'session_invalid' || code === 'session_terminated' || code === 'concurrent_login') {
+                    handleAuthFailure(code, errData && errData.message, { reason: errData && errData.reason });
+                }
+            }
+            return res;
+        }
+
+        if (res.status === 403 && opts.method && opts.method.toUpperCase() !== 'GET') {
+            const code = errData && errData.error;
+            if (code === 'csrf_missing' || code === 'csrf_invalid') {
+                if (!opts._retried) {
+                    opts._retried = true;
+                    try {
+                        const meRes = await fetchWithTimeout('/api/admin/me', { credentials: 'same-origin' }, 10000);
+                        if (meRes.ok) {
+                            const meData = await meRes.json();
+                            const refreshedCsrf = meData.csrf_token || getCsrfToken();
+                            if (refreshedCsrf) {
+                                sessionStorage.setItem('herasat_csrf', refreshedCsrf);
+                                opts.headers['X-CSRF-Token'] = refreshedCsrf;
+                                return adminFetch(url, opts);
+                            }
+                        }
+                    } catch (_) {}
+                    if (!opts.skipGlobalError) {
+                        handleAuthFailure('csrf_invalid', errData && errData.message);
+                    }
+                    return res;
+                } else {
+                    if (!opts.skipGlobalError) {
+                        handleAuthFailure('csrf_invalid', errData && errData.message);
+                    }
+                    return res;
+                }
+            } else if (code === 'origin_invalid') {
+                if (!opts.skipGlobalError) {
+                    handleAuthFailure('origin_invalid', errData && errData.message);
+                }
+                return res;
+            } else if (code === 'ip_not_allowed') {
+                if (!opts.skipGlobalError) {
+                    handleAuthFailure('ip_not_allowed', errData && errData.message);
+                }
+                return res;
+            }
+        }
+
+        if (!res.ok && !opts.silentError && !opts.skipGlobalError) {
             if (res.status === 403) {
                 if (errData && errData.error === '2fa_setup_required') {
                     showGlobalErrorModal('الزام فعال‌سازی احراز هویت دومرحله‌ای', errData.message || 'فعال‌سازی احراز هویت دومرحله‌ای جهت دسترسی به کارتابل و اطلاعات گزارش‌ها الزامی است.', {
@@ -186,6 +370,8 @@ function adminFetch(url, options = {}) {
                 } else if (errData && errData.error === 'password_change_required') {
                     const modalForcePwd = document.getElementById('modal-force-change-password');
                     if (modalForcePwd) modalForcePwd.style.display = 'flex';
+                } else if (errData && errData.error === 'ip_not_allowed') {
+                    handleAuthFailure('ip_not_allowed', errData.message);
                 } else {
                     let errorMsg = errData && (errData.message || errData.error);
                     if (!errorMsg) {
@@ -992,12 +1178,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const isDashboardActive = dashboardSection && dashboardSection.style.display !== 'none' && !dashboardSection.classList.contains('d-none');
         if (isDashboardActive || currentAdmin !== null) {
             try {
-                adminFetch('/api/admin/logout', { method: 'POST' }).catch(() => {});
+                fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' }).catch(() => {});
             } catch (_) {}
-            document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             sessionStorage.removeItem('herasat_csrf');
             sessionStorage.removeItem('2fa_prompt_shown');
             currentAdmin = null;
+            allReports = [];
+            if (reportsBody) reportsBody.innerHTML = '';
             if (_sseConnection) {
                 _sseConnection.close();
                 _sseConnection = null;
@@ -1169,16 +1356,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (remainingSeconds <= 0) {
             clearInterval(timerInterval);
             timerInterval = null;
-            showConfirmDialog({
-                title: 'پایان نشست کاری',
-                description: 'نشست کاری شما به دلیل عدم فعالیت به پایان رسید. لطفاً مجدداً وارد شوید.',
-                confirmText: 'ورود مجدد به سامانه',
-                cancelText: 'بستن',
-                variant: 'warning',
-                iconType: 'shield-alert'
-            }).then(() => {
-                forceLogoutOnConnectionDrop();
-            });
+            if (sessionWarningModal) sessionWarningModal.style.display = 'none';
+            handleAuthFailure('session_expired', 'نشست کاری شما به دلیل عدم فعالیت به پایان رسید. لطفاً مجدداً وارد شوید.', { reason: 'idle' });
         }
     }
 
@@ -1391,7 +1570,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await adminFetch('/api/admin/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
+                skipGlobalError: true
             });
 
             if (response.ok) {
@@ -1404,27 +1584,52 @@ document.addEventListener('DOMContentLoaded', () => {
                     sessionStorage.setItem('herasat_csrf', data.csrf_token);
                 }
                 sessionStorage.removeItem('2fa_prompt_shown');
-                if (loginSection) {
-                    loginSection.classList.add('d-none');
-                    loginSection.style.display = 'none';
+
+                const profileEstablished = await checkAdminProfile(true);
+                if (profileEstablished) {
+                    isAuthFailureHandled = false;
+                    window.isKickoutHandled = false;
+                    if (loginSection) {
+                        loginSection.classList.add('d-none');
+                        loginSection.style.display = 'none';
+                    }
+                    if (dashboardSection) {
+                        dashboardSection.classList.remove('d-none');
+                        dashboardSection.style.display = 'block';
+                    }
+                    startSessionTimer();
+                    startBackgroundPolling();
+                    switchMainTab('reports');
+                    runWhenIdle(fetchNotifications);
+                } else {
+                    try {
+                        fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' }).catch(() => {});
+                    } catch (_) {}
+                    sessionStorage.removeItem('herasat_csrf');
+                    currentAdmin = null;
+                    if (typeof window.showConfirmDialog === 'function') {
+                        window.showConfirmDialog({
+                            title: 'برقراری نشست کاری ناموفق بود',
+                            description: 'احراز هویت با موفقیت انجام شد اما برقراری نشست کاری با سرور امکان‌پذیر نشد. لطفاً ارتباط شبکه و تنظیمات کوکی مرورگر را بررسی نموده و مجدداً تلاش فرمایید.',
+                            singleButton: true,
+                            confirmText: 'تلاش مجدد',
+                            variant: 'warning',
+                            iconType: 'shield-alert'
+                        });
+                    } else if (loginMessage) {
+                        loginMessage.textContent = 'احراز هویت انجام شد اما نشست کاری برقرار نگردید.';
+                        loginMessage.style.display = 'block';
+                    }
+                    loadAdminCaptcha();
                 }
-                if (dashboardSection) {
-                    dashboardSection.classList.remove('d-none');
-                    dashboardSection.style.display = 'block';
-                }
-                startSessionTimer();
-                startBackgroundPolling();
-                await checkAdminProfile();
-                switchMainTab('reports');
-                runWhenIdle(fetchNotifications);
             } else if (response.status === 409) {
                 const confData = await response.clone().json().catch(() => null);
                 if (confData && confData.status === 'session_active_conflict') {
                     showTakeoverConfirmationModal(payload, confData.active_session, confData.takeover_token);
                     return;
                 }
-                const errText = await response.text();
-                loginMessage.textContent = errText || 'خطا در احراز هویت.';
+                const errData = await response.clone().json().catch(() => null);
+                loginMessage.textContent = (errData && errData.message) || 'خطا در احراز هویت.';
                 loginMessage.style.display = 'block';
                 loadAdminCaptcha();
             } else if (response.status === 429) {
@@ -1433,13 +1638,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     startTakeoverCooldownTimer(coolData.retry_after_seconds || 60, coolData.message);
                     return;
                 }
-                const errText = await response.text().catch(() => '');
-                loginMessage.textContent = errText || 'درخواست‌های بیش از حد مجاز. لطفاً کمی بعد تلاش کنید.';
+                const errData = await response.clone().json().catch(() => null);
+                loginMessage.textContent = (errData && errData.message) || 'درخواست‌های بیش از حد مجاز. لطفاً کمی بعد تلاش کنید.';
                 loginMessage.style.display = 'block';
                 loadAdminCaptcha();
             } else {
-                const errText = await response.text();
-                loginMessage.textContent = errText || 'نام کاربری یا رمز عبور اشتباه است.';
+                const errData = await response.clone().json().catch(() => null);
+                loginMessage.textContent = (errData && errData.message) || 'نام کاربری یا رمز عبور اشتباه است.';
                 loginMessage.style.display = 'block';
                 loadAdminCaptcha();
             }
@@ -1737,7 +1942,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const res = await adminFetch('/api/admin/login/verify-mfa', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mfa_token: token, totp_code: code })
+                    body: JSON.stringify({ mfa_token: token, totp_code: code }),
+                    skipGlobalError: true
                 });
 
                 if (res.ok) {
@@ -1747,21 +1953,38 @@ document.addEventListener('DOMContentLoaded', () => {
                         sessionStorage.setItem('herasat_csrf', data.csrf_token);
                     }
                     if (mfaCountdownInterval) clearInterval(mfaCountdownInterval);
-                    const mfaStep = document.getElementById('mfaStepContainer');
-                    if (mfaStep) mfaStep.style.display = 'none';
-                    if (loginSection) {
-                        loginSection.classList.add('d-none');
-                        loginSection.style.display = 'none';
+
+                    const profileEstablished = await checkAdminProfile(true);
+                    if (profileEstablished) {
+                        isAuthFailureHandled = false;
+                        window.isKickoutHandled = false;
+                        const mfaStep = document.getElementById('mfaStepContainer');
+                        if (mfaStep) mfaStep.style.display = 'none';
+                        if (loginSection) {
+                            loginSection.classList.add('d-none');
+                            loginSection.style.display = 'none';
+                        }
+                        if (dashboardSection) {
+                            dashboardSection.classList.remove('d-none');
+                            dashboardSection.style.display = 'block';
+                        }
+                        startSessionTimer();
+                        startBackgroundPolling();
+                        switchMainTab('reports');
+                        runWhenIdle(fetchNotifications);
+                    } else {
+                        try {
+                            fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' }).catch(() => {});
+                        } catch (_) {}
+                        sessionStorage.removeItem('herasat_csrf');
+                        currentAdmin = null;
+                        if (mfaOtpController) mfaOtpController.showError();
+                        if (mfaMsg) {
+                            mfaMsg.textContent = 'احراز هویت انجام شد اما برقراری نشست کاری ناموفق بود.';
+                            mfaMsg.className = 'response-box error';
+                            mfaMsg.style.display = 'block';
+                        }
                     }
-                    if (dashboardSection) {
-                        dashboardSection.classList.remove('d-none');
-                        dashboardSection.style.display = 'block';
-                    }
-                    startSessionTimer();
-                    startBackgroundPolling();
-                    await checkAdminProfile();
-                    switchMainTab('reports');
-                    runWhenIdle(fetchNotifications);
                 } else if (res.status === 429) {
                     const coolData = await res.clone().json().catch(() => null);
                     if (mfaOtpController) mfaOtpController.showError();
@@ -1771,10 +1994,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         mfaMsg.style.display = 'block';
                     }
                 } else {
-                    const errText = await res.text();
+                    const errData = await res.clone().json().catch(() => null);
                     if (mfaOtpController) mfaOtpController.showError();
                     if (mfaMsg) {
-                        mfaMsg.textContent = errText || 'کد امنیتی اشتباه است یا منقضی شده است.';
+                        mfaMsg.textContent = (errData && errData.message) || 'کد امنیتی اشتباه است یا منقضی شده است.';
                         mfaMsg.className = 'response-box error';
                         mfaMsg.style.display = 'block';
                     }
@@ -4404,6 +4627,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let lastReportsSignature = '';
+    let consecutiveReportsErrors = 0;
 
     async function fetchReports(forceRefresh = false, showSkeleton = false) {
         if (!dashboardSection || dashboardSection.style.display === 'none' || dashboardSection.classList.contains('d-none') || !currentAdmin) {
@@ -4418,7 +4642,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const reportsUrl = `/api/admin/reports?${queryParams.toString()}`;
             const response = await adminFetch(reportsUrl);
             if (response.status === 401) {
-                forceLogoutOnConnectionDrop();
                 return false;
             }
             if (!response.ok) {
@@ -4442,8 +4665,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (data && Array.isArray(data.reports)) {
                 fetchedReports = data.reports;
             } else {
-                fetchedReports = [];
+                throw new Error('قالب داده‌های دریافتی از سرور نامعتبر است.');
             }
+            consecutiveReportsErrors = 0;
 
             let currentUnread = 0;
             for (let i = 0; i < fetchedReports.length; i++) {
@@ -5148,7 +5372,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnPrintDossierBtn')?.addEventListener('click', () => {
         if (!currentViewingReportId) return;
         showToast('در حال صدور و دریافت برگ پرونده بر اساس قالب ورد...');
-        window.location.href = `/api/admin/report/export-docx?id=${currentViewingReportId}`;
+        downloadAdminFile(`/api/admin/report/export-docx?id=${currentViewingReportId}`, `report_${currentViewingReportId}.docx`);
+    });
+
+    document.addEventListener('click', (e) => {
+        const card = e.target.closest('.admin-file-card-item');
+        if (!card) return;
+        const href = card.getAttribute('href');
+        if (!href) return;
+        e.preventDefault();
+        const nameEl = card.querySelector('.admin-file-card-name');
+        const filename = nameEl ? nameEl.textContent.trim() : 'attachment';
+        downloadAdminFile(href, filename);
     });
 
     let _elDetailSkeleton = null;
@@ -7553,10 +7788,14 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const data = JSON.parse(e.data || '{}');
                 if (data.username && currentAdmin && currentAdmin.username === data.username) {
-                    triggerConcurrentLoginAlert();
+                    if (data.reason === 'TERMINATED_BY_SUPERUSER') {
+                        handleAuthFailure('session_terminated', 'نشست کاری شما توسط پشتیبانی سامانه خاتمه یافت.');
+                    } else {
+                        handleAuthFailure('concurrent_login', data.message || 'یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.');
+                    }
                 }
             } catch (_) {
-                triggerConcurrentLoginAlert();
+                handleAuthFailure('concurrent_login', 'یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.');
             }
         });
 
@@ -7567,6 +7806,9 @@ document.addEventListener('DOMContentLoaded', () => {
         _sseConnection.addEventListener('error', () => {
             if (_sseConnection && _sseConnection.readyState === EventSource.CLOSED) {
                 _sseConnection = null;
+                if (currentAdmin) {
+                    adminFetch('/api/admin/me').catch(() => {});
+                }
                 startFallbackPolling();
             }
         });
@@ -7640,11 +7882,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    async function checkAdminProfile() {
+    async function checkAdminProfile(isPostLogin = false) {
         try {
-            const res = await adminFetch('/api/admin/me');
+            const res = await adminFetch('/api/admin/me', { skipGlobalError: true });
             if (res.ok) {
                 currentAdmin = await res.json();
+                isAuthFailureHandled = false;
+                if (typeof window !== 'undefined') {
+                    window.isKickoutHandled = false;
+                }
                 if (currentAdmin && currentAdmin.csrf_token) {
                     sessionStorage.setItem('herasat_csrf', currentAdmin.csrf_token);
                 }
@@ -8847,7 +9093,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await adminFetch('/api/admin/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payloadToSubmit)
+                body: JSON.stringify(payloadToSubmit),
+                skipGlobalError: true
             });
 
             if (response.ok) {
@@ -8860,6 +9107,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     sessionStorage.setItem('herasat_csrf', data.csrf_token);
                 }
                 sessionStorage.removeItem('2fa_prompt_shown');
+                const profileEstablished = await checkAdminProfile(true);
+                if (!profileEstablished) {
+                    if (loginMessage) {
+                        loginMessage.textContent = 'احراز هویت انجام شد اما برقراری نشست کاری با سرور با خطا مواجه شد. لطفاً مجدداً وارد شوید.';
+                        loginMessage.style.display = 'block';
+                    }
+                    loadAdminCaptcha();
+                    return;
+                }
                 if (loginSection) {
                     loginSection.classList.add('d-none');
                     loginSection.style.display = 'none';
@@ -8870,15 +9126,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 startSessionTimer();
                 startBackgroundPolling();
-                await checkAdminProfile();
                 switchMainTab('reports');
                 runWhenIdle(fetchNotifications);
             } else if (response.status === 429) {
                 const coolData = await response.clone().json().catch(() => null);
                 startTakeoverCooldownTimer(coolData?.retry_after_seconds || 60, coolData?.message);
             } else {
-                const errText = await response.text();
-                loginMessage.textContent = errText || 'خطا در احراز هویت و انتقال نشست.';
+                const errData = await response.clone().json().catch(() => null);
+                loginMessage.textContent = errData?.message || (await response.text()) || 'خطا در احراز هویت و انتقال نشست.';
                 loginMessage.style.display = 'block';
                 loadAdminCaptcha();
             }
@@ -8924,41 +9179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.triggerConcurrentLoginAlert = function (customMsg) {
-        if (isKickoutHandled) return;
-        isKickoutHandled = true;
-        clearInterval(timerInterval);
-
-        if (_sseConnection) {
-            _sseConnection.close();
-            _sseConnection = null;
-        }
-
-        if (typeof stopBackgroundPolling === 'function') {
-            stopBackgroundPolling();
-        }
-
-        document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        sessionStorage.removeItem('herasat_csrf');
-        sessionStorage.removeItem('2fa_prompt_shown');
-
-        if (modalConcurrentAlert) {
-            if (customMsg) {
-                const desc = modalConcurrentAlert.querySelector('.icon-alert-desc, p');
-                if (desc) desc.textContent = customMsg;
-            }
-            modalConcurrentAlert.style.display = 'flex';
-        } else {
-            showConfirmDialog({
-                title: 'خروج همزمان از حساب کاربری',
-                description: customMsg || 'یک ورود جدید با نام کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.',
-                confirmText: 'ورود مجدد به سامانه',
-                cancelText: 'بستن',
-                variant: 'danger',
-                iconType: 'shield-alert'
-            }).then(() => {
-                location.reload();
-            });
-        }
+        handleAuthFailure('concurrent_login', customMsg || 'یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.');
     };
 
     function triggerConcurrentLoginAlert(customMsg) {
@@ -8966,9 +9187,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     btnAckConcurrentLogout?.addEventListener('click', () => {
-        sessionStorage.removeItem('2fa_prompt_shown');
-        document.cookie = 'herasat_admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        location.reload();
+        if (modalConcurrentAlert) modalConcurrentAlert.style.display = 'none';
+        handleAuthFailure('concurrent_login', 'یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.');
     });
 
     let allAuditLogs = [];

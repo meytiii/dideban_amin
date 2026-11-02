@@ -301,21 +301,21 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 		ForceTakeover bool   `json:"force_takeover"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Bad request", http.StatusBadRequest)
+		writeAuthJSONError(w, http.StatusBadRequest, "bad_request", "درخواست نامعتبر است.")
 		return
 	}
 
 	clientIP := getIP(r)
 	payload, err := ValidateMFAPendingToken(req.MFAToken, clientIP, r.UserAgent())
 	if err != nil {
-		http.Error(w, "توکن احراز هویت دومرحله‌ای منقضی شده یا نامعتبر است.", http.StatusUnauthorized)
+		writeAuthJSONError(w, http.StatusUnauthorized, "mfa_token_expired", "توکن احراز هویت دومرحله‌ای منقضی شده یا نامعتبر است.")
 		return
 	}
 
 	if isLocked, remaining := Lockouts.IsLocked(payload.Username, clientIP); isLocked {
 		logAudit(payload.Username, "UNKNOWN", "LOCKED_MFA_ATTEMPT", nil, clientIP)
 		minutes := int(remaining.Minutes()) + 1
-		http.Error(w, fmt.Sprintf("حساب کاربری شما به دلیل تلاش‌های ناموفق متعدد به مدت %d دقیقه موقتاً مسدود شده است.", minutes), http.StatusTooManyRequests)
+		writeAuthJSONError(w, http.StatusTooManyRequests, "account_locked", fmt.Sprintf("حساب کاربری شما به دلیل تلاش‌های ناموفق متعدد به مدت %d دقیقه موقتاً مسدود شده است.", minutes), map[string]any{"lockout_minutes": minutes})
 		return
 	}
 
@@ -334,18 +334,18 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 		&userID, &storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword,
 		&encSecret, &totpEnabled, &dbNow)
 	if err != nil {
-		http.Error(w, "کاربر یافت نشد یا حساب غیرفعال است.", http.StatusUnauthorized)
+		writeAuthJSONError(w, http.StatusUnauthorized, "invalid_credentials", "کاربر یافت نشد یا حساب غیرفعال است.")
 		return
 	}
 
 	if !totpEnabled || encSecret == "" {
-		http.Error(w, "احراز هویت دومرحله‌ای برای این حساب فعال نیست.", http.StatusBadRequest)
+		writeAuthJSONError(w, http.StatusBadRequest, "bad_request", "احراز هویت دومرحله‌ای برای این حساب فعال نیست.")
 		return
 	}
 
 	plainSecret, err := DecryptBoundField("admin_users", "totp_secret", userID, encSecret)
 	if err != nil {
-		http.Error(w, "خطای رمزگشایی کلید امنیتی دومرحله‌ای", http.StatusInternalServerError)
+		writeAuthJSONError(w, http.StatusInternalServerError, "server_error", "خطای رمزگشایی کلید امنیتی دومرحله‌ای")
 		return
 	}
 
@@ -358,7 +358,7 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 				logAudit(payload.Username, roleTitle, "ACCOUNT_LOCKED", nil, clientIP)
 			}
 			logAudit(payload.Username, roleTitle, "REPLAYED_MFA_VERIFICATION", nil, clientIP)
-			http.Error(w, "این کد امنیتی قبلاً استفاده شده است. لطفاً منتظر تولید کد بعدی بمانید.", http.StatusConflict)
+			writeAuthJSONError(w, http.StatusConflict, "invalid_otp", "این کد امنیتی قبلاً استفاده شده است. لطفاً منتظر تولید کد بعدی بمانید.")
 			return
 		}
 		failures, justLocked := Lockouts.RecordFailure(payload.Username, clientIP)
@@ -367,7 +367,7 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 			logAudit(payload.Username, roleTitle, "ACCOUNT_LOCKED", nil, clientIP)
 		}
 		logAudit(payload.Username, roleTitle, "FAILED_MFA_VERIFICATION", nil, clientIP)
-		http.Error(w, "کد ۶ رقمی امنیتی وارد شده اشتباه است یا منقضی شده است.", http.StatusUnauthorized)
+		writeAuthJSONError(w, http.StatusUnauthorized, "invalid_otp", "کد ۶ رقمی امنیتی وارد شده اشتباه است یا منقضی شده است.")
 		return
 	}
 
