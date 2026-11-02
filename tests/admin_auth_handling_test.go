@@ -1,7 +1,9 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -524,4 +526,90 @@ func TestCSRFAuditThrottling(t *testing.T) {
 		t.Fatalf("expected exactly 1 throttled audit record, got %d", throttleCount)
 	}
 }
+
+func TestExtendUserPasswordHandler(t *testing.T) {
+	if connStr := os.Getenv("HERASAT_DB_CONN"); connStr != "" && DB == nil {
+		db, err := sql.Open("postgres", connStr)
+		if err == nil && db.Ping() == nil {
+			DB = db
+			defer func() { DB = nil }()
+		}
+	}
+
+	reqUnauth := httptest.NewRequest(http.MethodPost, "/api/admin/users/extend-password", strings.NewReader(`{"user_id":1}`))
+	recUnauth := httptest.NewRecorder()
+	ExtendUserPasswordHandler(recUnauth, reqUnauth)
+	if recUnauth.Code != http.StatusUnauthorized {
+		t.Fatalf("expected 401 on unauthenticated call, got %d", recUnauth.Code)
+	}
+
+	superSession := AdminSession{
+		Username:    "admin_it",
+		Role:        "superuser",
+		IsSuperuser: true,
+		Title:       "مدیر ارشد",
+	}
+
+	reqBad := httptest.NewRequest(http.MethodPost, "/api/admin/users/extend-password", strings.NewReader(`{invalid}`))
+	reqBad = reqBad.WithContext(contextWithAdmin(reqBad.Context(), superSession))
+	recBad := httptest.NewRecorder()
+	ExtendUserPasswordHandler(recBad, reqBad)
+	if recBad.Code != http.StatusBadRequest {
+		t.Fatalf("expected 400 on malformed json, got %d", recBad.Code)
+	}
+
+	reqNotFound := httptest.NewRequest(http.MethodPost, "/api/admin/users/extend-password", strings.NewReader(`{"user_id":999999}`))
+	reqNotFound = reqNotFound.WithContext(contextWithAdmin(reqNotFound.Context(), superSession))
+	recNotFound := httptest.NewRecorder()
+	ExtendUserPasswordHandler(recNotFound, reqNotFound)
+	if recNotFound.Code != http.StatusNotFound {
+		t.Fatalf("expected 404 on nonexistent user, got %d", recNotFound.Code)
+	}
+
+	if db := Sessions.getDB(); db != nil {
+		testUser := "test_pwd_ext_admin"
+		_, _ = db.Exec("DELETE FROM admin_users WHERE username = $1", testUser)
+		res, err := db.Exec(`INSERT INTO admin_users (username, password_hash, role_title, role, is_active, is_superuser, password_changed_at, must_change_password)
+			VALUES ($1, 'dummyhash', 'کارشناس تست', 'edare_kol', true, false, NOW() - INTERVAL '40 days', true)`, testUser)
+		if err != nil {
+			t.Fatalf("failed to insert test admin: %v", err)
+		}
+		uid, _ := res.LastInsertId()
+		if uid == 0 {
+			_ = db.QueryRow("SELECT id FROM admin_users WHERE username = $1", testUser).Scan(&uid)
+		}
+
+		var changedAtBefore time.Time
+		_ = db.QueryRow("SELECT password_changed_at FROM admin_users WHERE id = $1", uid).Scan(&changedAtBefore)
+		if time.Since(changedAtBefore) <= 30*24*time.Hour {
+			t.Fatalf("expected password to be expired before extension")
+		}
+
+		reqOk := httptest.NewRequest(http.MethodPost, "/api/admin/users/extend-password", strings.NewReader(fmt.Sprintf(`{"user_id":%d,"username":"%s"}`, uid, testUser)))
+		reqOk = reqOk.WithContext(contextWithAdmin(reqOk.Context(), superSession))
+		recOk := httptest.NewRecorder()
+		ExtendUserPasswordHandler(recOk, reqOk)
+
+		if recOk.Code != http.StatusOK {
+			t.Fatalf("expected 200 on successful password extension, got %d: %s", recOk.Code, recOk.Body.String())
+		}
+
+		var changedAtAfter time.Time
+		var mustChangeAfter bool
+		err = db.QueryRow("SELECT password_changed_at, must_change_password FROM admin_users WHERE id = $1", uid).Scan(&changedAtAfter, &mustChangeAfter)
+		if err != nil {
+			t.Fatalf("failed to query admin after extension: %v", err)
+		}
+
+		if time.Since(changedAtAfter) > 5*time.Minute {
+			t.Fatalf("expected password_changed_at to be reset to recent time, got %v", changedAtAfter)
+		}
+		if mustChangeAfter {
+			t.Fatalf("expected must_change_password to be false after extension")
+		}
+
+		_, _ = db.Exec("DELETE FROM admin_users WHERE id = $1", uid)
+	}
+}
+
 

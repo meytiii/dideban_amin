@@ -1899,6 +1899,68 @@ func DisableUser2FAHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status": "success", "message": "احراز هویت دومرحله‌ای برای این حساب با موفقیت غیرفعال شد."}`))
 }
 
+func ExtendUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
+	admin, ok := adminFromContext(r)
+	if !ok {
+		writeAuthJSONError(w, http.StatusUnauthorized, "unauthorized", "دسترسی غیرمجاز است.")
+		return
+	}
+
+	if DB == nil {
+		writeAuthJSONError(w, http.StatusInternalServerError, "database_error", "ارتباط با پایگاه داده برقرار نیست.")
+		return
+	}
+
+	var req struct {
+		UserID   int64  `json:"user_id"`
+		Username string `json:"username"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeAuthJSONError(w, http.StatusBadRequest, "bad_request", "داده‌های ارسالی نامعتبر است.")
+		return
+	}
+
+	req.Username = strings.TrimSpace(req.Username)
+	if req.Username == "" && req.UserID > 0 {
+		_ = DB.QueryRow("SELECT username FROM admin_users WHERE id = $1", req.UserID).Scan(&req.Username)
+	}
+	if req.Username == "" && req.UserID <= 0 {
+		writeAuthJSONError(w, http.StatusBadRequest, "bad_request", "کاربر اداری مورد نظر مشخص نشده است.")
+		return
+	}
+
+	var targetID int64
+	var targetUsername string
+	var err error
+	if req.UserID > 0 {
+		err = DB.QueryRow("SELECT id, username FROM admin_users WHERE id = $1", req.UserID).Scan(&targetID, &targetUsername)
+	} else {
+		err = DB.QueryRow("SELECT id, username FROM admin_users WHERE username = $1", req.Username).Scan(&targetID, &targetUsername)
+	}
+	if err != nil {
+		writeAuthJSONError(w, http.StatusNotFound, "user_not_found", "کاربر اداری مورد نظر یافت نشد.")
+		return
+	}
+
+	res, err := DB.Exec("UPDATE admin_users SET password_changed_at = NOW(), must_change_password = false WHERE id = $1", targetID)
+	if err != nil {
+		writeAuthJSONError(w, http.StatusInternalServerError, "database_error", "خطای پایگاه داده در تمدید مهلت رمز عبور.")
+		return
+	}
+	rowsAff, _ := res.RowsAffected()
+	if rowsAff == 0 {
+		writeAuthJSONError(w, http.StatusNotFound, "user_not_found", "کاربر اداری مورد نظر یافت نشد.")
+		return
+	}
+
+	if err := logAudit(admin.Username, admin.Title, "EXTEND_PASSWORD_VALIDITY:"+targetUsername, &targetID, getIP(r)); err != nil {
+		log.Printf("ERROR: Failed to record audit log for password validity extension: %v", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status":"success","message":"مهلت اعتبار ۳۰ روزه رمز عبور کاربر با موفقیت تمدید شد."}`))
+}
+
 type AuditLogItem struct {
 	ID                 int64   `json:"id"`
 	AdminUsername      string  `json:"admin_username"`

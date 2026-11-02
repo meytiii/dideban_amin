@@ -8293,6 +8293,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button type="button" class="btn-action btn-secondary btn-icon-only" data-action="reset-pwd" data-id="${u.id}" data-user="${escapeHTML(u.username)}" data-tooltip="تغییر رمز عبور" aria-label="تغییر رمز عبور">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 10V14M10.2676 11L13.7317 13M13.7314 11L10.2673 13"/><path d="M6.73241 10V14M4.99999 11L8.46409 13M8.46386 11L4.99976 13"/><path d="M17.2681 10V14M15.5356 11L18.9997 13M18.9995 11L15.5354 13"/><path d="M22 12C22 15.7712 22 17.6569 20.8284 18.8284C19.6569 20 17.7712 20 14 20H10C6.22876 20 4.34315 20 3.17157 18.8284C2 17.6569 2 15.7712 2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C21.4816 5.82475 21.7706 6.69989 21.8985 8"/></svg>
                 </button>
+                ${u.is_password_expired ? `
+                <button type="button" class="btn-action btn-warning btn-icon-only" data-action="extend-pwd" data-id="${u.id}" data-user="${escapeHTML(u.username)}" data-tooltip="حذف انقضا و تمدید ۳۰ روزه اعتبار رمز عبور" aria-label="حذف انقضای رمز عبور">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 4H10C6.22876 4 4.34315 4 3.17157 5.17157C2 6.34315 2 8.22876 2 12C2 15.7712 2 17.6569 3.17157 18.8284C4.34315 20 6.22876 20 10 20H12M15 4.00093C18.1143 4.01004 19.7653 4.10848 20.8284 5.17157C22 6.34315 22 8.22876 22 12C22 15.7712 22 17.6569 20.8284 18.8284C19.7653 19.8915 18.1143 19.99 15 19.9991"/>
+                        <circle cx="8" cy="12" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                        <path d="M15 2V22"/>
+                    </svg>
+                </button>
+                ` : ''}
                 <button type="button" class="btn-action ${u.is_locked ? 'btn-warning is-locked-pulse' : 'btn-secondary'} btn-icon-only btn-lift-ban" data-action="lift-ban" data-id="${u.id}" data-user="${escapeHTML(u.username)}" data-tooltip="${u.is_locked ? `رفع قفل موقت ورود (${escapeHTML(u.lockout_remaining || '۱۵ دقیقه')})` : 'رفع محدودیت و بازنشانی خطاهای ورود'}" aria-label="رفع قفل موقت ورود">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="16" r="2"/><path d="M11 22H8C5.17157 22 3.75736 22 2.87868 21.1213C2 20.2426 2 18.8284 2 16C2 13.1716 2 11.7574 2.87868 10.8787C3.75736 10 5.17157 10 8 10H16C18.8284 10 20.2426 10 21.1213 10.8787C22 11.7574 22 13.1716 22 16C22 18.8284 22 20.2426 21.1213 21.1213C20.2426 22 18.8284 22 16 22H15"/><path d="M6 10V8C6 7.65929 6.0284 7.32521 6.08296 7M17.811 6.5C17.1449 3.91216 14.7958 2 12 2C10.223 2 8.62643 2.7725 7.52779 4"/></svg>
                 </button>
@@ -8360,12 +8370,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (targetUser) openEditUserModal(targetUser);
                 } else if (action === 'reset-pwd') {
                     openResetPwdModal(b.getAttribute('data-id'), b.getAttribute('data-user'));
+                } else if (action === 'extend-pwd') {
+                    extendUserPassword(b.getAttribute('data-id'), b.getAttribute('data-user'));
                 } else if (action === 'lift-ban') {
                     liftUserLockout(b.getAttribute('data-id'), b.getAttribute('data-user'));
                 } else if (action === 'delete-user') {
                     deleteUser(b.getAttribute('data-id'), b.getAttribute('data-user'));
                 }
             });
+        }
+    }
+
+    async function extendUserPassword(userId, username) {
+        const confirmed = await showConfirmDialog({
+            title: 'حذف انقضا و تمدید مهلت رمز عبور',
+            description: `آیا از رفع وضعیت انقضا و تمدید ۳۰ روزه اعتبار رمز عبور حساب کاربری «${escapeHTML(username)}» اطمینان دارید؟ کاربر تا ۳۰ روز آینده ملزم به تغییر رمز نخواهد بود.`,
+            confirmText: 'بله، تمدید اعتبار',
+            cancelText: 'انصراف'
+        });
+        if (!confirmed) return;
+
+        try {
+            const res = await adminFetch('/api/admin/users/extend-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: parseInt(userId, 10), username: username })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                showToast(data.message || 'خطا در تمدید مهلت رمز عبور کاربر.', 3000, 'error');
+                return;
+            }
+            showToast(data.message || 'مهلت اعتبار رمز عبور با موفقیت تمدید شد.', 3000, 'success');
+            fetchAdminUsers();
+        } catch (e) {
+            showToast('خطا در برقراری ارتباط با سرور جهت تمدید مهلت رمز عبور.', 3000, 'error');
         }
     }
 
