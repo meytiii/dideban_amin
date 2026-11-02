@@ -375,7 +375,22 @@ func TestSessionTerminatedParallelPersistence(t *testing.T) {
 
 	termToken := "parallel-term-test-token"
 	th := hashToken(termToken)
-	Sessions.SetTombstone(th, "TERMINATED_BY_SUPERUSER")
+
+	Sessions.mu.Lock()
+	delete(Sessions.cache, th)
+	delete(Sessions.sessions, termToken)
+	if Sessions.tombstones != nil {
+		delete(Sessions.tombstones, th)
+	}
+	Sessions.kickedTokens[termToken] = "TERMINATED_BY_SUPERUSER"
+	Sessions.mu.Unlock()
+
+	if db := Sessions.getDB(); db != nil {
+		_, _ = db.Exec(`DELETE FROM admin_sessions WHERE token_hash = $1`, th)
+		_, _ = db.Exec(`INSERT INTO admin_session_kicks (token_hash, reason, created_at)
+			VALUES ($1, 'TERMINATED_BY_SUPERUSER', NOW())
+			ON CONFLICT (token_hash) DO UPDATE SET reason = 'TERMINATED_BY_SUPERUSER'`, th)
+	}
 
 	var wg sync.WaitGroup
 	errCount := 0

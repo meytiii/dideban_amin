@@ -32,7 +32,8 @@ func logThrottledCSRFAudit(r *http.Request, alertType string) {
 		}
 	}
 
-	key := alertType + ":" + sessionKey
+	safeAlert := truncateRunes(alertType, 160)
+	key := safeAlert + ":" + sessionKey
 	now := time.Now()
 
 	csrfAuditMu.Lock()
@@ -51,7 +52,7 @@ func logThrottledCSRFAudit(r *http.Request, alertType string) {
 	}
 	csrfAuditMu.Unlock()
 
-	logAudit(username, "SECURITY_ALERT", alertType, nil, clientIP)
+	logAudit(username, "SECURITY_ALERT", safeAlert, nil, clientIP)
 }
 
 func isOriginAllowed(origin string, r *http.Request) bool {
@@ -96,7 +97,8 @@ func CSRFMiddleware(next http.HandlerFunc) http.HandlerFunc {
 				}
 			}
 			if origin != "" && !isOriginAllowed(origin, r) {
-				logThrottledCSRFAudit(r, "CSRF_INVALID_ORIGIN:"+origin)
+				safeOrigin := truncateRunes(origin, 128)
+				logThrottledCSRFAudit(r, "CSRF_INVALID_ORIGIN:"+safeOrigin)
 				writeAuthJSONError(w, http.StatusForbidden, "origin_invalid", "درخواست ارسالی از مبدأ شبکه غیرمجاز رد گردید.")
 				return
 			}

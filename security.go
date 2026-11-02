@@ -261,14 +261,17 @@ func (sm *SessionManager) setTombstoneLocked(tokenHash, reason string) {
 }
 
 func (sm *SessionManager) GetTombstone(tokenHash string) (string, bool) {
-	sm.mu.RLock()
-	defer sm.mu.RUnlock()
+	sm.mu.Lock()
+	defer sm.mu.Unlock()
 	if sm.tombstones == nil {
 		return "", false
 	}
 	ts, ok := sm.tombstones[tokenHash]
-	if ok && time.Now().Before(ts.expiresAt) {
-		return ts.reason, true
+	if ok {
+		if time.Now().Before(ts.expiresAt) {
+			return ts.reason, true
+		}
+		delete(sm.tombstones, tokenHash)
 	}
 	return "", false
 }
@@ -375,17 +378,19 @@ func (sm *SessionManager) GetKickedReason(token string) (string, bool) {
 		var createdAt time.Time
 		err := db.QueryRow(`SELECT reason, created_at FROM admin_session_kicks WHERE token_hash = $1`, tokenHash).Scan(&reason, &createdAt)
 		if err == nil && reason != "" {
+			_, _ = db.Exec(`DELETE FROM admin_session_kicks WHERE token_hash = $1`, tokenHash)
 			if time.Since(createdAt) <= 24*time.Hour {
 				return reason, true
 			}
 		}
 	}
 
-	sm.mu.RLock()
-	defer sm.mu.RUnlock()
+	sm.mu.Lock()
+	defer sm.mu.Unlock()
 
 	reason, exists := sm.kickedTokens[token]
 	if exists {
+		delete(sm.kickedTokens, token)
 		return reason, true
 	}
 	return "", false
@@ -730,6 +735,11 @@ func (sm *SessionManager) StartReaper(interval time.Duration) {
 			for token, session := range sm.sessions {
 				if now.After(session.Expiry) {
 					delete(sm.sessions, token)
+				}
+			}
+			for th, ts := range sm.tombstones {
+				if now.After(ts.expiresAt) {
+					delete(sm.tombstones, th)
 				}
 			}
 			sm.mu.Unlock()

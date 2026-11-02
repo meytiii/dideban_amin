@@ -148,7 +148,7 @@ func (b *SSEBroker) BroadcastSessionRevoked(username, tokenHash string, reason .
 	defer b.mu.RUnlock()
 
 	for client := range b.clients {
-		if client.username == username {
+		if client.id == tokenHash {
 			select {
 			case client.send <- targetMsg:
 			default:

@@ -109,7 +109,7 @@ function broadcastAuthEvent(type, data = {}) {
 }
 
 function handleAuthFailure(code, message, details = {}) {
-    if (typeof window.handleAuthFailure === 'function') {
+    if (typeof window.handleAuthFailure === 'function' && window.handleAuthFailure !== handleAuthFailure) {
         window.handleAuthFailure(code, message, details);
     }
 }
