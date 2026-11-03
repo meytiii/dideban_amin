@@ -8326,6 +8326,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < count; i++) {
             html += `
                 <tr class="skeleton-tr" aria-hidden="true">
+                    <td><div class="skeleton-shimmer" style="width:16px; height:16px; border-radius:4px; margin:0 auto;"></div></td>
                     <td><div class="skeleton-shimmer" style="width:24px; height:18px; border-radius:4px;"></div></td>
                     <td><div class="skeleton-shimmer" style="width:90px; height:18px; border-radius:4px;"></div></td>
                     <td><div class="skeleton-shimmer" style="width:120px; height:18px; border-radius:4px;"></div></td>
@@ -8348,7 +8349,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res = await adminFetch('/api/admin/users');
             if (res.status === 403) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--color-danger);">دسترسی به بخش مدیریت کاربران محدود به پشتیبانی سامانه است.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--color-danger);">دسترسی به بخش مدیریت کاربران محدود به پشتیبانی سامانه است.</td></tr>';
                 return;
             }
             if (!res.ok) throw new Error('خطا در دریافت کاربران');
@@ -8364,7 +8365,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (superEl) superEl.textContent = toPersianNum(allAdminUsers.filter(u => u.is_superuser).length);
         } catch (e) {
 
-            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${escapeHTML(e.message)}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--color-danger);">خطا: ${escapeHTML(e.message)}</td></tr>`;
         }
     }
 
@@ -8381,13 +8382,120 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
 
+    let selectedAdminUserIds = new Set();
+
+    function updateAdminUsersBulkToolbar() {
+        const toolbar = document.getElementById('adminUsersBulkToolbar');
+        const countEl = document.getElementById('adminUsersBulkCount');
+        const selectAllCheckbox = document.getElementById('selectAllAdminUsers');
+        const size = selectedAdminUserIds.size;
+
+        if (countEl) countEl.textContent = toPersianNum(size);
+        if (toolbar) toolbar.style.display = size > 0 ? 'flex' : 'none';
+
+        const visibleCheckboxes = Array.from(document.querySelectorAll('.user-bulk-checkbox:not(:disabled)'));
+        if (selectAllCheckbox && visibleCheckboxes.length > 0) {
+            const checkedCount = visibleCheckboxes.filter(cb => cb.checked).length;
+            selectAllCheckbox.checked = checkedCount === visibleCheckboxes.length;
+            selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < visibleCheckboxes.length;
+        } else if (selectAllCheckbox) {
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = false;
+        }
+    }
+
+    const selectAllAdminUsers = document.getElementById('selectAllAdminUsers');
+    selectAllAdminUsers?.addEventListener('change', () => {
+        const checked = selectAllAdminUsers.checked;
+        const checkboxes = document.querySelectorAll('.user-bulk-checkbox:not(:disabled)');
+        checkboxes.forEach(cb => {
+            cb.checked = checked;
+            const id = parseInt(cb.getAttribute('data-id'), 10);
+            if (checked) {
+                selectedAdminUserIds.add(id);
+            } else {
+                selectedAdminUserIds.delete(id);
+            }
+        });
+        updateAdminUsersBulkToolbar();
+    });
+
+    document.getElementById('btnAdminBulkCancel')?.addEventListener('click', () => {
+        selectedAdminUserIds.clear();
+        document.querySelectorAll('.user-bulk-checkbox').forEach(cb => { cb.checked = false; });
+        updateAdminUsersBulkToolbar();
+    });
+
+    async function executeAdminBulkAction(action, title, description, confirmText = 'تأیید و اعمال گروهی', variant = 'danger', iconType = 'shield-alert') {
+        const userIds = Array.from(selectedAdminUserIds);
+        if (userIds.length === 0) return;
+
+        const countFa = toPersianNum(userIds.length);
+        const fullDesc = `${description}\n(تعداد کاربران انتخاب‌شده: ${countFa} کاربر)`;
+
+        const confirmed = await showConfirmDialog({
+            title,
+            description: fullDesc,
+            confirmText,
+            cancelText: 'انصراف',
+            variant,
+            iconType
+        });
+        if (!confirmed) return;
+
+        try {
+            const res = await adminFetch('/api/admin/users/bulk-action', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action, user_ids: userIds })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                showToast(data.message || 'خطا در اجرای عملیات گروهی بر روی کاربران.', 3500, 'error');
+                return;
+            }
+            selectedAdminUserIds.clear();
+            updateAdminUsersBulkToolbar();
+            cachedForwardingRecipients = null;
+            showToast(data.message || 'عملیات گروهی با موفقیت اعمال گردید.', 3500, 'success');
+            fetchAdminUsers();
+        } catch (e) {
+            showToast('خطا در برقراری ارتباط با سرور جهت اعمال عملیات گروهی.', 3500, 'error');
+        }
+    }
+
+    document.getElementById('btnAdminBulkActivate')?.addEventListener('click', () => {
+        executeAdminBulkAction('activate', 'فعالسازی حساب‌های کاربری', 'آیا از فعال‌سازی مجدد حساب مدیران انتخابی اطمینان دارید؟ دسترسی آنها به پنل برقرار خواهد شد.', 'بله، فعالسازی حساب‌ها', 'primary', 'check-circle');
+    });
+
+    document.getElementById('btnAdminBulkDeactivate')?.addEventListener('click', () => {
+        executeAdminBulkAction('deactivate', 'غیرفعالسازی حساب‌های کاربری', 'آیا از غیرفعال‌سازی و مسدودسازی حساب مدیران انتخابی اطمینان دارید؟ تمام نشست‌های فعال آنها فوراً خاتمه خواهد یافت.', 'بله، غیرفعالسازی حساب‌ها', 'danger', 'shield-alert');
+    });
+
+    document.getElementById('btnAdminBulkExpirePwd')?.addEventListener('click', () => {
+        executeAdminBulkAction('expire_pwd', 'منقضی کردن اعتبار رمز عبور', 'آیا از منقضی کردن اعتبار رمز عبور مدیران انتخابی اطمینان دارید؟ کاربران در ورود بعدی ملزم به تغییر رمز خواهند بود.', 'بله، منقضی کردن رمزها', 'danger', 'shield-alert');
+    });
+
+    document.getElementById('btnAdminBulkExtendPwd')?.addEventListener('click', () => {
+        executeAdminBulkAction('extend_pwd', 'تمدید اعتبار رمز عبور', 'آیا از رفع وضعیت انقضا و تمدید ۳۰ روزه اعتبار رمز عبور مدیران انتخابی اطمینان دارید؟', 'بله، تمدید اعتبار', 'warning', 'key');
+    });
+
+    document.getElementById('btnAdminBulkLiftBan')?.addEventListener('click', () => {
+        executeAdminBulkAction('lift_ban', 'رفع محدودیت و بازنشانی خطاها', 'آیا از رفع قفل موقت ورود و بازنشانی خطاهای تلاش ناموفق برای کاربران انتخابی اطمینان دارید؟', 'بله، رفع محدودیت', 'secondary', 'shield-alert');
+    });
+
+    document.getElementById('btnAdminBulkDelete')?.addEventListener('click', () => {
+        executeAdminBulkAction('delete', 'حذف حساب‌های کاربری', 'آیا از حذف دائم حساب‌های کاربری مدیران انتخابی اطمینان دارید؟ این عملیات غیرقابل بازگشت است.', 'بله، حذف دائم حساب‌ها', 'danger', 'trash');
+    });
+
     function renderUsersTable(users) {
         const tbody = document.getElementById('adv-users-tbody');
         if (!tbody) return;
         tbody.innerHTML = '';
 
         if (!users || users.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--text-muted);">هیچ کاربری یافت نشد.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--text-muted);">هیچ کاربری یافت نشد.</td></tr>';
+            updateAdminUsersBulkToolbar();
             return;
         }
 
@@ -8396,6 +8504,7 @@ document.addEventListener('DOMContentLoaded', () => {
         users.forEach(u => {
             const tr = document.createElement('tr');
             const isSelf = currentAdmin && currentAdmin.username === u.username;
+            const isSelected = selectedAdminUserIds.has(u.id);
 
             let lockoutBadge = '';
             if (u.is_locked) {
@@ -8456,6 +8565,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             tr.innerHTML = `
+                <td class="bulk-td" style="width: 40px; text-align: center;">
+                    <input type="checkbox" class="user-bulk-checkbox" data-id="${u.id}" ${isSelected ? 'checked' : ''} ${isSelf ? 'disabled data-tooltip="امکان انتخاب حساب کاربری خودتان وجود ندارد"' : ''}>
+                </td>
                 <td><strong>#${toPersianNum(u.id)}</strong></td>
                 <td><div style="display:inline-flex; align-items:center; gap:8px;"><svg viewBox="0 0 32 32" width="20" height="20" fill="none" style="flex-shrink:0; color:#38bdf8;" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="rgba(56, 189, 248, 0.14)" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></circle><circle cx="16" cy="14.695" r="4.565" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.8"></circle><path d="M16 31a14.928 14.928 0 0 0 9.4-3.323 9.773 9.773 0 0 0-18.808 0A14.928 14.928 0 0 0 16 31Z" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.8"></path></svg><strong style="color:var(--text-main); font-weight:600;">${escapeHTML(u.full_name || '-')}</strong></div></td>
                 <td><span class="ltr" style="font-family:Tahoma,sans-serif; color:var(--text-muted);">${escapeHTML(u.username)}</span> ${isSelf ? '<span class="badge-2 badge-2-sm badge-2-primary" style="margin-right:6px;"><span class="badge-2-dot" aria-hidden="true"></span><span>حساب شما</span></span>' : ''}</td>
@@ -8481,9 +8593,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         tbody.appendChild(fragment);
+        updateAdminUsersBulkToolbar();
 
         if (!tbody._delegated) {
             tbody._delegated = true;
+            tbody.addEventListener('change', (e) => {
+                if (e.target.classList.contains('user-bulk-checkbox')) {
+                    const id = parseInt(e.target.getAttribute('data-id'), 10);
+                    if (e.target.checked) {
+                        selectedAdminUserIds.add(id);
+                    } else {
+                        selectedAdminUserIds.delete(id);
+                    }
+                    updateAdminUsersBulkToolbar();
+                }
+            });
             tbody.addEventListener('click', (e) => {
                 const b = e.target.closest('button[data-action]');
                 if (!b) return;

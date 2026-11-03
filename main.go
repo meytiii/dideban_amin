@@ -351,6 +351,7 @@ func main() {
 	mux.HandleFunc("POST /api/admin/users/reset-password", SuperuserAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(ResetUserPasswordHandler)))))
 	mux.HandleFunc("POST /api/admin/users/extend-password", SuperuserAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(ExtendUserPasswordHandler)))))
 	mux.HandleFunc("POST /api/admin/users/expire-password", SuperuserAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(ExpireUserPasswordHandler)))))
+	mux.HandleFunc("POST /api/admin/users/bulk-action", SuperuserAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(BulkUserActionHandler)))))
 	mux.HandleFunc("POST /api/admin/users/lift-lockout", SuperuserAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(LiftUserLockoutHandler)))))
 	mux.HandleFunc("POST /api/admin/users/disable-2fa", SuperuserAuthMiddleware(CSRFMiddleware(LimitBodyMiddleware(maxJSONBodyBytes, RequireJSONMiddleware(DisableUser2FAHandler)))))
 	mux.HandleFunc("GET /api/admin/sessions", SuperuserAuthMiddleware(GetActiveSessionsHandler))

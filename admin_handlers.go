@@ -2033,6 +2033,193 @@ func ExpireUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status":"success","message":"رمز عبور کاربر با موفقیت منقضی شد و در ورود بعدی ملزم به تغییر رمز خواهد بود."}`))
 }
 
+func BulkUserActionHandler(w http.ResponseWriter, r *http.Request) {
+	admin, ok := adminFromContext(r)
+	if !ok {
+		writeAuthJSONError(w, http.StatusUnauthorized, "unauthorized", "دسترسی غیرمجاز است.")
+		return
+	}
+	if !admin.IsSuperuser {
+		writeAuthJSONError(w, http.StatusForbidden, "forbidden", "تنها مدیر ارشد سامانه مجاز به انجام عملیات گروهی می‌باشد.")
+		return
+	}
+	if DB == nil {
+		writeAuthJSONError(w, http.StatusInternalServerError, "database_error", "ارتباط با پایگاه داده برقرار نیست.")
+		return
+	}
+
+	var req struct {
+		Action  string  `json:"action"`
+		UserIDs []int64 `json:"user_ids"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeAuthJSONError(w, http.StatusBadRequest, "bad_request", "داده‌های ارسالی نامعتبر است.")
+		return
+	}
+
+	req.Action = strings.ToLower(strings.TrimSpace(req.Action))
+	validActions := map[string]bool{
+		"activate":   true,
+		"deactivate": true,
+		"expire_pwd": true,
+		"extend_pwd": true,
+		"lift_ban":   true,
+		"delete":     true,
+	}
+	if !validActions[req.Action] {
+		writeAuthJSONError(w, http.StatusBadRequest, "invalid_action", "نوع عملیات گروهی نامعتبر است.")
+		return
+	}
+
+	var callerID int64
+	_ = DB.QueryRow("SELECT id FROM admin_users WHERE username = $1", admin.Username).Scan(&callerID)
+
+	filteredIDs := make([]int64, 0, len(req.UserIDs))
+	seen := make(map[int64]bool)
+	for _, id := range req.UserIDs {
+		if id > 0 && id != callerID && !seen[id] {
+			seen[id] = true
+			filteredIDs = append(filteredIDs, id)
+		}
+	}
+
+	if len(filteredIDs) == 0 {
+		writeAuthJSONError(w, http.StatusBadRequest, "no_users", "هیچ کاربر معتبری برای انجام عملیات انتخاب نشده است (حساب کاربری خودتان مستثنی گردید).")
+		return
+	}
+
+	type targetUser struct {
+		id       int64
+		username string
+		isSuper  bool
+		isActive bool
+	}
+
+	rows, err := DB.Query("SELECT id, username, is_superuser, is_active FROM admin_users WHERE id = ANY($1)", pq.Array(filteredIDs))
+	if err != nil {
+		writeAuthJSONError(w, http.StatusInternalServerError, "database_error", "خطا در بازیابی اطلاعات کاربران.")
+		return
+	}
+	defer rows.Close()
+
+	var targets []targetUser
+	for rows.Next() {
+		var tu targetUser
+		if err := rows.Scan(&tu.id, &tu.username, &tu.isSuper, &tu.isActive); err == nil {
+			targets = append(targets, tu)
+		}
+	}
+
+	if len(targets) == 0 {
+		writeAuthJSONError(w, http.StatusNotFound, "users_not_found", "کاربران انتخابی یافت نشدند.")
+		return
+	}
+
+	var validTargetIDs []int64
+	var validUsernames []string
+
+	if req.Action == "delete" {
+		for _, tu := range targets {
+			if tu.isSuper {
+				continue
+			}
+			validTargetIDs = append(validTargetIDs, tu.id)
+			validUsernames = append(validUsernames, tu.username)
+		}
+		if len(validTargetIDs) == 0 {
+			writeAuthJSONError(w, http.StatusBadRequest, "cannot_delete_super", "امکان حذف مدیران ارشد سامانه در عملیات گروهی وجود ندارد.")
+			return
+		}
+	} else if req.Action == "deactivate" {
+		var activeSuperCount int
+		_ = DB.QueryRow("SELECT COUNT(*) FROM admin_users WHERE is_superuser = true AND is_active = true").Scan(&activeSuperCount)
+		deactivatingSuperCount := 0
+		for _, tu := range targets {
+			if tu.isSuper && tu.isActive {
+				deactivatingSuperCount++
+			}
+		}
+		if activeSuperCount-deactivatingSuperCount < 1 {
+			writeAuthJSONError(w, http.StatusBadRequest, "last_superuser", "امکان غیرفعال‌سازی تمامی مدیران ارشد فعال سامانه وجود ندارد.")
+			return
+		}
+		for _, tu := range targets {
+			validTargetIDs = append(validTargetIDs, tu.id)
+			validUsernames = append(validUsernames, tu.username)
+		}
+	} else {
+		for _, tu := range targets {
+			validTargetIDs = append(validTargetIDs, tu.id)
+			validUsernames = append(validUsernames, tu.username)
+		}
+	}
+
+	tx, err := DB.Begin()
+	if err != nil {
+		writeAuthJSONError(w, http.StatusInternalServerError, "database_error", "خطا در شروع تراکنش پایگاه داده.")
+		return
+	}
+	defer tx.Rollback()
+
+	var actionMsg string
+
+	switch req.Action {
+	case "activate":
+		_, err = tx.Exec("UPDATE admin_users SET is_active = true WHERE id = ANY($1)", pq.Array(validTargetIDs))
+		actionMsg = "فعالسازی حساب کاربری"
+	case "deactivate":
+		_, err = tx.Exec("UPDATE admin_users SET is_active = false WHERE id = ANY($1)", pq.Array(validTargetIDs))
+		actionMsg = "غیرفعالسازی حساب کاربری"
+	case "expire_pwd":
+		_, err = tx.Exec("UPDATE admin_users SET password_changed_at = NOW() - INTERVAL '31 days', must_change_password = true WHERE id = ANY($1)", pq.Array(validTargetIDs))
+		actionMsg = "منقضی کردن اعتبار رمز عبور"
+	case "extend_pwd":
+		_, err = tx.Exec("UPDATE admin_users SET password_changed_at = NOW(), must_change_password = false WHERE id = ANY($1)", pq.Array(validTargetIDs))
+		actionMsg = "تمدید اعتبار رمز عبور"
+	case "lift_ban":
+		actionMsg = "رفع محدودیت و بازنشانی خطاها"
+	case "delete":
+		_, err = tx.Exec("DELETE FROM admin_users WHERE id = ANY($1)", pq.Array(validTargetIDs))
+		actionMsg = "حذف حساب کاربری"
+	}
+
+	if err != nil {
+		writeAuthJSONError(w, http.StatusInternalServerError, "database_error", "خطا در ذخیره تغییرات گروهی در پایگاه داده.")
+		return
+	}
+
+	if err := tx.Commit(); err != nil {
+		writeAuthJSONError(w, http.StatusInternalServerError, "database_error", "خطا در نهایی‌سازی عملیات گروهی.")
+		return
+	}
+
+	for _, uName := range validUsernames {
+		if req.Action == "deactivate" {
+			Sessions.RevokeAllUserSessions(uName, "DEACTIVATED")
+		} else if req.Action == "expire_pwd" {
+			Sessions.RevokeAllUserSessions(uName, "PASSWORD_EXPIRED")
+		} else if req.Action == "delete" {
+			Sessions.RevokeAllUserSessions(uName, "DELETED")
+		} else if req.Action == "lift_ban" {
+			Lockouts.Reset(uName)
+		}
+	}
+
+	clientIP := getIP(r)
+	for i, uID := range validTargetIDs {
+		uName := validUsernames[i]
+		auditAction := fmt.Sprintf("BULK_%s:%s", strings.ToUpper(req.Action), uName)
+		_ = logAudit(admin.Username, admin.Title, auditAction, &uID, clientIP)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"status":  "success",
+		"message": fmt.Sprintf("عملیات گروهی «%s» با موفقیت بر روی %d کاربر اعمال گردید.", actionMsg, len(validTargetIDs)),
+		"count":   len(validTargetIDs),
+	})
+}
+
 type AuditLogItem struct {
 	ID                 int64   `json:"id"`
 	AdminUsername      string  `json:"admin_username"`
