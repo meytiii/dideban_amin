@@ -441,7 +441,7 @@ Surfaces employ tonal layering with subtle 1px border outlines rather than harsh
   - Indicator Dot (`.badge-2-dot` / `BadgeDot`): 6px diameter, `rounded-full`, `currentColor` with `opacity: 0.85`.
 - **Variant Mapping & Palettes:**
   - `superuser` (Vivid Amber-Orange `#F59827`): `مدیر ارشد سامانه` with 6px status dot.
-  - `destructive` (Rose / Crimson): `مسدود / غیرفعال`, `منقضی شده` (with clock SVG).
+  - `destructive` (Rose / Crimson): `غیرفعال`, `منقضی شده` (with clock SVG).
   - `info` (Indigo / Violet): `اداره کل`.
   - `primary` (Sky Blue / Cyan): `نواحی و مناطق`, `حساب شما`.
   - `success` (Emerald): `فعال`, `۲FA فعال` (with shield-check SVG).

@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "admin_handlers.go": {
-    "mtime": 1793689557.2176237,
-    "seen": 1793690330.9894185,
-    "ast_hash": "4b6b0ce8fb9d0f2cffeba66f10c07ced",
+    "mtime": 1793694607.7376401,
+    "seen": 1793694660.1051533,
+    "ast_hash": "8b53574523f9b834f5b14aa3587fa799",
     "semantic_hash": ""
   },
   "captcha.go": {
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1793693070.558253,
-    "seen": 1793693187.636225,
-    "ast_hash": "2f6c0d9de7e34b9a61f46674fe30dba5",
+    "mtime": 1793694417.5607216,
+    "seen": 1793694660.1255598,
+    "ast_hash": "38aba3df4fc473a7dfaf8f7433d506a4",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
@@ -2244,9 +2244,33 @@
     "semantic_hash": ""
   },
   "frontend/admin/svg/deactivate_account.svg": {
-    "mtime": 1793690402.8586462,
-    "seen": 1793693187.637943,
-    "ast_hash": "a281589cda3717022e60429b75d13a4d",
+    "mtime": 1793693863.4366927,
+    "seen": 1793694660.1276665,
+    "ast_hash": "e60368e35d75acc36b88f02c1a0f9873",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/danger.svg": {
+    "mtime": 1793693426.1135106,
+    "seen": 1793694660.1276643,
+    "ast_hash": "31953986bff9a06a43fa84ed6877c628",
+    "semantic_hash": ""
+  },
+  "frontend/admin/svg/protection_shield.svg": {
+    "mtime": 1793693405.133805,
+    "seen": 1793694660.1280658,
+    "ast_hash": "c6bb0dfb32f07bc0bd55286a12a62d5c",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/danger.svg": {
+    "mtime": 1793693426.1135106,
+    "seen": 1793694660.129848,
+    "ast_hash": "31953986bff9a06a43fa84ed6877c628",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/protection_shield.svg": {
+    "mtime": 1793693405.133805,
+    "seen": 1793694660.1301014,
+    "ast_hash": "c6bb0dfb32f07bc0bd55286a12a62d5c",
     "semantic_hash": ""
   }
 }

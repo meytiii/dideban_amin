@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-11-03)
 
 ## Corpus Check
-- 311 files · ~492,483 words
+- 311 files · ~493,003 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3503 nodes · 5003 edges · 232 communities (212 shown, 20 thin omitted)
+- 3503 nodes · 5005 edges · 233 communities (212 shown, 21 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 558 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d996cfb9`
+- Built from commit: `0ae094ac`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -87,7 +87,7 @@
 - Container Security Guide
 - herasat.local/backend
 - antislop-layoutmobile
-- LoginHandler
+- logAudit
 - workflows/hallmark.md
 - Scan Commands by Platform
 - Data Flow Classification — Trust Levels L1-L4
@@ -245,6 +245,7 @@
 - ft2-inline-rule-single-line.md
 - h6-photographic-fold.md
 - s4-inline-no-break.md
+- TestMain
 
 ## God Nodes (most connected - your core abstractions)
 1. `adminFromContext()` - 43 edges
@@ -261,8 +262,8 @@
 ## Surprising Connections (you probably didn't know these)
 - `init()` --calls--> `HashPassword()`  [INFERRED]
   admin_auth.go → crypto.go
-- `LoginHandler()` --calls--> `logAudit()`  [INFERRED]
-  admin_auth.go → audit.go
+- `ChangeMyPasswordHandler()` --calls--> `generateSessionToken()`  [INFERRED]
+  admin_handlers.go → admin_auth.go
 - `LoginHandler()` --calls--> `VerifyCaptcha()`  [INFERRED]
   admin_auth.go → captcha.go
 - `LoginHandler()` --calls--> `GenerateMFAPendingToken()`  [INFERRED]
@@ -273,7 +274,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (232 total, 20 thin omitted)
+## Communities (233 total, 21 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -333,7 +334,7 @@ Nodes (26): After the file is written, Emitting a `design.md` from `study`, Imag
 
 ### Community 14 - "admin_handlers.go"
 Cohesion: 0.11
-Nodes (66): GetCurrentAdminHandler(), getIP(), BulkUserActionHandler(), canAdminAccessReport(), ClassifyReportHandler(), CreateUserHandler(), DeleteReportHandler(), DeleteUserHandler() (+58 more)
+Nodes (59): GetCurrentAdminHandler(), getIP(), BulkUserActionHandler(), ChangeMyPasswordHandler(), ClassifyReportHandler(), DeleteReportHandler(), DeleteUserHandler(), DisableUser2FAHandler() (+51 more)
 
 ### Community 15 - "Hero enrichment — when, what, and how much"
 Cohesion: 0.09
@@ -536,8 +537,8 @@ Cohesion: 0.17
 Nodes (19): createShamsiDateRangePicker(), closePopover(), commitDateRange(), openPopover(), renderCalendar(), renderCalendarHighlights(), resetRange(), fetchServerTime() (+11 more)
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.08
-Nodes (48): VerifyCaptcha(), DecryptAES(), DecryptBoundField(), DecryptCaptchaPayload(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), DecryptWithAAD() (+40 more)
+Cohesion: 0.09
+Nodes (45): VerifyCaptcha(), DecryptAES(), DecryptBoundField(), DecryptCaptchaPayload(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), DecryptWithAAD() (+37 more)
 
 ### Community 68 - "Tone & Voice"
 Cohesion: 0.05
@@ -551,9 +552,9 @@ Nodes (40): Alerts to Configure, Bad vs Good Patterns, Base Image Selection, CI/
 Cohesion: 0.06
 Nodes (30): 100vh Sections, antislop-layoutmobile, Bottom Nav That Eats Content, Breakpoint Driven by Device List, Breakpoints, Columns That Don't Collapse, Desktop-Only Layout, Desktop-Sized Everything (+22 more)
 
-### Community 72 - "LoginHandler"
-Cohesion: 0.29
-Nodes (12): generateSessionToken(), init(), LoginHandler(), LogoutHandler(), ChangeMyPasswordHandler(), HashPassword(), VerifyPassword(), VerifyPasswordWithRehash() (+4 more)
+### Community 72 - "logAudit"
+Cohesion: 0.18
+Nodes (20): generateSessionToken(), init(), LoginHandler(), LogoutHandler(), CreateUserHandler(), logAudit(), HashPassword(), VerifyPassword() (+12 more)
 
 ### Community 74 - "Scan Commands by Platform"
 Cohesion: 0.25
@@ -584,8 +585,8 @@ Cohesion: 0.11
 Nodes (17): Cookie attributes thiếu, Cross-references, Cross-Site Request Forgery (CSRF), Cách reasoning (KHÔNG pattern-match thuần), Django (cảnh báo nếu tắt), Examples, Fix recommendation, HIGH — flag (+9 more)
 
 ### Community 83 - "security.go"
-Cohesion: 0.12
-Nodes (22): CSRFMiddleware(), isOriginAllowed(), logThrottledCSRFAudit(), generateTrackingCode(), SubmitReportHandler(), TrackReportHandler(), isValidTrackingCode(), isWithinDirectory() (+14 more)
+Cohesion: 0.13
+Nodes (22): canAdminAccessReport(), DownloadAttachmentHandler(), RespondToReportHandler(), UpdateInternalNotesHandler(), generateTrackingCode(), SubmitReportHandler(), TrackReportHandler(), isValidTrackingCode() (+14 more)
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -1118,7 +1119,7 @@ Nodes (4): Compliance Checklist, Data Flow Audit, Data Privacy & Compliance, Pro
 ## Knowledge Gaps
 - **1973 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+1968 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
