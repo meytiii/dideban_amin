@@ -69,7 +69,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var storedHash, fullName, roleTitle, role, totpSecret string
-	var isSuperuser, totpEnabled, totpEnforced bool
+	var isSuperuser, totpEnabled, totpEnforced, isActive bool
 	var passwordChangedAt, dbNow time.Time
 	var mustChangePassword bool
 	var lastLoginAt sql.NullTime
@@ -77,11 +77,11 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		SELECT password_hash, COALESCE(full_name, ''), role_title, COALESCE(role, 'edare_kol'), is_superuser,
 		       COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false),
 		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), COALESCE(totp_enforced, false),
-		       last_login_at, NOW()
+		       last_login_at, NOW(), COALESCE(is_active, true)
 		FROM admin_users
-		WHERE username=$1 AND is_active=true`, creds.Username).Scan(
+		WHERE username=$1`, creds.Username).Scan(
 		&storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword,
-		&totpSecret, &totpEnabled, &totpEnforced, &lastLoginAt, &dbNow)
+		&totpSecret, &totpEnabled, &totpEnforced, &lastLoginAt, &dbNow, &isActive)
 	if err != nil {
 		_ = VerifyPassword(creds.Password, dummyArgon2Hash)
 		failures, justLocked := Lockouts.RecordFailure(creds.Username, clientIP)
@@ -112,6 +112,17 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 				logAudit(safeUsername, roleTitle, "PASSWORD_REHASHED", nil, clientIP)
 			}
 		}
+	}
+
+	if !isActive {
+		logAudit(safeUsername, roleTitle, "DEACTIVATED_LOGIN_ATTEMPT", nil, clientIP)
+		greetingName := strings.TrimSpace(fullName)
+		if greetingName == "" {
+			greetingName = safeUsername
+		}
+		errMsg := fmt.Sprintf("همکار گرامی %s؛\nحساب شما غیرفعال گردیده است. جهت فعالسازی حساب کاربری با پشتیبان سامانه تماس حاصل فرمایید.", greetingName)
+		writeAuthJSONError(w, http.StatusForbidden, "account_deactivated", errMsg)
+		return
 	}
 
 	if lastLoginAt.Valid && time.Since(lastLoginAt.Time) > 90*24*time.Hour {

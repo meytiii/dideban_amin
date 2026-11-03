@@ -2396,10 +2396,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'edare_kol': 'دسترسی کامل به پرونده‌های حراست کل استان',
             'navahi_manategh': 'دسترسی استعلام و ارسال پاسخ حراست منطقه',
             'superuser': 'مدیر ارشد با دسترسی کامل به کلیه بخش‌ها و کاربران'
-        },
-        'edit_is_active': {
-            'true': 'حساب کاربری فعال و دارای مجوز ورود به سیستم',
-            'false': 'حساب غیرفعال و مسدود، قطع کامل دسترسی به پنل'
         }
     };
 
@@ -2434,7 +2430,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dropdown.classList.add('dropdown-detail-priority');
         } else if (selectId.startsWith('audit-filter-')) {
             dropdown.classList.add('dropdown-audit-control');
-        } else if (selectId === 'new_role' || selectId === 'edit_role' || selectId === 'edit_is_active') {
+        } else if (selectId === 'new_role' || selectId === 'edit_role') {
             dropdown.classList.add('dropdown-modal-control');
         }
 
@@ -2627,8 +2623,86 @@ document.addEventListener('DOMContentLoaded', () => {
         return controller;
     }
 
+    function initRadioGroupBase(containerEl, onChange) {
+        if (!containerEl) return null;
+        const indicator = containerEl.querySelector('.radio-active-indicator');
+        const items = Array.from(containerEl.querySelectorAll('.radio-item-base'));
+        let currentValue = null;
+
+        function updateIndicator() {
+            const activeItem = items.find(i => i.getAttribute('data-value') === currentValue);
+            if (!activeItem || !indicator) {
+                if (indicator) indicator.style.opacity = '0';
+                return;
+            }
+            const cRect = containerEl.getBoundingClientRect();
+            const iRect = activeItem.getBoundingClientRect();
+            if (iRect.width === 0 && iRect.height === 0) return;
+            const left = iRect.left - cRect.left;
+            const top = iRect.top - cRect.top;
+            indicator.style.width = `${iRect.width}px`;
+            indicator.style.height = `${iRect.height}px`;
+            indicator.style.transform = `translate(${left}px, ${top}px)`;
+            indicator.style.opacity = '1';
+        }
+
+        function setValue(val, emitChange = false) {
+            currentValue = String(val);
+            items.forEach(item => {
+                const isSelected = item.getAttribute('data-value') === currentValue;
+                item.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+                item.tabIndex = isSelected ? 0 : -1;
+                const hiddenInput = item.querySelector('input[type="radio"]');
+                if (hiddenInput) hiddenInput.checked = isSelected;
+            });
+            requestAnimationFrame(updateIndicator);
+            if (emitChange && typeof onChange === 'function') {
+                onChange(currentValue);
+            }
+        }
+
+        items.forEach((item, idx) => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const val = item.getAttribute('data-value');
+                setValue(val, true);
+                item.focus();
+            });
+
+            item.addEventListener('keydown', (e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    setValue(item.getAttribute('data-value'), true);
+                } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const next = (idx + 1) % items.length;
+                    items[next].focus();
+                    setValue(items[next].getAttribute('data-value'), true);
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const prev = (idx - 1 + items.length) % items.length;
+                    items[prev].focus();
+                    setValue(items[prev].getAttribute('data-value'), true);
+                }
+            });
+        });
+
+        window.addEventListener('resize', updateIndicator);
+
+        const activeInitially = items.find(i => i.getAttribute('aria-checked') === 'true') || items[0];
+        if (activeInitially) {
+            setValue(activeInitially.getAttribute('data-value'), false);
+        }
+
+        return {
+            setValue,
+            getValue: () => currentValue,
+            refresh: updateIndicator
+        };
+    }
+
     function initAdminCustomFilters() {
-        ['filter-type', 'filter-read-status', 'filter-priority', 'filter-report-type', 'detail-priority-select', 'audit-filter-action', 'audit-filter-user', 'new_role', 'edit_role', 'edit_is_active'].forEach(id => {
+        ['filter-type', 'filter-read-status', 'filter-priority', 'filter-report-type', 'detail-priority-select', 'audit-filter-action', 'audit-filter-user', 'new_role', 'edit_role'].forEach(id => {
             if (document.getElementById(id)) {
                 initAdminCustomSelect(id, ADMIN_FILTER_DESCRIPTIONS[id]);
             }
@@ -8474,6 +8548,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCloseEditUser = document.getElementById('btn-close-edit-user-modal');
     const btnCancelEditUser = document.getElementById('btn-cancel-edit-user');
     const formEditUser = document.getElementById('form-edit-user');
+    let editActiveRadioCtrl = null;
+    const editActiveRadioEl = document.getElementById('edit_active_radio_group');
+    if (editActiveRadioEl) {
+        editActiveRadioCtrl = initRadioGroupBase(editActiveRadioEl);
+    }
 
     const btnCloseResetPwd = document.getElementById('btn-close-reset-pwd-modal');
     const btnCancelResetPwd = document.getElementById('btn-cancel-reset-pwd');
@@ -8547,7 +8626,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const nameInput = document.getElementById('edit_full_name');
         const roleInput = document.getElementById('edit_role_title');
         const roleSelect = document.getElementById('edit_role');
-        const activeSelect = document.getElementById('edit_is_active');
         const activeContainer = document.getElementById('edit_active_container');
         const forcePwdCheckbox = document.getElementById('edit_must_change_pwd');
         const statusEl = document.getElementById('edit-user-status');
@@ -8561,12 +8639,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (forcePwdCheckbox) forcePwdCheckbox.checked = !!user.must_change_password;
 
-        if (user.is_superuser) {
-            if (activeSelect) activeSelect.value = 'true';
+        const isSelf = currentAdmin && currentAdmin.username === user.username;
+        if (isSelf) {
             if (activeContainer) activeContainer.style.display = 'none';
+            if (editActiveRadioCtrl) editActiveRadioCtrl.setValue('true');
         } else {
             if (activeContainer) activeContainer.style.display = 'block';
-            if (activeSelect) activeSelect.value = user.is_active ? 'true' : 'false';
+            if (editActiveRadioCtrl) editActiveRadioCtrl.setValue(user.is_active ? 'true' : 'false');
         }
         syncAllAdminCustomSelects();
         if (typeof syncAllFloatingLabels === 'function') syncAllFloatingLabels();
@@ -8675,6 +8754,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = modalEditUser.querySelector('.modal-card') || modalEditUser;
             promoteTemporarily(card, 'transform, opacity', 250);
             modalEditUser.style.display = 'flex';
+            setTimeout(() => {
+                if (editActiveRadioCtrl) editActiveRadioCtrl.refresh();
+            }, 50);
         }
     }
 
@@ -8693,7 +8775,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const fullName = document.getElementById('edit_full_name')?.value.trim();
         const roleTitle = document.getElementById('edit_role_title')?.value.trim();
         const role = document.getElementById('edit_role')?.value || 'edare_kol';
-        const isActive = document.getElementById('edit_is_active')?.value === 'true';
+        const isActive = editActiveRadioCtrl ? editActiveRadioCtrl.getValue() === 'true' : true;
         const mustChangePwd = document.getElementById('edit_must_change_pwd')?.checked || false;
 
         if (submitBtn) submitBtn.disabled = true;
@@ -8716,6 +8798,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (res.ok) {
+                cachedForwardingRecipients = null;
                 showToast(`اطلاعات کاربر "${fullName}" با موفقیت بروزرسانی شد`);
                 closeEditUserModal();
                 fetchAdminUsers();

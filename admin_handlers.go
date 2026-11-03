@@ -46,6 +46,8 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 				writeAuthJSONError(w, http.StatusUnauthorized, "concurrent_login", "یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.", map[string]any{"reason": "CONCURRENT_LOGIN"})
 			case "TERMINATED_BY_SUPERUSER":
 				writeAuthJSONError(w, http.StatusUnauthorized, "session_terminated", "نشست کاری شما توسط پشتیبانی سامانه خاتمه یافت.")
+			case "DEACTIVATED", "ROLE_OR_STATUS_CHANGED":
+				writeAuthJSONError(w, http.StatusUnauthorized, "session_terminated", "حساب کاربری شما غیرفعال گردیده یا تغییر وضعیت یافته است.")
 			case "idle":
 				writeAuthJSONError(w, http.StatusUnauthorized, "session_expired", "نشست کاری شما به دلیل عدم فعالیت به پایان رسید.", map[string]any{"reason": "idle"})
 			case "absolute":
@@ -1645,12 +1647,14 @@ func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if (isSuper || currentRole == "superuser") && req.Role != "superuser" {
-		var otherSuperCount int
-		_ = DB.QueryRow("SELECT COUNT(*) FROM admin_users WHERE (is_superuser = true OR role = 'superuser') AND is_active = true AND id != $1", req.UserID).Scan(&otherSuperCount)
-		if otherSuperCount < 1 {
-			http.Error(w, "امکان تغییر نقش این کاربر وجود ندارد: حداقل یک مدیر ارشد سامانه فعال باید در سیستم باقی بماند.", http.StatusBadRequest)
-			return
+	if isSuper || currentRole == "superuser" {
+		if req.Role != "superuser" || !req.IsActive {
+			var otherSuperCount int
+			_ = DB.QueryRow("SELECT COUNT(*) FROM admin_users WHERE (is_superuser = true OR role = 'superuser') AND is_active = true AND id != $1", req.UserID).Scan(&otherSuperCount)
+			if otherSuperCount < 1 {
+				http.Error(w, "امکان غیرفعال‌سازی یا تغییر نقش این کاربر وجود ندارد: حداقل یک مدیر ارشد سامانه فعال باید در سیستم باقی بماند.", http.StatusBadRequest)
+				return
+			}
 		}
 	}
 

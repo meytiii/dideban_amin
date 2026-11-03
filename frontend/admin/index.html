@@ -2435,13 +2435,25 @@
                         <option value="superuser">مدیر ارشد سامانه</option>
                     </select>
                 </div>
-                <div class="form-group" id="edit_active_container">
-                    <label for="edit_is_active">وضعیت حساب کاربری:</label>
-                    <select id="edit_is_active"
-                        style="width: 100%; height: 40px; background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 0 12px; color: var(--text-main); font-family: inherit; font-size: 13px;">
-                        <option value="true">فعال (دسترسی کامل به کارتابل)</option>
-                        <option value="false">غیرفعال (مسدود شده و لغو دسترسی)</option>
-                    </select>
+                <div class="form-group" id="edit_active_container" style="margin-top: 12px; margin-bottom: 12px;">
+                    <label class="form-label" style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 500; color: var(--text-main);">وضعیت حساب کاربری:</label>
+                    <div class="radio-group-base" id="edit_active_radio_group" role="radiogroup" aria-label="وضعیت حساب کاربری">
+                        <div class="radio-active-indicator" id="edit_active_indicator" aria-hidden="true"></div>
+                        <label class="radio-item-base" data-value="true" role="radio" aria-checked="true" tabindex="0">
+                            <input type="radio" name="edit_user_active_radio" value="true" class="radio-input-hidden" tabindex="-1">
+                            <span class="radio-circle">
+                                <span class="radio-dot"></span>
+                            </span>
+                            <span class="radio-label-text">فعال</span>
+                        </label>
+                        <label class="radio-item-base" data-value="false" role="radio" aria-checked="false" tabindex="-1">
+                            <input type="radio" name="edit_user_active_radio" value="false" class="radio-input-hidden" tabindex="-1">
+                            <span class="radio-circle">
+                                <span class="radio-dot"></span>
+                            </span>
+                            <span class="radio-label-text">غیرفعال</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="form-group" style="margin-top: 10px;">
                     <label class="checkbox-label"

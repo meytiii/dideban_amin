@@ -321,20 +321,31 @@ func VerifyMFAHandler(w http.ResponseWriter, r *http.Request) {
 
 	var userID int64
 	var storedHash, fullName, roleTitle, role, encSecret string
-	var isSuperuser, totpEnabled bool
+	var isSuperuser, totpEnabled, isActive bool
 	var passwordChangedAt, dbNow time.Time
 	var mustChangePassword bool
 
 	err = DB.QueryRow(`
 		SELECT id, password_hash, COALESCE(full_name, ''), role_title, COALESCE(role, 'edare_kol'), is_superuser,
 		       COALESCE(password_changed_at, NOW()), COALESCE(must_change_password, false),
-		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), NOW()
+		       COALESCE(totp_secret, ''), COALESCE(totp_enabled, false), NOW(), COALESCE(is_active, true)
 		FROM admin_users
-		WHERE username=$1 AND is_active=true`, payload.Username).Scan(
+		WHERE username=$1`, payload.Username).Scan(
 		&userID, &storedHash, &fullName, &roleTitle, &role, &isSuperuser, &passwordChangedAt, &mustChangePassword,
-		&encSecret, &totpEnabled, &dbNow)
+		&encSecret, &totpEnabled, &dbNow, &isActive)
 	if err != nil {
-		writeAuthJSONError(w, http.StatusUnauthorized, "invalid_credentials", "کاربر یافت نشد یا حساب غیرفعال است.")
+		writeAuthJSONError(w, http.StatusUnauthorized, "invalid_credentials", "کاربر یافت نشد.")
+		return
+	}
+
+	if !isActive {
+		logAudit(payload.Username, roleTitle, "DEACTIVATED_MFA_ATTEMPT", nil, clientIP)
+		greetingName := strings.TrimSpace(fullName)
+		if greetingName == "" {
+			greetingName = payload.Username
+		}
+		errMsg := fmt.Sprintf("همکار گرامی %s؛\nحساب شما غیرفعال گردیده است. جهت فعالسازی حساب کاربری با پشتیبان سامانه تماس حاصل فرمایید.", greetingName)
+		writeAuthJSONError(w, http.StatusForbidden, "account_deactivated", errMsg)
 		return
 	}
 
