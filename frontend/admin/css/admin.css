@@ -1863,6 +1863,21 @@ button {
     transform: translateY(-1px);
 }
 
+.btn-success,
+.btn-action.btn-success {
+    background: linear-gradient(135deg, #059669, #047857) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.btn-success:hover,
+.btn-action.btn-success:hover {
+    background: linear-gradient(135deg, #047857, #065f46) !important;
+    border-color: rgba(52, 211, 153, 0.6);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+    transform: translateY(-1px);
+}
+
 .btn-secondary,
 .btn-action.btn-secondary {
     background: linear-gradient(135deg, #475569, #334155) !important;

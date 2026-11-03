@@ -8426,6 +8426,99 @@ document.addEventListener('DOMContentLoaded', () => {
         updateAdminUsersBulkToolbar();
     });
 
+    function promptBulkDeletePhrase() {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('modal-bulk-delete-phrase');
+            const input = document.getElementById('bulkDeletePhraseInput');
+            const btnConfirm = document.getElementById('btnConfirmBulkDeletePhrase');
+            const btnCancel = document.getElementById('btnCancelBulkDeletePhrase');
+            const btnClose = document.getElementById('btn-close-bulk-delete-modal');
+
+            if (!modal || !input || !btnConfirm) {
+                resolve(true);
+                return;
+            }
+
+            function normalizePhrase(s) {
+                if (!s) return '';
+                return s
+                    .replace(/[\u200c\u200b\s]+/g, ' ')
+                    .replace(/ي/g, 'ی')
+                    .replace(/ك/g, 'ک')
+                    .replace(/ة/g, 'ه')
+                    .trim();
+            }
+
+            const targetPhrase = normalizePhrase('بله از حذف این حساب ها اطمینان دارم');
+
+            input.value = '';
+            btnConfirm.disabled = true;
+            btnConfirm.style.opacity = '0.5';
+            btnConfirm.style.cursor = 'not-allowed';
+            modal.style.display = 'flex';
+
+            let resolved = false;
+
+            function cleanup(res) {
+                if (resolved) return;
+                resolved = true;
+                modal.style.display = 'none';
+                input.removeEventListener('input', onInput);
+                input.removeEventListener('keydown', onKeyDown);
+                btnConfirm.removeEventListener('click', onConfirm);
+                btnCancel?.removeEventListener('click', onCancel);
+                btnClose?.removeEventListener('click', onCancel);
+                modal.removeEventListener('click', onBackdrop);
+                resolve(res);
+            }
+
+            function onInput() {
+                const val = normalizePhrase(input.value);
+                const isMatch = val === targetPhrase;
+                btnConfirm.disabled = !isMatch;
+                btnConfirm.style.opacity = isMatch ? '1' : '0.5';
+                btnConfirm.style.cursor = isMatch ? 'pointer' : 'not-allowed';
+            }
+
+            function onKeyDown(e) {
+                if (e.key === 'Enter' && !btnConfirm.disabled) {
+                    e.preventDefault();
+                    cleanup(true);
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    cleanup(false);
+                }
+            }
+
+            function onConfirm() {
+                if (!btnConfirm.disabled) {
+                    cleanup(true);
+                }
+            }
+
+            function onCancel() {
+                cleanup(false);
+            }
+
+            function onBackdrop(e) {
+                if (e.target === modal) {
+                    cleanup(false);
+                }
+            }
+
+            input.addEventListener('input', onInput);
+            input.addEventListener('keydown', onKeyDown);
+            btnConfirm.addEventListener('click', onConfirm);
+            btnCancel?.addEventListener('click', onCancel);
+            btnClose?.addEventListener('click', onCancel);
+            modal.addEventListener('click', onBackdrop);
+
+            setTimeout(() => {
+                input.focus();
+            }, 60);
+        });
+    }
+
     async function executeAdminBulkAction(action, title, description, confirmText = 'تأیید و اعمال گروهی', variant = 'danger', iconType = 'shield-alert') {
         const userIds = Array.from(selectedAdminUserIds);
         if (userIds.length === 0) return;
@@ -8442,6 +8535,11 @@ document.addEventListener('DOMContentLoaded', () => {
             iconType
         });
         if (!confirmed) return;
+
+        if (action === 'delete') {
+            const phraseConfirmed = await promptBulkDeletePhrase();
+            if (!phraseConfirmed) return;
+        }
 
         try {
             const res = await adminFetch('/api/admin/users/bulk-action', {
