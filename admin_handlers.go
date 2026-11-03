@@ -46,7 +46,7 @@ func AdminAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 				writeAuthJSONError(w, http.StatusUnauthorized, "concurrent_login", "یک ورود جدید با حساب کاربری شما در دستگاه دیگری انجام شد و شما از این سامانه خارج شدید.", map[string]any{"reason": "CONCURRENT_LOGIN"})
 			case "TERMINATED_BY_SUPERUSER":
 				writeAuthJSONError(w, http.StatusUnauthorized, "session_terminated", "نشست کاری شما توسط پشتیبانی سامانه خاتمه یافت.")
-			case "DEACTIVATED", "ROLE_OR_STATUS_CHANGED":
+			case "DEACTIVATED", "ROLE_OR_STATUS_CHANGED", "PASSWORD_EXPIRED":
 				writeAuthJSONError(w, http.StatusUnauthorized, "session_terminated", "حساب کاربری شما غیرفعال گردیده یا تغییر وضعیت یافته است.")
 			case "idle":
 				writeAuthJSONError(w, http.StatusUnauthorized, "session_expired", "نشست کاری شما به دلیل عدم فعالیت به پایان رسید.", map[string]any{"reason": "idle"})
@@ -1614,12 +1614,11 @@ func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var req struct {
-		UserID             int64  `json:"user_id"`
-		FullName           string `json:"full_name"`
-		RoleTitle          string `json:"role_title"`
-		Role               string `json:"role"`
-		IsActive           bool   `json:"is_active"`
-		MustChangePassword bool   `json:"must_change_password"`
+		UserID    int64  `json:"user_id"`
+		FullName  string `json:"full_name"`
+		RoleTitle string `json:"role_title"`
+		Role      string `json:"role"`
+		IsActive  bool   `json:"is_active"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.UserID <= 0 {
 		http.Error(w, "Bad request", http.StatusBadRequest)
@@ -1667,9 +1666,9 @@ func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	_, err = DB.Exec(`
 		UPDATE admin_users
-		SET full_name = $1, role_title = $2, role = $3, is_superuser = $4, is_active = $5, must_change_password = $6
-		WHERE id = $7
-	`, req.FullName, req.RoleTitle, req.Role, isNewSuper, req.IsActive, req.MustChangePassword, req.UserID)
+		SET full_name = $1, role_title = $2, role = $3, is_superuser = $4, is_active = $5
+		WHERE id = $6
+	`, req.FullName, req.RoleTitle, req.Role, isNewSuper, req.IsActive, req.UserID)
 
 	if err != nil {
 		http.Error(w, "خطای دیتابیس در ویرایش کاربر", http.StatusInternalServerError)
@@ -1963,6 +1962,75 @@ func ExtendUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status":"success","message":"مهلت اعتبار ۳۰ روزه رمز عبور کاربر با موفقیت تمدید شد."}`))
+}
+
+func ExpireUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
+	admin, ok := adminFromContext(r)
+	if !ok {
+		writeAuthJSONError(w, http.StatusUnauthorized, "unauthorized", "دسترسی غیرمجاز است.")
+		return
+	}
+
+	if DB == nil {
+		writeAuthJSONError(w, http.StatusInternalServerError, "database_error", "ارتباط با پایگاه داده برقرار نیست.")
+		return
+	}
+
+	var req struct {
+		UserID   int64  `json:"user_id"`
+		Username string `json:"username"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeAuthJSONError(w, http.StatusBadRequest, "bad_request", "داده‌های ارسالی نامعتبر است.")
+		return
+	}
+
+	req.Username = strings.TrimSpace(req.Username)
+	if req.Username == "" && req.UserID > 0 {
+		_ = DB.QueryRow("SELECT username FROM admin_users WHERE id = $1", req.UserID).Scan(&req.Username)
+	}
+	if req.Username == "" && req.UserID <= 0 {
+		writeAuthJSONError(w, http.StatusBadRequest, "bad_request", "کاربر اداری مورد نظر مشخص نشده است.")
+		return
+	}
+
+	var targetID int64
+	var targetUsername string
+	var err error
+	if req.UserID > 0 {
+		err = DB.QueryRow("SELECT id, username FROM admin_users WHERE id = $1", req.UserID).Scan(&targetID, &targetUsername)
+	} else {
+		err = DB.QueryRow("SELECT id, username FROM admin_users WHERE username = $1", req.Username).Scan(&targetID, &targetUsername)
+	}
+	if err != nil {
+		writeAuthJSONError(w, http.StatusNotFound, "user_not_found", "کاربر اداری مورد نظر یافت نشد.")
+		return
+	}
+
+	if targetUsername == admin.Username {
+		writeAuthJSONError(w, http.StatusBadRequest, "bad_request", "نمی‌توانید رمز عبور حساب کاربری خودتان را منقضی کنید.")
+		return
+	}
+
+	res, err := DB.Exec("UPDATE admin_users SET password_changed_at = NOW() - INTERVAL '31 days', must_change_password = true WHERE id = $1", targetID)
+	if err != nil {
+		writeAuthJSONError(w, http.StatusInternalServerError, "database_error", "خطای پایگاه داده در منقضی کردن رمز عبور.")
+		return
+	}
+	rowsAff, _ := res.RowsAffected()
+	if rowsAff == 0 {
+		writeAuthJSONError(w, http.StatusNotFound, "user_not_found", "کاربر اداری مورد نظر یافت نشد.")
+		return
+	}
+
+	Sessions.RevokeAllUserSessions(targetUsername, "PASSWORD_EXPIRED")
+
+	if err := logAudit(admin.Username, admin.Title, "EXPIRE_PASSWORD_VALIDITY:"+targetUsername, &targetID, getIP(r)); err != nil {
+		log.Printf("ERROR: Failed to record audit log for password expiration: %v", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status":"success","message":"رمز عبور کاربر با موفقیت منقضی شد و در ورود بعدی ملزم به تغییر رمز خواهد بود."}`))
 }
 
 type AuditLogItem struct {

@@ -8376,7 +8376,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         <path d="M15 2V22"/>
                     </svg>
                 </button>
-                ` : ''}
+                ` : (!isSelf ? `
+                <button type="button" class="btn-action btn-danger btn-icon-only" data-action="expire-pwd" data-id="${u.id}" data-user="${escapeHTML(u.username)}" data-tooltip="منقضی کردن اعتبار رمز عبور (اجبار به تغییر رمز)" aria-label="منقضی کردن اعتبار رمز">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.75 2C15.75 1.58579 15.4142 1.25 15 1.25C14.5858 1.25 14.25 1.58579 14.25 2V22C14.25 22.4142 14.5858 22.75 15 22.75C15.4142 22.75 15.75 22.4142 15.75 22V19.9944C18.3859 19.9668 19.8541 19.8028 20.8284 18.8284C22 17.6569 22 15.7712 22 12C22 8.22876 22 6.34315 20.8284 5.17157C19.8541 4.19724 18.3859 4.03321 15.75 4.00559V2Z" fill="currentColor"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M3.17157 18.8284C4.34315 20 6.22876 20 10 20H13V12V4H10C6.22876 4 4.34315 4 3.17157 5.17157C2 6.34315 2 8.22876 2 12C2 15.7712 2 17.6569 3.17157 18.8284ZM13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13C12.5523 13 13 12.5523 13 12ZM9 12C9 12.5523 8.55228 13 8 13C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11C8.55228 11 9 11.4477 9 12Z" fill="currentColor"/>
+                    </svg>
+                </button>
+                ` : '')}
                 <button type="button" class="btn-action ${u.is_locked ? 'btn-warning is-locked-pulse' : 'btn-secondary'} btn-icon-only btn-lift-ban" data-action="lift-ban" data-id="${u.id}" data-user="${escapeHTML(u.username)}" data-tooltip="${u.is_locked ? `رفع قفل موقت ورود (${escapeHTML(u.lockout_remaining || '۱۵ دقیقه')})` : 'رفع محدودیت و بازنشانی خطاهای ورود'}" aria-label="رفع قفل موقت ورود">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="16" r="2"/><path d="M11 22H8C5.17157 22 3.75736 22 2.87868 21.1213C2 20.2426 2 18.8284 2 16C2 13.1716 2 11.7574 2.87868 10.8787C3.75736 10 5.17157 10 8 10H16C18.8284 10 20.2426 10 21.1213 10.8787C22 11.7574 22 13.1716 22 16C22 18.8284 22 20.2426 21.1213 21.1213C20.2426 22 18.8284 22 16 22H15"/><path d="M6 10V8C6 7.65929 6.0284 7.32521 6.08296 7M17.811 6.5C17.1449 3.91216 14.7958 2 12 2C10.223 2 8.62643 2.7725 7.52779 4"/></svg>
                 </button>
@@ -8446,6 +8453,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     openResetPwdModal(b.getAttribute('data-id'), b.getAttribute('data-user'));
                 } else if (action === 'extend-pwd') {
                     extendUserPassword(b.getAttribute('data-id'), b.getAttribute('data-user'));
+                } else if (action === 'expire-pwd') {
+                    expireUserPassword(b.getAttribute('data-id'), b.getAttribute('data-user'));
                 } else if (action === 'lift-ban') {
                     liftUserLockout(b.getAttribute('data-id'), b.getAttribute('data-user'));
                 } else if (action === 'delete-user') {
@@ -8479,6 +8488,35 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchAdminUsers();
         } catch (e) {
             showToast('خطا در برقراری ارتباط با سرور جهت تمدید مهلت رمز عبور.', 3000, 'error');
+        }
+    }
+
+    async function expireUserPassword(userId, username) {
+        const confirmed = await showConfirmDialog({
+            title: 'منقضی کردن اعتبار رمز عبور',
+            description: `آیا از منقضی کردن اعتبار رمز عبور حساب «${escapeHTML(username)}» اطمینان دارید؟ کاربر در ورود بعدی ملزم به تعیین رمز جدید خواهد شد.`,
+            confirmText: 'بله، منقضی کن',
+            cancelText: 'انصراف',
+            variant: 'danger',
+            iconType: 'shield-alert'
+        });
+        if (!confirmed) return;
+
+        try {
+            const res = await adminFetch('/api/admin/users/expire-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: parseInt(userId, 10), username: username })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                showToast(data.message || 'خطا در منقضی کردن رمز عبور کاربر.', 3000, 'error');
+                return;
+            }
+            showToast(data.message || 'رمز عبور با موفقیت منقضی شد.', 3000, 'success');
+            fetchAdminUsers();
+        } catch (e) {
+            showToast('خطا در برقراری ارتباط با سرور جهت منقضی کردن رمز عبور.', 3000, 'error');
         }
     }
 
@@ -8627,7 +8665,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const roleInput = document.getElementById('edit_role_title');
         const roleSelect = document.getElementById('edit_role');
         const activeContainer = document.getElementById('edit_active_container');
-        const forcePwdCheckbox = document.getElementById('edit_must_change_pwd');
         const statusEl = document.getElementById('edit-user-status');
 
         if (idInput) idInput.value = user.id;
@@ -8637,7 +8674,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (roleSelect) {
             roleSelect.value = user.role || (user.is_superuser ? 'superuser' : 'edare_kol');
         }
-        if (forcePwdCheckbox) forcePwdCheckbox.checked = !!user.must_change_password;
 
         const isSelf = currentAdmin && currentAdmin.username === user.username;
         if (isSelf) {
@@ -8776,7 +8812,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const roleTitle = document.getElementById('edit_role_title')?.value.trim();
         const role = document.getElementById('edit_role')?.value || 'edare_kol';
         const isActive = editActiveRadioCtrl ? editActiveRadioCtrl.getValue() === 'true' : true;
-        const mustChangePwd = document.getElementById('edit_must_change_pwd')?.checked || false;
 
         if (submitBtn) submitBtn.disabled = true;
         if (btnText) btnText.textContent = 'در حال ذخیره...';
@@ -8792,8 +8827,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     full_name: fullName,
                     role_title: roleTitle,
                     role: role,
-                    is_active: isActive,
-                    must_change_password: mustChangePwd
+                    is_active: isActive
                 })
             });
 

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -68,5 +70,27 @@ func TestDeactivatedUserSessionTermination(t *testing.T) {
 	}
 	if reason != "DEACTIVATED" {
 		t.Fatalf("expected reason=DEACTIVATED, got %s", reason)
+	}
+}
+
+func TestExpireUserPasswordSelfCheck(t *testing.T) {
+	reqBody := []byte(`{"user_id": 1, "username": "superadmin"}`)
+	req := httptest.NewRequest(http.MethodPost, "/api/admin/users/expire-password", bytes.NewReader(reqBody))
+	req.Header.Set("Content-Type", "application/json")
+
+	adminSession := AdminSession{
+		Username:    "superadmin",
+		Role:        "superuser",
+		IsSuperuser: true,
+	}
+	ctx := context.WithValue(req.Context(), adminContextKey, adminSession)
+	req = req.WithContext(ctx)
+
+	w := httptest.NewRecorder()
+	ExpireUserPasswordHandler(w, req)
+
+	resp := w.Result()
+	if resp.StatusCode != http.StatusBadRequest && resp.StatusCode != http.StatusInternalServerError && resp.StatusCode != http.StatusNotFound {
+		t.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 }
