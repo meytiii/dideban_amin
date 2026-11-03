@@ -20,6 +20,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 	"unicode/utf8"
@@ -3796,17 +3797,59 @@ func stripXMLControlChars(s string) string {
 	return b.String()
 }
 
+var (
+	cachedPythonMu   sync.RWMutex
+	cachedPythonPath string
+)
+
+func isWorkingPythonRuntime(path string) bool {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, path, "-c", "import sys, docx; sys.exit(0)")
+	cmd.Env = getRestrictedSubprocessEnv()
+	return cmd.Run() == nil
+}
+
 func resolvePythonBinary() (string, error) {
+	cachedPythonMu.RLock()
+	cached := cachedPythonPath
+	cachedPythonMu.RUnlock()
+	if cached != "" {
+		return cached, nil
+	}
+
 	if custom := strings.TrimSpace(os.Getenv("HERASAT_PYTHON_BIN")); custom != "" {
 		if path, err := exec.LookPath(custom); err == nil {
-			return path, nil
+			if isWorkingPythonRuntime(path) {
+				cachedPythonMu.Lock()
+				cachedPythonPath = path
+				cachedPythonMu.Unlock()
+				return path, nil
+			}
 		}
 	}
-	for _, bin := range []string{"python3", "python"} {
+
+	var candidates []string
+	if runtime.GOOS == "windows" {
+		candidates = []string{"python", "py", "python3"}
+	} else {
+		candidates = []string{"python3", "python"}
+	}
+
+	for _, bin := range candidates {
 		if path, err := exec.LookPath(bin); err == nil {
-			return path, nil
+			if runtime.GOOS == "windows" && strings.Contains(strings.ToLower(path), "windowsapps") {
+				continue
+			}
+			if isWorkingPythonRuntime(path) {
+				cachedPythonMu.Lock()
+				cachedPythonPath = path
+				cachedPythonMu.Unlock()
+				return path, nil
+			}
 		}
 	}
+
 	return "", errors.New("python runtime unavailable")
 }
 
@@ -4030,6 +4073,8 @@ func getRestrictedSubprocessEnv() []string {
 	env := []string{
 		"PYTHONDONTWRITEBYTECODE=1",
 		"PYTHONNOUSERSITE=1",
+		"PYTHONUTF8=1",
+		"PYTHONIOENCODING=utf-8",
 	}
 	if runtime.GOOS == "windows" {
 		for _, key := range []string{"PATH", "SystemRoot", "COMSPEC", "PATHEXT", "TEMP", "TMP"} {

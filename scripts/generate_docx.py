@@ -47,7 +47,7 @@ def set_english_formatting (run ,font_name ="Calibri"):
 
 def format_persian_text_with_dates (text ):
     if not text :
-        return text 
+        return ""
 
     text =re .sub (r'(\d{4}/\d{2}/\d{2})\s*-\s*(\d{2}:\d{2})',lambda m :'\u200E'+m .group (1 )+'\u200E - \u200E'+m .group (2 )+'\u200E',str (text ))
 
@@ -109,21 +109,27 @@ def populate_docx (template_path ,data ):
 
     doc =docx .Document (template_path )
 
+    def clean_val(v, default=""):
+        if v is None:
+            return default
+        s = str(v).strip()
+        return s if s else default
+
     mapping ={
-    "{{TRACKING_CODE}}":data .get ("tracking_code",""),
-    "{{DATE}}":data .get ("date",""),
-    "{{PRINT_DATE}}":data .get ("print_date",""),
-    "{{CATEGORY}}":data .get ("category",""),
-    "{{PRIORITY}}":data .get ("priority","عادی"),
-    "{{REPORTER_TYPE}}":data .get ("reporter_type","ناشناس"),
-    "{{REPORTER_INFO}}":data .get ("reporter_info","محفوظ"),
-    "{{EVIDENCE_STATUS}}":data .get ("evidence_status","فاقد پیوست"),
-    "{{READ_STATUS}}":data .get ("read_status","در انتظار بررسی"),
-    "{{DESCRIPTION}}":data .get ("description",""),
-    "{{ADMIN_RESPONSE}}":data .get ("admin_response","فاقد پاسخ کارشناس حراست"),
-    "{{RESPONDED_BY}}":data .get ("responded_by","ثبت نشده"),
-    "{{RESPONDED_AT}}":data .get ("responded_at","ثبت نشده"),
-    "{{INTERNAL_NOTES}}":data .get ("internal_notes","فاقد یادداشت محرمانه داخلی.")
+    "{{TRACKING_CODE}}":clean_val(data .get ("tracking_code"),""),
+    "{{DATE}}":clean_val(data .get ("date"),""),
+    "{{PRINT_DATE}}":clean_val(data .get ("print_date"),""),
+    "{{CATEGORY}}":clean_val(data .get ("category"),""),
+    "{{PRIORITY}}":clean_val(data .get ("priority"),"عادی"),
+    "{{REPORTER_TYPE}}":clean_val(data .get ("reporter_type"),"ناشناس"),
+    "{{REPORTER_INFO}}":clean_val(data .get ("reporter_info"),"محفوظ"),
+    "{{EVIDENCE_STATUS}}":clean_val(data .get ("evidence_status"),"فاقد پیوست"),
+    "{{READ_STATUS}}":clean_val(data .get ("read_status"),"در انتظار بررسی"),
+    "{{DESCRIPTION}}":clean_val(data .get ("description"),""),
+    "{{ADMIN_RESPONSE}}":clean_val(data .get ("admin_response"),"فاقد پاسخ کارشناس حراست"),
+    "{{RESPONDED_BY}}":clean_val(data .get ("responded_by"),"ثبت نشده"),
+    "{{RESPONDED_AT}}":clean_val(data .get ("responded_at"),"ثبت نشده"),
+    "{{INTERNAL_NOTES}}":clean_val(data .get ("internal_notes"),"فاقد یادداشت محرمانه داخلی.")
     }
 
 

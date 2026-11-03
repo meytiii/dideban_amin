@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-11-03)
 
 ## Corpus Check
-- 311 files · ~493,003 words
+- 311 files · ~496,988 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3503 nodes · 5005 edges · 233 communities (212 shown, 21 thin omitted)
+- 3503 nodes · 5005 edges · 231 communities (211 shown, 20 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 558 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0ae094ac`
+- Built from commit: `91fd287b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -236,7 +236,6 @@
 - Structural & Flow
 - openForwardModal
 - Audit Workflow (6 Stages)
-- auth_hardening_test.go
 - time.Time
 - promptBulkDeletePhrase
 - AI-Assisted Security Tools
@@ -245,7 +244,6 @@
 - ft2-inline-rule-single-line.md
 - h6-photographic-fold.md
 - s4-inline-no-break.md
-- TestMain
 
 ## God Nodes (most connected - your core abstractions)
 1. `adminFromContext()` - 43 edges
@@ -274,7 +272,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (233 total, 21 thin omitted)
+## Communities (231 total, 20 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -537,8 +535,8 @@ Cohesion: 0.17
 Nodes (19): createShamsiDateRangePicker(), closePopover(), commitDateRange(), openPopover(), renderCalendar(), renderCalendarHighlights(), resetRange(), fetchServerTime() (+11 more)
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.09
-Nodes (45): VerifyCaptcha(), DecryptAES(), DecryptBoundField(), DecryptCaptchaPayload(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), DecryptWithAAD() (+37 more)
+Cohesion: 0.08
+Nodes (47): VerifyCaptcha(), DecryptAES(), DecryptBoundField(), DecryptCaptchaPayload(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), DecryptWithAAD() (+39 more)
 
 ### Community 68 - "Tone & Voice"
 Cohesion: 0.05
@@ -569,8 +567,8 @@ Cohesion: 0.28
 Nodes (14): executeDeleteReportIDs(), computeAuditHash(), computeLegacyAuditHash(), executeAuditLogTx(), getLatestAuditHashLocked(), isAuditStrict(), logAuditTxWithDetail(), logAuditWithDetail() (+6 more)
 
 ### Community 77 - "captcha.go"
-Cohesion: 0.23
-Nodes (13): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), renderObfuscatedChars(), EncryptCaptchaPayload(), CaptchaPayload (+5 more)
+Cohesion: 0.13
+Nodes (18): cryptoRandInt(), GenerateCaptchaToken(), GenerateMathCaptchaSVG(), generateNoiseElements(), GetCaptchaHandler(), NewUsedCaptchaStore(), renderObfuscatedChars(), EncryptCaptchaPayload() (+10 more)
 
 ### Community 78 - "metadata.go"
 Cohesion: 0.10
@@ -597,8 +595,8 @@ Cohesion: 0.20
 Nodes (17): normalizeForSearch(), cleanRune(), collapseRepeatedRunes(), containsBoundedPhrase(), ContainsVulgarLanguage(), hasVulgarLatinSuffix(), hasVulgarPersianSuffix(), init() (+9 more)
 
 ### Community 88 - "getTestDB"
-Cohesion: 0.12
-Nodes (17): NewUsedCaptchaStore(), NewAccountLockoutManager(), NewSessionManager(), TestCaptchaPersistenceTryRedeem(), TestAccountLockoutConcurrentFailures(), TestAuditChainConcurrentAndTamperDetection(), TestChangeMyPasswordPreservesRequires2FA(), TestInspectOOXMLFixtures() (+9 more)
+Cohesion: 0.19
+Nodes (12): NewSessionManager(), TestAuditChainConcurrentAndTamperDetection(), TestChangeMyPasswordPreservesRequires2FA(), TestInspectOOXMLFixtures(), TestSessionDeadlockAndPermutations(), TestTokenAwarePDFScanner(), getTestDB(), TestSessionManagementAndRateLimiter() (+4 more)
 
 ### Community 89 - "Typography"
 Cohesion: 0.50
@@ -661,8 +659,8 @@ Cohesion: 0.15
 Nodes (14): context.Context, contextWithAdmin(), TestAuditFailClosed(), TestForwardHistoryItemWithRegionalResponse(), TestForwardHistorySerialization(), TestForwardingRequestValidation(), TestNavahiManateghClassificationForbidden(), TestNavahiManateghNotificationScoping() (+6 more)
 
 ### Community 108 - "testing.T"
-Cohesion: 0.07
-Nodes (32): testing.T, TestAdminAuthMiddlewareJSONErrors(), TestAdminLogoutExemptFromCSRFAndSession(), TestConcurrentLoginParallelPersistence(), TestCSRFAuditThrottling(), TestCSRFMiddlewareJSONErrors(), TestExtendUserPasswordHandler(), TestRateLimitMiddlewareAdminJSON() (+24 more)
+Cohesion: 0.06
+Nodes (40): generateInitialPassword(), testing.T, TestAdminAuthMiddlewareJSONErrors(), TestAdminLogoutExemptFromCSRFAndSession(), TestConcurrentLoginParallelPersistence(), TestCSRFAuditThrottling(), TestCSRFMiddlewareJSONErrors(), TestExtendUserPasswordHandler() (+32 more)
 
 ### Community 109 - "Insecure Deserialization"
 Cohesion: 0.12
@@ -1092,10 +1090,6 @@ Nodes (8): fetchForwardingRecipients(), openForwardModal(), openResetPwdModal(),
 Cohesion: 0.29
 Nodes (7): Audit Workflow (6 Stages), Stage 1 — Context Building, Stage 2 — Threat Modeling (STRIDE), Stage 3 — Systematic Scanning, Stage 4 — Deep Analysis, Stage 5 — Report Writing, Stage 6 — Feedback Loop & Self-Update
 
-### Community 222 - "auth_hardening_test.go"
-Cohesion: 0.20
-Nodes (8): generateInitialPassword(), TestCompoundAccountLockoutByIP(), TestInitialAdminPasswordGenerator(), TestPasswordPolicyUnicodeAndRestrictions(), TestRestrictedSessionMiddlewareEnforcement(), TestBootstrapPasswordGeneration(), TestLockoutDecay(), TestNonEnumeratingLoginLockout()
-
 ### Community 224 - "time.Time"
 Cohesion: 0.24
 Nodes (9): sync.Mutex, time.Ticker, time.Time, BackupManifest, cachedAccountFailure, IPRateLimiter, sessionTombstone, TOTPReplayStore (+1 more)
@@ -1119,7 +1113,7 @@ Nodes (4): Compliance Checklist, Data Flow Audit, Data Privacy & Compliance, Pro
 ## Knowledge Gaps
 - **1973 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+1968 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

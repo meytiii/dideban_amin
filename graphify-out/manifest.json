@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "admin_handlers.go": {
-    "mtime": 1793694607.7376401,
-    "seen": 1793694660.1051533,
-    "ast_hash": "8b53574523f9b834f5b14aa3587fa799",
+    "mtime": 1793696744.913546,
+    "seen": 1793697032.5521147,
+    "ast_hash": "ca1483e8781103d9764e6ddc4492fa63",
     "semantic_hash": ""
   },
   "captcha.go": {
@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   "scripts/generate_docx.py": {
-    "mtime": 1788749663.2846153,
-    "seen": 1790405583.7019694,
-    "ast_hash": "2c391644ca98502ad29a286de592b6d5",
+    "mtime": 1793696695.3320537,
+    "seen": 1793697032.5536902,
+    "ast_hash": "fc205e29edbf5510d7f6668c12ac653e",
     "semantic_hash": ""
   },
   ".agents/rules/caveman.md": {

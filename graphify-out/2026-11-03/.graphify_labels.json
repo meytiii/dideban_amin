@@ -221,7 +221,6 @@
   "219": "Structural & Flow",
   "220": "openForwardModal",
   "221": "Audit Workflow (6 Stages)",
-  "222": "auth_hardening_test.go",
   "223": "antislop.md",
   "224": "time.Time",
   "225": "promptBulkDeletePhrase",
@@ -230,6 +229,5 @@
   "228": "Data Privacy & Compliance",
   "229": "ft2-inline-rule-single-line.md",
   "230": "h6-photographic-fold.md",
-  "231": "s4-inline-no-break.md",
-  "232": "TestMain"
+  "231": "s4-inline-no-break.md"
 }
