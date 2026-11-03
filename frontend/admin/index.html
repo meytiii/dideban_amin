@@ -7,7 +7,7 @@
     <title>سامانه دیده‌بان امین - پنل مدیریت حراست همدان</title>
     <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="css/admin.css?v=103">
+    <link rel="stylesheet" href="css/admin.css?v=20261103_radio_v2">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
@@ -2435,24 +2435,24 @@
                         <option value="superuser">مدیر ارشد سامانه</option>
                     </select>
                 </div>
-                <div class="form-group" id="edit_active_container" style="margin-top: 12px; margin-bottom: 12px;">
+                <div class="form-group" id="edit_active_container" style="margin-top: 14px; margin-bottom: 14px;">
                     <label class="form-label" style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 500; color: var(--text-main);">وضعیت حساب کاربری:</label>
                     <div class="radio-group-base" id="edit_active_radio_group" role="radiogroup" aria-label="وضعیت حساب کاربری">
+                        <div class="radio-hover-indicator" id="edit_active_hover_indicator" aria-hidden="true"></div>
                         <div class="radio-active-indicator" id="edit_active_indicator" aria-hidden="true"></div>
-                        <label class="radio-item-base" data-value="true" role="radio" aria-checked="true" tabindex="0">
-                            <input type="radio" name="edit_user_active_radio" value="true" class="radio-input-hidden" tabindex="-1">
+                        <div class="radio-item-base" data-value="true" role="radio" aria-checked="true" tabindex="0">
                             <span class="radio-circle">
                                 <span class="radio-dot"></span>
                             </span>
                             <span class="radio-label-text">فعال</span>
-                        </label>
-                        <label class="radio-item-base" data-value="false" role="radio" aria-checked="false" tabindex="-1">
-                            <input type="radio" name="edit_user_active_radio" value="false" class="radio-input-hidden" tabindex="-1">
+                        </div>
+                        <div class="radio-item-base" data-value="false" role="radio" aria-checked="false" tabindex="-1">
                             <span class="radio-circle">
                                 <span class="radio-dot"></span>
                             </span>
                             <span class="radio-label-text">غیرفعال</span>
-                        </label>
+                        </div>
+                        <input type="hidden" id="edit_user_active_val" name="is_active" value="true">
                     </div>
                 </div>
 
@@ -3318,7 +3318,7 @@
 
     <script src="js/confirm.js" defer></script>
     <script src="js/tatweel.js" defer></script>
-    <script src="js/admin.js?v=20261102_pwd_ext_v1" defer></script>
+    <script src="js/admin.js?v=20261103_radio_v2" defer></script>
 </body>
 
 </html>

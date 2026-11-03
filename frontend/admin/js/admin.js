@@ -2625,48 +2625,81 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initRadioGroupBase(containerEl, onChange) {
         if (!containerEl) return null;
-        const indicator = containerEl.querySelector('.radio-active-indicator');
+        const activeIndicator = containerEl.querySelector('.radio-active-indicator');
+        const hoverIndicator = containerEl.querySelector('.radio-hover-indicator');
         const items = Array.from(containerEl.querySelectorAll('.radio-item-base'));
+        const hiddenValInput = containerEl.querySelector('input[type="hidden"]');
         let currentValue = null;
 
-        function updateIndicator() {
+        function getRelativeRect(el) {
+            const cRect = containerEl.getBoundingClientRect();
+            const iRect = el.getBoundingClientRect();
+            if (iRect.width === 0 && iRect.height === 0) return null;
+            return {
+                left: iRect.left - cRect.left,
+                top: iRect.top - cRect.top,
+                width: iRect.width,
+                height: iRect.height
+            };
+        }
+
+        function updateActiveIndicator() {
+            if (!activeIndicator) return;
             const activeItem = items.find(i => i.getAttribute('data-value') === currentValue);
-            if (!activeItem || !indicator) {
-                if (indicator) indicator.style.opacity = '0';
+            if (!activeItem) {
+                activeIndicator.style.opacity = '0';
                 return;
             }
-            const cRect = containerEl.getBoundingClientRect();
-            const iRect = activeItem.getBoundingClientRect();
-            if (iRect.width === 0 && iRect.height === 0) return;
-            const left = iRect.left - cRect.left;
-            const top = iRect.top - cRect.top;
-            indicator.style.width = `${iRect.width}px`;
-            indicator.style.height = `${iRect.height}px`;
-            indicator.style.transform = `translate(${left}px, ${top}px)`;
-            indicator.style.opacity = '1';
+            const rect = getRelativeRect(activeItem);
+            if (!rect) return;
+            activeIndicator.style.width = `${rect.width}px`;
+            activeIndicator.style.height = `${rect.height}px`;
+            activeIndicator.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
+            activeIndicator.style.opacity = '1';
+        }
+
+        function updateHoverIndicator(targetItem) {
+            if (!hoverIndicator) return;
+            if (!targetItem) {
+                hoverIndicator.style.opacity = '0';
+                return;
+            }
+            const rect = getRelativeRect(targetItem);
+            if (!rect) return;
+            hoverIndicator.style.width = `${rect.width}px`;
+            hoverIndicator.style.height = `${rect.height}px`;
+            hoverIndicator.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
+            hoverIndicator.style.opacity = '1';
         }
 
         function setValue(val, emitChange = false) {
             currentValue = String(val);
+            if (hiddenValInput) hiddenValInput.value = currentValue;
             items.forEach(item => {
                 const isSelected = item.getAttribute('data-value') === currentValue;
                 item.setAttribute('aria-checked', isSelected ? 'true' : 'false');
                 item.tabIndex = isSelected ? 0 : -1;
-                const hiddenInput = item.querySelector('input[type="radio"]');
-                if (hiddenInput) hiddenInput.checked = isSelected;
             });
-            requestAnimationFrame(updateIndicator);
+            requestAnimationFrame(updateActiveIndicator);
             if (emitChange && typeof onChange === 'function') {
                 onChange(currentValue);
             }
         }
 
         items.forEach((item, idx) => {
+            item.addEventListener('mouseenter', () => {
+                updateHoverIndicator(item);
+            });
+
+            item.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                item.focus();
+            });
+
             item.addEventListener('click', (e) => {
                 e.preventDefault();
                 const val = item.getAttribute('data-value');
                 setValue(val, true);
-                item.focus();
             });
 
             item.addEventListener('keydown', (e) => {
@@ -2687,7 +2720,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        window.addEventListener('resize', updateIndicator);
+        containerEl.addEventListener('mouseleave', () => {
+            updateHoverIndicator(null);
+        });
+
+        window.addEventListener('resize', () => {
+            updateActiveIndicator();
+        });
 
         const activeInitially = items.find(i => i.getAttribute('aria-checked') === 'true') || items[0];
         if (activeInitially) {
@@ -2697,7 +2736,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return {
             setValue,
             getValue: () => currentValue,
-            refresh: updateIndicator
+            refresh: () => {
+                updateActiveIndicator();
+                setTimeout(updateActiveIndicator, 50);
+                setTimeout(updateActiveIndicator, 150);
+            }
         };
     }
 
@@ -8811,7 +8854,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const fullName = document.getElementById('edit_full_name')?.value.trim();
         const roleTitle = document.getElementById('edit_role_title')?.value.trim();
         const role = document.getElementById('edit_role')?.value || 'edare_kol';
-        const isActive = editActiveRadioCtrl ? editActiveRadioCtrl.getValue() === 'true' : true;
+        const activeHidden = document.getElementById('edit_user_active_val');
+        const isActive = editActiveRadioCtrl ? editActiveRadioCtrl.getValue() === 'true' : (activeHidden ? activeHidden.value === 'true' : true);
 
         if (submitBtn) submitBtn.disabled = true;
         if (btnText) btnText.textContent = 'در حال ذخیره...';

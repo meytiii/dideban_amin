@@ -9754,8 +9754,10 @@ a.admin-file-card-item:hover {
 .radio-group-base {
     position: relative;
     display: flex;
-    align-items: center;
-    gap: 6px;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    max-width: 320px;
     background: rgba(11, 19, 36, 0.85);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
@@ -9764,36 +9766,47 @@ a.admin-file-card-item:hover {
     isolation: isolate;
 }
 
+.radio-hover-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    opacity: 0;
+    z-index: 1;
+    transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), width 0.16s ease, height 0.16s ease, opacity 0.12s ease;
+}
+
 .radio-active-indicator {
     position: absolute;
     top: 0;
     left: 0;
     pointer-events: none;
     background: rgba(59, 130, 246, 0.16);
-    border: 1px solid rgba(59, 130, 246, 0.35);
+    border: 1px solid rgba(59, 130, 246, 0.38);
     border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), width 0.22s ease, height 0.22s ease, opacity 0.12s ease;
     opacity: 0;
-    z-index: 1;
+    z-index: 2;
 }
 
 .radio-item-base {
     position: relative;
-    z-index: 2;
-    display: inline-flex;
+    z-index: 3;
+    display: flex;
     align-items: center;
-    gap: 8px;
-    flex: 1;
+    gap: 10px;
     min-height: 38px;
-    padding: 0 14px;
+    padding: 0 12px;
     border-radius: 8px;
     cursor: pointer;
     outline: none;
     color: var(--text-muted);
     font-size: 13px;
     font-weight: 500;
-    transition: color 0.15s ease, background 0.15s ease;
+    transition: color 0.15s ease;
 }
 
 .radio-item-base:hover {
@@ -9807,15 +9820,6 @@ a.admin-file-card-item:hover {
 
 .radio-item-base:focus-visible {
     box-shadow: 0 0 0 2px var(--color-primary);
-}
-
-.radio-input-hidden {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-    width: 0;
-    height: 0;
-    margin: 0;
 }
 
 .radio-circle {

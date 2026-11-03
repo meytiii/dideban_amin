@@ -6,8 +6,8 @@
     "semantic_hash": ""
   },
   "admin_handlers.go": {
-    "mtime": 1793685615.869383,
-    "seen": 1793685788.9976387,
+    "mtime": 1793685887.4322424,
+    "seen": 1793686972.474256,
     "ast_hash": "b53d371856f5e70f18988b8cc1a6a3e8",
     "semantic_hash": ""
   },
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1793685658.226112,
-    "seen": 1793685789.017088,
-    "ast_hash": "da006df0a37bbaa9c0dd538ca23c0104",
+    "mtime": 1793686744.2007136,
+    "seen": 1793686972.4940927,
+    "ast_hash": "6734c9ffeb9ca2995ce6b299cc1a6b9c",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
@@ -1098,9 +1098,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/js/admin.js": {
-    "mtime": 1793685741.1740503,
-    "seen": 1793685788.998123,
-    "ast_hash": "11625e78c27720934774475d863fae4d",
+    "mtime": 1793686811.8610814,
+    "seen": 1793686972.474759,
+    "ast_hash": "93da815b99a686ba13e545e397507e7b",
     "semantic_hash": ""
   },
   "frontend/admin/js/confirm.js": {
@@ -2223,12 +2223,6 @@
     "mtime": 1793685763.8708284,
     "seen": 1793685789.0000973,
     "ast_hash": "1bf723b747e02e7f1751f204cd2acdf5",
-    "semantic_hash": ""
-  },
-  "graphify-out/converted/report_template_64ced46b.md": {
-    "mtime": 1793165293.0721302,
-    "seen": 1793684985.7127867,
-    "ast_hash": "19db3deb8dc72f0bcbfba3e4cb11fd63",
     "semantic_hash": ""
   },
   "frontend/admin/svg/force_password_reset.svg": {
