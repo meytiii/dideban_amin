@@ -4033,7 +4033,7 @@
       "file_type": "code",
       "norm_label": "main()",
       "source_file": "scripts/generate_docx.py",
-      "source_location": "L158"
+      "source_location": "L162"
     },
     {
       "id": "scripts_generate_docx_populate_docx",
@@ -4045,7 +4045,7 @@
       "file_type": "code",
       "norm_label": "populate_docx()",
       "source_file": "scripts/generate_docx.py",
-      "source_location": "L106"
+      "source_location": "L110"
     },
     {
       "id": "scripts_generate_docx_replace_in_table",
@@ -4057,7 +4057,7 @@
       "file_type": "code",
       "norm_label": "replace_in_table()",
       "source_file": "scripts/generate_docx.py",
-      "source_location": "L98"
+      "source_location": "L102"
     },
     {
       "id": "scripts_generate_docx_replace_placeholders_in_paragraph",
@@ -8986,28 +8986,6 @@
       "source_location": "L7"
     },
     {
-      "id": "admin_handlers_adminauthmiddleware",
-      "label": "AdminAuthMiddleware()",
-      "_origin": "ast",
-      "community": 116,
-      "community_name": "main",
-      "file_type": "code",
-      "norm_label": "adminauthmiddleware()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L31"
-    },
-    {
-      "id": "admin_handlers_superuserauthmiddleware",
-      "label": "SuperuserAuthMiddleware()",
-      "_origin": "ast",
-      "community": 116,
-      "community_name": "main",
-      "file_type": "code",
-      "norm_label": "superuserauthmiddleware()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L133"
-    },
-    {
       "id": "crypto_isknownplaceholderkey",
       "label": "isKnownPlaceholderKey()",
       "_origin": "ast",
@@ -9037,17 +9015,6 @@
       "community_name": "main",
       "file_type": "code",
       "norm_label": "net/http.handler",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_net_http_handlerfunc",
-      "label": "net/http.HandlerFunc",
-      "_origin": "ast",
-      "community": 116,
-      "community_name": "main",
-      "file_type": "code",
-      "norm_label": "net/http.handlerfunc",
       "source_file": "",
       "source_location": ""
     },
@@ -9140,17 +9107,6 @@
       "source_location": "L1"
     },
     {
-      "id": "middleware_adminipwhitelistmiddleware",
-      "label": "AdminIPWhitelistMiddleware()",
-      "_origin": "ast",
-      "community": 116,
-      "community_name": "main",
-      "file_type": "code",
-      "norm_label": "adminipwhitelistmiddleware()",
-      "source_file": "middleware.go",
-      "source_location": "L38"
-    },
-    {
       "id": "middleware_custom404fileserver",
       "label": "Custom404FileServer()",
       "_origin": "ast",
@@ -9215,28 +9171,6 @@
       "norm_label": "staticcachemiddleware()",
       "source_file": "middleware.go",
       "source_location": "L110"
-    },
-    {
-      "id": "security_ratelimitmiddleware",
-      "label": "RateLimitMiddleware()",
-      "_origin": "ast",
-      "community": 116,
-      "community_name": "main",
-      "file_type": "code",
-      "norm_label": "ratelimitmiddleware()",
-      "source_file": "security.go",
-      "source_location": "L871"
-    },
-    {
-      "id": "security_writeauthjsonerror",
-      "label": "writeAuthJSONError()",
-      "_origin": "ast",
-      "community": 116,
-      "community_name": "main",
-      "file_type": "code",
-      "norm_label": "writeauthjsonerror()",
-      "source_file": "security.go",
-      "source_location": "L71"
     },
     {
       "id": "setad_khabari_hmd_gzipresponsewriter",
@@ -13481,17 +13415,6 @@
       "source_location": "L52"
     },
     {
-      "id": "admin_auth_getcurrentadminhandler",
-      "label": "GetCurrentAdminHandler()",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "admin_handlers.go",
-      "file_type": "code",
-      "norm_label": "getcurrentadminhandler()",
-      "source_file": "admin_auth.go",
-      "source_location": "L265"
-    },
-    {
       "id": "admin_auth_getip",
       "label": "getIP()",
       "_origin": "ast",
@@ -13534,6 +13457,17 @@
       "norm_label": "canadminaccessreport()",
       "source_file": "admin_handlers.go",
       "source_location": "L144"
+    },
+    {
+      "id": "admin_handlers_changemypasswordhandler",
+      "label": "ChangeMyPasswordHandler()",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "changemypasswordhandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2466"
     },
     {
       "id": "admin_handlers_classifyreporthandler",
@@ -13844,6 +13778,17 @@
       "source_location": "L3669"
     },
     {
+      "id": "admin_handlers_redactreporthandler",
+      "label": "RedactReportHandler()",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "redactreporthandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2839"
+    },
+    {
       "id": "admin_handlers_removeforwardinghandler",
       "label": "RemoveForwardingHandler()",
       "_origin": "ast",
@@ -14007,6 +13952,17 @@
       "norm_label": "logaudittx()",
       "source_file": "audit.go",
       "source_location": "L155"
+    },
+    {
+      "id": "crypto_validatepasswordpolicy",
+      "label": "ValidatePasswordPolicy()",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "validatepasswordpolicy()",
+      "source_file": "crypto.go",
+      "source_location": "L695"
     },
     {
       "id": "events_admineventshandler",
@@ -27348,6 +27304,39 @@
       "source_location": "L19"
     },
     {
+      "id": "go_type_testing_m",
+      "label": "testing.M",
+      "_origin": "ast",
+      "community": 236,
+      "community_name": "TestMain",
+      "file_type": "code",
+      "norm_label": "testing.m",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "tests_test_main_test",
+      "label": "test_main_test.go",
+      "_origin": "ast",
+      "community": 236,
+      "community_name": "TestMain",
+      "file_type": "code",
+      "norm_label": "test_main_test.go",
+      "source_file": "tests/test_main_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_test_main_test_testmain",
+      "label": "TestMain()",
+      "_origin": "ast",
+      "community": 236,
+      "community_name": "TestMain",
+      "file_type": "code",
+      "norm_label": "testmain()",
+      "source_file": "tests/test_main_test.go",
+      "source_location": "L8"
+    },
+    {
       "id": "agents_skills_hallmark_references_typography_banned_defaults",
       "label": "Banned defaults",
       "_origin": "ast",
@@ -35730,15 +35719,26 @@
       "source_location": "L743"
     },
     {
-      "id": "crypto_validatepasswordpolicy",
-      "label": "ValidatePasswordPolicy()",
+      "id": "crypto_verifypassword",
+      "label": "VerifyPassword()",
       "_origin": "ast",
       "community": 67,
       "community_name": "crypto.go",
       "file_type": "code",
-      "norm_label": "validatepasswordpolicy()",
+      "norm_label": "verifypassword()",
       "source_file": "crypto.go",
-      "source_location": "L695"
+      "source_location": "L690"
+    },
+    {
+      "id": "crypto_verifypasswordwithrehash",
+      "label": "VerifyPasswordWithRehash()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "verifypasswordwithrehash()",
+      "source_file": "crypto.go",
+      "source_location": "L630"
     },
     {
       "id": "db_migratetrackingcodes",
@@ -35750,17 +35750,6 @@
       "norm_label": "migratetrackingcodes()",
       "source_file": "db.go",
       "source_location": "L534"
-    },
-    {
-      "id": "go_type_testing_m",
-      "label": "testing.M",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testing.m",
-      "source_file": "",
-      "source_location": ""
     },
     {
       "id": "migration_v2",
@@ -35805,6 +35794,28 @@
       "norm_label": "submitfollowuphandler()",
       "source_file": "public_handlers.go",
       "source_location": "L664"
+    },
+    {
+      "id": "public_handlers_trackreporthandler",
+      "label": "TrackReportHandler()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "trackreporthandler()",
+      "source_file": "public_handlers.go",
+      "source_location": "L572"
+    },
+    {
+      "id": "security_isvalidtrackingcode",
+      "label": "isValidTrackingCode()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "isvalidtrackingcode()",
+      "source_file": "security.go",
+      "source_location": "L1175"
     },
     {
       "id": "setad_khabari_hmd_keyringentry",
@@ -35860,6 +35871,17 @@
       "norm_label": "crypto_test.go",
       "source_file": "tests/crypto_test.go",
       "source_location": "L1"
+    },
+    {
+      "id": "tests_crypto_test_testargon2iddualformatandrehash",
+      "label": "TestArgon2idDualFormatAndRehash()",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "crypto.go",
+      "file_type": "code",
+      "norm_label": "testargon2iddualformatandrehash()",
+      "source_file": "tests/crypto_test.go",
+      "source_location": "L76"
     },
     {
       "id": "tests_crypto_test_testcaptchaverificationsuite",
@@ -36047,28 +36069,6 @@
       "norm_label": "testunboundfallbackrejection()",
       "source_file": "tests/phase2_test.go",
       "source_location": "L50"
-    },
-    {
-      "id": "tests_test_main_test",
-      "label": "test_main_test.go",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "test_main_test.go",
-      "source_file": "tests/test_main_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_test_main_test_testmain",
-      "label": "TestMain()",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "testmain()",
-      "source_file": "tests/test_main_test.go",
-      "source_location": "L8"
     },
     {
       "id": "agents_skills_antislop_copywriting_skill",
@@ -37814,7 +37814,7 @@
       "label": "admin_auth.go",
       "_origin": "ast",
       "community": 72,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
       "norm_label": "admin_auth.go",
       "source_file": "admin_auth.go",
@@ -37825,18 +37825,29 @@
       "label": "generateSessionToken()",
       "_origin": "ast",
       "community": 72,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
       "norm_label": "generatesessiontoken()",
       "source_file": "admin_auth.go",
       "source_location": "L25"
     },
     {
+      "id": "admin_auth_getcurrentadminhandler",
+      "label": "GetCurrentAdminHandler()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "getcurrentadminhandler()",
+      "source_file": "admin_auth.go",
+      "source_location": "L265"
+    },
+    {
       "id": "admin_auth_loginhandler",
       "label": "LoginHandler()",
       "_origin": "ast",
       "community": 72,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
       "norm_label": "loginhandler()",
       "source_file": "admin_auth.go",
@@ -37847,88 +37858,242 @@
       "label": "LogoutHandler()",
       "_origin": "ast",
       "community": 72,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
       "norm_label": "logouthandler()",
       "source_file": "admin_auth.go",
       "source_location": "L357"
     },
     {
-      "id": "admin_handlers_changemypasswordhandler",
-      "label": "ChangeMyPasswordHandler()",
+      "id": "admin_handlers_adminauthmiddleware",
+      "label": "AdminAuthMiddleware()",
       "_origin": "ast",
       "community": 72,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "changemypasswordhandler()",
+      "norm_label": "adminauthmiddleware()",
       "source_file": "admin_handlers.go",
-      "source_location": "L2466"
+      "source_location": "L31"
     },
     {
-      "id": "crypto_verifypassword",
-      "label": "VerifyPassword()",
+      "id": "admin_handlers_superuserauthmiddleware",
+      "label": "SuperuserAuthMiddleware()",
       "_origin": "ast",
       "community": 72,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "verifypassword()",
-      "source_file": "crypto.go",
-      "source_location": "L690"
+      "norm_label": "superuserauthmiddleware()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L133"
     },
     {
-      "id": "crypto_verifypasswordwithrehash",
-      "label": "VerifyPasswordWithRehash()",
+      "id": "csrf",
+      "label": "csrf.go",
       "_origin": "ast",
       "community": 72,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "verifypasswordwithrehash()",
-      "source_file": "crypto.go",
-      "source_location": "L630"
+      "norm_label": "csrf.go",
+      "source_file": "csrf.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "csrf_csrfmiddleware",
+      "label": "CSRFMiddleware()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "csrfmiddleware()",
+      "source_file": "csrf.go",
+      "source_location": "L87"
+    },
+    {
+      "id": "csrf_isoriginallowed",
+      "label": "isOriginAllowed()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "isoriginallowed()",
+      "source_file": "csrf.go",
+      "source_location": "L58"
+    },
+    {
+      "id": "csrf_logthrottledcsrfaudit",
+      "label": "logThrottledCSRFAudit()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "logthrottledcsrfaudit()",
+      "source_file": "csrf.go",
+      "source_location": "L19"
+    },
+    {
+      "id": "go_type_net_http_handlerfunc",
+      "label": "net/http.HandlerFunc",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "net/http.handlerfunc",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "mfa_verifymfahandler",
       "label": "VerifyMFAHandler()",
       "_origin": "ast",
       "community": 72,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
       "norm_label": "verifymfahandler()",
       "source_file": "mfa.go",
       "source_location": "L297"
     },
     {
+      "id": "middleware_adminipwhitelistmiddleware",
+      "label": "AdminIPWhitelistMiddleware()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "adminipwhitelistmiddleware()",
+      "source_file": "middleware.go",
+      "source_location": "L38"
+    },
+    {
+      "id": "security",
+      "label": "security.go",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "security.go",
+      "source_file": "security.go",
+      "source_location": "L1"
+    },
+    {
       "id": "security_iscookiesecure",
       "label": "isCookieSecure()",
       "_origin": "ast",
       "community": 72,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
       "norm_label": "iscookiesecure()",
       "source_file": "security.go",
       "source_location": "L1143"
     },
     {
+      "id": "security_iswithindirectory",
+      "label": "isWithinDirectory()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "iswithindirectory()",
+      "source_file": "security.go",
+      "source_location": "L21"
+    },
+    {
+      "id": "security_normalizeandvalidateusername",
+      "label": "normalizeAndValidateUsername()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "normalizeandvalidateusername()",
+      "source_file": "security.go",
+      "source_location": "L37"
+    },
+    {
+      "id": "security_normalizeratelimitkey",
+      "label": "normalizeRateLimitKey()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "normalizeratelimitkey()",
+      "source_file": "security.go",
+      "source_location": "L821"
+    },
+    {
       "id": "security_progressivedelay",
       "label": "ProgressiveDelay()",
       "_origin": "ast",
       "community": 72,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
       "norm_label": "progressivedelay()",
       "source_file": "security.go",
       "source_location": "L1113"
     },
     {
-      "id": "tests_crypto_test_testargon2iddualformatandrehash",
-      "label": "TestArgon2idDualFormatAndRehash()",
+      "id": "security_ratelimitmiddleware",
+      "label": "RateLimitMiddleware()",
       "_origin": "ast",
       "community": 72,
-      "community_name": "LoginHandler",
+      "community_name": "security.go",
       "file_type": "code",
-      "norm_label": "testargon2iddualformatandrehash()",
-      "source_file": "tests/crypto_test.go",
-      "source_location": "L76"
+      "norm_label": "ratelimitmiddleware()",
+      "source_file": "security.go",
+      "source_location": "L871"
+    },
+    {
+      "id": "security_truncaterunes",
+      "label": "truncateRunes()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "truncaterunes()",
+      "source_file": "security.go",
+      "source_location": "L1153"
+    },
+    {
+      "id": "security_writeauthjsonerror",
+      "label": "writeAuthJSONError()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "writeauthjsonerror()",
+      "source_file": "security.go",
+      "source_location": "L71"
+    },
+    {
+      "id": "setad_khabari_hmd_admincontextkeytype",
+      "label": "adminContextKeyType",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "admincontextkeytype",
+      "source_file": "security.go",
+      "source_location": "L51"
+    },
+    {
+      "id": "tests_admin_auth_handling_test_testcsrfauditthrottling",
+      "label": "TestCSRFAuditThrottling()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "testcsrfauditthrottling()",
+      "source_file": "tests/admin_auth_handling_test.go",
+      "source_location": "L494"
+    },
+    {
+      "id": "tests_admin_auth_handling_test_testcsrfmiddlewarejsonerrors",
+      "label": "TestCSRFMiddlewareJSONErrors()",
+      "_origin": "ast",
+      "community": 72,
+      "community_name": "security.go",
+      "file_type": "code",
+      "norm_label": "testcsrfmiddlewarejsonerrors()",
+      "source_file": "tests/admin_auth_handling_test.go",
+      "source_location": "L170"
     },
     {
       "id": "agents_workflows_hallmark",
@@ -38282,17 +38447,6 @@
       "source_location": "L2759"
     },
     {
-      "id": "admin_handlers_redactreporthandler",
-      "label": "RedactReportHandler()",
-      "_origin": "ast",
-      "community": 76,
-      "community_name": "audit.go",
-      "file_type": "code",
-      "norm_label": "redactreporthandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2839"
-    },
-    {
       "id": "audit",
       "label": "audit.go",
       "_origin": "ast",
@@ -38434,28 +38588,6 @@
       "norm_label": "database/sql.tx",
       "source_file": "",
       "source_location": ""
-    },
-    {
-      "id": "security_iswithindirectory",
-      "label": "isWithinDirectory()",
-      "_origin": "ast",
-      "community": 76,
-      "community_name": "audit.go",
-      "file_type": "code",
-      "norm_label": "iswithindirectory()",
-      "source_file": "security.go",
-      "source_location": "L21"
-    },
-    {
-      "id": "security_normalizeratelimitkey",
-      "label": "normalizeRateLimitKey()",
-      "_origin": "ast",
-      "community": 76,
-      "community_name": "audit.go",
-      "file_type": "code",
-      "norm_label": "normalizeratelimitkey()",
-      "source_file": "security.go",
-      "source_location": "L821"
     },
     {
       "id": "setad_khabari_hmd_auditverificationresult",
@@ -39628,55 +39760,11 @@
       "source_location": "L63"
     },
     {
-      "id": "csrf",
-      "label": "csrf.go",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "csrf.go",
-      "source_file": "csrf.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "csrf_csrfmiddleware",
-      "label": "CSRFMiddleware()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "csrfmiddleware()",
-      "source_file": "csrf.go",
-      "source_location": "L87"
-    },
-    {
-      "id": "csrf_isoriginallowed",
-      "label": "isOriginAllowed()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "isoriginallowed()",
-      "source_file": "csrf.go",
-      "source_location": "L58"
-    },
-    {
-      "id": "csrf_logthrottledcsrfaudit",
-      "label": "logThrottledCSRFAudit()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "logthrottledcsrfaudit()",
-      "source_file": "csrf.go",
-      "source_location": "L19"
-    },
-    {
       "id": "public_handlers",
       "label": "public_handlers.go",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "public_handlers.go",
       "source_file": "public_handlers.go",
@@ -39687,7 +39775,7 @@
       "label": "generateTrackingCode()",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "generatetrackingcode()",
       "source_file": "public_handlers.go",
@@ -39698,62 +39786,18 @@
       "label": "SubmitReportHandler()",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "submitreporthandler()",
       "source_file": "public_handlers.go",
       "source_location": "L171"
     },
     {
-      "id": "public_handlers_trackreporthandler",
-      "label": "TrackReportHandler()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "trackreporthandler()",
-      "source_file": "public_handlers.go",
-      "source_location": "L572"
-    },
-    {
-      "id": "security",
-      "label": "security.go",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "security.go",
-      "source_file": "security.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "security_isvalidtrackingcode",
-      "label": "isValidTrackingCode()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "isvalidtrackingcode()",
-      "source_file": "security.go",
-      "source_location": "L1175"
-    },
-    {
-      "id": "security_normalizeandvalidateusername",
-      "label": "normalizeAndValidateUsername()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "normalizeandvalidateusername()",
-      "source_file": "security.go",
-      "source_location": "L37"
-    },
-    {
       "id": "security_sanitizephone",
       "label": "sanitizePhone()",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "sanitizephone()",
       "source_file": "security.go",
@@ -39764,40 +39808,18 @@
       "label": "stripNul()",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "stripnul()",
       "source_file": "security.go",
       "source_location": "L1161"
     },
     {
-      "id": "security_truncaterunes",
-      "label": "truncateRunes()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "truncaterunes()",
-      "source_file": "security.go",
-      "source_location": "L1153"
-    },
-    {
-      "id": "setad_khabari_hmd_admincontextkeytype",
-      "label": "adminContextKeyType",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "admincontextkeytype",
-      "source_file": "security.go",
-      "source_location": "L51"
-    },
-    {
       "id": "setad_khabari_hmd_publicreportstatus",
       "label": "PublicReportStatus",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "publicreportstatus",
       "source_file": "public_handlers.go",
@@ -39808,7 +39830,7 @@
       "label": "RegionalResponseItem",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "regionalresponseitem",
       "source_file": "admin_handlers.go",
@@ -39819,7 +39841,7 @@
       "label": "ReportAttachmentItem",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "reportattachmentitem",
       "source_file": "admin_handlers.go",
@@ -39830,7 +39852,7 @@
       "label": "ReportDetail",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "reportdetail",
       "source_file": "admin_handlers.go",
@@ -39841,40 +39863,18 @@
       "label": "ReportMessageItem",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "reportmessageitem",
       "source_file": "public_handlers.go",
       "source_location": "L553"
     },
     {
-      "id": "tests_admin_auth_handling_test_testcsrfauditthrottling",
-      "label": "TestCSRFAuditThrottling()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testcsrfauditthrottling()",
-      "source_file": "tests/admin_auth_handling_test.go",
-      "source_location": "L494"
-    },
-    {
-      "id": "tests_admin_auth_handling_test_testcsrfmiddlewarejsonerrors",
-      "label": "TestCSRFMiddlewareJSONErrors()",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "testcsrfmiddlewarejsonerrors()",
-      "source_file": "tests/admin_auth_handling_test.go",
-      "source_location": "L170"
-    },
-    {
       "id": "tests_input_limits_test",
       "label": "input_limits_test.go",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "input_limits_test.go",
       "source_file": "tests/input_limits_test.go",
@@ -39885,7 +39885,7 @@
       "label": "TestInputSanitizationAndLimits()",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "testinputsanitizationandlimits()",
       "source_file": "tests/input_limits_test.go",
@@ -39896,7 +39896,7 @@
       "label": "RepDetailTest",
       "_origin": "ast",
       "community": 83,
-      "community_name": "security.go",
+      "community_name": "SubmitReportHandler",
       "file_type": "code",
       "norm_label": "repdetailtest",
       "source_file": "tests/forwarding_test.go",
@@ -49173,7 +49173,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "scripts/generate_docx.py",
-      "source_location": "L174",
+      "source_location": "L178",
       "weight": 1.0
     },
     {
@@ -49185,7 +49185,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "scripts/generate_docx.py",
-      "source_location": "L137",
+      "source_location": "L141",
       "weight": 1.0
     },
     {
@@ -49197,7 +49197,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "scripts/generate_docx.py",
-      "source_location": "L141",
+      "source_location": "L145",
       "weight": 1.0
     },
     {
@@ -49209,7 +49209,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "scripts/generate_docx.py",
-      "source_location": "L102",
+      "source_location": "L106",
       "weight": 1.0
     },
     {
@@ -86800,13 +86800,13 @@
     },
     {
       "source": "scripts_generate_docx",
-      "target": "scripts_generate_docx_populate_docx",
+      "target": "scripts_generate_docx_replace_in_table",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "scripts/generate_docx.py",
-      "source_location": "L106",
+      "source_location": "L102",
       "weight": 1.0
     },
     {
@@ -86822,13 +86822,24 @@
     },
     {
       "source": "scripts_generate_docx",
+      "target": "scripts_generate_docx_populate_docx",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/generate_docx.py",
+      "source_location": "L110",
+      "weight": 1.0
+    },
+    {
+      "source": "scripts_generate_docx",
       "target": "scripts_generate_docx_main",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "scripts/generate_docx.py",
-      "source_location": "L158",
+      "source_location": "L162",
       "weight": 1.0
     },
     {
@@ -86862,17 +86873,6 @@
       "confidence_score": 1.0,
       "source_file": "scripts/generate_docx.py",
       "source_location": "L57",
-      "weight": 1.0
-    },
-    {
-      "source": "scripts_generate_docx",
-      "target": "scripts_generate_docx_replace_in_table",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "scripts/generate_docx.py",
-      "source_location": "L98",
       "weight": 1.0
     },
     {
@@ -98611,5 +98611,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "797b68a4116efc4bcbf054537df169e8eb75ee74"
+  "built_at_commit": "59623951121262b04d6f468cc537dc0dc660975e"
 }

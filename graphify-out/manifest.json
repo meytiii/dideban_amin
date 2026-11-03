@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   "scripts/generate_docx.py": {
-    "mtime": 1793696695.3320537,
-    "seen": 1793697032.5536902,
-    "ast_hash": "fc205e29edbf5510d7f6668c12ac653e",
+    "mtime": 1793697946.755912,
+    "seen": 1793698082.7245066,
+    "ast_hash": "5418d5cbf83853af4c918c266a949064",
     "semantic_hash": ""
   },
   ".agents/rules/caveman.md": {

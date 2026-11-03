@@ -95,6 +95,10 @@ def replace_placeholders_in_paragraph (p ,mapping ):
         pPr .append (bidi )
     bidi .set (qn ('w:val'),'1')
 
+    jc =pPr .find (qn ('w:jc'))
+    if jc is not None and jc .get (qn ('w:val'))=='both':
+        jc .set (qn ('w:val'),'right')
+
 def replace_in_table (table ,mapping ):
     for row in table .rows :
         for cell in row .cells :

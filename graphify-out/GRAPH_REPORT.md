@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-11-03)
 
 ## Corpus Check
-- 311 files · ~497,083 words
+- 311 files · ~497,102 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3504 nodes · 5008 edges · 236 communities (217 shown, 19 thin omitted)
+- 3504 nodes · 5008 edges · 237 communities (217 shown, 20 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 558 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `797b68a4`
+- Built from commit: `59623951`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -87,7 +87,7 @@
 - Container Security Guide
 - herasat.local/backend
 - antislop-layoutmobile
-- LoginHandler
+- security.go
 - workflows/hallmark.md
 - Scan Commands by Platform
 - Data Flow Classification — Trust Levels L1-L4
@@ -98,7 +98,7 @@
 - rules/graphify.md
 - workflows/graphify.md
 - Cross-Site Request Forgery (CSRF)
-- security.go
+- SubmitReportHandler
 - generate_docx.py
 - rules/caveman.md
 - workflows/caveman.md
@@ -249,6 +249,7 @@
 - AI Supply Chain Security
 - Model Access & Cost Control
 - Phase 1 — Static Analysis 🌐
+- TestMain
 
 ## God Nodes (most connected - your core abstractions)
 1. `adminFromContext()` - 43 edges
@@ -265,19 +266,19 @@
 ## Surprising Connections (you probably didn't know these)
 - `init()` --calls--> `HashPassword()`  [INFERRED]
   admin_auth.go → crypto.go
+- `ChangeMyPasswordHandler()` --calls--> `generateSessionToken()`  [INFERRED]
+  admin_handlers.go → admin_auth.go
 - `LoginHandler()` --calls--> `logAudit()`  [INFERRED]
   admin_auth.go → audit.go
 - `LoginHandler()` --calls--> `VerifyCaptcha()`  [INFERRED]
   admin_auth.go → captcha.go
 - `LoginHandler()` --calls--> `HashPassword()`  [INFERRED]
   admin_auth.go → crypto.go
-- `LoginHandler()` --calls--> `GenerateMFAPendingToken()`  [INFERRED]
-  admin_auth.go → mfa.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (236 total, 19 thin omitted)
+## Communities (237 total, 20 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -337,7 +338,7 @@ Nodes (26): After the file is written, Emitting a `design.md` from `study`, Imag
 
 ### Community 14 - "admin_handlers.go"
 Cohesion: 0.11
-Nodes (66): GetCurrentAdminHandler(), getIP(), BulkUserActionHandler(), canAdminAccessReport(), ClassifyReportHandler(), CreateUserHandler(), DeleteReportHandler(), DeleteUserHandler() (+58 more)
+Nodes (68): getIP(), BulkUserActionHandler(), canAdminAccessReport(), ChangeMyPasswordHandler(), ClassifyReportHandler(), CreateUserHandler(), DeleteReportHandler(), DeleteUserHandler() (+60 more)
 
 ### Community 15 - "Hero enrichment — when, what, and how much"
 Cohesion: 0.09
@@ -541,7 +542,7 @@ Nodes (19): createShamsiDateRangePicker(), closePopover(), commitDateRange(), op
 
 ### Community 67 - "crypto.go"
 Cohesion: 0.08
-Nodes (47): init(), VerifyCaptcha(), DecryptAES(), DecryptBoundField(), DecryptCaptchaPayload(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload() (+39 more)
+Nodes (49): init(), VerifyCaptcha(), DecryptAES(), DecryptBoundField(), DecryptCaptchaPayload(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload() (+41 more)
 
 ### Community 68 - "Tone & Voice"
 Cohesion: 0.05
@@ -555,9 +556,9 @@ Nodes (40): Alerts to Configure, Bad vs Good Patterns, Base Image Selection, CI/
 Cohesion: 0.06
 Nodes (30): 100vh Sections, antislop-layoutmobile, Bottom Nav That Eats Content, Breakpoint Driven by Device List, Breakpoints, Columns That Don't Collapse, Desktop-Only Layout, Desktop-Sized Everything (+22 more)
 
-### Community 72 - "LoginHandler"
-Cohesion: 0.33
-Nodes (10): generateSessionToken(), LoginHandler(), LogoutHandler(), ChangeMyPasswordHandler(), VerifyPassword(), VerifyPasswordWithRehash(), VerifyMFAHandler(), isCookieSecure() (+2 more)
+### Community 72 - "security.go"
+Cohesion: 0.15
+Nodes (23): generateSessionToken(), GetCurrentAdminHandler(), LoginHandler(), LogoutHandler(), AdminAuthMiddleware(), SuperuserAuthMiddleware(), CSRFMiddleware(), isOriginAllowed() (+15 more)
 
 ### Community 74 - "Scan Commands by Platform"
 Cohesion: 0.25
@@ -568,8 +569,8 @@ Cohesion: 0.11
 Nodes (18): Bot/messaging, Bốn mức tin cậy, Data Flow Classification — Trust Levels L1-L4, File system / streams, L1 — Untrusted sources (LUÔN coi là attacker-controlled), L2 — Database / persistent storage, L3 — Internal code, L4 — System / runtime (+10 more)
 
 ### Community 76 - "audit.go"
-Cohesion: 0.20
-Nodes (18): executeDeleteReportIDs(), RedactReportHandler(), computeAuditHash(), computeLegacyAuditHash(), executeAuditLogTx(), getLatestAuditHashLocked(), isAuditStrict(), logAuditTxWithDetail() (+10 more)
+Cohesion: 0.26
+Nodes (15): executeDeleteReportIDs(), computeAuditHash(), computeLegacyAuditHash(), executeAuditLogTx(), getLatestAuditHashLocked(), isAuditStrict(), logAuditTxWithDetail(), logAuditWithDetail() (+7 more)
 
 ### Community 77 - "captcha.go"
 Cohesion: 0.42
@@ -587,9 +588,9 @@ Nodes (5): Colors, Named Rules, Neutral, Primary, Status & Accents
 Cohesion: 0.11
 Nodes (17): Cookie attributes thiếu, Cross-references, Cross-Site Request Forgery (CSRF), Cách reasoning (KHÔNG pattern-match thuần), Django (cảnh báo nếu tắt), Examples, Fix recommendation, HIGH — flag (+9 more)
 
-### Community 83 - "security.go"
-Cohesion: 0.12
-Nodes (21): CSRFMiddleware(), isOriginAllowed(), logThrottledCSRFAudit(), generateTrackingCode(), SubmitReportHandler(), TrackReportHandler(), isValidTrackingCode(), normalizeAndValidateUsername() (+13 more)
+### Community 83 - "SubmitReportHandler"
+Cohesion: 0.21
+Nodes (11): generateTrackingCode(), SubmitReportHandler(), sanitizePhone(), stripNul(), PublicReportStatus, RegionalResponseItem, ReportAttachmentItem, ReportDetail (+3 more)
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -693,7 +694,7 @@ Nodes (17): Edge cases, Inputs (đã có sẵn từ SKILL.md context), LARGE Rev
 
 ### Community 116 - "main"
 Cohesion: 0.12
-Nodes (25): AdminAuthMiddleware(), SuperuserAuthMiddleware(), isKnownPlaceholderKey(), compress/gzip.Writer, net/http.Handler, net/http.HandlerFunc, CSPReportHandler(), getDBConnStr() (+17 more)
+Nodes (19): isKnownPlaceholderKey(), compress/gzip.Writer, net/http.Handler, CSPReportHandler(), getDBConnStr(), healthCheck(), loadDotEnv(), main() (+11 more)
 
 ### Community 117 - "Quy tắc render"
 Cohesion: 0.12
@@ -1142,7 +1143,7 @@ Nodes (4): Dangerous APIs, Hardcoded Secrets, Input Validation, Phase 1 — Stat
 ## Knowledge Gaps
 - **1973 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+1968 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
