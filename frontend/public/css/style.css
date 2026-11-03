@@ -5580,13 +5580,49 @@ button:disabled {
 
 .scope-card {
     border-radius: var(--radius-md);
-    padding: 22px 20px;
+    padding: 0;
+    overflow: hidden;
+    min-width: 0;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     background: #0f172a;
     border: 1px solid rgba(255, 255, 255, 0.08);
     transition: transform var(--transition-normal), border-color var(--transition-normal);
     will-change: transform;
+}
+
+.scope-card-banner {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: #0b1120;
+}
+
+.scope-card--herasat .scope-card-banner {
+    border-bottom-color: rgba(16, 185, 129, 0.2);
+}
+
+.scope-card--external .scope-card-banner {
+    border-bottom-color: rgba(148, 163, 184, 0.18);
+}
+
+.scope-card-banner-img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 614 / 257;
+    object-fit: cover;
+}
+
+.scope-card-body {
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .scope-card--herasat {
@@ -6189,7 +6225,11 @@ button:disabled {
     }
 
     .scope-card {
-        padding: 14px 10px;
+        padding: 0;
+    }
+
+    .scope-card-body {
+        padding: 16px 12px;
     }
 
     .scope-card-header {

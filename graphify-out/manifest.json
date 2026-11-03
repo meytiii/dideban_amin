@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1793695725.4436688,
-    "seen": 1793695820.129237,
-    "ast_hash": "e70996384c7ed77d3d4d9f16a4c7af27",
+    "mtime": 1793699262.880077,
+    "seen": 1793699366.610489,
+    "ast_hash": "8c64b8cc48893cdce362a6dc097320ba",
     "semantic_hash": ""
   },
   "profanity.go": {
@@ -2271,6 +2271,18 @@
     "mtime": 1793694867.5261161,
     "seen": 1793695166.0119286,
     "ast_hash": "a1f094fd3874317486de95293c2c3d79",
+    "semantic_hash": ""
+  },
+  "frontend/public/img/herasat_workspace.webp": {
+    "mtime": 1793698376.3633769,
+    "seen": 1793699366.6139553,
+    "ast_hash": "c583a2241428c9e591eb5eff52b5c771",
+    "semantic_hash": ""
+  },
+  "frontend/public/img/non_herasat_workspace.webp": {
+    "mtime": 1793698407.063859,
+    "seen": 1793699366.6141686,
+    "ast_hash": "12dcd02e58e0ad84647b91d9ae1999c7",
     "semantic_hash": ""
   }
 }
