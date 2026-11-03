@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1793689655.6677654,
-    "seen": 1793690331.009943,
-    "ast_hash": "414ea06a911de4193a7f958c4ce0b3f4",
+    "mtime": 1793693070.558253,
+    "seen": 1793693187.636225,
+    "ast_hash": "2f6c0d9de7e34b9a61f46674fe30dba5",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
@@ -1098,9 +1098,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/js/admin.js": {
-    "mtime": 1793689854.81397,
-    "seen": 1793690330.9899318,
-    "ast_hash": "3ad494042a7c4ad3d615b2a2cb6f6ff1",
+    "mtime": 1793692487.6167417,
+    "seen": 1793693187.6159859,
+    "ast_hash": "c0f318736591f6a0bb3c3a1d00005d77",
     "semantic_hash": ""
   },
   "frontend/admin/js/confirm.js": {
@@ -2238,14 +2238,14 @@
     "semantic_hash": ""
   },
   "frontend/admin/svg/activate_account.svg": {
-    "mtime": 1793690291.1244287,
-    "seen": 1793690331.011147,
+    "mtime": 1793690402.6247458,
+    "seen": 1793693187.6374354,
     "ast_hash": "93c58848288257f37f227b6304368b0a",
     "semantic_hash": ""
   },
   "frontend/admin/svg/deactivate_account.svg": {
-    "mtime": 1793690302.2206247,
-    "seen": 1793690331.0116513,
+    "mtime": 1793690402.8586462,
+    "seen": 1793693187.637943,
     "ast_hash": "a281589cda3717022e60429b75d13a4d",
     "semantic_hash": ""
   }

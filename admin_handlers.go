@@ -2261,7 +2261,7 @@ func GetAuditLogsHandler(w http.ResponseWriter, r *http.Request) {
 			l.TargetReportID = &val
 		}
 		if trackingCode.Valid && trackingCode.String != "" {
-			tCode := trackingCode.String
+			tCode := ResolveTrackingCode(trackingCode.String)
 			l.TargetTrackingCode = &tCode
 		}
 		l.CreatedAt = createdAt.Format(time.RFC3339)
@@ -3649,7 +3649,7 @@ func GetNotificationsHandler(w http.ResponseWriter, r *http.Request) {
 			item.TargetReportID = &val
 		}
 		if targetTrackingCode.Valid && targetTrackingCode.String != "" {
-			code := targetTrackingCode.String
+			code := ResolveTrackingCode(targetTrackingCode.String)
 			item.TargetTrackingCode = &code
 		}
 		item.CreatedAt = createdAt.Format(time.RFC3339)
