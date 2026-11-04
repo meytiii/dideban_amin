@@ -29,13 +29,42 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
         const skeleton = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
         if (preloader) {
             preloader.classList.add('fade-out');
-            setTimeout(() => preloader.remove(), 450);
+            setTimeout(() => {
+                if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+            }, 450);
         }
         if (skeleton) skeleton.remove();
     }
 
+    const waitForCriticalImages = () => {
+        const imgs = Array.from(document.querySelectorAll('.admin-crest-img, img[loading="eager"]'));
+        const pending = imgs.filter(img => !img.complete || img.naturalWidth === 0);
+        if (pending.length === 0) return Promise.resolve();
+        return Promise.all(pending.map(img => new Promise(res => {
+            const finish = () => {
+                img.removeEventListener('load', finish);
+                img.removeEventListener('error', finish);
+                res();
+            };
+            img.addEventListener('load', finish, { once: true });
+            img.addEventListener('error', finish, { once: true });
+        })));
+    };
+
+    const waitForFonts = () => {
+        if (!document.fonts || !document.fonts.ready) return Promise.resolve();
+        return document.fonts.ready.catch(() => {});
+    };
+
+    const waitForLoad = () => {
+        if (document.readyState === 'complete') return Promise.resolve();
+        return new Promise(res => {
+            window.addEventListener('load', res, { once: true });
+        });
+    };
+
     window.markAdminReady = function () {
-        dismissAdminPreloader();
+        Promise.all([waitForLoad(), waitForFonts(), waitForCriticalImages()]).then(dismissAdminPreloader).catch(dismissAdminPreloader);
     };
 
     function onReadyCheck() {
@@ -50,9 +79,26 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
     }
 
     setTimeout(() => {
-        window.markAdminReady();
-    }, 10000);
+        dismissAdminPreloader();
+    }, 7000);
 })();
+
+function initLazyImageSkeletons() {
+    document.querySelectorAll('.img-skeleton-wrapper img').forEach(img => {
+        const wrap = img.closest('.img-skeleton-wrapper');
+        if (img.complete && img.naturalWidth > 0) {
+            wrap?.classList.add('is-loaded');
+            img.classList.add('is-loaded');
+        } else {
+            const onFinish = () => {
+                wrap?.classList.add('is-loaded');
+                img.classList.add('is-loaded');
+            };
+            img.addEventListener('load', onFinish, { once: true });
+            img.addEventListener('error', onFinish, { once: true });
+        }
+    });
+}
 
 function getCsrfToken() {
     const match = document.cookie.match(/(?:^|;\s*)herasat_csrf=([^;]+)/);
@@ -566,6 +612,7 @@ function initAppTooltips() {
 try { runWhenIdle(initAppTooltips); } catch (e) { console.error('Tooltips init failed:', e); }
 
 document.addEventListener('DOMContentLoaded', () => {
+    initLazyImageSkeletons();
 
     const toPersianNum = (n) => String(n).replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 
@@ -8162,7 +8209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateBulkToolbar();
             if (advancedSection) advancedSection.style.display = 'none';
             if (analyticsSection) analyticsSection.style.display = 'none';
-            fetchReports(true, false).catch(err => { console.error('Reports refresh failed:', err); });
+            fetchReports(true, true).catch(err => { console.error('Reports refresh failed:', err); });
             fetchNotifications().catch(err => { console.error('Notifications refresh failed:', err); });
         } else if (tabName === 'analytics') {
             tabBtnAnalytics?.classList.add('active');
@@ -8172,6 +8219,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (detailSection) detailSection.style.display = 'none';
             if (advancedSection) advancedSection.style.display = 'none';
             if (analyticsSection) analyticsSection.style.display = 'block';
+            const anaSkeleton = document.getElementById('analytics-skeleton-content');
+            const anaActual = document.getElementById('analytics-actual-content');
+            if (anaSkeleton) anaSkeleton.classList.remove('d-none');
+            if (anaActual) anaActual.classList.add('d-none');
             renderAnalyticsDashboard(true).catch(() => { });
         } else if (tabName === 'advanced') {
             if (!currentAdmin || !currentAdmin.is_superuser) {
@@ -8217,12 +8268,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
 
         if (targetId === 'adv-view-users') {
+            renderUsersTableSkeleton(5);
             fetchAdminUsers();
         } else if (targetId === 'adv-view-audit') {
+            renderAuditTableSkeleton(6);
             fetchAuditLogs();
         } else if (targetId === 'adv-view-sessions') {
+            renderSessionsTableSkeleton(5);
             fetchActiveSessions();
         } else if (targetId === 'adv-view-system') {
+            renderSystemStatusSkeleton();
             fetchSystemStatus();
         }
     }
@@ -10837,10 +10892,25 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody._delegated = true;
     }
 
+    function renderSystemStatusSkeleton() {
+        const ids = [
+            'sys-db-status', 'sys-db-conns', 'sys-db-idle', 'sys-db-inuse',
+            'sys-db-tz', 'sys-db-time', 'sys-active-sessions',
+            'sys-total-reports', 'sys-unread-reports', 'sys-total-users', 'sys-total-logs'
+        ];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.innerHTML = '<span class="skeleton-shimmer" style="display:inline-block; width:54px; height:16px; border-radius:4px; vertical-align:middle;"></span>';
+            }
+        });
+    }
+
     const btnRefreshSys = document.getElementById('btn-refresh-system-status');
     btnRefreshSys?.addEventListener('click', () => fetchSystemStatus());
 
     async function fetchSystemStatus() {
+        renderSystemStatusSkeleton();
         try {
             const res = await adminFetch('/api/admin/system-status');
             if (res.status === 403) return;
@@ -10874,6 +10944,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             showToast('وضعیت سلامت سامانه بروزرسانی شد');
         } catch (e) {
+            const ids = [
+                'sys-db-status', 'sys-db-conns', 'sys-db-idle', 'sys-db-inuse',
+                'sys-db-tz', 'sys-db-time', 'sys-active-sessions',
+                'sys-total-reports', 'sys-unread-reports', 'sys-total-users', 'sys-total-logs'
+            ];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.querySelector('.skeleton-shimmer')) el.textContent = '---';
+            });
             showToast('خطا در دریافت تله‌متری سیستم');
         }
     }

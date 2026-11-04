@@ -7223,6 +7223,41 @@ tr.row-priority-normal {
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.img-skeleton-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: rgba(30, 41, 59, 0.45);
+    display: block;
+}
+
+.img-skeleton-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.12), transparent);
+    transform: translateX(-100%);
+    animation: skeletonSlide 1.6s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.img-skeleton-wrapper.is-loaded::before {
+    opacity: 0;
+    animation: none;
+}
+
+.img-skeleton-wrapper img {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.img-skeleton-wrapper.is-loaded img,
+.img-skeleton-wrapper img.is-loaded {
+    opacity: 1;
+}
+
 .skeleton-tr {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     transition: background 0.2s ease;

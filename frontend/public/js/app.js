@@ -19,30 +19,34 @@ function fetchWithTimeout(url, options = {}, ms = 20000) {
         .finally(() => clearTimeout(timer));
 }
 
-(function initPreloader() {
-    let dismissed = false;
+let resolvePublicStartup;
+window.__publicStartupPromise = new Promise(resolve => {
+    resolvePublicStartup = resolve;
+});
 
-    function dismissPreloader() {
-        if (dismissed) return;
-        dismissed = true;
-        const preloader = document.getElementById('appPreloader') || document.getElementById('adminPreloader');
-        const skeleton = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
-        if (preloader) {
-            preloader.classList.add('fade-out');
-            setTimeout(() => preloader.remove(), 450);
+window.markAppReady = function () {
+    const skeleton = document.getElementById('pageSkeleton') || document.getElementById('adminSkeleton');
+    if (skeleton) skeleton.remove();
+    if (typeof resolvePublicStartup === 'function') resolvePublicStartup();
+    if (typeof window.dismissAppPreloader === 'function') window.dismissAppPreloader();
+};
+
+function initLazyImageSkeletons() {
+    document.querySelectorAll('.img-skeleton-wrapper img').forEach(img => {
+        const wrap = img.closest('.img-skeleton-wrapper');
+        if (img.complete && img.naturalWidth > 0) {
+            wrap?.classList.add('is-loaded');
+            img.classList.add('is-loaded');
+        } else {
+            const onFinish = () => {
+                wrap?.classList.add('is-loaded');
+                img.classList.add('is-loaded');
+            };
+            img.addEventListener('load', onFinish, { once: true });
+            img.addEventListener('error', onFinish, { once: true });
         }
-        if (skeleton) skeleton.remove();
-    }
-
-    if (document.readyState !== 'loading') {
-        dismissPreloader();
-    } else {
-        document.addEventListener('DOMContentLoaded', dismissPreloader);
-        window.addEventListener('load', dismissPreloader);
-    }
-
-    setTimeout(dismissPreloader, 2500);
-})();
+    });
+}
 
 const getScrollBehavior = () => (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
 
@@ -2728,11 +2732,9 @@ document.addEventListener('DOMContentLoaded', () => {
             trackErrorBox.style.display = 'none';
             trackResultBox?.classList.add('d-none');
 
-            let skeletonTimer = setTimeout(() => {
-                if (trackResultSkeleton) {
-                    trackResultSkeleton.classList.remove('d-none');
-                }
-            }, 80);
+            if (trackResultSkeleton) {
+                trackResultSkeleton.classList.remove('d-none');
+            }
 
             try {
 
@@ -2746,7 +2748,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                 });
 
-                clearTimeout(skeletonTimer);
                 if (trackResultSkeleton) {
                     trackResultSkeleton.classList.add('d-none');
                 }
@@ -2803,7 +2804,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 50);
                 });
             } catch (err) {
-                clearTimeout(skeletonTimer);
                 if (trackResultSkeleton) {
                     trackResultSkeleton.classList.add('d-none');
                 }
@@ -2871,4 +2871,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     syncAllFloatingLabels();
     setTimeout(syncAllFloatingLabels, 300);
+    initLazyImageSkeletons();
+    window.markAppReady();
 });
