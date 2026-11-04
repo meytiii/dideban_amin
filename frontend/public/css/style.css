@@ -843,8 +843,7 @@ body::before {
     align-items: flex-start;
     gap: 15px;
     background: rgba(15, 23, 42, 0.45);
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    border-right: 4px solid var(--color-primary);
+    border: 1px solid rgba(56, 189, 248, 0.28);
     border-radius: var(--radius-md);
     padding: 18px 20px;
     margin-bottom: 25px;
@@ -2368,8 +2367,7 @@ button:disabled {
 
 .contact-info-card {
     background: rgba(15, 23, 42, 0.45);
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    border-right: 4px solid var(--color-primary);
+    border: 1px solid rgba(56, 189, 248, 0.28);
     border-radius: var(--radius-md);
     padding: 18px 20px;
     margin-top: 28px;
