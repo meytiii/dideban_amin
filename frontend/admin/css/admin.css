@@ -303,8 +303,8 @@ body::before {
 }
 
 .admin-slider-slide {
-    position: absolute;
-    inset: 0;
+    position: absolute !important;
+    inset: 0 !important;
     width: 100%;
     height: 100%;
     opacity: 0;
