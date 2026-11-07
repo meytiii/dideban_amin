@@ -2878,8 +2878,74 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function initHeroMotionBanner() {
+        const video = document.getElementById('heroMotionVideo');
+        if (!video) return;
+
+        let pauseTimer = null;
+
+        const restartVideo = () => {
+            if (document.hidden) return;
+            video.currentTime = 0;
+            video.play().catch(() => {});
+        };
+
+        video.addEventListener('ended', () => {
+            if (pauseTimer) clearTimeout(pauseTimer);
+            pauseTimer = setTimeout(() => {
+                restartVideo();
+            }, 2000);
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (pauseTimer) {
+                    clearTimeout(pauseTimer);
+                    pauseTimer = null;
+                }
+                if (!video.paused) {
+                    video.pause();
+                }
+            } else {
+                if (video.ended) {
+                    restartVideo();
+                } else if (video.paused) {
+                    video.play().catch(() => {});
+                }
+            }
+        });
+
+        if ('IntersectionObserver' in window) {
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (video.ended) {
+                            restartVideo();
+                        } else if (video.paused) {
+                            video.play().catch(() => {});
+                        }
+                    } else {
+                        if (pauseTimer) {
+                            clearTimeout(pauseTimer);
+                            pauseTimer = null;
+                        }
+                        if (!video.paused) {
+                            video.pause();
+                        }
+                    }
+                });
+            }, { threshold: 0.15 });
+            obs.observe(video);
+        }
+
+        if (video.paused) {
+            video.play().catch(() => {});
+        }
+    }
+
     syncAllFloatingLabels();
     setTimeout(syncAllFloatingLabels, 300);
     initLazyImageSkeletons();
+    initHeroMotionBanner();
     window.markAppReady();
 });
