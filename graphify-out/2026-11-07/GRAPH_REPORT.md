@@ -1,7 +1,7 @@
 # Graph Report - Setad_Khabari_HMD  (2026-11-07)
 
 ## Corpus Check
-- 311 files · ~498,225 words
+- 311 files · ~498,253 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d17c1000`
+- Built from commit: `0d27a748`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -234,13 +234,13 @@
 - AI-Assisted Security Tools
 - Part 3: Liveliness Toolkit
 - Structural & Flow
+- Output Safety
 - auth_hardening_test.go
 - promptBulkDeletePhrase
 - Data Privacy & Compliance
 - ft2-inline-rule-single-line.md
 - h6-photographic-fold.md
 - s4-inline-no-break.md
-- Model Access & Cost Control
 
 ## God Nodes (most connected - your core abstractions)
 1. `adminFromContext()` - 43 edges
@@ -481,7 +481,7 @@ Nodes (36): adminFetch(), closeDetailView(), connectAdminSSE(), createReportStat
 
 ### Community 53 - "AI/LLM Security Deep Dive"
 Cohesion: 0.12
-Nodes (17): AI/LLM Security Deep Dive, AI Supply Chain Security, Anthropic Constitutional AI Approach, Behavioral Monitoring, Code Execution Safety, Content Filtering, Defense Checklist, Dependency Risks (+9 more)
+Nodes (17): AI/LLM Security Deep Dive, AI Supply Chain Security, Anthropic Constitutional AI Approach, API Key Security, Behavioral Monitoring, Defense Checklist, Dependency Risks, Direct Injection Patterns (+9 more)
 
 ### Community 54 - "Outdated Dependency (Known CVE)"
 Cohesion: 0.11
@@ -533,7 +533,7 @@ Nodes (19): createShamsiDateRangePicker(), closePopover(), commitDateRange(), op
 
 ### Community 67 - "crypto.go"
 Cohesion: 0.08
-Nodes (43): DecryptAES(), DecryptBoundField(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), DecryptWithAAD(), decryptWithKey(), deriveKey() (+35 more)
+Nodes (41): DecryptAES(), DecryptBoundField(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), DecryptWithAAD(), decryptWithKey(), deriveKey() (+33 more)
 
 ### Community 68 - "Tone & Voice"
 Cohesion: 0.05
@@ -548,8 +548,8 @@ Cohesion: 0.06
 Nodes (30): 100vh Sections, antislop-layoutmobile, Bottom Nav That Eats Content, Breakpoint Driven by Device List, Breakpoints, Columns That Don't Collapse, Desktop-Only Layout, Desktop-Sized Everything (+22 more)
 
 ### Community 72 - "LoginHandler"
-Cohesion: 0.18
-Nodes (18): generateSessionToken(), init(), LoginHandler(), LogoutHandler(), ChangeMyPasswordHandler(), HashPassword(), VerifyPassword(), VerifyPasswordWithRehash() (+10 more)
+Cohesion: 0.17
+Nodes (19): generateSessionToken(), init(), LoginHandler(), LogoutHandler(), ChangeMyPasswordHandler(), HashPassword(), RunCryptographicSelfTests(), VerifyPassword() (+11 more)
 
 ### Community 74 - "Scan Commands by Platform"
 Cohesion: 0.25
@@ -580,8 +580,8 @@ Cohesion: 0.11
 Nodes (17): Cookie attributes thiếu, Cross-references, Cross-Site Request Forgery (CSRF), Cách reasoning (KHÔNG pattern-match thuần), Django (cảnh báo nếu tắt), Examples, Fix recommendation, HIGH — flag (+9 more)
 
 ### Community 83 - "SubmitReportHandler"
-Cohesion: 0.17
-Nodes (17): HashTrackingCode(), generateTrackingCode(), isValidReportCategory(), SubmitFollowUpHandler(), SubmitReportHandler(), TrackReportHandler(), isValidTrackingCode(), sanitizePhone() (+9 more)
+Cohesion: 0.16
+Nodes (18): HashTrackingCode(), generateTrackingCode(), isValidReportCategory(), SubmitFollowUpHandler(), SubmitReportHandler(), TrackReportHandler(), isValidTrackingCode(), sanitizePhone() (+10 more)
 
 ### Community 84 - "generate_docx.py"
 Cohesion: 0.50
@@ -1083,6 +1083,10 @@ Nodes (4): Design Read (how the dials are set), Levers (how the dials become vis
 Cohesion: 0.50
 Nodes (4): Dead Navigation, Non-Functional Controls, Sections That Fill a Template, Structural & Flow
 
+### Community 220 - "Output Safety"
+Cohesion: 0.50
+Nodes (4): Code Execution Safety, Content Filtering, Output Safety, Untrusted Output Principle
+
 ### Community 222 - "auth_hardening_test.go"
 Cohesion: 0.20
 Nodes (8): generateInitialPassword(), TestCompoundAccountLockoutByIP(), TestInitialAdminPasswordGenerator(), TestPasswordPolicyUnicodeAndRestrictions(), TestRestrictedSessionMiddlewareEnforcement(), TestBootstrapPasswordGeneration(), TestLockoutDecay(), TestNonEnumeratingLoginLockout()
@@ -1094,10 +1098,6 @@ Nodes (8): promptBulkDeletePhrase(), cleanup(), normalizePhrase(), onBackdrop(),
 ### Community 228 - "Data Privacy & Compliance"
 Cohesion: 0.50
 Nodes (4): Compliance Checklist, Data Flow Audit, Data Privacy & Compliance, Provider Agreements
-
-### Community 234 - "Model Access & Cost Control"
-Cohesion: 0.50
-Nodes (4): API Key Security, Model Access & Cost Control, Rate Limiting Requirements, Spending Controls
 
 ## Knowledge Gaps
 - **1973 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+1968 more)
