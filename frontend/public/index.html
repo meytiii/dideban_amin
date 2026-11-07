@@ -26,7 +26,7 @@
 
     <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="css/style.css?v=92">
+    <link rel="stylesheet" href="css/style.css?v=93">
     
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
@@ -908,8 +908,11 @@
                 <h2 class="success-title persian-heading persian-heading--tatweel" data-tatweel-level="section">گزارش با
                     موفقیت ثبت شد</h2>
 
-                <div class="success-banner-wrapper img-skeleton-wrapper">
-                    <img src="img/success.webp" alt="ثبت موفقیت‌آمیز گزارش در ستاد خبری حراست" class="success-banner-img" width="1376" height="506" loading="lazy" decoding="async">
+                <div class="success-banner-wrapper">
+                    <video id="successMotionVideo" class="success-banner-video" muted playsinline disablepictureinpicture preload="auto" width="1280" height="720" poster="img/success.webp">
+                        <source src="img/success.webm" type="video/webm">
+                        <source src="img/success.mp4" type="video/mp4">
+                    </video>
                 </div>
 
                 <p class="success-text">
@@ -1669,7 +1672,7 @@
 
     <script src="js/confirm.js?v=3" defer></script>
     <script src="js/tatweel.js" defer></script>
-    <script src="js/app.js?v=82" defer></script>
+    <script src="js/app.js?v=83" defer></script>
 </body>
 
 </html>

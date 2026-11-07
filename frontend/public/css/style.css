@@ -2090,6 +2090,18 @@ button:disabled {
     pointer-events: none;
 }
 
+.success-banner-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+    user-select: none;
+    pointer-events: none;
+    border-radius: inherit;
+    background: #080c14;
+}
+
 .success-text {
     color: #cbd5e1;
     line-height: 2;

@@ -1768,6 +1768,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     const trackingEl = document.getElementById('final-tracking-code');
                     if (trackingEl) trackingEl.textContent = data.tracking_code;
                     successScreen?.classList.remove('d-none');
+                    const successVideo = document.getElementById('successMotionVideo');
+                    if (successVideo) {
+                        successVideo.currentTime = 0;
+                        successVideo.play().catch(() => {});
+                    }
                     if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
 
                     form.reset();
@@ -1983,6 +1988,11 @@ document.addEventListener('DOMContentLoaded', () => {
         successScreen?.classList.add('fade-out-anim');
 
         setTimeout(() => {
+            const successVideo = document.getElementById('successMotionVideo');
+            if (successVideo) {
+                successVideo.pause();
+                successVideo.currentTime = 0;
+            }
             successScreen?.classList.add('d-none');
             successScreen?.classList.remove('fade-out-anim');
 
