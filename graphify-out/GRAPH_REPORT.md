@@ -1,16 +1,16 @@
-# Graph Report - Setad_Khabari_HMD  (2026-11-04)
+# Graph Report - Setad_Khabari_HMD  (2026-11-07)
 
 ## Corpus Check
-- 311 files · ~498,044 words
+- 311 files · ~498,081 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3506 nodes · 5015 edges · 230 communities (211 shown, 19 thin omitted)
+- 3506 nodes · 5015 edges · 229 communities (210 shown, 19 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 558 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0f6738dd`
+- Built from commit: `44220320`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -106,7 +106,7 @@
 - getTestDB
 - Typography
 - self-update.py
-- applyFilters
+- handleAuthFailure
 - Architectural UI Components & Interaction Standards (Mandatory Rules)
 - contextWithAdmin
 - Impeccable Design Quality & Craft Floor
@@ -229,7 +229,6 @@
 - Phase 10 — AI/LLM Specific 🤖
 - Part 3: Liveliness Toolkit
 - Structural & Flow
-- openForwardModal
 - Phase 9 — Container Security 🐳
 - auth_hardening_test.go
 - promptBulkDeletePhrase
@@ -271,7 +270,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (230 total, 19 thin omitted)
+## Communities (229 total, 19 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -379,7 +378,7 @@ Nodes (4): deriveKey(), encryptWithKey(), genTrackingCode(), main()
 
 ### Community 26 - "admin.js"
 Cohesion: 0.06
-Nodes (40): broadcastAuthEvent(), buildPaginationHTML(), cancelMFAStep(), check2FAEnforcementNotice(), checkAdminProfile(), checkHostConnection(), checkMustChangePasswordPolicy(), evaluatePasswordStrength() (+32 more)
+Nodes (40): applyAuditFiltersAndPagination(), applyFilters(), buildPaginationHTML(), check2FAEnforcementNotice(), checkAdminProfile(), checkMustChangePasswordPolicy(), evaluatePasswordStrength(), fetchForwardingRecipients() (+32 more)
 
 ### Community 27 - "OWASP Top 10:2025"
 Cohesion: 0.04
@@ -605,9 +604,9 @@ Nodes (4): Hierarchy, Named Rules, Persian Tatweel Typography Subsystem, Typogra
 Cohesion: 0.60
 Nodes (5): fetch_url(), generate_update_prompt(), list_sources(), main(), run_update()
 
-### Community 91 - "applyFilters"
-Cohesion: 0.25
-Nodes (11): applyAuditFiltersAndPagination(), applyFilters(), getJalaliDateKeyFromDate(), getScrollBehavior(), handleKPICardFilter(), indexReportForSearch(), initTableHeadersInteractions(), normalizePersianForSearch() (+3 more)
+### Community 91 - "handleAuthFailure"
+Cohesion: 0.18
+Nodes (14): broadcastAuthEvent(), cancelMFAStep(), checkHostConnection(), forceLogoutOnConnectionDrop(), handleAdminLogout(), handleAuthFailure(), hideOfflineBanner(), loadAdminCaptcha() (+6 more)
 
 ### Community 92 - "Architectural UI Components & Interaction Standards (Mandatory Rules)"
 Cohesion: 0.08
@@ -650,8 +649,8 @@ Cohesion: 0.38
 Nodes (9): applyWrapperToNode(), canConnect(), enhanceElement(), enhanceText(), enhanceWord(), getViewportIntensity(), init(), recheckOverflow() (+1 more)
 
 ### Community 106 - "createOtpController"
-Cohesion: 0.38
-Nodes (6): createOtpController(), clearAll(), showError(), syncValue(), init2FAModalOtpControllers(), toAsciiDigits()
+Cohesion: 0.28
+Nodes (8): createOtpController(), clearAll(), showError(), syncValue(), init2FAModalOtpControllers(), initMfaOtpInput(), showMFAStep(), toAsciiDigits()
 
 ### Community 107 - "initRadioGroupBase"
 Cohesion: 0.70
@@ -1064,10 +1063,6 @@ Nodes (4): Design Read (how the dials are set), Levers (how the dials become vis
 ### Community 219 - "Structural & Flow"
 Cohesion: 0.50
 Nodes (4): Dead Navigation, Non-Functional Controls, Sections That Fill a Template, Structural & Flow
-
-### Community 220 - "openForwardModal"
-Cohesion: 0.50
-Nodes (5): fetchForwardingRecipients(), openForwardModal(), renderRecipientList(), renderRecipientListSkeleton(), updateSelectedRecipientsCounter()
 
 ### Community 221 - "Phase 9 — Container Security 🐳"
 Cohesion: 0.29

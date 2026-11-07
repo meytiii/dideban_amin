@@ -688,6 +688,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('textarea').forEach(ta => makeTextareaAutoExpand(ta));
 
     function updateStepTracker() {
+        const trackerContainer = document.querySelector('.step-tracker-container');
+        if (trackerContainer) {
+            trackerContainer.setAttribute('data-active-step', String(currentStep));
+        }
+        const trackerList = document.querySelector('.step-tracker');
+        if (trackerList) {
+            trackerList.setAttribute('data-active-step', String(currentStep));
+        }
+
         steps.forEach((step, index) => {
             const stepNum = index + 1;
             if (stepNum === currentStep) {
@@ -714,7 +723,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tracker?.setAttribute('tabindex', '0');
                 tracker?.setAttribute('role', 'button');
                 tracker?.setAttribute('aria-label', `بازگشت به مرحله ${toPersianNum(i)}`);
-                if (circle) circle.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                if (circle) circle.innerHTML = '<span class="step-check-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>';
                 if (connector) connector.classList.add('completed');
             } else if (i === currentStep) {
                 tracker?.classList.add('active');

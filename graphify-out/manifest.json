@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1793784263.6121714,
-    "seen": 1793784494.609658,
-    "ast_hash": "84f406d9ebe880a21935d5761c1164a2",
+    "mtime": 1794029090.0461717,
+    "seen": 1794029138.5422544,
+    "ast_hash": "b199178cb8551e288f29fcc71db0789a",
     "semantic_hash": ""
   },
   "profanity.go": {
@@ -1116,9 +1116,9 @@
     "semantic_hash": ""
   },
   "frontend/public/js/app.js": {
-    "mtime": 1793784264.6370037,
-    "seen": 1793784494.588937,
-    "ast_hash": "70bc188c4579aeb67ef7028d46fdfdba",
+    "mtime": 1794029090.662943,
+    "seen": 1794029138.521087,
+    "ast_hash": "7b3489164b5050276833215ae54f8d36",
     "semantic_hash": ""
   },
   "frontend/public/js/confirm.js": {

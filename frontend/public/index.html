@@ -452,22 +452,27 @@
         <section id="submitSection" class="d-none">
             <form id="reportForm" enctype="multipart/form-data" novalidate>
 
-                <ol class="step-tracker" role="list" aria-label="مراحل ثبت گزارش">
-                    <li class="step-item active" id="tracker-1" data-step="1" aria-current="step">
-                        <div class="step-circle" aria-hidden="true"><span class="step-num">۱</span></div>
-                        <div class="step-label">هویت گزارش‌دهنده</div>
-                    </li>
-                    <li class="step-connector" aria-hidden="true" id="connector-1"></li>
-                    <li class="step-item" id="tracker-2" data-step="2">
-                        <div class="step-circle" aria-hidden="true"><span class="step-num">۲</span></div>
-                        <div class="step-label">موضوع و شرح</div>
-                    </li>
-                    <li class="step-connector" aria-hidden="true" id="connector-2"></li>
-                    <li class="step-item" id="tracker-3" data-step="3">
-                        <div class="step-circle" aria-hidden="true"><span class="step-num">۳</span></div>
-                        <div class="step-label">مستندات و ثبت</div>
-                    </li>
-                </ol>
+                <div class="step-tracker-container" data-active-step="1">
+                    <div class="step-track-bg" aria-hidden="true"></div>
+                    <div class="step-track-fill" id="stepTrackFill" aria-hidden="true"></div>
+                    <div class="step-track-dot" id="stepTrackDot" aria-hidden="true"></div>
+                    <ol class="step-tracker" role="list" aria-label="مراحل ثبت گزارش" data-active-step="1">
+                        <li class="step-item active" id="tracker-1" data-step="1" aria-current="step">
+                            <div class="step-circle" aria-hidden="true"><span class="step-num">۱</span></div>
+                            <div class="step-label">هویت گزارش‌دهنده</div>
+                        </li>
+                        <li class="step-connector" aria-hidden="true" id="connector-1"></li>
+                        <li class="step-item" id="tracker-2" data-step="2">
+                            <div class="step-circle" aria-hidden="true"><span class="step-num">۲</span></div>
+                            <div class="step-label">موضوع و شرح</div>
+                        </li>
+                        <li class="step-connector" aria-hidden="true" id="connector-2"></li>
+                        <li class="step-item" id="tracker-3" data-step="3">
+                            <div class="step-circle" aria-hidden="true"><span class="step-num">۳</span></div>
+                            <div class="step-label">مستندات و ثبت</div>
+                        </li>
+                    </ol>
+                </div>
 
                 <div class="form-step active" id="step-1">
                     <div class="identity-notice-card">

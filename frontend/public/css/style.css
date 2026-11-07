@@ -719,13 +719,88 @@ body::before {
     transform: rotate(0deg) scale(1.1);
 }
 
+.step-tracker-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.step-track-bg {
+    position: absolute;
+    top: 31px;
+    right: calc(100% / 6);
+    left: calc(100% / 6);
+    height: 2px;
+    background: rgba(255, 255, 255, 0.12);
+    z-index: 1;
+    pointer-events: none;
+    transform: translateY(-50%) translateZ(0);
+}
+
+.step-track-fill {
+    position: absolute;
+    top: 31px;
+    right: calc(100% / 6);
+    left: calc(100% / 6);
+    height: 2px;
+    background: linear-gradient(270deg, #3b82f6 0%, #06b6d4 100%);
+    z-index: 1;
+    pointer-events: none;
+    transform-origin: right center;
+    transform: translateY(-50%) scaleX(0) translateZ(0);
+    transition: transform 0.45s cubic-bezier(0.34, 1.25, 0.64, 1);
+    will-change: transform;
+}
+
+.step-tracker-container[data-active-step="1"] .step-track-fill,
+.step-tracker[data-active-step="1"] ~ .step-track-fill {
+    transform: translateY(-50%) scaleX(0) translateZ(0);
+}
+
+.step-tracker-container[data-active-step="2"] .step-track-fill {
+    transform: translateY(-50%) scaleX(0.5) translateZ(0);
+}
+
+.step-tracker-container[data-active-step="3"] .step-track-fill {
+    transform: translateY(-50%) scaleX(1) translateZ(0);
+}
+
+.step-track-dot {
+    position: absolute;
+    top: 31px;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #60a5fa;
+    box-shadow: 0 0 10px rgba(96, 165, 250, 0.9), 0 0 2px #ffffff;
+    z-index: 3;
+    pointer-events: none;
+    transform: translate(50%, -50%) translateZ(0);
+    transition: right 0.45s cubic-bezier(0.34, 1.25, 0.64, 1);
+    will-change: right;
+}
+
+.step-tracker-container[data-active-step="1"] .step-track-dot {
+    right: calc(100% / 6);
+}
+
+.step-tracker-container[data-active-step="2"] .step-track-dot {
+    right: 50%;
+}
+
+.step-tracker-container[data-active-step="3"] .step-track-dot {
+    right: calc(100% * 5 / 6);
+}
+
 .step-tracker {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding: 12px 20px 0 20px;
+    align-items: flex-start;
+    margin: 0;
+    padding: 12px 0 0 0;
     list-style: none;
+    position: relative;
+    width: 100%;
 }
 
 .step-item {
@@ -735,6 +810,7 @@ body::before {
     flex: 1;
     position: relative;
     cursor: default;
+    z-index: 2;
 }
 
 .step-item.completed {
@@ -753,34 +829,78 @@ body::before {
     justify-content: center;
     font-weight: 700;
     font-size: 14px;
-
     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
     z-index: 2;
     position: relative;
+    transform: scale(1) translateZ(0);
 }
 
 .step-item.active .step-circle {
     background: var(--color-primary);
     border-color: #60a5fa;
     color: #ffffff;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 14px rgba(0, 138, 245, 0.35);
+    transform: scale(1.08) translateZ(0);
 }
 
 .step-item.active .step-circle::after {
     content: '';
     position: absolute;
-    inset: -2px;
+    inset: -3px;
     border-radius: var(--radius-full);
-    border: 2px solid #60a5fa;
+    border: 2px solid rgba(96, 165, 250, 0.6);
     pointer-events: none;
-    animation: pulse-ring-gpu 2s infinite cubic-bezier(0.45, 0, 0.55, 1);
+    animation: stepper-ring-breathe 2.2s infinite ease-in-out;
 }
 
 .step-item.completed .step-circle {
     background: var(--color-success);
     border-color: #34d399;
     color: #ffffff;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    transform: scale(1) translateZ(0);
+}
+
+.step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.step-check-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    animation: check-spring-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    will-change: transform, opacity;
+}
+
+@keyframes check-spring-in {
+    0% {
+        transform: scale(0) rotate(-90deg) translateZ(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) rotate(0deg) translateZ(0);
+        opacity: 1;
+    }
+}
+
+@keyframes stepper-ring-breathe {
+    0% {
+        transform: scale(1) translateZ(0);
+        opacity: 0.9;
+    }
+    50% {
+        transform: scale(1.45) translateZ(0);
+        opacity: 0.2;
+    }
+    100% {
+        transform: scale(1) translateZ(0);
+        opacity: 0.9;
+    }
 }
 
 .step-label {
@@ -798,44 +918,41 @@ body::before {
 }
 
 .step-connector {
-    flex: 1;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.1);
-    margin: 0 -15px;
-    margin-bottom: 22px;
-    transition: background var(--transition-normal);
-}
-
-.step-connector.completed {
-    background: var(--color-success);
-}
-
-@keyframes pulse-ring-gpu {
-    0% {
-        transform: scale(1);
-        opacity: 0.85;
-    }
-    70% {
-        transform: scale(1.35);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1.35);
-        opacity: 0;
-    }
+    display: none;
 }
 
 .form-step {
     display: none;
-    opacity: 0;
-    transform: translate3d(0, 8px, 0);
-    transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .form-step.active {
     display: block;
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
+    animation: step-content-in 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity;
+}
+
+@keyframes step-content-in {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 8px, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .step-track-fill,
+    .step-track-dot,
+    .step-circle,
+    .step-check-icon,
+    .form-step.active,
+    .step-item.active .step-circle::after {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
 }
 
 .identity-notice-card {
@@ -3297,15 +3414,25 @@ button:disabled {
         height: 26px !important;
     }
 
-    .step-tracker {
-        padding: 10px 4px 0 4px !important;
+    .step-tracker-container {
         margin-bottom: 22px !important;
+    }
+
+    .step-track-bg,
+    .step-track-fill,
+    .step-track-dot {
+        top: 26px !important;
+    }
+
+    .step-tracker {
+        padding: 10px 0 0 0 !important;
+        margin-bottom: 0 !important;
         align-items: flex-start !important;
     }
 
     .step-item {
         flex: 1 !important;
-        max-width: 105px !important;
+        max-width: none !important;
     }
 
     .step-circle {
@@ -3319,13 +3446,11 @@ button:disabled {
         line-height: 1.35 !important;
         margin-top: 6px !important;
         word-break: normal !important;
+        max-width: 95px !important;
     }
 
     .step-connector {
-        flex: 1 !important;
-        height: 2px !important;
-        margin: 15px -8px 0 -8px !important;
-        align-self: flex-start !important;
+        display: none !important;
     }
 
     input[type="text"],
