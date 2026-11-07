@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1794038984.2071307,
-    "seen": 1794039148.4964964,
-    "ast_hash": "32f127860f6ab2a86dddc0543f7e5667",
+    "mtime": 1794039335.382208,
+    "seen": 1794039370.998215,
+    "ast_hash": "95e4fd502df116425e8458ace3cfbcee",
     "semantic_hash": ""
   },
   "profanity.go": {
@@ -2328,15 +2328,21 @@
     "semantic_hash": ""
   },
   "frontend/public/svg/submitting_report.svg": {
-    "mtime": 1794038849.0945718,
-    "seen": 1794039148.501316,
+    "mtime": 1794039250.266811,
+    "seen": 1794039371.0031762,
     "ast_hash": "b8984128ef0317d6fec524f99fbb9e0c",
     "semantic_hash": ""
   },
   "frontend/public/svg/tracking_report.svg": {
-    "mtime": 1794038857.8868132,
-    "seen": 1794039148.5013185,
+    "mtime": 1794039250.5373282,
+    "seen": 1794039371.003178,
     "ast_hash": "efc334c7e25951deb50f69837bbb98d8",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/estelaam.svg": {
+    "mtime": 1794039323.6340265,
+    "seen": 1794039371.0025942,
+    "ast_hash": "8030db62d1b0cde30ae370502f211122",
     "semantic_hash": ""
   }
 }
