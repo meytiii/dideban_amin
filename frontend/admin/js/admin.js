@@ -6847,7 +6847,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 key: 'useless',
                 value: uselessCount,
                 percentage: uselessPct,
-                color: '#64748b',
+                color: '#f43f5e',
                 label: 'گزارش‌های بی‌محتوا و فاقد ارزش',
                 shortLabel: 'بی‌محتوا و فاقد ارزش',
                 pillClass: 'useless'
