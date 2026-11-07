@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-11-07)
 
 ## Corpus Check
-- 311 files · ~498,253 words
+- 312 files · ~498,448 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3507 nodes · 5016 edges · 228 communities (209 shown, 19 thin omitted)
+- 3508 nodes · 5016 edges · 229 communities (210 shown, 19 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 558 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0d27a748`
+- Built from commit: `61325526`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -234,7 +234,7 @@
 - AI-Assisted Security Tools
 - Part 3: Liveliness Toolkit
 - Structural & Flow
-- Output Safety
+- Model Access & Cost Control
 - auth_hardening_test.go
 - promptBulkDeletePhrase
 - Data Privacy & Compliance
@@ -269,7 +269,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (228 total, 19 thin omitted)
+## Communities (229 total, 19 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -329,7 +329,7 @@ Nodes (26): After the file is written, Emitting a `design.md` from `study`, Imag
 
 ### Community 14 - "admin_handlers.go"
 Cohesion: 0.12
-Nodes (65): GetCurrentAdminHandler(), getIP(), BulkUserActionHandler(), canAdminAccessReport(), ClassifyReportHandler(), CreateUserHandler(), DeleteReportHandler(), DeleteUserHandler() (+57 more)
+Nodes (64): GetCurrentAdminHandler(), getIP(), BulkUserActionHandler(), canAdminAccessReport(), ClassifyReportHandler(), CreateUserHandler(), DeleteReportHandler(), DeleteUserHandler() (+56 more)
 
 ### Community 15 - "Hero enrichment — when, what, and how much"
 Cohesion: 0.09
@@ -481,7 +481,7 @@ Nodes (36): adminFetch(), closeDetailView(), connectAdminSSE(), createReportStat
 
 ### Community 53 - "AI/LLM Security Deep Dive"
 Cohesion: 0.12
-Nodes (17): AI/LLM Security Deep Dive, AI Supply Chain Security, Anthropic Constitutional AI Approach, API Key Security, Behavioral Monitoring, Defense Checklist, Dependency Risks, Direct Injection Patterns (+9 more)
+Nodes (17): AI/LLM Security Deep Dive, AI Supply Chain Security, Anthropic Constitutional AI Approach, Behavioral Monitoring, Code Execution Safety, Content Filtering, Defense Checklist, Dependency Risks (+9 more)
 
 ### Community 54 - "Outdated Dependency (Known CVE)"
 Cohesion: 0.11
@@ -561,7 +561,7 @@ Nodes (18): Bot/messaging, Bốn mức tin cậy, Data Flow Classification — T
 
 ### Community 76 - "security.go"
 Cohesion: 0.12
-Nodes (29): executeDeleteReportIDs(), formatJalaliTime(), gregorianToJalali(), computeAuditHash(), computeLegacyAuditHash(), executeAuditLogTx(), getLatestAuditHashLocked(), isAuditStrict() (+21 more)
+Nodes (30): executeDeleteReportIDs(), formatJalaliTime(), gregorianToJalali(), RedactReportHandler(), computeAuditHash(), computeLegacyAuditHash(), executeAuditLogTx(), getLatestAuditHashLocked() (+22 more)
 
 ### Community 77 - "VerifyCaptcha"
 Cohesion: 0.15
@@ -1083,9 +1083,9 @@ Nodes (4): Design Read (how the dials are set), Levers (how the dials become vis
 Cohesion: 0.50
 Nodes (4): Dead Navigation, Non-Functional Controls, Sections That Fill a Template, Structural & Flow
 
-### Community 220 - "Output Safety"
+### Community 220 - "Model Access & Cost Control"
 Cohesion: 0.50
-Nodes (4): Code Execution Safety, Content Filtering, Output Safety, Untrusted Output Principle
+Nodes (4): API Key Security, Model Access & Cost Control, Rate Limiting Requirements, Spending Controls
 
 ### Community 222 - "auth_hardening_test.go"
 Cohesion: 0.20

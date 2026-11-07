@@ -2042,6 +2042,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const isSuccessVisible = successScreen && !successScreen.classList.contains('d-none');
             if (!isSuccessVisible) {
                 loadCaptcha('submit-captcha-img', 'submit_captcha_id', 'submit_captcha_answer');
+            } else {
+                const successVideo = document.getElementById('successMotionVideo');
+                if (successVideo) {
+                    successVideo.currentTime = 0;
+                    successVideo.play().catch(() => {});
+                }
             }
             if (typeof updateTopNavStickyBar === 'function') {
                 updateTopNavStickyBar();
@@ -2952,6 +2958,32 @@ document.addEventListener('DOMContentLoaded', () => {
             video.play().catch(() => {});
         }
     }
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            const successScreen = document.getElementById('success-screen');
+            const submitSection = document.getElementById('submitSection');
+            if (successScreen && !successScreen.classList.contains('d-none') && submitSection && !submitSection.classList.contains('d-none')) {
+                const successVideo = document.getElementById('successMotionVideo');
+                if (successVideo) {
+                    successVideo.currentTime = 0;
+                    successVideo.play().catch(() => {});
+                }
+            }
+        }
+    });
+
+    window.addEventListener('pageshow', () => {
+        const successScreen = document.getElementById('success-screen');
+        const submitSection = document.getElementById('submitSection');
+        if (successScreen && !successScreen.classList.contains('d-none') && submitSection && !submitSection.classList.contains('d-none')) {
+            const successVideo = document.getElementById('successMotionVideo');
+            if (successVideo) {
+                successVideo.currentTime = 0;
+                successVideo.play().catch(() => {});
+            }
+        }
+    });
 
     syncAllFloatingLabels();
     setTimeout(syncAllFloatingLabels, 300);

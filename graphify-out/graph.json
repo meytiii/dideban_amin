@@ -1093,7 +1093,7 @@
       "file_type": "code",
       "norm_label": "closeguidelinesdrawer()",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2326"
+      "source_location": "L2332"
     },
     {
       "id": "frontend_public_js_app_dismisstoast",
@@ -1321,7 +1321,7 @@
       "file_type": "code",
       "norm_label": "initheromotionbanner()",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2891"
+      "source_location": "L2897"
     },
     {
       "id": "frontend_public_js_app_initlazyimageskeletons",
@@ -1381,7 +1381,7 @@
       "file_type": "code",
       "norm_label": "navigatetohome()",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2066"
+      "source_location": "L2072"
     },
     {
       "id": "frontend_public_js_app_onunifiedscroll",
@@ -1393,7 +1393,7 @@
       "file_type": "code",
       "norm_label": "onunifiedscroll()",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2240"
+      "source_location": "L2246"
     },
     {
       "id": "frontend_public_js_app_openguidelinesdrawer",
@@ -1405,7 +1405,7 @@
       "file_type": "code",
       "norm_label": "openguidelinesdrawer()",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2303"
+      "source_location": "L2309"
     },
     {
       "id": "frontend_public_js_app_parsetimestamp",
@@ -1477,7 +1477,7 @@
       "file_type": "code",
       "norm_label": "renderconversationthread()",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2387"
+      "source_location": "L2393"
     },
     {
       "id": "frontend_public_js_app_renderfilecardhtml",
@@ -1609,7 +1609,7 @@
       "file_type": "code",
       "norm_label": "showtrackerror()",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2648"
+      "source_location": "L2654"
     },
     {
       "id": "frontend_public_js_app_startrecoverypolling",
@@ -1657,7 +1657,7 @@
       "file_type": "code",
       "norm_label": "syncallfloatinglabels()",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2879"
+      "source_location": "L2885"
     },
     {
       "id": "frontend_public_js_app_syncnavactionsposition",
@@ -1669,7 +1669,7 @@
       "file_type": "code",
       "norm_label": "syncnavactionsposition()",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2158"
+      "source_location": "L2164"
     },
     {
       "id": "frontend_public_js_app_transliteratetrackinginputdesktop",
@@ -1693,7 +1693,7 @@
       "file_type": "code",
       "norm_label": "updatelandingstickybar()",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2214"
+      "source_location": "L2220"
     },
     {
       "id": "frontend_public_js_app_updatesteptracker",
@@ -1717,7 +1717,7 @@
       "file_type": "code",
       "norm_label": "updatetopnavstickybar()",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2184"
+      "source_location": "L2190"
     },
     {
       "id": "frontend_public_js_app_validatecurrentstep",
@@ -13564,6 +13564,17 @@
       "norm_label": "marknotificationreadhandler()",
       "source_file": "admin_handlers.go",
       "source_location": "L3669"
+    },
+    {
+      "id": "admin_handlers_redactreporthandler",
+      "label": "RedactReportHandler()",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "admin_handlers.go",
+      "file_type": "code",
+      "norm_label": "redactreporthandler()",
+      "source_file": "admin_handlers.go",
+      "source_location": "L2839"
     },
     {
       "id": "admin_handlers_removeforwardinghandler",
@@ -26079,64 +26090,52 @@
       "source_location": "L68"
     },
     {
-      "id": "agents_skills_security_audit_references_ai_security_api_key_security",
-      "label": "API Key Security",
+      "id": "agents_skills_security_audit_references_ai_security_code_execution_safety",
+      "label": "Code Execution Safety",
       "_origin": "ast",
       "community": 220,
-      "community_name": "Model Access & Cost Control",
+      "community_name": "Output Safety",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "api key security",
+      "norm_label": "code execution safety",
       "source_file": ".agents/skills/security-audit/references/ai-security.md",
-      "source_location": "L73"
+      "source_location": "L110"
     },
     {
-      "id": "agents_skills_security_audit_references_ai_security_model_access_cost_control",
-      "label": "Model Access & Cost Control",
+      "id": "agents_skills_security_audit_references_ai_security_content_filtering",
+      "label": "Content Filtering",
       "_origin": "ast",
       "community": 220,
-      "community_name": "Model Access & Cost Control",
+      "community_name": "Output Safety",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "model access & cost control",
+      "norm_label": "content filtering",
       "source_file": ".agents/skills/security-audit/references/ai-security.md",
-      "source_location": "L71"
+      "source_location": "L120"
     },
     {
-      "id": "agents_skills_security_audit_references_ai_security_rate_limiting_requirements",
-      "label": "Rate Limiting Requirements",
+      "id": "agents_skills_security_audit_references_ai_security_output_safety",
+      "label": "Output Safety",
       "_origin": "ast",
       "community": 220,
-      "community_name": "Model Access & Cost Control",
+      "community_name": "Output Safety",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "rate limiting requirements",
+      "norm_label": "output safety",
       "source_file": ".agents/skills/security-audit/references/ai-security.md",
-      "source_location": "L80"
+      "source_location": "L99"
     },
     {
-      "id": "agents_skills_security_audit_references_ai_security_spending_controls",
-      "label": "Spending Controls",
+      "id": "agents_skills_security_audit_references_ai_security_untrusted_output_principle",
+      "label": "Untrusted Output Principle",
       "_origin": "ast",
       "community": 220,
-      "community_name": "Model Access & Cost Control",
+      "community_name": "Output Safety",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "spending controls",
+      "norm_label": "untrusted output principle",
       "source_file": ".agents/skills/security-audit/references/ai-security.md",
-      "source_location": "L89"
-    },
-    {
-      "id": "graphify_out_converted_report_template_64ced46b",
-      "label": "report_template_64ced46b.md",
-      "_origin": "ast",
-      "community": 221,
-      "community_name": "report_template_64ced46b.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "report_template_64ced46b.md",
-      "source_file": "graphify-out/converted/report_template_64ced46b.md",
-      "source_location": "L1"
+      "source_location": "L101"
     },
     {
       "id": "db_generateinitialpassword",
@@ -32333,6 +32332,18 @@
       "source_location": "L61"
     },
     {
+      "id": "agents_skills_security_audit_references_ai_security_api_key_security",
+      "label": "API Key Security",
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "AI/LLM Security Deep Dive",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "api key security",
+      "source_file": ".agents/skills/security-audit/references/ai-security.md",
+      "source_location": "L73"
+    },
+    {
       "id": "agents_skills_security_audit_references_ai_security_behavioral_monitoring",
       "label": "Behavioral Monitoring",
       "_origin": "ast",
@@ -32343,30 +32354,6 @@
       "norm_label": "behavioral monitoring",
       "source_file": ".agents/skills/security-audit/references/ai-security.md",
       "source_location": "L178"
-    },
-    {
-      "id": "agents_skills_security_audit_references_ai_security_code_execution_safety",
-      "label": "Code Execution Safety",
-      "_origin": "ast",
-      "community": 53,
-      "community_name": "AI/LLM Security Deep Dive",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "code execution safety",
-      "source_file": ".agents/skills/security-audit/references/ai-security.md",
-      "source_location": "L110"
-    },
-    {
-      "id": "agents_skills_security_audit_references_ai_security_content_filtering",
-      "label": "Content Filtering",
-      "_origin": "ast",
-      "community": 53,
-      "community_name": "AI/LLM Security Deep Dive",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "content filtering",
-      "source_file": ".agents/skills/security-audit/references/ai-security.md",
-      "source_location": "L120"
     },
     {
       "id": "agents_skills_security_audit_references_ai_security_defense_checklist",
@@ -32417,6 +32404,18 @@
       "source_location": "L218"
     },
     {
+      "id": "agents_skills_security_audit_references_ai_security_model_access_cost_control",
+      "label": "Model Access & Cost Control",
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "AI/LLM Security Deep Dive",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "model access & cost control",
+      "source_file": ".agents/skills/security-audit/references/ai-security.md",
+      "source_location": "L71"
+    },
+    {
       "id": "agents_skills_security_audit_references_ai_security_model_distillation_attacks",
       "label": "Model Distillation Attacks",
       "_origin": "ast",
@@ -32427,18 +32426,6 @@
       "norm_label": "model distillation attacks",
       "source_file": ".agents/skills/security-audit/references/ai-security.md",
       "source_location": "L164"
-    },
-    {
-      "id": "agents_skills_security_audit_references_ai_security_output_safety",
-      "label": "Output Safety",
-      "_origin": "ast",
-      "community": 53,
-      "community_name": "AI/LLM Security Deep Dive",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "output safety",
-      "source_file": ".agents/skills/security-audit/references/ai-security.md",
-      "source_location": "L99"
     },
     {
       "id": "agents_skills_security_audit_references_ai_security_prompt_injection",
@@ -32453,6 +32440,18 @@
       "source_location": "L38"
     },
     {
+      "id": "agents_skills_security_audit_references_ai_security_rate_limiting_requirements",
+      "label": "Rate Limiting Requirements",
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "AI/LLM Security Deep Dive",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "rate limiting requirements",
+      "source_file": ".agents/skills/security-audit/references/ai-security.md",
+      "source_location": "L80"
+    },
+    {
       "id": "agents_skills_security_audit_references_ai_security_self_update_sources",
       "label": "Self-Update Sources",
       "_origin": "ast",
@@ -32463,6 +32462,18 @@
       "norm_label": "self-update sources",
       "source_file": ".agents/skills/security-audit/references/ai-security.md",
       "source_location": "L230"
+    },
+    {
+      "id": "agents_skills_security_audit_references_ai_security_spending_controls",
+      "label": "Spending Controls",
+      "_origin": "ast",
+      "community": 53,
+      "community_name": "AI/LLM Security Deep Dive",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "spending controls",
+      "source_file": ".agents/skills/security-audit/references/ai-security.md",
+      "source_location": "L89"
     },
     {
       "id": "agents_skills_security_audit_references_ai_security_table_of_contents",
@@ -32487,18 +32498,6 @@
       "norm_label": "threat landscape",
       "source_file": ".agents/skills/security-audit/references/ai-security.md",
       "source_location": "L21"
-    },
-    {
-      "id": "agents_skills_security_audit_references_ai_security_untrusted_output_principle",
-      "label": "Untrusted Output Principle",
-      "_origin": "ast",
-      "community": 53,
-      "community_name": "AI/LLM Security Deep Dive",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "untrusted output principle",
-      "source_file": ".agents/skills/security-audit/references/ai-security.md",
-      "source_location": "L101"
     },
     {
       "id": "agents_skills_vbs_scan_security_rules_generic_20_outdated_dependency_cross_references",
@@ -37871,17 +37870,6 @@
       "norm_label": "gregoriantojalali()",
       "source_file": "admin_handlers.go",
       "source_location": "L3751"
-    },
-    {
-      "id": "admin_handlers_redactreporthandler",
-      "label": "RedactReportHandler()",
-      "_origin": "ast",
-      "community": 76,
-      "community_name": "security.go",
-      "file_type": "code",
-      "norm_label": "redactreporthandler()",
-      "source_file": "admin_handlers.go",
-      "source_location": "L2839"
     },
     {
       "id": "audit",
@@ -48117,7 +48105,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2067",
+      "source_location": "L2073",
       "weight": 1.0
     },
     {
@@ -48129,7 +48117,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2068",
+      "source_location": "L2074",
       "weight": 1.0
     },
     {
@@ -48141,7 +48129,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2245",
+      "source_location": "L2251",
       "weight": 1.0
     },
     {
@@ -48153,7 +48141,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2248",
+      "source_location": "L2254",
       "weight": 1.0
     },
     {
@@ -48201,7 +48189,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2454",
+      "source_location": "L2460",
       "weight": 1.0
     },
     {
@@ -48333,7 +48321,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2653",
+      "source_location": "L2659",
       "weight": 1.0
     },
     {
@@ -48345,7 +48333,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2656",
+      "source_location": "L2662",
       "weight": 1.0
     },
     {
@@ -48393,7 +48381,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2047",
+      "source_location": "L2053",
       "weight": 1.0
     },
     {
@@ -85253,7 +85241,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2066",
+      "source_location": "L2072",
       "weight": 1.0
     },
     {
@@ -85264,7 +85252,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2158",
+      "source_location": "L2164",
       "weight": 1.0
     },
     {
@@ -85275,7 +85263,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2184",
+      "source_location": "L2190",
       "weight": 1.0
     },
     {
@@ -85286,7 +85274,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2214",
+      "source_location": "L2220",
       "weight": 1.0
     },
     {
@@ -85297,7 +85285,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2240",
+      "source_location": "L2246",
       "weight": 1.0
     },
     {
@@ -85308,7 +85296,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2303",
+      "source_location": "L2309",
       "weight": 1.0
     },
     {
@@ -85319,7 +85307,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2326",
+      "source_location": "L2332",
       "weight": 1.0
     },
     {
@@ -85330,7 +85318,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2387",
+      "source_location": "L2393",
       "weight": 1.0
     },
     {
@@ -85341,7 +85329,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2648",
+      "source_location": "L2654",
       "weight": 1.0
     },
     {
@@ -85363,7 +85351,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2879",
+      "source_location": "L2885",
       "weight": 1.0
     },
     {
@@ -85374,7 +85362,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/public/js/app.js",
-      "source_location": "L2891",
+      "source_location": "L2897",
       "weight": 1.0
     },
     {
@@ -98752,5 +98740,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "613255263707de515da17c05fe4a814eb27a6fea"
+  "built_at_commit": "48fdef867601b83ad3a0c5cdae76e55644ca524b"
 }
