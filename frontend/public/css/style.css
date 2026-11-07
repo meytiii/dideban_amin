@@ -748,7 +748,7 @@ body::before {
     pointer-events: none;
     transform-origin: right center;
     transform: translateY(-50%) scaleX(0) translateZ(0);
-    transition: transform 0.45s cubic-bezier(0.34, 1.25, 0.64, 1);
+    transition: transform 0.75s cubic-bezier(0.34, 1.15, 0.64, 1);
     will-change: transform;
 }
 
@@ -763,33 +763,6 @@ body::before {
 
 .step-tracker-container[data-active-step="3"] .step-track-fill {
     transform: translateY(-50%) scaleX(1) translateZ(0);
-}
-
-.step-track-dot {
-    position: absolute;
-    top: 31px;
-    width: 8px;
-    height: 8px;
-    border-radius: var(--radius-full);
-    background: #60a5fa;
-    box-shadow: 0 0 10px rgba(96, 165, 250, 0.9), 0 0 2px #ffffff;
-    z-index: 3;
-    pointer-events: none;
-    transform: translate(50%, -50%) translateZ(0);
-    transition: right 0.45s cubic-bezier(0.34, 1.25, 0.64, 1);
-    will-change: right;
-}
-
-.step-tracker-container[data-active-step="1"] .step-track-dot {
-    right: calc(100% / 6);
-}
-
-.step-tracker-container[data-active-step="2"] .step-track-dot {
-    right: 50%;
-}
-
-.step-tracker-container[data-active-step="3"] .step-track-dot {
-    right: calc(100% * 5 / 6);
 }
 
 .step-tracker {
@@ -944,7 +917,6 @@ body::before {
 
 @media (prefers-reduced-motion: reduce) {
     .step-track-fill,
-    .step-track-dot,
     .step-circle,
     .step-check-icon,
     .form-step.active,
@@ -3419,8 +3391,7 @@ button:disabled {
     }
 
     .step-track-bg,
-    .step-track-fill,
-    .step-track-dot {
+    .step-track-fill {
         top: 26px !important;
     }
 
