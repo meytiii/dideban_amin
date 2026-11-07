@@ -835,6 +835,26 @@ body::before {
     transform: scale(1) translateZ(0);
 }
 
+.step-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.step-item.active .step-icon {
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.step-item.completed .step-icon {
+    color: #ffffff;
+}
+
 .step-num {
     display: inline-flex;
     align-items: center;
@@ -3423,6 +3443,11 @@ button:disabled {
         width: 32px !important;
         height: 32px !important;
         font-size: 12.5px !important;
+    }
+
+    .step-icon {
+        width: 15px !important;
+        height: 15px !important;
     }
 
     .step-label {

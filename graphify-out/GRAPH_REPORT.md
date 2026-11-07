@@ -1,7 +1,7 @@
 # Graph Report - Setad_Khabari_HMD  (2026-11-07)
 
 ## Corpus Check
-- 311 files · ~498,348 words
+- 311 files · ~499,468 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `48fdef86`
+- Built from commit: `d9250f17`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -329,7 +329,7 @@ Nodes (26): After the file is written, Emitting a `design.md` from `study`, Imag
 
 ### Community 14 - "admin_handlers.go"
 Cohesion: 0.12
-Nodes (65): GetCurrentAdminHandler(), getIP(), BulkUserActionHandler(), canAdminAccessReport(), ClassifyReportHandler(), CreateUserHandler(), DeleteReportHandler(), DeleteUserHandler() (+57 more)
+Nodes (64): GetCurrentAdminHandler(), getIP(), BulkUserActionHandler(), canAdminAccessReport(), ClassifyReportHandler(), CreateUserHandler(), DeleteReportHandler(), DeleteUserHandler() (+56 more)
 
 ### Community 15 - "Hero enrichment — when, what, and how much"
 Cohesion: 0.09
@@ -561,7 +561,7 @@ Nodes (18): Bot/messaging, Bốn mức tin cậy, Data Flow Classification — T
 
 ### Community 76 - "security.go"
 Cohesion: 0.12
-Nodes (29): executeDeleteReportIDs(), formatJalaliTime(), gregorianToJalali(), computeAuditHash(), computeLegacyAuditHash(), executeAuditLogTx(), getLatestAuditHashLocked(), isAuditStrict() (+21 more)
+Nodes (30): executeDeleteReportIDs(), formatJalaliTime(), gregorianToJalali(), RedactReportHandler(), computeAuditHash(), computeLegacyAuditHash(), executeAuditLogTx(), getLatestAuditHashLocked() (+22 more)
 
 ### Community 77 - "VerifyCaptcha"
 Cohesion: 0.15
