@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1794035727.3527038,
-    "seen": 1794035763.7630272,
-    "ast_hash": "69835008e441e74a68cb26b8555983d8",
+    "mtime": 1794035855.1287904,
+    "seen": 1794035896.207495,
+    "ast_hash": "0210e25ed15629ec43c9957c0ae9528d",
     "semantic_hash": ""
   },
   "profanity.go": {
