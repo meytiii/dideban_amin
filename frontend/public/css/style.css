@@ -979,6 +979,10 @@ body::before {
     line-height: 1.7;
 }
 
+.notice-text p + p {
+    margin-top: 6px;
+}
+
 .form-group {
     margin-bottom: 22px;
 }

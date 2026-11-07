@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1794036749.1810205,
-    "seen": 1794036897.614502,
-    "ast_hash": "77ed1af16c8803c1261bcab69aa88c9e",
+    "mtime": 1794037131.955557,
+    "seen": 1794037171.510465,
+    "ast_hash": "7ae2aada14fe60a57cf7da5b428e3132",
     "semantic_hash": ""
   },
   "profanity.go": {
@@ -1116,8 +1116,8 @@
     "semantic_hash": ""
   },
   "frontend/public/js/app.js": {
-    "mtime": 1794036825.3765638,
-    "seen": 1794036897.5940976,
+    "mtime": 1794037005.669154,
+    "seen": 1794037171.4900663,
     "ast_hash": "cee44c1a3e39ca582bdc26d771783244",
     "semantic_hash": ""
   },
@@ -2310,20 +2310,20 @@
     "semantic_hash": ""
   },
   "frontend/public/svg/step1.svg": {
-    "mtime": 1794036623.4260163,
-    "seen": 1794036897.6190276,
+    "mtime": 1794037006.0103211,
+    "seen": 1794037171.515049,
     "ast_hash": "8c012598871c4fc1cf5d4e26ea532efb",
     "semantic_hash": ""
   },
   "frontend/public/svg/step2.svg": {
-    "mtime": 1794036639.2631433,
-    "seen": 1794036897.6190288,
+    "mtime": 1794037006.342234,
+    "seen": 1794037171.5150504,
     "ast_hash": "7c4a18f66f63af0f3a295ef6173d8cf2",
     "semantic_hash": ""
   },
   "frontend/public/svg/step3.svg": {
-    "mtime": 1794036661.349201,
-    "seen": 1794036897.6190298,
+    "mtime": 1794037006.6035378,
+    "seen": 1794037171.5150518,
     "ast_hash": "8276493bfbe7b18bc9a1744a31096561",
     "semantic_hash": ""
   }
