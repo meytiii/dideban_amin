@@ -1777,6 +1777,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const successVideo = document.getElementById('successMotionVideo');
                     if (successVideo) {
                         successVideo.currentTime = 0;
+                        successVideo.playbackRate = 1.25;
                         successVideo.play().catch(() => {});
                     }
                     if (window.TatweelTypography) window.TatweelTypography.recheckOverflow();
@@ -2052,6 +2053,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const successVideo = document.getElementById('successMotionVideo');
                 if (successVideo) {
                     successVideo.currentTime = 0;
+                    successVideo.playbackRate = 1.25;
                     successVideo.play().catch(() => {});
                 }
             }
@@ -2900,15 +2902,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function bindVideoPlaybackRate(video, rate = 1.25) {
+        if (!video) return;
+        video.defaultPlaybackRate = rate;
+        video.playbackRate = rate;
+        video.addEventListener('play', () => {
+            video.playbackRate = rate;
+        });
+        video.addEventListener('loadedmetadata', () => {
+            video.playbackRate = rate;
+        });
+    }
+
     function initHeroMotionBanner() {
         const video = document.getElementById('heroMotionVideo');
         if (!video) return;
+
+        bindVideoPlaybackRate(video, 1.25);
 
         let pauseTimer = null;
 
         const restartVideo = () => {
             if (document.hidden) return;
             video.currentTime = 0;
+            video.playbackRate = 1.25;
             video.play().catch(() => {});
         };
 
@@ -2932,6 +2949,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (video.ended) {
                     restartVideo();
                 } else if (video.paused) {
+                    video.playbackRate = 1.25;
                     video.play().catch(() => {});
                 }
             }
@@ -2944,6 +2962,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (video.ended) {
                             restartVideo();
                         } else if (video.paused) {
+                            video.playbackRate = 1.25;
                             video.play().catch(() => {});
                         }
                     } else {
@@ -2961,6 +2980,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (video.paused) {
+            video.playbackRate = 1.25;
             video.play().catch(() => {});
         }
     }
@@ -2973,6 +2993,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const successVideo = document.getElementById('successMotionVideo');
                 if (successVideo) {
                     successVideo.currentTime = 0;
+                    successVideo.playbackRate = 1.25;
                     successVideo.play().catch(() => {});
                 }
             }
@@ -2986,6 +3007,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const successVideo = document.getElementById('successMotionVideo');
             if (successVideo) {
                 successVideo.currentTime = 0;
+                successVideo.playbackRate = 1.25;
                 successVideo.play().catch(() => {});
             }
         }
@@ -2995,5 +3017,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(syncAllFloatingLabels, 300);
     initLazyImageSkeletons();
     initHeroMotionBanner();
+    const successVideoEl = document.getElementById('successMotionVideo');
+    if (successVideoEl) {
+        bindVideoPlaybackRate(successVideoEl, 1.25);
+    }
     window.markAppReady();
 });
