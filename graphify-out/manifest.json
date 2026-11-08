@@ -72,15 +72,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1794040488.6204605,
-    "seen": 1794040621.9749956,
-    "ast_hash": "304f7cd753355c1efba01d1dd1f0a92e",
+    "mtime": 1794123487.5666113,
+    "seen": 1794123651.6689053,
+    "ast_hash": "0a3dc2fceebc51db02df50a575c20aed",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1794123217.491824,
-    "seen": 1794123244.935462,
-    "ast_hash": "cbac009f83181f2d12ec231112030c54",
+    "mtime": 1794123443.3741424,
+    "seen": 1794123651.668971,
+    "ast_hash": "e5774d4faaa56ef04fc7b8ed7e011182",
     "semantic_hash": ""
   },
   "profanity.go": {
@@ -1098,9 +1098,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/js/admin.js": {
-    "mtime": 1794040488.1127028,
-    "seen": 1794040621.9542205,
-    "ast_hash": "c3388a19d58bc2b56fc6416923a3913f",
+    "mtime": 1794123515.3787227,
+    "seen": 1794123651.6497731,
+    "ast_hash": "bf8b79db16e2796613065f5a77e7a1ba",
     "semantic_hash": ""
   },
   "frontend/admin/js/confirm.js": {
@@ -2346,27 +2346,27 @@
     "semantic_hash": ""
   },
   "frontend/admin/svg/copy.svg": {
-    "mtime": 1794122953.6288776,
-    "seen": 1794123244.9369693,
-    "ast_hash": "9aeae830e405b44fdbc680f278f292e9",
+    "mtime": 1794123397.919107,
+    "seen": 1794123651.6705067,
+    "ast_hash": "367e06e8a15d4b624d3a606a2cfd249d",
     "semantic_hash": ""
   },
   "frontend/admin/svg/paste.svg": {
-    "mtime": 1794122854.6065695,
-    "seen": 1794123244.9376466,
-    "ast_hash": "793b2e979d37d29eec080ec0452c6d06",
+    "mtime": 1794123412.8303359,
+    "seen": 1794123651.6712348,
+    "ast_hash": "c3fa35984ae2708df3fb404179b29f2e",
     "semantic_hash": ""
   },
   "frontend/public/svg/copy.svg": {
-    "mtime": 1794122953.6288776,
-    "seen": 1794123244.9393756,
-    "ast_hash": "9aeae830e405b44fdbc680f278f292e9",
+    "mtime": 1794123389.5579789,
+    "seen": 1794123651.673393,
+    "ast_hash": "367e06e8a15d4b624d3a606a2cfd249d",
     "semantic_hash": ""
   },
   "frontend/public/svg/paste.svg": {
-    "mtime": 1794122854.6065695,
-    "seen": 1794123244.9397495,
-    "ast_hash": "793b2e979d37d29eec080ec0452c6d06",
+    "mtime": 1794123405.6475089,
+    "seen": 1794123651.6737766,
+    "ast_hash": "c3fa35984ae2708df3fb404179b29f2e",
     "semantic_hash": ""
   }
 }

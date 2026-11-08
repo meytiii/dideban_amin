@@ -5120,7 +5120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             copyBtn.setAttribute('data-copy-tracking', report.tracking_code || '');
             copyBtn.setAttribute('data-tooltip', 'کپی کد پیگیری');
             copyBtn.setAttribute('aria-label', 'کپی کد پیگیری');
-            copyBtn.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+            copyBtn.innerHTML = '<svg viewBox="0 0 52 52" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M44,2H18c-2.2,0-4,1.8-4,4v2h24c2.2,0,4,1.8,4,4v28h2c2.2,0,4-1.8,4-4V6C48,3.8,46.2,2,44,2z"/><path d="M38,16c0-2.2-1.8-4-4-4H8c-2.2,0-4,1.8-4,4v30c0,2.2,1.8,4,4,4h26c2.2,0,4-1.8,4-4V16z M20,23 c0,0.6-0.4,1-1,1h-8c-0.6,0-1-0.4-1-1v-2c0-0.6,0.4-1,1-1h8c0.6,0,1,0.4,1,1V23z M28,39c0,0.6-0.4,1-1,1H11c-0.6,0-1-0.4-1-1v-2 c0-0.6,0.4-1,1-1h16c0.6,0,1,0.4,1,1V39z M32,31c0,0.6-0.4,1-1,1H11c-0.6,0-1-0.4-1-1v-2c0-0.6,0.4-1,1-1h20c0.6,0,1,0.4,1,1V31z"/></svg>';
 
             trackingWrapper.appendChild(codeSpan);
             trackingWrapper.appendChild(copyBtn);
@@ -10868,9 +10868,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="audit-tracking-cell">
                     <code class="audit-tracking-code ltr">${escapeHTML(l.target_tracking_code)}</code>
                     <button type="button" class="btn-mini-copy" data-copy-tracking="${escapeHTML(l.target_tracking_code)}" data-tooltip="کپی کد رهگیری" aria-label="کپی کد رهگیری">
-                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        <svg viewBox="0 0 52 52" width="13" height="13" fill="currentColor" aria-hidden="true">
+                            <path d="M44,2H18c-2.2,0-4,1.8-4,4v2h24c2.2,0,4,1.8,4,4v28h2c2.2,0,4-1.8,4-4V6C48,3.8,46.2,2,44,2z"/>
+                            <path d="M38,16c0-2.2-1.8-4-4-4H8c-2.2,0-4,1.8-4,4v30c0,2.2,1.8,4,4,4h26c2.2,0,4-1.8,4-4V16z M20,23 c0,0.6-0.4,1-1,1h-8c-0.6,0-1-0.4-1-1v-2c0-0.6,0.4-1,1-1h8c0.6,0,1,0.4,1,1V23z M28,39c0,0.6-0.4,1-1,1H11c-0.6,0-1-0.4-1-1v-2 c0-0.6,0.4-1,1-1h16c0.6,0,1,0.4,1,1V39z M32,31c0,0.6-0.4,1-1,1H11c-0.6,0-1-0.4-1-1v-2c0-0.6,0.4-1,1-1h20c0.6,0,1,0.4,1,1V31z"/>
                         </svg>
                     </button>
                 </div>
