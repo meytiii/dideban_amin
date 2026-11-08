@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1794114311.9117537,
-    "seen": 1794114382.4778144,
-    "ast_hash": "32a7501b8a18aa938467fcdc1de9a282",
+    "mtime": 1794039673.2644935,
+    "seen": 1794040621.975066,
+    "ast_hash": "66122377be8441600421b31dc6ccb9f2",
     "semantic_hash": ""
   },
   "profanity.go": {
@@ -2343,18 +2343,6 @@
     "mtime": 1794039414.1330774,
     "seen": 1794039582.884718,
     "ast_hash": "8030db62d1b0cde30ae370502f211122",
-    "semantic_hash": ""
-  },
-  "components/ui/demo.tsx": {
-    "mtime": 1794114238.358468,
-    "seen": 1794114382.4573476,
-    "ast_hash": "a51bc104955f06eaed78213ff1455962",
-    "semantic_hash": ""
-  },
-  "components/ui/shimmer-text.tsx": {
-    "mtime": 1794114233.2231028,
-    "seen": 1794114382.4573495,
-    "ast_hash": "5d2558007d673baff0554c48a73dde66",
     "semantic_hash": ""
   }
 }
