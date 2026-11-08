@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1794117395.4607065,
-    "seen": 1794117455.12244,
-    "ast_hash": "7dbefaba2664eb3b4c8baecda99293a1",
+    "mtime": 1794121135.7641487,
+    "seen": 1794121184.659982,
+    "ast_hash": "c5efb73b33670c25f6f52a572b5ec41f",
     "semantic_hash": ""
   },
   "profanity.go": {
@@ -1128,9 +1128,9 @@
     "semantic_hash": ""
   },
   "frontend/public/js/preloader.js": {
-    "mtime": 1793784264.9085567,
-    "seen": 1793784494.5890088,
-    "ast_hash": "1a8a04d9c76dc03403ef1fca461e3031",
+    "mtime": 1794121104.9061093,
+    "seen": 1794121184.641647,
+    "ast_hash": "1fe3bdbe4beb8b9a1d8ea4ba775c1bfe",
     "semantic_hash": ""
   },
   "frontend/public/js/tatweel.js": {
@@ -2343,6 +2343,18 @@
     "mtime": 1794039414.1330774,
     "seen": 1794039582.884718,
     "ast_hash": "8030db62d1b0cde30ae370502f211122",
+    "semantic_hash": ""
+  },
+  "lighthouse.html": {
+    "mtime": 1794118184.7959037,
+    "seen": 1794121184.6601593,
+    "ast_hash": "faa1b8abe269ceb3ff080587aab108bb",
+    "semantic_hash": ""
+  },
+  "lighthouse2.html": {
+    "mtime": 1794118646.0862565,
+    "seen": 1794121184.6601605,
+    "ast_hash": "70167fc6f9e55e25f1ae6a7e7444a81c",
     "semantic_hash": ""
   }
 }

@@ -26,7 +26,8 @@
 
     <link rel="preload" href="./fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="css/style.css?v=100">
+    <link rel="preload" as="image" href="img/homepage.webp" type="image/webp" fetchpriority="high">
+    <link rel="stylesheet" href="css/style.css?v=101">
     
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
@@ -94,7 +95,7 @@
                         loading="eager" fetchpriority="high" decoding="async">
                 </picture>
             </div>
-            <h1 class="persian-heading persian-heading--tatweel" data-tatweel-level="hero" id="headerBrandTitle" role="button" tabindex="0" aria-label="بازگشت به صفحه اصلی">دیده‌بان امین</h1>
+            <h1 class="persian-heading persian-heading--tatweel" data-tatweel-level="hero" id="headerBrandTitle" role="button" tabindex="0" aria-label="دیده‌بان امین - بازگشت به صفحه اصلی">دیده‌بان امین</h1>
             <div class="header-subtitle-row is-home-view" id="headerSubtitleRow">
                 <div class="header-action-slot header-action-home" id="headerHomeSlot"></div>
                 <div class="header-subtitle-group">
@@ -158,7 +159,7 @@
                     سامانه دیده‌بان امین، پل ارتباطی مستقیم و امن شما با اداره حراست آموزش و پرورش استان همدان است. پیام‌ها کاملاً محرمانه، بدون واسطه و بدون نیاز به اطلاعات هویتی بررسی می‌شوند.
                 </p>
                 <div class="landing-workflow-banner">
-                    <video id="heroMotionVideo" class="workflow-banner-video" autoplay muted playsinline disablepictureinpicture preload="auto" width="1280" height="720" poster="img/homepage.webp">
+                    <video id="heroMotionVideo" class="workflow-banner-video" autoplay muted playsinline disablepictureinpicture preload="auto" width="1280" height="720" poster="img/homepage.webp" fetchpriority="high">
                         <source src="img/setad_loop.webm" type="video/webm">
                         <source src="img/setad_loop.mp4" type="video/mp4">
                     </video>
