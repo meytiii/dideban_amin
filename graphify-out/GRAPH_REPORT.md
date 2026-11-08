@@ -1,7 +1,7 @@
 # Graph Report - Setad_Khabari_HMD  (2026-11-08)
 
 ## Corpus Check
-- 311 files · ~500,367 words
+- 311 files · ~500,415 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f729aa9f`
+- Built from commit: `50a06db2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -234,10 +234,10 @@
 - Scan Commands & Tools
 - Part 3: Liveliness Toolkit
 - Structural & Flow
-- Output Safety
+- Data Privacy & Compliance
 - Dockerfile Security
 - Model Access & Cost Control
-- Runtime Security
+- Image Supply Chain
 - promptBulkDeletePhrase
 - Kubernetes-Specific
 - ReportDetail
@@ -488,7 +488,7 @@ Nodes (36): adminFetch(), closeDetailView(), connectAdminSSE(), createReportStat
 
 ### Community 53 - "AI/LLM Security Deep Dive"
 Cohesion: 0.10
-Nodes (21): AI-Assisted Security Tools, AI/LLM Security Deep Dive, AI Supply Chain Security, Anthropic Constitutional AI Approach, Available Tools (as of 2026-02), Behavioral Monitoring, Claude Code Security Specifics, Compliance Checklist (+13 more)
+Nodes (21): AI-Assisted Security Tools, AI/LLM Security Deep Dive, AI Supply Chain Security, Anthropic Constitutional AI Approach, Available Tools (as of 2026-02), Behavioral Monitoring, Claude Code Security Specifics, Code Execution Safety (+13 more)
 
 ### Community 54 - "Outdated Dependency (Known CVE)"
 Cohesion: 0.11
@@ -548,7 +548,7 @@ Nodes (38): Actorless Passive, All-Caps Emphasis, antislop-copywriting, Aphorism
 
 ### Community 69 - "Container Security Guide"
 Cohesion: 0.10
-Nodes (21): Alerts to Configure, Bad vs Good Patterns, CI/CD Pipeline Security, CI Integration Examples, Container Security Guide, Defense Checklist, Docker Compose Network Isolation, Image Build Pipeline (+13 more)
+Nodes (21): Alerts to Configure, Bad vs Good Patterns, CI/CD Pipeline Security, CI Integration Examples, Container Security Guide, Dangerous Flags (Audit for These), Docker Compose Network Isolation, Docker Run Hardening (+13 more)
 
 ### Community 71 - "antislop-layoutmobile"
 Cohesion: 0.06
@@ -1090,9 +1090,9 @@ Nodes (4): Design Read (how the dials are set), Levers (how the dials become vis
 Cohesion: 0.50
 Nodes (4): Dead Navigation, Non-Functional Controls, Sections That Fill a Template, Structural & Flow
 
-### Community 220 - "Output Safety"
+### Community 220 - "Data Privacy & Compliance"
 Cohesion: 0.50
-Nodes (4): Code Execution Safety, Content Filtering, Output Safety, Untrusted Output Principle
+Nodes (4): Compliance Checklist, Data Flow Audit, Data Privacy & Compliance, Provider Agreements
 
 ### Community 221 - "Dockerfile Security"
 Cohesion: 0.40
@@ -1102,9 +1102,9 @@ Nodes (5): Base Image Selection, Common Dockerfile Vulnerabilities, Dockerfile S
 Cohesion: 0.50
 Nodes (4): API Key Security, Model Access & Cost Control, Rate Limiting Requirements, Spending Controls
 
-### Community 224 - "Runtime Security"
+### Community 224 - "Image Supply Chain"
 Cohesion: 0.50
-Nodes (4): Dangerous Flags (Audit for These), Docker Run Hardening, Docker Socket Exposure, Runtime Security
+Nodes (4): Defense Checklist, Image Supply Chain, Pinning Examples, Threat: Malicious or Vulnerable Base Images
 
 ### Community 225 - "promptBulkDeletePhrase"
 Cohesion: 0.46

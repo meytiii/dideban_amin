@@ -2057,6 +2057,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     successVideo.play().catch(() => {});
                 }
             }
+            if (typeof updateLandingStickyBar === 'function') {
+                updateLandingStickyBar();
+            }
             if (typeof updateTopNavStickyBar === 'function') {
                 updateTopNavStickyBar();
             }
@@ -2070,6 +2073,9 @@ document.addEventListener('DOMContentLoaded', () => {
             submitSection?.classList.add('d-none');
             trackingSection?.classList.remove('d-none');
             loadCaptcha('track-captcha-img', 'track_captcha_id', 'track_captcha_answer');
+            if (typeof updateLandingStickyBar === 'function') {
+                updateLandingStickyBar();
+            }
             if (typeof updateTopNavStickyBar === 'function') {
                 updateTopNavStickyBar();
             }
@@ -2229,9 +2235,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const anchor = document.getElementById('landingCtaAnchor');
         const bar = document.getElementById('landingStickyBar');
         const landing = document.getElementById('landingSection');
-        if (!anchor || !bar || !landing || landing.classList.contains('d-none')) return;
-        if (window.innerWidth > 860) {
-            bar.classList.remove('is-sticky');
+        if (!anchor || !bar || !landing || landing.classList.contains('d-none')) {
+            if (bar && bar.classList.contains('is-sticky')) {
+                bar.classList.remove('is-sticky');
+            }
             return;
         }
 

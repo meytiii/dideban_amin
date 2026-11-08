@@ -72,15 +72,15 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1794040488.6204605,
-    "seen": 1794040621.9749956,
-    "ast_hash": "304f7cd753355c1efba01d1dd1f0a92e",
+    "mtime": 1794123755.059318,
+    "seen": 1794131056.9667282,
+    "ast_hash": "0a3dc2fceebc51db02df50a575c20aed",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1794121135.7641487,
-    "seen": 1794121184.659982,
-    "ast_hash": "c5efb73b33670c25f6f52a572b5ec41f",
+    "mtime": 1794131256.4687006,
+    "seen": 1794131294.3468208,
+    "ast_hash": "1b75c03526e9257d27d46cd50ccea874",
     "semantic_hash": ""
   },
   "profanity.go": {
@@ -1098,9 +1098,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/js/admin.js": {
-    "mtime": 1794040488.1127028,
-    "seen": 1794040621.9542205,
-    "ast_hash": "c3388a19d58bc2b56fc6416923a3913f",
+    "mtime": 1794123756.225442,
+    "seen": 1794131056.947511,
+    "ast_hash": "bf8b79db16e2796613065f5a77e7a1ba",
     "semantic_hash": ""
   },
   "frontend/admin/js/confirm.js": {
@@ -1116,9 +1116,9 @@
     "semantic_hash": ""
   },
   "frontend/public/js/app.js": {
-    "mtime": 1794037005.669154,
-    "seen": 1794037171.4900663,
-    "ast_hash": "cee44c1a3e39ca582bdc26d771783244",
+    "mtime": 1794123195.5475965,
+    "seen": 1794123244.9165952,
+    "ast_hash": "a7142f889b1a8d717f1444cabc8dd1ac",
     "semantic_hash": ""
   },
   "frontend/public/js/confirm.js": {
@@ -1128,9 +1128,9 @@
     "semantic_hash": ""
   },
   "frontend/public/js/preloader.js": {
-    "mtime": 1794121104.9061093,
-    "seen": 1794121184.641647,
-    "ast_hash": "1fe3bdbe4beb8b9a1d8ea4ba775c1bfe",
+    "mtime": 1794123124.4704456,
+    "seen": 1794123244.9166636,
+    "ast_hash": "d0401a97637fd14905a13deb39131ab9",
     "semantic_hash": ""
   },
   "frontend/public/js/tatweel.js": {
@@ -2345,16 +2345,28 @@
     "ast_hash": "8030db62d1b0cde30ae370502f211122",
     "semantic_hash": ""
   },
-  "lighthouse.html": {
-    "mtime": 1794118184.7959037,
-    "seen": 1794121184.6601593,
-    "ast_hash": "faa1b8abe269ceb3ff080587aab108bb",
+  "frontend/admin/svg/copy.svg": {
+    "mtime": 1794123756.5619526,
+    "seen": 1794131056.9683447,
+    "ast_hash": "367e06e8a15d4b624d3a606a2cfd249d",
     "semantic_hash": ""
   },
-  "lighthouse2.html": {
-    "mtime": 1794118646.0862565,
-    "seen": 1794121184.6601605,
-    "ast_hash": "70167fc6f9e55e25f1ae6a7e7444a81c",
+  "frontend/admin/svg/paste.svg": {
+    "mtime": 1794123756.9095283,
+    "seen": 1794131056.969014,
+    "ast_hash": "c3fa35984ae2708df3fb404179b29f2e",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/copy.svg": {
+    "mtime": 1794123758.0998425,
+    "seen": 1794131056.9709156,
+    "ast_hash": "367e06e8a15d4b624d3a606a2cfd249d",
+    "semantic_hash": ""
+  },
+  "frontend/public/svg/paste.svg": {
+    "mtime": 1794123758.5778506,
+    "seen": 1794131056.9713469,
+    "ast_hash": "c3fa35984ae2708df3fb404179b29f2e",
     "semantic_hash": ""
   }
 }

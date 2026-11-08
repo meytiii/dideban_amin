@@ -6277,10 +6277,65 @@ button:disabled {
 }
 
 .landing-cta-anchor {
-    display: none;
+    display: block;
+    min-height: 52px;
+    width: 100%;
+    position: relative;
+    margin-top: 14px;
 }
 
 .landing-sticky-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.landing-sticky-bar.is-sticky {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 990;
+    padding: 12px 24px;
+    background: #0f172a;
+    border-top: 1px solid rgba(56, 189, 248, 0.25);
+    box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.5);
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.landing-sticky-bar:not(.is-sticky) {
+    position: static;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.btn-landing-primary {
+    order: 1;
+}
+
+.btn-landing-faq {
+    order: 2;
+}
+
+#btnLandingTrackReport {
+    order: 3;
+}
+
+.btn-faq-label {
+    display: inline;
+}
+
+.btn-track-label-pc {
+    display: inline;
+}
+
+.btn-track-label-mobile {
     display: none;
 }
 
@@ -6332,10 +6387,6 @@ button:disabled {
         gap: 8px;
     }
 
-    .landing-cta-actions {
-        display: none !important;
-    }
-
     .landing-cta-anchor {
         display: block;
         min-height: 48px;
@@ -6372,13 +6423,27 @@ button:disabled {
         box-shadow: none;
     }
 
+    .btn-faq-label {
+        display: none !important;
+    }
+
+    .btn-track-label-pc {
+        display: none !important;
+    }
+
+    .btn-track-label-mobile {
+        display: inline !important;
+    }
+
     .btn-sticky-primary {
+        order: 1 !important;
         flex: 1.35;
         min-height: 46px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 6px;
+        padding: 0 10px !important;
         background: #2563eb;
         color: #ffffff;
         font-size: 14px;
@@ -6397,12 +6462,14 @@ button:disabled {
     }
 
     .btn-sticky-secondary {
+        order: 2 !important;
         flex: 1.1;
         min-height: 46px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 6px;
+        padding: 0 8px !important;
         background: #1e293b;
         color: #93c5fd;
         font-size: 13px;
@@ -6420,9 +6487,14 @@ button:disabled {
     }
 
     .btn-sticky-faq {
+        order: 3 !important;
         width: 46px;
+        min-width: 46px;
         height: 46px;
+        min-height: 46px;
+        flex: 0 0 46px;
         flex-shrink: 0;
+        padding: 0 !important;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -6433,6 +6505,11 @@ button:disabled {
         cursor: pointer;
         transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
         font-family: inherit;
+    }
+
+    .btn-sticky-faq svg {
+        width: 24px;
+        height: 24px;
     }
 
     .btn-sticky-faq:active {
