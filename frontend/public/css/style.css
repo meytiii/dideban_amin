@@ -200,6 +200,60 @@ body::before {
     color: #93c5fd;
 }
 
+.header-brand-shimmer {
+    display: inline-block;
+    position: relative;
+    background-image: linear-gradient(
+        110deg,
+        #f8fafc 0%,
+        #f8fafc 38%,
+        #38bdf8 47%,
+        #ffffff 50%,
+        #38bdf8 53%,
+        #f8fafc 62%,
+        #f8fafc 100%
+    );
+    background-size: 250% 100%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmerGlanceRTL 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    will-change: background-position;
+    transform: translateZ(0);
+}
+
+.header-brand-shimmer .persian-tatweel-wrapper,
+.header-brand-shimmer .tatweel-visual {
+    color: inherit;
+    -webkit-text-fill-color: inherit;
+    background: inherit;
+    -webkit-background-clip: inherit;
+    background-clip: inherit;
+}
+
+@keyframes shimmerGlanceRTL {
+    0% {
+        background-position: 140% 0;
+    }
+    60%, 100% {
+        background-position: -140% 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .header-brand-shimmer {
+        animation: none;
+        background: none;
+        -webkit-text-fill-color: var(--text-main);
+        color: var(--text-main);
+    }
+    .header-brand-shimmer .persian-tatweel-wrapper,
+    .header-brand-shimmer .tatweel-visual {
+        -webkit-text-fill-color: var(--text-main);
+    }
+}
+
 .header p {
     color: var(--text-muted);
     font-size: 14.5px;
