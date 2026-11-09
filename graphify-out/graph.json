@@ -27137,6 +27137,62 @@
       "source_location": "L1"
     },
     {
+      "id": "setad_khabari_hmd_regionalresponseitem",
+      "label": "RegionalResponseItem",
+      "_origin": "ast",
+      "community": 235,
+      "community_name": "ReportDetail",
+      "file_type": "code",
+      "norm_label": "regionalresponseitem",
+      "source_file": "admin_handlers.go",
+      "source_location": "L568"
+    },
+    {
+      "id": "setad_khabari_hmd_reportattachmentitem",
+      "label": "ReportAttachmentItem",
+      "_origin": "ast",
+      "community": 235,
+      "community_name": "ReportDetail",
+      "file_type": "code",
+      "norm_label": "reportattachmentitem",
+      "source_file": "admin_handlers.go",
+      "source_location": "L608"
+    },
+    {
+      "id": "setad_khabari_hmd_reportdetail",
+      "label": "ReportDetail",
+      "_origin": "ast",
+      "community": 235,
+      "community_name": "ReportDetail",
+      "file_type": "code",
+      "norm_label": "reportdetail",
+      "source_file": "admin_handlers.go",
+      "source_location": "L577"
+    },
+    {
+      "id": "tests_repdetailtest",
+      "label": "RepDetailTest",
+      "_origin": "ast",
+      "community": 235,
+      "community_name": "ReportDetail",
+      "file_type": "code",
+      "norm_label": "repdetailtest",
+      "source_file": "tests/forwarding_test.go",
+      "source_location": "L302"
+    },
+    {
+      "id": "graphify_out_converted_report_template_64ced46b",
+      "label": "report_template_64ced46b.md",
+      "_origin": "ast",
+      "community": 236,
+      "community_name": "report_template_64ced46b.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "report_template_64ced46b.md",
+      "source_file": "graphify-out/converted/report_template_64ced46b.md",
+      "source_location": "L1"
+    },
+    {
       "id": "agents_skills_hallmark_references_typography_banned_defaults",
       "label": "Banned defaults",
       "_origin": "ast",
@@ -35905,39 +35961,6 @@
       "source_location": "L562"
     },
     {
-      "id": "setad_khabari_hmd_regionalresponseitem",
-      "label": "RegionalResponseItem",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "regionalresponseitem",
-      "source_file": "admin_handlers.go",
-      "source_location": "L568"
-    },
-    {
-      "id": "setad_khabari_hmd_reportattachmentitem",
-      "label": "ReportAttachmentItem",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "reportattachmentitem",
-      "source_file": "admin_handlers.go",
-      "source_location": "L608"
-    },
-    {
-      "id": "setad_khabari_hmd_reportdetail",
-      "label": "ReportDetail",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "reportdetail",
-      "source_file": "admin_handlers.go",
-      "source_location": "L577"
-    },
-    {
       "id": "setad_khabari_hmd_reportmessageitem",
       "label": "ReportMessageItem",
       "_origin": "ast",
@@ -36079,17 +36102,6 @@
       "norm_label": "testinputsanitizationandlimits()",
       "source_file": "tests/input_limits_test.go",
       "source_location": "L13"
-    },
-    {
-      "id": "tests_repdetailtest",
-      "label": "RepDetailTest",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "crypto.go",
-      "file_type": "code",
-      "norm_label": "repdetailtest",
-      "source_file": "tests/forwarding_test.go",
-      "source_location": "L302"
     },
     {
       "id": "agents_skills_antislop_copywriting_skill",
@@ -98867,5 +98879,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "acd292c0897119655821d0212ccab3b2d27a8957"
+  "built_at_commit": "74ddf8d13607773b67f71c8348fcacb4dc9bfc6e"
 }

@@ -1,16 +1,16 @@
 # Graph Report - Setad_Khabari_HMD  (2026-11-09)
 
 ## Corpus Check
-- 311 files · ~501,300 words
+- 312 files · ~501,495 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3510 nodes · 5024 edges · 235 communities (212 shown, 23 thin omitted)
+- 3511 nodes · 5024 edges · 237 communities (214 shown, 23 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 559 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `acd292c0`
+- Built from commit: `74ddf8d1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -248,6 +248,7 @@
 - f3-tabular-spec-sheet.md
 - h9-custom-illustration-centerpiece.md
 - n13-inline-cmdk-pill.md
+- ReportDetail
 
 ## God Nodes (most connected - your core abstractions)
 1. `adminFromContext()` - 43 edges
@@ -276,7 +277,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (235 total, 23 thin omitted)
+## Communities (237 total, 23 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -539,8 +540,8 @@ Cohesion: 0.17
 Nodes (19): createShamsiDateRangePicker(), closePopover(), commitDateRange(), openPopover(), renderCalendar(), renderCalendarHighlights(), resetRange(), fetchServerTime() (+11 more)
 
 ### Community 67 - "crypto.go"
-Cohesion: 0.08
-Nodes (44): DecryptAES(), DecryptBoundField(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), DecryptWithAAD(), decryptWithKey(), deriveKey() (+36 more)
+Cohesion: 0.09
+Nodes (40): DecryptAES(), DecryptBoundField(), DecryptFileBytes(), DecryptFilePath(), decryptFilePayload(), DecryptWithAAD(), decryptWithKey(), deriveKey() (+32 more)
 
 ### Community 68 - "Tone & Voice"
 Cohesion: 0.05
@@ -1117,6 +1118,10 @@ Nodes (4): CI/CD Pipeline Security, CI Integration Examples, Image Build Pipelin
 ### Community 227 - "Kubernetes-Specific"
 Cohesion: 0.50
 Nodes (4): Kubernetes-Specific, Pod Security Standards, RBAC Audit Points, Secure Pod Template
+
+### Community 235 - "ReportDetail"
+Cohesion: 0.50
+Nodes (4): RegionalResponseItem, ReportAttachmentItem, ReportDetail, RepDetailTest
 
 ## Knowledge Gaps
 - **1973 isolated node(s):** `AdminUserItem`, `AuditLogItem`, `RecipientUserItem`, `ForwardReportRequest`, `ForwardHistoryItem` (+1968 more)
