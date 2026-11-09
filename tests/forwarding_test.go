@@ -10,9 +10,9 @@ import (
 )
 
 func TestRoleDefinitionsAndRestrictions(t *testing.T) {
-	roles := []string{"superuser", "edare_kol", "navahi_manategh"}
+	roles := []string{"superuser", "raees_herasat", "edare_kol", "navahi_manategh"}
 	for _, r := range roles {
-		if r != "superuser" && r != "edare_kol" && r != "navahi_manategh" {
+		if r != "superuser" && r != "raees_herasat" && r != "edare_kol" && r != "navahi_manategh" {
 			t.Errorf("Unexpected role: %s", r)
 		}
 	}
@@ -29,13 +29,17 @@ func TestRoleDefinitionsAndRestrictions(t *testing.T) {
 	}
 
 	superSession := AdminSession{Username: "admin_it", Role: "superuser", IsSuperuser: true}
+	chiefSession := AdminSession{Username: "admin_boss", Role: "raees_herasat", IsSuperuser: false}
 	edareKolSession := AdminSession{Username: "admin_herasat", Role: "edare_kol", IsSuperuser: false}
 
 	if !canAdminAccessReport(superSession, 9999) {
 		t.Errorf("superuser should have access to any report")
 	}
-	if !canAdminAccessReport(edareKolSession, 9999) {
-		t.Errorf("edare_kol should have access to any report")
+	if !canAdminAccessReport(chiefSession, 9999) {
+		t.Errorf("raees_herasat should have access to any report")
+	}
+	if canAdminAccessReport(edareKolSession, 9999) {
+		t.Errorf("edare_kol must not have access to unforwarded report")
 	}
 }
 
@@ -404,5 +408,79 @@ func TestReportSummaryRegionalResponseSerialization(t *testing.T) {
 	}
 	if !parsed.HasAnyRegionalResponse {
 		t.Errorf("Expected HasAnyRegionalResponse=true, got false")
+	}
+}
+
+func TestRaeesHerasatRolePermissions(t *testing.T) {
+	chiefSession := AdminSession{
+		Username:    "chief_officer",
+		FullName:    "رئیس حراست تست",
+		Role:        "raees_herasat",
+		IsSuperuser: false,
+	}
+
+	if chiefSession.IsSuperuser {
+		t.Errorf("raees_herasat must not be flagged as is_superuser")
+	}
+
+	if !canAdminAccessReport(chiefSession, 54321) {
+		t.Errorf("raees_herasat must have full access to any report")
+	}
+
+	superSession := AdminSession{
+		Username:    "super_officer",
+		FullName:    "مدیر ارشد تست",
+		Role:        "superuser",
+		IsSuperuser: true,
+	}
+
+	if !canAdminAccessReport(superSession, 54321) {
+		t.Errorf("superuser must have full access to any report")
+	}
+
+	edareKolSession := AdminSession{
+		Username:    "edare_officer",
+		FullName:    "کارشناس کل",
+		Role:        "edare_kol",
+		IsSuperuser: false,
+	}
+
+	if canAdminAccessReport(edareKolSession, 54321) {
+		t.Errorf("edare_kol must not access unforwarded report without forwarding record")
+	}
+
+	nmSession := AdminSession{
+		Username:    "region_officer",
+		FullName:    "کارشناس منطقه",
+		Role:        "navahi_manategh",
+		IsSuperuser: false,
+	}
+
+	if canAdminAccessReport(nmSession, 54321) {
+		t.Errorf("navahi_manategh must not access unforwarded report without forwarding record")
+	}
+}
+
+func TestForwardingMatrixRecipientRoles(t *testing.T) {
+	item := RecipientUserItem{
+		ID:        42,
+		Username:  "officer_central",
+		FullName:  "کارشناس اداره کل",
+		RoleTitle: "کارشناس بررسی",
+		Role:      "edare_kol",
+	}
+
+	b, err := json.Marshal(item)
+	if err != nil {
+		t.Fatalf("Failed to marshal RecipientUserItem: %v", err)
+	}
+
+	var parsed RecipientUserItem
+	if err := json.Unmarshal(b, &parsed); err != nil {
+		t.Fatalf("Failed to unmarshal RecipientUserItem: %v", err)
+	}
+
+	if parsed.Role != "edare_kol" || parsed.ID != 42 || parsed.Username != "officer_central" {
+		t.Errorf("Mismatch in serialized RecipientUserItem fields: %+v", parsed)
 	}
 }

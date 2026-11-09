@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "admin_handlers.go": {
-    "mtime": 1793783466.4981165,
-    "seen": 1793784157.290757,
-    "ast_hash": "ca1483e8781103d9764e6ddc4492fa63",
+    "mtime": 1794202382.0095613,
+    "seen": 1794202470.8827631,
+    "ast_hash": "54881c4087960342cca653e10a06d8bd",
     "semantic_hash": ""
   },
   "captcha.go": {
@@ -72,14 +72,14 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1794123755.059318,
-    "seen": 1794131056.9667282,
-    "ast_hash": "0a3dc2fceebc51db02df50a575c20aed",
+    "mtime": 1794202109.7930949,
+    "seen": 1794202470.9019177,
+    "ast_hash": "705531b74056f3b67a6861efe80c8616",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
-    "mtime": 1794131382.5882778,
-    "seen": 1794131510.9998066,
+    "mtime": 1794131659.2724338,
+    "seen": 1794201978.307481,
     "ast_hash": "3296c1bc6ec4fd74a2612018441b0252",
     "semantic_hash": ""
   },
@@ -858,9 +858,9 @@
     "semantic_hash": ""
   },
   "events.go": {
-    "mtime": 1793783466.503117,
-    "seen": 1793784157.2907662,
-    "ast_hash": "26ecbe3c64b1e5935584b062f8109230",
+    "mtime": 1794201709.9756014,
+    "seen": 1794201978.287707,
+    "ast_hash": "8f6b2d897dc0d9d5b03e0d5cdec457dc",
     "semantic_hash": ""
   },
   "metadata.go": {
@@ -1098,9 +1098,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/js/admin.js": {
-    "mtime": 1794123756.225442,
-    "seen": 1794131056.947511,
-    "ast_hash": "bf8b79db16e2796613065f5a77e7a1ba",
+    "mtime": 1794202257.209967,
+    "seen": 1794202470.8832474,
+    "ast_hash": "9d5ceb947554a251d5718e098ad30efa",
     "semantic_hash": ""
   },
   "frontend/admin/js/confirm.js": {
@@ -1116,8 +1116,8 @@
     "semantic_hash": ""
   },
   "frontend/public/js/app.js": {
-    "mtime": 1794131469.2380326,
-    "seen": 1794131510.9692116,
+    "mtime": 1794131659.824431,
+    "seen": 1794201978.2879045,
     "ast_hash": "693a9612a970538d7a61cee4d6202053",
     "semantic_hash": ""
   },
@@ -1410,9 +1410,9 @@
     "semantic_hash": ""
   },
   "tests/forwarding_test.go": {
-    "mtime": 1793783466.830225,
-    "seen": 1793784157.290802,
-    "ast_hash": "ba78a3aaec67f0be4e91e545c66ed3bc",
+    "mtime": 1794202438.9498308,
+    "seen": 1794202470.8854496,
+    "ast_hash": "7e1ea5ca67c5f124cd8d3875792983a9",
     "semantic_hash": ""
   },
   "tests/get_ip_test.go": {
@@ -1470,9 +1470,9 @@
     "semantic_hash": ""
   },
   "tests/phase2_test.go": {
-    "mtime": 1793783466.830225,
-    "seen": 1793784157.29081,
-    "ast_hash": "3732a9ddd2e1af94b89de6502d20db86",
+    "mtime": 1794202300.6492143,
+    "seen": 1794202470.8859923,
+    "ast_hash": "8d8eeb89d0d00daff6187005bca091d6",
     "semantic_hash": ""
   },
   "tests/phase3_test.go": {
@@ -1500,9 +1500,9 @@
     "semantic_hash": ""
   },
   "tests/remediation_verification_test.go": {
-    "mtime": 1793783466.830225,
-    "seen": 1793784157.2908142,
-    "ast_hash": "d4cdb07bdf7a4b6ed86049dd3e67c68c",
+    "mtime": 1794202322.6530018,
+    "seen": 1794202470.8862338,
+    "ast_hash": "ccfe808bdc8494aa58a10683ad8434a5",
     "semantic_hash": ""
   },
   "tests/require_json_test.go": {

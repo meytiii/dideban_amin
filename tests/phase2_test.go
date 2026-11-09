@@ -119,6 +119,10 @@ func TestScopedSSEAccessControl(t *testing.T) {
 		Role:        "superuser",
 		IsSuperuser: true,
 	}
+	chiefAdmin := AdminSession{
+		Username: "admin_chief",
+		Role:     "raees_herasat",
+	}
 	edareKolAdmin := AdminSession{
 		Username: "admin_general",
 		Role:     "edare_kol",
@@ -127,8 +131,11 @@ func TestScopedSSEAccessControl(t *testing.T) {
 	if !canAdminAccessReport(superAdmin, 999999) {
 		t.Fatalf("superuser should have access to reports")
 	}
-	if !canAdminAccessReport(edareKolAdmin, 999999) {
-		t.Fatalf("edare_kol should have access to reports")
+	if !canAdminAccessReport(chiefAdmin, 999999) {
+		t.Fatalf("raees_herasat should have access to reports")
+	}
+	if canAdminAccessReport(edareKolAdmin, 999999) {
+		t.Fatalf("edare_kol should not have access to unforwarded reports")
 	}
 }
 

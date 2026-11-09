@@ -142,10 +142,13 @@ func SuperuserAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func canAdminAccessReport(admin AdminSession, reportID int64) bool {
-	if admin.IsSuperuser || admin.Role == "superuser" || admin.Role == "edare_kol" {
+	if admin.IsSuperuser || admin.Role == "superuser" || admin.Role == "raees_herasat" {
 		return true
 	}
-	if admin.Role == "navahi_manategh" {
+	if admin.Role == "navahi_manategh" || admin.Role == "edare_kol" {
+		if DB == nil {
+			return false
+		}
 		var exists bool
 		err := DB.QueryRow(`
 			SELECT EXISTS(
@@ -215,7 +218,7 @@ func ToggleReadStatusHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if admin.Role == "navahi_manategh" {
+		if admin.Role == "navahi_manategh" || admin.Role == "edare_kol" {
 			_, _ = DB.Exec(`
 				UPDATE admin_notifications
 				SET is_read = true
@@ -324,7 +327,7 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 
 	args = append(args, admin.Username)
 
-	if admin.Role == "navahi_manategh" {
+	if admin.Role == "navahi_manategh" || admin.Role == "edare_kol" {
 		whereClauses = append(whereClauses, "rf.recipient_username = $1")
 	} else {
 		whereClauses = append(whereClauses, "1=1")
@@ -396,7 +399,7 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 
 	var total int64
 	var countQuery string
-	if admin.Role == "navahi_manategh" {
+	if admin.Role == "navahi_manategh" || admin.Role == "edare_kol" {
 		countQuery = `
 			SELECT COUNT(DISTINCT r.id)
 			FROM reports r
@@ -433,6 +436,39 @@ func GetReportsHandler(w http.ResponseWriter, r *http.Request) {
 			       ) AS has_new_message,
 			       FALSE AS has_regional_response,
 			       FALSE AS has_any_regional_response,
+			       r.updated_at,
+			       CASE WHEN arv.id IS NOT NULL THEN 'شما' ELSE '' END,
+			       COALESCE(r.classification, ''),
+			       r.description
+			FROM reports r
+			INNER JOIN report_forwardings rf ON r.id = rf.report_id
+			LEFT JOIN admin_report_views arv ON r.id = arv.report_id AND arv.admin_username = $1
+			WHERE ` + whereSql + `
+			ORDER BY r.created_at DESC, r.id DESC
+			LIMIT $` + strconv.Itoa(limitIdx) + ` OFFSET $` + strconv.Itoa(offsetIdx)
+	} else if admin.Role == "edare_kol" {
+		selectQuery = `
+			SELECT r.id, r.tracking_code, r.category, r.report_type, COALESCE(r.priority, 'normal'),
+			       (arv.id IS NOT NULL) AS is_read,
+			       (r.admin_response IS NOT NULL AND r.admin_response != '') AS has_response, r.created_at,
+			       EXISTS(
+			           SELECT 1 FROM report_messages rm
+			           WHERE rm.report_id = r.id AND rm.sender_type = 'reporter'
+			             AND rm.id > COALESCE(arv.last_viewed_message_id, 0)
+			       ) AS has_new_message,
+			       EXISTS(
+			           SELECT 1 FROM report_forwardings rf2
+			           WHERE rf2.report_id = r.id
+			             AND rf2.response_text IS NOT NULL
+			             AND rf2.response_text != ''
+			             AND (arv.viewed_at IS NULL OR COALESCE(rf2.responded_at, rf2.created_at) > arv.viewed_at)
+			       ) AS has_regional_response,
+			       EXISTS(
+			           SELECT 1 FROM report_forwardings rf2
+			           WHERE rf2.report_id = r.id
+			             AND rf2.response_text IS NOT NULL
+			             AND rf2.response_text != ''
+			       ) AS has_any_regional_response,
 			       r.updated_at,
 			       CASE WHEN arv.id IS NOT NULL THEN 'شما' ELSE '' END,
 			       COALESCE(r.classification, ''),
@@ -595,7 +631,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if admin.Role == "navahi_manategh" {
+	if admin.Role == "navahi_manategh" || admin.Role == "edare_kol" {
 		_, _ = DB.Exec(`
 			UPDATE report_forwardings
 			SET is_viewed = true,
@@ -623,7 +659,7 @@ func GetReportDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		WHERE id = $2
 	`, admin.Username, reportID)
 
-	if admin.Role == "navahi_manategh" {
+	if admin.Role == "navahi_manategh" || admin.Role == "edare_kol" {
 		_, _ = DB.Exec(`
 			UPDATE admin_notifications
 			SET is_read = true
@@ -1515,7 +1551,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if req.Role != "superuser" && req.Role != "navahi_manategh" {
+	if req.Role != "superuser" && req.Role != "raees_herasat" && req.Role != "navahi_manategh" {
 		req.Role = "edare_kol"
 	}
 	isSuper := (req.Role == "superuser")
@@ -1635,7 +1671,7 @@ func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if req.Role != "superuser" && req.Role != "navahi_manategh" {
+	if req.Role != "superuser" && req.Role != "raees_herasat" && req.Role != "navahi_manategh" {
 		req.Role = "edare_kol"
 	}
 
@@ -3006,7 +3042,7 @@ func GetAnalyticsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	var resp AnalyticsResponse
 
-	if admin.Role == "navahi_manategh" {
+	if admin.Role == "navahi_manategh" || admin.Role == "edare_kol" {
 		catRows, err := DB.Query(`
 			SELECT r.category, COUNT(DISTINCT r.id)
 			FROM reports r
@@ -3097,8 +3133,11 @@ func GetAnalyticsHandler(w http.ResponseWriter, r *http.Request) {
 			SELECT COUNT(DISTINCT r.id)
 			FROM reports r
 			INNER JOIN report_forwardings rf ON r.id = rf.report_id
-			WHERE rf.recipient_username = $1 AND rf.response_text IS NOT NULL AND rf.response_text != ''
-		`, admin.Username).Scan(&resp.TotalResponded)
+			WHERE rf.recipient_username = $1 AND (
+				($2 = 'navahi_manategh' AND rf.response_text IS NOT NULL AND rf.response_text != '') OR
+				($2 != 'navahi_manategh' AND r.admin_response IS NOT NULL AND r.admin_response != '')
+			)
+		`, admin.Username, admin.Role).Scan(&resp.TotalResponded)
 
 		_ = DB.QueryRow(`
 			SELECT COUNT(DISTINCT r.id)
@@ -3260,6 +3299,7 @@ type RecipientUserItem struct {
 	Username  string `json:"username"`
 	FullName  string `json:"full_name"`
 	RoleTitle string `json:"role_title"`
+	Role      string `json:"role"`
 }
 
 func GetForwardingRecipientsHandler(w http.ResponseWriter, r *http.Request) {
@@ -3268,17 +3308,28 @@ func GetForwardingRecipientsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	if admin.Role != "superuser" && admin.Role != "edare_kol" && !admin.IsSuperuser {
+	if admin.Role != "superuser" && admin.Role != "raees_herasat" && admin.Role != "edare_kol" && !admin.IsSuperuser {
 		http.Error(w, "دسترسی غیرمجاز", http.StatusForbidden)
 		return
 	}
 
-	rows, err := DB.Query(`
-		SELECT id, username, COALESCE(full_name, ''), role_title
-		FROM admin_users
-		WHERE role = 'navahi_manategh' AND is_active = true
-		ORDER BY full_name ASC, id ASC
-	`)
+	var rows *sql.Rows
+	var err error
+	if admin.Role == "edare_kol" {
+		rows, err = DB.Query(`
+			SELECT id, username, COALESCE(full_name, ''), role_title, role
+			FROM admin_users
+			WHERE role = 'navahi_manategh' AND is_active = true
+			ORDER BY full_name ASC, id ASC
+		`)
+	} else {
+		rows, err = DB.Query(`
+			SELECT id, username, COALESCE(full_name, ''), role_title, role
+			FROM admin_users
+			WHERE role IN ('edare_kol', 'navahi_manategh') AND is_active = true AND username != $1
+			ORDER BY CASE WHEN role = 'edare_kol' THEN 0 ELSE 1 END, full_name ASC, id ASC
+		`, admin.Username)
+	}
 	if err != nil {
 		http.Error(w, "Database error", http.StatusInternalServerError)
 		return
@@ -3288,7 +3339,7 @@ func GetForwardingRecipientsHandler(w http.ResponseWriter, r *http.Request) {
 	var list []RecipientUserItem
 	for rows.Next() {
 		var u RecipientUserItem
-		if err := rows.Scan(&u.ID, &u.Username, &u.FullName, &u.RoleTitle); err == nil {
+		if err := rows.Scan(&u.ID, &u.Username, &u.FullName, &u.RoleTitle, &u.Role); err == nil {
 			list = append(list, u)
 		}
 	}
@@ -3312,8 +3363,8 @@ func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	if admin.Role != "superuser" && admin.Role != "edare_kol" && !admin.IsSuperuser {
-		http.Error(w, "دسترسی غیرمجاز: تنها اداره کل و مدیر ارشد مجاز به ارجاع خبر هستند.", http.StatusForbidden)
+	if admin.Role != "superuser" && admin.Role != "raees_herasat" && admin.Role != "edare_kol" && !admin.IsSuperuser {
+		http.Error(w, "دسترسی غیرمجاز: تنها رئیس حراست، اداره کل و مدیر ارشد مجاز به ارجاع خبر هستند.", http.StatusForbidden)
 		return
 	}
 
@@ -3325,6 +3376,11 @@ func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
 
 	if req.ReportID <= 0 || (len(req.RecipientIDs) == 0 && len(req.RecipientUsernames) == 0) {
 		http.Error(w, "لطفاً حداقل یک کارشناس حراست جهت ارجاع خبر انتخاب نمایید.", http.StatusBadRequest)
+		return
+	}
+
+	if !canAdminAccessReport(admin, req.ReportID) {
+		http.Error(w, "دسترسی غیرمجاز به این پرونده", http.StatusForbidden)
 		return
 	}
 
@@ -3344,12 +3400,22 @@ func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
 	var validRecips []validRecip
 
 	if len(req.RecipientIDs) > 0 {
-		recipRows, err := DB.Query(`
-			SELECT id, username, full_name
-			FROM admin_users
-			WHERE id = ANY($1) AND role = 'navahi_manategh' AND is_active = true
-		`, pq.Array(req.RecipientIDs))
-		if err != nil {
+		var recipRows *sql.Rows
+		var queryErr error
+		if admin.Role == "edare_kol" {
+			recipRows, queryErr = DB.Query(`
+				SELECT id, username, full_name
+				FROM admin_users
+				WHERE id = ANY($1) AND role = 'navahi_manategh' AND is_active = true AND username != $2
+			`, pq.Array(req.RecipientIDs), admin.Username)
+		} else {
+			recipRows, queryErr = DB.Query(`
+				SELECT id, username, full_name
+				FROM admin_users
+				WHERE id = ANY($1) AND role IN ('edare_kol', 'navahi_manategh') AND is_active = true AND username != $2
+			`, pq.Array(req.RecipientIDs), admin.Username)
+		}
+		if queryErr != nil {
 			http.Error(w, "خطای دیتابیس در استعلام کارشناسان", http.StatusInternalServerError)
 			return
 		}
@@ -3362,12 +3428,22 @@ func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	} else if len(req.RecipientUsernames) > 0 {
-		recipRows, err := DB.Query(`
-			SELECT id, username, full_name
-			FROM admin_users
-			WHERE username = ANY($1) AND role = 'navahi_manategh' AND is_active = true
-		`, pq.Array(req.RecipientUsernames))
-		if err != nil {
+		var recipRows *sql.Rows
+		var queryErr error
+		if admin.Role == "edare_kol" {
+			recipRows, queryErr = DB.Query(`
+				SELECT id, username, full_name
+				FROM admin_users
+				WHERE username = ANY($1) AND role = 'navahi_manategh' AND is_active = true AND username != $2
+			`, pq.Array(req.RecipientUsernames), admin.Username)
+		} else {
+			recipRows, queryErr = DB.Query(`
+				SELECT id, username, full_name
+				FROM admin_users
+				WHERE username = ANY($1) AND role IN ('edare_kol', 'navahi_manategh') AND is_active = true AND username != $2
+			`, pq.Array(req.RecipientUsernames), admin.Username)
+		}
+		if queryErr != nil {
 			http.Error(w, "خطای دیتابیس در استعلام کارشناسان", http.StatusInternalServerError)
 			return
 		}
@@ -3382,7 +3458,7 @@ func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(validRecips) == 0 {
-		http.Error(w, "هیچ کارشناس معتبری با نقش نواحی و مناطق جهت ارجاع یافت نشد.", http.StatusBadRequest)
+		http.Error(w, "هیچ کارشناس معتبری جهت ارجاع یافت نشد.", http.StatusBadRequest)
 		return
 	}
 
@@ -3393,6 +3469,13 @@ func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if strings.TrimSpace(admin.Title) != "" {
 		senderDisplayName = fmt.Sprintf("%s (%s)", senderDisplayName, admin.Title)
+	}
+
+	senderRoleName := "اداره کل"
+	if admin.Role == "raees_herasat" {
+		senderRoleName = "ریاست حراست"
+	} else if admin.IsSuperuser || admin.Role == "superuser" {
+		senderRoleName = "مدیریت سامانه"
 	}
 
 	tx, err := DB.BeginTx(r.Context(), nil)
@@ -3415,13 +3498,12 @@ func ForwardReportHandler(w http.ResponseWriter, r *http.Request) {
 
 		rowsAffected, _ := res.RowsAffected()
 		if rowsAffected > 0 {
-
 			_, notifErr := tx.Exec(`
 				INSERT INTO admin_notifications (notif_type, title, message, target_report_id, target_tracking_code, recipient_username)
 				VALUES ($1, $2, $3, $4, $5, $6)
 			`,
 				"report_forwarded",
-				"ارجاع خبر جدید از اداره کل",
+				fmt.Sprintf("ارجاع خبر جدید از %s", senderRoleName),
 				fmt.Sprintf("پرونده محرمانه با شماره پیگیری %s توسط %s به کارتابل شما ارجاع داده شد.", trackingCode, senderDisplayName),
 				req.ReportID,
 				trackingCode,
@@ -3585,7 +3667,7 @@ func GetNotificationsHandler(w http.ResponseWriter, r *http.Request) {
 	var rowsQuery string
 	var args []interface{}
 
-	if admin.Role == "navahi_manategh" {
+	if admin.Role == "navahi_manategh" || admin.Role == "edare_kol" {
 
 		unreadQuery = `
 			SELECT COUNT(*) FROM admin_notifications
@@ -3680,7 +3762,7 @@ func MarkNotificationReadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if admin.Role == "navahi_manategh" {
+	if admin.Role == "navahi_manategh" || admin.Role == "edare_kol" {
 		_, err := DB.Exec(`
 			UPDATE admin_notifications
 			SET is_read = true
@@ -3715,7 +3797,7 @@ func MarkAllNotificationsReadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if admin.Role == "navahi_manategh" {
+	if admin.Role == "navahi_manategh" || admin.Role == "edare_kol" {
 		_, err := DB.Exec(`
 			UPDATE admin_notifications
 			SET is_read = true

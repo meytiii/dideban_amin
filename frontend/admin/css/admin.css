@@ -5024,6 +5024,12 @@ button {
     color: #F59827;
 }
 
+.badge-2-chief {
+    background: rgba(168, 85, 247, 0.14);
+    border-color: rgba(168, 85, 247, 0.35);
+    color: #c084fc;
+}
+
 .badge-action-audit {
     display: inline-block;
     background: rgba(30, 41, 59, 0.9);

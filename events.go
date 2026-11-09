@@ -115,15 +115,15 @@ func (b *SSEBroker) BroadcastToRoles(roles []string, eventName string, data inte
 }
 
 func (b *SSEBroker) BroadcastNewReport(reportID int64) {
-	b.BroadcastToRoles([]string{"superuser", "edare_kol"}, "new_report", map[string]interface{}{"report_id": reportID})
+	b.BroadcastToRoles([]string{"superuser", "raees_herasat"}, "new_report", map[string]interface{}{"report_id": reportID})
 }
 
 func (b *SSEBroker) BroadcastNewMessage(reportID int64) {
-	b.BroadcastToRoles([]string{"superuser", "edare_kol"}, "new_message", map[string]interface{}{"report_id": reportID})
+	b.BroadcastToRoles([]string{"superuser", "raees_herasat", "edare_kol"}, "new_message", map[string]interface{}{"report_id": reportID})
 }
 
 func (b *SSEBroker) BroadcastRegionalResponse(reportID int64) {
-	b.BroadcastToRoles([]string{"superuser", "edare_kol"}, "regional_response", map[string]interface{}{"report_id": reportID})
+	b.BroadcastToRoles([]string{"superuser", "raees_herasat", "edare_kol"}, "regional_response", map[string]interface{}{"report_id": reportID})
 }
 
 func (b *SSEBroker) BroadcastSessionRevoked(username, tokenHash string, reason ...string) {

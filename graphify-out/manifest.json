@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "admin_handlers.go": {
-    "mtime": 1794201974.755733,
-    "seen": 1794201978.2873025,
-    "ast_hash": "dbcdf12f456e688d76a234aa32feb365",
+    "mtime": 1794202382.0095613,
+    "seen": 1794202470.8827631,
+    "ast_hash": "54881c4087960342cca653e10a06d8bd",
     "semantic_hash": ""
   },
   "captcha.go": {
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/index.html": {
-    "mtime": 1794201936.7229605,
-    "seen": 1794201978.3074188,
-    "ast_hash": "7bf02867c246bbcebdb85e070e8ad426",
+    "mtime": 1794202109.7930949,
+    "seen": 1794202470.9019177,
+    "ast_hash": "705531b74056f3b67a6861efe80c8616",
     "semantic_hash": ""
   },
   "frontend/public/index.html": {
@@ -1098,9 +1098,9 @@
     "semantic_hash": ""
   },
   "frontend/admin/js/admin.js": {
-    "mtime": 1794123756.225442,
-    "seen": 1794131056.947511,
-    "ast_hash": "bf8b79db16e2796613065f5a77e7a1ba",
+    "mtime": 1794202480.1623857,
+    "seen": 1794202497.149913,
+    "ast_hash": "d48573db2b9dfdde49b5ac31568f090d",
     "semantic_hash": ""
   },
   "frontend/admin/js/confirm.js": {
@@ -1410,9 +1410,9 @@
     "semantic_hash": ""
   },
   "tests/forwarding_test.go": {
-    "mtime": 1793783466.830225,
-    "seen": 1793784157.290802,
-    "ast_hash": "ba78a3aaec67f0be4e91e545c66ed3bc",
+    "mtime": 1794202438.9498308,
+    "seen": 1794202470.8854496,
+    "ast_hash": "7e1ea5ca67c5f124cd8d3875792983a9",
     "semantic_hash": ""
   },
   "tests/get_ip_test.go": {
@@ -1470,9 +1470,9 @@
     "semantic_hash": ""
   },
   "tests/phase2_test.go": {
-    "mtime": 1793783466.830225,
-    "seen": 1793784157.29081,
-    "ast_hash": "3732a9ddd2e1af94b89de6502d20db86",
+    "mtime": 1794202300.6492143,
+    "seen": 1794202470.8859923,
+    "ast_hash": "8d8eeb89d0d00daff6187005bca091d6",
     "semantic_hash": ""
   },
   "tests/phase3_test.go": {
@@ -1500,9 +1500,9 @@
     "semantic_hash": ""
   },
   "tests/remediation_verification_test.go": {
-    "mtime": 1793783466.830225,
-    "seen": 1793784157.2908142,
-    "ast_hash": "d4cdb07bdf7a4b6ed86049dd3e67c68c",
+    "mtime": 1794202322.6530018,
+    "seen": 1794202470.8862338,
+    "ast_hash": "ccfe808bdc8494aa58a10683ad8434a5",
     "semantic_hash": ""
   },
   "tests/require_json_test.go": {
@@ -2367,12 +2367,6 @@
     "mtime": 1794123758.5778506,
     "seen": 1794131056.9713469,
     "ast_hash": "c3fa35984ae2708df3fb404179b29f2e",
-    "semantic_hash": ""
-  },
-  "graphify-out/converted/report_template_64ced46b.md": {
-    "mtime": 1794035450.0046022,
-    "seen": 1794201978.307659,
-    "ast_hash": "43992e27da11af6eb43bfbc52e628476",
     "semantic_hash": ""
   }
 }

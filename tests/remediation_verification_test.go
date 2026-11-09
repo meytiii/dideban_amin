@@ -77,6 +77,12 @@ func TestRemediationSSEBrokerRoleScoping(t *testing.T) {
 		role:     "superuser",
 		send:     make(chan []byte, 10),
 	}
+	clientChief := &SSEClient{
+		id:       "tok_chief_1",
+		username: "admin_chief",
+		role:     "raees_herasat",
+		send:     make(chan []byte, 10),
+	}
 	clientEdare := &SSEClient{
 		id:       "tok_edare_1",
 		username: "admin_edare",
@@ -91,6 +97,7 @@ func TestRemediationSSEBrokerRoleScoping(t *testing.T) {
 	}
 
 	broker.register <- clientSuper
+	broker.register <- clientChief
 	broker.register <- clientEdare
 	broker.register <- clientRegional
 
@@ -108,12 +115,18 @@ func TestRemediationSSEBrokerRoleScoping(t *testing.T) {
 	}
 
 	select {
-	case msg := <-clientEdare.send:
+	case msg := <-clientChief.send:
 		if !strings.Contains(string(msg), "new_report") || !strings.Contains(string(msg), "98765") {
-			t.Fatalf("Unexpected message on edare_kol client: %s", string(msg))
+			t.Fatalf("Unexpected message on raees_herasat client: %s", string(msg))
 		}
 	case <-time.After(500 * time.Millisecond):
-		t.Fatalf("Edare_kol client failed to receive new_report event")
+		t.Fatalf("Raees_herasat client failed to receive new_report event")
+	}
+
+	select {
+	case msg := <-clientEdare.send:
+		t.Fatalf("SECURITY VIOLATION: Edare_kol officer received unassigned new_report event: %s", string(msg))
+	case <-time.After(100 * time.Millisecond):
 	}
 
 	select {

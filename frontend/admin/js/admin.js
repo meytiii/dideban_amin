@@ -2435,12 +2435,14 @@ document.addEventListener('DOMContentLoaded', () => {
             'all': 'همه کاربران ثبت‌کننده لاگ در سامانه'
         },
         'new_role': {
-            'edare_kol': 'دسترسی کامل به پرونده‌های حراست کل استان',
+            'edare_kol': 'دسترسی به پرونده‌های ارجاع‌شده اداره کل و پاسخ مستقیم به مراجعین',
+            'raees_herasat': 'رئیس اداره حراست با دسترسی کامل به کلیه گزارش‌ها و ارجاع پرونده‌ها',
             'navahi_manategh': 'دسترسی استعلام و ارسال پاسخ حراست منطقه',
             'superuser': 'مدیر ارشد با دسترسی کامل به کلیه بخش‌ها و کاربران'
         },
         'edit_role': {
-            'edare_kol': 'دسترسی کامل به پرونده‌های حراست کل استان',
+            'edare_kol': 'دسترسی به پرونده‌های ارجاع‌شده اداره کل و پاسخ مستقیم به مراجعین',
+            'raees_herasat': 'رئیس اداره حراست با دسترسی کامل به کلیه گزارش‌ها و ارجاع پرونده‌ها',
             'navahi_manategh': 'دسترسی استعلام و ارسال پاسخ حراست منطقه',
             'superuser': 'مدیر ارشد با دسترسی کامل به کلیه بخش‌ها و کاربران'
         }
@@ -5240,7 +5242,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 actionsWrap.appendChild(toggleBtn);
             }
 
-            const canForward = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
+            const canForward = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'raees_herasat' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
             if (canForward) {
                 const forwardBtn = document.createElement('button');
                 forwardBtn.type = 'button';
@@ -6163,7 +6165,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const btnForwardDetail = document.getElementById('btnForwardReportDetail');
-            const canForward = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
+            const canForward = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'raees_herasat' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
             if (btnForwardDetail) {
                 if (canForward) {
                     btnForwardDetail.classList.remove('d-none');
@@ -8303,6 +8305,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (adminUserActiveFilterPreset === 'edare_kol') {
             filtered = filtered.filter(u => (u.role === 'edare_kol') || (!u.role && !u.is_superuser));
+        } else if (adminUserActiveFilterPreset === 'raees_herasat') {
+            filtered = filtered.filter(u => u.role === 'raees_herasat');
         } else if (adminUserActiveFilterPreset === 'navahi_manategh') {
             filtered = filtered.filter(u => u.role === 'navahi_manategh');
         } else if (adminUserActiveFilterPreset === 'superuser') {
@@ -8711,6 +8715,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const userRole = u.role || (u.is_superuser ? 'superuser' : 'edare_kol');
             if (userRole === 'superuser') {
                 roleBadge = '<span class="badge-2 badge-2-superuser"><span class="badge-2-dot" aria-hidden="true"></span><span>مدیر ارشد سامانه</span></span>';
+            } else if (userRole === 'raees_herasat') {
+                roleBadge = '<span class="badge-2 badge-2-chief"><span class="badge-2-dot" aria-hidden="true"></span><span>رئیس حراست</span></span>';
             } else if (userRole === 'navahi_manategh') {
                 roleBadge = '<span class="badge-2 badge-2-primary"><span class="badge-2-dot" aria-hidden="true"></span><span>نواحی و مناطق</span></span>';
             } else {
@@ -10586,9 +10592,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             id: `user-match-${u.id || i}`,
                             title: `${u.full_name || u.username} (${u.username})`,
                             desc: `سمت: ${u.role_title || '-'} · شناسه: #${toPersianDigits(u.id)}`,
-                            tag: u.is_superuser ? 'مدیر ارشد' : (u.role === 'navahi_manategh' ? 'نواحی' : 'اداره کل'),
+                            tag: u.is_superuser ? 'مدیر ارشد' : (u.role === 'raees_herasat' ? 'رئیس حراست' : (u.role === 'navahi_manategh' ? 'نواحی' : 'اداره کل')),
                             short: 'انتخاب',
-                            iconBoxClass: u.is_superuser ? 'action-icon-rose' : 'action-icon-blue',
+                            iconBoxClass: u.is_superuser ? 'action-icon-rose' : (u.role === 'raees_herasat' ? 'action-icon-purple' : 'action-icon-blue'),
                             iconSvg: '<svg viewBox="0 0 32 32" width="16" height="16" fill="none" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="rgba(56, 189, 248, 0.14)" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></circle><circle cx="16" cy="14.695" r="4.565" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.8"></circle><path d="M16 31a14.928 14.928 0 0 0 9.4-3.323 9.773 9.773 0 0 0-18.808 0A14.928 14.928 0 0 0 16 31Z" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.8"></path></svg>',
                             run: () => {
                                 input.value = u.username;
@@ -11482,7 +11488,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!cachedForwardingRecipients || cachedForwardingRecipients.length === 0) {
             forwardRecipientsContainer.innerHTML = `
                 <div style="text-align:center; padding:25px; color:var(--text-muted); font-size:13px;">
-                    هیچ کاربری با نقش «نواحی و مناطق» در سامانه تعریف نشده است.
+                    هیچ کارشناس واجد شرایطی جهت ارجاع خبر در سامانه تعریف نشده است.
                 </div>
             `;
             return;
@@ -11522,6 +11528,12 @@ document.addEventListener('DOMContentLoaded', () => {
             item.style.cursor = 'pointer';
             item.style.transition = 'all 0.15s ease';
 
+            const isEdareKol = u.role === 'edare_kol';
+            const badgeLabel = isEdareKol ? 'اداره کل' : 'نواحی و مناطق';
+            const badgeStyle = isEdareKol
+                ? 'font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3);'
+                : 'font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);';
+
             item.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <input type="checkbox" class="recipient-checkbox" value="${escapeHTML(u.username)}" ${isChecked ? 'checked' : ''} style="width: 17px; height: 17px; accent-color: var(--color-primary, #0ea5e9); cursor: pointer;">
@@ -11530,12 +11542,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${escapeHTML(u.full_name || 'کارشناس حراست')}
                         </div>
                         <div class="recipient-roletitle" style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
-                            ${escapeHTML(u.role_title || 'ناحیه / منطقه')}
+                            ${escapeHTML(u.role_title || (isEdareKol ? 'اداره کل' : 'ناحیه / منطقه'))}
                         </div>
                     </div>
                 </div>
-                <span class="badge-regional-pill" style="font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
-                    نواحی و مناطق
+                <span class="badge-regional-pill" style="${badgeStyle}">
+                    ${badgeLabel}
                 </span>
             `;
 
@@ -11908,7 +11920,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
 
-                const isMainAdmin = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
+                const isMainAdmin = currentAdmin && (currentAdmin.role === 'edare_kol' || currentAdmin.role === 'raees_herasat' || currentAdmin.role === 'superuser' || currentAdmin.is_superuser);
                 const revokeBtnHtml = isMainAdmin ? `
                     <!-- [HARDEN-11] Accessible revoke forward button with aria-hidden icon -->
                     <button type="button" class="btn-revoke-forward" data-fwd-id="${r.id}" data-rep-id="${r.report_id}" data-recip-name="${escapeHTML(r.recipient_name || r.recipient_username)}" data-recip-user="${escapeHTML(r.recipient_username)}" title="حذف ارجاع و قطع دسترسی این کارشناس" aria-label="حذف ارجاع">
