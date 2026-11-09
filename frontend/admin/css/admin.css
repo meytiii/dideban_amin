@@ -1836,6 +1836,12 @@ button {
     box-sizing: border-box !important;
 }
 
+.btn-action.btn-icon-action svg {
+    width: 26px !important;
+    height: 26px !important;
+    flex-shrink: 0;
+}
+
 .btn-action.btn-icon-action.d-none,
 #btnDeleteReportSuperuser.d-none,
 #btnForwardReportDetail.d-none {

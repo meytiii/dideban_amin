@@ -13304,7 +13304,7 @@
       "file_type": "code",
       "norm_label": "bulkuseractionhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L2037"
+      "source_location": "L2070"
     },
     {
       "id": "admin_handlers_canadminaccessreport",
@@ -13326,7 +13326,7 @@
       "file_type": "code",
       "norm_label": "classifyreporthandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1014"
+      "source_location": "L1047"
     },
     {
       "id": "admin_handlers_createuserhandler",
@@ -13337,7 +13337,7 @@
       "file_type": "code",
       "norm_label": "createuserhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1482"
+      "source_location": "L1515"
     },
     {
       "id": "admin_handlers_deletereporthandler",
@@ -13348,7 +13348,7 @@
       "file_type": "code",
       "norm_label": "deletereporthandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L2623"
+      "source_location": "L2656"
     },
     {
       "id": "admin_handlers_deleteuserhandler",
@@ -13359,7 +13359,7 @@
       "file_type": "code",
       "norm_label": "deleteuserhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1691"
+      "source_location": "L1724"
     },
     {
       "id": "admin_handlers_disableuser2fahandler",
@@ -13370,7 +13370,7 @@
       "file_type": "code",
       "norm_label": "disableuser2fahandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1859"
+      "source_location": "L1892"
     },
     {
       "id": "admin_handlers_downloadattachmenthandler",
@@ -13381,7 +13381,7 @@
       "file_type": "code",
       "norm_label": "downloadattachmenthandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1116"
+      "source_location": "L1149"
     },
     {
       "id": "admin_handlers_expireuserpasswordhandler",
@@ -13392,7 +13392,7 @@
       "file_type": "code",
       "norm_label": "expireuserpasswordhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1968"
+      "source_location": "L2001"
     },
     {
       "id": "admin_handlers_exportreportdocxhandler",
@@ -13403,7 +13403,7 @@
       "file_type": "code",
       "norm_label": "exportreportdocxhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3862"
+      "source_location": "L3895"
     },
     {
       "id": "admin_handlers_extenduserpasswordhandler",
@@ -13414,7 +13414,7 @@
       "file_type": "code",
       "norm_label": "extenduserpasswordhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1906"
+      "source_location": "L1939"
     },
     {
       "id": "admin_handlers_formatjalalitime",
@@ -13425,7 +13425,7 @@
       "file_type": "code",
       "norm_label": "formatjalalitime()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3856"
+      "source_location": "L3889"
     },
     {
       "id": "admin_handlers_forwardreporthandler",
@@ -13436,7 +13436,7 @@
       "file_type": "code",
       "norm_label": "forwardreporthandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3309"
+      "source_location": "L3342"
     },
     {
       "id": "admin_handlers_getactivesessionshandler",
@@ -13447,7 +13447,7 @@
       "file_type": "code",
       "norm_label": "getactivesessionshandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L2357"
+      "source_location": "L2390"
     },
     {
       "id": "admin_handlers_getanalyticshandler",
@@ -13458,7 +13458,7 @@
       "file_type": "code",
       "norm_label": "getanalyticshandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3001"
+      "source_location": "L3034"
     },
     {
       "id": "admin_handlers_getauditlogshandler",
@@ -13469,7 +13469,7 @@
       "file_type": "code",
       "norm_label": "getauditlogshandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L2237"
+      "source_location": "L2270"
     },
     {
       "id": "admin_handlers_getforwardinghistoryhandler",
@@ -13480,7 +13480,7 @@
       "file_type": "code",
       "norm_label": "getforwardinghistoryhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3472"
+      "source_location": "L3505"
     },
     {
       "id": "admin_handlers_getforwardingrecipientshandler",
@@ -13491,7 +13491,7 @@
       "file_type": "code",
       "norm_label": "getforwardingrecipientshandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3265"
+      "source_location": "L3298"
     },
     {
       "id": "admin_handlers_getnotificationshandler",
@@ -13502,7 +13502,7 @@
       "file_type": "code",
       "norm_label": "getnotificationshandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3574"
+      "source_location": "L3607"
     },
     {
       "id": "admin_handlers_getreportdetailshandler",
@@ -13513,7 +13513,7 @@
       "file_type": "code",
       "norm_label": "getreportdetailshandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L579"
+      "source_location": "L612"
     },
     {
       "id": "admin_handlers_getreportshandler",
@@ -13535,7 +13535,7 @@
       "file_type": "code",
       "norm_label": "getrestrictedsubprocessenv()",
       "source_file": "admin_handlers.go",
-      "source_location": "L4072"
+      "source_location": "L4105"
     },
     {
       "id": "admin_handlers_getservertimehandler",
@@ -13546,7 +13546,7 @@
       "file_type": "code",
       "norm_label": "getservertimehandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L2328"
+      "source_location": "L2361"
     },
     {
       "id": "admin_handlers_getsystemstatushandler",
@@ -13557,7 +13557,7 @@
       "file_type": "code",
       "norm_label": "getsystemstatushandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L2285"
+      "source_location": "L2318"
     },
     {
       "id": "admin_handlers_getusershandler",
@@ -13568,7 +13568,7 @@
       "file_type": "code",
       "norm_label": "getusershandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1436"
+      "source_location": "L1469"
     },
     {
       "id": "admin_handlers_gregoriantojalali",
@@ -13579,7 +13579,7 @@
       "file_type": "code",
       "norm_label": "gregoriantojalali()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3751"
+      "source_location": "L3784"
     },
     {
       "id": "admin_handlers_isworkingpythonruntime",
@@ -13590,7 +13590,7 @@
       "file_type": "code",
       "norm_label": "isworkingpythonruntime()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3805"
+      "source_location": "L3838"
     },
     {
       "id": "admin_handlers_liftuserlockouthandler",
@@ -13601,7 +13601,7 @@
       "file_type": "code",
       "norm_label": "liftuserlockouthandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1825"
+      "source_location": "L1858"
     },
     {
       "id": "admin_handlers_markallnotificationsreadhandler",
@@ -13612,7 +13612,7 @@
       "file_type": "code",
       "norm_label": "markallnotificationsreadhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3711"
+      "source_location": "L3744"
     },
     {
       "id": "admin_handlers_marknotificationreadhandler",
@@ -13623,7 +13623,7 @@
       "file_type": "code",
       "norm_label": "marknotificationreadhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3669"
+      "source_location": "L3702"
     },
     {
       "id": "admin_handlers_redactreporthandler",
@@ -13634,7 +13634,7 @@
       "file_type": "code",
       "norm_label": "redactreporthandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L2839"
+      "source_location": "L2872"
     },
     {
       "id": "admin_handlers_removeforwardinghandler",
@@ -13645,7 +13645,7 @@
       "file_type": "code",
       "norm_label": "removeforwardinghandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L4196"
+      "source_location": "L4229"
     },
     {
       "id": "admin_handlers_resolvepythonbinary",
@@ -13656,7 +13656,7 @@
       "file_type": "code",
       "norm_label": "resolvepythonbinary()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3813"
+      "source_location": "L3846"
     },
     {
       "id": "admin_handlers_resolvetrackingcode",
@@ -13678,7 +13678,7 @@
       "file_type": "code",
       "norm_label": "respondtoreporthandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1345"
+      "source_location": "L1378"
     },
     {
       "id": "admin_handlers_setreportpriorityhandler",
@@ -13689,7 +13689,7 @@
       "file_type": "code",
       "norm_label": "setreportpriorityhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L970"
+      "source_location": "L1003"
     },
     {
       "id": "admin_handlers_stripxmlcontrolchars",
@@ -13700,7 +13700,7 @@
       "file_type": "code",
       "norm_label": "stripxmlcontrolchars()",
       "source_file": "admin_handlers.go",
-      "source_location": "L3790"
+      "source_location": "L3823"
     },
     {
       "id": "admin_handlers_submitregionalresponsehandler",
@@ -13711,7 +13711,7 @@
       "file_type": "code",
       "norm_label": "submitregionalresponsehandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L4096"
+      "source_location": "L4129"
     },
     {
       "id": "admin_handlers_terminatesessionhandler",
@@ -13722,7 +13722,7 @@
       "file_type": "code",
       "norm_label": "terminatesessionhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L2370"
+      "source_location": "L2403"
     },
     {
       "id": "admin_handlers_togglereadstatushandler",
@@ -13744,7 +13744,7 @@
       "file_type": "code",
       "norm_label": "toggleuseractivehandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1563"
+      "source_location": "L1596"
     },
     {
       "id": "admin_handlers_updateinternalnoteshandler",
@@ -13755,7 +13755,7 @@
       "file_type": "code",
       "norm_label": "updateinternalnoteshandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L911"
+      "source_location": "L944"
     },
     {
       "id": "admin_handlers_updateuserhandler",
@@ -13766,7 +13766,7 @@
       "file_type": "code",
       "norm_label": "updateuserhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1610"
+      "source_location": "L1643"
     },
     {
       "id": "audit_logaudit",
@@ -13865,7 +13865,7 @@
       "file_type": "code",
       "norm_label": "adminnotificationitem",
       "source_file": "admin_handlers.go",
-      "source_location": "L3558"
+      "source_location": "L3591"
     },
     {
       "id": "setad_khabari_hmd_adminnotificationsresponse",
@@ -13876,7 +13876,7 @@
       "file_type": "code",
       "norm_label": "adminnotificationsresponse",
       "source_file": "admin_handlers.go",
-      "source_location": "L3569"
+      "source_location": "L3602"
     },
     {
       "id": "setad_khabari_hmd_adminuseritem",
@@ -13887,7 +13887,7 @@
       "file_type": "code",
       "norm_label": "adminuseritem",
       "source_file": "admin_handlers.go",
-      "source_location": "L1419"
+      "source_location": "L1452"
     },
     {
       "id": "setad_khabari_hmd_auditlogitem",
@@ -13898,7 +13898,7 @@
       "file_type": "code",
       "norm_label": "auditlogitem",
       "source_file": "admin_handlers.go",
-      "source_location": "L2224"
+      "source_location": "L2257"
     },
     {
       "id": "setad_khabari_hmd_forwardhistoryitem",
@@ -13909,7 +13909,7 @@
       "file_type": "code",
       "norm_label": "forwardhistoryitem",
       "source_file": "admin_handlers.go",
-      "source_location": "L3454"
+      "source_location": "L3487"
     },
     {
       "id": "setad_khabari_hmd_forwardreportrequest",
@@ -13920,7 +13920,7 @@
       "file_type": "code",
       "norm_label": "forwardreportrequest",
       "source_file": "admin_handlers.go",
-      "source_location": "L3303"
+      "source_location": "L3336"
     },
     {
       "id": "setad_khabari_hmd_paginatedreportsresponse",
@@ -13942,7 +13942,7 @@
       "file_type": "code",
       "norm_label": "recipientuseritem",
       "source_file": "admin_handlers.go",
-      "source_location": "L3258"
+      "source_location": "L3291"
     },
     {
       "id": "setad_khabari_hmd_removeforwardingrequest",
@@ -13953,7 +13953,7 @@
       "file_type": "code",
       "norm_label": "removeforwardingrequest",
       "source_file": "admin_handlers.go",
-      "source_location": "L4190"
+      "source_location": "L4223"
     },
     {
       "id": "setad_khabari_hmd_reportsummary",
@@ -13975,7 +13975,7 @@
       "file_type": "code",
       "norm_label": "submitregionalresponserequest",
       "source_file": "admin_handlers.go",
-      "source_location": "L4091"
+      "source_location": "L4124"
     },
     {
       "id": "agents_skills_owasp_security_reference_config_and_supply_chain_a02_application_web_server_config",
@@ -21859,7 +21859,7 @@
       "file_type": "code",
       "norm_label": "executedeletereportids()",
       "source_file": "admin_handlers.go",
-      "source_location": "L2759"
+      "source_location": "L2792"
     },
     {
       "id": "audit",
@@ -26434,52 +26434,52 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_security_audit_references_container_security_defense_checklist",
-      "label": "Defense Checklist",
+      "id": "agents_skills_security_audit_references_container_security_dangerous_flags_audit_for_these",
+      "label": "Dangerous Flags (Audit for These)",
       "_origin": "ast",
       "community": 224,
-      "community_name": "Image Supply Chain",
+      "community_name": "Runtime Security",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "defense checklist",
+      "norm_label": "dangerous flags (audit for these)",
       "source_file": ".agents/skills/security-audit/references/container-security.md",
-      "source_location": "L135"
+      "source_location": "L181"
     },
     {
-      "id": "agents_skills_security_audit_references_container_security_image_supply_chain",
-      "label": "Image Supply Chain",
+      "id": "agents_skills_security_audit_references_container_security_docker_run_hardening",
+      "label": "Docker Run Hardening",
       "_origin": "ast",
       "community": 224,
-      "community_name": "Image Supply Chain",
+      "community_name": "Runtime Security",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "image supply chain",
+      "norm_label": "docker run hardening",
       "source_file": ".agents/skills/security-audit/references/container-security.md",
-      "source_location": "L125"
+      "source_location": "L163"
     },
     {
-      "id": "agents_skills_security_audit_references_container_security_pinning_examples",
-      "label": "Pinning Examples",
+      "id": "agents_skills_security_audit_references_container_security_docker_socket_exposure",
+      "label": "Docker Socket Exposure",
       "_origin": "ast",
       "community": 224,
-      "community_name": "Image Supply Chain",
+      "community_name": "Runtime Security",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "pinning examples",
+      "norm_label": "docker socket exposure",
       "source_file": ".agents/skills/security-audit/references/container-security.md",
-      "source_location": "L145"
+      "source_location": "L195"
     },
     {
-      "id": "agents_skills_security_audit_references_container_security_threat_malicious_or_vulnerable_base_images",
-      "label": "Threat: Malicious or Vulnerable Base Images",
+      "id": "agents_skills_security_audit_references_container_security_runtime_security",
+      "label": "Runtime Security",
       "_origin": "ast",
       "community": 224,
-      "community_name": "Image Supply Chain",
+      "community_name": "Runtime Security",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "threat: malicious or vulnerable base images",
+      "norm_label": "runtime security",
       "source_file": ".agents/skills/security-audit/references/container-security.md",
-      "source_location": "L127"
+      "source_location": "L161"
     },
     {
       "id": "agents_skills_security_audit_references_container_security_kubernetes_specific",
@@ -26538,7 +26538,7 @@
       "file_type": "code",
       "norm_label": "regionalresponseitem",
       "source_file": "admin_handlers.go",
-      "source_location": "L532"
+      "source_location": "L565"
     },
     {
       "id": "setad_khabari_hmd_reportattachmentitem",
@@ -26549,7 +26549,7 @@
       "file_type": "code",
       "norm_label": "reportattachmentitem",
       "source_file": "admin_handlers.go",
-      "source_location": "L572"
+      "source_location": "L605"
     },
     {
       "id": "setad_khabari_hmd_reportdetail",
@@ -26560,7 +26560,7 @@
       "file_type": "code",
       "norm_label": "reportdetail",
       "source_file": "admin_handlers.go",
-      "source_location": "L541"
+      "source_location": "L574"
     },
     {
       "id": "tests_repdetailtest",
@@ -26943,6 +26943,18 @@
       "node_kind": "heading",
       "norm_label": "n13 \u00b7 inline \u2318k search pill",
       "source_file": ".agents/skills/hallmark/references/components/n13-inline-cmdk-pill.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "graphify_out_converted_report_template_64ced46b",
+      "label": "report_template_64ced46b.md",
+      "_origin": "ast",
+      "community": 235,
+      "community_name": "report_template_64ced46b.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "report_template_64ced46b.md",
+      "source_file": "graphify-out/converted/report_template_64ced46b.md",
       "source_location": "L1"
     },
     {
@@ -34406,7 +34418,7 @@
       "file_type": "code",
       "norm_label": "analyticsresponse",
       "source_file": "admin_handlers.go",
-      "source_location": "L2954"
+      "source_location": "L2987"
     },
     {
       "id": "setad_khabari_hmd_categorycount",
@@ -34417,7 +34429,7 @@
       "file_type": "code",
       "norm_label": "categorycount",
       "source_file": "admin_handlers.go",
-      "source_location": "L2981"
+      "source_location": "L3014"
     },
     {
       "id": "setad_khabari_hmd_classificationanalytics",
@@ -34428,7 +34440,7 @@
       "file_type": "code",
       "norm_label": "classificationanalytics",
       "source_file": "admin_handlers.go",
-      "source_location": "L2972"
+      "source_location": "L3005"
     },
     {
       "id": "setad_khabari_hmd_classificationcount",
@@ -34439,7 +34451,7 @@
       "file_type": "code",
       "norm_label": "classificationcount",
       "source_file": "admin_handlers.go",
-      "source_location": "L2966"
+      "source_location": "L2999"
     },
     {
       "id": "setad_khabari_hmd_monthcount",
@@ -34450,7 +34462,7 @@
       "file_type": "code",
       "norm_label": "monthcount",
       "source_file": "admin_handlers.go",
-      "source_location": "L2986"
+      "source_location": "L3019"
     },
     {
       "id": "setad_khabari_hmd_prioritycount",
@@ -34461,7 +34473,7 @@
       "file_type": "code",
       "norm_label": "prioritycount",
       "source_file": "admin_handlers.go",
-      "source_location": "L2991"
+      "source_location": "L3024"
     },
     {
       "id": "setad_khabari_hmd_typecount",
@@ -34472,7 +34484,7 @@
       "file_type": "code",
       "norm_label": "typecount",
       "source_file": "admin_handlers.go",
-      "source_location": "L2996"
+      "source_location": "L3029"
     },
     {
       "id": "backup",
@@ -36224,16 +36236,16 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_security_audit_references_container_security_dangerous_flags_audit_for_these",
-      "label": "Dangerous Flags (Audit for These)",
+      "id": "agents_skills_security_audit_references_container_security_defense_checklist",
+      "label": "Defense Checklist",
       "_origin": "ast",
       "community": 69,
       "community_name": "Container Security Guide",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "dangerous flags (audit for these)",
+      "norm_label": "defense checklist",
       "source_file": ".agents/skills/security-audit/references/container-security.md",
-      "source_location": "L181"
+      "source_location": "L135"
     },
     {
       "id": "agents_skills_security_audit_references_container_security_docker_compose_network_isolation",
@@ -36248,30 +36260,6 @@
       "source_location": "L265"
     },
     {
-      "id": "agents_skills_security_audit_references_container_security_docker_run_hardening",
-      "label": "Docker Run Hardening",
-      "_origin": "ast",
-      "community": 69,
-      "community_name": "Container Security Guide",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "docker run hardening",
-      "source_file": ".agents/skills/security-audit/references/container-security.md",
-      "source_location": "L163"
-    },
-    {
-      "id": "agents_skills_security_audit_references_container_security_docker_socket_exposure",
-      "label": "Docker Socket Exposure",
-      "_origin": "ast",
-      "community": 69,
-      "community_name": "Container Security Guide",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "docker socket exposure",
-      "source_file": ".agents/skills/security-audit/references/container-security.md",
-      "source_location": "L195"
-    },
-    {
       "id": "agents_skills_security_audit_references_container_security_image_build_pipeline",
       "label": "Image Build Pipeline",
       "_origin": "ast",
@@ -36282,6 +36270,18 @@
       "norm_label": "image build pipeline",
       "source_file": ".agents/skills/security-audit/references/container-security.md",
       "source_location": "L354"
+    },
+    {
+      "id": "agents_skills_security_audit_references_container_security_image_supply_chain",
+      "label": "Image Supply Chain",
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "Container Security Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "image supply chain",
+      "source_file": ".agents/skills/security-audit/references/container-security.md",
+      "source_location": "L125"
     },
     {
       "id": "agents_skills_security_audit_references_container_security_kubernetes_network_policies",
@@ -36344,6 +36344,18 @@
       "source_location": "L234"
     },
     {
+      "id": "agents_skills_security_audit_references_container_security_pinning_examples",
+      "label": "Pinning Examples",
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "Container Security Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "pinning examples",
+      "source_file": ".agents/skills/security-audit/references/container-security.md",
+      "source_location": "L145"
+    },
+    {
       "id": "agents_skills_security_audit_references_container_security_pipeline_checklist",
       "label": "Pipeline Checklist",
       "_origin": "ast",
@@ -36380,18 +36392,6 @@
       "source_location": "L394"
     },
     {
-      "id": "agents_skills_security_audit_references_container_security_runtime_security",
-      "label": "Runtime Security",
-      "_origin": "ast",
-      "community": 69,
-      "community_name": "Container Security Guide",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "runtime security",
-      "source_file": ".agents/skills/security-audit/references/container-security.md",
-      "source_location": "L161"
-    },
-    {
       "id": "agents_skills_security_audit_references_container_security_secrets_management",
       "label": "Secrets Management",
       "_origin": "ast",
@@ -36414,6 +36414,18 @@
       "norm_label": "table of contents",
       "source_file": ".agents/skills/security-audit/references/container-security.md",
       "source_location": "L7"
+    },
+    {
+      "id": "agents_skills_security_audit_references_container_security_threat_malicious_or_vulnerable_base_images",
+      "label": "Threat: Malicious or Vulnerable Base Images",
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "Container Security Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "threat: malicious or vulnerable base images",
+      "source_file": ".agents/skills/security-audit/references/container-security.md",
+      "source_location": "L127"
     },
     {
       "id": "agents_skills_hallmark_references_themes_hum",
@@ -37276,7 +37288,7 @@
       "file_type": "code",
       "norm_label": "changemypasswordhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L2466"
+      "source_location": "L2499"
     },
     {
       "id": "admin_handlers_resetuserpasswordhandler",
@@ -37287,7 +37299,7 @@
       "file_type": "code",
       "norm_label": "resetuserpasswordhandler()",
       "source_file": "admin_handlers.go",
-      "source_location": "L1753"
+      "source_location": "L1786"
     },
     {
       "id": "audit_logaudittx",
@@ -41985,7 +41997,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1035",
+      "source_location": "L1068",
       "weight": 1.0
     },
     {
@@ -41997,7 +42009,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2695",
+      "source_location": "L2728",
       "weight": 1.0
     },
     {
@@ -42009,7 +42021,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1133",
+      "source_location": "L1166",
       "weight": 1.0
     },
     {
@@ -42021,7 +42033,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3881",
+      "source_location": "L3914",
       "weight": 1.0
     },
     {
@@ -42033,7 +42045,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3911",
+      "source_location": "L3944",
       "weight": 1.0
     },
     {
@@ -42045,7 +42057,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3953",
+      "source_location": "L3986",
       "weight": 1.0
     },
     {
@@ -42057,7 +42069,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3991",
+      "source_location": "L4024",
       "weight": 1.0
     },
     {
@@ -42069,7 +42081,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4035",
+      "source_location": "L4068",
       "weight": 1.0
     },
     {
@@ -42081,7 +42093,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4047",
+      "source_location": "L4080",
       "weight": 1.0
     },
     {
@@ -42093,7 +42105,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3858",
+      "source_location": "L3891",
       "weight": 1.0
     },
     {
@@ -42105,7 +42117,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3337",
+      "source_location": "L3370",
       "weight": 1.0
     },
     {
@@ -42117,7 +42129,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2265",
+      "source_location": "L2298",
       "weight": 1.0
     },
     {
@@ -42129,7 +42141,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3486",
+      "source_location": "L3519",
       "weight": 1.0
     },
     {
@@ -42141,7 +42153,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3653",
+      "source_location": "L3686",
       "weight": 1.0
     },
     {
@@ -42153,7 +42165,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L593",
+      "source_location": "L626",
       "weight": 1.0
     },
     {
@@ -42165,7 +42177,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L680",
+      "source_location": "L713",
       "weight": 1.0
     },
     {
@@ -42177,7 +42189,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L495",
+      "source_location": "L528",
       "weight": 1.0
     },
     {
@@ -42189,7 +42201,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3809",
+      "source_location": "L3842",
       "weight": 1.0
     },
     {
@@ -42201,7 +42213,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4243",
+      "source_location": "L4276",
       "weight": 1.0
     },
     {
@@ -42213,7 +42225,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3823",
+      "source_location": "L3856",
       "weight": 1.0
     },
     {
@@ -42225,7 +42237,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1377",
+      "source_location": "L1410",
       "weight": 1.0
     },
     {
@@ -42237,7 +42249,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L991",
+      "source_location": "L1024",
       "weight": 1.0
     },
     {
@@ -42249,7 +42261,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4136",
+      "source_location": "L4169",
       "weight": 1.0
     },
     {
@@ -42285,7 +42297,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L943",
+      "source_location": "L976",
       "weight": 1.0
     },
     {
@@ -50673,7 +50685,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "admin_handlers.go",
-      "source_location": "L3570",
+      "source_location": "L3603",
       "weight": 1.0
     },
     {
@@ -50697,7 +50709,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "admin_handlers.go",
-      "source_location": "L2955",
+      "source_location": "L2988",
       "weight": 1.0
     },
     {
@@ -50709,7 +50721,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "admin_handlers.go",
-      "source_location": "L2956",
+      "source_location": "L2989",
       "weight": 1.0
     },
     {
@@ -50721,7 +50733,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "admin_handlers.go",
-      "source_location": "L2957",
+      "source_location": "L2990",
       "weight": 1.0
     },
     {
@@ -50733,7 +50745,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "admin_handlers.go",
-      "source_location": "L2958",
+      "source_location": "L2991",
       "weight": 1.0
     },
     {
@@ -50745,7 +50757,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "admin_handlers.go",
-      "source_location": "L2963",
+      "source_location": "L2996",
       "weight": 1.0
     },
     {
@@ -50817,7 +50829,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "admin_handlers.go",
-      "source_location": "L2978",
+      "source_location": "L3011",
       "weight": 1.0
     },
     {
@@ -50889,7 +50901,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "admin_handlers.go",
-      "source_location": "L562",
+      "source_location": "L595",
       "weight": 1.0
     },
     {
@@ -50901,7 +50913,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "admin_handlers.go",
-      "source_location": "L566",
+      "source_location": "L599",
       "weight": 1.0
     },
     {
@@ -50913,7 +50925,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "admin_handlers.go",
-      "source_location": "L568",
+      "source_location": "L601",
       "weight": 1.0
     },
     {
@@ -51297,7 +51309,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2037",
+      "source_location": "L2070",
       "weight": 1.0
     },
     {
@@ -51309,7 +51321,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2037",
+      "source_location": "L2070",
       "weight": 1.0
     },
     {
@@ -51333,7 +51345,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2466",
+      "source_location": "L2499",
       "weight": 1.0
     },
     {
@@ -51345,7 +51357,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2466",
+      "source_location": "L2499",
       "weight": 1.0
     },
     {
@@ -51357,7 +51369,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1014",
+      "source_location": "L1047",
       "weight": 1.0
     },
     {
@@ -51369,7 +51381,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1014",
+      "source_location": "L1047",
       "weight": 1.0
     },
     {
@@ -51381,7 +51393,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1482",
+      "source_location": "L1515",
       "weight": 1.0
     },
     {
@@ -51393,7 +51405,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1482",
+      "source_location": "L1515",
       "weight": 1.0
     },
     {
@@ -51405,7 +51417,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2623",
+      "source_location": "L2656",
       "weight": 1.0
     },
     {
@@ -51417,7 +51429,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2623",
+      "source_location": "L2656",
       "weight": 1.0
     },
     {
@@ -51429,7 +51441,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1691",
+      "source_location": "L1724",
       "weight": 1.0
     },
     {
@@ -51441,7 +51453,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1691",
+      "source_location": "L1724",
       "weight": 1.0
     },
     {
@@ -51453,7 +51465,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1859",
+      "source_location": "L1892",
       "weight": 1.0
     },
     {
@@ -51465,7 +51477,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1859",
+      "source_location": "L1892",
       "weight": 1.0
     },
     {
@@ -51477,7 +51489,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1116",
+      "source_location": "L1149",
       "weight": 1.0
     },
     {
@@ -51489,7 +51501,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1116",
+      "source_location": "L1149",
       "weight": 1.0
     },
     {
@@ -51501,7 +51513,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2759",
+      "source_location": "L2792",
       "weight": 1.0
     },
     {
@@ -51513,7 +51525,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2759",
+      "source_location": "L2792",
       "weight": 1.0
     },
     {
@@ -51525,7 +51537,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2759",
+      "source_location": "L2792",
       "weight": 1.0
     },
     {
@@ -51537,7 +51549,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2759",
+      "source_location": "L2792",
       "weight": 1.0
     },
     {
@@ -51549,7 +51561,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1968",
+      "source_location": "L2001",
       "weight": 1.0
     },
     {
@@ -51561,7 +51573,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1968",
+      "source_location": "L2001",
       "weight": 1.0
     },
     {
@@ -51573,7 +51585,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3862",
+      "source_location": "L3895",
       "weight": 1.0
     },
     {
@@ -51585,7 +51597,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3862",
+      "source_location": "L3895",
       "weight": 1.0
     },
     {
@@ -51597,7 +51609,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1906",
+      "source_location": "L1939",
       "weight": 1.0
     },
     {
@@ -51609,7 +51621,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1906",
+      "source_location": "L1939",
       "weight": 1.0
     },
     {
@@ -51621,7 +51633,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3856",
+      "source_location": "L3889",
       "weight": 1.0
     },
     {
@@ -51633,7 +51645,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3309",
+      "source_location": "L3342",
       "weight": 1.0
     },
     {
@@ -51645,7 +51657,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3309",
+      "source_location": "L3342",
       "weight": 1.0
     },
     {
@@ -51657,7 +51669,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2357",
+      "source_location": "L2390",
       "weight": 1.0
     },
     {
@@ -51669,7 +51681,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2357",
+      "source_location": "L2390",
       "weight": 1.0
     },
     {
@@ -51681,7 +51693,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3001",
+      "source_location": "L3034",
       "weight": 1.0
     },
     {
@@ -51693,7 +51705,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3001",
+      "source_location": "L3034",
       "weight": 1.0
     },
     {
@@ -51705,7 +51717,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2237",
+      "source_location": "L2270",
       "weight": 1.0
     },
     {
@@ -51717,7 +51729,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2237",
+      "source_location": "L2270",
       "weight": 1.0
     },
     {
@@ -51729,7 +51741,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3472",
+      "source_location": "L3505",
       "weight": 1.0
     },
     {
@@ -51741,7 +51753,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3472",
+      "source_location": "L3505",
       "weight": 1.0
     },
     {
@@ -51753,7 +51765,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3265",
+      "source_location": "L3298",
       "weight": 1.0
     },
     {
@@ -51765,7 +51777,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3265",
+      "source_location": "L3298",
       "weight": 1.0
     },
     {
@@ -51777,7 +51789,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3574",
+      "source_location": "L3607",
       "weight": 1.0
     },
     {
@@ -51789,7 +51801,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3574",
+      "source_location": "L3607",
       "weight": 1.0
     },
     {
@@ -51801,7 +51813,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L579",
+      "source_location": "L612",
       "weight": 1.0
     },
     {
@@ -51813,7 +51825,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L579",
+      "source_location": "L612",
       "weight": 1.0
     },
     {
@@ -51849,7 +51861,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2328",
+      "source_location": "L2361",
       "weight": 1.0
     },
     {
@@ -51861,7 +51873,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2328",
+      "source_location": "L2361",
       "weight": 1.0
     },
     {
@@ -51873,7 +51885,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2285",
+      "source_location": "L2318",
       "weight": 1.0
     },
     {
@@ -51885,7 +51897,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2285",
+      "source_location": "L2318",
       "weight": 1.0
     },
     {
@@ -51897,7 +51909,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1436",
+      "source_location": "L1469",
       "weight": 1.0
     },
     {
@@ -51909,7 +51921,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1436",
+      "source_location": "L1469",
       "weight": 1.0
     },
     {
@@ -51921,7 +51933,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1825",
+      "source_location": "L1858",
       "weight": 1.0
     },
     {
@@ -51933,7 +51945,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1825",
+      "source_location": "L1858",
       "weight": 1.0
     },
     {
@@ -51945,7 +51957,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3711",
+      "source_location": "L3744",
       "weight": 1.0
     },
     {
@@ -51957,7 +51969,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3711",
+      "source_location": "L3744",
       "weight": 1.0
     },
     {
@@ -51969,7 +51981,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3669",
+      "source_location": "L3702",
       "weight": 1.0
     },
     {
@@ -51981,7 +51993,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L3669",
+      "source_location": "L3702",
       "weight": 1.0
     },
     {
@@ -51993,7 +52005,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2839",
+      "source_location": "L2872",
       "weight": 1.0
     },
     {
@@ -52005,7 +52017,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2839",
+      "source_location": "L2872",
       "weight": 1.0
     },
     {
@@ -52017,7 +52029,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L4196",
+      "source_location": "L4229",
       "weight": 1.0
     },
     {
@@ -52029,7 +52041,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L4196",
+      "source_location": "L4229",
       "weight": 1.0
     },
     {
@@ -52041,7 +52053,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1753",
+      "source_location": "L1786",
       "weight": 1.0
     },
     {
@@ -52053,7 +52065,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1753",
+      "source_location": "L1786",
       "weight": 1.0
     },
     {
@@ -52065,7 +52077,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1345",
+      "source_location": "L1378",
       "weight": 1.0
     },
     {
@@ -52077,7 +52089,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1345",
+      "source_location": "L1378",
       "weight": 1.0
     },
     {
@@ -52089,7 +52101,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L970",
+      "source_location": "L1003",
       "weight": 1.0
     },
     {
@@ -52101,7 +52113,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L970",
+      "source_location": "L1003",
       "weight": 1.0
     },
     {
@@ -52113,7 +52125,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L4096",
+      "source_location": "L4129",
       "weight": 1.0
     },
     {
@@ -52125,7 +52137,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L4096",
+      "source_location": "L4129",
       "weight": 1.0
     },
     {
@@ -52137,7 +52149,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2370",
+      "source_location": "L2403",
       "weight": 1.0
     },
     {
@@ -52149,7 +52161,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L2370",
+      "source_location": "L2403",
       "weight": 1.0
     },
     {
@@ -52185,7 +52197,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1563",
+      "source_location": "L1596",
       "weight": 1.0
     },
     {
@@ -52197,7 +52209,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1563",
+      "source_location": "L1596",
       "weight": 1.0
     },
     {
@@ -52209,7 +52221,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L911",
+      "source_location": "L944",
       "weight": 1.0
     },
     {
@@ -52221,7 +52233,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L911",
+      "source_location": "L944",
       "weight": 1.0
     },
     {
@@ -52233,7 +52245,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1610",
+      "source_location": "L1643",
       "weight": 1.0
     },
     {
@@ -52245,7 +52257,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "admin_handlers.go",
-      "source_location": "L1610",
+      "source_location": "L1643",
       "weight": 1.0
     },
     {
@@ -55460,13 +55472,24 @@
     },
     {
       "source": "admin_handlers",
+      "target": "admin_handlers_setreportpriorityhandler",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "admin_handlers.go",
+      "source_location": "L1003",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_handlers",
       "target": "admin_handlers_classifyreporthandler",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1014",
+      "source_location": "L1047",
       "weight": 1.0
     },
     {
@@ -55477,7 +55500,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1116",
+      "source_location": "L1149",
       "weight": 1.0
     },
     {
@@ -55499,29 +55522,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1345",
-      "weight": 1.0
-    },
-    {
-      "source": "admin_handlers",
-      "target": "setad_khabari_hmd_adminuseritem",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "admin_handlers.go",
-      "source_location": "L1419",
-      "weight": 1.0
-    },
-    {
-      "source": "admin_handlers",
-      "target": "admin_handlers_getusershandler",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "admin_handlers.go",
-      "source_location": "L1436",
+      "source_location": "L1378",
       "weight": 1.0
     },
     {
@@ -55537,13 +55538,35 @@
     },
     {
       "source": "admin_handlers",
+      "target": "setad_khabari_hmd_adminuseritem",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "admin_handlers.go",
+      "source_location": "L1452",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_handlers",
+      "target": "admin_handlers_getusershandler",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "admin_handlers.go",
+      "source_location": "L1469",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_handlers",
       "target": "admin_handlers_createuserhandler",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1482",
+      "source_location": "L1515",
       "weight": 1.0
     },
     {
@@ -55554,7 +55577,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1563",
+      "source_location": "L1596",
       "weight": 1.0
     },
     {
@@ -55576,7 +55599,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1610",
+      "source_location": "L1643",
       "weight": 1.0
     },
     {
@@ -55587,7 +55610,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1691",
+      "source_location": "L1724",
       "weight": 1.0
     },
     {
@@ -55598,7 +55621,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1753",
+      "source_location": "L1786",
       "weight": 1.0
     },
     {
@@ -55609,7 +55632,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1825",
+      "source_location": "L1858",
       "weight": 1.0
     },
     {
@@ -55620,7 +55643,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1859",
+      "source_location": "L1892",
       "weight": 1.0
     },
     {
@@ -55631,7 +55654,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1906",
+      "source_location": "L1939",
       "weight": 1.0
     },
     {
@@ -55642,7 +55665,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L1968",
+      "source_location": "L2001",
       "weight": 1.0
     },
     {
@@ -55653,7 +55676,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2037",
+      "source_location": "L2070",
       "weight": 1.0
     },
     {
@@ -55664,7 +55687,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2224",
+      "source_location": "L2257",
       "weight": 1.0
     },
     {
@@ -55675,7 +55698,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2237",
+      "source_location": "L2270",
       "weight": 1.0
     },
     {
@@ -55686,7 +55709,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2285",
+      "source_location": "L2318",
       "weight": 1.0
     },
     {
@@ -55697,29 +55720,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2328",
-      "weight": 1.0
-    },
-    {
-      "source": "admin_handlers",
-      "target": "admin_handlers_getactivesessionshandler",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "admin_handlers.go",
-      "source_location": "L2357",
-      "weight": 1.0
-    },
-    {
-      "source": "admin_handlers",
-      "target": "admin_handlers_terminatesessionhandler",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "admin_handlers.go",
-      "source_location": "L2370",
+      "source_location": "L2361",
       "weight": 1.0
     },
     {
@@ -55735,13 +55736,35 @@
     },
     {
       "source": "admin_handlers",
+      "target": "admin_handlers_getactivesessionshandler",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "admin_handlers.go",
+      "source_location": "L2390",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_handlers",
+      "target": "admin_handlers_terminatesessionhandler",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "admin_handlers.go",
+      "source_location": "L2403",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_handlers",
       "target": "admin_handlers_changemypasswordhandler",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2466",
+      "source_location": "L2499",
       "weight": 1.0
     },
     {
@@ -55757,17 +55780,6 @@
     },
     {
       "source": "admin_handlers",
-      "target": "admin_handlers_deletereporthandler",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "admin_handlers.go",
-      "source_location": "L2623",
-      "weight": 1.0
-    },
-    {
-      "source": "admin_handlers",
       "target": "admin_handlers_normalizeforsearch",
       "relation": "contains",
       "_origin": "ast",
@@ -55779,13 +55791,24 @@
     },
     {
       "source": "admin_handlers",
+      "target": "admin_handlers_deletereporthandler",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "admin_handlers.go",
+      "source_location": "L2656",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_handlers",
       "target": "admin_handlers_executedeletereportids",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2759",
+      "source_location": "L2792",
       "weight": 1.0
     },
     {
@@ -55807,7 +55830,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2839",
+      "source_location": "L2872",
       "weight": 1.0
     },
     {
@@ -55829,7 +55852,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2954",
+      "source_location": "L2987",
       "weight": 1.0
     },
     {
@@ -55840,7 +55863,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2966",
+      "source_location": "L2999",
       "weight": 1.0
     },
     {
@@ -55851,7 +55874,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2972",
+      "source_location": "L3005",
       "weight": 1.0
     },
     {
@@ -55862,7 +55885,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2981",
+      "source_location": "L3014",
       "weight": 1.0
     },
     {
@@ -55873,7 +55896,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2986",
+      "source_location": "L3019",
       "weight": 1.0
     },
     {
@@ -55884,7 +55907,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2991",
+      "source_location": "L3024",
       "weight": 1.0
     },
     {
@@ -55895,7 +55918,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L2996",
+      "source_location": "L3029",
       "weight": 1.0
     },
     {
@@ -55906,7 +55929,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3001",
+      "source_location": "L3034",
       "weight": 1.0
     },
     {
@@ -55928,7 +55951,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3258",
+      "source_location": "L3291",
       "weight": 1.0
     },
     {
@@ -55939,7 +55962,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3265",
+      "source_location": "L3298",
       "weight": 1.0
     },
     {
@@ -55950,7 +55973,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3303",
+      "source_location": "L3336",
       "weight": 1.0
     },
     {
@@ -55961,7 +55984,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3309",
+      "source_location": "L3342",
       "weight": 1.0
     },
     {
@@ -55972,7 +55995,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3454",
+      "source_location": "L3487",
       "weight": 1.0
     },
     {
@@ -55983,7 +56006,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3472",
+      "source_location": "L3505",
       "weight": 1.0
     },
     {
@@ -55994,7 +56017,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3558",
+      "source_location": "L3591",
       "weight": 1.0
     },
     {
@@ -56005,7 +56028,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3569",
+      "source_location": "L3602",
       "weight": 1.0
     },
     {
@@ -56016,7 +56039,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3574",
+      "source_location": "L3607",
       "weight": 1.0
     },
     {
@@ -56027,7 +56050,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3669",
+      "source_location": "L3702",
       "weight": 1.0
     },
     {
@@ -56038,7 +56061,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3711",
+      "source_location": "L3744",
       "weight": 1.0
     },
     {
@@ -56049,7 +56072,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3751",
+      "source_location": "L3784",
       "weight": 1.0
     },
     {
@@ -56060,7 +56083,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3790",
+      "source_location": "L3823",
       "weight": 1.0
     },
     {
@@ -56071,7 +56094,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3805",
+      "source_location": "L3838",
       "weight": 1.0
     },
     {
@@ -56082,7 +56105,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3813",
+      "source_location": "L3846",
       "weight": 1.0
     },
     {
@@ -56093,7 +56116,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3856",
+      "source_location": "L3889",
       "weight": 1.0
     },
     {
@@ -56104,7 +56127,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L3862",
+      "source_location": "L3895",
       "weight": 1.0
     },
     {
@@ -56115,7 +56138,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L4072",
+      "source_location": "L4105",
       "weight": 1.0
     },
     {
@@ -56126,7 +56149,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L4091",
+      "source_location": "L4124",
       "weight": 1.0
     },
     {
@@ -56137,7 +56160,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L4096",
+      "source_location": "L4129",
       "weight": 1.0
     },
     {
@@ -56148,7 +56171,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L4190",
+      "source_location": "L4223",
       "weight": 1.0
     },
     {
@@ -56159,7 +56182,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L4196",
+      "source_location": "L4229",
       "weight": 1.0
     },
     {
@@ -56170,7 +56193,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L532",
+      "source_location": "L565",
       "weight": 1.0
     },
     {
@@ -56181,7 +56204,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L541",
+      "source_location": "L574",
       "weight": 1.0
     },
     {
@@ -56192,7 +56215,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L572",
+      "source_location": "L605",
       "weight": 1.0
     },
     {
@@ -56203,7 +56226,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L579",
+      "source_location": "L612",
       "weight": 1.0
     },
     {
@@ -56214,18 +56237,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "admin_handlers.go",
-      "source_location": "L911",
-      "weight": 1.0
-    },
-    {
-      "source": "admin_handlers",
-      "target": "admin_handlers_setreportpriorityhandler",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "admin_handlers.go",
-      "source_location": "L970",
+      "source_location": "L944",
       "weight": 1.0
     },
     {
@@ -92614,7 +92626,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2038",
+      "source_location": "L2071",
       "weight": 1.0
     },
     {
@@ -92626,7 +92638,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2040",
+      "source_location": "L2073",
       "weight": 1.0
     },
     {
@@ -92638,7 +92650,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2209",
+      "source_location": "L2242",
       "weight": 1.0
     },
     {
@@ -92650,7 +92662,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2213",
+      "source_location": "L2246",
       "weight": 1.0
     },
     {
@@ -92662,7 +92674,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2467",
+      "source_location": "L2500",
       "weight": 1.0
     },
     {
@@ -92674,7 +92686,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2495",
+      "source_location": "L2528",
       "weight": 1.0
     },
     {
@@ -92686,7 +92698,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2515",
+      "source_location": "L2548",
       "weight": 1.0
     },
     {
@@ -92698,7 +92710,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2539",
+      "source_location": "L2572",
       "weight": 1.0
     },
     {
@@ -92710,7 +92722,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2564",
+      "source_location": "L2597",
       "weight": 1.0
     },
     {
@@ -92722,7 +92734,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2564",
+      "source_location": "L2597",
       "weight": 1.0
     },
     {
@@ -92734,7 +92746,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2576",
+      "source_location": "L2609",
       "weight": 1.0
     },
     {
@@ -92746,7 +92758,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2601",
+      "source_location": "L2634",
       "weight": 1.0
     },
     {
@@ -92758,7 +92770,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1015",
+      "source_location": "L1048",
       "weight": 1.0
     },
     {
@@ -92770,7 +92782,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1096",
+      "source_location": "L1129",
       "weight": 1.0
     },
     {
@@ -92782,7 +92794,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1096",
+      "source_location": "L1129",
       "weight": 1.0
     },
     {
@@ -92794,7 +92806,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1483",
+      "source_location": "L1516",
       "weight": 1.0
     },
     {
@@ -92806,7 +92818,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1503",
+      "source_location": "L1536",
       "weight": 1.0
     },
     {
@@ -92818,7 +92830,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1523",
+      "source_location": "L1556",
       "weight": 1.0
     },
     {
@@ -92830,7 +92842,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1528",
+      "source_location": "L1561",
       "weight": 1.0
     },
     {
@@ -92842,7 +92854,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1551",
+      "source_location": "L1584",
       "weight": 1.0
     },
     {
@@ -92854,7 +92866,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1551",
+      "source_location": "L1584",
       "weight": 1.0
     },
     {
@@ -92866,7 +92878,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2629",
+      "source_location": "L2662",
       "weight": 1.0
     },
     {
@@ -92878,7 +92890,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2631",
+      "source_location": "L2664",
       "weight": 1.0
     },
     {
@@ -92890,7 +92902,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2631",
+      "source_location": "L2664",
       "weight": 1.0
     },
     {
@@ -92902,7 +92914,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2665",
+      "source_location": "L2698",
       "weight": 1.0
     },
     {
@@ -92914,7 +92926,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1692",
+      "source_location": "L1725",
       "weight": 1.0
     },
     {
@@ -92926,7 +92938,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1737",
+      "source_location": "L1770",
       "weight": 1.0
     },
     {
@@ -92938,7 +92950,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1737",
+      "source_location": "L1770",
       "weight": 1.0
     },
     {
@@ -92950,7 +92962,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1860",
+      "source_location": "L1893",
       "weight": 1.0
     },
     {
@@ -92962,7 +92974,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1898",
+      "source_location": "L1931",
       "weight": 1.0
     },
     {
@@ -92974,7 +92986,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1898",
+      "source_location": "L1931",
       "weight": 1.0
     },
     {
@@ -92986,7 +92998,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1120",
+      "source_location": "L1153",
       "weight": 1.0
     },
     {
@@ -92998,7 +93010,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1158",
+      "source_location": "L1191",
       "weight": 1.0
     },
     {
@@ -93010,7 +93022,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1166",
+      "source_location": "L1199",
       "weight": 1.0
     },
     {
@@ -93022,7 +93034,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1167",
+      "source_location": "L1200",
       "weight": 1.0
     },
     {
@@ -93034,7 +93046,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1167",
+      "source_location": "L1200",
       "weight": 1.0
     },
     {
@@ -93046,7 +93058,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1168",
+      "source_location": "L1201",
       "weight": 1.0
     },
     {
@@ -93058,7 +93070,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1178",
+      "source_location": "L1211",
       "weight": 1.0
     },
     {
@@ -93070,7 +93082,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1190",
+      "source_location": "L1223",
       "weight": 1.0
     },
     {
@@ -93082,7 +93094,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2770",
+      "source_location": "L2803",
       "weight": 1.0
     },
     {
@@ -93094,7 +93106,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2772",
+      "source_location": "L2805",
       "weight": 1.0
     },
     {
@@ -93106,7 +93118,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2777",
+      "source_location": "L2810",
       "weight": 1.0
     },
     {
@@ -93118,7 +93130,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2807",
+      "source_location": "L2840",
       "weight": 1.0
     },
     {
@@ -93130,7 +93142,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2807",
+      "source_location": "L2840",
       "weight": 1.0
     },
     {
@@ -93142,7 +93154,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2820",
+      "source_location": "L2853",
       "weight": 1.0
     },
     {
@@ -93154,7 +93166,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1969",
+      "source_location": "L2002",
       "weight": 1.0
     },
     {
@@ -93166,7 +93178,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1971",
+      "source_location": "L2004",
       "weight": 1.0
     },
     {
@@ -93178,7 +93190,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2029",
+      "source_location": "L2062",
       "weight": 1.0
     },
     {
@@ -93190,7 +93202,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2029",
+      "source_location": "L2062",
       "weight": 1.0
     },
     {
@@ -93202,7 +93214,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3863",
+      "source_location": "L3896",
       "weight": 1.0
     },
     {
@@ -93214,7 +93226,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3914",
+      "source_location": "L3947",
       "weight": 1.0
     },
     {
@@ -93226,7 +93238,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4063",
+      "source_location": "L4096",
       "weight": 1.0
     },
     {
@@ -93238,7 +93250,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4063",
+      "source_location": "L4096",
       "weight": 1.0
     },
     {
@@ -93250,7 +93262,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1907",
+      "source_location": "L1940",
       "weight": 1.0
     },
     {
@@ -93262,7 +93274,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1909",
+      "source_location": "L1942",
       "weight": 1.0
     },
     {
@@ -93274,7 +93286,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1960",
+      "source_location": "L1993",
       "weight": 1.0
     },
     {
@@ -93286,7 +93298,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1960",
+      "source_location": "L1993",
       "weight": 1.0
     },
     {
@@ -93298,7 +93310,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3310",
+      "source_location": "L3343",
       "weight": 1.0
     },
     {
@@ -93310,7 +93322,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3436",
+      "source_location": "L3469",
       "weight": 1.0
     },
     {
@@ -93322,7 +93334,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3436",
+      "source_location": "L3469",
       "weight": 1.0
     },
     {
@@ -93334,7 +93346,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2358",
+      "source_location": "L2391",
       "weight": 1.0
     },
     {
@@ -93346,7 +93358,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3002",
+      "source_location": "L3035",
       "weight": 1.0
     },
     {
@@ -93358,7 +93370,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3473",
+      "source_location": "L3506",
       "weight": 1.0
     },
     {
@@ -93370,7 +93382,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3537",
+      "source_location": "L3570",
       "weight": 1.0
     },
     {
@@ -93382,7 +93394,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3266",
+      "source_location": "L3299",
       "weight": 1.0
     },
     {
@@ -93394,7 +93406,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3575",
+      "source_location": "L3608",
       "weight": 1.0
     },
     {
@@ -93406,7 +93418,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L580",
+      "source_location": "L613",
       "weight": 1.0
     },
     {
@@ -93418,7 +93430,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L607",
+      "source_location": "L640",
       "weight": 1.0
     },
     {
@@ -93430,7 +93442,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L607",
+      "source_location": "L640",
       "weight": 1.0
     },
     {
@@ -93442,7 +93454,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L708",
+      "source_location": "L741",
       "weight": 1.0
     },
     {
@@ -93478,7 +93490,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L505",
+      "source_location": "L538",
       "weight": 1.0
     },
     {
@@ -93490,7 +93502,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1826",
+      "source_location": "L1859",
       "weight": 1.0
     },
     {
@@ -93502,7 +93514,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1851",
+      "source_location": "L1884",
       "weight": 1.0
     },
     {
@@ -93514,7 +93526,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1851",
+      "source_location": "L1884",
       "weight": 1.0
     },
     {
@@ -93526,7 +93538,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3712",
+      "source_location": "L3745",
       "weight": 1.0
     },
     {
@@ -93538,7 +93550,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L3670",
+      "source_location": "L3703",
       "weight": 1.0
     },
     {
@@ -93574,7 +93586,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2845",
+      "source_location": "L2878",
       "weight": 1.0
     },
     {
@@ -93586,7 +93598,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2847",
+      "source_location": "L2880",
       "weight": 1.0
     },
     {
@@ -93598,7 +93610,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2847",
+      "source_location": "L2880",
       "weight": 1.0
     },
     {
@@ -93610,7 +93622,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2873",
+      "source_location": "L2906",
       "weight": 1.0
     },
     {
@@ -93622,7 +93634,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2923",
+      "source_location": "L2956",
       "weight": 1.0
     },
     {
@@ -93634,7 +93646,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2925",
+      "source_location": "L2958",
       "weight": 1.0
     },
     {
@@ -93646,7 +93658,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2930",
+      "source_location": "L2963",
       "weight": 1.0
     },
     {
@@ -93658,7 +93670,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2940",
+      "source_location": "L2973",
       "weight": 1.0
     },
     {
@@ -93670,7 +93682,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4197",
+      "source_location": "L4230",
       "weight": 1.0
     },
     {
@@ -93682,7 +93694,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4271",
+      "source_location": "L4304",
       "weight": 1.0
     },
     {
@@ -93694,7 +93706,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4271",
+      "source_location": "L4304",
       "weight": 1.0
     },
     {
@@ -93706,7 +93718,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1754",
+      "source_location": "L1787",
       "weight": 1.0
     },
     {
@@ -93718,7 +93730,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1779",
+      "source_location": "L1812",
       "weight": 1.0
     },
     {
@@ -93730,7 +93742,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1784",
+      "source_location": "L1817",
       "weight": 1.0
     },
     {
@@ -93742,7 +93754,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1809",
+      "source_location": "L1842",
       "weight": 1.0
     },
     {
@@ -93754,7 +93766,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1809",
+      "source_location": "L1842",
       "weight": 1.0
     },
     {
@@ -93778,7 +93790,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1346",
+      "source_location": "L1379",
       "weight": 1.0
     },
     {
@@ -93790,7 +93802,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1366",
+      "source_location": "L1399",
       "weight": 1.0
     },
     {
@@ -93802,7 +93814,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1382",
+      "source_location": "L1415",
       "weight": 1.0
     },
     {
@@ -93814,7 +93826,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1413",
+      "source_location": "L1446",
       "weight": 1.0
     },
     {
@@ -93826,31 +93838,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1413",
-      "weight": 1.0
-    },
-    {
-      "source": "admin_handlers_setreportpriorityhandler",
-      "target": "admin_auth_getip",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1008",
-      "weight": 1.0
-    },
-    {
-      "source": "admin_handlers_setreportpriorityhandler",
-      "target": "audit_logaudit",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "admin_handlers.go",
-      "source_location": "L1008",
+      "source_location": "L1446",
       "weight": 1.0
     },
     {
@@ -93862,7 +93850,31 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L971",
+      "source_location": "L1004",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_handlers_setreportpriorityhandler",
+      "target": "admin_auth_getip",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1041",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_handlers_setreportpriorityhandler",
+      "target": "audit_logaudit",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "admin_handlers.go",
+      "source_location": "L1041",
       "weight": 1.0
     },
     {
@@ -93874,7 +93886,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4097",
+      "source_location": "L4130",
       "weight": 1.0
     },
     {
@@ -93886,7 +93898,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4109",
+      "source_location": "L4142",
       "weight": 1.0
     },
     {
@@ -93898,7 +93910,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4138",
+      "source_location": "L4171",
       "weight": 1.0
     },
     {
@@ -93910,7 +93922,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4181",
+      "source_location": "L4214",
       "weight": 1.0
     },
     {
@@ -93922,7 +93934,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L4181",
+      "source_location": "L4214",
       "weight": 1.0
     },
     {
@@ -93958,7 +93970,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2376",
+      "source_location": "L2409",
       "weight": 1.0
     },
     {
@@ -93970,7 +93982,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2392",
+      "source_location": "L2425",
       "weight": 1.0
     },
     {
@@ -93982,7 +93994,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2437",
+      "source_location": "L2470",
       "weight": 1.0
     },
     {
@@ -93994,7 +94006,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L2437",
+      "source_location": "L2470",
       "weight": 1.0
     },
     {
@@ -94042,7 +94054,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1564",
+      "source_location": "L1597",
       "weight": 1.0
     },
     {
@@ -94054,7 +94066,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1602",
+      "source_location": "L1635",
       "weight": 1.0
     },
     {
@@ -94066,7 +94078,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1602",
+      "source_location": "L1635",
       "weight": 1.0
     },
     {
@@ -94078,7 +94090,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L912",
+      "source_location": "L945",
       "weight": 1.0
     },
     {
@@ -94090,7 +94102,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L933",
+      "source_location": "L966",
       "weight": 1.0
     },
     {
@@ -94102,7 +94114,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L950",
+      "source_location": "L983",
       "weight": 1.0
     },
     {
@@ -94114,7 +94126,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L964",
+      "source_location": "L997",
       "weight": 1.0
     },
     {
@@ -94126,7 +94138,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L964",
+      "source_location": "L997",
       "weight": 1.0
     },
     {
@@ -94138,7 +94150,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1611",
+      "source_location": "L1644",
       "weight": 1.0
     },
     {
@@ -94150,7 +94162,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1683",
+      "source_location": "L1716",
       "weight": 1.0
     },
     {
@@ -94162,7 +94174,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "admin_handlers.go",
-      "source_location": "L1683",
+      "source_location": "L1716",
       "weight": 1.0
     },
     {
@@ -98775,5 +98787,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "50a06db22cb46536964b525f63f7de78b9593a9a"
+  "built_at_commit": "7556ebafa7bb673cc38e76df49edeb3b555087eb"
 }

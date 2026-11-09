@@ -1,16 +1,16 @@
-# Graph Report - Setad_Khabari_HMD  (2026-11-08)
+# Graph Report - Setad_Khabari_HMD  (2026-11-09)
 
 ## Corpus Check
-- 311 files · ~500,415 words
+- 312 files · ~500,817 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3508 nodes · 5018 edges · 235 communities (212 shown, 23 thin omitted)
+- 3509 nodes · 5018 edges · 236 communities (213 shown, 23 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 558 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `50a06db2`
+- Built from commit: `7556ebaf`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -237,7 +237,7 @@
 - Data Privacy & Compliance
 - Dockerfile Security
 - Model Access & Cost Control
-- Image Supply Chain
+- Runtime Security
 - promptBulkDeletePhrase
 - Kubernetes-Specific
 - ReportDetail
@@ -276,7 +276,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (235 total, 23 thin omitted)
+## Communities (236 total, 23 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
@@ -548,7 +548,7 @@ Nodes (38): Actorless Passive, All-Caps Emphasis, antislop-copywriting, Aphorism
 
 ### Community 69 - "Container Security Guide"
 Cohesion: 0.10
-Nodes (21): Alerts to Configure, Bad vs Good Patterns, CI/CD Pipeline Security, CI Integration Examples, Container Security Guide, Dangerous Flags (Audit for These), Docker Compose Network Isolation, Docker Run Hardening (+13 more)
+Nodes (21): Alerts to Configure, Bad vs Good Patterns, CI/CD Pipeline Security, CI Integration Examples, Container Security Guide, Defense Checklist, Docker Compose Network Isolation, Image Build Pipeline (+13 more)
 
 ### Community 71 - "antislop-layoutmobile"
 Cohesion: 0.06
@@ -1102,9 +1102,9 @@ Nodes (5): Base Image Selection, Common Dockerfile Vulnerabilities, Dockerfile S
 Cohesion: 0.50
 Nodes (4): API Key Security, Model Access & Cost Control, Rate Limiting Requirements, Spending Controls
 
-### Community 224 - "Image Supply Chain"
+### Community 224 - "Runtime Security"
 Cohesion: 0.50
-Nodes (4): Defense Checklist, Image Supply Chain, Pinning Examples, Threat: Malicious or Vulnerable Base Images
+Nodes (4): Dangerous Flags (Audit for These), Docker Run Hardening, Docker Socket Exposure, Runtime Security
 
 ### Community 225 - "promptBulkDeletePhrase"
 Cohesion: 0.46
