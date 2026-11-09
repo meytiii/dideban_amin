@@ -11531,7 +11531,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isEdareKol = u.role === 'edare_kol';
             const badgeLabel = isEdareKol ? 'اداره کل' : 'نواحی و مناطق';
             const badgeStyle = isEdareKol
-                ? 'font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3);'
+                ? 'font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(165, 180, 252, 0.32);'
                 : 'font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);';
 
             item.innerHTML = `
