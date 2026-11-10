@@ -11881,13 +11881,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
+            const gradId = `flowArrowGrad_${idx}`;
             const connectorHtml = `
                 <div class="flow-connector-wrapper">
-                    <div class="flow-connector-line"></div>
                     <div class="flow-connector-arrow">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <polyline points="19 12 12 19 5 12"></polyline>
+                        <svg viewBox="0 0 24 36" width="24" height="36" fill="none" class="flow-unified-arrow" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="${gradId}" x1="12" y1="0" x2="12" y2="34" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#818cf8" stop-opacity="0.9"/>
+                                    <stop offset="55%" stop-color="#38bdf8" stop-opacity="0.95"/>
+                                    <stop offset="100%" stop-color="#06b6d4" stop-opacity="1"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M 12 0 V 32 M 5.5 25.5 L 12 32 L 18.5 25.5" stroke="url(#${gradId})" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
                     <div class="flow-connector-label">ارجاع به ${toPersianNum(group.recipients.length)} کارشناس</div>

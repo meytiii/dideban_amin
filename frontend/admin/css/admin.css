@@ -8405,39 +8405,32 @@ tr.row-priority-normal {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 14px 0 16px 0;
+    margin: 10px 0 14px 0;
     position: relative;
 }
 
-.flow-connector-line {
-    width: 2px;
-    height: 22px;
-    background: linear-gradient(to bottom, rgba(99, 102, 241, 0.7), rgba(56, 189, 248, 0.7));
-}
-
 .flow-connector-arrow {
-    color: #38bdf8;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: -2px;
-    animation: pulseArrow 2.2s infinite ease-in-out;
 }
 
-@keyframes pulseArrow {
-    0%, 100% { transform: translateY(0); opacity: 0.8; }
-    50% { transform: translateY(3px); opacity: 1; }
+.flow-unified-arrow {
+    display: block;
+    filter: drop-shadow(0 2px 6px rgba(56, 189, 248, 0.3));
 }
 
 .flow-connector-label {
     font-size: 11px;
     font-weight: 600;
     color: #94a3b8;
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(15, 23, 42, 0.9);
     padding: 3px 12px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
     margin-top: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    user-select: none;
 }
 
 .flow-destinations-grid {

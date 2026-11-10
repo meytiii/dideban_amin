@@ -27181,18 +27181,6 @@
       "source_location": "L302"
     },
     {
-      "id": "graphify_out_converted_report_template_64ced46b",
-      "label": "report_template_64ced46b.md",
-      "_origin": "ast",
-      "community": 236,
-      "community_name": "report_template_64ced46b.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "report_template_64ced46b.md",
-      "source_file": "graphify-out/converted/report_template_64ced46b.md",
-      "source_location": "L1"
-    },
-    {
       "id": "agents_skills_hallmark_references_typography_banned_defaults",
       "label": "Banned defaults",
       "_origin": "ast",
@@ -98879,5 +98867,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "74ddf8d13607773b67f71c8348fcacb4dc9bfc6e"
+  "built_at_commit": "a85cdb8c29cd7823634570ac1564794e65e38fc8"
 }

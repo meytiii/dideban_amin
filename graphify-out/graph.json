@@ -577,7 +577,7 @@
       "file_type": "code",
       "norm_label": "syncallfloatinglabels()",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L12112"
+      "source_location": "L12118"
     },
     {
       "id": "frontend_admin_js_admin_updateadminusersbulktoolbar",
@@ -46567,7 +46567,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L11980",
+      "source_location": "L11986",
       "weight": 1.0
     },
     {
@@ -46579,7 +46579,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L12012",
+      "source_location": "L12018",
       "weight": 1.0
     },
     {
@@ -46591,7 +46591,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L12028",
+      "source_location": "L12034",
       "weight": 1.0
     },
     {
@@ -46603,7 +46603,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L12033",
+      "source_location": "L12039",
       "weight": 1.0
     },
     {
@@ -83244,7 +83244,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/admin/js/admin.js",
-      "source_location": "L12112",
+      "source_location": "L12118",
       "weight": 1.0
     },
     {
@@ -98867,5 +98867,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a85cdb8c29cd7823634570ac1564794e65e38fc8"
+  "built_at_commit": "0e121c5dcaaaeeee862cdc5151e874d37c0daecc"
 }

@@ -1,16 +1,16 @@
-# Graph Report - Setad_Khabari_HMD  (2026-11-09)
+# Graph Report - Setad_Khabari_HMD  (2026-11-10)
 
 ## Corpus Check
-- 312 files · ~501,495 words
+- 311 files · ~501,296 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3511 nodes · 5024 edges · 237 communities (214 shown, 23 thin omitted)
+- 3510 nodes · 5024 edges · 236 communities (213 shown, 23 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 559 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `74ddf8d1`
+- Built from commit: `a85cdb8c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -277,7 +277,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (237 total, 23 thin omitted)
+## Communities (236 total, 23 thin omitted)
 
 ### Community 0 - "Components"
 Cohesion: 0.06
