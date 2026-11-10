@@ -11855,7 +11855,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="flow-node-source-container">
                     <div class="flow-node flow-node-source">
                         <div class="flow-node-header">
-                            <div class="flow-node-badge-role">مقام ارجاع‌دهنده (اداره کل)</div>
+                            <div class="flow-node-badge-role">ارجاع دهنده</div>
                         </div>
                         <div class="flow-node-body">
                             <div class="flow-node-icon-box source-icon">
@@ -11944,7 +11944,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 destinationsHtml += `
                     <div class="flow-node flow-node-destination ${isViewed ? 'is-viewed' : 'is-unseen'}">
                         <div class="flow-node-header">
-                            <div class="flow-node-badge-role recipient">دریافت‌کننده (ناحیه / منطقه)</div>
+                            <div class="flow-node-badge-role recipient">دریافت کننده</div>
                             ${revokeBtnHtml}
                         </div>
                         <div class="flow-node-body">
